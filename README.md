@@ -18,7 +18,7 @@ flutter run
 
 ## 项目集成介绍
 
-> 本项目精选了目前Flutter最实用的几个库，可大大提高开发的效率。
+> 本项目可能精选了目前Flutter最实用的几个库，可大大提高开发的效率。
 
 * [flutter_i18n(国际化插件)](https://marketplace.visualstudio.com/items?itemName=esskar.vscode-flutter-i18n-json)
 * [auto_route(自动路由注册插件)](https://pub.dev/packages/auto_route)
@@ -42,29 +42,17 @@ flutter run
 
 ## 使用指南
 
-1.克隆项目
-
-```
-git clone https://github.com/xuexiangjys/flutter_template.git
-```
-
 2.修改项目名（文件夹名），并删除目录下的.git文件夹（隐藏文件）
 
 3.使用AS或者VSCode打开项目，然后分别修改flutter、Android、ios项目的包名、应用ID以及应用名等信息。
 
 最简单的替换方法就是进行全局替换,搜索关键字`flutter_template`,然后替换你想要的项目包名,如下图所示:
 
-![flutter_replace.png](https://img.rruu.net/image/601e58c1c35c8)
-
 ### Flutter目录修改
 
 * 修改项目根目录`pubspec.yaml`文件, 修改项目名、描述、版本等信息。
 
-![flutter_1.png](https://img.rruu.net/image/5f7dc4dc3f52d)
-
 【注意】这里修改完`pubspec.yaml`中的`name`属性后，flutter项目的包名将会修改，这里我推荐大家使用全局替换的方式修改比较快。例如我想要修改`name`为`flutter_app`,在VSCode中你可以选择`lib`文件夹之后右击，选择`在文件夹中寻找`, 进行全局替换:
-
-![flutter_2.png](https://img.rruu.net/image/5f7dc4dea38d3)
 
 * 修改`lib/core/http/http.dart`中的网络请求配置，包括：服务器地址、超时、拦截器等设置
 
@@ -79,44 +67,13 @@ git clone https://github.com/xuexiangjys/flutter_template.git
 
 在VSCode中你可以选择`android`文件夹之后右击，选择`在文件夹中寻找`, 进行全局替换。
 
-![android_1.png](https://img.rruu.net/image/5f7dc4de2ab25)
-
 【注意】修改包名之后，记住需要将存放`MainActivity.kt`类的文件夹名也一并修改，否则将会找不到类。
 
 * 修改应用ID。修改`android/app/build.gradle`文件中的`applicationId`
 
 * 修改应用名。修改`android/app/src/main/res/values/strings.xml`文件中的`app_name`
 
-### IOS目录修改
 
-ios修改相对简单，直接使用XCode打开ios目录进行修改即可。如下图所示：
-
-![ios_1.jpeg](https://img.rruu.net/image/5f7dc4de4a9e3)
-
-![ios_2.png](https://img.rruu.net/image/5f7dc4dee2d4b)
-
-## 自动路由注册说明
-
-> 注意,本项目进行自动路由注册的文件是在`lib/router/route_map.dart`进行注册的,自动生成的路由表文件是`lib/router/route_map.gr.dart`.
-
-* 使用[watch]实时动态刷新路由表
-```
-flutter packages pub run build_runner watch
-```
-
-* 清除后重新构建路由表
-```
-flutter packages pub run build_runner build --delete-conflicting-outputs
-```
-
-* 生成一次路由表
-```
-flutter packages pub run build_runner build
-```
-* 清除路由表
-```
-flutter packages pub run build_runner clean
-```
 * 打包成APK
 ```
 flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform android-arm,android-arm64,android-x64 --split-per-abi
@@ -127,15 +84,4 @@ flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform 
 ```
 ---
 
-## 如果觉得项目还不错，可以考虑打赏一波
-
-> 你的打赏是我维护的动力，我将会列出所有打赏人员的清单在下方作为凭证，打赏前请留下打赏项目的备注！
-
-![pay.png](https://img.rruu.net/image/5f871d00045da)
-
-## 微信公众号
-
-> 更多资讯内容，欢迎扫描关注我的个人微信公众号:【我的Android开源之旅】
-
-![gzh_weixin.jpg](https://img.rruu.net/image/5f871cfff3194)
 
