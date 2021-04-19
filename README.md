@@ -1,4 +1,4 @@
-# OfferShow
+# OfferShow客户端
 
 * 查看一下版本号是否正确
 ```
