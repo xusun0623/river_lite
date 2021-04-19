@@ -13,6 +13,8 @@ dependencies:
   flutter_icons: ^1.1.0
   flutter_svg: ^0.21.0+1
   cupertino_icons: ^1.0.2
+  crypto: ^3.0.1
+  dio: ^4.0.0
 
 dev_dependencies:
   flutter_test:
