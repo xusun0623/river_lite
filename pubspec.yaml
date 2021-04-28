@@ -15,6 +15,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   crypto: ^3.0.1
   dio: ^4.0.0
+  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -24,4 +25,5 @@ flutter:
   uses-material-design: true
 
   assets:
-    - lib/asset/logo.svg
+    - lib/img/logo.svg
+    - lib/img/share.svg
