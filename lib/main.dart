@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/router/router.dart';
@@ -28,22 +29,22 @@ class MyApp extends StatelessWidget {
           final Function cotrollerFn = routers[routersname];
           //判断访问不存在的路由地址
           if (cotrollerFn == null) {
-            return MaterialPageRoute(
+            return CupertinoPageRoute(
               builder: (context) => routers['/404'](),
             );
           }
           if (settings.arguments == null) {
-            return MaterialPageRoute(
+            return CupertinoPageRoute(
               builder: (context) => cotrollerFn(),
             );
           } else {
-            return MaterialPageRoute(
+            return CupertinoPageRoute(
               builder: (context) => cotrollerFn(settings.arguments),
             );
           }
         },
         onUnknownRoute: (setting) {
-          return MaterialPageRoute(
+          return CupertinoPageRoute(
             builder: (context) => routers["/404"](),
           );
         },

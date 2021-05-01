@@ -33,8 +33,8 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: os_color,
         onPressed: () {
-          Navigator.push(context, CustomRouteSlide(Broke()));
-          // Navigator.pushNamed(context, "/broke");
+          // Navigator.push(context, CustomRouteSlide(Broke()));
+          Navigator.pushNamed(context, "/broke");
         },
         child: Icon(Icons.add),
       ),

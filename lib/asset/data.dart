@@ -9,6 +9,8 @@ class SalaryData {
     remark,
     look,
     time,
+    industry,
+    type,
     salaryId,
   }) {
     if (company != null) this.company = company;
@@ -20,26 +22,41 @@ class SalaryData {
     if (remark != null) this.remark = remark;
     if (look != null) this.look = look;
     if (time != null) this.time = time;
+    if (industry != null) this.industry = industry;
+    if (type != null) this.type = type;
     if (salaryId != null) this.salaryId = salaryId;
   }
-  String company =
-      "滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴";
-  String city =
-      "滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴";
-  String confidence =
-      "滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴";
-  String education =
-      "滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴";
-  String money =
-      "滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴";
-  String job =
-      "滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴";
-  String remark =
-      "滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴";
-  String look =
-      "滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴";
-  String time =
-      "滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴";
-  String salaryId =
-      "滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴滴";
+  String company;
+  String city;
+  String confidence;
+  String education;
+  String money;
+  String job;
+  String remark;
+  String look;
+  String time;
+  String industry;
+  String type;
+  String salaryId;
+}
+
+dynamic toLocalSalary(List<dynamic> networkData) {
+  var tmp = [];
+  networkData.forEach((element) {
+    tmp.add({
+      "company": element["company"],
+      "city": element["city"],
+      "confidence": element["score"],
+      "education": element["xueli"],
+      "money": element["salary"],
+      "job": element["position"],
+      "remark": element["remark"],
+      "look": element["number"],
+      "time": element["time"],
+      "industry": element["hangye"],
+      "type": element["salarytype"],
+      "salaryId": element["id"],
+    });
+  });
+  return tmp;
 }

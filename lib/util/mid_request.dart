@@ -3,9 +3,17 @@ import 'package:dio/dio.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:io';
 
-var os_url = "http://119.45.10.211/offershow"; //请求后台地址
-var os_salt = "offershow"; //测试盐值
-var os_token = "123456"; //测试Token
+// class ServerConfig {
+//   String os_url = "https://www.ioffershow.com";
+//   String os_salt = "offershow762932334";
+//   String os_token = "\$ytkzhLIvv5+sYwytrpIDkg26d4HQpxjr6pCoffershowzju1qaz";
+// }
+
+class ServerConfig {
+  String os_url = "http://119.45.10.211/offershow";
+  String os_salt = "offershow";
+  String os_token = "123456";
+}
 
 enum Method { GET, POST, PUT, DELETE, PATCH }
 
@@ -55,9 +63,9 @@ class XHttp {
     // print("${response}");
     // print("${response}");
     Map<String, dynamic> user = jsonDecode(response.toString());
-    print("$user");
+    // print("$user");
 
-    return response;
+    return user;
   }
 
   //带Token
@@ -126,17 +134,18 @@ class XHttp {
     Method method,
   }) async {
     var timeStamp = new DateTime.now().millisecondsSinceEpoch; // 时间戳
-    var token = os_token; //Token
+    var token = ServerConfig().os_token; //Token
     param = param == null ? {} : param;
     param.addAll({
       "access_token": "${token}.${timeStamp}." +
           md5
-              .convert(utf8.encode("${token}.${os_salt}.${timeStamp}"))
+              .convert(utf8
+                  .encode("${token}.${ServerConfig().os_salt}.${timeStamp}"))
               .toString()
     });
     return await netWorkRequest(
         method: method,
-        baseUrl: os_url,
+        baseUrl: ServerConfig().os_url,
         url: url,
         param: param,
         header: {

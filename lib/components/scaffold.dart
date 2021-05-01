@@ -134,7 +134,7 @@ class _OSScaffoldState extends State<OSScaffold> {
                     padding: new EdgeInsets.only(top: 5),
                     decoration: BoxDecoration(
                       color: widget.bodyColor ?? os_white,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                   top: top + (widget.headerHeight ?? 60),

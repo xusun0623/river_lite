@@ -3,6 +3,8 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/data.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/components/cartoon.dart';
+import 'package:offer_show/page/detail.dart';
 
 class OSSalary extends StatefulWidget {
   SalaryData data;
@@ -25,7 +27,14 @@ class _OSSalaryState extends State<OSSalary> {
           ),
           width: os_width * 0.97,
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              print(widget.data.salaryId);
+              Navigator.pushNamed(
+                context,
+                "/salary_detail",
+                arguments: {"salaryId": widget.data.salaryId},
+              );
+            },
             borderRadius: BorderRadius.circular(10),
             child: SalaryCont(
               data: widget.data,
@@ -93,7 +102,7 @@ class _SalaryContState extends State<SalaryCont> {
                         ),
                         Container(
                           child: Text(
-                            splitString(widget.data.city, 5),
+                            splitString(widget.data.city, 4),
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: os_color,
@@ -116,7 +125,7 @@ class _SalaryContState extends State<SalaryCont> {
                         color: os_color_opa,
                         borderRadius: BorderRadius.circular(3)),
                     child: Text(
-                      splitString(widget.data.confidence, 4),
+                      "可信度:" + splitString(widget.data.confidence, 4),
                       style: TextStyle(color: os_color, fontSize: 12),
                     ),
                   ),
@@ -162,26 +171,29 @@ class _SalaryContState extends State<SalaryCont> {
               )
             ],
           ),
-          Container(height: 5),
-          Transform.scale(
-            scale: 1.03,
-            child: Container(
-              width: os_width,
-              padding: EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(0, 0, 0, 0.025),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Text(
-                splitString(widget.data.remark, 25),
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  color: Color(0xFF4F4F4F),
-                  fontSize: 12,
-                ),
-              ),
-            ),
-          ),
+          Container(height: widget.data.remark.length == 0 ? 0 : 5),
+          (widget.data.remark.length == 0
+              ? Container()
+              : Transform.scale(
+                  scale: 1.03,
+                  child: Container(
+                    width: os_width,
+                    padding:
+                        EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(0, 0, 0, 0.025),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      splitString(widget.data.remark, 25),
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: Color(0xFF4F4F4F),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                )),
           Container(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

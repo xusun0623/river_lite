@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/data.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/components/byxusun.dart';
 import 'package:offer_show/components/occu.dart';
 import 'package:offer_show/components/salary.dart';
 import 'package:offer_show/components/scaffold.dart';
@@ -10,6 +11,7 @@ import 'package:offer_show/components/title.dart';
 import 'dart:math' as math;
 
 import 'package:offer_show/page/broke.dart';
+import 'package:offer_show/util/interface.dart';
 
 class Me extends StatefulWidget {
   @override
@@ -17,6 +19,8 @@ class Me extends StatefulWidget {
 }
 
 class _MeState extends State<Me> {
+  var salaryData = [];
+
   final icons = [
     "lib/img/me-agreement.svg",
     "lib/img/me-poster.svg",
@@ -24,12 +28,75 @@ class _MeState extends State<Me> {
     "lib/img/me-feedback.svg",
   ];
   @override
+  void initState() {
+    print("Hello");
+    _getData();
+    super.initState();
+  }
+
+  void _getData() async {
+    final res = await Api().webapi_v2_offers_4_lr(
+      param: {
+        // "xueli": "全部",
+        "salarytype": "校招",
+        // "limit": "50",
+      },
+    );
+    salaryData = toLocalSalary(res['info']);
+    this.setState(() {});
+  }
+
+  List<Widget> _buildList() {
+    var t = <Widget>[];
+    t
+      ..add(occu(height: 10.0))
+      ..add(
+        OSTitle(
+          title: "我的收藏",
+          tip: "本地存储，不记录个人信息；如需屏蔽，请在对应薪资下反馈",
+        ),
+      );
+    salaryData.forEach((element) {
+      print("$element");
+      t.add(OSSalary(
+        data: SalaryData(
+          company: element["company"].toString(),
+          city: element["city"].toString(),
+          confidence: element["confidence"].toString(),
+          education: element["education"].toString(),
+          money: element["money"].toString(),
+          job: element["job"].toString(),
+          remark: element["remark"].toString(),
+          look: element["look"].toString(),
+          time: element["time"].toString(),
+          industry: element["industry"].toString(),
+          type: element["type"].toString(),
+          salaryId: element["salaryId"].toString(),
+        ),
+      ));
+    });
+    t
+      ..add(occu())
+      ..add(byxusun(
+        txt: "一键清除收藏",
+      ))
+      ..add(occu())
+      ..add(occu())
+      ..add(occu());
+    return t;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double additionalBottomPadding =
         math.max(MediaQuery.of(context).padding.bottom - 12.0 / 2.0, 0.0);
     return OSScaffold(
+      onRefresh: () async {
+        await _getData();
+        return new Future.delayed(Duration(microseconds: 1));
+      },
       bodyColor: os_grey,
-      headerHeight: 130.0,
+      headerHeight: 100.0,
       header: Container(
         padding: new EdgeInsets.only(
           left: os_width * 0.075,
@@ -49,48 +116,7 @@ class _MeState extends State<Me> {
       columnHeight:
           os_height - kBottomNavigationBarHeight - additionalBottomPadding,
       body: Column(
-        children: [
-          occu(),
-          OSTitle(
-            title: "我的收藏",
-            tip: "本地存储，不记录个人信息；如需屏蔽，请在对应薪资下反馈",
-          ),
-          OSSalary(
-            data: new SalaryData(
-              company: "滴滴",
-            ),
-          ),
-          OSSalary(
-            data: new SalaryData(),
-          ),
-          OSSalary(
-            data: new SalaryData(),
-          ),
-          OSSalary(
-            data: new SalaryData(),
-          ),
-          OSSalary(
-            data: new SalaryData(),
-          ),
-          Card(),
-          Card(),
-          Card(),
-          Card(),
-          Card(),
-          Card(),
-          Card(),
-          Card(),
-          Card(),
-          occu(),
-          occu(),
-          occu(),
-          occu(),
-          occu(),
-          occu(),
-          occu(),
-          occu(),
-          occu(),
-        ],
+        children: _buildList(),
       ),
     );
   }
@@ -150,13 +176,13 @@ class _HeadButtonState extends State<HeadButton> {
           ),
         ),
         Container(
-          height: 8,
+          height: 5,
         ),
         Text(
           widget.txt,
           style: TextStyle(
-            color: os_white,
-            fontWeight: FontWeight.w600,
+            color: Color(0xAAFFFFFF),
+            // fontWeight: FontWeight.w600,
             fontSize: 13,
           ),
         ),
