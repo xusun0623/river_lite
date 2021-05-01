@@ -8,6 +8,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  flutter_easyrefresh: ^2.2.1
   flutter:
     sdk: flutter
   flutter_icons: ^1.1.0
@@ -27,3 +28,9 @@ flutter:
   assets:
     - lib/img/logo.svg
     - lib/img/share.svg
+    - lib/img/me-agreement.svg
+    - lib/img/me-poster.svg
+    - lib/img/me-discuss.svg
+    - lib/img/me-feedback.svg
+    - lib/img/salary-location.svg
+    - lib/img/salary-right.svg

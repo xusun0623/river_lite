@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/logo.dart';
+import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/components/cartoon.dart';
 import 'package:offer_show/page/404.dart';
+import 'package:offer_show/page/broke.dart';
+import 'package:offer_show/page/me.dart';
 import 'package:offer_show/page/page1.dart';
 import 'package:offer_show/page/page2.dart';
 import 'package:offer_show/router/tabbar.dart';
@@ -16,18 +20,21 @@ class _HomeState extends State<Home> {
   final homePages = [
     page1(),
     page2(),
-    Page404(),
+    Me(),
     Page404(),
   ];
   var _tabBarIndex = 0;
   @override
   Widget build(BuildContext context) {
+    os_width = MediaQuery.of(context).size.width;
+    os_height = MediaQuery.of(context).size.height;
     return Scaffold(
       drawer: OfferShowDraw(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: os_color,
         onPressed: () {
-          Navigator.pushNamed(context, "/broke");
+          Navigator.push(context, CustomRouteSlide(Broke()));
+          // Navigator.pushNamed(context, "/broke");
         },
         child: Icon(Icons.add),
       ),
@@ -41,7 +48,7 @@ class _HomeState extends State<Home> {
         selectedFontSize: 12,
         onTap: (index) {
           if (index == 1) {
-            Navigator.pushNamed(context, "/broke");
+            // Navigator.pushNamed(context, "/broke");
           } else {
             setState(() {
               _tabBarIndex = index;
@@ -53,35 +60,7 @@ class _HomeState extends State<Home> {
         type: BottomNavigationBarType.fixed,
         items: bottomNavItems,
       ),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: Builder(
-          builder: (context) {
-            return IconButton(
-              icon: Icon(
-                Icons.list,
-                color: os_color,
-              ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: os_black,
-            ),
-            onPressed: () {},
-          )
-        ],
-        title: Text(
-          "Home",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
+      appBar: null,
     );
   }
 }

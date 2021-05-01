@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/components/occu.dart';
+import 'package:offer_show/components/scaffold.dart';
 
 class Broke extends StatefulWidget {
   @override
@@ -8,28 +13,50 @@ class Broke extends StatefulWidget {
 class _BrokeState extends State<Broke> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        title: Text(
-          "Broke",
-          style: TextStyle(color: Colors.black),
+    return OSScaffold(
+      // headerHeight: 200.0,
+      onLoad: () async {
+        print("onLoad");
+        await Future.delayed(Duration(milliseconds: 300));
+        return false;
+      },
+      onRefresh: () async {
+        print("Refresh");
+        return Future.delayed(Duration(milliseconds: 300));
+      },
+      body: Container(
+        child: Column(
+          children: [
+            Card(),
+            Card(),
+            Card(),
+            Card(),
+          ],
         ),
       ),
-      body: Container(
-        child: Center(
-          child: Text(
-            "内容",
-          ),
-        ),
+    );
+  }
+}
+
+class Card extends StatelessWidget {
+  const Card({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: os_width,
+      height: 200,
+      decoration: BoxDecoration(
+        color: os_color,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      margin: new EdgeInsets.only(
+        left: os_width * 0.025,
+        right: os_width * 0.025,
+        top: 5,
+        bottom: 5,
       ),
     );
   }

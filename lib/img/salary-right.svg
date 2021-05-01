@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>页面 1</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M5.04001458,7.78036995 C5.15707822,7.92011302 5.3244357,8 5.50012373,8 C5.67581177,8 5.84316924,7.92011302 5.96023289,7.78036995 L9.86272356,2.98879485 C10.1833375,2.5945969 9.90659705,2 9.40205192,2 L1.59819555,2 C1.09365042,2 0.816347461,2.59459691 1.13752391,2.98879485 L5.04001458,7.78036995 Z" id="路径" fill="#2582F1" fill-rule="nonzero" transform="translate(5.500000, 5.000000) rotate(-90.000000) translate(-5.500000, -5.000000) "></path>
+        <rect id="矩形" fill="#D8D8D8" opacity="0" x="0" y="0" width="10" height="10"></rect>
+    </g>
+</svg>
