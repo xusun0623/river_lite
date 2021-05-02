@@ -6,6 +6,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/cartoon.dart';
 import 'package:offer_show/page/404.dart';
 import 'package:offer_show/page/broke.dart';
+import 'package:offer_show/page/home_component/HomeDrawer.dart';
 import 'package:offer_show/page/me.dart';
 import 'package:offer_show/page/page1.dart';
 import 'package:offer_show/page/page2.dart';
@@ -23,7 +24,7 @@ class _HomeState extends State<Home> {
     Me(),
     Page404(),
   ];
-  var _tabBarIndex = 2;
+  var _tabBarIndex = 0;
   @override
   Widget build(BuildContext context) {
     os_width = MediaQuery.of(context).size.width;
@@ -62,56 +63,6 @@ class _HomeState extends State<Home> {
         items: bottomNavItems,
       ),
       appBar: null,
-    );
-  }
-}
-
-class OfferShowDraw extends StatelessWidget {
-  const OfferShowDraw({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: Scaffold(
-        appBar: AppBar(
-          // leading: null,
-          backgroundColor: os_white,
-          centerTitle: true,
-          title: Row(
-            children: [
-              os_logo(
-                size: 30,
-              ),
-              Container(
-                width: 10,
-              ),
-              Text(
-                "OfferShow",
-                style: TextStyle(color: os_color),
-              ),
-            ],
-          ),
-        ),
-        body: Column(
-          children: [
-            ListTile(
-              title: Row(
-                children: [
-                  FlutterLogo(),
-                  Container(
-                    width: 10,
-                  ),
-                  Text("选项一"),
-                ],
-              ),
-              trailing: Text("备注"),
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: "/broke",
+        initialRoute: "/",
         theme: ThemeData(
           primaryColor: os_color,
         ),
