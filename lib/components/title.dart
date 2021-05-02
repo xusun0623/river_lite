@@ -17,8 +17,8 @@ class _OSTitleState extends State<OSTitle> {
   Widget build(BuildContext context) {
     return Container(
       padding: new EdgeInsets.only(
-        left: os_width * 0.025,
-        right: os_width * 0.025,
+        left: os_padding,
+        right: os_padding,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

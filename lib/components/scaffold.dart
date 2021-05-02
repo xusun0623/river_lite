@@ -5,6 +5,8 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/occu.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class OSScaffold extends StatefulWidget {
   Function onRefresh;
@@ -13,6 +15,8 @@ class OSScaffold extends StatefulWidget {
   Widget header;
   Widget body;
   double columnHeight;
+  double fixedBottomHeight;
+  double fixedBottomBottom;
   String headTxt;
   Color bodyColor;
   var headerHeight;
@@ -22,6 +26,8 @@ class OSScaffold extends StatefulWidget {
     this.onLoad,
     this.header,
     this.fixedBottom,
+    this.fixedBottomHeight,
+    this.fixedBottomBottom,
     this.headTxt,
     this.body,
     this.bodyColor,
@@ -45,55 +51,60 @@ class _OSScaffoldState extends State<OSScaffold> {
             height: widget.columnHeight ?? os_height,
             child: Stack(
               children: [
-                Stack(
-                  children: [
-                    Positioned(
-                      child: Container(
-                        padding: new EdgeInsets.only(top: top),
-                        height: 300,
-                        width: os_width * 100,
-                        decoration: BoxDecoration(
-                          color: os_color,
+                GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  },
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        child: Container(
+                          padding: new EdgeInsets.only(top: top),
+                          height: 300,
+                          width: os_width,
+                          decoration: BoxDecoration(
+                            color: os_color,
+                          ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      child: Container(
-                        width: 200,
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color: os_black_opa_opa,
-                          borderRadius: BorderRadius.circular(10000),
+                      Positioned(
+                        child: Container(
+                          width: 200,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            color: os_black_opa_opa,
+                            borderRadius: BorderRadius.circular(10000),
+                          ),
+                        ),
+                        left: -50,
+                        top: 60,
+                      ),
+                      Positioned(
+                        child: Container(
+                          width: 300,
+                          height: 300,
+                          decoration: BoxDecoration(
+                            color: os_black_opa,
+                            borderRadius: BorderRadius.circular(10000),
+                          ),
+                        ),
+                        right: -150,
+                        top: -100,
+                      ),
+                      Positioned(
+                        //页面首部
+                        top: top,
+                        child: Container(
+                          width: os_width,
+                          height: widget.headerHeight ?? 60,
+                          child: widget.header ??
+                              HeadBackBanner(
+                                headTxt: widget.headTxt,
+                              ),
                         ),
                       ),
-                      left: -50,
-                      top: 60,
-                    ),
-                    Positioned(
-                      child: Container(
-                        width: 300,
-                        height: 300,
-                        decoration: BoxDecoration(
-                          color: os_black_opa,
-                          borderRadius: BorderRadius.circular(10000),
-                        ),
-                      ),
-                      right: -150,
-                      top: -100,
-                    ),
-                    Positioned(
-                      //页面首部
-                      top: top,
-                      child: Container(
-                        width: os_width,
-                        height: widget.headerHeight ?? 60,
-                        child: widget.header ??
-                            HeadBackBanner(
-                              headTxt: widget.headTxt,
-                            ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Positioned(
                   child: Container(
@@ -105,32 +116,43 @@ class _OSScaffoldState extends State<OSScaffold> {
                         onLoad: widget.onLoad,
                         child: ListView(
                           children: [
-                            Container(
-                              child: widget.body ??
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text("data"),
-                                      ),
-                                      Text("data"),
-                                      Text("data"),
-                                      Text("data"),
-                                      Text("data"),
-                                      Text("data"),
-                                      Text("data"),
-                                      Text("data"),
-                                      Text("data"),
-                                      Text("data"),
-                                    ],
-                                  ),
+                            GestureDetector(
+                              onTap: () {
+                                FocusScope.of(context)
+                                    .requestFocus(FocusNode());
+                              },
+                              child: Container(
+                                child: widget.body ??
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text("data"),
+                                        ),
+                                        Text("data"),
+                                        Text("data"),
+                                        Text("data"),
+                                        Text("data"),
+                                        Text("data"),
+                                        Text("data"),
+                                        Text("data"),
+                                        Text("data"),
+                                        Text("data"),
+                                      ],
+                                    ),
+                              ),
                             ),
                           ],
                         )),
                     width: os_width,
-                    height: os_height - (widget.headerHeight ?? 60) - top,
+                    height: os_height -
+                        (widget.headerHeight ?? 60) -
+                        top -
+                        (widget.fixedBottom == null
+                            ? 0
+                            : (widget.fixedBottomHeight ?? 100)),
                     padding: new EdgeInsets.only(top: 5),
                     decoration: BoxDecoration(
                       color: widget.bodyColor ?? os_white,
@@ -142,23 +164,8 @@ class _OSScaffoldState extends State<OSScaffold> {
                 (widget.fixedBottom == null
                     ? Container()
                     : Positioned(
-                        child: Container(
-                          width: os_width,
-                          height: 100,
-                          padding: new EdgeInsets.only(bottom: 14),
-                          child: widget.fixedBottom ??
-                              Center(child: Text("底部导航栏")),
-                          decoration: BoxDecoration(
-                            color: os_white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0x22000000),
-                                blurRadius: 20.0,
-                              ),
-                            ],
-                          ),
-                        ),
-                        bottom: 0,
+                        child: widget.fixedBottom,
+                        bottom: widget.fixedBottomBottom ?? 0,
                       ))
               ],
             ),
@@ -212,8 +219,9 @@ class HeadBackBanner extends StatefulWidget {
 class _HeadBackBannerState extends State<HeadBackBanner> {
   @override
   Widget build(BuildContext context) {
+    KeyBoard provider = Provider.of<KeyBoard>(context);
     return Container(
-      padding: new EdgeInsets.all(10),
+      // padding: new EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -224,7 +232,10 @@ class _HeadBackBannerState extends State<HeadBackBanner> {
               color: os_white,
             ),
             onPressed: () {
+              provider.close();
+              FocusScope.of(context).requestFocus(FocusNode());
               Navigator.pop(context);
+              // Navigator.pop(context);
             },
           ),
           Text(

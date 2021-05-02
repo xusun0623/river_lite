@@ -8,6 +8,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  fluttertoast: ^8.0.6
   flutter_easyrefresh: ^2.2.1
   flutter:
     sdk: flutter
@@ -34,3 +35,15 @@ flutter:
     - lib/img/me-feedback.svg
     - lib/img/salary-location.svg
     - lib/img/salary-right.svg
+    - lib/img/detail-job.svg
+    - lib/img/detail-company.svg
+    - lib/img/detail-city.svg
+    - lib/img/detail-rightBottom.svg
+    - lib/img/detail-info.svg
+    - lib/img/detail-skelon.svg
+    - lib/img/salary-more.svg
+    - lib/img/detail-collect.svg
+    - lib/img/detail-feedback.svg
+    - lib/img/detail-like.svg
+    - lib/img/detail-unlike.svg
+    - lib/img/empty.svg

@@ -23,11 +23,12 @@ class _HomeState extends State<Home> {
     Me(),
     Page404(),
   ];
-  var _tabBarIndex = 0;
+  var _tabBarIndex = 2;
   @override
   Widget build(BuildContext context) {
     os_width = MediaQuery.of(context).size.width;
     os_height = MediaQuery.of(context).size.height;
+    os_padding = os_width * 0.025;
     return Scaffold(
       drawer: OfferShowDraw(),
       floatingActionButton: FloatingActionButton(

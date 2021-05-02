@@ -81,5 +81,9 @@ flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform 
 
 ## 打包
 
-cd '/Users/xusun/Desktop/Flutter/OfferShow/offer_show/build/app/outputs/flutter-apk' && adb -s 192.168.31.39:37133 install app-armeabi-v7a-release.apk 
+cd '/Users/xusun/Desktop/Flutter/OfferShow/offer_show/build/app/outputs/flutter-apk' && adb -s 192.168.31.39:43479 install app-armeabi-v7a-release.apk 
 
+
+## Provider
+
+KeyBoard provider = Provider.of<KeyBoard>(context);

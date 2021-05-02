@@ -40,8 +40,45 @@ class SalaryData {
   String salaryId;
 }
 
-dynamic toLocalSalary(List<dynamic> networkData) {
-  var tmp = [];
+class CommentData {
+  CommentData({
+    commentId,
+    content,
+    time,
+    isMine,
+    isOwner,
+  }) {
+    if (commentId != null) this.commentId = commentId;
+    if (content != null) this.content = content;
+    if (time != null) this.time = time;
+    if (isMine != null) this.isMine = isMine;
+    if (isOwner != null) this.isOwner = isOwner;
+  }
+  String commentId;
+  String content;
+  String time;
+  String isMine;
+  String isOwner;
+}
+
+/// 转化为本地的评论格式
+List<Map<dynamic, dynamic>> toLocalComment(List<dynamic> networkData) {
+  List<Map<dynamic, dynamic>> tmp = [];
+  networkData.forEach((element) {
+    tmp.add({
+      "commentId": element["comment_id"],
+      "content": element["content"],
+      "time": element["time"],
+      "isMine": element["is_mine"],
+      "isOwner": element["is_owner"],
+    });
+  });
+  return tmp;
+}
+
+/// 转化为本地的薪资格式
+List<Map<dynamic, dynamic>> toLocalSalary(List<dynamic> networkData) {
+  List<Map<dynamic, dynamic>> tmp = [];
   networkData.forEach((element) {
     tmp.add({
       "company": element["company"],

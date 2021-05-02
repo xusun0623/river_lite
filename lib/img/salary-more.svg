@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="23px" height="23px" viewBox="0 0 23 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 8备份</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-8备份">
+            <g id="编组-7" transform="translate(4.000000, 10.000000)" fill="#B3B3B3">
+                <circle id="椭圆形" cx="1.5" cy="1.5" r="1.5"></circle>
+                <circle id="椭圆形备份-3" cx="7.5" cy="1.5" r="1.5"></circle>
+                <circle id="椭圆形备份-4" cx="12.5" cy="1.5" r="1.5"></circle>
+            </g>
+            <rect id="矩形" fill="#D8D8D8" opacity="0" x="0" y="0" width="23" height="23"></rect>
+        </g>
+    </g>
+</svg>

@@ -39,7 +39,7 @@ class _MeState extends State<Me> {
       param: {
         // "xueli": "全部",
         "salarytype": "校招",
-        // "limit": "50",
+        "limit": 5,
       },
     );
     salaryData = toLocalSalary(res['info']);
@@ -57,7 +57,7 @@ class _MeState extends State<Me> {
         ),
       );
     salaryData.forEach((element) {
-      print("$element");
+      // print("$element");
       t.add(OSSalary(
         data: SalaryData(
           company: element["company"].toString(),
@@ -78,6 +78,7 @@ class _MeState extends State<Me> {
     t
       ..add(occu())
       ..add(byxusun(
+        show: salaryData.length != 0,
         txt: "一键清除收藏",
       ))
       ..add(occu())
@@ -98,13 +99,9 @@ class _MeState extends State<Me> {
       bodyColor: os_grey,
       headerHeight: 100.0,
       header: Container(
-        padding: new EdgeInsets.only(
-          left: os_width * 0.075,
-          right: os_width * 0.075,
-        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             HeadButton(icon: icons[0], txt: "平台公约"),
             HeadButton(icon: icons[1], txt: "薪资海报"),
@@ -130,15 +127,15 @@ class Card extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: os_width * 0.95,
+      width: os_width - 2 * os_padding,
       height: 200,
       decoration: BoxDecoration(
         color: os_color,
         borderRadius: BorderRadius.circular(10),
       ),
       margin: new EdgeInsets.only(
-        left: os_width * 0.025,
-        right: os_width * 0.025,
+        left: os_padding,
+        right: os_padding,
         top: 5,
         bottom: 5,
       ),

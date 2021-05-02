@@ -53,8 +53,8 @@ class Card extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       margin: new EdgeInsets.only(
-        left: os_width * 0.025,
-        right: os_width * 0.025,
+        left: os_padding,
+        right: os_padding,
         top: 5,
         bottom: 5,
       ),

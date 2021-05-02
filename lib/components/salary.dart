@@ -5,6 +5,8 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/cartoon.dart';
 import 'package:offer_show/page/detail.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class OSSalary extends StatefulWidget {
   SalaryData data;
@@ -16,6 +18,7 @@ class OSSalary extends StatefulWidget {
 class _OSSalaryState extends State<OSSalary> {
   @override
   Widget build(BuildContext context) {
+    KeyBoard provider = Provider.of<KeyBoard>(context);
     return Container(
       margin: EdgeInsets.only(top: os_space),
       child: Material(
@@ -25,14 +28,15 @@ class _OSSalaryState extends State<OSSalary> {
             borderRadius: BorderRadius.circular(10),
             color: os_white,
           ),
-          width: os_width * 0.97,
+          width: os_width - 2 * os_padding,
           child: InkWell(
             onTap: () {
               print(widget.data.salaryId);
+              provider.setNowSalaryId(widget.data.salaryId);
               Navigator.pushNamed(
                 context,
                 "/salary_detail",
-                arguments: {"salaryId": widget.data.salaryId},
+                arguments: widget.data.salaryId,
               );
             },
             borderRadius: BorderRadius.circular(10),
