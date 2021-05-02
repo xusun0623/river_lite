@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 class tip extends StatefulWidget {
   String txt = "";
-  tip({Key key, this.txt}) : super(key: key);
+  double size;
+  double left;
+  double top;
+  tip({Key key, this.txt, this.left, this.size, this.top}) : super(key: key);
   @override
   _tipState createState() => _tipState();
 }
@@ -12,15 +15,20 @@ class _tipState extends State<tip> {
   Widget build(BuildContext context) {
     return Container(
       padding: new EdgeInsets.only(
-        left: 15,
-        top: 20,
+        left: widget.left ?? 15,
+        top: widget.top ?? 20,
         bottom: 5,
       ),
-      child: Text(
-        widget.txt == null ? "" : widget.txt,
-        style: TextStyle(
-          color: Colors.grey,
-        ),
+      child: Row(
+        children: [
+          Text(
+            widget.txt == null ? "" : widget.txt,
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: widget.size ?? null,
+            ),
+          ),
+        ],
       ),
     );
   }

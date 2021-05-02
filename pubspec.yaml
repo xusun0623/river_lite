@@ -8,6 +8,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  direct_select: ^2.0.0
   fluttertoast: ^8.0.6
   flutter_easyrefresh: ^2.2.1
   flutter:
@@ -47,3 +48,12 @@ flutter:
     - lib/img/detail-like.svg
     - lib/img/detail-unlike.svg
     - lib/img/empty.svg
+    - lib/img/broke-city.svg
+    - lib/img/broke-company.svg
+    - lib/img/broke-education.svg
+    - lib/img/broke-industry.svg
+    - lib/img/broke-job.svg
+    - lib/img/broke-money.svg
+    - lib/img/broke-remark.svg
+    - lib/img/broke-type.svg
+    - lib/img/broke-cal.svg

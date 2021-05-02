@@ -3,17 +3,17 @@ import 'package:dio/dio.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:io';
 
-class ServerConfig {
-  String os_url = "https://www.ioffershow.com";
-  String os_salt = "offershow762932334";
-  String os_token = "\$ytkzhLIvv5+sYwytrpIDkg26d4HQpxjr6pCoffershowzju1qaz";
-}
-
 // class ServerConfig {
-//   String os_url = "http://119.45.10.211/offershow";
-//   String os_salt = "offershow";
-//   String os_token = "123456";
+//   String os_url = "https://www.ioffershow.com";
+//   String os_salt = "offershow762932334";
+//   String os_token = "\$ytkzhLIvv5+sYwytrpIDkg26d4HQpxjr6pCoffershowzju1qaz";
 // }
+
+class ServerConfig {
+  String os_url = "http://119.45.10.211/offershow";
+  String os_salt = "offershow";
+  String os_token = "123456";
+}
 
 enum Method { GET, POST, PUT, DELETE, PATCH }
 

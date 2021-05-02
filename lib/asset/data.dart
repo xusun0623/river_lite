@@ -8,6 +8,8 @@ class SalaryData {
     job,
     remark,
     look,
+    salaryLow,
+    salaryHigh,
     time,
     industry,
     type,
@@ -22,6 +24,8 @@ class SalaryData {
     if (remark != null) this.remark = remark;
     if (look != null) this.look = look;
     if (time != null) this.time = time;
+    if (salaryLow != null) this.salaryLow = salaryLow;
+    if (salaryHigh != null) this.salaryHigh = salaryHigh;
     if (industry != null) this.industry = industry;
     if (type != null) this.type = type;
     if (salaryId != null) this.salaryId = salaryId;
@@ -34,6 +38,8 @@ class SalaryData {
   String job;
   String remark;
   String look;
+  String salaryLow;
+  String salaryHigh;
   String time;
   String industry;
   String type;

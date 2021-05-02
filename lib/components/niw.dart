@@ -9,6 +9,7 @@ class myInkWell extends StatefulWidget {
   final double radius;
   final Color highlightColor;
   final Color splashColor;
+  final Color color;
   final Function tap;
 
   const myInkWell({
@@ -20,6 +21,7 @@ class myInkWell extends StatefulWidget {
     this.highlightColor,
     this.splashColor,
     this.tap,
+    this.color,
   }) : super(key: key);
   @override
   _myInkWellState createState() => _myInkWellState();
@@ -33,7 +35,7 @@ class _myInkWellState extends State<myInkWell> {
       child: Ink(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(widget.radius),
-          color: os_white,
+          color: widget.color ?? os_white,
         ),
         width: widget.width,
         height: widget.height,
