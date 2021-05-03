@@ -18,6 +18,66 @@ class MainProvider extends ChangeNotifier {
   }
 }
 
+//搜索
+class SearchProvider extends ChangeNotifier {
+  TextEditingController searchController = new TextEditingController();
+  bool getDone = false;
+  Widget column = new Column();
+
+  getSearchSalary() async {
+    final res = await Api().webapi_v2_search_salary(param: {
+      "content": searchController.text,
+      "education": "全部",
+      "ordertype": 2,
+      "part_school": "",
+      "search_priority": 1,
+      "year": "",
+    });
+    final tmp = toLocalSalary(res['info']);
+    List<Widget> tmpWidget = [];
+    tmp.forEach((element) {
+      tmpWidget.add(OSSalary(
+        data: new SalaryData(
+          company: element["company"].toString(),
+          city: element["city"].toString(),
+          confidence: element["confidence"].toString(),
+          education: element["education"].toString(),
+          money: element["money"].toString(),
+          job: element["job"].toString(),
+          remark: element["remark"].toString(),
+          look: element["look"].toString(),
+          salaryLow: element["salaryLow"].toString(),
+          salaryHigh: element["salaryHigh"].toString(),
+          time: element["time"].toString(),
+          industry: element["industry"].toString(),
+          type: element["type"].toString(),
+          salaryId: element["salaryId"].toString(),
+        ),
+      ));
+    });
+    column = Column(children: tmpWidget);
+    getDone = true;
+    notifyListeners();
+  }
+
+  search() {
+    getSearchSalary();
+    print(searchController.text);
+    notifyListeners();
+  }
+
+  getInput() {
+    notifyListeners();
+  }
+
+  clearInput() {
+    searchController.clear();
+    getDone = false;
+    column = new Column();
+    notifyListeners();
+  }
+}
+
 //首页实习数据管理员
 class HomePartSalarys extends ChangeNotifier {
   bool getDone = false;

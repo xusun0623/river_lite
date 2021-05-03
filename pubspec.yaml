@@ -60,3 +60,5 @@ flutter:
     - lib/img/draw-girl.svg
     - lib/img/filter-tick.svg
     - lib/img/home-skelon.svg
+    - lib/img/search-cross.svg
+    - lib/img/search-placeholder.svg

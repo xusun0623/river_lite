@@ -32,6 +32,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => HomePartSalarys(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => SearchProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

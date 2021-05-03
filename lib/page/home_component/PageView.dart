@@ -31,9 +31,27 @@ class _HomePageViewState extends State<HomePageView> {
         HomeFirstPage(),
         HomeSecondPage(),
         Container(
-          color: os_deep_grey,
+          color: os_back,
           child: Center(
-            child: Text("hh"),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.explore_rounded,
+                  size: 100,
+                  color: os_middle_grey,
+                ),
+                Container(height: 20),
+                Text(
+                  "关注「校招薪水」微信公众号\n获取一手薪资信息。",
+                  style: TextStyle(
+                    color: os_middle_grey,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Container(height: 100),
+              ],
+            ),
           ),
         ),
       ],
