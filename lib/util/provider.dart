@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/data.dart';
+import 'package:offer_show/components/salary.dart';
 import 'package:offer_show/components/tip.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:provider/provider.dart';
@@ -17,25 +18,98 @@ class MainProvider extends ChangeNotifier {
   }
 }
 
-class HomeSchoolSalarys extends ChangeNotifier {
+//首页实习数据管理员
+class HomePartSalarys extends ChangeNotifier {
+  bool getDone = false;
   List<SalaryData> salarys = [];
+  Widget column = new Column();
 
-  getHomeSalary(context) async {
-    FilterSchool provider = Provider.of<FilterSchool>(context);
-    final mapIndustry = [
-      "全部",
-      new DateTime.now().year.toString(),
-      (new DateTime.now().year - 1).toString(),
-    ];
-    final mapEducation = ["全部", "博士", "硕士", "本科", "大专", "其他"];
+  Future<Widget> getPartSalary(BuildContext context) async {
     final res = await Api().webapi_v2_offers_4_lr(
       param: {
-        "xueli": mapEducation[provider.tipIndex2],
-        "salarytype": "校招",
-        "limit": 5,
+        "xueli": "",
+        "salarytype": "实习",
+        "hangye": "",
+        "limit": 50,
       },
     );
     final tmp = toLocalSalary(res['info']);
+    List<Widget> tmpWidget = [];
+    tmp.forEach((element) {
+      tmpWidget.add(OSSalary(
+        data: new SalaryData(
+          company: element["company"].toString(),
+          city: element["city"].toString(),
+          confidence: element["confidence"].toString(),
+          education: element["education"].toString(),
+          money: element["money"].toString(),
+          job: element["job"].toString(),
+          remark: element["remark"].toString(),
+          look: element["look"].toString(),
+          salaryLow: element["salaryLow"].toString(),
+          salaryHigh: element["salaryHigh"].toString(),
+          time: element["time"].toString(),
+          industry: element["industry"].toString(),
+          type: element["type"].toString(),
+          salaryId: element["salaryId"].toString(),
+        ),
+      ));
+    });
+    column = Column(children: tmpWidget);
+    getDone = true;
+    notifyListeners();
+    return Container();
+  }
+}
+
+//首页校招数据管理员
+class HomeSchoolSalarys extends ChangeNotifier {
+  bool getDone = false;
+  List<SalaryData> salarys = [];
+  Widget column = new Column();
+
+  Future<Widget> getHomeSalary(BuildContext context) async {
+    FilterSchool provider = Provider.of<FilterSchool>(context, listen: false);
+    final edu = education[provider.tipIndex2] == "全部"
+        ? ""
+        : education[provider.tipIndex2];
+    final ind = industry[provider.tipIndex1] == "全部"
+        ? ""
+        : industry[provider.tipIndex1];
+    final res = await Api().webapi_v2_offers_4_lr(
+      param: {
+        "xueli": edu,
+        "salarytype": "校招",
+        "hangye": ind,
+        "limit": 50,
+      },
+    );
+    final tmp = toLocalSalary(res['info']);
+    List<Widget> tmpWidget = [];
+    tmp.forEach((element) {
+      tmpWidget.add(OSSalary(
+        data: new SalaryData(
+          company: element["company"].toString(),
+          city: element["city"].toString(),
+          confidence: element["confidence"].toString(),
+          education: element["education"].toString(),
+          money: element["money"].toString(),
+          job: element["job"].toString(),
+          remark: element["remark"].toString(),
+          look: element["look"].toString(),
+          salaryLow: element["salaryLow"].toString(),
+          salaryHigh: element["salaryHigh"].toString(),
+          time: element["time"].toString(),
+          industry: element["industry"].toString(),
+          type: element["type"].toString(),
+          salaryId: element["salaryId"].toString(),
+        ),
+      ));
+    });
+    column = Column(children: tmpWidget);
+    getDone = true;
+    notifyListeners();
+    return Container();
   }
 
   List<Widget> buildSalary() {}

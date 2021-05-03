@@ -6,6 +6,7 @@ import 'package:offer_show/page/me.dart';
 import 'package:offer_show/page/myhome.dart';
 import 'package:offer_show/page/page1.dart';
 import 'package:offer_show/page/page2.dart';
+import 'package:offer_show/page/search.dart';
 
 final routers = {
   "/": () => Home(),
@@ -14,6 +15,7 @@ final routers = {
         salaryId: data,
       ),
   "/me": () => Me(),
+  "/search": () => OSSearch(),
   "/myhome": () => MyHome(),
   "/404": () => Page404(),
   "/1": (param) => page1(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/data.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/page/home_component/FilterTip.dart';
 import 'package:offer_show/util/provider.dart';
@@ -19,29 +20,31 @@ class _HomeFilterState extends State<HomeFilter> {
   int _selectMainindex = 0;
   int _selectTipIndex = 0;
   final filterDataTip = [
-    [
-      "全部",
-      DateTime.now().year.toString(),
-      (DateTime.now().year - 1).toString(),
-    ],
-    [
-      "全部",
-      "博士",
-      "硕士",
-      "本科",
-      "大专",
-      "其他",
-    ],
+    industry,
+    education,
   ];
   var _selectTipIndexs = [0, 0];
   final filterDataTitle = [
-    {"title": "年份"},
+    {"title": "行业"},
     {"title": "学历"}
   ];
 
   @override
   void initState() {
     super.initState();
+    new Future.delayed(Duration.zero, () {
+      setState(() {
+        _selectMainindex =
+            Provider.of<FilterSchool>(context, listen: false).mainIndex;
+        if (_selectMainindex == 0) {
+          _selectTipIndexs[0] =
+              Provider.of<FilterSchool>(context, listen: false).tipIndex1;
+        } else {
+          _selectTipIndexs[1] =
+              Provider.of<FilterSchool>(context, listen: false).tipIndex2;
+        }
+      });
+    });
   }
 
   List<Widget> _buildMainTitle(FilterSchool provider) {
@@ -77,10 +80,11 @@ class _HomeFilterState extends State<HomeFilter> {
             : (FilterTip(
                 tap: () {
                   setState(() {
-                    if (_selectMainindex == 0)
+                    if (_selectMainindex == 0) {
                       provider.setTipIndex1(i);
-                    else
+                    } else {
                       provider.setTipIndex2(i);
+                    }
                     _selectTipIndexs[_selectMainindex] = i;
                     widget.filter();
                   });

@@ -15,6 +15,9 @@ class _HomeSearchRectState extends State<HomeSearchRect> {
       children: [
         Container(
           child: myInkWell(
+            tap: () {
+              Navigator.pushNamed(context, "/search");
+            },
             widget: Container(
               margin: EdgeInsets.symmetric(horizontal: os_padding * 1.5),
               child: Row(
