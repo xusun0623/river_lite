@@ -18,7 +18,13 @@ class MyApp extends StatelessWidget {
           create: (context) => MainProvider(),
         ),
         ChangeNotifierProvider(
+          create: (context) => HomeTabIndex(),
+        ),
+        ChangeNotifierProvider(
           create: (context) => KeyBoard(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => FilterSchool(),
         ),
       ],
       child: MaterialApp(

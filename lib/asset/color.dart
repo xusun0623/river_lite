@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+final os_old_color = Color(0xFF4280E9);
 final os_color = Color(0xFF3478F6); //主题蓝色
 final os_color_opa = Color.fromRGBO(52, 120, 246, 0.1); //主题蓝色
+final os_color_opa_opa = Color(0xFFF6F8FF);
 final os_black = Color(0xFF000000); //纯黑色
 final os_black_opa = Color.fromRGBO(0, 0, 0, 0.1); //透黑色
 final os_black_opa_opa = Color.fromRGBO(0, 0, 0, 0.05); //主题蓝色
@@ -12,3 +14,4 @@ final os_subtitle = Color(0xFFB8B8B8); //浅灰
 final os_light_grey = Color(0xFFFAFAFA); //浅灰
 final os_deep_grey = Color(0xFF8B8B8B); //浅灰
 final os_middle_grey = Color(0xFFD3D3D3); //浅灰
+final os_back = Color(0xFFF6F6F6); //浅灰

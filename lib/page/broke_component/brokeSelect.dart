@@ -70,18 +70,18 @@ class MySelectionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 60.0,
+        height: 55.0,
         child: isForList
             ? Padding(
                 child: _buildItem(context),
                 padding: EdgeInsets.all(0.0),
               )
             : myInkWell(
-                splashColor: os_color_opa,
-                color: os_color_opa,
-                highlightColor: os_color_opa,
+                splashColor: os_color_opa_opa,
+                color: os_color_opa_opa,
+                highlightColor: os_color_opa_opa,
                 widget: Container(
-                  height: 60,
+                  height: 55,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -92,7 +92,7 @@ class MySelectionItem extends StatelessWidget {
                         Text(
                           title,
                           style: TextStyle(
-                            color: os_color,
+                            color: os_old_color,
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                           ),

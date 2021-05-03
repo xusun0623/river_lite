@@ -29,12 +29,19 @@ class _BrokeInputState extends State<BrokeInput> {
         enabled: widget.enable,
         controller: widget.controller,
         style: TextStyle(
-          color: os_color,
+          color: os_old_color,
         ),
-        cursorColor: os_color_opa,
+        cursorColor: os_old_color,
         decoration: InputDecoration(
-          fillColor: os_color_opa,
-          filled: true,
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 15.0,
+            horizontal: 15.0,
+          ),
+          fillColor: os_color_opa_opa,
+          filled: true, //920
+          hintStyle: TextStyle(
+            color: Color(0xFFA6A5A6),
+          ),
           hintText: widget.hint,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),

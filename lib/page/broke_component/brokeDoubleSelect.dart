@@ -48,9 +48,9 @@ class _BrokeDoubleSelectState extends State<BrokeDoubleSelect> {
             child: Stack(children: [
               Container(
                 width: os_width - 3 * os_padding,
-                height: 60,
+                height: 55,
                 decoration: BoxDecoration(
-                  color: os_color_opa,
+                  color: os_color_opa_opa,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
@@ -58,9 +58,9 @@ class _BrokeDoubleSelectState extends State<BrokeDoubleSelect> {
                 curve: Curves.easeInOut,
                 child: Container(
                   width: (os_width - 3 * os_padding) / 2,
-                  height: 60,
+                  height: 55,
                   decoration: BoxDecoration(
-                    color: os_color,
+                    color: os_old_color,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular((rright - _right) / rright * 10),
                       topRight: Radius.circular((_right) / rright * 10),
@@ -74,7 +74,7 @@ class _BrokeDoubleSelectState extends State<BrokeDoubleSelect> {
                 duration: Duration(milliseconds: 300),
               ),
               Positioned(
-                top: 17,
+                top: 16,
                 child: Container(
                   width: os_width - 3 * os_padding,
                   child: Row(
@@ -85,7 +85,7 @@ class _BrokeDoubleSelectState extends State<BrokeDoubleSelect> {
                           "校招",
                           style: TextStyle(
                             color: (_right == 0.0) ? os_white : os_color,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -95,7 +95,7 @@ class _BrokeDoubleSelectState extends State<BrokeDoubleSelect> {
                           "实习",
                           style: TextStyle(
                             color: (_right == 0.0) ? os_color : os_white,
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

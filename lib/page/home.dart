@@ -8,6 +8,7 @@ import 'package:offer_show/page/404.dart';
 import 'package:offer_show/page/broke.dart';
 import 'package:offer_show/page/home_component/HomeDrawer.dart';
 import 'package:offer_show/page/me.dart';
+import 'package:offer_show/page/myhome.dart';
 import 'package:offer_show/page/page1.dart';
 import 'package:offer_show/page/page2.dart';
 import 'package:offer_show/router/tabbar.dart';
@@ -19,10 +20,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final homePages = [
-    page1(),
-    page2(),
-    Me(),
+    MyHome(),
     Page404(),
+    Me(),
   ];
   var _tabBarIndex = 0;
   @override

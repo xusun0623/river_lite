@@ -96,7 +96,7 @@ class _MeState extends State<Me> {
         await _getData();
         return new Future.delayed(Duration(microseconds: 1));
       },
-      bodyColor: os_grey,
+      bodyColor: os_back,
       headerHeight: 100.0,
       header: Container(
         child: Row(

@@ -39,8 +39,15 @@ class _BrokeInputDoubleState extends State<BrokeInputDouble> {
               ),
               cursorColor: os_color_opa,
               decoration: InputDecoration(
-                fillColor: os_color_opa,
-                filled: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 15.0,
+                  horizontal: 15.0,
+                ),
+                fillColor: os_color_opa_opa,
+                filled: true, //920
+                hintStyle: TextStyle(
+                  color: Color(0xFFA6A5A6),
+                ),
                 hintText: widget.hint1,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -60,8 +67,15 @@ class _BrokeInputDoubleState extends State<BrokeInputDouble> {
               ),
               cursorColor: os_color_opa,
               decoration: InputDecoration(
-                fillColor: os_color_opa,
-                filled: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 15.0,
+                  horizontal: 15.0,
+                ),
+                fillColor: os_color_opa_opa,
+                filled: true, //920
+                hintStyle: TextStyle(
+                  color: Color(0xFFA6A5A6),
+                ),
                 hintText: widget.hint2,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),

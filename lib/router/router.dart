@@ -3,6 +3,7 @@ import 'package:offer_show/page/broke.dart';
 import 'package:offer_show/page/detail.dart';
 import 'package:offer_show/page/home.dart';
 import 'package:offer_show/page/me.dart';
+import 'package:offer_show/page/myhome.dart';
 import 'package:offer_show/page/page1.dart';
 import 'package:offer_show/page/page2.dart';
 
@@ -13,6 +14,7 @@ final routers = {
         salaryId: data,
       ),
   "/me": () => Me(),
+  "/myhome": () => MyHome(),
   "/404": () => Page404(),
   "/1": (param) => page1(
         param: param,

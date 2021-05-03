@@ -35,8 +35,8 @@ class _BrokeTitleState extends State<BrokeTitle> {
           Text(
             widget.txt,
             style: TextStyle(
-              color: os_color,
-              fontSize: 18,
+              color: os_old_color,
+              fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
           ),
