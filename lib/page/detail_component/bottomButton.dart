@@ -29,7 +29,6 @@ class _BottomButtonState extends State<BottomButton> {
             provider.editingController.text = "";
             provider.open();
             provider.foucs(context);
-            // provider.focusNode.requestFocus();
           },
           borderRadius: BorderRadius.circular(10),
           child: Container(

@@ -57,15 +57,6 @@ class OfferShowDraw extends StatelessWidget {
           ),
           occu(height: 5.0),
           Text(
-            "안녕하세요",
-            style: TextStyle(
-              color: Color(0x886B8FE0),
-              fontSize: 20,
-              fontWeight: FontWeight.w100,
-            ),
-          ),
-          occu(height: 5.0),
-          Text(
             "Привет",
             style: TextStyle(
               color: Color(0x886B8FE0),

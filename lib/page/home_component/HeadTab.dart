@@ -89,8 +89,8 @@ class _HeadButtonSingleState extends State<HeadButtonSingle> {
                   ],
           ),
           Container(
-            width: 7,
-            height: 3.5,
+            width: 10,
+            height: 5,
             margin: EdgeInsets.only(top: 3),
             decoration: BoxDecoration(
               color: (widget.index == provider.tabIndex)

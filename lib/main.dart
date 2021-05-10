@@ -35,6 +35,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => SearchProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => IsSearchingProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

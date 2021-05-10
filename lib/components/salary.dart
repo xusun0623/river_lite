@@ -179,7 +179,7 @@ class _SalaryContState extends State<SalaryCont> {
           (widget.data.remark.length == 0
               ? Container()
               : Transform.scale(
-                  scale: 1.03,
+                  scale: 1,
                   child: Container(
                     width: os_width,
                     padding:

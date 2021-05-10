@@ -65,7 +65,7 @@ class _SalaryPrimaryInfoState extends State<SalaryPrimaryInfo> {
               ),
               Container(
                 // height: 80,
-                width: widget.width - 40,
+                width: widget.width - 60,
                 child: Text(
                   widget.cont ?? "",
                   style: TextStyle(

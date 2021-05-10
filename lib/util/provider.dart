@@ -18,13 +18,29 @@ class MainProvider extends ChangeNotifier {
   }
 }
 
+class IsSearchingProvider extends ChangeNotifier {
+  bool searching = false;
+  search() {
+    searching = true;
+    notifyListeners();
+  }
+
+  cancel() {
+    searching = false;
+    notifyListeners();
+  }
+}
+
 //搜索
 class SearchProvider extends ChangeNotifier {
   TextEditingController searchController = new TextEditingController();
   bool getDone = false;
+  bool searching = false;
   Widget column = new Column();
 
   getSearchSalary() async {
+    searching = true;
+    notifyListeners();
     final res = await Api().webapi_v2_search_salary(param: {
       "content": searchController.text,
       "education": "全部",
@@ -57,6 +73,7 @@ class SearchProvider extends ChangeNotifier {
     });
     column = Column(children: tmpWidget);
     getDone = true;
+    searching = false;
     notifyListeners();
   }
 

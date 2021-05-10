@@ -108,7 +108,7 @@ class _SalaryCommentState extends State<SalaryComment> {
                   ],
                 ),
                 Transform.scale(
-                  scale: 1.02,
+                  scale: 1,
                   child: Container(
                     margin: EdgeInsets.only(
                       top: 7,

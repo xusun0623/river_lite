@@ -8,6 +8,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  loading: ^1.0.2
   direct_select: ^2.0.0
   fluttertoast: ^8.0.6
   flutter_easyrefresh: ^2.2.1

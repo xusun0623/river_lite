@@ -97,16 +97,25 @@ class _BottomState2State extends State<BottomState2> {
                 },
                 widget: Container(
                   decoration: BoxDecoration(
-                    color: os_black_opa,
+                    color: os_black_opa_opa,
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: Center(
-                    child: Text(
-                      "取消",
-                      style: TextStyle(
-                        color: os_black,
-                        fontWeight: FontWeight.w700,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.close,
+                          size: 16,
+                        ),
+                        Text(
+                          "取消",
+                          style: TextStyle(
+                            color: os_black,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
