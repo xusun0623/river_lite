@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:loading/indicator/pacman_indicator.dart';
 import 'package:offer_show/asset/data.dart';
 import 'package:offer_show/components/salary.dart';
 import 'package:offer_show/components/tip.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+bool loadingStatus = true; //是否有系统加载状态
 
 class MainProvider extends ChangeNotifier {
   int curNum = 0;

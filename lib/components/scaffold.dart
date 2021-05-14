@@ -111,7 +111,9 @@ class _OSScaffoldState extends State<OSScaffold> {
                     //页面主体部分
                     child: EasyRefresh(
                         header: MaterialHeader(),
-                        footer: BallPulseFooter(),
+                        footer: BallPulseFooter(
+                          color: os_grey,
+                        ),
                         onRefresh: widget.onRefresh,
                         onLoad: widget.onLoad,
                         child: ListView(

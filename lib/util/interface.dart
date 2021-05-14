@@ -1,4 +1,5 @@
 import 'package:offer_show/util/mid_request.dart';
+import 'package:offer_show/util/provider.dart';
 
 /// 接口文档：https://www.yuque.com/oego7z/xotzpt/asf3d5#Ty08q*/
 
@@ -13,6 +14,7 @@ class Api {
   /// "salarytype": "校招",
   /// "limit": "3",
   webapi_v2_offers_4_lr({Map param}) async {
+    loadingStatus = false; //有骨架屏了，不需要加载弹窗
     return await XHttp().postWithGlobalToken(
       param: param,
       url: "/webapi/v2/offers_4_lr",
@@ -28,6 +30,7 @@ class Api {
 
   /// "id": 121,
   webapi_v2_offer_detail({Map param}) async {
+    loadingStatus = false; //有骨架屏了，不需要加载弹窗
     return await XHttp().postWithGlobalToken(
       param: param,
       url: "/webapi/v2/offer_detail",
@@ -86,6 +89,7 @@ class Api {
 
   /// "offer_id": 1,
   webapi_v2_job_comment_list({Map param}) async {
+    loadingStatus = false;
     return await XHttp().postWithGlobalToken(
       param: param,
       url: "/webapi/v2/job_comment_list",

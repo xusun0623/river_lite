@@ -8,6 +8,7 @@ import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class fixedBottom extends StatefulWidget {
   final bool showText;
@@ -104,10 +105,6 @@ class _BottomState2State extends State<BottomState2> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.close,
-                          size: 16,
-                        ),
                         Text(
                           "取消",
                           style: TextStyle(

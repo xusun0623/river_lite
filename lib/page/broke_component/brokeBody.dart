@@ -82,12 +82,50 @@ class _BrokeBodyState extends State<BrokeBody> {
     return Container(
       child: Column(
         children: [
+          _getCommonWidget(
+            txt: "公司",
+            path: "lib/img/broke-company.svg",
+            hint: "公司名称",
+            enable: true,
+            index: 0,
+          ),
+          _getCommonWidget(
+            txt: "岗位",
+            path: "lib/img/broke-job.svg",
+            hint: "岗位名称",
+            enable: true,
+            index: 1,
+          ),
+          _getCommonWidget(
+            txt: "城市",
+            path: "lib/img/broke-city.svg",
+            hint: "公司所在城市",
+            enable: true,
+            index: 2,
+          ),
           _insertWidget(
-            widget: BrokeDoubleSelect(
-              controller: _controllers[6],
+            widget: BrokeSelectInput(
+              index: 0,
+              elements: [
+                "IT|互联网|通信",
+                "销售|客服|市场",
+                "财务|人力资源|行政",
+                "项目质量|高级管理",
+                "房产建筑|物业管理",
+                "金融",
+                "采购|贸易|交通|物流",
+                "生产|制造",
+                "传媒|印刷|艺术|设计",
+                "咨询|法律|教育|翻译",
+                "服务业",
+                "能源环保|农业科研",
+                "其他行业",
+                "兼职|实习|社工|其他",
+              ],
+              controller: _controllers[8],
             ),
-            txt: "类型",
-            path: "lib/img/broke-type.svg",
+            txt: "行业",
+            path: "lib/img/broke-industry.svg",
           ),
           _insertWidget(
             widget: BrokeSelectInput(
@@ -113,49 +151,11 @@ class _BrokeBodyState extends State<BrokeBody> {
             path: "lib/img/broke-education.svg",
           ),
           _insertWidget(
-            widget: BrokeSelectInput(
-              index: 0,
-              elements: [
-                "IT|互联网|通信",
-                "销售|客服|市场",
-                "财务|人力资源|行政",
-                "项目质量|高级管理",
-                "房产建筑|物业管理",
-                "金融",
-                "采购|贸易|交通|物流",
-                "生产|制造",
-                "传媒|印刷|艺术|设计",
-                "咨询|法律|教育|翻译",
-                "服务业",
-                "能源环保|农业科研",
-                "其他行业",
-                "兼职|实习|社工|其他",
-              ],
-              controller: _controllers[8],
+            widget: BrokeDoubleSelect(
+              controller: _controllers[6],
             ),
-            txt: "学历",
-            path: "lib/img/broke-industry.svg",
-          ),
-          _getCommonWidget(
-            txt: "公司",
-            path: "lib/img/broke-company.svg",
-            hint: "公司名称",
-            enable: true,
-            index: 0,
-          ),
-          _getCommonWidget(
-            txt: "岗位",
-            path: "lib/img/broke-job.svg",
-            hint: "岗位名称",
-            enable: true,
-            index: 1,
-          ),
-          _getCommonWidget(
-            txt: "城市",
-            path: "lib/img/broke-city.svg",
-            hint: "公司所在城市",
-            enable: true,
-            index: 2,
+            txt: "类型",
+            path: "lib/img/broke-type.svg",
           ),
           _getCommonWidget(
             txt: "薪资描述",

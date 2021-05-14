@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class RightButtons extends StatefulWidget {
   @override
@@ -12,6 +16,7 @@ class RightButtons extends StatefulWidget {
 class _RightButtonsState extends State<RightButtons> {
   @override
   Widget build(BuildContext context) {
+    KeyBoard provider = Provider.of<KeyBoard>(context);
     return Container(
       width: os_width * 0.48,
       child: Row(
@@ -36,6 +41,19 @@ class _RightButtonsState extends State<RightButtons> {
             width: os_width * 0.12,
           ),
           myInkWell(
+            tap: () async {
+              final res = await Api().webapi_jobdislike(
+                param: {
+                  "id": "${provider.nowSalaryId}",
+                },
+              );
+              if (res['msg'] != null) {
+                Fluttertoast.showToast(
+                  msg: "${res['msg']}",
+                  gravity: ToastGravity.CENTER,
+                );
+              }
+            },
             widget: RightButtonSingle(
               txt: "不可信",
               path: "lib/img/detail-unlike.svg",
@@ -45,6 +63,19 @@ class _RightButtonsState extends State<RightButtons> {
             width: os_width * 0.12,
           ),
           myInkWell(
+            tap: () async {
+              final res = await Api().webapi_joblike(
+                param: {
+                  "id": "${provider.nowSalaryId}",
+                },
+              );
+              if (res['msg'] != null) {
+                Fluttertoast.showToast(
+                  msg: "${res['msg']}",
+                  gravity: ToastGravity.CENTER,
+                );
+              }
+            },
             widget: RightButtonSingle(
               txt: "可信",
               path: "lib/img/detail-like.svg",

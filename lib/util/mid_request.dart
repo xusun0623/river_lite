@@ -3,6 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:io';
 
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:offer_show/util/provider.dart';
+
 class ServerConfig {
   String os_url = "https://www.ioffershow.com";
   String os_salt = "offershow762932334";
@@ -16,6 +19,7 @@ class ServerConfig {
 // }
 
 enum Method { GET, POST, PUT, DELETE, PATCH }
+enum WithLoading { YES, NOOP }
 
 class XHttp {
   //发起网络请求
@@ -39,6 +43,9 @@ class XHttp {
     dio.options.connectTimeout = 5000; //5s
     dio.options.receiveTimeout = 3000;
 
+    EasyLoading.instance..indicatorType = EasyLoadingIndicatorType.ring;
+    EasyLoading.instance..maskType = EasyLoadingMaskType.black;
+    if (loadingStatus) EasyLoading.show(status: '加载中…');
     Response response = await dio.request(
       url,
       data: param,
@@ -64,7 +71,8 @@ class XHttp {
     // print("${response}");
     Map<String, dynamic> user = jsonDecode(response.toString());
     print("$user");
-
+    EasyLoading.dismiss();
+    loadingStatus = true;
     return user;
   }
 

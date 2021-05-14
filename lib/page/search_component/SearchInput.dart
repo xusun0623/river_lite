@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:loading/indicator/ball_beat_indicator.dart';
 import 'package:loading/indicator/ball_pulse_indicator.dart';
 import 'package:loading/indicator/ball_scale_multiple_indicator.dart';
 import 'package:loading/indicator/line_scale_pulse_out_indicator.dart';
@@ -69,26 +71,15 @@ class _SearchInputState extends State<SearchInput> {
           ),
           Container(
             width: 60,
-            child: provider.searching
-                ? Container(
-                    margin: EdgeInsets.only(
-                      right: 10,
-                    ),
-                    child: Loading(
-                      indicator: BallScaleMultipleIndicator(),
-                      size: 20,
-                      color: Colors.black,
-                    ),
-                  )
-                : IconButton(
-                    icon: Icon(
-                      Icons.search,
-                      size: 28,
-                    ),
-                    onPressed: () {
-                      provider.search();
-                    },
-                  ),
+            child: IconButton(
+              icon: Icon(
+                Icons.search,
+                size: 28,
+              ),
+              onPressed: () {
+                provider.search();
+              },
+            ),
           ),
         ],
       ),
