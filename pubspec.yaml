@@ -8,6 +8,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  sqflite: ^2.0.0+3
   flutter_easyloading: ^3.0.0
   loading: ^1.0.2
   direct_select: ^2.0.0

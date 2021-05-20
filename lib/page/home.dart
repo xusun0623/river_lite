@@ -4,6 +4,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/logo.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/cartoon.dart';
+import 'package:offer_show/database/db_manager.dart';
 import 'package:offer_show/page/404.dart';
 import 'package:offer_show/page/broke.dart';
 import 'package:offer_show/page/home_component/HomeDrawer.dart';
@@ -25,6 +26,12 @@ class _HomeState extends State<Home> {
     Me(),
   ];
   var _tabBarIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    DBManager.isTableExits("test");
+  }
+
   @override
   Widget build(BuildContext context) {
     os_width = MediaQuery.of(context).size.width;

@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/data.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/byxusun.dart';
+import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/occu.dart';
 import 'package:offer_show/components/salary.dart';
 import 'package:offer_show/components/scaffold.dart';
@@ -37,7 +40,6 @@ class _MeState extends State<Me> {
   void _getData() async {
     final res = await Api().webapi_v2_offers_4_lr(
       param: {
-        // "xueli": "全部",
         "salarytype": "校招",
         "limit": 5,
       },
@@ -48,16 +50,7 @@ class _MeState extends State<Me> {
 
   List<Widget> _buildList() {
     var t = <Widget>[];
-    t
-      ..add(occu(height: 10.0))
-      ..add(
-        OSTitle(
-          title: "我的收藏",
-          tip: "本地存储，不记录个人信息；如需屏蔽，请在对应薪资下反馈",
-        ),
-      );
     salaryData.forEach((element) {
-      // print("$element");
       t.add(OSSalary(
         data: SalaryData(
           company: element["company"].toString(),
@@ -76,13 +69,10 @@ class _MeState extends State<Me> {
       ));
     });
     t
-      ..add(occu())
       ..add(byxusun(
         show: salaryData.length != 0,
         txt: "一键清除收藏",
       ))
-      ..add(occu())
-      ..add(occu())
       ..add(occu());
     return t;
   }
@@ -91,29 +81,39 @@ class _MeState extends State<Me> {
   Widget build(BuildContext context) {
     final double additionalBottomPadding =
         math.max(MediaQuery.of(context).padding.bottom - 12.0 / 2.0, 0.0);
-    return OSScaffold(
-      onRefresh: () async {
-        await _getData();
-        return new Future.delayed(Duration(microseconds: 1));
-      },
-      bodyColor: os_back,
-      headerHeight: 100.0,
-      header: Container(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            HeadButton(icon: icons[0], txt: "平台公约"),
-            HeadButton(icon: icons[1], txt: "薪资海报"),
-            HeadButton(icon: icons[2], txt: "薪资论坛"),
-            HeadButton(icon: icons[3], txt: "意见反馈"),
-          ],
-        ),
-      ),
-      columnHeight:
-          os_height - kBottomNavigationBarHeight - additionalBottomPadding,
+    EdgeInsets padding = MediaQuery.of(context).padding;
+    double top = max(padding.top, EdgeInsets.zero.top);
+    return Scaffold(
+      backgroundColor: os_back,
       body: Column(
-        children: _buildList(),
+        children: [
+          occu(height: top + 20),
+          Container(
+            color: os_back,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                HeadButton(icon: icons[0], txt: "平台公约"),
+                HeadButton(icon: icons[1], txt: "薪资海报"),
+                HeadButton(icon: icons[2], txt: "薪资论坛"),
+                HeadButton(icon: icons[3], txt: "意见反馈"),
+              ],
+            ),
+          ),
+          Container(
+            child: ListView(
+              children: _buildList(),
+            ),
+            width: os_width - 2 * os_padding,
+            margin: EdgeInsets.only(top: 15),
+            height: 400,
+            decoration: BoxDecoration(
+              color: os_white,
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -158,19 +158,29 @@ class _HeadButtonState extends State<HeadButton> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          width: 50,
-          height: 50,
-          padding: new EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: os_white,
-            borderRadius: BorderRadius.circular(10000),
+        myInkWell(
+          color: os_white,
+          widget: Container(
+            width: 80,
+            height: 80,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  widget.icon,
+                  width: os_width * 0.1,
+                  height: os_width * 0.1,
+                  color: os_color,
+                  placeholderBuilder: (BuildContext context) => Container(
+                    child: const CircularProgressIndicator(),
+                  ),
+                ),
+              ],
+            ),
           ),
-          child: SvgPicture.asset(
-            widget.icon,
-            placeholderBuilder: (BuildContext context) =>
-                Container(child: const CircularProgressIndicator()),
-          ),
+          width: 70,
+          height: 70,
+          radius: 1000.0,
         ),
         Container(
           height: 5,
@@ -178,9 +188,9 @@ class _HeadButtonState extends State<HeadButton> {
         Text(
           widget.txt,
           style: TextStyle(
-            color: Color(0xAAFFFFFF),
-            // fontWeight: FontWeight.w600,
-            fontSize: 13,
+            color: os_color,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],
