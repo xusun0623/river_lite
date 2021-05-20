@@ -13,6 +13,7 @@ import 'package:offer_show/page/myhome.dart';
 import 'package:offer_show/page/page1.dart';
 import 'package:offer_show/page/page2.dart';
 import 'package:offer_show/router/tabbar.dart';
+import 'package:offer_show/page/me.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -26,11 +27,6 @@ class _HomeState extends State<Home> {
     Me(),
   ];
   var _tabBarIndex = 0;
-  @override
-  void initState() {
-    super.initState();
-    DBManager.isTableExits("test");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +57,6 @@ class _HomeState extends State<Home> {
           } else {
             setState(() {
               _tabBarIndex = index;
-              print("$_tabBarIndex");
             });
           }
         },

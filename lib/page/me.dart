@@ -1,54 +1,55 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/data.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/byxusun.dart';
+import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/occu.dart';
 import 'package:offer_show/components/salary.dart';
 import 'package:offer_show/components/scaffold.dart';
 import 'package:offer_show/components/title.dart';
+import 'package:offer_show/database/collect_salary.dart';
 import 'dart:math' as math;
 
 import 'package:offer_show/page/broke.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class Me extends StatefulWidget {
+  const Me({Key key}) : super(key: key);
   @override
   _MeState createState() => _MeState();
 }
 
 class _MeState extends State<Me> {
-  var salaryData = [];
-
   final icons = [
     "lib/img/me-agreement.svg",
     "lib/img/me-poster.svg",
     "lib/img/me-discuss.svg",
     "lib/img/me-feedback.svg",
   ];
+
   @override
   void initState() {
-    print("Hello");
-    _getData();
+    new Future.delayed(Duration.zero, () {
+      getData();
+    });
     super.initState();
   }
 
-  void _getData() async {
-    final res = await Api().webapi_v2_offers_4_lr(
-      param: {
-        "salarytype": "校招",
-        "limit": 5,
-      },
-    );
-    salaryData = toLocalSalary(res['info']);
-    this.setState(() {});
+  getData() async {
+    await Provider.of<CollectData>(context, listen: false).refresh();
   }
 
-  List<Widget> _buildList() {
+  Widget _buildList(salaryData) {
+    print("build");
     var t = <Widget>[];
     salaryData.forEach((element) {
       t.add(OSSalary(
@@ -68,52 +69,65 @@ class _MeState extends State<Me> {
         ),
       ));
     });
-    t
-      ..add(byxusun(
-        show: salaryData.length != 0,
-        txt: "一键清除收藏",
-      ))
-      ..add(occu());
-    return t;
+    return Column(children: t);
   }
 
   @override
   Widget build(BuildContext context) {
+    CollectData provider = Provider.of<CollectData>(context);
     final double additionalBottomPadding =
         math.max(MediaQuery.of(context).padding.bottom - 12.0 / 2.0, 0.0);
+    double height = MediaQuery.of(context).size.height;
     EdgeInsets padding = MediaQuery.of(context).padding;
     double top = max(padding.top, EdgeInsets.zero.top);
     return Scaffold(
       backgroundColor: os_back,
-      body: Column(
-        children: [
-          occu(height: top + 20),
-          Container(
-            color: os_back,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                HeadButton(icon: icons[0], txt: "平台公约"),
-                HeadButton(icon: icons[1], txt: "薪资海报"),
-                HeadButton(icon: icons[2], txt: "薪资论坛"),
-                HeadButton(icon: icons[3], txt: "意见反馈"),
-              ],
+      body: EasyRefresh(
+        header: MaterialHeader(
+          enableHapticFeedback: true,
+        ),
+        onRefresh: () async {
+          await getData();
+          return;
+        },
+        child: ListView(
+          children: [
+            occu(height: top + 20.0),
+            Container(
+              color: os_back,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  HeadButton(icon: icons[0], txt: "平台公约"),
+                  HeadButton(icon: icons[1], txt: "薪资海报"),
+                  HeadButton(icon: icons[2], txt: "薪资论坛"),
+                  HeadButton(icon: icons[3], txt: "意见反馈"),
+                ],
+              ),
             ),
-          ),
-          Container(
-            child: ListView(
-              children: _buildList(),
-            ),
-            width: os_width - 2 * os_padding,
-            margin: EdgeInsets.only(top: 15),
-            height: 400,
-            decoration: BoxDecoration(
-              color: os_white,
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-          ),
-        ],
+            occu(height: 20.0),
+            provider.salaryData.length == 0
+                ? OSEmpty(txt: "您还没有收藏薪资哦", show: true)
+                : _buildList(provider.salaryData),
+            provider.salaryData.length == 0
+                ? Container()
+                : ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(os_back),
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                      foregroundColor: MaterialStateProperty.all(os_deep_grey),
+                    ),
+                    onPressed: () async {
+                      CollectSalary().clear();
+                      provider.clear();
+                    },
+                    child: Text("清空收藏"),
+                  ),
+            occu(height: 20.0),
+          ],
+        ),
       ),
     );
   }

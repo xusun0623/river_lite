@@ -47,7 +47,8 @@ class _SalaryCommentState extends State<SalaryComment> {
             padding: EdgeInsets.only(
               left: os_padding * 1.5,
               right: os_padding * 1.5,
-              top: 10.0,
+              top: 15.0,
+              // bottom: 10.0,
             ),
             child: Column(
               children: [
@@ -68,7 +69,7 @@ class _SalaryCommentState extends State<SalaryComment> {
                           )],
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            // fontSize: 16,
+                            fontSize: 16,
                           ),
                         ),
                         Container(width: 5),
@@ -87,7 +88,7 @@ class _SalaryCommentState extends State<SalaryComment> {
                               (widget.index ?? 1).toString() + "楼",
                               style: TextStyle(
                                 color: os_color,
-                                fontSize: 12,
+                                fontSize: 14,
                                 letterSpacing: 0.5,
                                 // fontWeight: FontWeight.w200,
                               ),
@@ -100,32 +101,29 @@ class _SalaryCommentState extends State<SalaryComment> {
                         padding: EdgeInsets.all(3.0),
                         icon: os_svg(
                           path: "lib/img/salary-more.svg",
-                          size: 22,
+                          size: 24,
                         ),
                         onPressed: () {},
                       ),
                     )
                   ],
                 ),
-                Transform.scale(
-                  scale: 1,
-                  child: Container(
-                    margin: EdgeInsets.only(
-                      top: 7,
-                      bottom: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(0, 0, 0, 0.03),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: EdgeInsets.all(8),
-                    width: os_width,
-                    child: Text(
-                      widget.content ?? "该留言已删除",
-                      style: TextStyle(
-                        fontSize: 14,
-                        // color: os_deep_grey,
-                      ),
+                Container(
+                  margin: EdgeInsets.only(
+                    top: 7,
+                    bottom: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(0, 0, 0, 0.03),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.all(8),
+                  width: os_width,
+                  child: Text(
+                    widget.content ?? "该留言已删除",
+                    style: TextStyle(
+                      fontSize: 16,
+                      // color: os_deep_grey,
                     ),
                   ),
                 ),
@@ -142,8 +140,8 @@ class _SalaryCommentState extends State<SalaryComment> {
                 Container(
                   height: 1,
                   width: os_width - 2 * os_padding,
-                  color: Color(0xFFF3F3F3),
-                  margin: EdgeInsets.only(top: 10),
+                  color: Color(0xFFFAFAFA),
+                  margin: EdgeInsets.only(top: 13),
                 ),
               ],
             ),

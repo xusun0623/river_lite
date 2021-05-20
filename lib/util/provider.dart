@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:loading/indicator/pacman_indicator.dart';
 import 'package:offer_show/asset/data.dart';
 import 'package:offer_show/components/salary.dart';
 import 'package:offer_show/components/tip.dart';
+import 'package:offer_show/database/collect_salary.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 bool loadingStatus = true; //是否有系统加载状态
 
@@ -23,16 +27,28 @@ class MainProvider extends ChangeNotifier {
   }
 }
 
-class IsSearchingProvider extends ChangeNotifier {
-  bool searching = false;
-  search() {
-    searching = true;
+class CollectData extends ChangeNotifier {
+  var salaryData = [];
+
+  clear() {
+    salaryData = [];
     notifyListeners();
   }
 
-  cancel() {
-    searching = false;
-    notifyListeners();
+  refresh() async {
+    List collect = await CollectSalary().getCollect();
+    collect.removeWhere((element) => element.length == 0);
+    if (collect.length != 0) {
+      final res = await Api().webapi_v2_user_favorite_offer(
+        param: {
+          "offerids": collect.join("_"),
+          "limit": 50,
+          "offset": 0,
+        },
+      );
+      salaryData = toLocalSalary(res['info']);
+      notifyListeners();
+    }
   }
 }
 

@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           create: (context) => SearchProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => IsSearchingProvider(),
+          create: (context) => CollectData(),
         ),
       ],
       child: MaterialApp(

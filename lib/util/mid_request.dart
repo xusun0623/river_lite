@@ -4,6 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'dart:io';
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:offer_show/util/provider.dart';
 
 class ServerConfig {
@@ -46,7 +47,8 @@ class XHttp {
     EasyLoading.instance..indicatorType = EasyLoadingIndicatorType.ring;
     EasyLoading.instance..maskType = EasyLoadingMaskType.black;
     if (loadingStatus) EasyLoading.show(status: '加载中…');
-    Response response = await dio.request(
+    Response response = await dio
+        .request(
       url,
       data: param,
       options: Options(
@@ -64,16 +66,24 @@ class XHttp {
           Method.PATCH,
         ].indexOf(method)],
       ),
+    )
+        .catchError(
+      (err) {
+        Fluttertoast.showToast(
+          msg: "网络请求错误",
+          gravity: ToastGravity.CENTER,
+        );
+      },
     );
-    // print("地址:$url入参:$param回参:${response}");
-    // print("${response.toString()}");
-    // print("${response}");
-    // print("${response}");
-    Map<String, dynamic> user = jsonDecode(response.toString());
-    print("$user");
     EasyLoading.dismiss();
-    loadingStatus = true;
-    return user;
+    if (response != null) {
+      Map<String, dynamic> user = jsonDecode(response.toString());
+      print("地址:$url入参:$param回参:$user");
+      loadingStatus = true;
+      return user;
+    } else {
+      return new Map();
+    }
   }
 
   //带Token

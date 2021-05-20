@@ -8,6 +8,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  shared_preferences: ^2.0.5
   sqflite: ^2.0.0+3
   flutter_easyloading: ^3.0.0
   loading: ^1.0.2
@@ -47,6 +48,7 @@ flutter:
     - lib/img/detail-skelon.svg
     - lib/img/salary-more.svg
     - lib/img/detail-collect.svg
+    - lib/img/detail-collected.svg
     - lib/img/detail-feedback.svg
     - lib/img/detail-like.svg
     - lib/img/detail-unlike.svg

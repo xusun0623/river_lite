@@ -54,6 +54,7 @@ class Api {
   /// "limit": 8,
   /// "offset": 0,
   webapi_v2_user_favorite_offer({Map param}) async {
+    loadingStatus = false;
     return await XHttp().postWithGlobalToken(
       param: param,
       url: "/webapi/v2/user_favorite_offer",

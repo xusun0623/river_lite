@@ -187,10 +187,11 @@ class _BottomState1State extends State<BottomState1> {
   Widget build(BuildContext context) {
     return Container(
       width: os_width,
-      height: 60,
+      height: 70,
       padding: EdgeInsets.only(
         left: os_padding,
         right: os_padding,
+        bottom: 10,
       ),
       decoration: BoxDecoration(
           color: os_white,
