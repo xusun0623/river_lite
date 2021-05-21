@@ -8,6 +8,8 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  shelf_proxy: ^1.0.0
+  shelf: ^1.1.4
   shared_preferences: ^2.0.5
   sqflite: ^2.0.0+3
   flutter_easyloading: ^3.0.0
