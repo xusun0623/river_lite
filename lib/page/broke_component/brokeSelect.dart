@@ -77,9 +77,9 @@ class MySelectionItem extends StatelessWidget {
                 padding: EdgeInsets.all(0.0),
               )
             : myInkWell(
-                splashColor: os_color_opa_opa,
-                color: os_color_opa_opa,
-                highlightColor: os_color_opa_opa,
+                splashColor: Color.fromRGBO(0, 0, 0, 0.025),
+                color: Color.fromRGBO(0, 0, 0, 0.025),
+                highlightColor: Color.fromRGBO(0, 0, 0, 0.025),
                 widget: Container(
                   height: 55,
                   decoration: BoxDecoration(

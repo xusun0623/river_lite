@@ -182,8 +182,8 @@ class _HeadButtonState extends State<HeadButton> {
               children: [
                 SvgPicture.asset(
                   widget.icon,
-                  width: os_width * 0.1,
-                  height: os_width * 0.1,
+                  width: 40,
+                  height: 40,
                   color: os_color,
                   placeholderBuilder: (BuildContext context) => Container(
                     child: const CircularProgressIndicator(),

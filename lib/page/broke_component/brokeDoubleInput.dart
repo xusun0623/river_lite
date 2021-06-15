@@ -43,7 +43,7 @@ class _BrokeInputDoubleState extends State<BrokeInputDouble> {
                   vertical: 15.0,
                   horizontal: 15.0,
                 ),
-                fillColor: os_color_opa_opa,
+                fillColor: Color.fromRGBO(0, 0, 0, 0.025),
                 filled: true, //920
                 hintStyle: TextStyle(
                   color: Color(0xFFA6A5A6),
@@ -71,7 +71,7 @@ class _BrokeInputDoubleState extends State<BrokeInputDouble> {
                   vertical: 15.0,
                   horizontal: 15.0,
                 ),
-                fillColor: os_color_opa_opa,
+                fillColor: Color.fromRGBO(0, 0, 0, 0.025),
                 filled: true, //920
                 hintStyle: TextStyle(
                   color: Color(0xFFA6A5A6),

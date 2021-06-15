@@ -50,7 +50,7 @@ class _BrokeDoubleSelectState extends State<BrokeDoubleSelect> {
                 width: os_width - 3 * os_padding,
                 height: 55,
                 decoration: BoxDecoration(
-                  color: os_color_opa_opa,
+                  color: Color.fromRGBO(0, 0, 0, 0.025),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),

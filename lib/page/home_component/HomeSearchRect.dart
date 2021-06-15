@@ -35,7 +35,7 @@ class _HomeSearchRectState extends State<HomeSearchRect> {
                 ],
               ),
             ),
-            width: os_width,
+            width: MediaQuery.of(context).size.width,
             height: 45,
             radius: 10,
           ),

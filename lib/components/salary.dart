@@ -28,7 +28,7 @@ class _OSSalaryState extends State<OSSalary> {
             borderRadius: BorderRadius.circular(10),
             color: os_white,
           ),
-          width: os_width - 2 * os_padding,
+          width: MediaQuery.of(context).size.width - 2 * os_padding,
           child: InkWell(
             onTap: () {
               print(widget.data.salaryId);
