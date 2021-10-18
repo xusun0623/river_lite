@@ -48,28 +48,7 @@ class _HomeFirstPageState extends State<HomeFirstPage> {
           return await Provider.of<HomeSchoolSalarys>(context, listen: false)
               .getHomeSalary(context);
         },
-        child: ListView(
-          children: [
-            HomeSearchRect(),
-            provider.isOpen
-                ? HomeFilter(
-                    filter: () {
-                      provider_school_home.getHomeSalary(context);
-                      provider.close();
-                    },
-                  )
-                : Container(),
-            os_svg(
-              show: !provider_school_home.getDone,
-              width: os_width * 0.98,
-              height: os_width * 1.96,
-              path: "lib/img/home-skelon.svg",
-            ),
-            provider_school_home.column,
-            byxusun(show: true, txt: "数据有限，更多复杂查询请使用+号来组合查询。"),
-            occu(),
-          ],
-        ),
+        child: provider_school_home.column,
       ),
     );
   }
