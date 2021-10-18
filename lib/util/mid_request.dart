@@ -10,7 +10,7 @@ import 'package:offer_show/util/provider.dart';
 class ServerConfig {
   String os_url = "https://www.ioffershow.com";
   String os_salt = "offershow762932334";
-  String os_token = "\$ytkzhLIvv5+sYwytrpIDkg26d4HQpxjr6pCoffershowzju1qaz";
+  String os_token = "\$yt1kzhL23Ivv5+sYwy23tkg26423Hjr62pCoff11ersh223owzjuaz";
 }
 
 // class ServerConfig {
@@ -155,11 +155,12 @@ class XHttp {
     var token = ServerConfig().os_token; //Token
     param = param == null ? {} : param;
     param.addAll({
-      "access_token": "${token}.${timeStamp}." +
-          md5
-              .convert(utf8
-                  .encode("${token}.${ServerConfig().os_salt}.${timeStamp}"))
-              .toString()
+      // "access_token": "${token}.${timeStamp}." +
+      //     md5
+      //         .convert(utf8
+      //             .encode("${token}.${ServerConfig().os_salt}.${timeStamp}"))
+      //         .toString()
+      "access_token": "${token}"
     });
     return await netWorkRequest(
         method: method,
