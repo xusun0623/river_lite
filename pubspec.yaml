@@ -46,7 +46,7 @@ flutter:
     - lib/img/detail-company.svg
     - lib/img/detail-city.svg
     - lib/img/detail-rightBottom.svg
-    - lib/img/detail-info.svg
+    - lib/img/detail-info.svg 
     - lib/img/detail-skelon.svg
     - lib/img/salary-more.svg
     - lib/img/detail-collect.svg

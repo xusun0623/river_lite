@@ -7,6 +7,8 @@ import 'package:offer_show/asset/data.dart';
 import 'package:offer_show/components/salary.dart';
 import 'package:offer_show/components/tip.dart';
 import 'package:offer_show/database/collect_salary.dart';
+import 'package:offer_show/page/home_component/HomeSearchRect.dart';
+import 'package:offer_show/page/search_component/SearchInput.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -183,51 +185,52 @@ class HomeSchoolSalarys extends ChangeNotifier {
       },
     );
     final tmp = toLocalSalary(res['info']);
-    // List<Widget> tmpWidget = [];
-    // tmp.forEach((element) {
-    //   tmpWidget.add(OSSalary(
-    //     data: new SalaryData(
-    //       company: element["company"].toString(),
-    //       city: element["city"].toString(),
-    //       confidence: element["confidence"].toString(),
-    //       education: element["education"].toString(),
-    //       money: element["money"].toString(),
-    //       job: element["job"].toString(),
-    //       remark: element["remark"].toString(),
-    //       look: element["look"].toString(),
-    //       salaryLow: element["salaryLow"].toString(),
-    //       salaryHigh: element["salaryHigh"].toString(),
-    //       time: element["time"].toString(),
-    //       industry: element["industry"].toString(),
-    //       type: element["type"].toString(),
-    //       salaryId: element["salaryId"].toString(),
-    //     ),
-    //   ));
-    // });
-    column = ListView.builder(
-      itemCount: tmp.length,
-      itemBuilder: (context, index) {
-        return OSSalary(
-          data: new SalaryData(
-            company: tmp[index]["company"].toString(),
-            city: tmp[index]["city"].toString(),
-            confidence: tmp[index]["confidence"].toString(),
-            education: tmp[index]["education"].toString(),
-            money: tmp[index]["money"].toString(),
-            job: tmp[index]["job"].toString(),
-            remark: tmp[index]["remark"].toString(),
-            look: tmp[index]["look"].toString(),
-            salaryLow: tmp[index]["salaryLow"].toString(),
-            salaryHigh: tmp[index]["salaryHigh"].toString(),
-            time: tmp[index]["time"].toString(),
-            industry: tmp[index]["industry"].toString(),
-            type: tmp[index]["type"].toString(),
-            salaryId: tmp[index]["salaryId"].toString(),
-          ),
-        );
-      },
-    );
-    // column = Column(children: tmpWidget);
+    List<Widget> tmpWidget = [];
+    tmpWidget.add(HomeSearchRect());
+    tmp.forEach((element) {
+      tmpWidget.add(OSSalary(
+        data: new SalaryData(
+          company: element["company"].toString(),
+          city: element["city"].toString(),
+          confidence: element["confidence"].toString(),
+          education: element["education"].toString(),
+          money: element["money"].toString(),
+          job: element["job"].toString(),
+          remark: element["remark"].toString(),
+          look: element["look"].toString(),
+          salaryLow: element["salaryLow"].toString(),
+          salaryHigh: element["salaryHigh"].toString(),
+          time: element["time"].toString(),
+          industry: element["industry"].toString(),
+          type: element["type"].toString(),
+          salaryId: element["salaryId"].toString(),
+        ),
+      ));
+    });
+    // column = ListView.builder(
+    //   itemCount: tmp.length,
+    //   itemBuilder: (context, index) {
+    //     return OSSalary(
+    //       data: new SalaryData(
+    //         company: tmp[index]["company"].toString(),
+    //         city: tmp[index]["city"].toString(),
+    //         confidence: tmp[index]["confidence"].toString(),
+    //         education: tmp[index]["education"].toString(),
+    //         money: tmp[index]["money"].toString(),
+    //         job: tmp[index]["job"].toString(),
+    //         remark: tmp[index]["remark"].toString(),
+    //         look: tmp[index]["look"].toString(),
+    //         salaryLow: tmp[index]["salaryLow"].toString(),
+    //         salaryHigh: tmp[index]["salaryHigh"].toString(),
+    //         time: tmp[index]["time"].toString(),
+    //         industry: tmp[index]["industry"].toString(),
+    //         type: tmp[index]["type"].toString(),
+    //         salaryId: tmp[index]["salaryId"].toString(),
+    //       ),
+    //     );
+    //   },
+    // );
+    column = Column(children: tmpWidget);
     getDone = true;
     notifyListeners();
     return Container();
