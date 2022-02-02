@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
-import 'package:offer_show/components/scaffold.dart';
 import 'package:offer_show/page/search_component/SearchInput.dart';
 import 'package:offer_show/page/search_component/SearchPlaceHolder.dart';
 import 'package:offer_show/util/provider.dart';

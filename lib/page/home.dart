@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/logo.dart';
 import 'package:offer_show/asset/size.dart';
-import 'package:offer_show/components/cartoon.dart';
-import 'package:offer_show/database/db_manager.dart';
 import 'package:offer_show/page/404.dart';
 import 'package:offer_show/page/broke.dart';
 import 'package:offer_show/page/home_component/HomeDrawer.dart';
 import 'package:offer_show/page/me.dart';
 import 'package:offer_show/page/myhome.dart';
-import 'package:offer_show/page/page1.dart';
-import 'package:offer_show/page/page2.dart';
-import 'package:offer_show/router/tabbar.dart';
-import 'package:offer_show/page/me.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -23,10 +15,37 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final homePages = [
     MyHome(),
+    Broke(),
     Page404(),
     Me(),
   ];
   var _tabBarIndex = 0;
+  final List<BottomNavigationBarItem> bottomNavItems = [
+    BottomNavigationBarItem(
+      backgroundColor: Colors.blue,
+      icon: Icon(Icons.home_outlined),
+      label: "首页",
+      tooltip: "",
+    ),
+    BottomNavigationBarItem(
+      backgroundColor: Colors.blue,
+      icon: Icon(Icons.sort),
+      label: "广场",
+      tooltip: "",
+    ),
+    BottomNavigationBarItem(
+      backgroundColor: Colors.blue,
+      icon: Icon(Icons.notifications_active_outlined),
+      label: "消息",
+      tooltip: "",
+    ),
+    BottomNavigationBarItem(
+      backgroundColor: Colors.red,
+      icon: Icon(Icons.person_outline),
+      label: "我",
+      tooltip: "",
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -34,37 +53,34 @@ class _HomeState extends State<Home> {
     os_height = MediaQuery.of(context).size.height;
     os_padding = os_width * 0.025;
     return Scaffold(
-      drawer: OfferShowDraw(),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: os_color,
-        onPressed: () {
-          // Navigator.push(context, CustomRouteSlide(Broke()));
-          Navigator.pushNamed(context, "/broke");
-        },
-        child: Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: IndexedStack(
-        children: homePages,
-        index: _tabBarIndex,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        unselectedFontSize: 12,
-        selectedFontSize: 12,
-        onTap: (index) {
-          if (index == 1) {
-            // Navigator.pushNamed(context, "/broke");
-          } else {
-            setState(() {
-              _tabBarIndex = index;
-            });
-          }
-        },
-        currentIndex: _tabBarIndex,
-        type: BottomNavigationBarType.fixed,
-        items: bottomNavItems,
-      ),
-      appBar: null,
-    );
+        body: IndexedStack(
+          children: homePages,
+          index: _tabBarIndex,
+        ),
+        bottomNavigationBar: Theme(
+          data: ThemeData(
+            brightness: Brightness.light,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+          child: BottomNavigationBar(
+            elevation: 8,
+            showUnselectedLabels: true,
+            unselectedFontSize: 11,
+            selectedFontSize: 11,
+            selectedIconTheme: IconThemeData(size: 26),
+            unselectedIconTheme: IconThemeData(size: 26),
+            selectedItemColor: os_color,
+            backgroundColor: os_white,
+            type: BottomNavigationBarType.fixed,
+            onTap: (index) {
+              setState(() {
+                _tabBarIndex = index;
+              });
+            },
+            currentIndex: _tabBarIndex,
+            items: bottomNavItems,
+          ),
+        ));
   }
 }
