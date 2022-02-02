@@ -8,7 +8,6 @@ import 'package:offer_show/components/salary.dart';
 import 'package:offer_show/components/tip.dart';
 import 'package:offer_show/database/collect_salary.dart';
 import 'package:offer_show/page/home_component/HomeSearchRect.dart';
-import 'package:offer_show/page/search_component/SearchInput.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';

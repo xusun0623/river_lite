@@ -2,9 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/size.dart';
-import 'package:offer_show/page/search_component/SearchInput.dart';
-import 'package:offer_show/page/search_component/SearchPlaceHolder.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -17,11 +14,6 @@ class _OSSearchState extends State<OSSearch> {
   @override
   void initState() {
     super.initState();
-    // new Future.delayed(Duration.zero, () {
-    //   SearchProvider provider =
-    //       Provider.of<SearchProvider>(context, listen: false);
-    //   provider.getSearchSalary();
-    // });
   }
 
   @override
@@ -31,14 +23,12 @@ class _OSSearchState extends State<OSSearch> {
     double top = max(padding.top, EdgeInsets.zero.top);
     return Material(
       color: os_back,
-      child: ListView(
-        children: [
-          Container(height: os_space),
-          SearchInput(),
-          SearchPlaceholder(),
-          provider.column,
-        ],
-      ),
+      child: Center(
+          child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Text("Content"))),
     );
   }
 }

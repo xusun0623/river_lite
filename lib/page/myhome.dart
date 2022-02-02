@@ -11,6 +11,7 @@ class _MyHomeState extends State<MyHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: os_back,
         elevation: 0.0,
         title: Text(
@@ -19,7 +20,24 @@ class _MyHomeState extends State<MyHome> {
         ),
       ),
       body: Center(
-        child: Text("Hello"),
+        child: GestureDetector(
+          child: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              color: os_color,
+              borderRadius: BorderRadius.all(Radius.circular(10000)),
+            ),
+            child:
+                Center(child: Text("Hello", style: TextStyle(color: os_white))),
+          ),
+          onTap: () => {
+            Navigator.pushNamed(
+              context,
+              "/search",
+            )
+          },
+        ),
       ),
     );
   }
