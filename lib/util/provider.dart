@@ -1,17 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:loading/indicator/pacman_indicator.dart';
 import 'package:offer_show/asset/data.dart';
 import 'package:offer_show/components/salary.dart';
-import 'package:offer_show/components/tip.dart';
 import 'package:offer_show/database/collect_salary.dart';
-import 'package:offer_show/page/home_component/HomeSearchRect.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 bool loadingStatus = true; //是否有系统加载状态
 
@@ -185,7 +177,6 @@ class HomeSchoolSalarys extends ChangeNotifier {
     );
     final tmp = toLocalSalary(res['info']);
     List<Widget> tmpWidget = [];
-    tmpWidget.add(HomeSearchRect());
     tmp.forEach((element) {
       tmpWidget.add(OSSalary(
         data: new SalaryData(
