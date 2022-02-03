@@ -3,7 +3,6 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/data.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
-import 'package:offer_show/components/cartoon.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
