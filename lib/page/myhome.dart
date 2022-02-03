@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 
 class MyHome extends StatefulWidget {
@@ -11,13 +12,13 @@ class _MyHomeState extends State<MyHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.light,
         backgroundColor: os_back,
         elevation: 0.0,
         title: Text(
           "title",
           style: TextStyle(color: os_black),
         ),
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: Center(
         child: GestureDetector(

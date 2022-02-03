@@ -11,20 +11,17 @@ class ServerConfig {
   String os_token = "\$yt1kzhL23Ivv5+sYwy23tkg26423Hjr62pCoff11ersh223owzjuaz";
 }
 
-enum Method { GET, POST, PUT, DELETE, PATCH }
-enum WithLoading { YES, NOOP }
+enum Method { GET, POST }
 
 class XHttp {
   netWorkRequest({
     Method method = Method.GET, //网络请求的类型-可选POST GET PUT DELETE等
-    String baseUrl = "api.apiopen.top", //默认的请求Host
-    String url = "/singlePoetry", //请求的地址
+    String baseUrl = "", //默认的请求Host
+    String url = "", //请求的地址
     Map header,
     Map param, //参数
   }) async {
     var dio = Dio();
-    final Directory = ["http://", "HTTP://", "Http://"];
-    final isHttp = Directory.indexOf(baseUrl.substring(0, 7)) > -1;
 
     dio.options.baseUrl = baseUrl;
     dio.options.contentType = Headers.formUrlEncodedContentType;
@@ -43,15 +40,9 @@ class XHttp {
         method: [
           "GET",
           "POST",
-          "PUT",
-          "DELETE",
-          "PATCH",
         ][[
           Method.GET,
           Method.POST,
-          Method.PUT,
-          Method.DELETE,
-          Method.PATCH,
         ].indexOf(method)],
       ),
     )
@@ -98,58 +89,14 @@ class XHttp {
     );
   }
 
-  //带Token
-  putWithGlobalToken({
-    Map param,
-    String url,
-  }) async {
-    return await httpWithGlobalToken(
-      param: param,
-      url: url,
-      method: Method.PUT,
-    );
-  }
-
-  //带Token
-  deleteWithGlobalToken({
-    Map param,
-    String url,
-  }) async {
-    return await httpWithGlobalToken(
-      param: param,
-      url: url,
-      method: Method.DELETE,
-    );
-  }
-
-  //带Token
-  patchWithGlobalToken({
-    Map param,
-    String url,
-  }) async {
-    return await httpWithGlobalToken(
-      param: param,
-      url: url,
-      method: Method.PATCH,
-    );
-  }
-
   httpWithGlobalToken({
     Map param,
     String url,
     Method method,
   }) async {
-    var timeStamp = new DateTime.now().millisecondsSinceEpoch; // 时间戳
     var token = ServerConfig().os_token; //Token
     param = param == null ? {} : param;
-    param.addAll({
-      // "access_token": "${token}.${timeStamp}." +
-      //     md5
-      //         .convert(utf8
-      //             .encode("${token}.${ServerConfig().os_salt}.${timeStamp}"))
-      //         .toString()
-      "access_token": "${token}"
-    });
+    param.addAll({"access_token": "$token"});
     return await netWorkRequest(
         method: method,
         baseUrl: ServerConfig().os_url,
@@ -176,7 +123,7 @@ class XHttp {
     );
   }
 
-//发起POST请求
+  //发起POST请求
   post({
     String baseUrl,
     String url,
