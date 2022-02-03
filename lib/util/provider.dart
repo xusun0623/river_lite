@@ -197,29 +197,6 @@ class HomeSchoolSalarys extends ChangeNotifier {
         ),
       ));
     });
-    // column = ListView.builder(
-    //   itemCount: tmp.length,
-    //   itemBuilder: (context, index) {
-    //     return OSSalary(
-    //       data: new SalaryData(
-    //         company: tmp[index]["company"].toString(),
-    //         city: tmp[index]["city"].toString(),
-    //         confidence: tmp[index]["confidence"].toString(),
-    //         education: tmp[index]["education"].toString(),
-    //         money: tmp[index]["money"].toString(),
-    //         job: tmp[index]["job"].toString(),
-    //         remark: tmp[index]["remark"].toString(),
-    //         look: tmp[index]["look"].toString(),
-    //         salaryLow: tmp[index]["salaryLow"].toString(),
-    //         salaryHigh: tmp[index]["salaryHigh"].toString(),
-    //         time: tmp[index]["time"].toString(),
-    //         industry: tmp[index]["industry"].toString(),
-    //         type: tmp[index]["type"].toString(),
-    //         salaryId: tmp[index]["salaryId"].toString(),
-    //       ),
-    //     );
-    //   },
-    // );
     column = Column(children: tmpWidget);
     getDone = true;
     notifyListeners();

@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:io';
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,24 +11,14 @@ class ServerConfig {
   String os_token = "\$yt1kzhL23Ivv5+sYwy23tkg26423Hjr62pCoff11ersh223owzjuaz";
 }
 
-// class ServerConfig {
-//   String os_url = "http://119.45.10.211/offershow";
-//   String os_salt = "offershow";
-//   String os_token = "123456";
-// }
-
 enum Method { GET, POST, PUT, DELETE, PATCH }
 enum WithLoading { YES, NOOP }
 
 class XHttp {
-  //发起网络请求
   netWorkRequest({
     Method method = Method.GET, //网络请求的类型-可选POST GET PUT DELETE等
     String baseUrl = "api.apiopen.top", //默认的请求Host
     String url = "/singlePoetry", //请求的地址
-    //header设置的请求头内容
-    //"Content-Type": "application/x-www-form-urlencoded"
-    //"Authorization": "JWT " + token
     Map header,
     Map param, //参数
   }) async {

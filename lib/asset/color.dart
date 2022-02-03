@@ -28,8 +28,6 @@ const SystemUiOverlayStyle light = SystemUiOverlayStyle(
   statusBarBrightness: Brightness.dark,
 );
 
-/// System overlays should be drawn with a dark color. Intended for
-/// applications with a light background.
 const SystemUiOverlayStyle dark = SystemUiOverlayStyle(
   systemNavigationBarColor: Color(0xFF000000),
   systemNavigationBarDividerColor: null,

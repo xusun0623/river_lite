@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:offer_show/asset/svg.dart';
 
 class Me extends StatefulWidget {
