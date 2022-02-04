@@ -15,7 +15,8 @@ final os_subtitle = Color(0xFFB8B8B8); //浅灰
 final os_light_grey = Color(0xFFFAFAFA); //浅灰
 final os_deep_grey = Color(0xFF8B8B8B); //浅灰
 final os_middle_grey = Color(0xFFD3D3D3); //浅灰
-final os_back = Color(0xFFF3F3F3); //浅灰
+
+final os_back = Color(0xFFF1F4F8); //浅灰
 
 /// System overlays should be drawn with a light color. Intended for
 /// applications with a dark background.

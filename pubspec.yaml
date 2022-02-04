@@ -35,3 +35,5 @@ flutter:
 
   assets:
     - lib/img/logo.svg
+    - lib/img/search.svg
+    - lib/img/home.svg
