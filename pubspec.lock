@@ -15,6 +15,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0"
+  card_swiper:
+    dependency: "direct main"
+    description:
+      name: card_swiper
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.1"
   characters:
     dependency: transitive
     description:
@@ -198,6 +205,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
+  noripple_overscroll:
+    dependency: "direct main"
+    description:
+      name: noripple_overscroll
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.2"
   path:
     dependency: transitive
     description:

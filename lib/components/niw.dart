@@ -15,9 +15,9 @@ class myInkWell extends StatefulWidget {
   const myInkWell({
     Key key,
     @required this.widget,
-    @required this.width,
-    @required this.height,
     @required this.radius,
+    this.width,
+    this.height,
     this.highlightColor,
     this.splashColor,
     this.tap,

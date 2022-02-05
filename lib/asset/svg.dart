@@ -6,9 +6,17 @@ class os_svg extends StatefulWidget {
   double size;
   final double width;
   final double height;
+  final double radius;
   String path;
-  os_svg({Key key, this.size, this.path, this.width, this.height, this.show})
-      : super(key: key);
+  os_svg({
+    Key key,
+    this.size,
+    this.path,
+    this.width,
+    this.height,
+    this.show,
+    this.radius,
+  }) : super(key: key);
   @override
   _os_svgState createState() => _os_svgState();
 }

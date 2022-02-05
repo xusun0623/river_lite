@@ -1,12 +1,16 @@
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 
-/// 接口文档：https://www.yuque.com/oego7z/xotzpt/asf3d5#Ty08q*/
+/// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 
 class Api {
-  webapi_v2_indexad() async {
-    return await XHttp().postWithGlobalToken(
-      url: "/webapi/v2/indexad",
+  portal_newslist() async {
+    return await XHttp().post(
+      url: "",
+      param: {
+        "r": "portal/newslist",
+        "moduleId": 2,
+      },
     );
   }
 

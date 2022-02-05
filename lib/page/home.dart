@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/page/404.dart';
@@ -51,35 +52,37 @@ class _HomeState extends State<Home> {
     os_width = MediaQuery.of(context).size.width;
     os_height = MediaQuery.of(context).size.height;
     os_padding = os_width * 0.025;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     return Scaffold(
-        body: IndexedStack(
-          children: homePages,
-          index: _tabBarIndex,
+      body: IndexedStack(
+        children: homePages,
+        index: _tabBarIndex,
+      ),
+      bottomNavigationBar: Theme(
+        data: ThemeData(
+          brightness: Brightness.light,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
         ),
-        bottomNavigationBar: Theme(
-          data: ThemeData(
-            brightness: Brightness.light,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-          ),
-          child: BottomNavigationBar(
-            elevation: 8,
-            showUnselectedLabels: true,
-            unselectedFontSize: 11,
-            selectedFontSize: 11,
-            selectedIconTheme: IconThemeData(size: 26),
-            unselectedIconTheme: IconThemeData(size: 26),
-            selectedItemColor: os_color,
-            backgroundColor: os_white,
-            type: BottomNavigationBarType.fixed,
-            onTap: (index) {
-              setState(() {
-                _tabBarIndex = index;
-              });
-            },
-            currentIndex: _tabBarIndex,
-            items: bottomNavItems,
-          ),
-        ));
+        child: BottomNavigationBar(
+          elevation: 8,
+          showUnselectedLabels: true,
+          unselectedFontSize: 11,
+          selectedFontSize: 11,
+          selectedIconTheme: IconThemeData(size: 26),
+          unselectedIconTheme: IconThemeData(size: 26),
+          selectedItemColor: os_color,
+          backgroundColor: os_white,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            setState(() {
+              _tabBarIndex = index;
+            });
+          },
+          currentIndex: _tabBarIndex,
+          items: bottomNavItems,
+        ),
+      ),
+    );
   }
 }

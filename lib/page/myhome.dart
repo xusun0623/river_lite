@@ -1,271 +1,88 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
-import 'package:loading/indicator.dart';
+import 'package:noripple_overscroll/noripple_overscroll.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
-import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/page/home/homeHot.dart';
+import 'package:offer_show/page/home/homeNew.dart';
 
 class MyHome extends StatefulWidget {
   @override
   _MyHomeState createState() => _MyHomeState();
 }
 
-class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
-  TabController tabController;
+class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
+  TabController _tabController;
+
+  final List<String> _tabValues = [
+    "热帖",
+    "新回复",
+    "入站必看",
+    "专辑",
+    "抢沙发",
+  ];
+
+  List<Widget> _list = <Widget>[
+    HomeHot(),
+    HomeNew(),
+    HomeNew(),
+    HomeNew(),
+    HomeNew(),
+  ];
+
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(length: _tabValues.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: os_back,
-      appBar: AppBar(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: Scaffold(
         backgroundColor: os_back,
-        elevation: 0.0,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: os_svg(path: "lib/img/search.svg", width: 23, height: 23),
-          ),
-          Padding(padding: EdgeInsets.all(2)),
-        ],
-        title: TabBar(
-          isScrollable: true,
-          labelColor: os_black,
-          labelPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-          unselectedLabelColor: os_deep_grey,
-          labelStyle: TextStyle(fontSize: 18),
-          indicator: TabSizeIndicator(
-            wantWidth: 20,
-            borderSide: BorderSide(width: 8.0, color: Color(0x440092FF)),
-          ),
-          tabs: [
-            Tab(text: "新帖"),
-            Tab(text: "新回复"),
-            Tab(text: '热门'),
-            Tab(text: '精华'),
-            Tab(text: '专辑'),
-            Tab(text: '抢沙发'),
+        appBar: AppBar(
+          backgroundColor: os_back,
+          elevation: 0.0,
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: os_svg(path: "lib/img/search.svg", width: 23, height: 23),
+            ),
+            Padding(padding: EdgeInsets.all(2)),
           ],
-          controller: tabController,
+          title: TabBar(
+            isScrollable: true,
+            labelColor: os_black,
+            labelPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+            unselectedLabelColor: os_deep_grey,
+            labelStyle: TextStyle(fontSize: 18),
+            indicator: TabSizeIndicator(
+              wantWidth: 20,
+              borderSide: BorderSide(width: 8.0, color: Color(0x440092FF)),
+            ),
+            tabs: _tabValues.map((e) {
+              return Tab(text: e);
+            }).toList(),
+            controller: _tabController,
+          ),
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-      ),
-      body: TabBarView(
-        physics: BouncingScrollPhysics(),
-        children: [
-          ListView(
-            physics: BouncingScrollPhysics(),
-            children: [
-              myInkWell(
-                widget: os_svg(
-                  path: "lib/img/home.svg",
-                ),
-                width: 322,
-                height: 196,
-                radius: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新发表')),
-              ),
-            ],
+        body: NoRippleOverScroll(
+          child: TabBarView(
+            controller: _tabController,
+            physics: CustomTabBarViewScrollPhysics(),
+            children: _list,
           ),
-          ListView(
-            physics: BouncingScrollPhysics(),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Center(child: Text('最新回复')),
-              ),
-            ],
-          ),
-          Center(child: Text('热门')),
-          Center(child: Text('精华')),
-          Center(child: Text('专辑')),
-          Center(child: Text('抢沙发')),
-        ],
-        controller: tabController,
+        ),
       ),
     );
   }
@@ -346,4 +163,21 @@ class _MyUnderlinePainter extends BoxPainter {
       paint,
     );
   }
+}
+
+class CustomTabBarViewScrollPhysics extends ScrollPhysics {
+  const CustomTabBarViewScrollPhysics({ScrollPhysics parent})
+      : super(parent: parent);
+
+  @override
+  CustomTabBarViewScrollPhysics applyTo(ScrollPhysics ancestor) {
+    return CustomTabBarViewScrollPhysics(parent: buildParent(ancestor));
+  }
+
+  @override
+  SpringDescription get spring => const SpringDescription(
+        mass: 50,
+        stiffness: 100,
+        damping: 0.8,
+      );
 }

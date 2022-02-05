@@ -25,6 +25,8 @@ dependencies:
   crypto: ^3.0.1
   dio: ^4.0.0
   provider: ^5.0.0
+  noripple_overscroll:
+  card_swiper: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -37,3 +39,4 @@ flutter:
     - lib/img/logo.svg
     - lib/img/search.svg
     - lib/img/home.svg
+    - lib/img/banner.svg

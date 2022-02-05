@@ -23,30 +23,14 @@ class MyApp extends StatelessWidget {
     }
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => MainProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => HomeTabIndex(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => KeyBoard(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => FilterSchool(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => HomeSchoolSalarys(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => HomePartSalarys(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => SearchProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => CollectData(),
-        ),
+        ChangeNotifierProvider(create: (context) => MainProvider()),
+        ChangeNotifierProvider(create: (context) => HomeTabIndex()),
+        ChangeNotifierProvider(create: (context) => KeyBoard()),
+        ChangeNotifierProvider(create: (context) => FilterSchool()),
+        ChangeNotifierProvider(create: (context) => HomeSchoolSalarys()),
+        ChangeNotifierProvider(create: (context) => HomePartSalarys()),
+        ChangeNotifierProvider(create: (context) => SearchProvider()),
+        ChangeNotifierProvider(create: (context) => CollectData()),
       ],
       child: MaterialApp(
         builder: EasyLoading.init(),

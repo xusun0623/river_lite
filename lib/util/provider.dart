@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/data.dart';
-import 'package:offer_show/components/salary.dart';
 import 'package:offer_show/database/collect_salary.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:provider/provider.dart';
@@ -65,26 +64,7 @@ class SearchProvider extends ChangeNotifier {
     });
     final tmp = toLocalSalary(res['info']);
     List<Widget> tmpWidget = [];
-    tmp.forEach((element) {
-      tmpWidget.add(OSSalary(
-        data: new SalaryData(
-          company: element["company"].toString(),
-          city: element["city"].toString(),
-          confidence: element["confidence"].toString(),
-          education: element["education"].toString(),
-          money: element["money"].toString(),
-          job: element["job"].toString(),
-          remark: element["remark"].toString(),
-          look: element["look"].toString(),
-          salaryLow: element["salaryLow"].toString(),
-          salaryHigh: element["salaryHigh"].toString(),
-          time: element["time"].toString(),
-          industry: element["industry"].toString(),
-          type: element["type"].toString(),
-          salaryId: element["salaryId"].toString(),
-        ),
-      ));
-    });
+    tmp.forEach((element) {});
     column = Column(children: tmpWidget);
     getDone = true;
     searching = false;
@@ -126,26 +106,7 @@ class HomePartSalarys extends ChangeNotifier {
     );
     final tmp = toLocalSalary(res['info']);
     List<Widget> tmpWidget = [];
-    tmp.forEach((element) {
-      tmpWidget.add(OSSalary(
-        data: new SalaryData(
-          company: element["company"].toString(),
-          city: element["city"].toString(),
-          confidence: element["confidence"].toString(),
-          education: element["education"].toString(),
-          money: element["money"].toString(),
-          job: element["job"].toString(),
-          remark: element["remark"].toString(),
-          look: element["look"].toString(),
-          salaryLow: element["salaryLow"].toString(),
-          salaryHigh: element["salaryHigh"].toString(),
-          time: element["time"].toString(),
-          industry: element["industry"].toString(),
-          type: element["type"].toString(),
-          salaryId: element["salaryId"].toString(),
-        ),
-      ));
-    });
+    tmp.forEach((element) {});
     column = Column(children: tmpWidget);
     getDone = true;
     notifyListeners();
@@ -177,26 +138,7 @@ class HomeSchoolSalarys extends ChangeNotifier {
     );
     final tmp = toLocalSalary(res['info']);
     List<Widget> tmpWidget = [];
-    tmp.forEach((element) {
-      tmpWidget.add(OSSalary(
-        data: new SalaryData(
-          company: element["company"].toString(),
-          city: element["city"].toString(),
-          confidence: element["confidence"].toString(),
-          education: element["education"].toString(),
-          money: element["money"].toString(),
-          job: element["job"].toString(),
-          remark: element["remark"].toString(),
-          look: element["look"].toString(),
-          salaryLow: element["salaryLow"].toString(),
-          salaryHigh: element["salaryHigh"].toString(),
-          time: element["time"].toString(),
-          industry: element["industry"].toString(),
-          type: element["type"].toString(),
-          salaryId: element["salaryId"].toString(),
-        ),
-      ));
-    });
+    tmp.forEach((element) {});
     column = Column(children: tmpWidget);
     getDone = true;
     notifyListeners();

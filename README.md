@@ -137,3 +137,12 @@ myInkWell(
 )
 ```
 
+#### 5.状态栏颜色
+```dart
+AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: Container()
+)
+```
+
+
