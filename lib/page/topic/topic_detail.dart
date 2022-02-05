@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
 
@@ -123,9 +124,50 @@ class _TopicDetailState extends State<TopicDetail> {
         decoration: BoxDecoration(
           color: os_white,
         ),
-        child: Center(
-          child: Text("hhh"),
-        ),
+        child: FutureBuilder(
+            future: _getData(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return ListView(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                      child: Text(
+                        data["topic"]["title"],
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(15, 2, 15, 2),
+                      child: Text(
+                        RelativeDateFormat.format(
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    int.parse(data["topic"]["create_date"]))) +
+                            "·浏览量${data['topic']['hits'].toString()}",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFFC4C4C4),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(15, 2, 15, 2),
+                      child: Text(
+                        data["topic"]["content"][0]["infor"],
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return Container();
+              }
+            }),
       ),
     );
   }
