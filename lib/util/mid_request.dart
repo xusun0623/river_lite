@@ -43,16 +43,16 @@ class XHttp {
     Map param,
     String url,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    final String accessToken = prefs.getString('accessToken');
-    final String accessSecret = prefs.getString('accessSecret');
-    if (accessToken == "" || accessSecret == "") {
-      print("需要登录");
-      return new Map();
-    }
+    // final prefs = await SharedPreferences.getInstance();
+    // final String accessToken = prefs.getString('accessToken');
+    // final String accessSecret = prefs.getString('accessSecret');
+    // if (accessToken == "" || accessSecret == "") {
+    //   print("需要登录");
+    //   return new Map();
+    // }
     param.addAll({
-      accessToken: accessToken,
-      accessSecret: accessSecret,
+      "accessToken": "e9f49ac6acace2b9f6582800f32ff",
+      "accessSecret": "8aef222107fcd2cedcc5f60b4edd1",
     });
     return await netWorkRequest(
       url: url,

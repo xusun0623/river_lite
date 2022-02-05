@@ -32,7 +32,12 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
   Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot) {
     if (snapshot.connectionState == ConnectionState.done) {
       List<Widget> t = [];
-      t.add(os_svg(path: "lib/img/banner.svg", width: 360, height: 144));
+      t.add(
+        os_svg(
+            path: "lib/img/banner.svg",
+            width: MediaQuery.of(context).size.width - 30,
+            height: (MediaQuery.of(context).size.width - 30) / 360 * 144),
+      );
       if (snapshot.data.length != 0) {
         for (var i in snapshot.data["list"]) {
           t.add(Topic(data: i));

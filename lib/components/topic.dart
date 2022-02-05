@@ -5,7 +5,7 @@ import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Topic extends StatefulWidget {
   Map data;
@@ -24,7 +24,6 @@ class _TopicState extends State<Topic> {
       key: "topic_like",
     );
     List<String> ids = tmp.split(",");
-    print("${ids.indexOf(widget.data["source_id"].toString())}");
     if (ids.indexOf(widget.data["source_id"].toString()) > -1) {
       setState(() {
         _isRated = true;
@@ -60,6 +59,13 @@ class _TopicState extends State<Topic> {
     return Padding(
       padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
       child: myInkWell(
+        tap: () {
+          Navigator.pushNamed(
+            context,
+            "/topic_detail",
+            arguments: widget.data["source_id"],
+          );
+        },
         widget: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -75,10 +81,14 @@ class _TopicState extends State<Topic> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            color: os_grey,
-                            child: Image.network(widget.data["userAvatar"],
-                                width: 30, height: 30),
+                          child: CachedNetworkImage(
+                            width: 30,
+                            height: 30,
+                            imageUrl: widget.data["userAvatar"],
+                            placeholder: (context, url) =>
+                                Container(color: os_grey),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
                         ),
                         Padding(padding: EdgeInsets.all(4)),

@@ -31,14 +31,6 @@ class CollectData extends ChangeNotifier {
     List collect = await CollectSalary().getCollect();
     collect.removeWhere((element) => element.length == 0);
     if (collect.length != 0) {
-      final res = await Api().webapi_v2_user_favorite_offer(
-        param: {
-          "offerids": collect.join("_"),
-          "limit": 50,
-          "offset": 0,
-        },
-      );
-      salaryData = toLocalSalary(res['info']);
       notifyListeners();
     }
   }
@@ -53,21 +45,6 @@ class SearchProvider extends ChangeNotifier {
 
   getSearchSalary() async {
     searching = true;
-    notifyListeners();
-    final res = await Api().webapi_v2_search_salary(param: {
-      "content": searchController.text,
-      "education": "全部",
-      "ordertype": 2,
-      "part_school": "",
-      "search_priority": 1,
-      "year": "",
-    });
-    final tmp = toLocalSalary(res['info']);
-    List<Widget> tmpWidget = [];
-    tmp.forEach((element) {});
-    column = Column(children: tmpWidget);
-    getDone = true;
-    searching = false;
     notifyListeners();
   }
 
@@ -96,19 +73,6 @@ class HomePartSalarys extends ChangeNotifier {
   Widget column = new Column();
 
   Future<Widget> getPartSalary(BuildContext context) async {
-    final res = await Api().webapi_v2_offers_4_lr(
-      param: {
-        "xueli": "",
-        "salarytype": "实习",
-        "hangye": "",
-        "limit": 50,
-      },
-    );
-    final tmp = toLocalSalary(res['info']);
-    List<Widget> tmpWidget = [];
-    tmp.forEach((element) {});
-    column = Column(children: tmpWidget);
-    getDone = true;
     notifyListeners();
     return Container();
   }
@@ -128,19 +92,6 @@ class HomeSchoolSalarys extends ChangeNotifier {
     final ind = industry[provider.tipIndex1] == "全部"
         ? ""
         : industry[provider.tipIndex1];
-    final res = await Api().webapi_v2_offers_4_lr(
-      param: {
-        "xueli": edu,
-        "salarytype": "校招",
-        "hangye": ind,
-        "limit": 50,
-      },
-    );
-    final tmp = toLocalSalary(res['info']);
-    List<Widget> tmpWidget = [];
-    tmp.forEach((element) {});
-    column = Column(children: tmpWidget);
-    getDone = true;
     notifyListeners();
     return Container();
   }

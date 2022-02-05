@@ -27,6 +27,8 @@ dependencies:
   provider: ^5.0.0
   noripple_overscroll:
   card_swiper: ^2.0.1
+  cached_network_image: ^3.2.0
+
 
 dev_dependencies:
   flutter_test:
@@ -45,3 +47,5 @@ flutter:
     - lib/img/comment.svg
     - lib/img/right_arrow.svg
     - lib/img/more.svg
+    - lib/img/right_arrow_grey.svg
+    - lib/img/topic_detail_more.svg

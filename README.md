@@ -20,6 +20,7 @@
 
 #### 2.命令行安装
 > adb -s 192.168.28.39:42163 install app-armeabi-v7a-release.apk
+> adb install build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
 
 #### 3.IOS打包
 > flutter build ios --release  
@@ -145,7 +146,15 @@ AnnotatedRegion<SystemUiOverlayStyle>(
 )
 ```
 ```dart
+if (Platform.isAndroid) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  }
+```
 
+#### 6.屏幕宽度
+```dart
+MediaQuery.of(context).size.width
 ```
 
 

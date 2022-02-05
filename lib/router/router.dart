@@ -5,6 +5,7 @@ import 'package:offer_show/page/me.dart';
 import 'package:offer_show/page/myhome.dart';
 import 'package:offer_show/page/search.dart';
 import 'package:offer_show/page/square.dart';
+import 'package:offer_show/page/topic/topic_detail.dart';
 
 final routers = {
   "/": () => Home(),
@@ -14,4 +15,7 @@ final routers = {
   "/myhome": () => MyHome(),
   "/square": () => Square(),
   "/404": () => Page404(),
+  "/topic_detail": (data) => TopicDetail(
+        topicID: data,
+      ),
 };
