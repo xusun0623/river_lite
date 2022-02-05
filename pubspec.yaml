@@ -40,3 +40,8 @@ flutter:
     - lib/img/search.svg
     - lib/img/home.svg
     - lib/img/banner.svg
+    - lib/img/like_blue.svg
+    - lib/img/like_grey.svg
+    - lib/img/comment.svg
+    - lib/img/right_arrow.svg
+    - lib/img/more.svg

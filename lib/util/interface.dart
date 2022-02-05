@@ -14,6 +14,22 @@ class Api {
     );
   }
 
+  forum_vote(Map m) async {
+    m.addAll({"r": "forum/vote"});
+    return await XHttp().post(
+      url: "",
+      param: m,
+    );
+  }
+
+  forum_support(Map m) async {
+    m.addAll({"r": "forum/support"});
+    return await XHttp().post(
+      url: "",
+      param: m,
+    );
+  }
+
   /// "xueli": "博士211",
   /// "salarytype": "校招",
   /// "limit": "3",

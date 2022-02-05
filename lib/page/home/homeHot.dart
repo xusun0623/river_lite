@@ -13,35 +13,8 @@ class HomeHot extends StatefulWidget {
 
 class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
-  final List<String> _contentList = [
-    '语文',
-    '英语',
-    '化学',
-    '物理',
-    '数学',
-    '生物',
-    '体育',
-    '经济',
-    '语文',
-    '英语',
-    '化学',
-    '物理',
-    '数学',
-    '生物',
-    '体育',
-    '经济',
-    '语文',
-    '英语',
-    '化学',
-    '物理',
-    '数学',
-    '生物',
-    '体育',
-    '经济',
-  ];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -65,6 +38,7 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
           t.add(Topic(data: i));
         }
       }
+      t.add(Padding(padding: EdgeInsets.all(7.5)));
       return ListView(
         children: t,
       );
@@ -80,7 +54,7 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
       body: RefreshIndicator(
         color: os_color,
         onRefresh: () async {
-          return await Future.delayed(Duration(milliseconds: 300));
+          return await _getData();
         },
         child: NoRippleOverScroll(
           child: FutureBuilder(
