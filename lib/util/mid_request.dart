@@ -27,7 +27,7 @@ class XHttp {
     Response response = await dio
         .request(url, data: param, options: Options(method: "POST"))
         .catchError((err) {
-      Fluttertoast.showToast(msg: "网络请求错误", gravity: ToastGravity.CENTER);
+      // Fluttertoast.showToast(msg: "网络请求错误", gravity: ToastGravity.CENTER);
     });
     EasyLoading.dismiss();
     if (response != null) {

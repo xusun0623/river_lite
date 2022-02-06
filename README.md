@@ -157,4 +157,17 @@ if (Platform.isAndroid) {
 MediaQuery.of(context).size.width
 ```
 
+#### 7.帖子内容
+```json
+{
+    "infor": "https://bbs.uestc.edu.cn/data/attachment/forum/202201/17/232224senjq9cjyiqqnyq6.jpg",
+    "type": 1,// 0-纯文字 1-图片 4-链接 5-附件
+    "url": "https://bbs.uestc.edu.cn/forum.php?mod=attachment&aid=MjEwNTQxOHw0OWY4ZDM5YnwxNjQ0MDcyNjY0fDIyMTc4OHwxOTE3OTc0",
+    "desc": "(7.88 MB, 下载次数: 352)",
+    "originalInfo": "https://bbs.uestc.edu.cn/data/attachment/forum/202201/17/232224senjq9cjyiqqnyq6.jpg",
+    "aid": 2105419
+}
+```
+
+
 

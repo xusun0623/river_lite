@@ -34,6 +34,18 @@ class _TopicDetailState extends State<TopicDetail> {
     super.initState();
   }
 
+  _buildContBody() {
+    List<Widget> tmp = [];
+    data["topic"]["content"].forEach((e) {
+      // print("隐隐约约隐隐约约一样${e}");
+      tmp.add(Container(
+        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+        child: DetailCont(data: e),
+      ));
+    });
+    return Column(children: tmp);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +59,7 @@ class _TopicDetailState extends State<TopicDetail> {
             future: _getData(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                print("哈哈哈哈哈哈哈哈哈哈哈哈$data");
+                if (data["topic"] == null) return Center(child: Text(""));
                 return myInkWell(
                     color: Colors.transparent,
                     widget: Container(
@@ -128,6 +140,7 @@ class _TopicDetailState extends State<TopicDetail> {
             future: _getData(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
+                if (data["topic"] == null) return Center(child: Text("加载失败:("));
                 return ListView(
                   children: [
                     Container(
@@ -153,15 +166,7 @@ class _TopicDetailState extends State<TopicDetail> {
                         ),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(15, 2, 15, 2),
-                      child: Text(
-                        data["topic"]["content"][0]["infor"],
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
+                    _buildContBody(),
                   ],
                 );
               } else {
@@ -170,5 +175,103 @@ class _TopicDetailState extends State<TopicDetail> {
             }),
       ),
     );
+  }
+}
+
+class DetailCont extends StatefulWidget {
+  var data;
+  DetailCont({Key key, this.data}) : super(key: key);
+
+  @override
+  _DetailContState createState() => _DetailContState();
+}
+
+class _DetailContState extends State<DetailCont> {
+  @override
+  void initState() {
+    print("啧啧啧啧啧啧${widget.data["type"]}");
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    switch (widget.data["type"]) {
+      case 0:
+        return Container(
+          width: MediaQuery.of(context).size.width - 30,
+          child: Text(widget.data["infor"], style: TextStyle(fontSize: 16)),
+        );
+        break;
+      case 1:
+        return ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          child: Container(
+            decoration: BoxDecoration(
+              color: os_grey,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child: CachedNetworkImage(
+              imageUrl: widget.data["infor"],
+              fadeInDuration: Duration(milliseconds: 200),
+              placeholder: (context, url) => Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: CircularProgressIndicator(color: os_deep_grey),
+              ),
+            ),
+          ),
+        );
+        break;
+      case 2:
+        return Container();
+        break;
+      case 3:
+        return Container();
+        break;
+      case 4:
+        return GestureDetector(
+          onTap: () {
+            print("跳转链接${widget.data['url']}");
+          },
+          child: Container(
+            width: MediaQuery.of(context).size.width - 30,
+            child: Text(
+              widget.data["infor"],
+              style: TextStyle(color: os_color, fontSize: 16),
+            ),
+          ),
+        );
+        break;
+      case 5:
+        return myInkWell(
+          color: Color(0xFFF6F6F6),
+          tap: () {},
+          radius: 10,
+          widget: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            width: MediaQuery.of(context).size.width - 30,
+            padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "附件" + widget.data["desc"],
+                  style: TextStyle(color: os_deep_grey),
+                ),
+                Text(
+                  "点击下载",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: os_color,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+        break;
+      default:
+    }
   }
 }
