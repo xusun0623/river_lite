@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:noripple_overscroll/noripple_overscroll.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/logo.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/niw.dart';
@@ -20,6 +20,7 @@ class TopicDetail extends StatefulWidget {
 class _TopicDetailState extends State<TopicDetail> {
   var data;
   var comment = [];
+  ScrollController _scrollController = new ScrollController();
 
   Future _getData() async {
     data = await Api().forum_postlist({
@@ -27,12 +28,19 @@ class _TopicDetailState extends State<TopicDetail> {
       "page": comment.length / 10 + 1,
       "pageSize": 10,
     });
+    comment = data["list"];
     Clipboard.setData(ClipboardData(text: data.toString()));
   }
 
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _getData();
+      }
+    });
   }
 
   _buildContBody() {
@@ -69,15 +77,18 @@ class _TopicDetailState extends State<TopicDetail> {
                   decoration: BoxDecoration(
                     color: os_white,
                   ),
-                  child: ListView(
-                    children: [
-                      TopicDetailTitle(data: data),
-                      TopicDetailTime(data: data),
-                      _buildContBody(),
-                      TopicBottom(data: data),
-                      Comments(data: data["list"]),
-                      Container(height: 80),
-                    ],
+                  child: NoRippleOverScroll(
+                    child: ListView(
+                      controller: _scrollController,
+                      children: [
+                        TopicDetailTitle(data: data),
+                        TopicDetailTime(data: data),
+                        _buildContBody(),
+                        TopicBottom(data: data),
+                        Comments(data: comment),
+                        Container(height: 80),
+                      ],
+                    ),
                   ),
                 ),
                 DetailFixBottom()
@@ -140,7 +151,7 @@ class _CommentState extends State<Comment> {
     return myInkWell(
       color: Colors.transparent,
       widget: Padding(
-        padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+        padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,6 +251,12 @@ class _CommentState extends State<Comment> {
                           ),
                         )
                       : Container(),
+                  Container(
+                    width: MediaQuery.of(context).size.width - 75,
+                    height: 1,
+                    margin: EdgeInsets.only(top: 15),
+                    color: Color(0x07000000),
+                  ),
                 ],
               ),
             )
