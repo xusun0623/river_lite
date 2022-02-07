@@ -50,3 +50,5 @@ flutter:
     - lib/img/more.svg
     - lib/img/right_arrow_grey.svg
     - lib/img/topic_detail_more.svg
+    - lib/img/topic_water.svg
+    - lib/img/topic_collect.svg
