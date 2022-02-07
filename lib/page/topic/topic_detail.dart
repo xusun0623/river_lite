@@ -20,25 +20,41 @@ class TopicDetail extends StatefulWidget {
 class _TopicDetailState extends State<TopicDetail> {
   var data;
   var comment = [];
+  var load_done = false;
   ScrollController _scrollController = new ScrollController();
 
   Future _getData() async {
     data = await Api().forum_postlist({
       "topicId": widget.topicID,
-      "page": comment.length / 10 + 1,
+      "page": (comment.length / 10 + 1).floor(),
       "pageSize": 10,
     });
-    comment = data["list"];
-    Clipboard.setData(ClipboardData(text: data.toString()));
+    comment.addAll(data["list"]);
+    load_done = (data["list"].length != 10);
+    setState(() {});
+  }
+
+  void _getComment() async {
+    const nums = 10;
+    var tmp = await Api().forum_postlist({
+      "topicId": widget.topicID,
+      "page": (comment.length / nums + 1).floor(),
+      "pageSize": nums,
+    });
+    if (tmp["list"].length != 0 && comment.length % nums == 0)
+      comment.addAll(tmp["list"]);
+    load_done = (tmp["list"].length != nums);
+    setState(() {});
   }
 
   @override
   void initState() {
+    _getData();
     super.initState();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        _getData();
+        _getComment();
       }
     });
   }
@@ -56,12 +72,14 @@ class _TopicDetailState extends State<TopicDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _getData(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return Scaffold(
-            appBar: AppBar(
+    return Scaffold(
+      appBar: data == null
+          ? AppBar(
+              backgroundColor: os_white,
+              foregroundColor: os_black,
+              elevation: 0,
+            )
+          : AppBar(
               backgroundColor: os_white,
               foregroundColor: os_black,
               elevation: 0,
@@ -71,7 +89,9 @@ class _TopicDetailState extends State<TopicDetail> {
                 TopicDetailMore(),
               ],
             ),
-            body: Stack(
+      body: data == null
+          ? Container()
+          : Stack(
               children: [
                 Container(
                   decoration: BoxDecoration(
@@ -86,7 +106,13 @@ class _TopicDetailState extends State<TopicDetail> {
                         _buildContBody(),
                         TopicBottom(data: data),
                         Comments(data: comment),
-                        Container(height: 80),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Center(
+                              child: Text(load_done ? "" : "加载中…",
+                                  style: TextStyle(color: os_deep_grey))),
+                        ),
+                        Container(height: 60),
                       ],
                     ),
                   ),
@@ -94,11 +120,6 @@ class _TopicDetailState extends State<TopicDetail> {
                 DetailFixBottom()
               ],
             ),
-          );
-        } else {
-          return Scaffold();
-        }
-      },
     );
   }
 }
@@ -114,9 +135,12 @@ class Comments extends StatefulWidget {
 class _CommentsState extends State<Comments> {
   Widget _buildComment() {
     List<Widget> t = [];
-    widget.data.forEach((e) {
-      t.add(Comment(data: e));
-    });
+    for (var i = 0; i < widget.data.length; i++) {
+      t.add(Comment(
+        data: widget.data[i],
+        is_last: i == widget.data.length - 1,
+      ));
+    }
     return Column(children: t);
   }
 
@@ -128,7 +152,8 @@ class _CommentsState extends State<Comments> {
 
 class Comment extends StatefulWidget {
   var data;
-  Comment({Key key, this.data}) : super(key: key);
+  var is_last;
+  Comment({Key key, this.data, this.is_last}) : super(key: key);
 
   @override
   _CommentState createState() => _CommentState();
@@ -251,12 +276,14 @@ class _CommentState extends State<Comment> {
                           ),
                         )
                       : Container(),
-                  Container(
-                    width: MediaQuery.of(context).size.width - 75,
-                    height: 1,
-                    margin: EdgeInsets.only(top: 15),
-                    color: Color(0x07000000),
-                  ),
+                  widget.is_last
+                      ? Container()
+                      : Container(
+                          width: MediaQuery.of(context).size.width - 75,
+                          height: 1,
+                          margin: EdgeInsets.only(top: 15),
+                          color: Color(0x07000000),
+                        ),
                 ],
               ),
             )
