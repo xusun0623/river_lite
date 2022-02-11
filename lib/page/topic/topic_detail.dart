@@ -1,13 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:noripple_overscroll/noripple_overscroll.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class TopicDetail extends StatefulWidget {
   int topicID;
@@ -21,6 +20,7 @@ class _TopicDetailState extends State<TopicDetail> {
   var data;
   var comment = [];
   var load_done = false;
+  var loading = false;
   ScrollController _scrollController = new ScrollController();
 
   Future _getData() async {
@@ -35,6 +35,8 @@ class _TopicDetailState extends State<TopicDetail> {
   }
 
   void _getComment() async {
+    if (loading) return; //控制因为网络过慢反复请求问题
+    loading = true;
     const nums = 10;
     var tmp = await Api().forum_postlist({
       "topicId": widget.topicID,
@@ -45,6 +47,7 @@ class _TopicDetailState extends State<TopicDetail> {
       comment.addAll(tmp["list"]);
     load_done = (tmp["list"].length != nums);
     setState(() {});
+    loading = false;
   }
 
   @override
@@ -97,29 +100,63 @@ class _TopicDetailState extends State<TopicDetail> {
                   decoration: BoxDecoration(
                     color: os_white,
                   ),
-                  child: NoRippleOverScroll(
-                    child: ListView(
-                      controller: _scrollController,
-                      children: [
-                        TopicDetailTitle(data: data),
-                        TopicDetailTime(data: data),
-                        _buildContBody(),
-                        TopicBottom(data: data),
-                        Comments(data: comment),
-                        Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Center(
-                              child: Text(load_done ? "" : "加载中…",
-                                  style: TextStyle(color: os_deep_grey))),
+                  child: ListView(
+                    physics: ClampingScrollPhysics(),
+                    controller: _scrollController,
+                    children: [
+                      TopicDetailTitle(data: data),
+                      TopicDetailTime(data: data),
+                      _buildContBody(),
+                      TopicBottom(data: data),
+                      Container(height: 10),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 15,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF6F6F6),
+                          borderRadius: BorderRadius.all(Radius.circular(2)),
                         ),
-                        Container(height: 60),
-                      ],
-                    ),
+                      ),
+                      Comments(data: comment),
+                      load_done ? Container() : BottomLoading(),
+                      Container(height: 60),
+                    ],
                   ),
                 ),
                 DetailFixBottom()
               ],
             ),
+    );
+  }
+}
+
+class BottomLoading extends StatelessWidget {
+  const BottomLoading({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Color(0xFFF6F6F6),
+      padding: const EdgeInsets.all(20),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                color: Color(0xFFAAAAAA),
+                strokeWidth: 2.5,
+              ),
+            ),
+            Container(width: 10),
+            Text("加载中…", style: TextStyle(color: os_deep_grey)),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -133,6 +170,8 @@ class Comments extends StatefulWidget {
 }
 
 class _CommentsState extends State<Comments> {
+  var select = 0; //Tab标签
+  var sort = 0; //0-按时间排序 1-按点赞排序
   Widget _buildComment() {
     List<Widget> t = [];
     for (var i = 0; i < widget.data.length; i++) {
@@ -146,7 +185,156 @@ class _CommentsState extends State<Comments> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildComment();
+    return StickyHeader(
+      header: CommentTab(
+        TapSelect: (idx) {
+          setState(() {
+            select = idx;
+          });
+        },
+        TapSort: () {
+          setState(() {
+            sort = 1 - sort;
+          });
+        },
+        select: select,
+        sort: sort,
+      ),
+      content: _buildComment(),
+    );
+
+    //  Column(
+    //   children: [
+    //     CommentTab(
+    //       TapSelect: (idx) {
+    //         setState(() {
+    //           select = idx;
+    //         });
+    //       },
+    //       TapSort: () {
+    //         setState(() {
+    //           sort = 1 - sort;
+    //         });
+    //       },
+    //       select: select,
+    //       sort: sort,
+    //     ),
+    //     _buildComment(),
+    //   ],
+    // ),
+  }
+}
+
+class CommentTab extends StatefulWidget {
+  Function TapSelect;
+  Function TapSort;
+  var select;
+  var sort;
+  CommentTab({Key key, this.TapSelect, this.TapSort, this.select, this.sort})
+      : super(key: key);
+
+  @override
+  _CommentTabState createState() => _CommentTabState();
+}
+
+class _CommentTabState extends State<CommentTab> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+      color: os_white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  widget.TapSelect(0);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(children: [
+                    Text(
+                      "评论区",
+                      style: TextStyle(
+                        color: Color(0xFF454545),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Container(height: 3),
+                    Container(
+                      width: 18,
+                      height: 3,
+                      decoration: BoxDecoration(
+                        color:
+                            widget.select == 0 ? os_color : Colors.transparent,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                    )
+                  ]),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  widget.TapSelect(1);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(children: [
+                    Text(
+                      "只看楼主",
+                      style: TextStyle(
+                        color: Color(0xFF454545),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Container(height: 3),
+                    Container(
+                      width: 18,
+                      height: 3,
+                      decoration: BoxDecoration(
+                        color:
+                            widget.select == 1 ? os_color : Colors.transparent,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                    )
+                  ]),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              os_svg(
+                path: "lib/img/detail_sort.svg",
+                width: 15,
+                height: 12,
+              ),
+              Container(width: 5),
+              GestureDetector(
+                onTap: () {
+                  widget.TapSort();
+                },
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 2),
+                  child: Text(
+                    widget.sort == 0 ? "按时间排序" : "按点赞排序",
+                    style: TextStyle(
+                      color: os_color,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -176,7 +364,7 @@ class _CommentState extends State<Comment> {
     return myInkWell(
       color: Colors.transparent,
       widget: Padding(
-        padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+        padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,8 +392,9 @@ class _CommentState extends State<Comment> {
                           Text(
                             widget.data["reply_name"],
                             style: TextStyle(
-                              color: Color(0xFF1B1B1B),
-                              fontSize: 16,
+                              color: Color(0xFF333333),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
                           ),
                           Container(width: 8),
@@ -277,11 +466,13 @@ class _CommentState extends State<Comment> {
                         )
                       : Container(),
                   widget.is_last
-                      ? Container()
+                      ? Container(
+                          margin: EdgeInsets.only(top: 20),
+                        )
                       : Container(
                           width: MediaQuery.of(context).size.width - 75,
                           height: 1,
-                          margin: EdgeInsets.only(top: 15),
+                          margin: EdgeInsets.only(top: 20),
                           color: Color(0x07000000),
                         ),
                 ],
@@ -395,18 +586,27 @@ class _TopicBottomState extends State<TopicBottom> {
             myInkWell(
                 widget: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(children: [
-                    os_svg(
-                        path: "lib/img/topic_water.svg", width: 14, height: 17),
-                    Padding(padding: EdgeInsets.all(2.5)),
-                    widget.data["topic"]["reward"] != null
-                        ? Text(
-                            widget.data["topic"]["reward"]["score"][0]["value"]
-                                .toString(),
-                            style: TextStyle(color: os_deep_grey),
-                          )
-                        : Container()
-                  ]),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        os_svg(
+                            path: "lib/img/topic_water.svg",
+                            width: 14,
+                            height: 17),
+                        Padding(
+                            padding: EdgeInsets.all(
+                                widget.data["topic"]["reward"] != null
+                                    ? 2.5
+                                    : 0)),
+                        widget.data["topic"]["reward"] != null
+                            ? Text(
+                                widget.data["topic"]["reward"]["score"][0]
+                                        ["value"]
+                                    .toString(),
+                                style: TextStyle(color: os_deep_grey),
+                              )
+                            : Container()
+                      ]),
                 ),
                 radius: 10),
             myInkWell(
@@ -516,7 +716,6 @@ class TopicDetailHead extends StatelessWidget {
           margin: EdgeInsets.fromLTRB(5, 12, 5, 12),
           padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
           decoration: BoxDecoration(
-            // color: Color(0xFFF6F6F6),
             borderRadius: BorderRadius.all(Radius.circular(100)),
           ),
           child: Row(

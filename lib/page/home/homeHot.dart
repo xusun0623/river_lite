@@ -13,43 +13,42 @@ class HomeHot extends StatefulWidget {
 
 class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
+  var data = [];
   @override
   void initState() {
     super.initState();
+    _getData();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         print("滑动到底部");
-        //滑动到了底部判断
       }
     });
   }
 
-  Future _getData() async {
-    return await Api().portal_newslist();
+  _getData() async {
+    var tmp = await Api().portal_newslist();
+    data = tmp["list"];
+    setState(() {});
   }
 
-  Widget _buildFuture(BuildContext context, AsyncSnapshot snapshot) {
-    if (snapshot.connectionState == ConnectionState.done) {
-      List<Widget> t = [];
-      t.add(
-        os_svg(
-            path: "lib/img/banner.svg",
-            width: MediaQuery.of(context).size.width - 30,
-            height: (MediaQuery.of(context).size.width - 30) / 360 * 144),
-      );
-      if (snapshot.data.length != 0) {
-        for (var i in snapshot.data["list"]) {
-          t.add(Topic(data: i));
-        }
+  Widget _buildComponents() {
+    List<Widget> t = [];
+    t.add(
+      os_svg(
+          path: "lib/img/banner.svg",
+          width: MediaQuery.of(context).size.width - 30,
+          height: (MediaQuery.of(context).size.width - 30) / 360 * 144),
+    );
+    if (data != null && data.length != 0) {
+      for (var i in data) {
+        t.add(Topic(data: i));
       }
-      t.add(Padding(padding: EdgeInsets.all(7.5)));
-      return ListView(
-        children: t,
-      );
-    } else {
-      return Container();
     }
+    t.add(Padding(padding: EdgeInsets.all(7.5)));
+    return ListView(
+      children: t,
+    );
   }
 
   @override
@@ -62,10 +61,7 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
           return await _getData();
         },
         child: NoRippleOverScroll(
-          child: FutureBuilder(
-            future: _getData(),
-            builder: _buildFuture,
-          ),
+          child: _buildComponents(),
         ),
       ),
     );

@@ -6,6 +6,7 @@ import 'package:offer_show/page/myhome.dart';
 import 'package:offer_show/page/search.dart';
 import 'package:offer_show/page/square.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
+import 'package:offer_show/page/webview/webview.dart';
 
 final routers = {
   "/": () => Home(),
@@ -15,7 +16,6 @@ final routers = {
   "/myhome": () => MyHome(),
   "/square": () => Square(),
   "/404": () => Page404(),
-  "/topic_detail": (data) => TopicDetail(
-        topicID: data,
-      ),
+  "/webview": (data) => RiverWebView(url: data),
+  "/topic_detail": (data) => TopicDetail(topicID: data),
 };

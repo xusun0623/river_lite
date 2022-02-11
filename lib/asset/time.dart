@@ -11,7 +11,6 @@ class RelativeDateFormat {
   static final String ONE_MONTH_AGO = "月前";
   static final String ONE_YEAR_AGO = "年前";
 
-//时间转换
   static String format(DateTime date) {
     num delta =
         DateTime.now().millisecondsSinceEpoch - date.millisecondsSinceEpoch;
@@ -25,7 +24,12 @@ class RelativeDateFormat {
     }
     if (delta < 24 * ONE_HOUR) {
       num hours = toHours(delta);
-      return (hours <= 0 ? 1 : hours).toInt().toString() + ONE_HOUR_AGO;
+      String tmp = (hours <= 0 ? 1 : hours).toInt().toString();
+      if (tmp == "0") {
+        return "1小时内";
+      } else {
+        return tmp + ONE_HOUR_AGO;
+      }
     }
     if (delta < 48 * ONE_HOUR) {
       return "昨天";

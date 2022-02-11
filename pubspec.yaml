@@ -29,6 +29,11 @@ dependencies:
   noripple_overscroll:
   card_swiper: ^2.0.1
   cached_network_image: ^3.2.0
+  loading_indicator_view: 
+  webview_flutter: ^3.0.0
+  url_launcher: ^6.0.3
+  flutter_webview_plugin: ^0.3.11
+  sticky_headers: ^0.2.0
 
 
 dev_dependencies:
@@ -52,3 +57,4 @@ flutter:
     - lib/img/topic_detail_more.svg
     - lib/img/topic_water.svg
     - lib/img/topic_collect.svg
+    - lib/img/detail_sort.svg

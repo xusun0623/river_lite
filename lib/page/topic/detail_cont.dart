@@ -68,11 +68,18 @@ class _DetailContState extends State<DetailCont> {
         return Container();
         break;
       case 4:
-        return GestureDetector(
-          onTap: () {
-            print("跳转链接${widget.data['url']}");
+        return myInkWell(
+          radius: 0,
+          tap: () {
+            Navigator.pushNamed(
+              context,
+              "/webview",
+              arguments: widget.data['url'],
+            );
+            // print("跳转链接${widget.data['url']}");
           },
-          child: Container(
+          color: Colors.transparent,
+          widget: Container(
             width: MediaQuery.of(context).size.width - 30,
             child: Text(
               widget.data["infor"],
