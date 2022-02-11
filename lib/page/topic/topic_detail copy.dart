@@ -79,52 +79,6 @@ class _TopicDetailState extends State<TopicDetail> {
     return Column(children: tmp);
   }
 
-  _buildTotal() {
-    List<Widget> tmp = [];
-    tmp = [
-      TopicDetailTitle(data: data),
-      TopicDetailTime(data: data),
-      _buildContBody(),
-      TopicBottom(data: data),
-      Container(height: 10),
-      Divider(context: context),
-      Comments(
-        select: _select,
-        sort: _sort,
-        bindSelect: (select) async {
-          setState(() {
-            _select = select;
-          });
-          comment = [];
-          EasyLoading.show();
-          _getComment();
-        },
-        bindSort: (sort) {
-          setState(() {
-            _sort = sort;
-          });
-          comment = [];
-          EasyLoading.show();
-          _getComment();
-        },
-        host_id: data["topic"]["user_id"],
-        data: [],
-        topic_id: data["topic"]["topic_id"],
-      ),
-    ];
-    for (var i = 0; i < comment.length; i++) {
-      tmp.add(Comment(
-        host_id: data["topic"]["user_id"],
-        topic_id: data["topic"]["topic_id"],
-        data: comment[i],
-        is_last: i == comment.length - 1,
-      ));
-    }
-    tmp.addAll(
-        [load_done ? Container() : BottomLoading(), Container(height: 60)]);
-    return tmp;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,7 +109,40 @@ class _TopicDetailState extends State<TopicDetail> {
                   child: ListView(
                     physics: ClampingScrollPhysics(),
                     controller: _scrollController,
-                    children: _buildTotal(),
+                    children: [
+                      TopicDetailTitle(data: data),
+                      TopicDetailTime(data: data),
+                      _buildContBody(),
+                      TopicBottom(data: data),
+                      Container(height: 10),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 15,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF6F6F6),
+                          borderRadius: BorderRadius.all(Radius.circular(2)),
+                        ),
+                      ),
+                      Comments(
+                        bindSelect: (select) async {
+                          _select = select;
+                          comment = [];
+                          EasyLoading.show();
+                          _getComment();
+                        },
+                        bindSort: (sort) {
+                          _sort = sort;
+                          comment = [];
+                          EasyLoading.show();
+                          _getComment();
+                        },
+                        host_id: data["topic"]["user_id"],
+                        data: comment,
+                        topic_id: data["topic"]["topic_id"],
+                      ),
+                      load_done ? Container() : BottomLoading(),
+                      Container(height: 60),
+                    ],
                   ),
                 ),
                 DetailFixBottom(
@@ -165,27 +152,6 @@ class _TopicDetailState extends State<TopicDetail> {
                 )
               ],
             ),
-    );
-  }
-}
-
-class Divider extends StatelessWidget {
-  const Divider({
-    Key key,
-    @required this.context,
-  }) : super(key: key);
-
-  final BuildContext context;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 15,
-      decoration: BoxDecoration(
-        color: Color(0xFFF6F6F6),
-        borderRadius: BorderRadius.all(Radius.circular(2)),
-      ),
     );
   }
 }
@@ -225,26 +191,24 @@ class Comments extends StatefulWidget {
   var data;
   var topic_id;
   var host_id;
-  var select;
-  var sort;
   Function bindSelect;
   Function bindSort;
-  Comments(
-      {Key key,
-      this.data,
-      this.topic_id,
-      this.host_id,
-      this.bindSelect,
-      this.bindSort,
-      this.select,
-      this.sort})
-      : super(key: key);
+  Comments({
+    Key key,
+    this.data,
+    this.topic_id,
+    this.host_id,
+    this.bindSelect,
+    this.bindSort,
+  }) : super(key: key);
 
   @override
   _CommentsState createState() => _CommentsState();
 }
 
 class _CommentsState extends State<Comments> {
+  var select = 0; //Tab标签
+  var sort = 0; //0-按时间排序 1-按点赞排序
   Widget _buildComment() {
     List<Widget> t = [];
     for (var i = 0; i < widget.data.length; i++) {
@@ -264,16 +228,18 @@ class _CommentsState extends State<Comments> {
       header: CommentTab(
         TapSelect: (idx) {
           setState(() {
+            select = idx;
             widget.bindSelect(idx);
           });
         },
         TapSort: () {
           setState(() {
-            widget.bindSort(1 - widget.sort);
+            sort = 1 - sort;
+            widget.bindSort(sort);
           });
         },
-        select: widget.select,
-        sort: widget.sort,
+        select: select,
+        sort: sort,
       ),
       content: _buildComment(),
     );
