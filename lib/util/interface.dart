@@ -34,7 +34,7 @@ class Api {
 
   forum_support(Map m) async {
     m.addAll({"r": "forum/support"});
-    return await XHttp().post(
+    return await XHttp().postWithGlobalToken(
       url: "",
       param: m,
     );

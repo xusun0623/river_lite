@@ -6,6 +6,7 @@ import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/storage.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
 class TopicDetail extends StatefulWidget {
@@ -117,13 +118,18 @@ class _TopicDetailState extends State<TopicDetail> {
                           borderRadius: BorderRadius.all(Radius.circular(2)),
                         ),
                       ),
-                      Comments(data: comment),
+                      Comments(
+                          data: comment, topic_id: data["topic"]["topic_id"]),
                       load_done ? Container() : BottomLoading(),
                       Container(height: 60),
                     ],
                   ),
                 ),
-                DetailFixBottom()
+                DetailFixBottom(
+                  topic_id: data["topic"]["topic_id"],
+                  count: data["topic"]["extraPanel"][1]["extParams"]
+                      ["recommendAdd"],
+                )
               ],
             ),
     );
@@ -163,7 +169,8 @@ class BottomLoading extends StatelessWidget {
 
 class Comments extends StatefulWidget {
   var data;
-  Comments({Key key, this.data}) : super(key: key);
+  var topic_id;
+  Comments({Key key, this.data, this.topic_id}) : super(key: key);
 
   @override
   _CommentsState createState() => _CommentsState();
@@ -176,6 +183,7 @@ class _CommentsState extends State<Comments> {
     List<Widget> t = [];
     for (var i = 0; i < widget.data.length; i++) {
       t.add(Comment(
+        topic_id: widget.topic_id,
         data: widget.data[i],
         is_last: i == widget.data.length - 1,
       ));
@@ -202,26 +210,6 @@ class _CommentsState extends State<Comments> {
       ),
       content: _buildComment(),
     );
-
-    //  Column(
-    //   children: [
-    //     CommentTab(
-    //       TapSelect: (idx) {
-    //         setState(() {
-    //           select = idx;
-    //         });
-    //       },
-    //       TapSort: () {
-    //         setState(() {
-    //           sort = 1 - sort;
-    //         });
-    //       },
-    //       select: select,
-    //       sort: sort,
-    //     ),
-    //     _buildComment(),
-    //   ],
-    // ),
   }
 }
 
@@ -341,13 +329,45 @@ class _CommentTabState extends State<CommentTab> {
 class Comment extends StatefulWidget {
   var data;
   var is_last;
-  Comment({Key key, this.data, this.is_last}) : super(key: key);
+  var topic_id;
+  Comment({Key key, this.data, this.is_last, this.topic_id}) : super(key: key);
 
   @override
   _CommentState createState() => _CommentState();
 }
 
 class _CommentState extends State<Comment> {
+  var liked = 0;
+  _getLikedStatus() async {
+    String tmp = await getStorage(
+      key: "comment_like",
+    );
+    List<String> ids = tmp.split(",");
+    if (ids.indexOf(widget.data["reply_posts_id"].toString()) > -1) {
+      setState(() {
+        liked = 1;
+      });
+    }
+  }
+
+  void _tapLike() async {
+    if (liked == 1) return;
+    liked = 1;
+    widget.data["extraPanel"][0]["extParams"]["recommendAdd"]++;
+    setState(() {});
+    await Api().forum_support({
+      "tid": widget.topic_id,
+      "pid": widget.data["reply_posts_id"],
+      "type": "post",
+      "action": "support",
+    });
+    String tmp = await getStorage(
+      key: "comment_like",
+    );
+    tmp += ",${widget.data["reply_posts_id"]}";
+    setStorage(key: "comment_like", value: tmp);
+  }
+
   _buildContBody(data) {
     List<Widget> tmp = [];
     data.forEach((e) {
@@ -357,6 +377,12 @@ class _CommentState extends State<Comment> {
       ));
     });
     return Column(children: tmp);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getLikedStatus();
   }
 
   @override
@@ -414,7 +440,59 @@ class _CommentState extends State<Comment> {
                         ],
                       ),
                       Row(
-                        children: [Text("data")],
+                        children: [
+                          myInkWell(
+                            tap: () {
+                              _tapLike();
+                            },
+                            color: Colors.transparent,
+                            widget: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 2,
+                                horizontal: 5,
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(top: 4),
+                                    child: Text(
+                                      widget.data["extraPanel"][0]["extParams"]
+                                              ["recommendAdd"]
+                                          .toString(),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: liked == 1
+                                            ? os_color
+                                            : Color(0xFFB1B1B1),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(width: 3),
+                                  os_svg(
+                                    path: liked == 1
+                                        ? "lib/img/detail_like_blue.svg"
+                                        : "lib/img/detail_like.svg",
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            radius: 7.5,
+                          ),
+                          myInkWell(
+                            color: Colors.transparent,
+                            widget: Container(
+                              padding: EdgeInsets.all(5),
+                              child: os_svg(
+                                path: "lib/img/detail_comment_more.svg",
+                                width: 15,
+                                height: 15,
+                              ),
+                            ),
+                            radius: 7.5,
+                          )
+                        ],
                       ),
                     ],
                   ),
@@ -486,10 +564,53 @@ class _CommentState extends State<Comment> {
   }
 }
 
-class DetailFixBottom extends StatelessWidget {
-  const DetailFixBottom({
-    Key key,
-  }) : super(key: key);
+class DetailFixBottom extends StatefulWidget {
+  var topic_id;
+  var count;
+  DetailFixBottom({Key key, this.topic_id, this.count}) : super(key: key);
+
+  @override
+  _DetailFixBottomState createState() => _DetailFixBottomState();
+}
+
+class _DetailFixBottomState extends State<DetailFixBottom> {
+  var liked = 0;
+
+  void _getLikeStatus() async {
+    String tmp = await getStorage(
+      key: "topic_like",
+    );
+    List<String> ids = tmp.split(",");
+    if (ids.indexOf(widget.topic_id.toString()) > -1) {
+      setState(() {
+        liked = 1;
+      });
+    }
+  }
+
+  void _tapLike() async {
+    if (liked == 1) return;
+    liked = 1;
+    setState(() {
+      widget.count++;
+    });
+    await Api().forum_support({
+      "tid": widget.topic_id,
+      "type": "thread",
+      "action": "support",
+    });
+    String tmp = await getStorage(
+      key: "topic_like",
+    );
+    tmp += ",${widget.topic_id}";
+    setStorage(key: "topic_like", value: tmp);
+  }
+
+  @override
+  void initState() {
+    _getLikeStatus();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -532,14 +653,23 @@ class DetailFixBottom extends StatelessWidget {
               height: 47,
               child: Center(
                 child: myInkWell(
+                    tap: () {
+                      _tapLike();
+                    },
                     color: Colors.transparent,
                     widget: Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.favorite, color: Color(0xFFcccccc)),
+                          Icon(Icons.favorite,
+                              color: liked == 1 ? os_color : Color(0xFFcccccc)),
                           Padding(padding: EdgeInsets.all(1)),
-                          Text("3", style: TextStyle(color: Color(0xFFcccccc))),
+                          Text(
+                            (widget.count ?? 0).toString(),
+                            style: TextStyle(
+                              color: liked == 1 ? os_color : Color(0xFFcccccc),
+                            ),
+                          ),
                         ],
                       ),
                     ),

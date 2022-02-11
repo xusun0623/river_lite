@@ -120,7 +120,10 @@ class _TopicState extends State<Topic> {
                         myInkWell(
                           color: Colors.transparent,
                           widget: Padding(
-                            padding: const EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 5,
+                            ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -131,17 +134,17 @@ class _TopicState extends State<Topic> {
                                   style: TextStyle(
                                     fontSize: 12,
                                     color:
-                                        _isRated ? os_color : Color(0xFFDDDDDD),
+                                        _isRated ? os_color : Color(0xFFB1B1B1),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
                                 Padding(padding: EdgeInsets.all(2)),
                                 os_svg(
                                   path: _isRated
-                                      ? "lib/img/like_blue.svg"
-                                      : "lib/img/like_grey.svg",
-                                  width: 14,
-                                  height: 14,
+                                      ? "lib/img/detail_like_blue.svg"
+                                      : "lib/img/detail_like.svg",
+                                  width: 24,
+                                  height: 24,
                                 ),
                               ],
                             ),

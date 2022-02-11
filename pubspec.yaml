@@ -58,3 +58,6 @@ flutter:
     - lib/img/topic_water.svg
     - lib/img/topic_collect.svg
     - lib/img/detail_sort.svg
+    - lib/img/detail_like.svg
+    - lib/img/detail_like_blue.svg
+    - lib/img/detail_comment_more.svg
