@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
@@ -22,6 +23,8 @@ class _TopicDetailState extends State<TopicDetail> {
   var comment = [];
   var load_done = false;
   var loading = false;
+  var _select = 0; //0-全部回复 1-只看楼主
+  var _sort = 0; //0-按时间正序 1-按时间倒序
   ScrollController _scrollController = new ScrollController();
 
   Future _getData() async {
@@ -41,6 +44,8 @@ class _TopicDetailState extends State<TopicDetail> {
     const nums = 10;
     var tmp = await Api().forum_postlist({
       "topicId": widget.topicID,
+      "authorId": _select == 0 ? 0 : data["topic"]["user_id"],
+      "order": _sort,
       "page": (comment.length / nums + 1).floor(),
       "pageSize": nums,
     });
@@ -119,7 +124,22 @@ class _TopicDetailState extends State<TopicDetail> {
                         ),
                       ),
                       Comments(
-                          data: comment, topic_id: data["topic"]["topic_id"]),
+                        bindSelect: (select) async {
+                          _select = select;
+                          comment = [];
+                          EasyLoading.show();
+                          _getComment();
+                        },
+                        bindSort: (sort) {
+                          _sort = sort;
+                          comment = [];
+                          EasyLoading.show();
+                          _getComment();
+                        },
+                        host_id: data["topic"]["user_id"],
+                        data: comment,
+                        topic_id: data["topic"]["topic_id"],
+                      ),
                       load_done ? Container() : BottomLoading(),
                       Container(height: 60),
                     ],
@@ -170,7 +190,17 @@ class BottomLoading extends StatelessWidget {
 class Comments extends StatefulWidget {
   var data;
   var topic_id;
-  Comments({Key key, this.data, this.topic_id}) : super(key: key);
+  var host_id;
+  Function bindSelect;
+  Function bindSort;
+  Comments({
+    Key key,
+    this.data,
+    this.topic_id,
+    this.host_id,
+    this.bindSelect,
+    this.bindSort,
+  }) : super(key: key);
 
   @override
   _CommentsState createState() => _CommentsState();
@@ -183,6 +213,7 @@ class _CommentsState extends State<Comments> {
     List<Widget> t = [];
     for (var i = 0; i < widget.data.length; i++) {
       t.add(Comment(
+        host_id: widget.host_id,
         topic_id: widget.topic_id,
         data: widget.data[i],
         is_last: i == widget.data.length - 1,
@@ -198,11 +229,13 @@ class _CommentsState extends State<Comments> {
         TapSelect: (idx) {
           setState(() {
             select = idx;
+            widget.bindSelect(idx);
           });
         },
         TapSort: () {
           setState(() {
             sort = 1 - sort;
+            widget.bindSort(sort);
           });
         },
         select: select,
@@ -310,7 +343,7 @@ class _CommentTabState extends State<CommentTab> {
                 child: Container(
                   margin: EdgeInsets.only(bottom: 2),
                   child: Text(
-                    widget.sort == 0 ? "按时间排序" : "按点赞排序",
+                    widget.sort == 0 ? "按时间正序" : "按时间倒序",
                     style: TextStyle(
                       color: os_color,
                       fontSize: 14,
@@ -330,7 +363,9 @@ class Comment extends StatefulWidget {
   var data;
   var is_last;
   var topic_id;
-  Comment({Key key, this.data, this.is_last, this.topic_id}) : super(key: key);
+  var host_id;
+  Comment({Key key, this.data, this.is_last, this.topic_id, this.host_id})
+      : super(key: key);
 
   @override
   _CommentState createState() => _CommentState();
@@ -424,19 +459,50 @@ class _CommentState extends State<Comment> {
                             ),
                           ),
                           Container(width: 8),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(5, 3, 5, 3),
-                            decoration: BoxDecoration(
-                              color: os_color_opa,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                            ),
-                            child: Text("楼主·沙发",
-                                style: TextStyle(
-                                  color: os_color,
-                                  fontSize: 12,
-                                )),
+                          Tag(
+                            txt: widget.data["userTitle"],
+                            color: widget.data["userTitle"].toString().length <
+                                    7
+                                ? Color(0xFFFE6F61)
+                                : [
+                                    Color(0xFF0092FF),
+                                    Color(0xFF0092FF),
+                                    Color(0xFF0092FF),
+                                    Color(0xFF0092FF),
+                                    Color(0xFF0092FF),
+                                    Color(0xFF0092FF),
+                                    Color(0xFF0092FF),
+                                    Color(0xFF0092FF),
+                                    Color(0xFF0092FF),
+                                    Color(0xFF0092FF),
+                                  ][int.parse(
+                                    widget.data["userTitle"].toString()[7])],
+                            color_opa:
+                                widget.data["userTitle"].toString().length < 7
+                                    ? Color(0x10FE6F61)
+                                    : [
+                                        Color(0x100092FF),
+                                        Color(0x100092FF),
+                                        Color(0x100092FF),
+                                        Color(0x100092FF),
+                                        Color(0x100092FF),
+                                        Color(0x100092FF),
+                                        Color(0x100092FF),
+                                        Color(0x100092FF),
+                                        Color(0x100092FF),
+                                        Color(0x100092FF),
+                                      ][int.parse(
+                                        widget.data["userTitle"].toString()[7],
+                                      )],
                           ),
+                          Container(width: 5),
+                          widget.data["reply_id"] == widget.host_id
+                              ? Tag(
+                                  txt: "楼主",
+                                  color: os_white,
+                                  color_opa: Color(0xFF2EA6FF),
+                                )
+                              : Container(),
                         ],
                       ),
                       Row(
@@ -560,6 +626,39 @@ class _CommentState extends State<Comment> {
         ),
       ),
       radius: 0,
+    );
+  }
+}
+
+class Tag extends StatefulWidget {
+  var txt;
+  var color;
+  var color_opa;
+  Tag({
+    Key key,
+    this.txt,
+    this.color,
+    this.color_opa,
+  }) : super(key: key);
+
+  @override
+  _TagState createState() => _TagState();
+}
+
+class _TagState extends State<Tag> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(5, 3, 5, 3),
+      decoration: BoxDecoration(
+        color: widget.color_opa,
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
+      child: Text(widget.txt,
+          style: TextStyle(
+            color: widget.color,
+            fontSize: 12,
+          )),
     );
   }
 }
