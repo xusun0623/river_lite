@@ -2,10 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/page/photo_view/photo_view.dart';
 
 class DetailCont extends StatefulWidget {
   var data;
-  DetailCont({Key key, this.data}) : super(key: key);
+  var imgLists;
+  DetailCont({
+    Key key,
+    this.data,
+    this.imgLists,
+  }) : super(key: key);
 
   @override
   _DetailContState createState() => _DetailContState();
@@ -33,7 +39,7 @@ class _DetailContState extends State<DetailCont> {
   @override
   Widget build(BuildContext context) {
     switch (widget.data["type"]) {
-      case 0:
+      case 0: //纯文字
         return Container(
           width: MediaQuery.of(context).size.width - 30,
           child: Text.rich(
@@ -43,7 +49,7 @@ class _DetailContState extends State<DetailCont> {
           ),
         );
         break;
-      case 1:
+      case 1: //图片
         return ClipRRect(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           child: Container(
@@ -51,23 +57,40 @@ class _DetailContState extends State<DetailCont> {
               color: os_grey,
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
-            child: CachedNetworkImage(
-              imageUrl: widget.data["infor"],
-              placeholder: (context, url) => Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: CircularProgressIndicator(color: os_deep_grey),
+            child: GestureDetector(
+              onLongPress: () {},
+              onTap: () {
+                // print(widget.imgLists);
+                // print(widget.data["infor"]);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => PhotoPreview(
+                      galleryItems: widget.imgLists,
+                      defaultImage:
+                          widget.imgLists.indexOf(widget.data["infor"]),
+                    ),
+                  ),
+                );
+              },
+              child: CachedNetworkImage(
+                imageUrl: widget.data["infor"],
+                placeholder: (context, url) => Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: CircularProgressIndicator(color: os_deep_grey),
+                ),
               ),
             ),
           ),
         );
         break;
-      case 2:
+      case 2: //未知
         return Container();
         break;
-      case 3:
+      case 3: //未知
         return Container();
         break;
-      case 4:
+      case 4: //网页链接
         return myInkWell(
           radius: 0,
           tap: () {
@@ -88,7 +111,7 @@ class _DetailContState extends State<DetailCont> {
           ),
         );
         break;
-      case 5:
+      case 5: //附件下载
         return myInkWell(
           color: Color(0xFFF6F6F6),
           tap: () {},

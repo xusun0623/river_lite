@@ -3,6 +3,7 @@ import 'package:offer_show/page/broke.dart';
 import 'package:offer_show/page/home.dart';
 import 'package:offer_show/page/me.dart';
 import 'package:offer_show/page/myhome.dart';
+import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/search.dart';
 import 'package:offer_show/page/square.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -18,4 +19,11 @@ final routers = {
   "/404": () => Page404(),
   "/webview": (data) => RiverWebView(url: data),
   "/topic_detail": (data) => TopicDetail(topicID: data),
+  "/photo_view": ({data}) => PhotoPreview(
+        galleryItems: data.galleryItems,
+        defaultImage: data.defaultImage,
+        pageChanged: data.pageChanged,
+        direction: data.direction,
+        decoration: data.decoration,
+      ),
 };

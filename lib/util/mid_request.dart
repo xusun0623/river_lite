@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:offer_show/asset/modal.dart';
 
 class ServerConfig {
   String url = "https://bbs.uestc.edu.cn/mobcent/app/web/index.php";
@@ -21,15 +19,11 @@ class XHttp {
     dio.options.responseType = ResponseType.plain;
     dio.options.connectTimeout = 5000;
     dio.options.receiveTimeout = 3000;
-    EasyLoading.instance..indicatorType = EasyLoadingIndicatorType.ring;
-    EasyLoading.instance..maskType = EasyLoadingMaskType.black;
     print("地址:$url入参:$param");
     Response response = await dio
         .request(url, data: param, options: Options(method: "POST"))
-        .catchError((err) {
-      // Fluttertoast.showToast(msg: "网络请求错误", gravity: ToastGravity.CENTER);
-    });
-    EasyLoading.dismiss();
+        .catchError((err) {});
+    hideToast();
     if (response != null) {
       Map<String, dynamic> user = jsonDecode(response.toString());
       print("地址:$url入参:$param回参:$user");

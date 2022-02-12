@@ -70,10 +70,17 @@ class _TopicDetailState extends State<TopicDetail> {
 
   _buildContBody() {
     List<Widget> tmp = [];
+    var imgLists = [];
+    data["topic"]["content"].forEach((e) {
+      if (e["type"] == 1) {
+        imgLists.add(e["infor"]);
+      }
+    });
+    print("imgLists${imgLists}");
     data["topic"]["content"].forEach((e) {
       tmp.add(Container(
         padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-        child: DetailCont(data: e),
+        child: DetailCont(data: e, imgLists: imgLists),
       ));
     });
     return Column(children: tmp);

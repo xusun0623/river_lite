@@ -11,6 +11,7 @@ class myInkWell extends StatefulWidget {
   final Color splashColor;
   final Color color;
   final Function tap;
+  final Function longPress;
 
   const myInkWell({
     Key key,
@@ -22,6 +23,7 @@ class myInkWell extends StatefulWidget {
     this.splashColor,
     this.tap,
     this.color,
+    this.longPress,
   }) : super(key: key);
   @override
   _myInkWellState createState() => _myInkWellState();
@@ -45,6 +47,11 @@ class _myInkWellState extends State<myInkWell> {
           onTap: () {
             if (widget.tap != null) {
               widget.tap();
+            }
+          },
+          onLongPress: () {
+            if (widget.longPress != null) {
+              widget.longPress();
             }
           },
           borderRadius: BorderRadius.circular(widget.radius),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Square extends StatefulWidget {
   @override
@@ -10,7 +11,7 @@ class _SquareState extends State<Square> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: Center(
         child: Text("广场二级"),

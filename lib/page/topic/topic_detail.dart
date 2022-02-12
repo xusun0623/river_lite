@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/niw.dart';
@@ -70,10 +71,17 @@ class _TopicDetailState extends State<TopicDetail> {
 
   _buildContBody() {
     List<Widget> tmp = [];
+    var imgLists = [];
+    data["topic"]["content"].forEach((e) {
+      if (e["type"] == 1) {
+        imgLists.add(e["infor"]);
+      }
+    });
+    print("imgLists${imgLists}");
     data["topic"]["content"].forEach((e) {
       tmp.add(Container(
         padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-        child: DetailCont(data: e),
+        child: DetailCont(data: e, imgLists: imgLists),
       ));
     });
     return Column(children: tmp);
@@ -92,19 +100,19 @@ class _TopicDetailState extends State<TopicDetail> {
         select: _select,
         sort: _sort,
         bindSelect: (select) async {
-          setState(() {
-            _select = select;
-          });
+          _select = select;
           comment = [];
-          EasyLoading.show();
+          showToast(context: context, type: XSToast.loading);
           _getComment();
         },
         bindSort: (sort) {
-          setState(() {
-            _sort = sort;
-          });
+          _sort = sort;
           comment = [];
-          EasyLoading.show();
+          showToast(
+            context: context,
+            type: XSToast.loading,
+            txt: "切换排序中…",
+          );
           _getComment();
         },
         host_id: data["topic"]["user_id"],
