@@ -60,8 +60,6 @@ class _DetailContState extends State<DetailCont> {
             child: GestureDetector(
               onLongPress: () {},
               onTap: () {
-                // print(widget.imgLists);
-                // print(widget.data["infor"]);
                 Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -96,7 +95,7 @@ class _TopicDetailState extends State<TopicDetail> {
       TopicBottom(data: data),
       Container(height: 10),
       Divider(context: context),
-      Comments(
+      CommentsTab(
         select: _select,
         sort: _sort,
         bindSelect: (select) async {
@@ -229,7 +228,7 @@ class BottomLoading extends StatelessWidget {
   }
 }
 
-class Comments extends StatefulWidget {
+class CommentsTab extends StatefulWidget {
   var data;
   var topic_id;
   var host_id;
@@ -237,7 +236,7 @@ class Comments extends StatefulWidget {
   var sort;
   Function bindSelect;
   Function bindSort;
-  Comments(
+  CommentsTab(
       {Key key,
       this.data,
       this.topic_id,
@@ -249,10 +248,10 @@ class Comments extends StatefulWidget {
       : super(key: key);
 
   @override
-  _CommentsState createState() => _CommentsState();
+  _CommentsTabState createState() => _CommentsTabState();
 }
 
-class _CommentsState extends State<Comments> {
+class _CommentsTabState extends State<CommentsTab> {
   Widget _buildComment() {
     List<Widget> t = [];
     for (var i = 0; i < widget.data.length; i++) {
@@ -447,10 +446,19 @@ class _CommentState extends State<Comment> {
 
   _buildContBody(data) {
     List<Widget> tmp = [];
+    var imgLists = [];
+    data.forEach((e) {
+      if (e["type"] == 1) {
+        imgLists.add(e["infor"]);
+      }
+    });
     data.forEach((e) {
       tmp.add(Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        child: DetailCont(data: e),
+        child: DetailCont(
+          data: e,
+          imgLists: imgLists,
+        ),
       ));
     });
     return Column(children: tmp);

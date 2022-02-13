@@ -33,6 +33,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: os_black,
       body: Stack(
         children: [
           Container(
@@ -41,8 +42,16 @@ class _PhotoPreviewState extends State<PhotoPreview> {
               Navigator.pop(context);
             },
             child: PhotoViewGallery.builder(
-              loadingBuilder: (context, event) => Center(
-                child: Text("加载图片中…"),
+              loadingBuilder: (context, event) => Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: os_black,
+                child: Center(
+                  child: Text(
+                    "加载图片中…",
+                    style: TextStyle(color: os_white),
+                  ),
+                ),
               ),
               scrollPhysics: const BouncingScrollPhysics(),
               builder: (BuildContext context, int index) {

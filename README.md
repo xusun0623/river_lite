@@ -1,5 +1,8 @@
 # OfferShow客户端
 
+## API文档  
+https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
+
 ## 项目集成介绍
 [cached_network_image (网络缓存图片)](https://pub.dev/packages/cached_network_image)  
 [dio (非常好用的网络请求库)](https://pub.dev/packages/dio)  
