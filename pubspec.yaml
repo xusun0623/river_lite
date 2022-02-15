@@ -34,6 +34,7 @@ dependencies:
   url_launcher: ^6.0.3
   flutter_webview_plugin: ^0.3.11
   sticky_headers: ^0.2.0
+  vibrate: ^0.0.4
 
 
 dev_dependencies:

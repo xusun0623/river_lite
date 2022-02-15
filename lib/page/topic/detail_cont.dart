@@ -30,7 +30,20 @@ class _DetailContState extends State<DetailCont> {
     for (var i = 1; i < tmp.length; i++) {
       var first_idx = tmp[i].indexOf(']');
       ret.add(WidgetSpan(
-          child: CachedNetworkImage(imageUrl: tmp[i].substring(0, first_idx))));
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: CachedNetworkImage(
+            placeholder: (context, url) => Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: os_grey,
+              ),
+            ),
+            imageUrl: tmp[i].substring(0, first_idx),
+          ),
+        ),
+      ));
       ret.add(TextSpan(text: tmp[i].substring(first_idx + 1)));
     }
     return ret;
@@ -44,8 +57,9 @@ class _DetailContState extends State<DetailCont> {
           width: MediaQuery.of(context).size.width - 30,
           child: Text.rich(
             TextSpan(
-                style: TextStyle(fontSize: 16),
-                children: _getRichText(widget.data["infor"])),
+              style: TextStyle(fontSize: 16),
+              children: _getRichText(widget.data["infor"]),
+            ),
           ),
         );
         break;
@@ -58,7 +72,6 @@ class _DetailContState extends State<DetailCont> {
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             child: GestureDetector(
-              onLongPress: () {},
               onTap: () {
                 Navigator.push(
                   context,

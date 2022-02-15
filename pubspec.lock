@@ -602,6 +602,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.1"
+  vibrate:
+    dependency: "direct main"
+    description:
+      name: vibrate
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.4"
   webview_flutter:
     dependency: "direct main"
     description:

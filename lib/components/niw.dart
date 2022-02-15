@@ -49,11 +49,6 @@ class _myInkWellState extends State<myInkWell> {
               widget.tap();
             }
           },
-          onLongPress: () {
-            if (widget.longPress != null) {
-              widget.longPress();
-            }
-          },
           borderRadius: BorderRadius.circular(widget.radius),
           child: widget.widget,
         ),

@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -9,6 +12,7 @@ import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
+import 'package:vibrate/vibrate.dart';
 
 class TopicDetail extends StatefulWidget {
   int topicID;
@@ -30,12 +34,13 @@ class _TopicDetailState extends State<TopicDetail> {
   Future _getData() async {
     data = await Api().forum_postlist({
       "topicId": widget.topicID,
-      "page": (comment.length / 10 + 1).floor(),
+      "page": 1,
       "pageSize": 10,
     });
-    comment.addAll(data["list"]);
+    comment = data["list"];
     load_done = (data["list"].length != 10);
     setState(() {});
+    return;
   }
 
   void _getComment() async {
@@ -71,16 +76,30 @@ class _TopicDetailState extends State<TopicDetail> {
   _buildContBody() {
     List<Widget> tmp = [];
     var imgLists = [];
+    String s_tmp = "";
     data["topic"]["content"].forEach((e) {
       if (e["type"] == 1) {
         imgLists.add(e["infor"]);
       }
+      if (e["type"] == 0) {
+        s_tmp += e["infor"] + "\n";
+      }
     });
-    print("imgLists${imgLists}");
     data["topic"]["content"].forEach((e) {
-      tmp.add(Container(
-        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-        child: DetailCont(data: e, imgLists: imgLists),
+      tmp.add(GestureDetector(
+        onLongPress: () {
+          Clipboard.setData(ClipboardData(text: s_tmp));
+          Vibrate.feedback(FeedbackType.medium);
+          showToast(
+            context: context,
+            type: XSToast.success,
+            txt: "复制文本成功",
+          );
+        },
+        child: Container(
+          padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+          child: DetailCont(data: e, imgLists: imgLists),
+        ),
       ));
     });
     return Column(children: tmp);
@@ -92,7 +111,12 @@ class _TopicDetailState extends State<TopicDetail> {
       TopicDetailTitle(data: data),
       TopicDetailTime(data: data),
       _buildContBody(),
-      TopicBottom(data: data),
+      TopicVote(
+        poll_info: data["topic"]["poll_info"],
+      ),
+      TopicBottom(
+        data: data,
+      ),
       Container(height: 10),
       Divider(context: context),
       CommentsTab(
@@ -159,10 +183,16 @@ class _TopicDetailState extends State<TopicDetail> {
                   decoration: BoxDecoration(
                     color: os_white,
                   ),
-                  child: ListView(
-                    physics: ClampingScrollPhysics(),
-                    controller: _scrollController,
-                    children: _buildTotal(),
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await _getData();
+                      return;
+                    },
+                    child: ListView(
+                      physics: ClampingScrollPhysics(),
+                      controller: _scrollController,
+                      children: _buildTotal(),
+                    ),
                   ),
                 ),
                 DetailFixBottom(
@@ -225,6 +255,133 @@ class BottomLoading extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class TopicVote extends StatefulWidget {
+  var poll_info;
+  TopicVote({Key key, this.poll_info}) : super(key: key);
+
+  @override
+  _TopicVoteState createState() => _TopicVoteState();
+}
+
+class _TopicVoteState extends State<TopicVote> {
+  int select = -1;
+  bool selected = false;
+  void _vote(int side) {
+    if (selected) return;
+    Vibrate.feedback(FeedbackType.medium);
+    widget.poll_info["voters"]++;
+    widget.poll_info["poll_item_list"][side]["total_num"]++;
+    select = side;
+    selected = true;
+    setState(() {});
+  }
+
+  List<Widget> _buildVote() {
+    List<Widget> tmp = [];
+    widget.poll_info["poll_item_list"].forEach((element) {
+      int ele_idx = widget.poll_info["poll_item_list"].indexOf(element);
+      tmp.add(GestureDetector(
+        onTap: () {
+          _vote(ele_idx);
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width - 50,
+          margin: EdgeInsets.symmetric(vertical: 4),
+          decoration: BoxDecoration(
+            color: os_white,
+            borderRadius: BorderRadius.all(Radius.circular(7.5)),
+            border: Border.all(color: selected ? os_color : Color(0xFFAAAAAA)),
+          ),
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width - 50,
+                padding: EdgeInsets.symmetric(vertical: 7.5, horizontal: 12),
+                child: Center(
+                  child: Text(
+                    (selected && select == (ele_idx) ? "【已选】" : "") +
+                        (element["name"].length > 12
+                            ? element["name"].toString().substring(0, 12) + "…"
+                            : element["name"].toString()),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: selected ? os_color : os_black,
+                    ),
+                  ),
+                ),
+              ),
+              selected
+                  ? Positioned(
+                      left: 0.5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: os_color_opa,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(6),
+                            bottomLeft: Radius.circular(6),
+                          ),
+                        ),
+                        width: (MediaQuery.of(context).size.width - 50) *
+                            (element["total_num"] / widget.poll_info["voters"]),
+                        height: 34.5,
+                      ),
+                    )
+                  : Container(),
+              Positioned(
+                child: Text(
+                  selected
+                      ? (element["total_num"] /
+                                  widget.poll_info["voters"] *
+                                  100)
+                              .toStringAsFixed(2) +
+                          "%"
+                      : "投票",
+                  style: TextStyle(
+                    color: selected ? os_color : os_black,
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                right: 10,
+              ),
+            ],
+          ),
+        ),
+      ));
+    });
+    tmp.add(Container(
+      width: MediaQuery.of(context).size.width - 50,
+      padding: EdgeInsets.symmetric(vertical: 3),
+      child: Text(
+        " 已有 ${widget.poll_info['voters']} 人参与投票",
+        style: TextStyle(
+          color: os_deep_grey,
+          fontSize: 12,
+        ),
+      ),
+    ));
+    return tmp;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.poll_info == nullptr
+        ? Container()
+        : Container(
+            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+            padding: EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              color: Color(0xFFF1F1F1),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child: Column(
+              children: _buildVote(),
+            ),
+          );
   }
 }
 
@@ -454,7 +611,7 @@ class _CommentState extends State<Comment> {
     });
     data.forEach((e) {
       tmp.add(Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
         child: DetailCont(
           data: e,
           imgLists: imgLists,
@@ -850,16 +1007,15 @@ class _TopicBottomState extends State<TopicBottom> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          myInkWell(
-              color: os_color_opa,
-              widget: Padding(
-                padding: EdgeInsets.fromLTRB(8, 5, 8, 5),
-                child: Text(
-                  "收录自专辑: 撸猫日记 >",
-                  style: TextStyle(color: os_color),
-                ),
-              ),
-              radius: 10),
+          GestureDetector(
+            onTap: () {
+              print("测试${widget.data['boardId']}");
+            },
+            child: Text(
+              "收录自专栏: " + widget.data["forumName"] + " >",
+              style: TextStyle(color: os_color),
+            ),
+          ),
           Container(),
           Row(children: [
             myInkWell(
@@ -922,10 +1078,10 @@ class TopicDetailTime extends StatelessWidget {
       child: Text(
         RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
                 int.parse(data["topic"]["create_date"]))) +
-            "·浏览量${data['topic']['hits'].toString()}",
+            " · 浏览量${data['topic']['hits'].toString()}",
         style: TextStyle(
           fontSize: 14,
-          color: Color(0xFFC4C4C4),
+          color: Color(0xFFAAAAAA),
         ),
       ),
     );
