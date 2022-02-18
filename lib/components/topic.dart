@@ -63,8 +63,8 @@ class _TopicState extends State<Topic> {
           Navigator.pushNamed(
             context,
             "/topic_detail",
-            // arguments: widget.data["source_id"],
-            arguments: 1903247,
+            arguments: widget.data["source_id"],
+            // arguments: 1903247,
           );
         },
         widget: Container(

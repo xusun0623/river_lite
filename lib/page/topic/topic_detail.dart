@@ -111,9 +111,11 @@ class _TopicDetailState extends State<TopicDetail> {
       TopicDetailTitle(data: data),
       TopicDetailTime(data: data),
       _buildContBody(),
-      TopicVote(
-        poll_info: data["topic"]["poll_info"],
-      ),
+      data["topic"]["poll_info"] != null
+          ? TopicVote(
+              poll_info: data["topic"]["poll_info"],
+            )
+          : Container(),
       TopicBottom(
         data: data,
       ),
@@ -148,7 +150,7 @@ class _TopicDetailState extends State<TopicDetail> {
         host_id: data["topic"]["user_id"],
         topic_id: data["topic"]["topic_id"],
         data: comment[i],
-        is_last: i == comment.length - 1,
+        is_last: i == (comment.length - 1),
       ));
     }
     tmp.addAll(
@@ -375,8 +377,8 @@ class _TopicVoteState extends State<TopicVote> {
             margin: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
             padding: EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-              color: Color(0xFFF1F1F1),
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              color: Color(0xFFF3F3F3),
+              borderRadius: BorderRadius.all(Radius.circular(7.5)),
             ),
             child: Column(
               children: _buildVote(),
@@ -668,39 +670,14 @@ class _CommentState extends State<Comment> {
                           Container(width: 8),
                           Tag(
                             txt: widget.data["userTitle"],
-                            color: widget.data["userTitle"].toString().length <
-                                    7
-                                ? Color(0xFFFE6F61)
-                                : [
-                                    Color(0xFF0092FF),
-                                    Color(0xFF0092FF),
-                                    Color(0xFF0092FF),
-                                    Color(0xFF0092FF),
-                                    Color(0xFF0092FF),
-                                    Color(0xFF0092FF),
-                                    Color(0xFF0092FF),
-                                    Color(0xFF0092FF),
-                                    Color(0xFF0092FF),
-                                    Color(0xFF0092FF),
-                                  ][int.parse(
-                                    widget.data["userTitle"].toString()[7])],
+                            color:
+                                widget.data["userTitle"].toString().length < 7
+                                    ? Color(0xFFFE6F61)
+                                    : Color(0xFF0092FF),
                             color_opa:
                                 widget.data["userTitle"].toString().length < 7
                                     ? Color(0x10FE6F61)
-                                    : [
-                                        Color(0x100092FF),
-                                        Color(0x100092FF),
-                                        Color(0x100092FF),
-                                        Color(0x100092FF),
-                                        Color(0x100092FF),
-                                        Color(0x100092FF),
-                                        Color(0x100092FF),
-                                        Color(0x100092FF),
-                                        Color(0x100092FF),
-                                        Color(0x100092FF),
-                                      ][int.parse(
-                                        widget.data["userTitle"].toString()[7],
-                                      )],
+                                    : Color(0x100092FF),
                           ),
                           Container(width: 5),
                           widget.data["reply_id"] == widget.host_id
@@ -967,13 +944,22 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.favorite,
-                              color: liked == 1 ? os_color : Color(0xFFcccccc)),
+                          // Icon(
+                          //   Icons.favorite,
+                          //   color: liked == 1 ? os_color : Color(0xFFcccccc),
+                          // ),
+                          os_svg(
+                            path: liked == 1
+                                ? "lib/img/detail_like_blue.svg"
+                                : "lib/img/detail_like.svg",
+                            width: 25,
+                            height: 25,
+                          ),
                           Padding(padding: EdgeInsets.all(1)),
                           Text(
                             (widget.count ?? 0).toString(),
                             style: TextStyle(
-                              color: liked == 1 ? os_color : Color(0xFFcccccc),
+                              color: liked == 1 ? os_color : Color(0xFFB1B1B1),
                             ),
                           ),
                         ],
