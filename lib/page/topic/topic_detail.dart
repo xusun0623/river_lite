@@ -129,7 +129,7 @@ class _TopicDetailState extends State<TopicDetail> {
           _select = select;
           comment = [];
           showToast(context: context, type: XSToast.loading);
-          _getData();
+          _getComment();
         },
         bindSort: (sort) {
           _sort = sort;
@@ -139,7 +139,7 @@ class _TopicDetailState extends State<TopicDetail> {
             type: XSToast.loading,
             txt: "切换排序中…",
           );
-          _getData();
+          _getComment();
         },
         host_id: data["topic"]["user_id"],
         data: [],
@@ -230,15 +230,24 @@ class Divider extends StatelessWidget {
   }
 }
 
-class BottomLoading extends StatelessWidget {
-  const BottomLoading({
+class BottomLoading extends StatefulWidget {
+  Color color;
+  String txt;
+  BottomLoading({
     Key key,
+    this.color,
+    this.txt,
   }) : super(key: key);
 
   @override
+  _BottomLoadingState createState() => _BottomLoadingState();
+}
+
+class _BottomLoadingState extends State<BottomLoading> {
+  @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(0xFFF6F6F6),
+      color: widget.color ?? Color(0xFFF6F6F6),
       padding: const EdgeInsets.all(20),
       child: Center(
         child: Row(
@@ -253,7 +262,7 @@ class BottomLoading extends StatelessWidget {
               ),
             ),
             Container(width: 10),
-            Text("加载中…", style: TextStyle(color: os_deep_grey)),
+            Text(widget.txt ?? "加载中…", style: TextStyle(color: os_deep_grey)),
           ],
         ),
       ),

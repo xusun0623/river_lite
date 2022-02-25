@@ -24,7 +24,9 @@ class _TopicState extends State<Topic> {
       key: "topic_like",
     );
     List<String> ids = tmp.split(",");
-    if (ids.indexOf(widget.data["source_id"].toString()) > -1) {
+    if (ids.indexOf(
+            (widget.data["source_id"] ?? widget.data["topic_id"]).toString()) >
+        -1) {
       setState(() {
         _isRated = true;
       });
@@ -35,16 +37,14 @@ class _TopicState extends State<Topic> {
     if (_isRated == true) return;
     _isRated = true;
     await Api().forum_support({
-      "tid": widget.data["source_id"],
+      "tid": (widget.data["source_id"] ?? widget.data["topic_id"]),
       "type": "thread",
       "action": "support",
-      "accessToken": "e9f49ac6acace2b9f6582800f32ff",
-      "accessSecret": "8aef222107fcd2cedcc5f60b4edd1",
     });
     String tmp = await getStorage(
       key: "topic_like",
     );
-    tmp += ",${widget.data['source_id']}";
+    tmp += ",${widget.data['source_id'] ?? widget.data['topic_id']}";
     setStorage(key: "topic_like", value: tmp);
   }
 
@@ -63,7 +63,7 @@ class _TopicState extends State<Topic> {
           Navigator.pushNamed(
             context,
             "/topic_detail",
-            arguments: widget.data["source_id"],
+            arguments: (widget.data["source_id"] ?? widget.data["topic_id"]),
             // arguments: 1903247,
           );
         },
@@ -190,7 +190,7 @@ class _TopicState extends State<Topic> {
                 Container(
                   width: MediaQuery.of(context).size.width - 60,
                   child: Text(
-                    widget.data["summary"],
+                    (widget.data["summary"] ?? widget.data["subject"]) ?? "",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 15,

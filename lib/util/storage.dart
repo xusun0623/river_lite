@@ -6,10 +6,10 @@ getStorage({@required String key, String initData = ""}) async {
   String s = await prefs.getString(key);
   if (s == null) {
     await prefs.setString(key, initData);
-    print("获得数据:$key-$initData");
+    // print("获得数据:$key-$initData");
     return initData;
   } else {
-    print("获得数据:$key-$s");
+    // print("获得数据:$key-$s");
     return s;
   }
 }

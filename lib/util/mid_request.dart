@@ -17,8 +17,8 @@ class XHttp {
     dio.options.baseUrl = ServerConfig().url;
     dio.options.contentType = Headers.formUrlEncodedContentType;
     dio.options.responseType = ResponseType.plain;
-    dio.options.connectTimeout = 5000;
-    dio.options.receiveTimeout = 3000;
+    dio.options.connectTimeout = 10000;
+    dio.options.receiveTimeout = 10000;
     print("地址:$url入参:$param");
     Response response = await dio
         .request(url, data: param, options: Options(method: "POST"))

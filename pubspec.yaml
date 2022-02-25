@@ -31,7 +31,7 @@ dependencies:
   cached_network_image: ^3.2.0
   loading_indicator_view: 
   webview_flutter: ^3.0.0
-  url_launcher: ^6.0.3
+  url_launcher: ^6.0.20
   flutter_webview_plugin: ^0.3.11
   sticky_headers: ^0.2.0
   vibrate: ^0.0.4
