@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailCont extends StatefulWidget {
   var data;
@@ -108,12 +110,17 @@ class _DetailContState extends State<DetailCont> {
         return myInkWell(
           radius: 0,
           tap: () {
-            Navigator.pushNamed(
-              context,
-              "/webview",
-              arguments: widget.data['url'],
+            showModal(
+              context: context,
+              title: "请确认",
+              cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
+              confirmTxt: "立即前往",
+              cancelTxt: "取消",
+              confirm: () {
+                Navigator.pop(context);
+                launch(widget.data['url']);
+              },
             );
-            // print("跳转链接${widget.data['url']}");
           },
           color: Colors.transparent,
           widget: Container(
@@ -128,7 +135,19 @@ class _DetailContState extends State<DetailCont> {
       case 5: //附件下载
         return myInkWell(
           color: Color(0xFFF6F6F6),
-          tap: () {},
+          tap: () {
+            showModal(
+              context: context,
+              title: "请确认",
+              cont: "即将调用外部浏览器下载此附件，河畔App不保证此链接的安全性",
+              confirmTxt: "立即前往",
+              cancelTxt: "取消",
+              confirm: () {
+                Navigator.pop(context);
+                launch(widget.data['url']);
+              },
+            );
+          },
           radius: 10,
           widget: Container(
             decoration: BoxDecoration(

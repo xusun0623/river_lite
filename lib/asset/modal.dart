@@ -1,5 +1,93 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/components/niw.dart';
+
+void showModal({
+  @required BuildContext context,
+  String title,
+  String cont,
+  String confirmTxt,
+  String cancelTxt,
+  Function confirm,
+}) {
+  AlertDialog alert = AlertDialog(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(15),
+      ),
+    ),
+    title: Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Center(
+        child: Text(
+          title ?? "标题",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+      ),
+    ),
+    content: Text(
+      cont ?? "内容",
+      textAlign: TextAlign.center,
+    ),
+    actions: [
+      Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            myInkWell(
+              widget: Container(
+                width: 140,
+                height: 50,
+                child: Center(
+                  child: Text(
+                    cancelTxt ?? "取消",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+              radius: 10,
+              tap: () {
+                Navigator.pop(context);
+              },
+            ),
+            myInkWell(
+              color: os_color_opa,
+              widget: Container(
+                width: 140,
+                height: 50,
+                child: Center(
+                  child: Text(
+                    confirmTxt ?? "确认",
+                    style: TextStyle(
+                      color: os_color,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              radius: 10,
+              tap: () {
+                confirm();
+              },
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
 
 var isShown = false;
 BuildContext context_tmp;

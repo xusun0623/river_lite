@@ -16,6 +16,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   var data = [];
   var loading = false;
   var load_done = false;
+  bool showBackToTop = false;
 
   @override
   void initState() {
@@ -27,6 +28,16 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
         print("触底");
         _getData();
       }
+      if (_scrollController.position.pixels > 1000 && !showBackToTop) {
+        setState(() {
+          showBackToTop = true;
+        });
+      }
+      if (_scrollController.position.pixels < 1000 && showBackToTop) {
+        setState(() {
+          showBackToTop = false;
+        });
+      }
     });
   }
 
@@ -37,6 +48,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     var tmp = await Api().forum_topiclist({
       "page": (data.length / pageSize + 1).toInt(),
       "pageSize": pageSize,
+      "sortby": "all"
     });
     if (tmp["list"] != null && tmp["list"].length != 0) {
       data.addAll(tmp["list"]);
@@ -62,8 +74,10 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
             ),
     );
     t.add(Padding(
-        padding: EdgeInsets.all(load_done || data.length == 0 ? 7.5 : 0)));
+      padding: EdgeInsets.all(load_done || data.length == 0 ? 7.5 : 0),
+    ));
     return BackToTop(
+      show: showBackToTop,
       child: ListView(
         controller: _scrollController,
         children: t,
@@ -96,9 +110,11 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 class BackToTop extends StatefulWidget {
   ScrollController controller;
   Widget child;
+  bool show;
   BackToTop({
     Key key,
     this.child,
+    this.show,
     this.controller,
   }) : super(key: key);
 
@@ -115,7 +131,7 @@ class _BackToTopState extends State<BackToTop> {
           child: widget.child,
         ),
         Positioned(
-            right: 20,
+            right: widget.show ? 20 : -200,
             bottom: 20,
             child: Container(
               decoration: BoxDecoration(
@@ -136,11 +152,14 @@ class _BackToTopState extends State<BackToTop> {
                     curve: Curves.ease,
                   );
                 },
-                color: os_white,
+                color: os_color,
                 widget: Container(
                   width: 50,
                   height: 50,
-                  child: Icon(Icons.arrow_upward_sharp),
+                  child: Icon(
+                    Icons.arrow_upward_sharp,
+                    color: os_white,
+                  ),
                 ),
                 radius: 100,
               ),
