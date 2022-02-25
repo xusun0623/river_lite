@@ -35,16 +35,16 @@ class _TopicDetailState extends State<TopicDetail> {
     data = await Api().forum_postlist({
       "topicId": widget.topicID,
       "page": 1,
-      "pageSize": 10,
+      "pageSize": 20,
     });
     comment = data["list"];
-    load_done = (data["list"].length != 10);
+    load_done = (data["list"].length < 20);
     setState(() {});
     return;
   }
 
   void _getComment() async {
-    if (loading) return; //控制因为网络过慢反复请求问题
+    if (loading || load_done) return; //控制因为网络过慢反复请求问题
     loading = true;
     const nums = 10;
     var tmp = await Api().forum_postlist({
@@ -54,9 +54,10 @@ class _TopicDetailState extends State<TopicDetail> {
       "page": (comment.length / nums + 1).floor(),
       "pageSize": nums,
     });
-    if (tmp["list"].length != 0 && comment.length % nums == 0)
+    if (tmp["list"].length != 0) {
       comment.addAll(tmp["list"]);
-    load_done = (tmp["list"].length != nums);
+    }
+    load_done = (tmp["list"].length < nums);
     setState(() {});
     loading = false;
   }
@@ -128,7 +129,7 @@ class _TopicDetailState extends State<TopicDetail> {
           _select = select;
           comment = [];
           showToast(context: context, type: XSToast.loading);
-          _getComment();
+          _getData();
         },
         bindSort: (sort) {
           _sort = sort;
@@ -138,7 +139,7 @@ class _TopicDetailState extends State<TopicDetail> {
             type: XSToast.loading,
             txt: "切换排序中…",
           );
-          _getComment();
+          _getData();
         },
         host_id: data["topic"]["user_id"],
         data: [],
@@ -731,13 +732,34 @@ class _CommentState extends State<Comment> {
                             radius: 7.5,
                           ),
                           myInkWell(
+                            tap: () {
+                              showModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
+                                  ),
+                                ),
+                                context: context,
+                                builder: (context) {
+                                  return ConstrainedBox(
+                                    constraints: BoxConstraints(maxHeight: 300),
+                                    child: Container(
+                                      child: Center(
+                                        child: Text("哈哈哈"),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                             color: Colors.transparent,
                             widget: Container(
                               padding: EdgeInsets.all(5),
                               child: os_svg(
                                 path: "lib/img/detail_comment_more.svg",
-                                width: 15,
-                                height: 15,
+                                width: 17,
+                                height: 17,
                               ),
                             ),
                             radius: 7.5,
@@ -801,7 +823,7 @@ class _CommentState extends State<Comment> {
                           width: MediaQuery.of(context).size.width - 75,
                           height: 1,
                           margin: EdgeInsets.only(top: 20),
-                          color: Color(0x07000000),
+                          color: Color(0x00000000),
                         ),
                 ],
               ),

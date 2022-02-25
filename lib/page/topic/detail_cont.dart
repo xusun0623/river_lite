@@ -57,7 +57,10 @@ class _DetailContState extends State<DetailCont> {
           width: MediaQuery.of(context).size.width - 30,
           child: Text.rich(
             TextSpan(
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 16,
+                height: 1.6,
+              ),
               children: _getRichText(widget.data["infor"]),
             ),
           ),
