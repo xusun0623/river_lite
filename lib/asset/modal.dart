@@ -2,6 +2,76 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
 
+void showActionSheet({
+  @required BuildContext context,
+  String title,
+  @required List<String> list,
+  @required Function select,
+}) {
+  List<Widget> _buildChidren() {
+    List<Widget> tmp = [];
+    for (var i = 0; i < list.length; i++) {
+      tmp.add(
+        myInkWell(
+          tap: () {
+            select(i);
+            Navigator.pop(context);
+          },
+          radius: 10,
+          widget: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Center(
+                child: Text(
+                  list[i],
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    return tmp;
+  }
+
+  AlertDialog alert = AlertDialog(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(15),
+      ),
+    ),
+    title: Padding(
+      padding: const EdgeInsets.all(0),
+      child: Center(
+        child: Text(
+          title ?? "搜索类型",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    ),
+    actions: [
+      Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _buildChidren(),
+        ),
+      ),
+    ],
+  );
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
 void showModal({
   @required BuildContext context,
   String title,

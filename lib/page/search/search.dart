@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/niw.dart';
-import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/util/interface.dart';
 
 class Search extends StatefulWidget {
@@ -17,9 +17,22 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   int select = 0;
   var data = [];
+  FocusNode _commentFocus = FocusNode();
+  TextEditingController _controller = new TextEditingController();
   _getData() async {
+    showToast(context: context, type: XSToast.loading);
     var tmp = await Api().forum_search({
-      "keyword": "测试",
+      "keyword": _controller.text ?? "",
+      "page": 1,
+      "pageSize": 20,
+    });
+    data = tmp["list"] ?? [];
+    setState(() {});
+  }
+
+  _getMore() async {
+    var tmp = await Api().forum_search({
+      "keyword": _controller.text ?? "",
       "page": 1,
       "pageSize": 10,
     });
@@ -30,19 +43,18 @@ class _SearchState extends State<Search> {
   List<Widget> _buildTopic() {
     List<Widget> tmp = [];
     if (data.length > 0) {
-      data.forEach((element) {
+      for (int i = 0; i < data.length; i++) {
         tmp.add(SearchTopicCard(
-          data: element,
+          index: i,
+          data: data[i],
         ));
-      });
+      }
     }
     return tmp;
   }
 
   @override
   void initState() {
-    // TODO: implement initState
-    _getData();
     super.initState();
   }
 
@@ -50,15 +62,34 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 100,
+        toolbarHeight: 80,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: os_back,
         foregroundColor: os_black,
         elevation: 0,
-        actions: [SearchBtn()],
+        actions: [
+          SearchBtn(
+            search: () {
+              _getData();
+              _commentFocus.unfocus();
+            },
+          )
+        ],
         leadingWidth: 0,
         leading: Container(width: 0),
-        title: SearchLeft(),
+        title: SearchLeft(
+          confirm: () {
+            _getData();
+            _commentFocus.unfocus();
+          },
+          commentFocus: _commentFocus,
+          controller: _controller,
+          select: (idx) {
+            setState(() {
+              select = idx;
+            });
+          },
+        ),
       ),
       body: Center(
         child: Container(
@@ -66,6 +97,7 @@ class _SearchState extends State<Search> {
           height: MediaQuery.of(context).size.height,
           color: Color(0xFFF1F4F8),
           child: ListView(
+            physics: BouncingScrollPhysics(),
             children: _buildTopic(),
           ),
         ),
@@ -75,7 +107,8 @@ class _SearchState extends State<Search> {
 }
 
 class SearchBtn extends StatefulWidget {
-  const SearchBtn({Key key}) : super(key: key);
+  Function search;
+  SearchBtn({Key key, @required this.search}) : super(key: key);
 
   @override
   _SearchBtnState createState() => _SearchBtnState();
@@ -88,7 +121,7 @@ class _SearchBtnState extends State<SearchBtn> {
       margin: EdgeInsets.only(right: 15),
       child: myInkWell(
         tap: () {
-          print("Tap");
+          widget.search();
         },
         color: Colors.transparent,
         splashColor: Colors.transparent,
@@ -109,17 +142,28 @@ class _SearchBtnState extends State<SearchBtn> {
 }
 
 class SearchLeft extends StatefulWidget {
-  const SearchLeft({Key key}) : super(key: key);
+  Function select;
+  Function confirm;
+  TextEditingController controller;
+  FocusNode commentFocus;
+  SearchLeft({
+    Key key,
+    @required this.select,
+    this.controller,
+    @required this.commentFocus,
+    @required this.confirm,
+  }) : super(key: key);
 
   @override
   _SearchLeftState createState() => _SearchLeftState();
 }
 
 class _SearchLeftState extends State<SearchLeft> {
+  int select_idx = 0;
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width - 80,
+      width: MediaQuery.of(context).size.width - 83,
       height: 60,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -129,38 +173,75 @@ class _SearchLeftState extends State<SearchLeft> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "帖子",
-                style: TextStyle(
-                  color: Color(0xFF004DFF),
-                  fontSize: 16,
-                ),
+          myInkWell(
+            tap: () {
+              widget.commentFocus.unfocus();
+              showActionSheet(
+                context: context,
+                list: ["帖子", "用户"],
+                select: (idx) {
+                  setState(() {
+                    select_idx = idx;
+                  });
+                  widget.select(idx);
+                },
+              );
+            },
+            radius: 10,
+            widget: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    select_idx == 0 ? "帖子" : "用户",
+                    style: TextStyle(
+                      color: Color(0xFF004DFF),
+                      fontSize: 16,
+                    ),
+                  ),
+                  Container(width: 2),
+                  Container(
+                    margin: EdgeInsets.only(top: 2),
+                    child: os_svg(
+                      path: "lib/img/search_filter.svg",
+                      width: 7.9,
+                      height: 10,
+                    ),
+                  ),
+                ],
               ),
-              Container(width: 2),
-              Container(
-                margin: EdgeInsets.only(top: 2),
-                child: os_svg(
-                  path: "lib/img/search_filter.svg",
-                  width: 7.9,
-                  height: 10,
-                ),
-              ),
-            ],
+            ),
           ),
-          Container(width: 15),
           Container(
-            width: MediaQuery.of(context).size.width - 180,
+            width: MediaQuery.of(context).size.width - 165.5,
             child: TextField(
+              onSubmitted: (context) {
+                widget.confirm();
+              },
+              controller: widget.controller,
               cursorColor: os_black,
               cursorWidth: 1.5,
+              focusNode: widget.commentFocus,
               style: TextStyle(
                 fontSize: 16,
               ),
               decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    widget.controller.clear();
+                  },
+                  icon: Icon(
+                    Icons.cancel,
+                    color: Color(
+                      widget.controller.text.length > 0
+                          ? 0xFFCCCCCC
+                          : 0X00CCCCCC,
+                    ),
+                    size: 20,
+                  ),
+                ),
                 hintText: "搜一搜",
                 border: InputBorder.none,
               ),
@@ -174,8 +255,9 @@ class _SearchLeftState extends State<SearchLeft> {
 
 class SearchTopicCard extends StatefulWidget {
   Map data;
+  int index;
 
-  SearchTopicCard({Key key, this.data}) : super(key: key);
+  SearchTopicCard({Key key, this.data, this.index}) : super(key: key);
 
   @override
   _SearchTopicCardState createState() => _SearchTopicCardState();
@@ -190,7 +272,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
       child: myInkWell(
         tap: () {
           Navigator.pushNamed(
@@ -218,14 +300,14 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                           child: Container(
                             width: 35,
                             height: 35,
-                            color: os_grey,
+                            color: os_wonderful_color_opa[widget.index % 7],
                             child: Center(
                               child: Text(
                                 widget.data["user_nick_name"].length == 0
                                     ? "X"
                                     : widget.data["user_nick_name"][0],
                                 style: TextStyle(
-                                  color: os_deep_grey,
+                                  color: os_wonderful_color[widget.index % 7],
                                 ),
                               ),
                             ),
