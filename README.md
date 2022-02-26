@@ -173,4 +173,16 @@ MediaQuery.of(context).size.width
 ```
 
 
+### 8.上拉刷新
+```dart
+ScrollController _scrollController = new ScrollController();
+_scrollController.addListener(() {
+  if (_scrollController.position.pixels ==
+      _scrollController.position.maxScrollExtent) {
+    _getComment();
+  }
+});
+```
+
+
 

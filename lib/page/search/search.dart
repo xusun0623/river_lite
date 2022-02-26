@@ -5,6 +5,7 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 
 class Search extends StatefulWidget {
@@ -17,27 +18,39 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   int select = 0;
   var data = [];
+  bool loading = false;
+  bool load_done = false;
   FocusNode _commentFocus = FocusNode();
+  ScrollController _scrollController = new ScrollController();
   TextEditingController _controller = new TextEditingController();
   _getData() async {
-    showToast(context: context, type: XSToast.loading);
+    showToast(
+      context: context,
+      type: XSToast.loading,
+      duration: 10000,
+    );
     var tmp = await Api().forum_search({
       "keyword": _controller.text ?? "",
       "page": 1,
       "pageSize": 20,
     });
     data = tmp["list"] ?? [];
+    load_done = data.length < 20;
     setState(() {});
   }
 
   _getMore() async {
+    if (loading) return;
+    loading = true;
+    print("${data.length}");
     var tmp = await Api().forum_search({
-      "keyword": _controller.text ?? "",
-      "page": 1,
-      "pageSize": 10,
+      "keyword": _controller.text,
+      "page": (data.length / 20 + 1).toInt(),
+      "pageSize": 20,
     });
-    data = tmp["list"] ?? [];
+    data.addAll(tmp["list"] ?? []);
     setState(() {});
+    loading = false;
   }
 
   List<Widget> _buildTopic() {
@@ -50,11 +63,28 @@ class _SearchState extends State<Search> {
         ));
       }
     }
+    tmp.add(
+      load_done || data.length == 0
+          ? Container()
+          : BottomLoading(
+              color: Colors.transparent,
+            ),
+    );
+    tmp.add(Container(
+      height: 15,
+    ));
     return tmp;
   }
 
   @override
   void initState() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        print("触底");
+        _getMore();
+      }
+    });
     super.initState();
   }
 
@@ -97,6 +127,7 @@ class _SearchState extends State<Search> {
           height: MediaQuery.of(context).size.height,
           color: Color(0xFFF1F4F8),
           child: ListView(
+            controller: _scrollController,
             physics: BouncingScrollPhysics(),
             children: _buildTopic(),
           ),
