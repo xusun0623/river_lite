@@ -129,8 +129,8 @@ class _TopicState extends State<Topic> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  (widget.data["recommendAdd"] +
-                                          (_isRated ? 1 : 0))
+                                  (widget.data["recommendAdd"] ??
+                                          0 + (_isRated ? 1 : 0))
                                       .toString(),
                                   style: TextStyle(
                                     fontSize: 12,

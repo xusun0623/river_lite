@@ -16,6 +16,25 @@ final os_middle_grey = Color(0xFFD3D3D3); //浅灰
 
 final os_back = Color(0xFFF1F4F8); //浅灰
 
+final wonderful_color = [
+  Color(0xFFFE6F61),
+  Color(0xFF50B9FE),
+  Color(0xFF40D69C),
+  Color(0xFFFF773F),
+  Color(0xFFFF8D46),
+  Color(0xFF96A4FE),
+  Color(0xFF0092FF),
+];
+final wonderful_color_opa = [
+  Color.fromRGBO(254, 111, 97, 0.1),
+  Color.fromRGBO(80, 185, 254, 0.1),
+  Color.fromRGBO(64, 214, 156, 0.1),
+  Color.fromRGBO(255, 119, 63, 0.1),
+  Color.fromRGBO(255, 141, 70, 0.1),
+  Color.fromRGBO(150, 164, 254, 0.1),
+  Color.fromRGBO(0, 146, 255, 0.1),
+];
+
 /// System overlays should be drawn with a light color. Intended for
 /// applications with a dark background.
 const SystemUiOverlayStyle light = SystemUiOverlayStyle(

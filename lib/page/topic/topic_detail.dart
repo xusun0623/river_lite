@@ -305,7 +305,7 @@ class _TopicVoteState extends State<TopicVote> {
           decoration: BoxDecoration(
             color: os_white,
             borderRadius: BorderRadius.all(Radius.circular(7.5)),
-            border: Border.all(color: selected ? os_color : Color(0xFFAAAAAA)),
+            border: Border.all(color: selected ? os_color : Color(0xFFCCCCCC)),
           ),
           child: Stack(
             alignment: AlignmentDirectional.center,
@@ -387,7 +387,7 @@ class _TopicVoteState extends State<TopicVote> {
             margin: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
             padding: EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-              color: Color(0xFFF3F3F3),
+              color: Color(0xFFF6F6F6),
               borderRadius: BorderRadius.all(Radius.circular(7.5)),
             ),
             child: Column(

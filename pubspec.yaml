@@ -62,3 +62,4 @@ flutter:
     - lib/img/detail_like.svg
     - lib/img/detail_like_blue.svg
     - lib/img/detail_comment_more.svg
+    - lib/img/search_filter.svg

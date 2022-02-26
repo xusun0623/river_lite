@@ -21,7 +21,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    _getData();
+    _getInitData();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -41,6 +41,18 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     });
   }
 
+  _getInitData() async {
+    if (loading) return;
+    loading = true;
+    var tmp = await Api()
+        .forum_topiclist({"page": 1, "pageSize": 20, "sortby": "all"});
+    data = tmp["list"];
+    loading = false;
+    load_done = false;
+    setState(() {});
+    return;
+  }
+
   _getData() async {
     if (loading || load_done) return;
     loading = true;
@@ -53,7 +65,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     if (tmp["list"] != null && tmp["list"].length != 0) {
       data.addAll(tmp["list"]);
     }
-    load_done = (tmp["list"] == null || tmp["list"].length < pageSize);
+    load_done = tmp == null || ((tmp["list"] ?? []).length < pageSize);
     loading = false;
     setState(() {});
   }
@@ -93,8 +105,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       body: RefreshIndicator(
         color: os_color,
         onRefresh: () async {
-          data = [];
-          return await _getData();
+          return await _getInitData();
         },
         child: NoRippleOverScroll(
           child: _buildComponents(),

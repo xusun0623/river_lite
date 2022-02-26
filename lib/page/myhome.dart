@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:noripple_overscroll/noripple_overscroll.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/home/homeHot.dart';
 import 'package:offer_show/page/home/homeNew.dart';
 
@@ -53,9 +54,34 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           backgroundColor: os_back,
           elevation: 0.0,
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: os_svg(path: "lib/img/search.svg", width: 23, height: 23),
+            myInkWell(
+              tap: () {
+                Navigator.pushNamed(context, "/search");
+              },
+              radius: 100,
+              color: Colors.transparent,
+              widget: Container(
+                width: 60,
+                height: 30,
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+                child: Center(
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                    ),
+                    child: Center(
+                      child: os_svg(
+                        path: "lib/img/search.svg",
+                        width: 22,
+                        height: 22,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
             Padding(padding: EdgeInsets.all(2)),
           ],
@@ -67,7 +93,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
             labelStyle: TextStyle(fontSize: 18),
             indicator: TabSizeIndicator(
               wantWidth: 20,
-              borderSide: BorderSide(width: 8.0, color: Color(0x440092FF)),
+              borderSide: BorderSide(width: 3.0, color: Color(0xFF0092FF)),
             ),
             tabs: _tabValues.map((e) {
               return Tab(text: e);
@@ -158,8 +184,8 @@ class _MyUnderlinePainter extends BoxPainter {
         _indicatorRectFor(rect, textDirection).deflate(borderSide.width / 2.0);
     final Paint paint = borderSide.toPaint()..strokeCap = StrokeCap.round;
     canvas.drawLine(
-      indicator.bottomLeft.translate(0, -10),
-      indicator.bottomRight.translate(0, -10),
+      indicator.bottomLeft.translate(0, -7.5),
+      indicator.bottomRight.translate(0, -7.5),
       paint,
     );
   }
