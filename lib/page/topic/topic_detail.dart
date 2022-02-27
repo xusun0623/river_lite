@@ -9,6 +9,8 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/components/totop.dart';
+import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
@@ -30,6 +32,7 @@ class _TopicDetailState extends State<TopicDetail> {
   var loading = false;
   var _select = 0; //0-全部回复 1-只看楼主
   var _sort = 0; //0-按时间正序 1-按时间倒序
+  var showBackToTop = false;
   ScrollController _scrollController = new ScrollController();
 
   Future _getData() async {
@@ -73,6 +76,16 @@ class _TopicDetailState extends State<TopicDetail> {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         _getComment();
+      }
+      if (_scrollController.position.pixels > 1000 && !showBackToTop) {
+        setState(() {
+          showBackToTop = true;
+        });
+      }
+      if (_scrollController.position.pixels < 1000 && showBackToTop) {
+        setState(() {
+          showBackToTop = false;
+        });
       }
     });
   }
@@ -197,10 +210,15 @@ class _TopicDetailState extends State<TopicDetail> {
                       await _getData();
                       return;
                     },
-                    child: ListView(
-                      physics: ClampingScrollPhysics(),
+                    child: BackToTop(
+                      bottom: 100,
+                      show: showBackToTop,
                       controller: _scrollController,
-                      children: _buildTotal(),
+                      child: ListView(
+                        physics: ClampingScrollPhysics(),
+                        controller: _scrollController,
+                        children: _buildTotal(),
+                      ),
                     ),
                   ),
                 ),

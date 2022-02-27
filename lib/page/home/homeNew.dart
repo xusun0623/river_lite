@@ -1,8 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:noripple_overscroll/noripple_overscroll.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
+import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 
@@ -112,66 +115,4 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 
   @override
   bool get wantKeepAlive => true;
-}
-
-class BackToTop extends StatefulWidget {
-  ScrollController controller;
-  Widget child;
-  bool show;
-  BackToTop({
-    Key key,
-    this.child,
-    this.show,
-    this.controller,
-  }) : super(key: key);
-
-  @override
-  _BackToTopState createState() => _BackToTopState();
-}
-
-class _BackToTopState extends State<BackToTop> {
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned(
-          child: widget.child,
-        ),
-        Positioned(
-            right: widget.show ? 20 : -200,
-            bottom: 20,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(100)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0x22000000),
-                    blurRadius: 10,
-                    offset: Offset(3, 3),
-                  ),
-                ],
-              ),
-              child: myInkWell(
-                tap: () {
-                  widget.controller.animateTo(
-                    0,
-                    duration: Duration(milliseconds: 1),
-                    curve: Curves.ease,
-                  );
-                },
-                color: os_color,
-                widget: Container(
-                  width: 50,
-                  height: 50,
-                  child: Icon(
-                    Icons.arrow_upward_sharp,
-                    color: os_white,
-                  ),
-                ),
-                radius: 100,
-              ),
-            ))
-      ],
-    );
-  }
 }

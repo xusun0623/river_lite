@@ -64,3 +64,4 @@ flutter:
     - lib/img/detail_comment_more.svg
     - lib/img/search_filter.svg
     - lib/img/empty.png
+    - lib/img/to_top.svg
