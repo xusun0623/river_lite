@@ -70,11 +70,11 @@ class _DetailContState extends State<DetailCont> {
         break;
       case 1: //图片
         return ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(7.5)),
           child: Container(
             decoration: BoxDecoration(
               color: os_grey,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: BorderRadius.all(Radius.circular(7.5)),
             ),
             child: GestureDetector(
               onTap: () {

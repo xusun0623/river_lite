@@ -42,15 +42,11 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   }
 
   _getInitData() async {
-    if (loading) return;
-    loading = true;
     var tmp = await Api()
         .forum_topiclist({"page": 1, "pageSize": 20, "sortby": "all"});
     data = tmp["list"];
-    loading = false;
     load_done = false;
     setState(() {});
-    return;
   }
 
   _getData() async {

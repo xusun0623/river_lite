@@ -7,6 +7,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/util/interface.dart';
@@ -34,6 +35,8 @@ class _TopicDetailState extends State<TopicDetail> {
   Future _getData() async {
     data = await Api().forum_postlist({
       "topicId": widget.topicID,
+      "authorId": _select == 0 ? 0 : data["topic"]["user_id"],
+      "order": _sort,
       "page": 1,
       "pageSize": 20,
     });
@@ -54,7 +57,7 @@ class _TopicDetailState extends State<TopicDetail> {
       "page": (comment.length / nums + 1).floor(),
       "pageSize": nums,
     });
-    if (tmp["list"].length != 0) {
+    if (tmp["list"] != null && tmp["list"].length != 0) {
       comment.addAll(tmp["list"]);
     }
     load_done = (tmp["list"].length < nums);
@@ -127,25 +130,27 @@ class _TopicDetailState extends State<TopicDetail> {
         sort: _sort,
         bindSelect: (select) async {
           _select = select;
-          comment = [];
           showToast(context: context, type: XSToast.loading);
-          _getComment();
+          _getData();
         },
-        bindSort: (sort) {
+        bindSort: (sort) async {
           _sort = sort;
-          comment = [];
+          await Future.delayed(Duration(milliseconds: 30));
           showToast(
             context: context,
             type: XSToast.loading,
             txt: "切换排序中…",
           );
-          _getComment();
+          _getData();
         },
         host_id: data["topic"]["user_id"],
         data: [],
         topic_id: data["topic"]["topic_id"],
       ),
     ];
+    tmp.add(comment.length == 0
+        ? Empty(txt: _select == 0 ? "暂无评论, 快去抢沙发吧~" : "楼主没有发表评论~")
+        : Container());
     for (var i = 0; i < comment.length; i++) {
       tmp.add(Comment(
         host_id: data["topic"]["user_id"],
@@ -444,9 +449,13 @@ class _CommentsTabState extends State<CommentsTab> {
           });
         },
         TapSort: () {
-          setState(() {
-            widget.bindSort(1 - widget.sort);
-          });
+          showActionSheet(
+              context: context,
+              list: ["按时间正序", "按时间倒序"],
+              title: "排序方式",
+              select: (idx) {
+                widget.bindSort(idx);
+              });
         },
         select: widget.select,
         sort: widget.sort,

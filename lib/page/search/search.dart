@@ -195,7 +195,7 @@ class _SearchLeftState extends State<SearchLeft> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width - 83,
-      height: 60,
+      height: 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
         color: os_white,
