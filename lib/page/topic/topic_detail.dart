@@ -60,7 +60,7 @@ class _TopicDetailState extends State<TopicDetail> {
     if (tmp["list"] != null && tmp["list"].length != 0) {
       comment.addAll(tmp["list"]);
     }
-    load_done = (tmp["list"].length < nums);
+    load_done = ((tmp["list"] ?? []).length < nums);
     setState(() {});
     loading = false;
   }
@@ -117,6 +117,7 @@ class _TopicDetailState extends State<TopicDetail> {
       _buildContBody(),
       data["topic"]["poll_info"] != null
           ? TopicVote(
+              topic_id: data["topic"]["topic_id"],
               poll_info: data["topic"]["poll_info"],
             )
           : Container(),
@@ -277,7 +278,8 @@ class _BottomLoadingState extends State<BottomLoading> {
 
 class TopicVote extends StatefulWidget {
   var poll_info;
-  TopicVote({Key key, this.poll_info}) : super(key: key);
+  var topic_id;
+  TopicVote({Key key, this.poll_info, this.topic_id}) : super(key: key);
 
   @override
   _TopicVoteState createState() => _TopicVoteState();
@@ -286,11 +288,47 @@ class TopicVote extends StatefulWidget {
 class _TopicVoteState extends State<TopicVote> {
   int select = -1;
   bool selected = false;
-  void _vote(int side) {
+
+  @override
+  void initState() {
+    _getStatus();
+    super.initState();
+  }
+
+  void _getStatus() async {
+    String data = await getStorage(
+      key: "vote_side",
+      initData: "",
+    );
+    var poll_item_ids = data.split(",");
+    var poll_item_list = widget.poll_info["poll_item_list"];
+    poll_item_ids.forEach((element) {
+      for (var i = 0; i < poll_item_list.length; i++) {
+        if (element == "${poll_item_list[i]['poll_item_id']}") {
+          selected = true;
+          select = i;
+        }
+      }
+    });
+    setState(() {});
+  }
+
+  void _vote(int side) async {
     if (selected) return;
+    var poll_item_id = widget.poll_info["poll_item_list"][side]["poll_item_id"];
+    await Api().forum_vote({
+      "tid": widget.topic_id,
+      "options": poll_item_id,
+    });
     Vibrate.feedback(FeedbackType.medium);
     widget.poll_info["voters"]++;
     widget.poll_info["poll_item_list"][side]["total_num"]++;
+    var vote_status = await getStorage(
+      key: "vote_side",
+      initData: "",
+    );
+    vote_status += "${poll_item_id},";
+    await setStorage(key: "vote_side", value: vote_status);
     select = side;
     selected = true;
     setState(() {});

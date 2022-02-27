@@ -4,6 +4,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
@@ -55,9 +56,25 @@ class _SearchState extends State<Search> {
 
   List<Widget> _buildTopic() {
     List<Widget> tmp = [];
+    tmp.add(data.length == 0 && load_done
+        ? Container(
+            width: MediaQuery.of(context).size.width - 30,
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+              color: os_white,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child: Empty(
+              txt: "没有搜索结果",
+            ),
+          )
+        : Container());
     if (data.length > 0) {
       for (int i = 0; i < data.length; i++) {
         tmp.add(SearchTopicCard(
+          tap: () {
+            _commentFocus.unfocus();
+          },
           index: i,
           data: data[i],
         ));
@@ -261,6 +278,7 @@ class _SearchLeftState extends State<SearchLeft> {
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   onPressed: () {
+                    FocusScope.of(context).requestFocus(widget.commentFocus);
                     widget.controller.clear();
                   },
                   icon: Icon(
@@ -287,8 +305,10 @@ class _SearchLeftState extends State<SearchLeft> {
 class SearchTopicCard extends StatefulWidget {
   Map data;
   int index;
+  Function tap;
 
-  SearchTopicCard({Key key, this.data, this.index}) : super(key: key);
+  SearchTopicCard({Key key, this.data, this.index, @required this.tap})
+      : super(key: key);
 
   @override
   _SearchTopicCardState createState() => _SearchTopicCardState();
@@ -306,6 +326,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
       padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
       child: myInkWell(
         tap: () {
+          widget.tap();
           Navigator.pushNamed(
             context,
             "/topic_detail",
