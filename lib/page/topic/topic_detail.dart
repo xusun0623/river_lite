@@ -1,5 +1,6 @@
+import 'dart:async';
 import 'dart:ffi';
-
+import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,7 +34,11 @@ class _TopicDetailState extends State<TopicDetail> {
   var _select = 0; //0-全部回复 1-只看楼主
   var _sort = 0; //0-按时间正序 1-按时间倒序
   var showBackToTop = false;
+  bool editing = false; //是否处于编辑状态
   ScrollController _scrollController = new ScrollController();
+
+  TextEditingController _txtController = new TextEditingController();
+  FocusNode _focusNode = new FocusNode();
 
   Future _getData() async {
     data = await Api().forum_postlist({
@@ -44,7 +49,7 @@ class _TopicDetailState extends State<TopicDetail> {
       "pageSize": 20,
     });
     comment = data["list"];
-    load_done = (data["list"].length < 20);
+    load_done = ((data["list"] ?? []).length < 20);
     setState(() {});
     return;
   }
@@ -173,8 +178,10 @@ class _TopicDetailState extends State<TopicDetail> {
         is_last: i == (comment.length - 1),
       ));
     }
-    tmp.addAll(
-        [load_done ? Container() : BottomLoading(), Container(height: 60)]);
+    tmp.addAll([
+      load_done ? Container() : BottomLoading(),
+      Container(height: editing ? 250 : 60)
+    ]);
     return tmp;
   }
 
@@ -222,13 +229,264 @@ class _TopicDetailState extends State<TopicDetail> {
                     ),
                   ),
                 ),
-                DetailFixBottom(
-                  topic_id: data["topic"]["topic_id"],
-                  count: data["topic"]["extraPanel"][1]["extParams"]
-                      ["recommendAdd"],
-                )
+                editing //编辑回复框
+                    ? RichInput(
+                        controller: _txtController,
+                        focusNode: _focusNode,
+                        cancel: () {
+                          _focusNode.unfocus();
+                          _txtController.clear();
+                          editing = false;
+                          setState(() {});
+                        },
+                        send: () async {
+                          var contents = [
+                            {
+                              "type": 0, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
+                              "infor": _txtController.text,
+                            },
+                          ];
+                          Map json = {
+                            "body": {
+                              "json": {
+                                "isAnonymous": 0,
+                                "isOnlyAuthor": 0,
+                                "isQuote": 0,
+                                "typeId": "",
+                                "aid": "",
+                                "fid": "",
+                                "replyId": "",
+                                "tid": widget.topicID, // 回复时指定帖子
+                                // "isQuote": 1, //"是否引用之前回复的内容
+                                // "replyId": 123456, //回复 ID（pid）
+                                // "aid": "1,2,3", // 附件 ID，逗号隔开
+                                "title": "测试标题",
+                                "content": jsonEncode(contents),
+                              }
+                            }
+                          };
+                          print({
+                            "act": "reply",
+                            "json": jsonEncode(json),
+                          });
+                          showToast(
+                            context: context,
+                            type: XSToast.loading,
+                            txt: "发表中…",
+                          );
+                          await Api().forum_topicadmin(
+                            {
+                              "act": "reply",
+                              "json": jsonEncode(json),
+                            },
+                          );
+                          _focusNode.unfocus();
+                          _txtController.clear();
+                          editing = false;
+                          setState(() {});
+                          await Future.delayed(Duration(milliseconds: 30));
+                          showToast(
+                            context: context,
+                            type: XSToast.success,
+                            duration: 200,
+                            txt: "发表成功!",
+                          );
+                          await _getData();
+                        },
+                      )
+                    : DetailFixBottom(
+                        tapEdit: () {
+                          _focusNode.requestFocus();
+                          editing = true;
+                          setState(() {});
+                        },
+                        topic_id: data["topic"]["topic_id"],
+                        count: data["topic"]["extraPanel"][1]["extParams"]
+                            ["recommendAdd"],
+                      )
               ],
             ),
+    );
+  }
+}
+
+class RichInput extends StatefulWidget {
+  double bottom;
+  TextEditingController controller;
+  FocusNode focusNode;
+  Function cancel;
+  Function send;
+  RichInput({
+    Key key,
+    this.bottom,
+    @required this.controller,
+    @required this.focusNode,
+    @required this.cancel,
+    @required this.send,
+  }) : super(key: key);
+
+  @override
+  _RichInputState createState() => _RichInputState();
+}
+
+class _RichInputState extends State<RichInput> {
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: widget.bottom ?? 0,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 250,
+        decoration: BoxDecoration(
+            color: os_white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.1),
+                blurRadius: 7,
+                offset: Offset(1, -2),
+              )
+            ]),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  child: Row(
+                    children: [
+                      SendFunc(
+                        path: "lib/img/topic_emoji.svg",
+                        tap: () {},
+                      ),
+                      SendFunc(
+                        path: "lib/img/topic_@.svg",
+                        tap: () {},
+                      ),
+                      SendFunc(
+                        path: "lib/img/topic_picture.svg",
+                        tap: () {},
+                      ),
+                      SendFunc(
+                        path: "lib/img/topic_attach.svg",
+                        tap: () {},
+                      ),
+                    ],
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    height: 185,
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      focusNode: widget.focusNode,
+                      controller: widget.controller,
+                      style: TextStyle(
+                        height: 1.8,
+                      ),
+                      cursorColor: Color(0xFF004DFF),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "请在此编辑回复",
+                        hintStyle: TextStyle(
+                          height: 1.8,
+                          color: Color(0xFFBBBBBB),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                myInkWell(
+                  tap: () {
+                    widget.cancel();
+                  },
+                  widget: Container(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    height: 60,
+                    child: Center(
+                      child: Text(
+                        "取消",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF656565),
+                        ),
+                      ),
+                    ),
+                  ),
+                  radius: 15,
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 15),
+                  child: myInkWell(
+                    tap: () {
+                      widget.send();
+                    },
+                    color: Color(0xFF004DFF),
+                    widget: Container(
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      height: 100,
+                      child: Center(
+                        child: Text(
+                          "发\n送",
+                          style: TextStyle(
+                            color: os_white,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                    radius: 10,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SendFunc extends StatefulWidget {
+  String path;
+  Function tap;
+  SendFunc({
+    Key key,
+    @required this.path,
+    @required this.tap,
+  }) : super(key: key);
+
+  @override
+  _SendFuncState createState() => _SendFuncState();
+}
+
+class _SendFuncState extends State<SendFunc> {
+  @override
+  Widget build(BuildContext context) {
+    return myInkWell(
+      tap: () {
+        widget.tap();
+      },
+      widget: Container(
+        padding: EdgeInsets.all(15),
+        child: os_svg(
+          path: widget.path,
+          width: 24,
+          height: 24,
+        ),
+      ),
+      radius: 100,
     );
   }
 }
@@ -946,7 +1204,13 @@ class _TagState extends State<Tag> {
 class DetailFixBottom extends StatefulWidget {
   var topic_id;
   var count;
-  DetailFixBottom({Key key, this.topic_id, this.count}) : super(key: key);
+  Function tapEdit;
+  DetailFixBottom({
+    Key key,
+    this.topic_id,
+    this.count,
+    this.tapEdit,
+  }) : super(key: key);
 
   @override
   _DetailFixBottomState createState() => _DetailFixBottomState();
@@ -1011,6 +1275,9 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
         child: Row(
           children: [
             myInkWell(
+              tap: () {
+                widget.tapEdit();
+              },
               radius: 10,
               color: os_white,
               widget: Container(
@@ -1019,9 +1286,19 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
                 child: Center(
                   child: Container(
                     width: MediaQuery.of(context).size.width - 120,
-                    child: Text(
-                      "我一出口就是神回复",
-                      style: TextStyle(color: os_deep_grey),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.mode_edit,
+                          color: Color(0xFFBBBBBB),
+                          size: 18,
+                        ),
+                        Container(width: 5),
+                        Text(
+                          "我一出口就是神回复",
+                          style: TextStyle(color: os_deep_grey),
+                        ),
+                      ],
                     ),
                   ),
                 ),

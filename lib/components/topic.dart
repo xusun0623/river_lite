@@ -85,6 +85,7 @@ class _TopicState extends State<Topic> {
                           child: CachedNetworkImage(
                             width: 30,
                             height: 30,
+                            fit: BoxFit.fill,
                             imageUrl: widget.data["userAvatar"],
                             placeholder: (context, url) =>
                                 Container(color: os_grey),

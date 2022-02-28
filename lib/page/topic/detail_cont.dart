@@ -63,7 +63,12 @@ class _DetailContState extends State<DetailCont> {
                 fontSize: 16,
                 height: 1.6,
               ),
-              children: _getRichText(widget.data["infor"]),
+              children: _getRichText(
+                widget.data["infor"].indexOf("本帖最后由") > -1
+                    ? widget.data["infor"]
+                        .substring(widget.data["infor"].indexOf("编辑") + 7)
+                    : widget.data["infor"],
+              ),
             ),
           ),
         );

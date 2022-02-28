@@ -86,7 +86,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                 widget: Container(
                   width: 50,
                   height: 50,
-                  padding: EdgeInsets.all(15),
+                  padding: EdgeInsets.all(17.5),
                   child: os_svg(
                     path: "lib/img/to_top.svg",
                   ),
