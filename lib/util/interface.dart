@@ -3,6 +3,18 @@ import 'package:offer_show/util/mid_request.dart';
 /// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 
 class Api {
+  //获得某一板块的帖子
+  certain_forum_topiclist(Map m) async {
+    Map tmp = {
+      "r": "forum/topiclist",
+    };
+    tmp.addAll(m);
+    return await XHttp().postWithGlobalToken(
+      url: "",
+      param: tmp,
+    );
+  }
+
   //回复
   forum_topicadmin(Map m) async {
     Map tmp = {

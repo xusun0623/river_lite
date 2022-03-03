@@ -24,11 +24,50 @@ class _HomeBtnCollectState extends State<HomeBtnCollect> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Btn(img: "1-loss", txt: "失物招领"),
-          Btn(img: "2-second", txt: "二手专区"),
-          Btn(img: "0-all", txt: "全部分类"),
+          Btn(img: "1-loss", txt: "失物招领", board_id: 305),
+          Btn(img: "2-second", txt: "二手专区", board_id: 61),
+          BtnAll(),
         ],
       ),
+    );
+  }
+}
+
+class BtnAll extends StatefulWidget {
+  const BtnAll({Key key}) : super(key: key);
+
+  @override
+  State<BtnAll> createState() => _BtnAllState();
+}
+
+class _BtnAllState extends State<BtnAll> {
+  @override
+  Widget build(BuildContext context) {
+    return myInkWell(
+      tap: () {},
+      widget: Container(
+        padding: EdgeInsets.symmetric(vertical: 15),
+        width: (MediaQuery.of(context).size.width - 30 - 20) / 3,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            os_svg(
+              path: "lib/collect_btn/0-all.svg",
+              width: 24,
+              height: 24,
+            ),
+            Container(width: 3),
+            Text(
+              "全部分类",
+              style: TextStyle(
+                color: Color(0xFF676767),
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+      ),
+      radius: 0,
     );
   }
 }
@@ -36,10 +75,12 @@ class _HomeBtnCollectState extends State<HomeBtnCollect> {
 class Btn extends StatefulWidget {
   String img;
   String txt;
+  int board_id;
   Btn({
     Key key,
     @required this.img,
     @required this.txt,
+    @required this.board_id,
   }) : super(key: key);
 
   @override
@@ -47,10 +88,17 @@ class Btn extends StatefulWidget {
 }
 
 class _BtnState extends State<Btn> {
-  /**  { img: 0-all, txt: 全部分类 } */
+  /**  { img: 0-all, txt: 全部分类, board_id: 25,  } */
   @override
   Widget build(BuildContext context) {
     return myInkWell(
+      tap: () {
+        Navigator.pushNamed(
+          context,
+          "/column",
+          arguments: widget.board_id,
+        );
+      },
       widget: Container(
         padding: EdgeInsets.symmetric(vertical: 15),
         width: (MediaQuery.of(context).size.width - 30 - 20) / 3,

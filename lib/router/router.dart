@@ -1,5 +1,6 @@
 import 'package:offer_show/page/404.dart';
 import 'package:offer_show/page/broke.dart';
+import 'package:offer_show/page/column/column.dart';
 import 'package:offer_show/page/home.dart';
 import 'package:offer_show/page/me.dart';
 import 'package:offer_show/page/myhome.dart';
@@ -17,6 +18,7 @@ final routers = {
   "/404": () => Page404(),
   "/topic_detail": (data) => TopicDetail(topicID: data),
   "/search": () => Search(),
+  "/column": (data) => TopicColumn(columnID: data),
   "/photo_view": ({data}) => PhotoPreview(
         galleryItems: data.galleryItems,
         defaultImage: data.defaultImage,

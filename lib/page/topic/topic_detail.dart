@@ -201,12 +201,26 @@ class _TopicDetailState extends State<TopicDetail> {
           ? AppBar(
               backgroundColor: os_white,
               foregroundColor: os_black,
+              leading: IconButton(
+                icon: Icon(Icons.chevron_left_rounded),
+                color: os_black,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
               elevation: 0,
             )
           : AppBar(
               backgroundColor: os_white,
               foregroundColor: os_black,
               elevation: 0,
+              leading: IconButton(
+                icon: Icon(Icons.chevron_left_rounded),
+                color: os_black,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
               title: Text(""),
               actions: [
                 TopicDetailHead(data: data),
