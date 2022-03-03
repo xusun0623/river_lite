@@ -243,6 +243,7 @@ class _TopicDetailState extends State<TopicDetail> {
                     child: BackToTop(
                       bottom: 100,
                       show: showBackToTop,
+                      animation: true,
                       controller: _scrollController,
                       child: ListView(
                         physics: BouncingScrollPhysics(),

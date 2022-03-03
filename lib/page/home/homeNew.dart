@@ -90,6 +90,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     return BackToTop(
       show: showBackToTop,
       child: ListView(
+        physics: BouncingScrollPhysics(),
         controller: _scrollController,
         children: t,
       ),
@@ -106,9 +107,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
         onRefresh: () async {
           return await _getInitData();
         },
-        child: NoRippleOverScroll(
-          child: _buildComponents(),
-        ),
+        child: _buildComponents(),
       ),
     );
   }

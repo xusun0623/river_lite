@@ -80,8 +80,8 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                 tap: () {
                   widget.controller.animateTo(
                     0,
-                    duration:
-                        Duration(milliseconds: (widget.animation ? 500 : 1)),
+                    duration: Duration(
+                        milliseconds: (widget.animation ?? true ? 500 : 1)),
                     curve: Curves.ease,
                   );
                   widget.show = false;

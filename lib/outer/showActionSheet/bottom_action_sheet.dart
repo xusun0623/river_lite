@@ -132,7 +132,8 @@ class _BottomActionItemWidget extends StatelessWidget {
             child: Text(
               bottomActionItem.title,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -297,14 +298,19 @@ class _ActionSheetState extends State<_ActionSheet> {
                   ),
                 },
                 Flexible(
-                  child: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(),
+                  child: Theme(
+                    data: ThemeData(
+                      splashColor: Colors.white70,
+                    ),
+                    child: SingleChildScrollView(
                       child: Column(
                         children: [
                           ...widgets,
                           ..._buildChoiceItems(),
                         ],
-                      )),
+                      ),
+                    ),
+                  ),
                 ),
                 if (widget.bottomActionItem != null) ...{
                   _BottomActionItemWidget(widget.bottomActionItem)

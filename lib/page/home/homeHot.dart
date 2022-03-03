@@ -48,6 +48,7 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
     }
     t.add(Padding(padding: EdgeInsets.all(7.5)));
     return ListView(
+      physics: BouncingScrollPhysics(),
       children: t,
     );
   }
@@ -61,9 +62,7 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
         onRefresh: () async {
           return await _getData();
         },
-        child: NoRippleOverScroll(
-          child: _buildComponents(),
-        ),
+        child: _buildComponents(),
       ),
     );
   }

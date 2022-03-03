@@ -4,6 +4,7 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
+import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -31,6 +32,7 @@ class _TopicColumnState extends State<TopicColumn> {
   bool load_done = false;
   bool showBackToTop = false;
   bool fold = true;
+  bool manualPull = false;
 
   _getMore() async {
     if (loading_more || load_done) return;
@@ -46,7 +48,7 @@ class _TopicColumnState extends State<TopicColumn> {
               ["classificationType_id"],
       "sortby": "new",
     });
-    data["list"].addAll(tmp["list"]);
+    if (tmp != null && tmp["list"] != null) data["list"].addAll(tmp["list"]);
     load_done = data["list"].length < 10;
     loading_more = false;
     setState(() {});
@@ -54,7 +56,7 @@ class _TopicColumnState extends State<TopicColumn> {
 
   _getData() async {
     setState(() {
-      loading = true;
+      if (!manualPull) loading = true;
       fold = true;
     });
     data = await Api().certain_forum_topiclist({
@@ -77,6 +79,7 @@ class _TopicColumnState extends State<TopicColumn> {
     loading = false;
     load_done = data["list"].length < 10;
     setState(() {});
+    return;
   }
 
   void _toTop() {
@@ -143,6 +146,7 @@ class _TopicColumnState extends State<TopicColumn> {
         controller: _tabController,
         fold: () {
           showActionSheet(
+            isScrollControlled: true,
             topActionItem: TopActionItem(
               showBottomLine: false,
               title: "请选择分栏",
@@ -155,6 +159,12 @@ class _TopicColumnState extends State<TopicColumn> {
             enableDrag: true,
             context: context,
             actions: _buildSheet(),
+            bottomActionItem: BottomActionItem(
+              title: "取消",
+              titleTextStyle: TextStyle(
+                fontSize: 18,
+              ),
+            ),
           );
         },
         tap: (idx) {
@@ -221,10 +231,18 @@ class _TopicColumnState extends State<TopicColumn> {
                 show: showBackToTop,
                 bottom: 100,
                 controller: _controller,
-                child: ListView(
-                  controller: _controller,
-                  physics: BouncingScrollPhysics(),
-                  children: _buildCont(),
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    manualPull = true;
+                    await _getData();
+                    manualPull = false;
+                    return;
+                  },
+                  child: ListView(
+                    controller: _controller,
+                    physics: BouncingScrollPhysics(),
+                    children: _buildCont(),
+                  ),
                 ),
               ));
   }
@@ -273,40 +291,41 @@ class _DefineTabBarState extends State<DefineTabBar> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width - 30,
-      height: 60,
       margin: EdgeInsets.symmetric(horizontal: 15),
-      padding: EdgeInsets.only(left: 5),
-      decoration: BoxDecoration(
-        color: os_white,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width - 95,
-            child: ListView(
-              controller: widget.controller,
-              physics: BouncingScrollPhysics(),
-              shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
-              scrollDirection: Axis.horizontal,
-              children: _buildList(),
-            ),
+      child: myInkWell(
+        tap: () {
+          widget.fold();
+        },
+        radius: 15,
+        widget: Container(
+          height: 60,
+          padding: EdgeInsets.only(left: 5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-          myInkWell(
-            tap: () {
-              widget.fold();
-            },
-            widget: Container(
-              width: 60,
-              height: 60,
-              child: Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: Color(0xFF004FFF),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                width: MediaQuery.of(context).size.width - 95,
+                child: Text(
+                  widget.themes[widget.select],
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
               ),
-            ),
-            radius: 100,
+              Container(
+                width: 60,
+                height: 60,
+                child: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: Color(0xFF004FFF),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
