@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:loading/loading.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
+import 'package:offer_show/outer/showActionSheet/action_item.dart';
+import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
+import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 
@@ -20,6 +22,7 @@ class TopicColumn extends StatefulWidget {
 
 class _TopicColumnState extends State<TopicColumn> {
   ScrollController _controller = new ScrollController();
+  ScrollController _tabController = new ScrollController();
   List<String> theme = [];
   var select = 0;
   var data;
@@ -27,6 +30,7 @@ class _TopicColumnState extends State<TopicColumn> {
   bool loading_more = false;
   bool load_done = false;
   bool showBackToTop = false;
+  bool fold = true;
 
   _getMore() async {
     if (loading_more || load_done) return;
@@ -51,6 +55,7 @@ class _TopicColumnState extends State<TopicColumn> {
   _getData() async {
     setState(() {
       loading = true;
+      fold = true;
     });
     data = await Api().certain_forum_topiclist({
       "page": 1,
@@ -72,6 +77,32 @@ class _TopicColumnState extends State<TopicColumn> {
     loading = false;
     load_done = data["list"].length < 10;
     setState(() {});
+  }
+
+  void _toTop() {
+    _controller.animateTo(
+      0.0,
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+    );
+  }
+
+  List<ActionItem> _buildSheet() {
+    List<ActionItem> tmp = [];
+    for (var i = 0; i < theme.length; i++) {
+      tmp.add(
+        ActionItem(
+          title: theme[i],
+          onPressed: () {
+            select = i;
+            setState(() {});
+            _getData();
+            Navigator.pop(context);
+          },
+        ),
+      );
+    }
+    return tmp;
   }
 
   List<Widget> _buildCont() {
@@ -109,12 +140,29 @@ class _TopicColumnState extends State<TopicColumn> {
       DefineTabBar(
         select: select,
         themes: theme,
+        controller: _tabController,
+        fold: () {
+          showActionSheet(
+            topActionItem: TopActionItem(
+              showBottomLine: false,
+              title: "请选择分栏",
+              titleTextStyle: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            actionSheetColor: os_white,
+            enableDrag: true,
+            context: context,
+            actions: _buildSheet(),
+          );
+        },
         tap: (idx) {
           select = idx;
           _getData();
           setState(() {});
         },
-      ),
+      )
     ]);
     data["list"].forEach((e) {
       tmp.add(Topic(
@@ -186,11 +234,15 @@ class DefineTabBar extends StatefulWidget {
   int select;
   List<String> themes;
   Function tap;
+  Function fold;
+  ScrollController controller;
   DefineTabBar({
     Key key,
     @required this.select,
     @required this.themes,
     @required this.tap,
+    @required this.controller,
+    @required this.fold,
   }) : super(key: key);
 
   @override
@@ -213,6 +265,11 @@ class _DefineTabBarState extends State<DefineTabBar> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width - 30,
@@ -228,6 +285,7 @@ class _DefineTabBarState extends State<DefineTabBar> {
           Container(
             width: MediaQuery.of(context).size.width - 95,
             child: ListView(
+              controller: widget.controller,
               physics: BouncingScrollPhysics(),
               shrinkWrap: true, //为true可以解决子控件必须设置高度的问题
               scrollDirection: Axis.horizontal,
@@ -235,6 +293,9 @@ class _DefineTabBarState extends State<DefineTabBar> {
             ),
           ),
           myInkWell(
+            tap: () {
+              widget.fold();
+            },
             widget: Container(
               width: 60,
               height: 60,
