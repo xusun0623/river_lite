@@ -9,12 +9,14 @@ class BackToTop extends StatefulWidget {
   Widget child;
   bool show;
   double bottom;
+  bool animation;
   BackToTop({
     Key key,
     this.child,
     this.show,
     this.controller,
     this.bottom,
+    this.animation,
   }) : super(key: key);
 
   @override
@@ -37,7 +39,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
     });
     controller = new AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 400),
+      duration: Duration(milliseconds: 400),
     )..addListener(() {
         setState(() {});
       });
@@ -78,9 +80,12 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                 tap: () {
                   widget.controller.animateTo(
                     0,
-                    duration: Duration(milliseconds: 500),
+                    duration:
+                        Duration(milliseconds: (widget.animation ? 500 : 1)),
                     curve: Curves.ease,
                   );
+                  widget.show = false;
+                  setState(() {});
                 },
                 color: Color(0xFFFFFFFF),
                 widget: Container(

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:loading/loading.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/components/topic.dart';
+import 'package:offer_show/components/totop.dart';
+import 'package:offer_show/page/topic/topic_detail.dart';
+import 'package:offer_show/util/interface.dart';
 
 class TopicColumn extends StatefulWidget {
   int columnID;
@@ -14,62 +19,166 @@ class TopicColumn extends StatefulWidget {
 }
 
 class _TopicColumnState extends State<TopicColumn> {
-  var theme = [
-    "标题一",
-    "标题二",
-    "标题三",
-    "标题四",
-    "标题五",
-    "标题六",
-    "标题七",
-    "标题八",
-  ];
+  ScrollController _controller = new ScrollController();
+  List<String> theme = [];
   var select = 0;
   var data;
+  bool loading = false;
+  bool loading_more = false;
+  bool load_done = false;
+  bool showBackToTop = false;
+
+  _getMore() async {
+    if (loading_more || load_done) return;
+    loading_more = true;
+    var tmp = await Api().certain_forum_topiclist({
+      "page": (data["list"].length / 10 + 1).toInt(),
+      "pageSize": 10,
+      "boardId": widget.columnID,
+      "filterType": "typeid",
+      "filterId": data == null || select == 0
+          ? ""
+          : data["classificationType_list"][select - 1]
+              ["classificationType_id"],
+      "sortby": "new",
+    });
+    data["list"].addAll(tmp["list"]);
+    load_done = data["list"].length < 10;
+    loading_more = false;
+    setState(() {});
+  }
+
+  _getData() async {
+    setState(() {
+      loading = true;
+    });
+    data = await Api().certain_forum_topiclist({
+      "page": 1,
+      "pageSize": 10,
+      "boardId": widget.columnID,
+      "filterType": "typeid",
+      "filterId": data == null || select == 0
+          ? ""
+          : data["classificationType_list"][select - 1]
+              ["classificationType_id"],
+      "sortby": "new",
+    });
+    await Future.delayed(Duration(milliseconds: 200));
+    var list = data["classificationType_list"];
+    theme = ["全部"];
+    for (var i = 0; i < list.length; i++) {
+      theme.add(list[i]["classificationType_name"]);
+    }
+    loading = false;
+    load_done = data["list"].length < 10;
+    setState(() {});
+  }
+
+  List<Widget> _buildCont() {
+    List<Widget> tmp = [];
+    tmp.addAll([
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+        child: Row(
+          children: [
+            Text(
+              data["forumInfo"]["title"],
+              style: TextStyle(
+                fontSize: 29,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            Container(width: 10),
+            loading
+                ? Container(
+                    margin: EdgeInsets.only(top: 5),
+                    child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        color: os_black,
+                        strokeWidth: 2.5,
+                      ),
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
+      ),
+      Container(height: 30),
+      DefineTabBar(
+        select: select,
+        themes: theme,
+        tap: (idx) {
+          select = idx;
+          _getData();
+          setState(() {});
+        },
+      ),
+    ]);
+    data["list"].forEach((e) {
+      tmp.add(Topic(
+        data: e,
+      ));
+    });
+    tmp.add(
+      load_done
+          ? Container(height: 15)
+          : BottomLoading(color: Colors.transparent),
+    );
+    return tmp;
+  }
+
+  @override
+  void initState() {
+    _getData();
+    _controller.addListener(() {
+      if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+        _getMore();
+      }
+
+      if (_controller.position.pixels > 1000 && !showBackToTop) {
+        setState(() {
+          showBackToTop = true;
+        });
+      }
+      if (_controller.position.pixels < 1000 && showBackToTop) {
+        setState(() {
+          showBackToTop = false;
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: os_back,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left_rounded),
-          color: os_black,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         backgroundColor: os_back,
-        elevation: 0,
-      ),
-      body: data == null
-          ? Container()
-          : ListView(
-              physics: BouncingScrollPhysics(),
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-                  child: Text(
-                    "视觉艺术",
-                    style: TextStyle(
-                      fontSize: 29,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.chevron_left_rounded),
+            color: os_black,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          backgroundColor: os_back,
+          elevation: 0,
+        ),
+        body: data == null
+            ? Container()
+            : BackToTop(
+                animation: false,
+                show: showBackToTop,
+                bottom: 100,
+                controller: _controller,
+                child: ListView(
+                  controller: _controller,
+                  physics: BouncingScrollPhysics(),
+                  children: _buildCont(),
                 ),
-                Container(height: 30),
-                DefineTabBar(
-                  select: select,
-                  themes: theme,
-                  tap: (idx) {
-                    setState(() {
-                      select = idx;
-                    });
-                  },
-                ),
-              ],
-            ),
-    );
+              ));
   }
 }
 
