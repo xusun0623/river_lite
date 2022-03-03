@@ -25,14 +25,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   crypto: ^3.0.1
   dio: ^4.0.0
-  provider: ^5.0.0
   noripple_overscroll:
-  card_swiper: ^2.0.1
   cached_network_image: ^3.2.0
   loading_indicator_view: 
-  webview_flutter: ^3.0.0
   url_launcher: ^6.0.20
-  flutter_webview_plugin: ^0.3.11
   sticky_headers: ^0.2.0
   vibrate: ^0.0.4
 
@@ -69,3 +65,6 @@ flutter:
     - lib/img/topic_@.svg
     - lib/img/topic_picture.svg
     - lib/img/topic_attach.svg
+    - lib/collect_btn/0-all.svg
+    - lib/collect_btn/1-loss.svg
+    - lib/collect_btn/2-second.svg

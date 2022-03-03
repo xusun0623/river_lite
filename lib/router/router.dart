@@ -7,7 +7,6 @@ import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/search/search.dart';
 import 'package:offer_show/page/square.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
-import 'package:offer_show/page/webview/webview.dart';
 
 final routers = {
   "/": () => Home(),
@@ -16,7 +15,6 @@ final routers = {
   "/myhome": () => MyHome(),
   "/square": () => Square(),
   "/404": () => Page404(),
-  "/webview": (data) => RiverWebView(url: data),
   "/topic_detail": (data) => TopicDetail(topicID: data),
   "/search": () => Search(),
   "/photo_view": ({data}) => PhotoPreview(

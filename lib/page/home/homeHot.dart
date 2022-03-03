@@ -1,8 +1,8 @@
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:noripple_overscroll/noripple_overscroll.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/components/home_btn.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/util/interface.dart';
 
@@ -40,6 +40,7 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
           width: MediaQuery.of(context).size.width - 30,
           height: (MediaQuery.of(context).size.width - 30) / 360 * 144),
     );
+    t.add(HomeBtnCollect());
     if (data != null && data.length != 0) {
       for (var i in data) {
         t.add(Topic(data: i));

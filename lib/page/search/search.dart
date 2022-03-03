@@ -122,8 +122,16 @@ class _SearchState extends State<Search> {
             },
           )
         ],
-        leadingWidth: 0,
-        leading: Container(width: 0),
+        leadingWidth: 30,
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left_rounded,
+            size: 28,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: SearchLeft(
           confirm: () {
             _getData();
@@ -211,7 +219,7 @@ class _SearchLeftState extends State<SearchLeft> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width - 83,
+      width: MediaQuery.of(context).size.width - 105,
       height: 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -263,7 +271,7 @@ class _SearchLeftState extends State<SearchLeft> {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width - 165.5,
+            width: MediaQuery.of(context).size.width - 195,
             child: TextField(
               onSubmitted: (context) {
                 widget.confirm();
@@ -327,6 +335,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
       child: myInkWell(
         tap: () {
           widget.tap();
+          // print("hhhhhh${widget.data}");
           Navigator.pushNamed(
             context,
             "/topic_detail",
@@ -397,7 +406,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                 Container(
                   width: MediaQuery.of(context).size.width - 60,
                   child: Text(
-                    widget.data["title"],
+                    widget.data["title"].replaceAll("&nbsp1", " "),
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 17,

@@ -179,7 +179,16 @@ class _TopicDetailState extends State<TopicDetail> {
       ));
     }
     tmp.addAll([
-      load_done ? Container() : BottomLoading(),
+      load_done
+          ? Container()
+          : BottomLoading(
+              color: Colors.transparent,
+            ),
+      load_done
+          ? Container()
+          : Container(
+              height: 30,
+            ),
       Container(height: editing ? 250 : 60)
     ]);
     return tmp;
@@ -188,7 +197,7 @@ class _TopicDetailState extends State<TopicDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: data == null
+      appBar: data == null || data["topic"] == null
           ? AppBar(
               backgroundColor: os_white,
               foregroundColor: os_black,
@@ -204,7 +213,7 @@ class _TopicDetailState extends State<TopicDetail> {
                 TopicDetailMore(),
               ],
             ),
-      body: data == null
+      body: data == null || data["topic"] == null
           ? Container()
           : Stack(
               children: [
@@ -222,7 +231,7 @@ class _TopicDetailState extends State<TopicDetail> {
                       show: showBackToTop,
                       controller: _scrollController,
                       child: ListView(
-                        physics: ClampingScrollPhysics(),
+                        physics: BouncingScrollPhysics(),
                         controller: _scrollController,
                         children: _buildTotal(),
                       ),
@@ -251,13 +260,12 @@ class _TopicDetailState extends State<TopicDetail> {
                               "json": {
                                 "isAnonymous": 0,
                                 "isOnlyAuthor": 0,
-                                "isQuote": 0,
                                 "typeId": "",
                                 "aid": "",
                                 "fid": "",
                                 "replyId": "",
                                 "tid": widget.topicID, // 回复时指定帖子
-                                // "isQuote": 1, //"是否引用之前回复的内容
+                                "isQuote": 0, //"是否引用之前回复的内容
                                 // "replyId": 123456, //回复 ID（pid）
                                 // "aid": "1,2,3", // 附件 ID，逗号隔开
                                 "title": "测试标题",
@@ -285,13 +293,13 @@ class _TopicDetailState extends State<TopicDetail> {
                           editing = false;
                           setState(() {});
                           await Future.delayed(Duration(milliseconds: 30));
+                          await _getData();
                           showToast(
                             context: context,
                             type: XSToast.success,
                             duration: 200,
                             txt: "发表成功!",
                           );
-                          await _getData();
                         },
                       )
                     : DetailFixBottom(
@@ -1461,7 +1469,7 @@ class TopicDetailTitle extends StatelessWidget {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
       child: Text(
-        data["topic"]["title"],
+        data["topic"]["title"].replaceAll("&nbsp1", " "),
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,

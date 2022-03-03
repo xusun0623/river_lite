@@ -82,7 +82,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                     curve: Curves.ease,
                   );
                 },
-                color: Color(0xFF3179FF),
+                color: Color(0xFFFFFFFF),
                 widget: Container(
                   width: 50,
                   height: 50,

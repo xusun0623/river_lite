@@ -27,6 +27,7 @@ class _DetailContState extends State<DetailCont> {
 
   List<InlineSpan> _getRichText(String t) {
     List<InlineSpan> ret = [];
+    t = t.replaceAll("&nbsp;", " ");
     List<String> tmp = t.split("[mobcent_phiz=");
     ret.add(TextSpan(text: tmp[0]));
     for (var i = 1; i < tmp.length; i++) {
