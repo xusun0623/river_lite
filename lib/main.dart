@@ -6,8 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/router/router.dart';
-import 'package:offer_show/util/provider.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   if (Platform.isAndroid) {

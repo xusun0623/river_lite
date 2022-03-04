@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/home_btn.dart';
+import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -80,7 +81,8 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 
   Widget _buildComponents() {
     List<Widget> t = [];
-    t.add(HomeBtnCollect());
+    t.add(HomeBtn());
+    // t.add(HomeBtnCollect());
     if (data != null && data.length != 0) {
       for (var i in data) {
         t.add(Topic(data: i));

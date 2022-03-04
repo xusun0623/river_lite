@@ -25,11 +25,9 @@ class _SearchState extends State<Search> {
   ScrollController _scrollController = new ScrollController();
   TextEditingController _controller = new TextEditingController();
   _getData() async {
-    showToast(
-      context: context,
-      type: XSToast.loading,
-      duration: 10000,
-    );
+    setState(() {
+      loading = true;
+    });
     var tmp = await Api().forum_search({
       "keyword": _controller.text ?? "",
       "page": 1,
@@ -37,6 +35,7 @@ class _SearchState extends State<Search> {
     });
     data = tmp["list"] ?? [];
     load_done = data.length < 20;
+    loading = false;
     setState(() {});
   }
 
@@ -56,6 +55,13 @@ class _SearchState extends State<Search> {
 
   List<Widget> _buildTopic() {
     List<Widget> tmp = [];
+    tmp.add(loading
+        ? BottomLoading(
+            color: Colors.transparent,
+            txt: "加载中…",
+          )
+        : Container());
+    tmp.add(loading ? Container(height: 15) : Container());
     tmp.add(data.length == 0 && load_done
         ? Container(
             width: MediaQuery.of(context).size.width - 30,

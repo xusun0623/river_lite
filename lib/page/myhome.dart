@@ -41,7 +41,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           title: Row(
             children: [
               TabTip(
-                txt: "热门",
+                txt: "新回复",
                 tap: () {
                   setState(() {
                     index = 0;
@@ -50,7 +50,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
                 select: index == 0,
               ),
               TabTip(
-                txt: "新回复",
+                txt: "热门",
                 tap: () {
                   setState(() {
                     index = 1;
