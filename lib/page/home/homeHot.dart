@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:noripple_overscroll/noripple_overscroll.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/home_btn.dart';
 import 'package:offer_show/components/topic.dart';
@@ -14,6 +16,11 @@ class HomeHot extends StatefulWidget {
 class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
   var list = [];
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
@@ -28,11 +35,12 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
 
   _getData() async {
     var tmp = await Api().portal_newslist();
-    list = tmp["list"];
+    list = tmp["list"] ?? [];
+    showToast(context: context, type: XSToast.done, txt: jsonEncode(list));
     setState(() {});
   }
 
-  Widget _buildComponents() {
+  List<Widget> _buildComponents() {
     List<Widget> t = [];
     t.addAll([
       os_svg(
@@ -42,16 +50,11 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
       ),
       HomeBtnCollect(),
     ]);
-    if (list != null && list.length != 0) {
-      for (var i in list) {
-        t.add(Topic(data: i));
-      }
+    for (var i in list) {
+      t.add(Topic(data: i));
     }
     t.add(Padding(padding: EdgeInsets.all(7.5)));
-    return ListView(
-      physics: BouncingScrollPhysics(),
-      children: t,
-    );
+    return t;
   }
 
   @override
@@ -61,13 +64,10 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
       onRefresh: () async {
         return await _getData();
       },
-      child: NoRippleOverScroll(
-        child: _buildComponents(),
+      child: ListView(
+        physics: BouncingScrollPhysics(),
+        children: _buildComponents(),
       ),
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

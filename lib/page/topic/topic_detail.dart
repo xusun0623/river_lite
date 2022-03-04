@@ -15,8 +15,6 @@ import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
-import 'package:sticky_headers/sticky_headers/widget.dart';
-import 'package:vibrate/vibrate.dart';
 
 class TopicDetail extends StatefulWidget {
   int topicID;
@@ -111,7 +109,6 @@ class _TopicDetailState extends State<TopicDetail> {
       tmp.add(GestureDetector(
         onLongPress: () {
           Clipboard.setData(ClipboardData(text: s_tmp));
-          Vibrate.feedback(FeedbackType.medium);
           showToast(
             context: context,
             type: XSToast.success,
@@ -619,7 +616,6 @@ class _TopicVoteState extends State<TopicVote> {
       "tid": widget.topic_id,
       "options": poll_item_id,
     });
-    Vibrate.feedback(FeedbackType.medium);
     widget.poll_info["voters"]++;
     widget.poll_info["poll_item_list"][side]["total_num"]++;
     var vote_status = await getStorage(
@@ -778,26 +774,23 @@ class _CommentsTabState extends State<CommentsTab> {
 
   @override
   Widget build(BuildContext context) {
-    return StickyHeader(
-      header: CommentTab(
-        TapSelect: (idx) {
-          setState(() {
-            widget.bindSelect(idx);
-          });
-        },
-        TapSort: () {
-          showActionSheet(
-              context: context,
-              list: ["按时间正序", "按时间倒序"],
-              title: "排序方式",
-              select: (idx) {
-                widget.bindSort(idx);
-              });
-        },
-        select: widget.select,
-        sort: widget.sort,
-      ),
-      content: _buildComment(),
+    return CommentTab(
+      TapSelect: (idx) {
+        setState(() {
+          widget.bindSelect(idx);
+        });
+      },
+      TapSort: () {
+        showActionSheet(
+            context: context,
+            list: ["按时间正序", "按时间倒序"],
+            title: "排序方式",
+            select: (idx) {
+              widget.bindSort(idx);
+            });
+      },
+      select: widget.select,
+      sort: widget.sort,
     );
   }
 }

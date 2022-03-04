@@ -8,29 +8,16 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  photo_view: ^0.10.2
-  shelf_proxy: ^1.0.0
-  shelf: ^1.1.4
-  shared_preferences: ^2.0.5
-  sqflite: ^2.0.0+3
-  flutter_easyloading: ^3.0.0
-  loading: ^1.0.2
-  direct_select: ^2.0.0
-  fluttertoast: ^8.0.6
-  flutter_easyrefresh: ^2.2.1
   flutter:
     sdk: flutter
-  flutter_icons: ^1.1.0
+  photo_view: ^0.10.2
+  shared_preferences: ^2.0.5
+  fluttertoast: ^8.0.6
   flutter_svg: ^0.21.0+1
-  cupertino_icons: ^1.0.2
-  crypto: ^3.0.1
   dio: ^4.0.0
-  noripple_overscroll:
   cached_network_image: ^3.2.0
   loading_indicator_view: 
   url_launcher: ^6.0.20
-  sticky_headers: ^0.2.0
-  vibrate: ^0.0.4
 
 
 dev_dependencies:
