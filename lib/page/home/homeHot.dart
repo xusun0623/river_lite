@@ -43,11 +43,6 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
   List<Widget> _buildComponents() {
     List<Widget> t = [];
     t.addAll([
-      os_svg(
-        path: "lib/img/banner.svg",
-        width: MediaQuery.of(context).size.width - 30,
-        height: (MediaQuery.of(context).size.width - 30) / 360 * 144,
-      ),
       HomeBtnCollect(),
     ]);
     for (var i in list) {

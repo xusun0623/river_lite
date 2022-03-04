@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/components/banner.dart';
 import 'package:offer_show/components/home_btn.dart';
 import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/topic.dart';
@@ -81,8 +82,9 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 
   Widget _buildComponents() {
     List<Widget> t = [];
+    t.add(ImgBanner());
+    t.add(Container(height: 10));
     t.add(HomeBtn());
-    // t.add(HomeBtnCollect());
     if (data != null && data.length != 0) {
       for (var i in data) {
         t.add(Topic(data: i));
