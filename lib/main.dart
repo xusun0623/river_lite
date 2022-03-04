@@ -14,20 +14,11 @@ void main() {
     );
   }
   runApp(MyApp());
-  if (Platform.isAndroid) {
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-  }
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (Platform.isAndroid) {
-      SystemUiOverlayStyle systemUiOverlayStyle =
-          SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-    }
     return MaterialApp(
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,

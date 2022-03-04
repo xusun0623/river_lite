@@ -1,13 +1,16 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:noripple_overscroll/noripple_overscroll.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/components/home_btn.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/storage.dart';
 
 class HomeNew extends StatefulWidget {
   @override
@@ -24,6 +27,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
+    _getStorageData();
     _getInitData();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -48,8 +52,16 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     var tmp = await Api()
         .forum_topiclist({"page": 1, "pageSize": 20, "sortby": "all"});
     data = tmp["list"];
+    setStorage(key: "home_new", value: jsonEncode(data));
     load_done = false;
     setState(() {});
+  }
+
+  _getStorageData() async {
+    var tmp = await getStorage(key: "home_new", initData: "[]");
+    setState(() {
+      data = tmp;
+    });
   }
 
   _getData() async {
@@ -71,6 +83,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 
   Widget _buildComponents() {
     List<Widget> t = [];
+    t.add(HomeBtnCollect());
     if (data != null && data.length != 0) {
       for (var i in data) {
         t.add(Topic(data: i));
