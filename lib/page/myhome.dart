@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
-import 'package:noripple_overscroll/noripple_overscroll.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';

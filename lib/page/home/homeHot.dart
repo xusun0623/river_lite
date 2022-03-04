@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:noripple_overscroll/noripple_overscroll.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/home_btn.dart';
 import 'package:offer_show/components/topic.dart';
@@ -13,7 +15,12 @@ class HomeHot extends StatefulWidget {
 
 class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
-  var data = [];
+  var list = [];
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
@@ -28,46 +35,39 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
 
   _getData() async {
     var tmp = await Api().portal_newslist();
-    data = tmp["list"];
+    list = tmp["list"] ?? [];
+    showToast(context: context, type: XSToast.done, txt: jsonEncode(list));
     setState(() {});
   }
 
-  Widget _buildComponents() {
+  List<Widget> _buildComponents() {
     List<Widget> t = [];
-    t.add(
+    t.addAll([
       os_svg(
-          path: "lib/img/banner.svg",
-          width: MediaQuery.of(context).size.width - 30,
-          height: (MediaQuery.of(context).size.width - 30) / 360 * 144),
-    );
-    t.add(HomeBtnCollect());
-    if (data != null && data.length != 0) {
-      for (var i in data) {
-        t.add(Topic(data: i));
-      }
+        path: "lib/img/banner.svg",
+        width: MediaQuery.of(context).size.width - 30,
+        height: (MediaQuery.of(context).size.width - 30) / 360 * 144,
+      ),
+      HomeBtnCollect(),
+    ]);
+    for (var i in list) {
+      t.add(Topic(data: i));
     }
     t.add(Padding(padding: EdgeInsets.all(7.5)));
-    return ListView(
-      physics: BouncingScrollPhysics(),
-      children: t,
-    );
+    return t;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: os_back,
-      body: RefreshIndicator(
-        color: os_color,
-        onRefresh: () async {
-          return await _getData();
-        },
-        child: _buildComponents(),
+    return RefreshIndicator(
+      color: os_color,
+      onRefresh: () async {
+        return await _getData();
+      },
+      child: ListView(
+        physics: BouncingScrollPhysics(),
+        children: _buildComponents(),
       ),
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

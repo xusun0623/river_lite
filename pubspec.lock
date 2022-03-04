@@ -65,19 +65,12 @@ packages:
     source: hosted
     version: "1.15.0"
   crypto:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: crypto
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.1"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.4"
   dio:
     dependency: "direct main"
     description:
@@ -85,13 +78,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.4"
-  direct_select:
-    dependency: "direct main"
-    description:
-      name: direct_select
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -132,34 +118,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.3.0"
-  flutter_easyloading:
-    dependency: "direct main"
-    description:
-      name: flutter_easyloading
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.0.3"
-  flutter_easyrefresh:
-    dependency: "direct main"
-    description:
-      name: flutter_easyrefresh
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.2.1"
-  flutter_icons:
-    dependency: "direct main"
-    description:
-      name: flutter_icons
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.1.0"
-  flutter_spinkit:
-    dependency: transitive
-    description:
-      name: flutter_spinkit
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "5.1.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -205,13 +163,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.6.4"
-  loading:
-    dependency: "direct main"
-    description:
-      name: loading
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.2"
   loading_indicator_view:
     dependency: "direct main"
     description:
@@ -240,13 +191,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.7.0"
-  noripple_overscroll:
-    dependency: "direct main"
-    description:
-      name: noripple_overscroll
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.0.2"
   octo_image:
     dependency: transitive
     description:
@@ -429,20 +373,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0"
-  shelf:
-    dependency: "direct main"
-    description:
-      name: shelf
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.2.0"
-  shelf_proxy:
-    dependency: "direct main"
-    description:
-      name: shelf_proxy
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -456,7 +386,7 @@ packages:
     source: hosted
     version: "1.8.2"
   sqflite:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sqflite
       url: "https://pub.flutter-io.cn"
@@ -476,13 +406,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.10.0"
-  sticky_headers:
-    dependency: "direct main"
-    description:
-      name: sticky_headers
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.2.0"
   stream_channel:
     dependency: transitive
     description:
@@ -595,13 +518,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.2"
-  vibrate:
-    dependency: "direct main"
-    description:
-      name: vibrate
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.0.4"
   win32:
     dependency: transitive
     description:

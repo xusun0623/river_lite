@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:noripple_overscroll/noripple_overscroll.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/home_btn.dart';
 import 'package:offer_show/components/niw.dart';
