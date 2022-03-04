@@ -13,7 +13,7 @@ class HomeHot extends StatefulWidget {
 
 class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
-  var data = [];
+  var list = [];
   @override
   void initState() {
     super.initState();
@@ -28,21 +28,22 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
 
   _getData() async {
     var tmp = await Api().portal_newslist();
-    data = tmp["list"];
+    list = tmp["list"];
     setState(() {});
   }
 
   Widget _buildComponents() {
     List<Widget> t = [];
-    t.add(
+    t.addAll([
       os_svg(
-          path: "lib/img/banner.svg",
-          width: MediaQuery.of(context).size.width - 30,
-          height: (MediaQuery.of(context).size.width - 30) / 360 * 144),
-    );
-    t.add(HomeBtnCollect());
-    if (data != null && data.length != 0) {
-      for (var i in data) {
+        path: "lib/img/banner.svg",
+        width: MediaQuery.of(context).size.width - 30,
+        height: (MediaQuery.of(context).size.width - 30) / 360 * 144,
+      ),
+      HomeBtnCollect(),
+    ]);
+    if (list != null && list.length != 0) {
+      for (var i in list) {
         t.add(Topic(data: i));
       }
     }
@@ -55,13 +56,12 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: os_back,
-      body: RefreshIndicator(
-        color: os_color,
-        onRefresh: () async {
-          return await _getData();
-        },
+    return RefreshIndicator(
+      color: os_color,
+      onRefresh: () async {
+        return await _getData();
+      },
+      child: NoRippleOverScroll(
         child: _buildComponents(),
       ),
     );
