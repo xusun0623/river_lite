@@ -11,12 +11,13 @@ import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 
-class HomeNew extends StatefulWidget {
+class HomeNewReply extends StatefulWidget {
   @override
-  _HomeNewState createState() => _HomeNewState();
+  _HomeNewReplyState createState() => _HomeNewReplyState();
 }
 
-class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
+class _HomeNewReplyState extends State<HomeNewReply>
+    with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
   var data = [];
   var loading = false;
@@ -49,16 +50,16 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 
   _getInitData() async {
     var tmp = await Api()
-        .forum_topiclist({"page": 1, "pageSize": 20, "sortby": "new"});
+        .forum_topiclist({"page": 1, "pageSize": 20, "sortby": "all"});
     if (tmp != null) data = tmp["list"] ?? [];
     if (data != null && data.length != 0)
-      setStorage(key: "home_new", value: jsonEncode(data));
+      setStorage(key: "home_new_reply", value: jsonEncode(data));
     load_done = false;
     setState(() {});
   }
 
   _getStorageData() async {
-    var tmp = await getStorage(key: "home_new", initData: "[]");
+    var tmp = await getStorage(key: "home_new_reply", initData: "[]");
     setState(() {
       data = jsonDecode(tmp);
     });
@@ -71,7 +72,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     var tmp = await Api().forum_topiclist({
       "page": (data.length / pageSize + 1).toInt(),
       "pageSize": pageSize,
-      "sortby": "new"
+      "sortby": "all"
     });
     if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
       data.addAll(tmp["list"]);
@@ -84,9 +85,6 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 
   Widget _buildComponents() {
     List<Widget> t = [];
-    t.add(ImgBanner());
-    t.add(Container(height: 10));
-    t.add(HomeBtn());
     if (data != null && data.length != 0) {
       for (var i in data) {
         t.add(Topic(data: i));

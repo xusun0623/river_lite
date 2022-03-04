@@ -43,7 +43,6 @@ class Api {
   forum_topiclist(Map m) async {
     Map tmp = {
       "r": "forum/topiclist",
-      // "sortby": "all",
     };
     tmp.addAll(m);
     return await XHttp().postWithGlobalToken(

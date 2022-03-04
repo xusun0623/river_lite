@@ -6,6 +6,7 @@ import 'package:offer_show/page/404.dart';
 import 'package:offer_show/page/broke.dart';
 import 'package:offer_show/page/me.dart';
 import 'package:offer_show/page/myhome.dart';
+import 'package:offer_show/util/interface.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -46,6 +47,11 @@ class _HomeState extends State<Home> {
       tooltip: "",
     ),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,8 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/home/homeHot.dart';
 import 'package:offer_show/page/home/homeNew.dart';
+import 'package:offer_show/page/home/homeNewReply.dart';
+import 'package:offer_show/util/interface.dart';
 
 class MyHome extends StatefulWidget {
   @override
@@ -14,15 +17,42 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
   final List<String> _tabValues = ["新回复", "热帖"];
+  SwiperController _controller = new SwiperController();
   var index = 0;
   List<Widget> _list = <Widget>[
     HomeNew(),
+    HomeNewReply(),
     HomeHot(),
   ];
 
+  _request() async {
+    Api().forum_search({"keyword": ""});
+    await Future.delayed(Duration(milliseconds: 100));
+    setState(() {});
+  }
+
   @override
   void initState() {
+    _request();
     super.initState();
+  }
+
+  List<Widget> _buildTabTip() {
+    List<String> tabs = ["新发布", "新回复", "热门"];
+    List<Widget> tmp = [];
+    for (var i = 0; i < tabs.length; i++) {
+      tmp.add(TabTip(
+        txt: tabs[i],
+        tap: () {
+          setState(() {
+            index = i;
+          });
+          _controller.move(index);
+        },
+        select: index == i,
+      ));
+    }
+    return tmp;
   }
 
   @override
@@ -39,30 +69,23 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
             Padding(padding: EdgeInsets.all(2)),
           ],
           title: Row(
-            children: [
-              TabTip(
-                txt: "新回复",
-                tap: () {
-                  setState(() {
-                    index = 0;
-                  });
-                },
-                select: index == 0,
-              ),
-              TabTip(
-                txt: "热门",
-                tap: () {
-                  setState(() {
-                    index = 1;
-                  });
-                },
-                select: index == 1,
-              ),
-            ],
+            children: _buildTabTip(),
           ),
           systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
-        body: _list[index],
+        body: Swiper(
+          loop: false,
+          itemCount: 3,
+          duration: 100,
+          controller: _controller,
+          onIndexChanged: (idx) {
+            index = idx;
+            setState(() {});
+          },
+          itemBuilder: (BuildContext context, int index) {
+            return _list[index];
+          },
+        ),
       ),
     );
   }

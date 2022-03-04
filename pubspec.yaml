@@ -20,6 +20,7 @@ dependencies:
   cached_network_image: ^3.2.0
   loading_indicator_view: 
   url_launcher: ^6.0.20
+  card_swiper: ^2.0.1
 
 
 dev_dependencies:
