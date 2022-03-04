@@ -184,7 +184,6 @@ void showToast({
 }) {
   if (isShown) return;
   isShown = true;
-
   if (type == XSToast.loading) {
     popDialog(
       delay: duration ?? 3000,
@@ -202,7 +201,8 @@ void showToast({
           children: [
             CircularProgressIndicator(color: os_white, strokeWidth: 4),
             Container(height: 20),
-            Text(txt ?? "加载中…", style: TextStyle(color: os_white)),
+            Container(
+                child: Text(txt ?? "加载中…", style: TextStyle(color: os_white))),
           ],
         ),
       ),
@@ -263,7 +263,7 @@ void popDialog({
   );
   Future.delayed(Duration(milliseconds: delay)).then((value) {
     if (!isShown) return; //已经取消弹窗了
-    Navigator.pop(context);
     isShown = false;
+    Navigator.pop(context);
   });
 }

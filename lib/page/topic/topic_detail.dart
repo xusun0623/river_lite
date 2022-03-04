@@ -147,7 +147,8 @@ class _TopicDetailState extends State<TopicDetail> {
         bindSelect: (select) async {
           _select = select;
           showToast(context: context, type: XSToast.loading);
-          _getData();
+          await _getData();
+          hideToast();
         },
         bindSort: (sort) async {
           _sort = sort;
@@ -157,7 +158,8 @@ class _TopicDetailState extends State<TopicDetail> {
             type: XSToast.loading,
             txt: "切换排序中…",
           );
-          _getData();
+          await _getData();
+          hideToast();
         },
         host_id: data["topic"]["user_id"],
         data: [],

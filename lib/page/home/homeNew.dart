@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/home_btn.dart';
-import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -59,7 +57,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   _getStorageData() async {
     var tmp = await getStorage(key: "home_new", initData: "[]");
     setState(() {
-      data = tmp;
+      data = jsonDecode(tmp);
     });
   }
 

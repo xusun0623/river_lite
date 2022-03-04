@@ -23,8 +23,8 @@ class XHttp {
     Response response = await dio
         .request(url, data: param, options: Options(method: "POST"))
         .catchError((err) {});
-    hideToast();
     if (response != null) {
+      // hideToast();
       Map<String, dynamic> user = jsonDecode(response.toString());
       print("地址:$url入参:$param回参:$user");
       return user;

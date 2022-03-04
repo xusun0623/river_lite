@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/router/router.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   if (Platform.isAndroid) {
@@ -13,12 +16,22 @@ void main() {
     );
   }
   runApp(MyApp());
+  if (Platform.isAndroid) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  }
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (Platform.isAndroid) {
+      SystemUiOverlayStyle systemUiOverlayStyle =
+          SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    }
     return MaterialApp(
+      builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
       initialRoute: "/",
       theme: ThemeData(

@@ -103,7 +103,7 @@ class _TabTipState extends State<TabTip> {
             ),
             Container(height: 3),
             Container(
-              width: 20,
+              width: 18,
               height: 3,
               decoration: BoxDecoration(
                 color: widget.select ? os_color : Colors.transparent,
