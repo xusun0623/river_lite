@@ -33,6 +33,7 @@ flutter:
   assets:
     - lib/img/logo.svg
     - lib/img/search.svg
+    - lib/img/search_blue.svg
     - lib/img/home.svg
     - lib/img/banner.svg
     - lib/img/like_blue.svg

@@ -1394,6 +1394,41 @@ class _TopicBottomState extends State<TopicBottom> {
             ),
           ),
           Container(),
+        ],
+      ),
+    );
+  }
+}
+
+// 帖子浏览量和时间
+class TopicDetailTime extends StatefulWidget {
+  var data;
+  TopicDetailTime({
+    Key key,
+    @required this.data,
+  }) : super(key: key);
+
+  @override
+  State<TopicDetailTime> createState() => _TopicDetailTimeState();
+}
+
+class _TopicDetailTimeState extends State<TopicDetailTime> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                    int.parse(widget.data["topic"]["create_date"]))) +
+                " · 浏览量${widget.data['topic']['hits'].toString()}",
+            style: TextStyle(
+              fontSize: 14,
+              color: Color(0xFFAAAAAA),
+            ),
+          ),
           Row(children: [
             myInkWell(
                 widget: Padding(
@@ -1434,32 +1469,6 @@ class _TopicBottomState extends State<TopicBottom> {
                 radius: 10),
           ])
         ],
-      ),
-    );
-  }
-}
-
-// 帖子浏览量和时间
-class TopicDetailTime extends StatelessWidget {
-  const TopicDetailTime({
-    Key key,
-    @required this.data,
-  }) : super(key: key);
-
-  final data;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-      child: Text(
-        RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                int.parse(data["topic"]["create_date"]))) +
-            " · 浏览量${data['topic']['hits'].toString()}",
-        style: TextStyle(
-          fontSize: 14,
-          color: Color(0xFFAAAAAA),
-        ),
       ),
     );
   }

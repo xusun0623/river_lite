@@ -3,10 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/page/404.dart';
-import 'package:offer_show/page/broke.dart';
 import 'package:offer_show/page/me.dart';
 import 'package:offer_show/page/myhome.dart';
-import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/page/square/square.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -16,7 +15,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final homePages = [
     MyHome(),
-    Broke(),
+    Square(),
     Page404(),
     Me(),
   ];
