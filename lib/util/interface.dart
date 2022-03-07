@@ -40,10 +40,10 @@ class Api {
       //    id: 2109629,
       //    urlName: https://bbs.uestc.edu.cn/data/attachment//forum/202203/07/231221mdoxxgxxxeou2j11.png
       // }
-      return jsonDecode(jsonDecode(data)["body"]["attachment"]);
+      return jsonDecode(data)["body"]["attachment"];
     } else {
-      return [];
       print(response.reasonPhrase);
+      return [];
     }
     /** 
     var dio = new Dio();

@@ -34,6 +34,7 @@ class _TopicDetailState extends State<TopicDetail> {
   var _select = 0; //0-全部回复 1-只看楼主
   var _sort = 0; //0-按时间正序 1-按时间倒序
   var showBackToTop = false;
+  var uploadImgUrls = [];
   bool editing = false; //是否处于编辑状态
   ScrollController _scrollController = new ScrollController();
 
@@ -256,6 +257,12 @@ class _TopicDetailState extends State<TopicDetail> {
                 ),
                 editing //编辑回复框
                     ? RichInput(
+                        uploadImg: (img_urls) {
+                          if (img_urls != null && img_urls.length != 0)
+                            for (var i = 0; i < img_urls.length; i++) {
+                              uploadImgUrls.add(img_urls[i]["urlName"]);
+                            }
+                        },
                         controller: _txtController,
                         focusNode: _focusNode,
                         cancel: () {
@@ -271,6 +278,12 @@ class _TopicDetailState extends State<TopicDetail> {
                               "infor": _txtController.text,
                             },
                           ];
+                          for (var i = 0; i < uploadImgUrls.length; i++) {
+                            contents.add({
+                              "type": 1, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
+                              "infor": uploadImgUrls[i],
+                            });
+                          }
                           Map json = {
                             "body": {
                               "json": {
@@ -304,6 +317,7 @@ class _TopicDetailState extends State<TopicDetail> {
                               "json": jsonEncode(json),
                             },
                           );
+                          hideToast();
                           _focusNode.unfocus();
                           _txtController.clear();
                           editing = false;
@@ -340,6 +354,7 @@ class RichInput extends StatefulWidget {
   FocusNode focusNode;
   Function cancel;
   Function send;
+  Function uploadImg;
   RichInput({
     Key key,
     this.bottom,
@@ -347,6 +362,7 @@ class RichInput extends StatefulWidget {
     @required this.focusNode,
     @required this.cancel,
     @required this.send,
+    @required this.uploadImg,
   }) : super(key: key);
 
   @override
@@ -356,6 +372,7 @@ class RichInput extends StatefulWidget {
 class _RichInputState extends State<RichInput> {
   List<XFile> image = [];
   List<PlatformFile> files = [];
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -397,17 +414,14 @@ class _RichInputState extends State<RichInput> {
                         path: "lib/img/topic_picture.svg",
                         tap: () async {
                           final ImagePicker _picker = ImagePicker();
-                          List<XFile> tmp = await _picker.pickMultiImage(
-                            imageQuality: 30,
-                          );
-                          if (tmp != null) {
-                            var data = await Api().uploadImage(tmp);
-                            print(data);
-                          } else {
-                            image = [];
-                          }
+                          //选好了图片
+                          image = await _picker.pickMultiImage(
+                                imageQuality: 50,
+                              ) ??
+                              [];
+                          var img_urls = await Api().uploadImage(image) ?? [];
+                          widget.uploadImg(img_urls);
                           setState(() {});
-                          // print(image);
                         },
                       ),
                       //上传附件，暂时不支持

@@ -40,6 +40,8 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - heic_to_jpg (0.0.1):
+    - Flutter
   - image_picker (0.0.1):
     - Flutter
   - loading_indicator_view (0.0.1):
@@ -63,6 +65,7 @@ DEPENDENCIES:
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - heic_to_jpg (from `.symlinks/plugins/heic_to_jpg/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - loading_indicator_view (from `.symlinks/plugins/loading_indicator_view/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
@@ -86,6 +89,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  heic_to_jpg:
+    :path: ".symlinks/plugins/heic_to_jpg/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
   loading_indicator_view:
@@ -106,6 +111,7 @@ SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  heic_to_jpg: cce9d6463ab11852a7393daa61be23f98a951c64
   image_picker: 541dcbb3b9cf32d87eacbd957845d8651d6c62c3
   loading_indicator_view: fb6f8efecc1cd030dc3a42a39f9107eef908da86
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
