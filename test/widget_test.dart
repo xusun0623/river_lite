@@ -1,23 +1,31 @@
-import 'package:http/http.dart' as http;
+import 'dart:io';
+import 'package:http_parser/http_parser.dart';
+import 'package:dio/dio.dart';
 
-void main(List<String> args) async {
-  var headers = {
-    'Cookie':
-        'v3hW_2132_lastact=1646632538%09index.php%09; v3hW_2132_lastvisit=1646628120; v3hW_2132_saltkey=wie3O7E4; v3hW_2132_sid=RCmsyd'
-  };
-  var request = http.MultipartRequest(
-      'POST',
-      Uri.parse(
-          'https://bbs.uestc.edu.cn/mobcent/app/web/index.php?r=forum/sendattachmentex&type=image&module=forum&accessToken=e9f49ac6acace2b9f6582800f32ff&accessSecret=8aef222107fcd2cedcc5f60b4edd1'));
-  request.files
-      .add(await http.MultipartFile.fromPath('uploadFile[]', './test.png'));
-  request.headers.addAll(headers);
+_upload() async {
+  var dio = new Dio();
+  var formData = FormData();
+  formData.files.addAll([
+    MapEntry(
+      'uploadFile[]',
+      MultipartFile.fromFileSync(
+        './test.png',
+        filename: 'test.png',
+        /* 一定要写！！！！！！！！！！！！！！！！！！！！！！！*/
+        contentType: MediaType("image", "png"), //"image/png",
+      ),
+    ),
+  ]);
+  var response = await dio.post(
+    'https://bbs.uestc.edu.cn/mobcent/app/web/index.php?r=forum/sendattachmentex&type=image&module=forum&accessToken=e9f49ac6acace2b9f6582800f32ff&accessSecret=8aef222107fcd2cedcc5f60b4edd1',
+    options: Options(headers: {
+      "Content-Type": "multipart/form-data;",
+    }),
+    data: formData,
+  );
+  print(response.data);
+}
 
-  http.StreamedResponse response = await request.send();
-
-  if (response.statusCode == 200) {
-    print(await response.stream.bytesToString());
-  } else {
-    print(response.reasonPhrase);
-  }
+void main(List<String> args) {
+  _upload();
 }

@@ -184,6 +184,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "8.0.9"
+  heic_to_jpg:
+    dependency: "direct main"
+    description:
+      name: heic_to_jpg
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.2.0"
   http:
     dependency: transitive
     description:

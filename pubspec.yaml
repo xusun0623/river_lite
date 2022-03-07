@@ -23,6 +23,7 @@ dependencies:
   loading_indicator_view: 
   url_launcher: ^6.0.20
   card_swiper: ^2.0.1
+  heic_to_jpg: ^0.2.0
 
 
 dev_dependencies:
