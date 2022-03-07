@@ -73,11 +73,13 @@ class _TopicColumnState extends State<TopicColumn> {
     await Future.delayed(Duration(milliseconds: 200));
     var list = data["classificationType_list"];
     theme = ["全部"];
-    for (var i = 0; i < list.length; i++) {
-      theme.add(list[i]["classificationType_name"]);
+    if (list != null && list.length != 0) {
+      for (var i = 0; i < list.length; i++) {
+        theme.add(list[i]["classificationType_name"]);
+      }
     }
     loading = false;
-    load_done = data["list"].length < 10;
+    load_done = (data["list"] ?? []).length < 10;
     setState(() {});
     return;
   }
@@ -230,7 +232,7 @@ class _TopicColumnState extends State<TopicColumn> {
           backgroundColor: os_back,
           elevation: 0,
         ),
-        body: data == null
+        body: data == null || data["list"] == null
             ? Container()
             : BackToTop(
                 animation: false,
