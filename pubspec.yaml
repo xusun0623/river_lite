@@ -8,6 +8,8 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  image_picker: ^0.8.4+10
+  file_picker: ^4.5.0
   flutter:
     sdk: flutter
   photo_view: ^0.10.2

@@ -28,7 +28,7 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        print("滑动到底部");
+        // print("滑动到底部");
       }
     });
   }

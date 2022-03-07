@@ -31,7 +31,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        print("触底");
+        // print("触底");
         _getData();
       }
       if (_scrollController.position.pixels > 1000 && !showBackToTop) {

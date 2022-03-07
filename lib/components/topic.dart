@@ -60,7 +60,6 @@ class _TopicState extends State<Topic> {
       padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
       child: myInkWell(
         tap: () {
-          print("哈哈哈哈哈${widget.data}");
           Navigator.pushNamed(
             context,
             "/topic_detail",
@@ -86,7 +85,7 @@ class _TopicState extends State<Topic> {
                           child: CachedNetworkImage(
                             width: 30,
                             height: 30,
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                             imageUrl: widget.data["userAvatar"],
                             placeholder: (context, url) =>
                                 Container(color: os_grey),

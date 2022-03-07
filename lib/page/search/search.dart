@@ -42,7 +42,7 @@ class _SearchState extends State<Search> {
   _getMore() async {
     if (loading) return;
     loading = true;
-    print("${data.length}");
+    // print("${data.length}");
     var tmp = await Api().forum_search({
       "keyword": _controller.text,
       "page": (data.length / 20 + 1).toInt(),
@@ -104,7 +104,7 @@ class _SearchState extends State<Search> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        print("触底");
+        // print("触底");
         _getMore();
       }
     });

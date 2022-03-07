@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,10 +12,11 @@ import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/totop.dart';
-import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 
 class TopicDetail extends StatefulWidget {
   int topicID;
@@ -287,10 +289,10 @@ class _TopicDetailState extends State<TopicDetail> {
                               }
                             }
                           };
-                          print({
-                            "act": "reply",
-                            "json": jsonEncode(json),
-                          });
+                          // print({
+                          //   "act": "reply",
+                          //   "json": jsonEncode(json),
+                          // });
                           showToast(
                             context: context,
                             type: XSToast.loading,
@@ -352,6 +354,8 @@ class RichInput extends StatefulWidget {
 }
 
 class _RichInputState extends State<RichInput> {
+  List<XFile> image = [];
+  List<PlatformFile> files = [];
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -389,13 +393,39 @@ class _RichInputState extends State<RichInput> {
                         tap: () {},
                       ),
                       SendFunc(
+                        nums: image.length == 0 ? null : image.length,
                         path: "lib/img/topic_picture.svg",
-                        tap: () {},
+                        tap: () async {
+                          final ImagePicker _picker = ImagePicker();
+                          List<XFile> tmp = await _picker.pickMultiImage(
+                            imageQuality: 30,
+                          );
+                          if (tmp != null) {
+                            var data = await Api().uploadImage(tmp);
+                            print(data);
+                          } else {
+                            image = [];
+                          }
+                          setState(() {});
+                          // print(image);
+                        },
                       ),
-                      SendFunc(
-                        path: "lib/img/topic_attach.svg",
-                        tap: () {},
-                      ),
+                      //上传附件，暂时不支持
+                      // SendFunc(
+                      //   nums: files.length == 0 ? null : files.length,
+                      //   path: "lib/img/topic_attach.svg",
+                      //   tap: () async {
+                      //     FilePickerResult result =
+                      //         await FilePicker.platform.pickFiles();
+                      //     if (result != null && result.files != null) {
+                      //       files = result.files;
+                      //     } else {
+                      //       files = [];
+                      //     }
+                      //     setState(() {});
+                      //     // print(result.files.length);
+                      //   },
+                      // ),
                     ],
                   ),
                 ),
@@ -483,10 +513,12 @@ class _RichInputState extends State<RichInput> {
 class SendFunc extends StatefulWidget {
   String path;
   Function tap;
+  int nums;
   SendFunc({
     Key key,
     @required this.path,
     @required this.tap,
+    this.nums,
   }) : super(key: key);
 
   @override
@@ -500,13 +532,41 @@ class _SendFuncState extends State<SendFunc> {
       tap: () {
         widget.tap();
       },
-      widget: Container(
-        padding: EdgeInsets.all(15),
-        child: os_svg(
-          path: widget.path,
-          width: 24,
-          height: 24,
-        ),
+      widget: Stack(
+        children: [
+          widget.nums == null
+              ? Container()
+              : Positioned(
+                  child: Container(
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                      color: Color(0x22004DFF),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        widget.nums.toString(),
+                        style: TextStyle(
+                          color: Color(0xFF004DFF),
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  right: 5,
+                  top: 5,
+                ),
+          Container(
+            padding: EdgeInsets.all(15),
+            child: os_svg(
+              path: widget.path,
+              width: 24,
+              height: 24,
+            ),
+          ),
+        ],
       ),
       radius: 100,
     );
@@ -1386,7 +1446,7 @@ class _TopicBottomState extends State<TopicBottom> {
         children: [
           GestureDetector(
             onTap: () {
-              print("测试${widget.data['boardId']}");
+              // print("测试${widget.data['boardId']}");
             },
             child: Text(
               "收录自专栏: " + widget.data["forumName"] + " >",
@@ -1549,7 +1609,7 @@ class TopicDetailHead extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: CachedNetworkImage(
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                     width: 23,
                     height: 23,
                     imageUrl: data["topic"]["icon"],

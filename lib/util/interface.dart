@@ -1,8 +1,36 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/util/mid_request.dart';
+import 'package:http/http.dart' as http;
 
 /// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 
 class Api {
+  //此处有
+  uploadImage(List<XFile> imgs) async {
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'https://bbs.uestc.edu.cn/mobcent/app/web/index.php?r=forum/sendattachmentex&type=image&module=forum&accessToken=e9f49ac6acace2b9f6582800f32ff&accessSecret=8aef222107fcd2cedcc5f60b4edd1'));
+    var imges = await imgs[0].readAsBytes();
+    request.files
+        .add(await http.MultipartFile.fromBytes('uploadFile[]', imges));
+    // request.files.add(await http.MultipartFile.fromPath(
+    //     'uploadFile[]', '/Users/xusun/Downloads/IMG_0323.JPG'));
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
   //获取板块列表
   forum_forumlist(Map m) async {
     Map tmp = {
