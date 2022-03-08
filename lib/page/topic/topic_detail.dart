@@ -35,7 +35,9 @@ class _TopicDetailState extends State<TopicDetail> {
   var _sort = 0; //0-按时间正序 1-按时间倒序
   var showBackToTop = false;
   var uploadImgUrls = [];
+  var replyId = 0;
   bool editing = false; //是否处于编辑状态
+  String placeholder = "请在此编辑回复";
   ScrollController _scrollController = new ScrollController();
 
   TextEditingController _txtController = new TextEditingController();
@@ -174,6 +176,15 @@ class _TopicDetailState extends State<TopicDetail> {
         : Container());
     for (var i = 0; i < comment.length; i++) {
       tmp.add(Comment(
+        tap: (reply_id, reply_name) {
+          //回复别人
+          replyId = reply_id;
+          editing = true;
+          _focusNode.requestFocus();
+          placeholder = "回复@${reply_name}：";
+          print("回复信息${placeholder}${replyId}");
+          setState(() {});
+        },
         host_id: data["topic"]["user_id"],
         topic_id: data["topic"]["topic_id"],
         data: comment[i],
@@ -265,11 +276,14 @@ class _TopicDetailState extends State<TopicDetail> {
                             }
                           }
                         },
+                        placeholder: placeholder,
                         controller: _txtController,
                         focusNode: _focusNode,
                         cancel: () {
                           _focusNode.unfocus();
                           _txtController.clear();
+                          placeholder = "请在此编辑回复";
+                          uploadImgUrls = [];
                           editing = false;
                           setState(() {});
                         },
@@ -294,9 +308,11 @@ class _TopicDetailState extends State<TopicDetail> {
                                 "typeId": "",
                                 "aid": "",
                                 "fid": "",
-                                "replyId": "",
+                                "replyId": replyId,
                                 "tid": widget.topicID, // 回复时指定帖子
-                                "isQuote": 0, //"是否引用之前回复的内容
+                                "isQuote": placeholder == "请在此编辑回复"
+                                    ? 0
+                                    : 1, //"是否引用之前回复的内容
                                 // "replyId": 123456, //回复 ID（pid）
                                 // "aid": "1,2,3", // 附件 ID，逗号隔开
                                 "title": "测试标题",
@@ -322,6 +338,8 @@ class _TopicDetailState extends State<TopicDetail> {
                           hideToast();
                           _focusNode.unfocus();
                           _txtController.clear();
+                          placeholder = "请在此编辑回复";
+                          uploadImgUrls = [];
                           editing = false;
                           setState(() {});
                           await Future.delayed(Duration(milliseconds: 30));
@@ -357,6 +375,7 @@ class RichInput extends StatefulWidget {
   Function cancel;
   Function send;
   Function uploadImg;
+  String placeholder;
   RichInput({
     Key key,
     this.bottom,
@@ -365,6 +384,7 @@ class RichInput extends StatefulWidget {
     @required this.cancel,
     @required this.send,
     @required this.uploadImg,
+    @required this.placeholder,
   }) : super(key: key);
 
   @override
@@ -461,7 +481,7 @@ class _RichInputState extends State<RichInput> {
                       cursorColor: Color(0xFF004DFF),
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "请在此编辑回复",
+                        hintText: widget.placeholder ?? "请在此编辑回复",
                         hintStyle: TextStyle(
                           height: 1.8,
                           color: Color(0xFFBBBBBB),
@@ -991,7 +1011,9 @@ class Comment extends StatefulWidget {
   var is_last;
   var topic_id;
   var host_id;
-  Comment({Key key, this.data, this.is_last, this.topic_id, this.host_id})
+  Function tap;
+  Comment(
+      {Key key, this.data, this.is_last, this.topic_id, this.host_id, this.tap})
       : super(key: key);
 
   @override
@@ -1059,6 +1081,9 @@ class _CommentState extends State<Comment> {
   @override
   Widget build(BuildContext context) {
     return myInkWell(
+      tap: () {
+        widget.tap(widget.data["reply_posts_id"], widget.data["reply_name"]);
+      },
       color: Colors.transparent,
       widget: Padding(
         padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
@@ -1095,19 +1120,27 @@ class _CommentState extends State<Comment> {
                             ),
                           ),
                           Container(width: 8),
-                          Tag(
-                            txt: widget.data["userTitle"],
-                            color:
-                                widget.data["userTitle"].toString().length < 7
-                                    ? Color(0xFFFE6F61)
-                                    : Color(0xFF0092FF),
-                            color_opa:
-                                widget.data["userTitle"].toString().length < 7
-                                    ? Color(0x10FE6F61)
-                                    : Color(0x100092FF),
-                          ),
+                          widget.data["userTitle"] == null ||
+                                  widget.data["userTitle"].length == 0
+                              ? Container()
+                              : Tag(
+                                  txt: widget.data["userTitle"],
+                                  color: widget.data["userTitle"]
+                                              .toString()
+                                              .length <
+                                          7
+                                      ? Color(0xFFFE6F61)
+                                      : Color(0xFF0092FF),
+                                  color_opa: widget.data["userTitle"]
+                                              .toString()
+                                              .length <
+                                          7
+                                      ? Color(0x10FE6F61)
+                                      : Color(0x100092FF),
+                                ),
                           Container(width: 5),
-                          widget.data["reply_id"] == widget.host_id
+                          widget.data["reply_id"] == widget.host_id &&
+                                  widget.data["reply_name"] != "匿名"
                               ? Tag(
                                   txt: "楼主",
                                   color: os_white,
@@ -1462,11 +1495,19 @@ class _TopicBottomState extends State<TopicBottom> {
         children: [
           GestureDetector(
             onTap: () {
-              // print("测试${widget.data['boardId']}");
+              Navigator.pushNamed(context, "/column",
+                  arguments: widget.data['boardId']);
             },
-            child: Text(
-              "收录自专栏: " + widget.data["forumName"] + " >",
-              style: TextStyle(color: os_color),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 2),
+              decoration: BoxDecoration(
+                  // color: os_color_opa,
+                  // borderRadius: BorderRadius.all(Radius.circular(5))
+                  ),
+              child: Text(
+                "收录自专栏: " + widget.data["forumName"] + " >",
+                style: TextStyle(color: os_color),
+              ),
             ),
           ),
           Container(),
