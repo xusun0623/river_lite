@@ -258,10 +258,12 @@ class _TopicDetailState extends State<TopicDetail> {
                 editing //编辑回复框
                     ? RichInput(
                         uploadImg: (img_urls) {
-                          if (img_urls != null && img_urls.length != 0)
+                          if (img_urls != null && img_urls.length != 0) {
+                            uploadImgUrls = [];
                             for (var i = 0; i < img_urls.length; i++) {
                               uploadImgUrls.add(img_urls[i]["urlName"]);
                             }
+                          }
                         },
                         controller: _txtController,
                         focusNode: _focusNode,

@@ -50,7 +50,9 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   _getInitData() async {
     var tmp = await Api()
         .forum_topiclist({"page": 1, "pageSize": 20, "sortby": "new"});
-    if (tmp != null) data = tmp["list"] ?? [];
+    if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
+      data = tmp["list"];
+    }
     if (data != null && data.length != 0)
       setStorage(key: "home_new", value: jsonEncode(data));
     load_done = false;
@@ -91,6 +93,11 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       for (var i in data) {
         t.add(Topic(data: i));
       }
+    }
+    if (data.length == 0) {
+      t.add(Container(
+        height: MediaQuery.of(context).size.height - 100,
+      ));
     }
     t.add(
       load_done || data.length == 0

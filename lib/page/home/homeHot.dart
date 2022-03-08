@@ -35,8 +35,10 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
 
   _getData() async {
     var tmp = await Api().portal_newslist();
-    list = tmp["list"] ?? [];
-    showToast(context: context, type: XSToast.done, txt: jsonEncode(list));
+    if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
+      list = tmp["list"];
+    }
+    // showToast(context: context, type: XSToast.done, txt: jsonEncode(list));
     setState(() {});
   }
 
@@ -47,6 +49,11 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
     ]);
     for (var i in list) {
       t.add(Topic(data: i));
+    }
+    if (list.length == 0) {
+      t.add(Container(
+        height: MediaQuery.of(context).size.height - 100,
+      ));
     }
     t.add(Padding(padding: EdgeInsets.all(7.5)));
     return t;
