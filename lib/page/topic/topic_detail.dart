@@ -132,6 +132,7 @@ class _TopicDetailState extends State<TopicDetail> {
       tmp.add(GestureDetector(
         onLongPress: () {
           Clipboard.setData(ClipboardData(text: s_tmp));
+          Vibrate.feedback(FeedbackType.impact);
           showToast(
             context: context,
             type: XSToast.success,
