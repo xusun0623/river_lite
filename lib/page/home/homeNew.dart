@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/banner.dart';
 import 'package:offer_show/components/hot_btn.dart';
@@ -22,6 +23,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   var loading = false;
   var load_done = false;
   bool showBackToTop = false;
+  bool vibrate = false;
 
   @override
   void initState() {
@@ -29,6 +31,15 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     _getStorageData();
     _getInitData();
     _scrollController.addListener(() {
+      if (_scrollController.position.pixels < -100) {
+        if (!vibrate) {
+          vibrate = true; //不允许再震动
+          Vibrate.feedback(FeedbackType.impact);
+        }
+      }
+      if (_scrollController.position.pixels >= 0) {
+        vibrate = false; //允许震动
+      }
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         // print("触底");
@@ -129,7 +140,9 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       body: RefreshIndicator(
         color: os_color,
         onRefresh: () async {
-          return await _getInitData();
+          var data = await _getInitData();
+          vibrate = false;
+          return data;
         },
         child: _buildComponents(),
       ),

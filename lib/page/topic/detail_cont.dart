@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/saveImg.dart';
@@ -124,16 +125,19 @@ class _DetailContState extends State<DetailCont> {
           radius: 0,
           tap: () {
             showModal(
-              context: context,
-              title: "请确认",
-              cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
-              confirmTxt: "立即前往",
-              cancelTxt: "取消",
-              confirm: () {
-                Navigator.pop(context);
-                launch(widget.data['url']);
-              },
-            );
+                context: context,
+                title: "请确认",
+                cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
+                confirmTxt: "立即前往",
+                cancelTxt: "复制链接",
+                confirm: () {
+                  launch(widget.data['url']);
+                },
+                cancel: () {
+                  Clipboard.setData(ClipboardData(text: widget.data['url']));
+                  showToast(
+                      context: context, type: XSToast.success, txt: "复制成功");
+                });
           },
           color: Colors.transparent,
           widget: Container(
@@ -150,16 +154,19 @@ class _DetailContState extends State<DetailCont> {
           color: Color(0xFFF6F6F6),
           tap: () {
             showModal(
-              context: context,
-              title: "请确认",
-              cont: "即将调用外部浏览器下载此附件，河畔App不保证此链接的安全性",
-              confirmTxt: "立即前往",
-              cancelTxt: "取消",
-              confirm: () {
-                Navigator.pop(context);
-                launch(widget.data['url']);
-              },
-            );
+                context: context,
+                title: "请确认",
+                cont: "即将调用外部浏览器下载此附件，河畔App不保证此链接的安全性",
+                confirmTxt: "立即前往",
+                cancelTxt: "复制链接",
+                confirm: () {
+                  launch(widget.data['url']);
+                },
+                cancel: () {
+                  Clipboard.setData(ClipboardData(text: widget.data['url']));
+                  showToast(
+                      context: context, type: XSToast.success, txt: "复制成功");
+                });
           },
           radius: 10,
           widget: Container(

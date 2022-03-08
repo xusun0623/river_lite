@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
@@ -189,6 +190,8 @@ class _TopicColumnState extends State<TopicColumn> {
     return tmp;
   }
 
+  bool vibrate = false;
+
   @override
   void initState() {
     _getData();
@@ -196,7 +199,15 @@ class _TopicColumnState extends State<TopicColumn> {
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
         _getMore();
       }
-
+      if (_controller.position.pixels < -100) {
+        if (!vibrate) {
+          vibrate = true; //不允许再震动
+          Vibrate.feedback(FeedbackType.impact);
+        }
+      }
+      if (_controller.position.pixels >= 0) {
+        vibrate = false; //允许震动
+      }
       if (_controller.position.pixels > 1000 && !showBackToTop) {
         setState(() {
           showBackToTop = true;
@@ -243,6 +254,7 @@ class _TopicColumnState extends State<TopicColumn> {
                   onRefresh: () async {
                     manualPull = true;
                     await _getData();
+                    vibrate = false;
                     manualPull = false;
                     return;
                   },

@@ -79,6 +79,7 @@ void showModal({
   String confirmTxt,
   String cancelTxt,
   Function confirm,
+  Function cancel,
 }) {
   AlertDialog alert = AlertDialog(
     shape: RoundedRectangleBorder(
@@ -124,6 +125,7 @@ void showModal({
               radius: 10,
               tap: () {
                 Navigator.pop(context);
+                cancel();
               },
             ),
             myInkWell(
@@ -143,6 +145,7 @@ void showModal({
               ),
               radius: 10,
               tap: () {
+                Navigator.pop(context);
                 confirm();
               },
             ),

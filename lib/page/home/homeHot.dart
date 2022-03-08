@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/home_btn.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/storage.dart';
 
 class HomeHot extends StatefulWidget {
   @override
@@ -16,16 +18,25 @@ class HomeHot extends StatefulWidget {
 class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
   var list = [];
+  bool vibrate = false;
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
-
   @override
   void initState() {
     super.initState();
+    _getTmpData();
     _getData();
     _scrollController.addListener(() {
+      if (_scrollController.position.pixels < -100) {
+        if (!vibrate) {
+          vibrate = true; //不允许再震动
+          Vibrate.feedback(FeedbackType.impact);
+        }
+      }
+      if (_scrollController.position.pixels >= 0) {
+        vibrate = false; //允许震动
+      }
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         // print("滑动到底部");
@@ -33,12 +44,18 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
     });
   }
 
+  _getTmpData() async {
+    var tmp_data = await getStorage(key: "home_hot_lists", initData: "[]");
+    list = jsonDecode(tmp_data);
+    setState(() {});
+  }
+
   _getData() async {
     var tmp = await Api().portal_newslist();
     if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
+      await setStorage(key: "home_hot_lists", value: jsonEncode(tmp["list"]));
       list = tmp["list"];
     }
-    // showToast(context: context, type: XSToast.done, txt: jsonEncode(list));
     setState(() {});
   }
 
@@ -64,9 +81,14 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
     return RefreshIndicator(
       color: os_color,
       onRefresh: () async {
-        return await _getData();
+        setState(() {
+          vibrate = false;
+        });
+        var data = await _getData();
+        return data;
       },
       child: ListView(
+        controller: _scrollController,
         physics: BouncingScrollPhysics(),
         children: _buildComponents(),
       ),

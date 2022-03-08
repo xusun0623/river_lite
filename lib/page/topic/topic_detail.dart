@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -77,10 +78,27 @@ class _TopicDetailState extends State<TopicDetail> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  bool vibrate = false;
+
+  @override
   void initState() {
     _getData();
     super.initState();
     _scrollController.addListener(() {
+      // print("${_scrollController.position.pixels}");
+      if (_scrollController.position.pixels < -100) {
+        if (!vibrate) {
+          vibrate = true; //不允许再震动
+          Vibrate.feedback(FeedbackType.impact);
+        }
+      }
+      if (_scrollController.position.pixels >= 0) {
+        vibrate = false; //允许震动
+      }
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         _getComment();
@@ -251,6 +269,7 @@ class _TopicDetailState extends State<TopicDetail> {
                   child: RefreshIndicator(
                     onRefresh: () async {
                       await _getData();
+                      vibrate = false;
                       return;
                     },
                     child: BackToTop(

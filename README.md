@@ -185,4 +185,20 @@ _scrollController.addListener(() {
 ```
 
 
+### 9.震动
+```dart
+bool vibrate = false;
+if (_scrollController.position.pixels < -100) {
+  if (!vibrate) {
+    vibrate = true; //不允许再震动
+    Vibrate.feedback(FeedbackType.impact);
+  }
+}
+if (_scrollController.position.pixels >= 0) {
+  vibrate = false; //允许震动
+}
+```
+
+
+
 
