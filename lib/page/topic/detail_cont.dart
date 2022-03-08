@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -75,31 +76,37 @@ class _DetailContState extends State<DetailCont> {
         );
         break;
       case 1: //图片
-        return ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(7.5)),
-          child: Container(
-            decoration: BoxDecoration(
-              color: os_grey,
-              borderRadius: BorderRadius.all(Radius.circular(7.5)),
-            ),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => PhotoPreview(
-                      galleryItems: widget.imgLists,
-                      defaultImage:
-                          widget.imgLists.indexOf(widget.data["infor"]),
+        return GestureDetector(
+          onLongPress: () {
+            saveImge(context, widget.imgLists,
+                widget.imgLists.indexOf(widget.data["infor"]));
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(7.5)),
+            child: Container(
+              decoration: BoxDecoration(
+                color: os_grey,
+                borderRadius: BorderRadius.all(Radius.circular(7.5)),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PhotoPreview(
+                        galleryItems: widget.imgLists,
+                        defaultImage:
+                            widget.imgLists.indexOf(widget.data["infor"]),
+                      ),
                     ),
+                  );
+                },
+                child: CachedNetworkImage(
+                  imageUrl: widget.data["infor"],
+                  placeholder: (context, url) => Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: CircularProgressIndicator(color: os_deep_grey),
                   ),
-                );
-              },
-              child: CachedNetworkImage(
-                imageUrl: widget.data["infor"],
-                placeholder: (context, url) => Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: CircularProgressIndicator(color: os_deep_grey),
                 ),
               ),
             ),

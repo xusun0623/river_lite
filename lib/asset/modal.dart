@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
 
-void showActionSheet({
+void showMidActionSheet({
   @required BuildContext context,
   String title,
   @required List<String> list,

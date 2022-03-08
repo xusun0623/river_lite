@@ -238,7 +238,7 @@ class _SearchLeftState extends State<SearchLeft> {
           myInkWell(
             tap: () {
               widget.commentFocus.unfocus();
-              showActionSheet(
+              showMidActionSheet(
                 context: context,
                 list: ["帖子", "用户"],
                 select: (idx) {

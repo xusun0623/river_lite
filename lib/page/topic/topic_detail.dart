@@ -857,7 +857,7 @@ class _CommentsTabState extends State<CommentsTab> {
         });
       },
       TapSort: () {
-        showActionSheet(
+        showMidActionSheet(
             context: context,
             list: ["按时间正序", "按时间倒序"],
             title: "排序方式",
