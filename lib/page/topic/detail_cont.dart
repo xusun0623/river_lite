@@ -136,7 +136,11 @@ class _DetailContState extends State<DetailCont> {
                 cancel: () {
                   Clipboard.setData(ClipboardData(text: widget.data['url']));
                   showToast(
-                      context: context, type: XSToast.success, txt: "复制成功");
+                    context: context,
+                    type: XSToast.success,
+                    txt: "复制成功",
+                    duration: 500,
+                  );
                 });
           },
           color: Colors.transparent,
@@ -165,7 +169,11 @@ class _DetailContState extends State<DetailCont> {
                 cancel: () {
                   Clipboard.setData(ClipboardData(text: widget.data['url']));
                   showToast(
-                      context: context, type: XSToast.success, txt: "复制成功");
+                    context: context,
+                    type: XSToast.success,
+                    txt: "复制成功",
+                    duration: 500,
+                  );
                 });
           },
           radius: 10,
