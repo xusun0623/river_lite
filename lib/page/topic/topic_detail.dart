@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:characters/characters.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -419,6 +421,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
   List<XFile> image = [];
   List<PlatformFile> files = [];
   bool popSection = false;
+  int popSectionIndex = 0; //0-表情包 1-艾特某人
 
   AnimationController controller; //动画控制器
   Animation<double> animation;
@@ -487,12 +490,19 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                         children: [
                           SendFunc(
                             path: "lib/img/topic_emoji.svg",
-                            tap: () {},
+                            tap: () {
+                              widget.focusNode.unfocus();
+                              popSectionIndex = 0;
+                              popSection = true;
+                              controller.forward();
+                              setState(() {});
+                            },
                           ),
                           SendFunc(
                             path: "lib/img/topic_@.svg",
                             tap: () async {
                               widget.focusNode.unfocus();
+                              popSectionIndex = 1;
                               popSection = true;
                               controller.forward();
                               setState(() {});
@@ -603,18 +613,97 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                   width: MediaQuery.of(context).size.width,
                   color: os_white,
                   height: popHeight,
-                  child: AtSomeone(
-                    tap: (uid, name) {
-                      at_user.add({uid: uid, name: name});
-                      widget.atUser(at_user);
-                      widget.controller.text =
-                          widget.controller.text + " @${name} ";
-                      setState(() {});
-                    },
-                  ),
+                  child: popSectionIndex == 0
+                      ? YourEmoji(
+                          tap: (emoji) {
+                            widget.controller.text =
+                                widget.controller.text + emoji;
+                            setState(() {});
+                          },
+                        )
+                      : AtSomeone(
+                          tap: (uid, name) {
+                            at_user.add({uid: uid, name: name});
+                            widget.atUser(at_user);
+                            widget.controller.text =
+                                widget.controller.text + " @${name} ";
+                            setState(() {});
+                          },
+                        ),
                 )
               : Container(),
         ],
+      ),
+    );
+  }
+}
+
+class YourEmoji extends StatefulWidget {
+  Function tap;
+  YourEmoji({Key key, @required this.tap}) : super(key: key);
+
+  @override
+  State<YourEmoji> createState() => _YourEmojiState();
+}
+
+class _YourEmojiState extends State<YourEmoji> {
+  String emoji_common =
+      "😀😁😂😃😄😅😆😉😊😋😎😍😘😗😙😚😇😐😑😶😏😣😥😮😯😪😫😴😌😛😜😝😒😓😔😕😲😷😖😞😟😤😢😭😦😧😨😬😰😱😳😵😡😠😈👿👹👺💀👻👽👦👧👨👩👴👵👶👱👮👲👳👷👸💂🎅👰👼💆💇🙍🙎🙅🙆💁🙋🙇🙌🙏👤👥🚶🏃👯💃👫👬👭💏💑👪💪👈👉👆👇✋👌👍👎✊👊👋👏👐✍👣👀👂👃👅👄💋👓👔👕👖👗👘👙👚👛👜👝🎒💼👞👟👠👡👢👑👒🎩🎓💄💅💍🌂";
+
+  List<Widget> _buildEmoji() {
+    List<Widget> tmp = [];
+    for (var i = 0; i < emoji_common.characters.length; i++) {
+      tmp.add(myInkWell(
+        radius: 5,
+        color: Colors.transparent,
+        tap: () {
+          widget.tap(emoji_common.characters.elementAt(i));
+        },
+        widget: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Text(
+            emoji_common.characters.elementAt(i),
+            style: TextStyle(fontSize: 30),
+          ),
+        ),
+      ));
+    }
+    return tmp;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: os_grey,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Swiper(
+        physics: BouncingScrollPhysics(),
+        loop: false,
+        duration: 100,
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          return ListView(
+            children: [
+              Container(
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
+                child: Text(
+                  "Emoji表情",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+                child: Wrap(
+                  children: _buildEmoji(),
+                ),
+              )
+            ],
+          );
+        },
       ),
     );
   }
@@ -670,7 +759,7 @@ class _AtSomeoneState extends State<AtSomeone> {
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: Text(
             "可以@的人",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
       ));

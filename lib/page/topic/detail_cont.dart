@@ -70,8 +70,11 @@ class _DetailContState extends State<DetailCont> {
                     ),
                     children: _getRichText(
                       widget.data["infor"].indexOf("本帖最后由") > -1
-                          ? widget.data["infor"]
-                              .substring(widget.data["infor"].indexOf("编辑") + 7)
+                          ? widget.data["infor"].substring(
+                              (widget.data["infor"].indexOf("编辑") + 7) >=
+                                      widget.data["infor"].length
+                                  ? widget.data["infor"].length - 1
+                                  : widget.data["infor"].indexOf("编辑") + 7)
                           : widget.data["infor"],
                     ),
                   ),
