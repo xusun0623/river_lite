@@ -18,7 +18,7 @@ class MyHome extends StatefulWidget {
 class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
   final List<String> _tabValues = ["新回复", "热帖"];
   SwiperController _controller = new SwiperController();
-  var index = 1;
+  var index = 0;
   List<Widget> _list = <Widget>[
     HomeNew(),
     HomeNewReply(),

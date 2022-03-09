@@ -99,9 +99,6 @@ class _HomeNewReplyState extends State<HomeNewReply>
 
   Widget _buildComponents() {
     List<Widget> t = [];
-    t.add(ImgBanner());
-    t.add(Container(height: 10));
-    t.add(HomeBtn());
     if (data != null && data.length != 0) {
       for (var i in data) {
         t.add(Topic(data: i));
