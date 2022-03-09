@@ -195,6 +195,7 @@ class _TopicDetailState extends State<TopicDetail> {
         : Container());
     for (var i = 0; i < comment.length; i++) {
       tmp.add(Comment(
+        index: i,
         tap: (reply_id, reply_name) {
           //回复别人
           replyId = reply_id;
@@ -1031,9 +1032,16 @@ class Comment extends StatefulWidget {
   var is_last;
   var topic_id;
   var host_id;
+  int index;
   Function tap;
   Comment(
-      {Key key, this.data, this.is_last, this.topic_id, this.host_id, this.tap})
+      {Key key,
+      this.data,
+      this.is_last,
+      this.topic_id,
+      this.host_id,
+      this.tap,
+      this.index})
       : super(key: key);
 
   @override
