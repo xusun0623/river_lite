@@ -899,14 +899,17 @@ class _CommentsTabState extends State<CommentsTab> {
           widget.bindSelect(idx);
         });
       },
-      TapSort: () {
-        showMidActionSheet(
-            context: context,
-            list: ["按时间正序", "按时间倒序"],
-            title: "排序方式",
-            select: (idx) {
-              widget.bindSort(idx);
-            });
+      TapSort: (idx) {
+        if (idx != widget.sort) {
+          widget.bindSort(idx);
+        }
+        // showMidActionSheet(
+        //     context: context,
+        //     list: ["按时间正序", "按时间倒序"],
+        //     title: "排序方式",
+        //     select: (idx) {
+        //       widget.bindSort(idx);
+        //     });
       },
       select: widget.select,
       sort: widget.sort,
@@ -995,31 +998,53 @@ class _CommentTabState extends State<CommentTab> {
               ),
             ],
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              os_svg(
-                path: "lib/img/detail_sort.svg",
-                width: 15,
-                height: 12,
-              ),
-              Container(width: 5),
-              GestureDetector(
-                onTap: () {
-                  widget.TapSort();
-                },
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 2),
-                  child: Text(
-                    widget.sort == 0 ? "按时间正序" : "按时间倒序",
-                    style: TextStyle(
-                      color: os_color,
-                      fontSize: 14,
+          Container(
+            padding: EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              color: Color(0xFFF3F3F3),
+              borderRadius: BorderRadius.all(Radius.circular(100)),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    widget.TapSort(0);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 9, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: widget.sort == 0 ? os_white : Colors.transparent,
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                    ),
+                    child: Text(
+                      "正序",
+                      style: TextStyle(
+                        color: widget.sort == 0 ? os_black : os_deep_grey,
+                      ),
                     ),
                   ),
                 ),
-              )
-            ],
+                GestureDetector(
+                  onTap: () {
+                    widget.TapSort(1);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 9, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: widget.sort == 1 ? os_white : Colors.transparent,
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                    ),
+                    child: Text(
+                      "倒序",
+                      style: TextStyle(
+                        color: widget.sort == 1 ? os_black : os_deep_grey,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
