@@ -443,7 +443,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
       vsync: this,
       duration: Duration(milliseconds: 500),
     );
-    animation = Tween(begin: 0.0, end: 200.0).animate(CurvedAnimation(
+    animation = Tween(begin: 0.0, end: 249.0).animate(CurvedAnimation(
       parent: controller,
       curve: Curves.easeInOut,
     ))
@@ -647,6 +647,7 @@ class _AtSomeoneState extends State<AtSomeone> {
   }
 
   _getData() async {
+    if (load_finish) return;
     var pageSize = 20;
     var data = await Api().forum_atuserlist({
       "page": (list.length / pageSize + 1).toInt(),
@@ -709,7 +710,7 @@ class _AtSomeoneState extends State<AtSomeone> {
     }
     if (list.length == 0 && load_done) {
       tmp.add(Container(
-        height: 180,
+        height: 249,
         child: Center(
           child: Text(
             "暂无可以@的人,你可以通过关注/好友增加人数",
@@ -723,7 +724,7 @@ class _AtSomeoneState extends State<AtSomeone> {
     }
     if (list.length == 0 && load_done == false) {
       tmp.add(Container(
-        height: 180,
+        height: 230,
         child: Center(
           child: Text(
             "加载中…",
@@ -747,6 +748,7 @@ class _AtSomeoneState extends State<AtSomeone> {
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: ListView(
+        physics: BouncingScrollPhysics(),
         controller: _scrollController,
         children: _buildCont(),
       ),

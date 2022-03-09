@@ -58,23 +58,25 @@ class _DetailContState extends State<DetailCont> {
   Widget build(BuildContext context) {
     switch (widget.data["type"]) {
       case 0: //纯文字
-        return Container(
-          width: MediaQuery.of(context).size.width - 30,
-          child: Text.rich(
-            TextSpan(
-              style: TextStyle(
-                fontSize: 16,
-                height: 1.6,
-              ),
-              children: _getRichText(
-                widget.data["infor"].indexOf("本帖最后由") > -1
-                    ? widget.data["infor"]
-                        .substring(widget.data["infor"].indexOf("编辑") + 7)
-                    : widget.data["infor"],
-              ),
-            ),
-          ),
-        );
+        return widget.data["infor"].toString().trim() == ""
+            ? Container()
+            : Container(
+                width: MediaQuery.of(context).size.width - 30,
+                child: Text.rich(
+                  TextSpan(
+                    style: TextStyle(
+                      fontSize: 16,
+                      height: 1.6,
+                    ),
+                    children: _getRichText(
+                      widget.data["infor"].indexOf("本帖最后由") > -1
+                          ? widget.data["infor"]
+                              .substring(widget.data["infor"].indexOf("编辑") + 7)
+                          : widget.data["infor"],
+                    ),
+                  ),
+                ),
+              );
         break;
       case 1: //图片
         return GestureDetector(
