@@ -12,6 +12,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/util/interface.dart';
@@ -39,6 +40,7 @@ class _TopicDetailState extends State<TopicDetail> {
   var replyId = 0;
   bool editing = false; //是否处于编辑状态
   String placeholder = "请在此编辑回复";
+  List<Map> atUser = [];
   ScrollController _scrollController = new ScrollController();
 
   TextEditingController _txtController = new TextEditingController();
@@ -213,7 +215,7 @@ class _TopicDetailState extends State<TopicDetail> {
     }
     tmp.addAll([
       load_done
-          ? Container()
+          ? NoMore()
           : BottomLoading(
               color: Colors.transparent,
             ),
@@ -297,6 +299,9 @@ class _TopicDetailState extends State<TopicDetail> {
                             }
                           }
                         },
+                        atUser: (List<Map> map) {
+                          atUser = map;
+                        },
                         placeholder: placeholder,
                         controller: _txtController,
                         focusNode: _focusNode,
@@ -336,15 +341,11 @@ class _TopicDetailState extends State<TopicDetail> {
                                     : 1, //"是否引用之前回复的内容
                                 // "replyId": 123456, //回复 ID（pid）
                                 // "aid": "1,2,3", // 附件 ID，逗号隔开
-                                "title": "测试标题",
+                                "title": "",
                                 "content": jsonEncode(contents),
                               }
                             }
                           };
-                          // print({
-                          //   "act": "reply",
-                          //   "json": jsonEncode(json),
-                          // });
                           showToast(
                             context: context,
                             type: XSToast.loading,
@@ -397,6 +398,7 @@ class RichInput extends StatefulWidget {
   Function send;
   Function uploadImg;
   String placeholder;
+  Function atUser;
   RichInput({
     Key key,
     this.bottom,
@@ -405,6 +407,7 @@ class RichInput extends StatefulWidget {
     @required this.cancel,
     @required this.send,
     @required this.uploadImg,
+    @required this.atUser,
     @required this.placeholder,
   }) : super(key: key);
 
@@ -412,156 +415,340 @@ class RichInput extends StatefulWidget {
   _RichInputState createState() => _RichInputState();
 }
 
-class _RichInputState extends State<RichInput> {
+class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
   List<XFile> image = [];
   List<PlatformFile> files = [];
+  bool popSection = false;
+
+  AnimationController controller; //动画控制器
+  Animation<double> animation;
+  double popHeight = 0;
+
+  _foldPop() async {
+    controller.reverse();
+    setState(() {
+      popSection = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.focusNode.addListener(() {
+      if (widget.focusNode.hasFocus) {
+        _foldPop();
+      }
+    });
+    controller = new AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+    animation = Tween(begin: 0.0, end: 200.0).animate(CurvedAnimation(
+      parent: controller,
+      curve: Curves.easeInOut,
+    ))
+      ..addListener(() {
+        setState(() {
+          popHeight = animation.value;
+        });
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
+    List<Map> at_user = [];
     return Positioned(
       bottom: widget.bottom ?? 0,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: 250,
-        decoration: BoxDecoration(
-            color: os_white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromRGBO(0, 0, 0, 0.1),
-                blurRadius: 7,
-                offset: Offset(1, -2),
-              )
-            ]),
-        child: Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  child: Row(
-                    children: [
-                      SendFunc(
-                        path: "lib/img/topic_emoji.svg",
-                        tap: () {},
-                      ),
-                      SendFunc(
-                        path: "lib/img/topic_@.svg",
-                        tap: () {},
-                      ),
-                      SendFunc(
-                        nums: image.length == 0 ? null : image.length,
-                        path: "lib/img/topic_picture.svg",
-                        tap: () async {
-                          final ImagePicker _picker = ImagePicker();
-                          //选好了图片
-                          image = await _picker.pickMultiImage(
-                                imageQuality: 50,
-                              ) ??
-                              [];
-                          var img_urls = await Api().uploadImage(image) ?? [];
-                          widget.uploadImg(img_urls);
-                          setState(() {});
-                        },
-                      ),
-                      //上传附件，暂时不支持
-                      // SendFunc(
-                      //   nums: files.length == 0 ? null : files.length,
-                      //   path: "lib/img/topic_attach.svg",
-                      //   tap: () async {
-                      //     FilePickerResult result =
-                      //         await FilePicker.platform.pickFiles();
-                      //     if (result != null && result.files != null) {
-                      //       files = result.files;
-                      //     } else {
-                      //       files = [];
-                      //     }
-                      //     setState(() {});
-                      //     // print(result.files.length);
-                      //   },
-                      // ),
-                    ],
-                  ),
+      child: Column(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 250,
+            decoration: BoxDecoration(
+                color: os_white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
                 ),
-                Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.75,
-                    height: 185,
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: TextField(
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      focusNode: widget.focusNode,
-                      controller: widget.controller,
-                      style: TextStyle(
-                        height: 1.8,
-                      ),
-                      cursorColor: Color(0xFF004DFF),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: widget.placeholder ?? "请在此编辑回复",
-                        hintStyle: TextStyle(
-                          height: 1.8,
-                          color: Color(0xFFBBBBBB),
-                        ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.1),
+                    blurRadius: 7,
+                    offset: Offset(1, -2),
+                  )
+                ]),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Row(
+                        children: [
+                          SendFunc(
+                            path: "lib/img/topic_emoji.svg",
+                            tap: () {},
+                          ),
+                          SendFunc(
+                            path: "lib/img/topic_@.svg",
+                            tap: () async {
+                              widget.focusNode.unfocus();
+                              popSection = true;
+                              controller.forward();
+                              setState(() {});
+                            },
+                          ),
+                          SendFunc(
+                            nums: image.length == 0 ? null : image.length,
+                            path: "lib/img/topic_picture.svg",
+                            tap: () async {
+                              final ImagePicker _picker = ImagePicker();
+                              //选好了图片
+                              image = await _picker.pickMultiImage(
+                                    imageQuality: 50,
+                                  ) ??
+                                  [];
+                              var img_urls =
+                                  await Api().uploadImage(image) ?? [];
+                              widget.uploadImg(img_urls);
+                              setState(() {});
+                            },
+                          ),
+                          //上传附件，暂时不支持
+                          // SendFunc(
+                          //   path: "lib/img/topic_attach.svg",
+                          // ),
+                        ],
                       ),
                     ),
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                myInkWell(
-                  tap: () {
-                    widget.cancel();
-                  },
-                  widget: Container(
-                    width: MediaQuery.of(context).size.width * 0.25,
-                    height: 60,
-                    child: Center(
-                      child: Text(
-                        "取消",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF656565),
-                        ),
-                      ),
-                    ),
-                  ),
-                  radius: 15,
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 15),
-                  child: myInkWell(
-                    tap: () {
-                      widget.send();
-                    },
-                    color: Color(0xFF004DFF),
-                    widget: Container(
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      height: 100,
-                      child: Center(
-                        child: Text(
-                          "发\n送",
+                    Center(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.75,
+                        height: 185,
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: TextField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          focusNode: widget.focusNode,
+                          controller: widget.controller,
                           style: TextStyle(
-                            color: os_white,
-                            fontSize: 16,
+                            height: 1.8,
+                          ),
+                          cursorColor: Color(0xFF004DFF),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: widget.placeholder ?? "请在此编辑回复",
+                            hintStyle: TextStyle(
+                              height: 1.8,
+                              color: Color(0xFFBBBBBB),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    radius: 10,
-                  ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    myInkWell(
+                      tap: () {
+                        widget.cancel();
+                      },
+                      widget: Container(
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        height: 60,
+                        child: Center(
+                          child: Text(
+                            "取消",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF656565),
+                            ),
+                          ),
+                        ),
+                      ),
+                      radius: 15,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 15),
+                      child: myInkWell(
+                        tap: () {
+                          widget.send();
+                        },
+                        color: Color(0xFF004DFF),
+                        widget: Container(
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          height: 100,
+                          child: Center(
+                            child: Text(
+                              "发\n送",
+                              style: TextStyle(
+                                color: os_white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                        radius: 10,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
+          popSection
+              ? Container(
+                  width: MediaQuery.of(context).size.width,
+                  color: os_white,
+                  height: popHeight,
+                  child: AtSomeone(
+                    tap: (uid, name) {
+                      at_user.add({uid: uid, name: name});
+                      widget.atUser(at_user);
+                      widget.controller.text =
+                          widget.controller.text + " @${name} ";
+                      setState(() {});
+                    },
+                  ),
+                )
+              : Container(),
+        ],
+      ),
+    );
+  }
+}
+
+class AtSomeone extends StatefulWidget {
+  Function tap;
+  AtSomeone({Key key, @required this.tap}) : super(key: key);
+
+  @override
+  State<AtSomeone> createState() => _AtSomeoneState();
+}
+
+class _AtSomeoneState extends State<AtSomeone> {
+  var list = [];
+  bool load_done = false;
+  bool load_finish = false;
+  ScrollController _scrollController = new ScrollController();
+
+  @override
+  void initState() {
+    _getData();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _getData();
+      }
+    });
+    super.initState();
+  }
+
+  _getData() async {
+    var pageSize = 20;
+    var data = await Api().forum_atuserlist({
+      "page": (list.length / pageSize + 1).toInt(),
+      "pageSize": pageSize,
+    });
+    if (data != null && data["list"] != null && data["list"].length != 0) {
+      list.addAll(data["list"]);
+      load_finish = data["list"].length < pageSize;
+    }
+    load_done = true;
+    setState(() {});
+  }
+
+  List<Widget> _buildCont() {
+    List<Widget> tmp = [];
+    if (list.length != 0) {
+      tmp.add(Container(
+        margin: EdgeInsets.only(left: 5, top: 10, right: 5),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Text(
+            "可以@的人",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
         ),
+      ));
+    }
+    list.forEach((element) {
+      tmp.add(Container(
+        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+        child: myInkWell(
+          color: Colors.transparent,
+          tap: () {
+            widget.tap(element["uid"], element["name"]);
+          },
+          widget: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Row(
+              children: [
+                Icon(Icons.person, color: os_color),
+                Container(width: 10),
+                Text(
+                  element["name"],
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+          radius: 5,
+        ),
+      ));
+    });
+    if (list.length != 0 && !load_finish) {
+      tmp.add(Container(
+        padding: EdgeInsets.only(top: 15, bottom: 25),
+        child: Center(
+          child: Text("加载中…", style: TextStyle(color: os_deep_grey)),
+        ),
+      ));
+    }
+    if (list.length == 0 && load_done) {
+      tmp.add(Container(
+        height: 180,
+        child: Center(
+          child: Text(
+            "暂无可以@的人,你可以通过关注/好友增加人数",
+            style: TextStyle(
+              fontSize: 14,
+              color: os_deep_grey,
+            ),
+          ),
+        ),
+      ));
+    }
+    if (list.length == 0 && load_done == false) {
+      tmp.add(Container(
+        height: 180,
+        child: Center(
+          child: Text(
+            "加载中…",
+            style: TextStyle(
+              fontSize: 14,
+              color: os_deep_grey,
+            ),
+          ),
+        ),
+      ));
+    }
+    return tmp;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: os_grey,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: ListView(
+        controller: _scrollController,
+        children: _buildCont(),
       ),
     );
   }

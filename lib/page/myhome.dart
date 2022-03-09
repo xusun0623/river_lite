@@ -18,7 +18,7 @@ class MyHome extends StatefulWidget {
 class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
   final List<String> _tabValues = ["新回复", "热帖"];
   SwiperController _controller = new SwiperController();
-  var index = 0;
+  var index = 1;
   List<Widget> _list = <Widget>[
     HomeNew(),
     HomeNewReply(),
@@ -77,6 +77,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           loop: false,
           itemCount: 3,
           duration: 100,
+          index: index,
           controller: _controller,
           onIndexChanged: (idx) {
             index = idx;
@@ -115,13 +116,14 @@ class _TabTipState extends State<TabTip> {
       },
       color: Colors.transparent,
       widget: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         child: Column(
           children: [
             Text(
               widget.txt,
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
+                color: widget.select ? os_black : os_deep_grey,
               ),
             ),
             Container(height: 3),
@@ -136,7 +138,7 @@ class _TabTipState extends State<TabTip> {
           ],
         ),
       ),
-      radius: 0,
+      radius: 10,
     );
   }
 }

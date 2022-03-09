@@ -6,6 +6,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 
@@ -60,7 +61,7 @@ class _SearchState extends State<Search> {
             color: Colors.transparent,
             txt: "加载中…",
           )
-        : Container());
+        : NoMore());
     tmp.add(loading ? Container(height: 15) : Container());
     tmp.add(data.length == 0 && load_done
         ? Container(
@@ -88,7 +89,7 @@ class _SearchState extends State<Search> {
     }
     tmp.add(
       load_done || data.length == 0
-          ? Container()
+          ? NoMore()
           : BottomLoading(
               color: Colors.transparent,
             ),

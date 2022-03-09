@@ -5,6 +5,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/banner.dart';
 import 'package:offer_show/components/hot_btn.dart';
+import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/outer/contained_tab_bar_view/src/contained_tab_bar_view.dart';
@@ -97,9 +98,6 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 
   Widget _buildComponents() {
     List<Widget> t = [];
-    t.add(ImgBanner());
-    t.add(Container(height: 10));
-    t.add(HomeBtn());
     if (data != null && data.length != 0) {
       for (var i in data) {
         t.add(Topic(data: i));
@@ -112,7 +110,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     }
     t.add(
       load_done || data.length == 0
-          ? Container()
+          ? NoMore()
           : BottomLoading(
               color: Colors.transparent,
               txt: "加载中…",

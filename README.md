@@ -199,6 +199,39 @@ if (_scrollController.position.pixels >= 0) {
 }
 ```
 
+### 10.动画
+```dart
+AnimationController controller; //动画控制器
+Animation<double> animation;
+double _right = -200;
+@override
+void initState() {
+  super.initState();
+  widget.controller.addListener(() {
+    if (widget.show) {
+      controller.forward();
+    } else {
+      controller.reverse();
+    }
+  });
+  controller = new AnimationController(
+    vsync: this,
+    duration: Duration(milliseconds: 400),
+  )..addListener(() {
+      setState(() {});
+    });
+  final CurvedAnimation curve = CurvedAnimation(
+    parent: controller,
+    curve: Curves.easeInOut,
+  );
+  animation = Tween(begin: -200.0, end: 20.0).animate(curve)
+    ..addListener(() {
+      setState(() {
+        _right = animation.value;
+      });
+    });
+}
+```
 
 
 

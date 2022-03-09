@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
@@ -73,7 +74,7 @@ class _TopicColumnState extends State<TopicColumn> {
     });
     await Future.delayed(Duration(milliseconds: 200));
     var list = data["classificationType_list"];
-    theme = ["全部"];
+    theme = ["全部分栏"];
     if (list != null && list.length != 0) {
       for (var i = 0; i < list.length; i++) {
         theme.add(list[i]["classificationType_name"]);
@@ -183,9 +184,7 @@ class _TopicColumnState extends State<TopicColumn> {
       ));
     });
     tmp.add(
-      load_done
-          ? Container(height: 15)
-          : BottomLoading(color: Colors.transparent),
+      load_done ? NoMore() : BottomLoading(color: Colors.transparent),
     );
     return tmp;
   }

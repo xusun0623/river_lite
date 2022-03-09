@@ -10,6 +10,17 @@ import 'package:http/http.dart' as http;
 /// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 
 class Api {
+  forum_atuserlist(Map m) async {
+    Map tmp = {
+      "r": "forum/atuserlist",
+    };
+    tmp.addAll(m);
+    return await XHttp().postWithGlobalToken(
+      url: "",
+      param: tmp,
+    );
+  }
+
   //此处有
   uploadImage(List<XFile> imgs) async {
     var request = http.MultipartRequest(
