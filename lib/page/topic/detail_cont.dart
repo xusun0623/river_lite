@@ -107,13 +107,22 @@ class _DetailContState extends State<DetailCont> {
                     ),
                   );
                 },
-                child: CachedNetworkImage(
-                  imageUrl: widget.data["infor"],
-                  placeholder: (context, url) => Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: CircularProgressIndicator(color: os_deep_grey),
-                  ),
-                ),
+                child: widget.imgLists.length > 15
+                    ? CachedNetworkImage(
+                        height: 500,
+                        imageUrl: widget.data["infor"],
+                        placeholder: (context, url) => Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: CircularProgressIndicator(color: os_deep_grey),
+                        ),
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: widget.data["infor"],
+                        placeholder: (context, url) => Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: CircularProgressIndicator(color: os_deep_grey),
+                        ),
+                      ),
               ),
             ),
           ),
@@ -159,7 +168,8 @@ class _DetailContState extends State<DetailCont> {
         );
         break;
       case 5: //附件下载
-        return myInkWell(
+        return //图片链接就不用下载了
+            myInkWell(
           color: Color(0xFFF6F6F6),
           tap: () {
             showModal(

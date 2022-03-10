@@ -133,21 +133,28 @@ class _TopicDetailState extends State<TopicDetail> {
       }
     });
     data["topic"]["content"].forEach((e) {
-      tmp.add(GestureDetector(
-        onLongPress: () {
-          Clipboard.setData(ClipboardData(text: s_tmp));
-          Vibrate.feedback(FeedbackType.impact);
-          showToast(
-            context: context,
-            type: XSToast.success,
-            txt: "复制文本成功",
-          );
-        },
-        child: Container(
-          padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-          child: DetailCont(data: e, imgLists: imgLists),
-        ),
-      ));
+      if (e["type"] == 5 &&
+          e["originalInfo"] != null &&
+          e["originalInfo"].toString().indexOf(".jpg") > -1) {
+        //图片附件,不提供跳转下载
+      } else {
+        //图片附件不允许下载
+        tmp.add(GestureDetector(
+          onLongPress: () {
+            Clipboard.setData(ClipboardData(text: s_tmp));
+            Vibrate.feedback(FeedbackType.impact);
+            showToast(
+              context: context,
+              type: XSToast.success,
+              txt: "复制文本成功",
+            );
+          },
+          child: Container(
+            padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+            child: DetailCont(data: e, imgLists: imgLists),
+          ),
+        ));
+      }
     });
     return Column(children: tmp);
   }
@@ -647,22 +654,24 @@ class YourEmoji extends StatefulWidget {
 }
 
 class _YourEmojiState extends State<YourEmoji> {
-  String emoji_common =
-      "😀😁😂😃😄😅😆😉😊😋😎😍😘😗😙😚😇😐😑😶😏😣😥😮😯😪😫😴😌😛😜😝😒😓😔😕😲😷😖😞😟😤😢😭😦😧😨😬😰😱😳😵😡😠😈👿👹👺💀👻👽👦👧👨👩👴👵👶👱👮👲👳👷👸💂🎅👰👼💆💇🙍🙎🙅🙆💁🙋🙇🙌🙏👤👥🚶🏃👯💃👫👬👭💏💑👪💪👈👉👆👇✋👌👍👎✊👊👋👏👐✍👣👀👂👃👅👄💋👓👔👕👖👗👘👙👚👛👜👝🎒💼👞👟👠👡👢👑👒🎩🎓💄💅💍🌂";
+  List<String> emoji = [
+    "😋😎🥰🥳🤩😘🤪😍😉😏😂🤔✋😶😓😭🤨😅🤮😒😓😤👨👩🙏👆👇💪✋👌👍👎✊👊👋👏👀",
+    "😀😁😂😃😄😅😆😉😊😋😎😍😘😗😙😚😇😐😑😶😏😣😥😮😯😪😫😴😌😛😜😝😒😓😔😕😲😷😖😞😟😤😢😭😦😧😨😬😰😱😳😵😡😠😈👹👺💀👻👽👦👧👨👩👴👵👶👱👮👲👳👷👸💂🎅👰👼💆💇🙍🙎🙅🙆💁🙋🙇🙌🙏👤👥🚶🏃👯💃👫👬👭💏💑👪💪👈👉☝👆👇✌✋👌👍👎✊👊👋👏👐✍🙈🙉🙊🐵🐒🐶🐕🐩🐺🐱😺😸😹😻😼😽🙀😿😾🐈🐯🐅🐆🐴🐎🐮🐂🐃🐄🐷🐖🐗🐽🐏🐑🐐🐪🐫🐘🐭🐁🐀🐹🐰🐇🐻🐨🐼🐾🐔🐓🐣🐤🐥🐦🐧🐸🐊🐢🐍🐲🐉🐳🐋🐬🐟🐠🐡🐙🐚🐌🐛🐜🐝🐞�🐚🌎🌍🌏🌕🌖🌗🌘🌑🌒🌓🌔🌙🍀🌿☘🌱🌴🌳⭐🌟💫✨☄🪐🌞☀🌤⛅🌥🌦☁🌧⛈🌩⚡⚡💥❄🌨☃⛄🌬💨🌪🌫☔🖋",
+  ];
 
-  List<Widget> _buildEmoji() {
+  List<Widget> _buildEmoji(int index) {
     List<Widget> tmp = [];
-    for (var i = 0; i < emoji_common.characters.length; i++) {
+    for (var i = 0; i < emoji[index].characters.length; i++) {
       tmp.add(myInkWell(
         radius: 5,
         color: Colors.transparent,
         tap: () {
-          widget.tap(emoji_common.characters.elementAt(i));
+          widget.tap(emoji[index].characters.elementAt(i));
         },
         widget: Padding(
           padding: const EdgeInsets.all(5),
           child: Text(
-            emoji_common.characters.elementAt(i),
+            emoji[index].characters.elementAt(i),
             style: TextStyle(fontSize: 30),
           ),
         ),
@@ -683,7 +692,7 @@ class _YourEmojiState extends State<YourEmoji> {
         physics: BouncingScrollPhysics(),
         loop: false,
         duration: 100,
-        itemCount: 3,
+        itemCount: 2,
         itemBuilder: (context, index) {
           return ListView(
             children: [
@@ -691,14 +700,14 @@ class _YourEmojiState extends State<YourEmoji> {
                 padding:
                     EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
                 child: Text(
-                  "Emoji表情",
+                  ["常用Emoji表情", "通用Emoji"][index],
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
                 child: Wrap(
-                  children: _buildEmoji(),
+                  children: _buildEmoji(index),
                 ),
               )
             ],
