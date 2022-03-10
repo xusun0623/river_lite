@@ -17,6 +17,7 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
+import 'package:offer_show/page/topic/emoji.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -453,7 +454,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
       vsync: this,
       duration: Duration(milliseconds: 500),
     );
-    animation = Tween(begin: 0.0, end: 249.0).animate(CurvedAnimation(
+    animation = Tween(begin: 0.0, end: 300.0).animate(CurvedAnimation(
       parent: controller,
       curve: Curves.easeInOut,
     ))
@@ -473,7 +474,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 250,
+            height: popSection ? 200 : 250,
             decoration: BoxDecoration(
                 color: os_white,
                 borderRadius: BorderRadius.only(
@@ -541,7 +542,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                     Center(
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.75,
-                        height: 185,
+                        height: popSection ? 135 : 185,
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         child: TextField(
                           keyboardType: TextInputType.multiline,
@@ -656,8 +657,57 @@ class YourEmoji extends StatefulWidget {
 class _YourEmojiState extends State<YourEmoji> {
   List<String> emoji = [
     "😋😎🥰🥳🤩😘🤪😍😉😏😂🤔✋😶😓😭🤨😅🤮😒😓😤👨👩🙏👆👇💪✋👌👍👎✊👊👋👏👀",
-    "😀😁😂😃😄😅😆😉😊😋😎😍😘😗😙😚😇😐😑😶😏😣😥😮😯😪😫😴😌😛😜😝😒😓😔😕😲😷😖😞😟😤😢😭😦😧😨😬😰😱😳😵😡😠😈👹👺💀👻👽👦👧👨👩👴👵👶👱👮👲👳👷👸💂🎅👰👼💆💇🙍🙎🙅🙆💁🙋🙇🙌🙏👤👥🚶🏃👯💃👫👬👭💏💑👪💪👈👉☝👆👇✌✋👌👍👎✊👊👋👏👐✍🙈🙉🙊🐵🐒🐶🐕🐩🐺🐱😺😸😹😻😼😽🙀😿😾🐈🐯🐅🐆🐴🐎🐮🐂🐃🐄🐷🐖🐗🐽🐏🐑🐐🐪🐫🐘🐭🐁🐀🐹🐰🐇🐻🐨🐼🐾🐔🐓🐣🐤🐥🐦🐧🐸🐊🐢🐍🐲🐉🐳🐋🐬🐟🐠🐡🐙🐚🐌🐛🐜🐝🐞�🐚🌎🌍🌏🌕🌖🌗🌘🌑🌒🌓🌔🌙🍀🌿☘🌱🌴🌳⭐🌟💫✨☄🪐🌞☀🌤⛅🌥🌦☁🌧⛈🌩⚡⚡💥❄🌨☃⛄🌬💨🌪🌫☔🖋",
   ];
+
+  List<Widget> _buildRiver1() {
+    List<Widget> tmp = [];
+    emoji1.forEach((element) {
+      tmp.add(myInkWell(
+        radius: 5,
+        color: Colors.transparent,
+        tap: () {
+          widget.tap("[a:${element}]");
+        },
+        widget: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Image.asset(
+            "lib/emoji/1/[a_${element}].gif",
+            width: 37,
+            height: 37,
+          ),
+        ),
+      ));
+    });
+    return tmp;
+  }
+
+  List<Widget> _buildRiver2() {
+    List<Widget> tmp = [];
+    emoji2.forEach((element) {
+      tmp.add(myInkWell(
+        radius: 5,
+        color: Colors.transparent,
+        tap: () {
+          widget.tap("[s:${element}]");
+        },
+        widget: Padding(
+          padding: const EdgeInsets.all(5),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(12.5)),
+            child: Container(
+              color: os_white,
+              width: 37,
+              height: 37,
+              child: Image.asset(
+                "lib/emoji/2/[s_${element}].gif",
+              ),
+            ),
+          ),
+        ),
+      ));
+    });
+    return tmp;
+  }
 
   List<Widget> _buildEmoji(int index) {
     List<Widget> tmp = [];
@@ -688,31 +738,48 @@ class _YourEmojiState extends State<YourEmoji> {
         color: os_grey,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      child: Swiper(
-        physics: BouncingScrollPhysics(),
-        loop: false,
-        duration: 100,
-        itemCount: 2,
-        itemBuilder: (context, index) {
-          return ListView(
-            children: [
-              Container(
-                padding:
-                    EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
-                child: Text(
-                  ["常用Emoji表情", "通用Emoji"][index],
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
-                child: Wrap(
-                  children: _buildEmoji(index),
-                ),
-              )
-            ],
-          );
-        },
+      child: ListView(
+        children: [
+          Container(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
+            child: Text(
+              "畔畔小表情",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+            child: Wrap(
+              children: _buildRiver1(),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+            child: Text(
+              "畔畔小动图",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+            child: Wrap(
+              children: _buildRiver2(),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+            child: Text(
+              "常用Emoji表情⬇️",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+            child: Wrap(
+              children: _buildEmoji(0),
+            ),
+          ),
+        ],
       ),
     );
   }
