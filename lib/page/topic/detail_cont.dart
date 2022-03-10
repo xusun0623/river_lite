@@ -5,6 +5,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/emoji/emoji.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -60,26 +61,43 @@ class _DetailContState extends State<DetailCont> {
       case 0: //纯文字
         return widget.data["infor"].toString().trim() == ""
             ? Container()
-            : Container(
-                width: MediaQuery.of(context).size.width - 30,
-                child: Text.rich(
-                  TextSpan(
-                    style: TextStyle(
-                      fontSize: 16,
-                      height: 1.6,
+            : (widget.data["infor"].toString().characters.length == 1 &&
+                    emoji
+                        .toString()
+                        .characters
+                        .contains(widget.data["infor"].toString().trim())
+                ? Container(
+                    width: MediaQuery.of(context).size.width - 30,
+                    child: Text.rich(
+                      TextSpan(
+                        style: TextStyle(
+                          fontSize: 60,
+                          height: 1.6,
+                        ),
+                        text: widget.data["infor"].toString().trim(),
+                      ),
                     ),
-                    children: _getRichText(
-                      widget.data["infor"].indexOf("本帖最后由") > -1
-                          ? widget.data["infor"].substring(
-                              (widget.data["infor"].indexOf("编辑") + 7) >=
-                                      widget.data["infor"].length
-                                  ? widget.data["infor"].length - 1
-                                  : widget.data["infor"].indexOf("编辑") + 7)
-                          : widget.data["infor"],
+                  )
+                : Container(
+                    width: MediaQuery.of(context).size.width - 30,
+                    child: Text.rich(
+                      TextSpan(
+                        style: TextStyle(
+                          fontSize: 16,
+                          height: 1.6,
+                        ),
+                        children: _getRichText(
+                          widget.data["infor"].indexOf("本帖最后由") > -1
+                              ? widget.data["infor"].substring(
+                                  (widget.data["infor"].indexOf("编辑") + 7) >=
+                                          widget.data["infor"].length
+                                      ? widget.data["infor"].length - 1
+                                      : widget.data["infor"].indexOf("编辑") + 7)
+                              : widget.data["infor"],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              );
+                  ));
         break;
       case 1: //图片
         return GestureDetector(
