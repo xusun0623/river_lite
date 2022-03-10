@@ -37,42 +37,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - lib/img/logo.svg
-    - lib/img/search.svg
-    - lib/img/search_blue.svg
-    - lib/img/home.svg
-    - lib/img/banner.svg
-    - lib/img/like_blue.svg
-    - lib/img/like_grey.svg
-    - lib/img/comment.svg
-    - lib/img/right_arrow.svg
-    - lib/img/more.svg
-    - lib/img/right_arrow_grey.svg
-    - lib/img/topic_detail_more.svg
-    - lib/img/topic_water.svg
-    - lib/img/topic_collect.svg
-    - lib/img/detail_sort.svg
-    - lib/img/detail_like.svg
-    - lib/img/detail_like_blue.svg
-    - lib/img/detail_comment_more.svg
-    - lib/img/search_filter.svg
-    - lib/img/empty.png
-    - lib/img/to_top.svg
-    - lib/img/topic_emoji.svg
-    - lib/img/topic_@.svg
-    - lib/img/topic_picture.svg
-    - lib/img/topic_attach.svg
-    - lib/collect_btn/0-all.svg
-    - lib/collect_btn/1-loss.svg
-    - lib/collect_btn/2-second.svg
-    - lib/img/home/1.svg
-    - lib/img/home/2.svg
-    - lib/img/home/3.svg
-    - lib/img/home/4.svg
-    - lib/img/home/5.svg
-    - lib/img/square/1.svg
-    - lib/img/square/2.svg
-    - lib/img/square/3.svg
-    - lib/img/square/4.svg
-    - lib/img/square/5.svg
-    - lib/img/square/6.svg
+    - lib/emoji/
+    - lib/img/
+    - lib/collect_btn/
