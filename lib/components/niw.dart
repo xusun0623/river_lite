@@ -41,17 +41,32 @@ class _myInkWellState extends State<myInkWell> {
         ),
         width: widget.width,
         height: widget.height,
-        child: InkWell(
-          highlightColor: widget.highlightColor ?? null,
-          splashColor: widget.splashColor ?? null,
-          onTap: () {
-            if (widget.tap != null) {
-              widget.tap();
-            }
-          },
-          borderRadius: BorderRadius.circular(widget.radius),
-          child: widget.widget,
-        ),
+        child: widget.longPress == null
+            ? InkWell(
+                highlightColor: widget.highlightColor ?? null,
+                splashColor: widget.splashColor ?? null,
+                onTap: () {
+                  if (widget.tap != null) {
+                    widget.tap();
+                  }
+                },
+                borderRadius: BorderRadius.circular(widget.radius),
+                child: widget.widget,
+              )
+            : InkWell(
+                highlightColor: widget.highlightColor ?? null,
+                splashColor: widget.splashColor ?? null,
+                onTap: () {
+                  if (widget.tap != null) {
+                    widget.tap();
+                  }
+                },
+                onLongPress: () {
+                  widget.longPress();
+                },
+                borderRadius: BorderRadius.circular(widget.radius),
+                child: widget.widget,
+              ),
       ),
     );
   }

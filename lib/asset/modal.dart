@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
 
@@ -177,6 +178,32 @@ void hideToast() {
     isShown = false;
     Navigator.pop(context_tmp);
   }
+}
+
+void showEmoji({
+  @required BuildContext context,
+  @required Widget emoji,
+}) {
+  if (isShown) return;
+  isShown = true;
+  Vibrate.feedback(FeedbackType.impact);
+  popDialog(
+    delay: 1000,
+    context: context,
+    widget: Container(
+      padding: EdgeInsets.all(30),
+      width: 150,
+      height: 150,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: Color(0xBB000000),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [emoji],
+      ),
+    ),
+  );
 }
 
 void showToast({
