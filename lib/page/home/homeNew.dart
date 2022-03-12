@@ -125,6 +125,10 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     return BackToTop(
       show: showBackToTop,
       animation: false,
+      attachBtn: true,
+      tap: () {
+        Navigator.pushNamed(context, "/new", arguments: {});
+      },
       child: ListView(
         physics: BouncingScrollPhysics(),
         controller: _scrollController,

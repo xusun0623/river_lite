@@ -222,7 +222,10 @@ class _TopicState extends State<Topic> {
                       ],
                     ),
                     myInkWell(
-                      tap: () {},
+                      tap: () {
+                        Navigator.pushNamed(context, "/column",
+                            arguments: widget.data["board_id"]);
+                      },
                       color: Colors.transparent,
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,

@@ -10,6 +10,8 @@ class BackToTop extends StatefulWidget {
   bool show;
   double bottom;
   bool animation;
+  bool attachBtn;
+  Function tap;
   BackToTop({
     Key key,
     this.child,
@@ -17,6 +19,8 @@ class BackToTop extends StatefulWidget {
     this.controller,
     this.bottom,
     this.animation,
+    this.attachBtn,
+    this.tap,
   }) : super(key: key);
 
   @override
@@ -62,6 +66,41 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
         Positioned(
           child: widget.child,
         ),
+        widget.attachBtn == null
+            ? Container()
+            : Positioned(
+                right: 20,
+                bottom: (widget.bottom ?? 20) + (_right + 200) / 3.5,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0x22000000),
+                        blurRadius: 10,
+                        offset: Offset(3, 3),
+                      ),
+                    ],
+                  ),
+                  child: myInkWell(
+                    tap: () {
+                      widget.tap();
+                    },
+                    color: os_color,
+                    widget: Container(
+                      width: 50,
+                      height: 50,
+                      child: Center(
+                        child: Icon(
+                          Icons.add_rounded,
+                          color: os_white,
+                          size: 22,
+                        ),
+                      ),
+                    ),
+                    radius: 100,
+                  ),
+                )),
         Positioned(
             right: _right,
             bottom: widget.bottom ?? 20,
@@ -98,7 +137,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                 ),
                 radius: 100,
               ),
-            ))
+            )),
       ],
     );
   }
