@@ -47,6 +47,7 @@ saveImge(
       onPressed: () async {
         Navigator.pop(context);
         showToast(
+          duration: 10000,
           context: context,
           type: XSToast.loading,
           txt: "保存中…",

@@ -219,6 +219,7 @@ class _PostNewState extends State<PostNew> {
                       ),
                     ),
                   ),
+                  VoteMachine(),
                 ],
               ),
             ),
@@ -464,35 +465,38 @@ class _PostNewState extends State<PostNew> {
                         Row(
                           //右边功能区
                           children: [
-                            Container(
-                              height: 25,
-                              padding: EdgeInsets.symmetric(horizontal: 7),
-                              margin: EdgeInsets.only(left: 5),
-                              decoration: BoxDecoration(
-                                color: os_white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(100),
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                height: 25,
+                                padding: EdgeInsets.symmetric(horizontal: 7),
+                                margin: EdgeInsets.only(left: 5),
+                                decoration: BoxDecoration(
+                                  color: os_white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(100),
+                                  ),
+                                  border: Border.all(
+                                    color: Color(0xFF9D9D9D),
+                                  ),
                                 ),
-                                border: Border.all(
-                                  color: Color(0xFF9D9D9D),
-                                ),
-                              ),
-                              child: Center(
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.add,
-                                      size: 12,
-                                      color: Color(0xFF9D9D9D),
-                                    ),
-                                    Text(
-                                      "插入投票",
-                                      style: TextStyle(
-                                        fontSize: 12,
+                                child: Center(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        size: 12,
                                         color: Color(0xFF9D9D9D),
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        "插入投票",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Color(0xFF9D9D9D),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -541,6 +545,109 @@ class _PostNewState extends State<PostNew> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class VoteMachine extends StatefulWidget {
+  Function confirm; //返回投票选项的List<String>数组即可
+  VoteMachine({
+    Key key,
+    this.confirm,
+  }) : super(key: key);
+
+  @override
+  State<VoteMachine> createState() => _VoteMachineState();
+}
+
+class _VoteMachineState extends State<VoteMachine> {
+  List<Map> options = [
+    {
+      "index": 0,
+      "txt": "",
+    },
+    {
+      "index": 1,
+      "txt": "",
+    },
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: 15, right: 15, bottom: 115),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      decoration: BoxDecoration(
+        color: os_white,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Column(
+        children: [
+          Container(height: 5),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  os_svg(path: "lib/img/vote.svg", width: 22, height: 22),
+                  Container(width: 2),
+                  Text("投票", style: TextStyle(fontSize: 16)),
+                ],
+              ),
+              GestureDetector(
+                onTap: () {
+                  options.add({
+                    "index": options.length - 1,
+                    "txt": "",
+                  });
+                  setState(() {});
+                },
+                child: Text(
+                  "+新增选项",
+                  style: TextStyle(fontSize: 16, color: Color(0xFFB9B9B9)),
+                ),
+              ),
+            ],
+          ),
+          Container(height: 10),
+          Column(
+            children: options.map((e) {
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 5),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF1F4F8),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width - 105,
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 45,
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "请输入选项",
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        options.removeAt(e["index"]);
+                        for (var i = 0; i < options.length; i++) {
+                          options[i]["index"] = i;
+                        }
+                        setState(() {});
+                      },
+                      child: Text("删除",
+                          style: TextStyle(color: os_color, fontSize: 16)),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
     );
   }
