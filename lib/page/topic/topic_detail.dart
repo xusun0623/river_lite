@@ -739,6 +739,7 @@ class _YourEmojiState extends State<YourEmoji> {
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: ListView(
+        physics: BouncingScrollPhysics(),
         children: [
           Container(
             padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),

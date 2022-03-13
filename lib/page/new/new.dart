@@ -1,7 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/outer/showActionSheet/action_item.dart';
+import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
+import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
+import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
+import 'package:offer_show/util/interface.dart';
 
 class PostNew extends StatefulWidget {
   var board;
@@ -15,7 +23,53 @@ class PostNew extends StatefulWidget {
 }
 
 class _PostNewState extends State<PostNew> {
-  String select_section = "板块";
+  String select_section = "水手之家";
+  int select_section_id = 25;
+  TextEditingController title_controller = new TextEditingController();
+  FocusNode title_focus = new FocusNode();
+  TextEditingController tip_controller = new TextEditingController();
+  FocusNode tip_focus = new FocusNode();
+  List<Map> total = [
+    // {"board_id": 45, "board_name": "情感专区"},
+  ];
+  List<Map> quick = [
+    {"board_id": 45, "board_name": "情感专区"},
+    {"board_id": 61, "board_name": "二手专区"},
+    {"board_id": 236, "board_name": "校园热点"},
+    {"board_id": 174, "board_name": "就业创业"},
+    {"board_id": 199, "board_name": "保研考研"},
+    {"board_id": 370, "board_name": "吃喝玩乐"},
+    {"board_id": 309, "board_name": "成电锐评"},
+    {"board_id": 25, "board_name": "水手之家"},
+  ];
+
+  _getTotalColumn() async {
+    var data = await Api().forum_forumlist({});
+    if (data != null && data["list"] != null && data["list"].length != 0) {
+      List<Map> tmp = [];
+      for (var board in data["list"]) {
+        for (var board_tip in board["board_list"]) {
+          tmp.add({
+            "board_id": board_tip["board_id"],
+            "board_name": board_tip["board_name"],
+          });
+        }
+      }
+      total = tmp;
+      total.add({
+        "board_id": 371,
+        "board_name": "密语",
+      });
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    _getTotalColumn();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,8 +88,55 @@ class _PostNewState extends State<PostNew> {
         ),
         actions: [
           RightTopSend(
-            tap: () {
-              print("tap");
+            tap: () async {
+              var contents = [
+                {
+                  "type": 0, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
+                  "infor": tip_controller.text,
+                },
+              ];
+              // for (var i = 0; i < uploadImgUrls.length; i++) {
+              //   contents.add({
+              //     "type": 1, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
+              //     "infor": uploadImgUrls[i],
+              //   });
+              // }
+              Map json = {
+                "body": {
+                  "json": {
+                    "isAnonymous": 0,
+                    "isOnlyAuthor": 0,
+                    "typeId": "",
+                    "aid": "",
+                    "fid": select_section_id,
+                    "isQuote": 0, //"是否引用之前回复的内容
+                    // "replyId": 123456, //回复 ID（pid）
+                    // "aid": "1,2,3", // 附件 ID，逗号隔开
+                    "title": title_controller.text,
+                    "content": jsonEncode(contents),
+                  }
+                }
+              };
+              showToast(
+                context: context,
+                type: XSToast.loading,
+                txt: "发表中…",
+              );
+              await Api().forum_topicadmin(
+                {
+                  "act": "new",
+                  "json": jsonEncode(json),
+                },
+              );
+              hideToast();
+              setState(() {});
+              await Future.delayed(Duration(milliseconds: 30));
+              showToast(
+                context: context,
+                type: XSToast.success,
+                duration: 200,
+                txt: "发布成功!",
+              );
             },
           )
         ],
@@ -50,13 +151,15 @@ class _PostNewState extends State<PostNew> {
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 20),
                     child: TextField(
+                      controller: title_controller,
+                      focusNode: title_focus,
                       style: TextStyle(fontSize: 17),
-                      cursorColor: Color(0xFF004DFF),
+                      cursorColor: os_color,
                       decoration: InputDecoration(
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                             width: 1,
-                            color: Color(0xFF004DFF),
+                            color: os_color,
                             style: BorderStyle.solid,
                           ),
                         ),
@@ -78,10 +181,13 @@ class _PostNewState extends State<PostNew> {
                   Container(
                     padding: EdgeInsets.only(left: 20, right: 20, top: 0),
                     child: TextField(
+                      controller: tip_controller,
+                      focusNode: tip_focus,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
-                      cursorColor: Color(0xFF004DFF),
+                      cursorColor: os_color,
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(bottom: 200, top: 10),
                         border: InputBorder.none,
                         hintStyle: TextStyle(
                           color: Color(0xFFA3A3A3),
@@ -110,35 +216,64 @@ class _PostNewState extends State<PostNew> {
                   children: [
                     Row(
                       children: [
-                        Container(
-                          height: 27,
-                          padding: EdgeInsets.symmetric(horizontal: 5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(100),
-                            ),
-                            border: Border.all(
-                              color: os_deep_blue,
-                              width: 1,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(width: 7.5),
-                              Text(
-                                select_section,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: os_deep_blue,
+                        GestureDetector(
+                          onTap: () {
+                            title_focus.unfocus();
+                            tip_focus.unfocus();
+                            showActionSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              actions: total.map((e) {
+                                return ActionItem(
+                                  title: e["board_name"],
+                                  onPressed: () {
+                                    select_section = e["board_name"];
+                                    select_section_id = e["board_id"];
+                                    Navigator.pop(context);
+                                    setState(() {});
+                                  },
+                                );
+                              }).toList(),
+                              topActionItem: TopActionItem(
+                                title: "已选择:${select_section}✅",
+                                titleTextStyle: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Icon(
-                                Icons.chevron_right_rounded,
-                                size: 18,
-                                color: os_deep_blue,
-                              )
-                            ],
+                              bottomActionItem: BottomActionItem(title: "取消"),
+                            );
+                          },
+                          child: Container(
+                            height: 27,
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(100),
+                              ),
+                              border: Border.all(
+                                color: os_color,
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(width: 7.5),
+                                Text(
+                                  select_section,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: os_color,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.chevron_right_rounded,
+                                  size: 18,
+                                  color: os_color,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         Container(
@@ -148,16 +283,20 @@ class _PostNewState extends State<PostNew> {
                           height: 30,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
-                            children: [
-                              SelectTag(),
-                              SelectTag(),
-                              SelectTag(),
-                              SelectTag(),
-                              SelectTag(),
-                              SelectTag(),
-                              SelectTag(),
-                              SelectTag(),
-                            ],
+                            children: quick.map((e) {
+                              return SelectTag(
+                                selected: e["board_name"] == select_section,
+                                tap: (tap_board) {
+                                  title_focus.unfocus();
+                                  tip_focus.unfocus();
+                                  setState(() {
+                                    select_section = tap_board["board_name"];
+                                    select_section_id = tap_board["board_id"];
+                                  });
+                                },
+                                quick: e,
+                              );
+                            }).toList(),
                           ),
                         )
                       ],
@@ -175,6 +314,10 @@ class _PostNewState extends State<PostNew> {
                           //左边按键区
                           children: [
                             myInkWell(
+                              tap: () {
+                                title_focus.unfocus();
+                                tip_focus.unfocus();
+                              },
                               widget: Container(
                                 padding: EdgeInsets.all(2.5),
                                 child: os_svg(
@@ -189,6 +332,10 @@ class _PostNewState extends State<PostNew> {
                             ),
                             Container(width: 15),
                             myInkWell(
+                              tap: () {
+                                title_focus.unfocus();
+                                tip_focus.unfocus();
+                              },
                               widget: Container(
                                 padding: EdgeInsets.all(2.5),
                                 child: os_svg(
@@ -203,6 +350,10 @@ class _PostNewState extends State<PostNew> {
                             ),
                             Container(width: 15),
                             myInkWell(
+                              tap: () {
+                                title_focus.unfocus();
+                                tip_focus.unfocus();
+                              },
                               widget: Container(
                                 padding: EdgeInsets.all(2.5),
                                 child: os_svg(
@@ -252,38 +403,41 @@ class _PostNewState extends State<PostNew> {
                                 ),
                               ),
                             ),
-                            Container(
-                              height: 25,
-                              padding: EdgeInsets.symmetric(horizontal: 7),
-                              margin: EdgeInsets.only(left: 5),
-                              decoration: BoxDecoration(
-                                color: os_white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(100),
-                                ),
-                                border: Border.all(
-                                  color: Color(0xFF9D9D9D),
-                                ),
-                              ),
-                              child: Center(
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "所有人可见",
-                                      style: TextStyle(
-                                        fontSize: 12,
+                            select_section != "密语"
+                                ? Container()
+                                : Container(
+                                    height: 25,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 7),
+                                    margin: EdgeInsets.only(left: 5),
+                                    decoration: BoxDecoration(
+                                      color: os_white,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(100),
+                                      ),
+                                      border: Border.all(
                                         color: Color(0xFF9D9D9D),
                                       ),
                                     ),
-                                    Icon(
-                                      Icons.keyboard_arrow_up_rounded,
-                                      size: 12,
-                                      color: Color(0xFF9D9D9D),
+                                    child: Center(
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            "所有人可见",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Color(0xFF9D9D9D),
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.keyboard_arrow_up_rounded,
+                                            size: 12,
+                                            color: Color(0xFF9D9D9D),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                                  ),
                           ],
                         ),
                       ],
@@ -300,7 +454,15 @@ class _PostNewState extends State<PostNew> {
 }
 
 class SelectTag extends StatefulWidget {
-  SelectTag({Key key}) : super(key: key);
+  Map quick;
+  Function tap;
+  bool selected;
+  SelectTag({
+    Key key,
+    @required this.quick,
+    this.selected,
+    this.tap,
+  }) : super(key: key);
 
   @override
   State<SelectTag> createState() => _SelectTagState();
@@ -309,24 +471,29 @@ class SelectTag extends StatefulWidget {
 class _SelectTagState extends State<SelectTag> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 27,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      margin: EdgeInsets.only(left: 5),
-      decoration: BoxDecoration(
-        color: Color(0xFFF6F6F6),
-        borderRadius: BorderRadius.all(
-          Radius.circular(100),
+    return GestureDetector(
+      onTap: () {
+        widget.tap(widget.quick);
+      },
+      child: Container(
+        height: 27,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        margin: EdgeInsets.only(left: 5),
+        decoration: BoxDecoration(
+          color: widget.selected ?? false ? os_color_opa : Color(0xFFF6F6F6),
+          borderRadius: BorderRadius.all(
+            Radius.circular(100),
+          ),
+          border: Border.all(
+            color: Colors.transparent,
+          ),
         ),
-        border: Border.all(
-          color: Colors.transparent,
-        ),
-      ),
-      child: Center(
-        child: Text(
-          "#水手之家",
-          style: TextStyle(
-            color: Color(0xFF9D9D9D),
+        child: Center(
+          child: Text(
+            "#" + (widget.quick["board_name"] ?? "测试Tag"),
+            style: TextStyle(
+              color: widget.selected ?? false ? os_color : Color(0xFF9D9D9D),
+            ),
           ),
         ),
       ),
@@ -358,7 +525,7 @@ class _RightTopSendState extends State<RightTopSend> {
           width: 60,
           height: 25,
           decoration: BoxDecoration(
-            color: Color(0xFF004DFF),
+            color: os_color,
             borderRadius: BorderRadius.all(Radius.circular(100)),
           ),
           child: Center(
