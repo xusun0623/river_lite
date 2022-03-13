@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -9,6 +10,7 @@ import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
+import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 
 class PostNew extends StatefulWidget {
@@ -29,9 +31,12 @@ class _PostNewState extends State<PostNew> {
   FocusNode title_focus = new FocusNode();
   TextEditingController tip_controller = new TextEditingController();
   FocusNode tip_focus = new FocusNode();
+  bool pop_section = false;
+  int pop_section_index = -1;
   List<Map> total = [
     // {"board_id": 45, "board_name": "情感专区"},
   ];
+  List img_urls = [];
   List<Map> quick = [
     {"board_id": 45, "board_name": "情感专区"},
     {"board_id": 61, "board_name": "二手专区"},
@@ -67,6 +72,18 @@ class _PostNewState extends State<PostNew> {
   @override
   void initState() {
     _getTotalColumn();
+    tip_focus.addListener(() {
+      if (tip_focus.hasFocus) {
+        pop_section = false;
+        setState(() {});
+      }
+    });
+    title_focus.addListener(() {
+      if (title_focus.hasFocus) {
+        pop_section = false;
+        setState(() {});
+      }
+    });
     super.initState();
   }
 
@@ -95,12 +112,12 @@ class _PostNewState extends State<PostNew> {
                   "infor": tip_controller.text,
                 },
               ];
-              // for (var i = 0; i < uploadImgUrls.length; i++) {
-              //   contents.add({
-              //     "type": 1, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
-              //     "infor": uploadImgUrls[i],
-              //   });
-              // }
+              for (var i = 0; i < img_urls.length; i++) {
+                contents.add({
+                  "type": 1, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
+                  "infor": img_urls[i]["urlName"],
+                });
+              }
               Map json = {
                 "body": {
                   "json": {
@@ -122,6 +139,8 @@ class _PostNewState extends State<PostNew> {
                 type: XSToast.loading,
                 txt: "发表中…",
               );
+              print("${json}");
+              return;
               await Api().forum_topicadmin(
                 {
                   "act": "new",
@@ -186,10 +205,14 @@ class _PostNewState extends State<PostNew> {
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       cursorColor: os_color,
+                      style: TextStyle(
+                        height: 1.8,
+                      ),
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(bottom: 200, top: 10),
                         border: InputBorder.none,
                         hintStyle: TextStyle(
+                          height: 1.8,
                           color: Color(0xFFA3A3A3),
                         ),
                         hintText: "说点什么吧…",
@@ -200,7 +223,26 @@ class _PostNewState extends State<PostNew> {
               ),
             ),
             Positioned(
+              child: pop_section
+                  ? Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 250,
+                      color: os_white,
+                      child: [
+                        YourEmoji(tap: (emoji) {
+                          tip_controller.text += emoji;
+                        }),
+                        AtSomeone(tap: (uid, name) {
+                          tip_controller.text =
+                              tip_controller.text + " @${name} ";
+                        }),
+                      ][pop_section_index],
+                    )
+                  : Container(),
               bottom: 0,
+            ),
+            Positioned(
+              bottom: pop_section ? 250 : 0,
               child: Container(
                 decoration: BoxDecoration(
                   color: os_white,
@@ -317,6 +359,13 @@ class _PostNewState extends State<PostNew> {
                               tap: () {
                                 title_focus.unfocus();
                                 tip_focus.unfocus();
+                                if (pop_section_index == 0 && pop_section) {
+                                  pop_section = false;
+                                } else {
+                                  pop_section = true;
+                                }
+                                pop_section_index = 0;
+                                setState(() {});
                               },
                               widget: Container(
                                 padding: EdgeInsets.all(2.5),
@@ -335,6 +384,13 @@ class _PostNewState extends State<PostNew> {
                               tap: () {
                                 title_focus.unfocus();
                                 tip_focus.unfocus();
+                                if (pop_section_index == 1 && pop_section) {
+                                  pop_section = false;
+                                } else {
+                                  pop_section = true;
+                                }
+                                pop_section_index = 1;
+                                setState(() {});
                               },
                               widget: Container(
                                 padding: EdgeInsets.all(2.5),
@@ -350,17 +406,54 @@ class _PostNewState extends State<PostNew> {
                             ),
                             Container(width: 15),
                             myInkWell(
-                              tap: () {
+                              tap: () async {
                                 title_focus.unfocus();
                                 tip_focus.unfocus();
+                                final ImagePicker _picker = ImagePicker();
+                                //选好了图片
+                                var image = await _picker.pickMultiImage(
+                                      imageQuality: 50,
+                                    ) ??
+                                    [];
+                                img_urls = await Api().uploadImage(image) ?? [];
+                                print("${img_urls}");
+                                setState(() {});
                               },
-                              widget: Container(
-                                padding: EdgeInsets.all(2.5),
-                                child: os_svg(
-                                  path: "lib/img/topic_line_image.svg",
-                                  width: 20,
-                                  height: 20,
-                                ),
+                              widget: Stack(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(2.5),
+                                    child: os_svg(
+                                      path: "lib/img/topic_line_image.svg",
+                                      width: 20,
+                                      height: 20,
+                                    ),
+                                  ),
+                                  img_urls.length == 0
+                                      ? Container()
+                                      : Positioned(
+                                          right: 0,
+                                          top: 0,
+                                          child: Container(
+                                            width: 14,
+                                            height: 14,
+                                            decoration: BoxDecoration(
+                                              color: os_color,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                img_urls.length.toString(),
+                                                style: TextStyle(
+                                                  color: os_white,
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                ],
                               ),
                               radius: 10,
                               width: 30,
@@ -445,7 +538,7 @@ class _PostNewState extends State<PostNew> {
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
