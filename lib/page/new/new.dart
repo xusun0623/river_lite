@@ -33,6 +33,8 @@ class _PostNewState extends State<PostNew> {
   FocusNode tip_focus = new FocusNode();
   bool pop_section = false;
   int pop_section_index = -1;
+  bool show_vote = false;
+  ScrollController listview_controller = new ScrollController();
   List<Map> total = [
     // {"board_id": 45, "board_name": "情感专区"},
   ];
@@ -166,6 +168,7 @@ class _PostNewState extends State<PostNew> {
           children: [
             Positioned(
               child: ListView(
+                controller: listview_controller,
                 children: [
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 20),
@@ -219,7 +222,25 @@ class _PostNewState extends State<PostNew> {
                       ),
                     ),
                   ),
-                  VoteMachine(),
+                  show_vote
+                      ? VoteMachine(
+                          focus: () async {
+                            await Future.delayed(Duration(milliseconds: 600));
+                            listview_controller.animateTo(
+                                listview_controller.position.maxScrollExtent +
+                                    50,
+                                duration: Duration(milliseconds: 200),
+                                curve: Curves.ease);
+                          },
+                          tap: () {
+                            listview_controller.animateTo(
+                                listview_controller.position.maxScrollExtent +
+                                    50,
+                                duration: Duration(milliseconds: 200),
+                                curve: Curves.ease);
+                          },
+                        )
+                      : Container(),
                 ],
               ),
             ),
@@ -481,21 +502,38 @@ class _PostNewState extends State<PostNew> {
                                   ),
                                 ),
                                 child: Center(
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.add,
-                                        size: 12,
-                                        color: Color(0xFF9D9D9D),
-                                      ),
-                                      Text(
-                                        "插入投票",
-                                        style: TextStyle(
-                                          fontSize: 12,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        show_vote = !show_vote;
+                                      });
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          show_vote
+                                              ? Icons.no_sim_outlined
+                                              : Icons.add,
+                                          size: 12,
                                           color: Color(0xFF9D9D9D),
                                         ),
-                                      ),
-                                    ],
+                                        show_vote
+                                            ? Text(
+                                                "删除投票",
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(0xFF9D9D9D),
+                                                ),
+                                              )
+                                            : Text(
+                                                "插入投票",
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(0xFF9D9D9D),
+                                                ),
+                                              ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -552,9 +590,13 @@ class _PostNewState extends State<PostNew> {
 
 class VoteMachine extends StatefulWidget {
   Function confirm; //返回投票选项的List<String>数组即可
+  Function tap;
+  Function focus;
   VoteMachine({
     Key key,
     this.confirm,
+    this.tap,
+    this.focus,
   }) : super(key: key);
 
   @override
@@ -591,20 +633,24 @@ class _VoteMachineState extends State<VoteMachine> {
                 children: [
                   os_svg(path: "lib/img/vote.svg", width: 22, height: 22),
                   Container(width: 2),
-                  Text("投票", style: TextStyle(fontSize: 16)),
+                  Text("投票", style: TextStyle(fontSize: 15)),
                 ],
               ),
               GestureDetector(
                 onTap: () {
+                  if (widget.tap != null) widget.tap();
                   options.add({
                     "index": options.length - 1,
                     "txt": "",
                   });
+                  for (var i = 0; i < options.length; i++) {
+                    options[i]["index"] = i;
+                  }
                   setState(() {});
                 },
                 child: Text(
                   "+新增选项",
-                  style: TextStyle(fontSize: 16, color: Color(0xFFB9B9B9)),
+                  style: TextStyle(fontSize: 15, color: Color(0xFFB9B9B9)),
                 ),
               ),
             ],
@@ -625,6 +671,9 @@ class _VoteMachineState extends State<VoteMachine> {
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       height: 45,
                       child: TextField(
+                        onTap: () {
+                          widget.focus();
+                        },
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "请输入选项",
@@ -640,7 +689,11 @@ class _VoteMachineState extends State<VoteMachine> {
                         setState(() {});
                       },
                       child: Text("删除",
-                          style: TextStyle(color: os_color, fontSize: 16)),
+                          style: TextStyle(
+                            color: os_color,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
                   ],
                 ),
