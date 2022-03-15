@@ -1532,7 +1532,9 @@ class _CommentState extends State<Comment> {
                                   widget.data["userTitle"].length == 0
                               ? Container()
                               : Tag(
-                                  txt: widget.data["userTitle"],
+                                  txt: widget.data["poststick"] == 1
+                                      ? "置顶"
+                                      : "" + widget.data["userTitle"],
                                   color: widget.data["userTitle"]
                                               .toString()
                                               .length <

@@ -122,6 +122,13 @@ class _PostNewState extends State<PostNew> {
                   "infor": img_urls[i]["urlName"],
                 });
               }
+              Map poll = {
+                "expiration": 3,
+                "options": vote_options,
+                "maxChoices": 1,
+                "visibleAfterVote": false,
+                "showVoters": false,
+              };
               Map json = {
                 "body": {
                   "json": {
@@ -135,6 +142,7 @@ class _PostNewState extends State<PostNew> {
                     // "aid": "1,2,3", // 附件 ID，逗号隔开
                     "title": title_controller.text,
                     "content": jsonEncode(contents),
+                    "poll": show_vote ? poll : "",
                   }
                 }
               };
@@ -144,7 +152,6 @@ class _PostNewState extends State<PostNew> {
                 txt: "发表中…",
               );
               print("${json}");
-              return;
               await Api().forum_topicadmin(
                 {
                   "act": "new",
@@ -170,6 +177,7 @@ class _PostNewState extends State<PostNew> {
           children: [
             Positioned(
               child: ListView(
+                physics: BouncingScrollPhysics(),
                 controller: listview_controller,
                 children: [
                   Container(
@@ -355,6 +363,7 @@ class _PostNewState extends State<PostNew> {
                               70,
                           height: 30,
                           child: ListView(
+                            physics: BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             children: quick.map((e) {
                               return SelectTag(
@@ -438,17 +447,24 @@ class _PostNewState extends State<PostNew> {
                             Container(width: 15),
                             myInkWell(
                               tap: () async {
-                                title_focus.unfocus();
-                                tip_focus.unfocus();
-                                final ImagePicker _picker = ImagePicker();
-                                //选好了图片
-                                var image = await _picker.pickMultiImage(
-                                      imageQuality: 50,
-                                    ) ??
-                                    [];
-                                img_urls = await Api().uploadImage(image) ?? [];
-                                print("${img_urls}");
-                                setState(() {});
+                                showModal(
+                                    context: context,
+                                    title: "请注意",
+                                    cont: "你即将跳转到系统图片选择页面，请从【系统相册】多项选择文件",
+                                    confirm: () async {
+                                      title_focus.unfocus();
+                                      tip_focus.unfocus();
+                                      final ImagePicker _picker = ImagePicker();
+                                      //选好了图片
+                                      var image = await _picker.pickMultiImage(
+                                            imageQuality: 50,
+                                          ) ??
+                                          [];
+                                      img_urls =
+                                          await Api().uploadImage(image) ?? [];
+                                      print("${img_urls}");
+                                      setState(() {});
+                                    });
                               },
                               widget: Stack(
                                 children: [
@@ -515,6 +531,7 @@ class _PostNewState extends State<PostNew> {
                                 child: Center(
                                   child: GestureDetector(
                                     onTap: () {
+                                      pop_section = false;
                                       if (show_vote) {
                                         showModal(
                                           context: context,
@@ -631,6 +648,38 @@ class _PostNewState extends State<PostNew> {
                                               Icons.keyboard_arrow_up_rounded,
                                               size: 12,
                                               color: Color(0xFF9D9D9D),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                            !tip_focus.hasFocus
+                                ? Container()
+                                : GestureDetector(
+                                    onTap: () {
+                                      tip_focus.unfocus();
+                                    },
+                                    child: Container(
+                                      height: 25,
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 12),
+                                      margin: EdgeInsets.only(left: 5),
+                                      decoration: BoxDecoration(
+                                        color: os_color,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(100),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "完成",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: os_white,
+                                              ),
                                             ),
                                           ],
                                         ),
