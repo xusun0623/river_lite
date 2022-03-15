@@ -112,7 +112,7 @@ void showModal({
           children: [
             myInkWell(
               widget: Container(
-                width: 140,
+                width: 130,
                 height: 50,
                 child: Center(
                   child: Text(
@@ -126,13 +126,13 @@ void showModal({
               radius: 10,
               tap: () {
                 Navigator.pop(context);
-                cancel();
+                if (cancel != null) cancel();
               },
             ),
             myInkWell(
               color: os_color_opa,
               widget: Container(
-                width: 140,
+                width: 130,
                 height: 50,
                 child: Center(
                   child: Text(
@@ -147,7 +147,7 @@ void showModal({
               radius: 10,
               tap: () {
                 Navigator.pop(context);
-                confirm();
+                if (confirm != null) confirm();
               },
             ),
           ],

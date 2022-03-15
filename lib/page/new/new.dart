@@ -34,7 +34,9 @@ class _PostNewState extends State<PostNew> {
   bool pop_section = false;
   int pop_section_index = -1;
   bool show_vote = false;
+  List<String> vote_options = [];
   ScrollController listview_controller = new ScrollController();
+  int secret_see = 0;
   List<Map> total = [
     // {"board_id": 45, "board_name": "情感专区"},
   ];
@@ -224,13 +226,20 @@ class _PostNewState extends State<PostNew> {
                   ),
                   show_vote
                       ? VoteMachine(
+                          editVote: (options) {
+                            List<String> tmp = [];
+                            for (var item in options) {
+                              tmp.add(item["txt"]);
+                            }
+                            vote_options = tmp;
+                          },
                           focus: () async {
-                            await Future.delayed(Duration(milliseconds: 600));
+                            await Future.delayed(Duration(milliseconds: 800));
                             listview_controller.animateTo(
-                                listview_controller.position.maxScrollExtent +
-                                    50,
-                                duration: Duration(milliseconds: 200),
-                                curve: Curves.ease);
+                              listview_controller.position.maxScrollExtent,
+                              duration: Duration(milliseconds: 200),
+                              curve: Curves.ease,
+                            );
                           },
                           tap: () {
                             listview_controller.animateTo(
@@ -498,15 +507,30 @@ class _PostNewState extends State<PostNew> {
                                     Radius.circular(100),
                                   ),
                                   border: Border.all(
-                                    color: Color(0xFF9D9D9D),
+                                    color: show_vote
+                                        ? Colors.red
+                                        : Color(0xFF9D9D9D),
                                   ),
                                 ),
                                 child: Center(
                                   child: GestureDetector(
                                     onTap: () {
-                                      setState(() {
-                                        show_vote = !show_vote;
-                                      });
+                                      if (show_vote) {
+                                        showModal(
+                                          context: context,
+                                          title: "请确认",
+                                          cont: "是否要删除此投票，请谨慎操作",
+                                          confirm: () {
+                                            setState(() {
+                                              show_vote = false;
+                                            });
+                                          },
+                                        );
+                                      } else {
+                                        setState(() {
+                                          show_vote = true;
+                                        });
+                                      }
                                     },
                                     child: Row(
                                       children: [
@@ -515,14 +539,16 @@ class _PostNewState extends State<PostNew> {
                                               ? Icons.no_sim_outlined
                                               : Icons.add,
                                           size: 12,
-                                          color: Color(0xFF9D9D9D),
+                                          color: show_vote
+                                              ? Colors.red
+                                              : Color(0xFF9D9D9D),
                                         ),
                                         show_vote
                                             ? Text(
                                                 "删除投票",
                                                 style: TextStyle(
                                                   fontSize: 12,
-                                                  color: Color(0xFF9D9D9D),
+                                                  color: Colors.red,
                                                 ),
                                               )
                                             : Text(
@@ -540,36 +566,74 @@ class _PostNewState extends State<PostNew> {
                             ),
                             select_section != "密语"
                                 ? Container()
-                                : Container(
-                                    height: 25,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 7),
-                                    margin: EdgeInsets.only(left: 5),
-                                    decoration: BoxDecoration(
-                                      color: os_white,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(100),
-                                      ),
-                                      border: Border.all(
-                                        color: Color(0xFF9D9D9D),
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            "所有人可见",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Color(0xFF9D9D9D),
-                                            ),
+                                : GestureDetector(
+                                    onTap: () {
+                                      showActionSheet(
+                                        context: context,
+                                        topActionItem: TopActionItem(
+                                          title: "评论有哪些人可以👀",
+                                          titleTextStyle: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
                                           ),
-                                          Icon(
-                                            Icons.keyboard_arrow_up_rounded,
-                                            size: 12,
-                                            color: Color(0xFF9D9D9D),
+                                        ),
+                                        actions: [
+                                          ActionItem(
+                                            title: "评论所有人可见",
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              setState(() {
+                                                secret_see = 0;
+                                              });
+                                            },
+                                          ),
+                                          ActionItem(
+                                            title: "评论仅作者可见",
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              setState(() {
+                                                secret_see = 1;
+                                              });
+                                            },
                                           ),
                                         ],
+                                        bottomActionItem:
+                                            BottomActionItem(title: "取消"),
+                                      );
+                                    },
+                                    child: Container(
+                                      height: 25,
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 7),
+                                      margin: EdgeInsets.only(left: 5),
+                                      decoration: BoxDecoration(
+                                        color: os_white,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(100),
+                                        ),
+                                        border: Border.all(
+                                          color: Color(0xFF9D9D9D),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              secret_see == 0
+                                                  ? "所有人可见"
+                                                  : "仅作者可见",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFF9D9D9D),
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.keyboard_arrow_up_rounded,
+                                              size: 12,
+                                              color: Color(0xFF9D9D9D),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -592,11 +656,13 @@ class VoteMachine extends StatefulWidget {
   Function confirm; //返回投票选项的List<String>数组即可
   Function tap;
   Function focus;
+  Function editVote;
   VoteMachine({
     Key key,
     this.confirm,
     this.tap,
     this.focus,
+    this.editVote,
   }) : super(key: key);
 
   @override
@@ -605,14 +671,8 @@ class VoteMachine extends StatefulWidget {
 
 class _VoteMachineState extends State<VoteMachine> {
   List<Map> options = [
-    {
-      "index": 0,
-      "txt": "",
-    },
-    {
-      "index": 1,
-      "txt": "",
-    },
+    {"index": 0, "txt": ""},
+    {"index": 1, "txt": ""},
   ];
   @override
   Widget build(BuildContext context) {
@@ -674,27 +734,36 @@ class _VoteMachineState extends State<VoteMachine> {
                         onTap: () {
                           widget.focus();
                         },
+                        onChanged: (value) {
+                          options[e["index"]]["txt"] = value;
+                          print("${options}");
+                          widget.editVote(options);
+                        },
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "请输入选项",
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        options.removeAt(e["index"]);
-                        for (var i = 0; i < options.length; i++) {
-                          options[i]["index"] = i;
-                        }
-                        setState(() {});
-                      },
-                      child: Text("删除",
-                          style: TextStyle(
-                            color: os_color,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    ),
+                    e["index"] != options.length - 1
+                        ? Container()
+                        : GestureDetector(
+                            onTap: () {
+                              options.removeAt(e["index"]);
+                              for (var i = 0; i < options.length; i++) {
+                                options[i]["index"] = i;
+                              }
+                              setState(() {});
+                            },
+                            child: Text(
+                              "删除",
+                              style: TextStyle(
+                                color: os_color,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               );
