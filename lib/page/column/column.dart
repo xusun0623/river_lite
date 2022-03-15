@@ -72,7 +72,7 @@ class _TopicColumnState extends State<TopicColumn> {
               ["classificationType_id"],
       "sortby": "new",
     });
-    await Future.delayed(Duration(milliseconds: 200));
+    // await Future.delayed(Duration(milliseconds: 200));
     var list = data["classificationType_list"];
     theme = ["全部分栏"];
     if (list != null && list.length != 0) {

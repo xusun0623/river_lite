@@ -15,7 +15,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final homePages = [
     MyHome(),
-    Square(),
     Page404(),
     Me(),
   ];
@@ -25,12 +24,6 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.blue,
       icon: Icon(Icons.home_outlined),
       label: "首页",
-      tooltip: "",
-    ),
-    BottomNavigationBarItem(
-      backgroundColor: Colors.blue,
-      icon: Icon(Icons.sort),
-      label: "广场",
       tooltip: "",
     ),
     BottomNavigationBarItem(

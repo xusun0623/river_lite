@@ -24,7 +24,11 @@ class _HomeBtnState extends State<HomeBtn> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Btn(txt: "专栏", img: "lib/img/home/1.svg", url: ""),
+          Btn(
+            txt: "专栏",
+            img: "lib/img/home/1.svg",
+            url: "/square",
+          ),
           Btn(
             txt: "淘二手",
             img: "lib/img/home/2.svg",
@@ -76,7 +80,7 @@ class _BtnState extends State<Btn> {
         padding: EdgeInsets.only(top: 20, bottom: 15),
         child: Column(
           children: [
-            os_svg(path: widget.img, width: 35, height: 35),
+            os_svg(path: widget.img, width: 30, height: 30),
             Container(height: 7.5),
             Text(
               widget.txt,

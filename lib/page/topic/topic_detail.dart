@@ -744,7 +744,7 @@ class _YourEmojiState extends State<YourEmoji> {
           Container(
             padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
             child: Text(
-              "畔畔小表情",
+              "阿鲁",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
@@ -757,7 +757,7 @@ class _YourEmojiState extends State<YourEmoji> {
           Container(
             padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Text(
-              "畔畔小动图",
+              "兔斯基",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
@@ -770,7 +770,7 @@ class _YourEmojiState extends State<YourEmoji> {
           Container(
             padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Text(
-              "常用Emoji表情⬇️",
+              "Emoji",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),

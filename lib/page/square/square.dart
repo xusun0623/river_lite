@@ -28,7 +28,7 @@ class _SquareState extends State<Square> {
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
-    tmp.add(_getInput());
+    // tmp.add(_getInput());
     // tmp.add(Container(height: 15));
     if (data != null && data.length != 0) {
       for (var i = 0; i < data.length; i++) {
@@ -64,10 +64,17 @@ class _SquareState extends State<Square> {
     return Scaffold(
       backgroundColor: os_back,
       appBar: AppBar(
-        toolbarHeight: 0,
+        // toolbarHeight: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: os_back,
         foregroundColor: os_black,
+        title: Text("全部板块"),
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left_rounded),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         elevation: 0,
       ),
       body: ListView(
@@ -86,7 +93,7 @@ class _SquareState extends State<Square> {
   Widget _getInput() {
     return Container(
       width: MediaQuery.of(context).size.width - 30,
-      margin: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
+      margin: EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 10),
       height: 50,
       decoration: BoxDecoration(
         color: os_white,
@@ -193,11 +200,11 @@ class _SquareCardState extends State<SquareCard> {
                 padding: EdgeInsets.all(5),
                 child: os_svg(
                   path: "lib/img/square/${widget.index + 1}.svg",
-                  width: 30,
-                  height: 30,
+                  width: 22,
+                  height: 22,
                 ),
               ),
-              Container(width: 5),
+              Container(width: 3),
               Text(
                 widget.data["board_category_name"],
                 style: TextStyle(
