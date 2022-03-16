@@ -181,24 +181,30 @@ class _PostNewState extends State<PostNew> {
                 controller: listview_controller,
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: os_white,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
                     child: TextField(
                       controller: title_controller,
                       focusNode: title_focus,
                       style: TextStyle(fontSize: 17),
                       cursorColor: os_color,
                       decoration: InputDecoration(
-                        focusedBorder: UnderlineInputBorder(
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
                           borderSide: BorderSide(
-                            width: 1,
+                            width: 2,
                             color: os_color,
                             style: BorderStyle.solid,
                           ),
                         ),
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
                           borderSide: BorderSide(
-                            width: 1,
-                            color: Color(0xFFE0E0E0),
+                            width: 2,
+                            color: os_white,
                             style: BorderStyle.solid,
                           ),
                         ),
