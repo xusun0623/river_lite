@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
@@ -22,19 +23,22 @@ class _HomeState extends State<Home> {
   final List<BottomNavigationBarItem> bottomNavItems = [
     BottomNavigationBarItem(
       backgroundColor: Colors.blue,
-      icon: Icon(Icons.home_outlined),
+      icon: Icon(Icons.explore_outlined),
       label: "首页",
       tooltip: "",
     ),
     BottomNavigationBarItem(
       backgroundColor: Colors.blue,
-      icon: Icon(Icons.notifications_active_outlined),
+      icon: Badge(
+        position: BadgePosition.topEnd(top: 0, end: 0),
+        child: Icon(Icons.messenger_outline_rounded),
+      ),
       label: "消息",
       tooltip: "",
     ),
     BottomNavigationBarItem(
       backgroundColor: Colors.red,
-      icon: Icon(Icons.person_outline),
+      icon: Icon(Icons.circle_outlined),
       label: "我",
       tooltip: "",
     ),
