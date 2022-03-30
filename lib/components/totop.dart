@@ -70,7 +70,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
             ? Container()
             : Positioned(
                 right: 20,
-                bottom: (widget.bottom ?? 20) + (_right + 200) / 3.5,
+                bottom: (widget.bottom ?? 25) + (_right + 200) / 3.5,
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(100)),
@@ -88,8 +88,8 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                     },
                     color: os_color,
                     widget: Container(
-                      width: 50,
-                      height: 50,
+                      width: 55,
+                      height: 55,
                       child: Center(
                         child: Icon(
                           Icons.add_rounded,
@@ -128,9 +128,9 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                 },
                 color: Color(0xFFFFFFFF),
                 widget: Container(
-                  width: 50,
-                  height: 50,
-                  padding: EdgeInsets.all(17.5),
+                  width: 55,
+                  height: 55,
+                  padding: EdgeInsets.all(20),
                   child: os_svg(
                     path: "lib/img/to_top.svg",
                   ),

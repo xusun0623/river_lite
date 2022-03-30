@@ -10,9 +10,21 @@ import 'package:http/http.dart' as http;
 /// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 
 class Api {
+  message_pmsessionlist(Map m) async {
+    Map tmp = {
+      "r": "message/pmsessionlist",
+    };
+    tmp.addAll(m);
+    return await XHttp().postWithGlobalToken(
+      url: "",
+      param: tmp,
+    );
+  }
+
   message_heart(Map m) async {
     Map tmp = {
       "r": "message/heart",
+      "sdkVersion": "2.4.2",
     };
     tmp.addAll(m);
     return await XHttp().postWithGlobalToken(

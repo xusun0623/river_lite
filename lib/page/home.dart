@@ -5,6 +5,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/page/404.dart';
 import 'package:offer_show/page/me.dart';
+import 'package:offer_show/page/msg/msg.dart';
 import 'package:offer_show/page/myhome.dart';
 import 'package:offer_show/page/square/square.dart';
 import 'package:offer_show/util/interface.dart';
@@ -17,12 +18,15 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool _isNewMsg = false;
-  final homePages = [
-    MyHome(),
-    Page404(),
-    Me(),
-  ];
   var _tabBarIndex = 0;
+
+  List<Widget> homePages() {
+    return [
+      MyHome(),
+      Msg(),
+      Me(),
+    ];
+  }
 
   List<BottomNavigationBarItem> _buildNavItem() {
     return [
@@ -54,15 +58,17 @@ class _HomeState extends State<Home> {
   _getNewMsg() async {
     var data = await Api().message_heart({});
     var count = 0;
-    print(data["body"]);
-    count += data["body"]["replyInfo"]["count"];
-    count += data["body"]["atMeInfo"]["count"];
-    count += data["body"]["friendInfo"]["count"];
-    count += data["body"]["pmInfos"].length;
-    print("${count}");
-    if (count != 0) {
-      _isNewMsg = true;
-      setState(() {});
+    if (data != null && data["body"] != null) {
+      print("${data}");
+      count += data["body"]["replyInfo"]["count"];
+      count += data["body"]["atMeInfo"]["count"];
+      count += data["body"]["systemInfo"]["count"];
+      count += data["body"]["pmInfos"].length;
+      data = data["body"];
+      if (count != 0) {
+        _isNewMsg = true;
+        setState(() {});
+      }
     }
   }
 
@@ -80,7 +86,7 @@ class _HomeState extends State<Home> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     return Scaffold(
       body: IndexedStack(
-        children: homePages,
+        children: homePages(),
         index: _tabBarIndex,
       ),
       bottomNavigationBar: Theme(
@@ -100,9 +106,7 @@ class _HomeState extends State<Home> {
           backgroundColor: os_white,
           type: BottomNavigationBarType.fixed,
           onTap: (index) {
-            if (index == 1) {
-              _isNewMsg = false;
-            }
+            _getNewMsg(); //获得新消息提醒
             setState(() {
               _tabBarIndex = index;
             });

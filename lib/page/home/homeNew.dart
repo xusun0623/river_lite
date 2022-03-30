@@ -124,7 +124,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     ));
     return BackToTop(
       show: showBackToTop,
-      animation: false,
+      animation: true,
       attachBtn: true,
       tap: () {
         Navigator.pushNamed(context, "/new", arguments: {});

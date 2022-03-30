@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
 
@@ -14,8 +15,8 @@ class _HomeBtnCollectState extends State<HomeBtnCollect> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width - 30,
-      margin: EdgeInsets.only(left: 15, right: 15, top: 10),
+      width: MediaQuery.of(context).size.width - os_edge * 2,
+      margin: EdgeInsets.only(left: os_edge, right: os_edge, top: 10),
       padding: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         color: os_white,
@@ -101,7 +102,7 @@ class _BtnState extends State<Btn> {
       },
       widget: Container(
         padding: EdgeInsets.symmetric(vertical: 15),
-        width: (MediaQuery.of(context).size.width - 30 - 20) / 3,
+        width: (MediaQuery.of(context).size.width - os_edge * 2 - 20) / 3,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

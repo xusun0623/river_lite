@@ -7,7 +7,7 @@ class ServerConfig {
   String url = "https://bbs.uestc.edu.cn/mobcent/app/web/index.php";
 }
 
-bool isLog = false;
+bool isLog = true;
 
 class XHttp {
   netWorkRequest({
@@ -50,8 +50,8 @@ class XHttp {
     //   return new Map();
     // }
     param.addAll({
-      "accessToken": "e9f49ac6acace2b9f6582800f32ff",
-      "accessSecret": "8aef222107fcd2cedcc5f60b4edd1",
+      "accessToken": "cb9c6e29e87b7963721083e5d2bf2",
+      "accessSecret": "bb1d53d63486c01b120e1585e044c",
     });
     return await netWorkRequest(
       url: url,

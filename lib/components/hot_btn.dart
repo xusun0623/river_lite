@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
 
@@ -18,9 +19,9 @@ class _HomeBtnState extends State<HomeBtn> {
         color: os_white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      margin: EdgeInsets.only(left: 15, right: 15),
+      margin: EdgeInsets.only(left: os_edge, right: os_edge),
       padding: EdgeInsets.symmetric(horizontal: 5),
-      width: MediaQuery.of(context).size.width - 30,
+      width: MediaQuery.of(context).size.width - os_edge * 2,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -76,7 +77,7 @@ class _BtnState extends State<Btn> {
         }
       },
       widget: Container(
-        width: (MediaQuery.of(context).size.width - 40) / 5,
+        width: (MediaQuery.of(context).size.width - os_edge * 2 - 10) / 5,
         padding: EdgeInsets.only(top: 20, bottom: 15),
         child: Column(
           children: [
