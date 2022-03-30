@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
@@ -8,6 +7,8 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/emoji/emoji.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../outer/cached_network_image/cached_image_widget.dart';
 
 class DetailCont extends StatefulWidget {
   var data;

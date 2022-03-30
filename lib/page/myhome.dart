@@ -1,6 +1,4 @@
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -8,15 +6,16 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/home/homeHot.dart';
 import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/home/homeNewReply.dart';
-import 'package:offer_show/util/interface.dart';
+
+import '../outer/card_swiper/swiper.dart';
+import '../outer/card_swiper/swiper_controller.dart';
 
 class MyHome extends StatefulWidget {
   @override
   _MyHomeState createState() => _MyHomeState();
 }
 
-class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
-  final List<String> _tabValues = ["新回复", "热帖"];
+class _MyHomeState extends State<MyHome> {
   SwiperController _controller = new SwiperController();
   var index = 0;
   List<Widget> _list = <Widget>[
@@ -24,18 +23,6 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
     HomeNewReply(),
     HomeHot(),
   ];
-
-  _request() async {
-    Api().forum_search({"keyword": ""});
-    await Future.delayed(Duration(milliseconds: 100));
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    _request();
-    super.initState();
-  }
 
   List<Widget> _buildTabTip() {
     List<String> tabs = ["新发布", "新回复", "热门"];

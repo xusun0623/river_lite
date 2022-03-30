@@ -6,7 +6,8 @@ import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+
+import '../outer/cached_network_image/cached_image_widget.dart';
 
 class Topic extends StatefulWidget {
   Map data;

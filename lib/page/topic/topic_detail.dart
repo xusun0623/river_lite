@@ -1,10 +1,6 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:convert';
-import 'dart:typed_data';
-import 'package:characters/characters.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -22,6 +18,8 @@ import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+
+import '../../outer/cached_network_image/cached_image_widget.dart';
 
 class TopicDetail extends StatefulWidget {
   int topicID;

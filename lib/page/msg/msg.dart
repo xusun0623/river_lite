@@ -1,7 +1,6 @@
 import 'dart:ffi';
 
 import 'package:badges/badges.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -15,6 +14,8 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+
+import '../../outer/cached_network_image/cached_image_widget.dart';
 
 class Msg extends StatefulWidget {
   Msg({
@@ -155,26 +156,28 @@ class _MsgState extends State<Msg> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 7),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ColorBtn(
-                        path: "lib/img/msg/@.svg",
-                        title: "@我",
-                        data: msg["atMeInfo"],
-                      ),
-                      ColorBtn(
-                        path: "lib/img/msg/reply.svg",
-                        title: "回复",
-                        data: msg["replyInfo"],
-                      ),
-                      ColorBtn(
-                        path: "lib/img/msg/noti.svg",
-                        title: "通知",
-                        data: msg["systemInfo"],
-                      ),
-                    ],
-                  ),
+                  child: msg == null
+                      ? Container()
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ColorBtn(
+                              path: "lib/img/msg/@.svg",
+                              title: "@我",
+                              data: msg["atMeInfo"],
+                            ),
+                            ColorBtn(
+                              path: "lib/img/msg/reply.svg",
+                              title: "回复",
+                              data: msg["replyInfo"],
+                            ),
+                            ColorBtn(
+                              path: "lib/img/msg/noti.svg",
+                              title: "通知",
+                              data: msg["systemInfo"],
+                            ),
+                          ],
+                        ),
                 ),
                 pmMsgArr.length == 0
                     ? Container()

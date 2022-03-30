@@ -20,15 +20,16 @@ dependencies:
   photo_view: ^0.10.2
   provider: 
   shared_preferences: ^2.0.5
-  flutter_easyloading: ^3.0.0
   fluttertoast: ^8.0.6
   flutter_svg: ^0.21.0+1
   dio: ^4.0.0
-  cached_network_image: ^3.2.0
   url_launcher: ^6.0.20
-  card_swiper: ^2.0.1
   heic_to_jpg: ^0.2.0
   image_gallery_saver: ^1.7.1
+  octo_image: ^1.0.1
+  flutter_cache_manager: ^3.3.0
+  cached_network_image_platform_interface: ^1.0.0
+  cached_network_image_web: ^1.0.0
 
 
 dev_dependencies:

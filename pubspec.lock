@@ -22,34 +22,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0"
-  cached_network_image:
-    dependency: "direct main"
-    description:
-      name: cached_network_image
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.2.0"
   cached_network_image_platform_interface:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: cached_network_image_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
   cached_network_image_web:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: cached_network_image_web
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.1"
-  card_swiper:
-    dependency: "direct main"
-    description:
-      name: card_swiper
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.1"
   characters:
     dependency: "direct main"
     description:
@@ -140,19 +126,12 @@ packages:
     source: hosted
     version: "0.6.4"
   flutter_cache_manager:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_cache_manager
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.3.0"
-  flutter_easyloading:
-    dependency: "direct main"
-    description:
-      name: flutter_easyloading
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.0.3"
   flutter_picker:
     dependency: "direct main"
     description:
@@ -167,13 +146,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.5"
-  flutter_spinkit:
-    dependency: transitive
-    description:
-      name: flutter_spinkit
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "5.1.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -290,7 +262,7 @@ packages:
     source: hosted
     version: "1.0.0"
   octo_image:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: octo_image
       url: "https://pub.flutter-io.cn"
@@ -503,7 +475,7 @@ packages:
       name: sqflite_common
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.1"
   stack_trace:
     dependency: transitive
     description:
@@ -531,7 +503,7 @@ packages:
       name: synchronized
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.0+2"
   term_glyph:
     dependency: transitive
     description:
@@ -659,5 +631,5 @@ packages:
     source: hosted
     version: "5.3.1"
 sdks:
-  dart: ">=2.16.0-100.0.dev <3.0.0"
+  dart: ">=2.16.0 <3.0.0"
   flutter: ">=2.10.0"

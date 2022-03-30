@@ -180,63 +180,13 @@ class _PostNewState extends State<PostNew> {
                 physics: BouncingScrollPhysics(),
                 controller: listview_controller,
                 children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: os_white,
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    child: TextField(
-                      controller: title_controller,
-                      focusNode: title_focus,
-                      style: TextStyle(fontSize: 17),
-                      cursorColor: os_color,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          borderSide: BorderSide(
-                            width: 2,
-                            color: os_color,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          borderSide: BorderSide(
-                            width: 2,
-                            color: os_white,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                        hintStyle: TextStyle(
-                          fontSize: 17,
-                          color: Color(0xFFA3A3A3),
-                        ),
-                        hintText: "请输入帖子的标题",
-                      ),
-                    ),
+                  TitleInput(
+                    title_controller: title_controller,
+                    title_focus: title_focus,
                   ),
-                  Container(
-                    padding: EdgeInsets.only(left: 20, right: 20, top: 0),
-                    child: TextField(
-                      controller: tip_controller,
-                      focusNode: tip_focus,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      cursorColor: os_color,
-                      style: TextStyle(
-                        height: 1.8,
-                      ),
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(bottom: 200, top: 10),
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                          height: 1.8,
-                          color: Color(0xFFA3A3A3),
-                        ),
-                        hintText: "说点什么吧…",
-                      ),
-                    ),
+                  ContInput(
+                    tip_controller: tip_controller,
+                    tip_focus: tip_focus,
                   ),
                   show_vote
                       ? VoteMachine(
@@ -701,6 +651,94 @@ class _PostNewState extends State<PostNew> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ContInput extends StatelessWidget {
+  const ContInput({
+    Key key,
+    @required this.tip_controller,
+    @required this.tip_focus,
+  }) : super(key: key);
+
+  final TextEditingController tip_controller;
+  final FocusNode tip_focus;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 20, right: 20, top: 0),
+      child: TextField(
+        controller: tip_controller,
+        focusNode: tip_focus,
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
+        cursorColor: os_color,
+        style: TextStyle(
+          height: 1.8,
+        ),
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.only(bottom: 200, top: 10),
+          border: InputBorder.none,
+          hintStyle: TextStyle(
+            height: 1.8,
+            color: Color(0xFFA3A3A3),
+          ),
+          hintText: "说点什么吧…",
+        ),
+      ),
+    );
+  }
+}
+
+class TitleInput extends StatelessWidget {
+  const TitleInput({
+    Key key,
+    @required this.title_controller,
+    @required this.title_focus,
+  }) : super(key: key);
+
+  final TextEditingController title_controller;
+  final FocusNode title_focus;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color: os_white,
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+      ),
+      child: TextField(
+        controller: title_controller,
+        focusNode: title_focus,
+        style: TextStyle(fontSize: 17),
+        cursorColor: os_color,
+        decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            borderSide: BorderSide(
+              width: 2,
+              color: os_color,
+              style: BorderStyle.solid,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            borderSide: BorderSide(
+              width: 2,
+              color: os_white,
+              style: BorderStyle.solid,
+            ),
+          ),
+          hintStyle: TextStyle(
+            fontSize: 17,
+            color: Color(0xFFA3A3A3),
+          ),
+          hintText: "请输入帖子的标题",
         ),
       ),
     );

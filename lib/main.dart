@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+// import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/router/router.dart';
 
@@ -29,7 +29,6 @@ class MyApp extends StatelessWidget {
       SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     }
     return MaterialApp(
-      builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
       initialRoute: "/",
       theme: ThemeData(
