@@ -7,6 +7,8 @@ class ServerConfig {
   String url = "https://bbs.uestc.edu.cn/mobcent/app/web/index.php";
 }
 
+bool isLog = false;
+
 class XHttp {
   netWorkRequest({
     String url = "",
@@ -19,14 +21,17 @@ class XHttp {
     dio.options.responseType = ResponseType.plain;
     dio.options.connectTimeout = 10000;
     dio.options.receiveTimeout = 10000;
-    // print("地址:$url入参:$param");
+    if (isLog) print("地址:$url入参:$param");
     Response response = await dio
         .request(url, data: param, options: Options(method: "POST"))
-        .catchError((err) {});
+        .catchError(
+      (err) {
+        if (isLog) print("${err}");
+      },
+    );
     if (response != null) {
-      // hideToast();
       Map<String, dynamic> user = jsonDecode(response.toString());
-      print("地址:$url入参:$param回参:$user");
+      if (isLog) print("地址:$url入参:$param回参:$user");
       return user;
     } else {
       return new Map();

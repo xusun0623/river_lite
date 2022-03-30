@@ -8,6 +8,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  flutter_picker: ^2.0.3
   badges: ^2.0.2
   characters: ^1.2.0
   flutter_vibrate: ^1.3.0
