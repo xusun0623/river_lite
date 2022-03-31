@@ -1,21 +1,20 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/modal.dart';
-import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/home_btn.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 
-class HomeHot extends StatefulWidget {
+class Hot extends StatefulWidget {
   @override
-  _HomeHotState createState() => _HomeHotState();
+  _HotState createState() => _HotState();
 }
 
-class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
+class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
   var list = [];
   bool vibrate = false;
@@ -78,19 +77,30 @@ class _HomeHotState extends State<HomeHot> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      color: os_color,
-      onRefresh: () async {
-        setState(() {
-          vibrate = false;
-        });
-        var data = await _getData();
-        return data;
-      },
-      child: ListView(
-        controller: _scrollController,
-        physics: BouncingScrollPhysics(),
-        children: _buildComponents(),
+    return Scaffold(
+      appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        toolbarHeight: 0,
+        backgroundColor: os_back,
+        elevation: 0,
+      ),
+      body: Container(
+        color: os_back,
+        child: RefreshIndicator(
+          color: os_color,
+          onRefresh: () async {
+            setState(() {
+              vibrate = false;
+            });
+            var data = await _getData();
+            return data;
+          },
+          child: ListView(
+            controller: _scrollController,
+            physics: BouncingScrollPhysics(),
+            children: _buildComponents(),
+          ),
+        ),
       ),
     );
   }

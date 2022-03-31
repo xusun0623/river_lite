@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
-import 'package:offer_show/page/404.dart';
+import 'package:offer_show/page/hot/homeHot.dart';
 import 'package:offer_show/page/me.dart';
 import 'package:offer_show/page/msg/msg.dart';
-import 'package:offer_show/page/myhome.dart';
-import 'package:offer_show/page/square/square.dart';
+import 'package:offer_show/page/home/myhome.dart';
+import 'package:offer_show/page/new_reply/homeNewReply.dart';
 import 'package:offer_show/util/interface.dart';
-import 'package:offer_show/util/mid_request.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -23,6 +22,7 @@ class _HomeState extends State<Home> {
   List<Widget> homePages() {
     return [
       MyHome(),
+      HomeNewReply(),
       Msg(),
       Me(),
     ];
@@ -34,6 +34,12 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.blue,
         icon: Icon(Icons.explore_outlined),
         label: "首页",
+        tooltip: "",
+      ),
+      BottomNavigationBarItem(
+        backgroundColor: Colors.blue,
+        icon: Icon(Icons.lightbulb_outline_sharp),
+        label: "最近回复",
         tooltip: "",
       ),
       BottomNavigationBarItem(

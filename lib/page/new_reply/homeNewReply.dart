@@ -1,14 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/components/banner.dart';
-import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
-import 'package:offer_show/outer/contained_tab_bar_view/src/contained_tab_bar_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
@@ -122,7 +120,7 @@ class _HomeNewReplyState extends State<HomeNewReply>
     ));
     return BackToTop(
       show: showBackToTop,
-      animation: false,
+      animation: true,
       child: ListView(
         physics: BouncingScrollPhysics(),
         controller: _scrollController,
@@ -136,6 +134,12 @@ class _HomeNewReplyState extends State<HomeNewReply>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: os_back,
+      appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        backgroundColor: os_back,
+        elevation: 0,
+        toolbarHeight: 5,
+      ),
       body: RefreshIndicator(
         color: os_color,
         onRefresh: () async {

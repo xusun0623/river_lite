@@ -42,7 +42,11 @@ class _HomeBtnState extends State<HomeBtn> {
             url: "/column",
             board_id: 305,
           ),
-          Btn(txt: "入站必看", img: "lib/img/home/4.svg", url: ""),
+          Btn(
+            txt: "十大热门",
+            img: "lib/img/home/4.svg",
+            url: "/hot",
+          ),
           Btn(txt: "专辑", img: "lib/img/home/5.svg", url: ""),
         ],
       ),
@@ -72,8 +76,10 @@ class _BtnState extends State<Btn> {
   Widget build(BuildContext context) {
     return myInkWell(
       tap: () {
-        if (widget.url != "") {
+        if (widget.url != "" && widget.board_id != null) {
           Navigator.pushNamed(context, widget.url, arguments: widget.board_id);
+        } else if (widget.url != "") {
+          Navigator.pushNamed(context, widget.url);
         }
       },
       widget: Container(

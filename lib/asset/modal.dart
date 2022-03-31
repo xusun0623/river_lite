@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
 
@@ -180,32 +179,6 @@ void hideToast() {
   }
 }
 
-void showEmoji({
-  @required BuildContext context,
-  @required Widget emoji,
-}) {
-  if (isShown) return;
-  isShown = true;
-  Vibrate.feedback(FeedbackType.impact);
-  popDialog(
-    delay: 1000,
-    context: context,
-    widget: Container(
-      padding: EdgeInsets.all(30),
-      width: 150,
-      height: 150,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: Color(0xBB000000),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [emoji],
-      ),
-    ),
-  );
-}
-
 void showToast({
   @required BuildContext context,
   @required XSToast type,
@@ -232,7 +205,8 @@ void showToast({
             CircularProgressIndicator(color: os_white, strokeWidth: 4),
             Container(height: 20),
             Container(
-                child: Text(txt ?? "加载中…", style: TextStyle(color: os_white))),
+              child: Text(txt ?? "加载中…", style: TextStyle(color: os_white)),
+            ),
           ],
         ),
       ),
@@ -279,14 +253,17 @@ void popDialog({
     barrierColor: back,
     barrierDismissible: false,
     builder: (ctx) {
-      return WillPopScope(
-        //阻止用户返回
-        onWillPop: () {
-          return;
-        },
-        child: Container(
-          margin: EdgeInsets.only(bottom: 150),
-          child: Center(child: widget),
+      return Material(
+        color: Colors.transparent,
+        child: WillPopScope(
+          //阻止用户返回
+          onWillPop: () {
+            return;
+          },
+          child: Container(
+            margin: EdgeInsets.only(bottom: 150),
+            child: Container(child: Center(child: widget)),
+          ),
         ),
       );
     },

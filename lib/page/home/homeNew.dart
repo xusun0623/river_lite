@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/banner.dart';
 import 'package:offer_show/components/hot_btn.dart';
+import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
-import 'package:offer_show/outer/contained_tab_bar_view/src/contained_tab_bar_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
@@ -98,6 +100,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 
   Widget _buildComponents() {
     List<Widget> t = [];
+    t.add(ToSearch());
     t.add(ImgBanner());
     t.add(Container(height: 10));
     t.add(HomeBtn());
@@ -156,4 +159,46 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class ToSearch extends StatefulWidget {
+  const ToSearch({Key key}) : super(key: key);
+
+  @override
+  State<ToSearch> createState() => _ToSearchState();
+}
+
+class _ToSearchState extends State<ToSearch> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: os_edge, right: os_edge, bottom: 10),
+      child: myInkWell(
+        radius: 10,
+        tap: () {
+          Navigator.pushNamed(context, "/search");
+        },
+        widget: Container(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "搜一搜",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color.fromARGB(255, 171, 171, 171),
+                ),
+              ),
+              os_svg(
+                path: "lib/img/search_grey.svg",
+                width: 20,
+                height: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
