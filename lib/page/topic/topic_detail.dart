@@ -474,19 +474,18 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
             width: MediaQuery.of(context).size.width,
             height: popSection ? 200 : 250,
             decoration: BoxDecoration(
-              color: os_white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15),
-                topRight: Radius.circular(15),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromRGBO(0, 0, 0, 0.1),
-                  blurRadius: 7,
-                  offset: Offset(1, -2),
-                )
-              ],
-            ),
+                color: os_white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.1),
+                    blurRadius: 7,
+                    offset: Offset(1, -2),
+                  )
+                ]),
             child: Row(
               children: [
                 Column(
