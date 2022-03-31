@@ -126,13 +126,15 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                   widget.show = false;
                   setState(() {});
                 },
-                color: Color(0xFFFFFFFF),
+                color: os_color,
                 widget: Container(
                   width: 55,
                   height: 55,
-                  padding: EdgeInsets.all(20),
-                  child: os_svg(
-                    path: "lib/img/to_top.svg",
+                  // padding: EdgeInsets.all(20),
+                  child: Icon(
+                    Icons.keyboard_arrow_up_rounded,
+                    size: 25,
+                    color: os_white,
                   ),
                 ),
                 radius: 100,

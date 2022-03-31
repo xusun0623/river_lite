@@ -103,8 +103,11 @@ class _DetailContState extends State<DetailCont> {
       case 1: //图片
         return GestureDetector(
           onLongPress: () {
-            saveImge(context, widget.imgLists,
-                widget.imgLists.indexOf(widget.data["infor"]));
+            saveImge(
+              context,
+              widget.imgLists,
+              widget.imgLists.indexOf(widget.data["infor"]),
+            );
           },
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(7.5)),
@@ -126,15 +129,27 @@ class _DetailContState extends State<DetailCont> {
                     ),
                   );
                 },
-                child: widget.imgLists.length > 15
-                    ? CachedNetworkImage(
-                        height: 500,
-                        imageUrl: widget.data["infor"],
-                        placeholder: (context, url) => Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: CircularProgressIndicator(color: os_deep_grey),
-                        ),
+                child: widget.imgLists.length > 5
+                    ? Image.network(
+                        widget.data["infor"],
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.cover,
                       )
+                    // CachedNetworkImage(
+                    //     height: 100,
+                    //     width: 100,
+                    //     filterQuality: FilterQuality.low,
+                    //     fit: BoxFit.cover,
+                    //     imageUrl: widget.data["infor"],
+                    //     placeholder: (context, url) => Padding(
+                    //       padding: const EdgeInsets.all(40.0),
+                    //       child: CircularProgressIndicator(
+                    //         color: os_deep_grey,
+                    //         strokeWidth: 2.0,
+                    //       ),
+                    //     ),
+                    //   )
                     : CachedNetworkImage(
                         imageUrl: widget.data["infor"],
                         placeholder: (context, url) => Padding(

@@ -1,11 +1,8 @@
-import 'dart:ffi';
-
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/BottomTip.dart';
@@ -57,6 +54,9 @@ class _MsgState extends State<Msg> {
     if (tmp != null && tmp["body"] != null) {
       pmMsgArr = tmp["body"]["list"];
       load_done = tmp["body"]["list"].length < 10;
+    } else {
+      pmMsgArr = [];
+      load_done = true;
     }
     setState(() {});
   }
@@ -88,6 +88,14 @@ class _MsgState extends State<Msg> {
     if (data != null && data["body"] != null) {
       setState(() {
         msg = data["body"];
+      });
+    } else {
+      setState(() {
+        msg = {
+          "atMeInfo": 0,
+          "replyInfo": 0,
+          "systemInfo": 0,
+        };
       });
     }
   }
@@ -194,7 +202,9 @@ class _MsgState extends State<Msg> {
                 Column(
                   children: _buildPMMsg(),
                 ),
-                load_done ? Container() : BottomLoading(),
+                (load_done || pmMsgArr.length == 0)
+                    ? Container()
+                    : BottomLoading(),
               ],
             ),
           ),
