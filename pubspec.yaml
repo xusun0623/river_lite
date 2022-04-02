@@ -47,3 +47,4 @@ flutter:
     - lib/img/home/
     - lib/img/msg/
     - lib/collect_btn/
+    - lib/page/msg_three/

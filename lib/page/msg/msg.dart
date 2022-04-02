@@ -170,6 +170,13 @@ class _MsgState extends State<Msg> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             ColorBtn(
+                              tap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  "/msg_three",
+                                  arguments: 0,
+                                );
+                              },
                               path: "lib/img/msg/@.svg",
                               title: "@我",
                               data: msg["atMeInfo"],
@@ -178,11 +185,25 @@ class _MsgState extends State<Msg> {
                               path: "lib/img/msg/reply.svg",
                               title: "回复",
                               data: msg["replyInfo"],
+                              tap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  "/msg_three",
+                                  arguments: 1,
+                                );
+                              },
                             ),
                             ColorBtn(
                               path: "lib/img/msg/noti.svg",
                               title: "通知",
                               data: msg["systemInfo"],
+                              tap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  "/msg_three",
+                                  arguments: 2,
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -218,11 +239,13 @@ class ColorBtn extends StatefulWidget {
   Map data;
   String path;
   String title;
+  Function tap;
   ColorBtn({
     Key key,
     this.data,
     this.path,
     this.title,
+    this.tap,
   }) : super(key: key);
 
   @override
@@ -232,40 +255,47 @@ class ColorBtn extends StatefulWidget {
 class _ColorBtnState extends State<ColorBtn> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: [
-          os_svg(
-            path: widget.path,
-            width: 108,
-            height: 51,
-          ),
-          Positioned(
-            top: 14,
-            left: 20,
-            child: Badge(
-              position: BadgePosition(top: -12, end: -12),
-              showBadge: widget.data["count"] != 0,
-              badgeContent: Text(
-                widget.data["count"].toString(),
-                style: TextStyle(
-                  color: os_white,
-                  fontSize: 10,
-                ),
-              ),
-              child: Container(
-                child: Text(
-                  widget.title,
+    return GestureDetector(
+      onTap: () {
+        if (widget.tap != null) {
+          widget.tap();
+        }
+      },
+      child: Container(
+        child: Stack(
+          children: [
+            os_svg(
+              path: widget.path,
+              width: 108,
+              height: 51,
+            ),
+            Positioned(
+              top: 14,
+              left: 20,
+              child: Badge(
+                position: BadgePosition(top: -12, end: -12),
+                showBadge: widget.data["count"] != 0,
+                badgeContent: Text(
+                  widget.data["count"].toString(),
                   style: TextStyle(
                     color: os_white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 10,
+                  ),
+                ),
+                child: Container(
+                  child: Text(
+                    widget.title,
+                    style: TextStyle(
+                      color: os_white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

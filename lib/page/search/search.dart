@@ -46,10 +46,11 @@ class _SearchState extends State<Search> {
     // print("${data.length}");
     var tmp = await Api().forum_search({
       "keyword": _controller.text,
-      "page": (data.length / 20 + 1).toInt(),
+      "page": (data.length / 20 + 1).ceil(),
       "pageSize": 20,
     });
     data.addAll(tmp["list"] ?? []);
+    load_done = data.length % 20 != 0;
     setState(() {});
     loading = false;
   }

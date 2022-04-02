@@ -233,5 +233,18 @@ void initState() {
 }
 ```
 
+### 11.下拉刷新
+```dart
+RefreshIndicator(
+  color: os_color,
+  onRefresh: () async {
+    var data = await _getInitData();
+    vibrate = false;
+    return data;
+  },
+  child: _buildComponents(),
+);
+```
+
 
 
