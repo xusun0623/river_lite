@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -43,6 +42,7 @@ class _MsgThreeState extends State<MsgThree> {
     "actions": []
   };
   List datas = [];
+  List lists = [];
   ScrollController _scrollController = new ScrollController();
   bool vibrate = false;
   bool load_done = false;
@@ -58,6 +58,7 @@ class _MsgThreeState extends State<MsgThree> {
       if (tmp != null && tmp["body"] != null && tmp["body"]["data"] != null) {
         setState(() {
           datas = tmp["body"]["data"];
+          lists = tmp["list"];
           load_done = datas.length % 10 != 0;
         });
       }
@@ -74,6 +75,7 @@ class _MsgThreeState extends State<MsgThree> {
       if (tmp != null && tmp["body"] != null && tmp["body"]["data"] != null) {
         setState(() {
           datas.addAll(tmp["body"]["data"]);
+          lists.addAll(tmp["list"]);
           load_done = tmp["body"]["data"].length < 10;
         });
       } else {
@@ -87,9 +89,9 @@ class _MsgThreeState extends State<MsgThree> {
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
     tmp.add(Container(height: 10));
-    datas.forEach((element) {
-      tmp.add(ForumCard(data: element));
-    });
+    for (int i = 0; i < datas.length; i++) {
+      tmp.add(ForumCard(data: datas[i], topic_id: lists[i]["topic_id"]));
+    }
     if (!load_done) tmp.add(BottomLoading(color: Colors.transparent));
     tmp.add(Container(height: 10));
     return tmp;
@@ -166,9 +168,11 @@ class _MsgThreeState extends State<MsgThree> {
 
 class ForumCard extends StatefulWidget {
   Map data;
+  int topic_id;
   ForumCard({
     Key key,
     this.data,
+    this.topic_id,
   }) : super(key: key);
 
   @override
@@ -182,8 +186,11 @@ class _ForumCardState extends State<ForumCard> {
     return myInkWell(
       radius: 0,
       tap: () {
-        Navigator.pushNamed(context, "/topic_detail",
-            arguments: widget.data["fromId"]);
+        Navigator.pushNamed(
+          context,
+          "/topic_detail",
+          arguments: widget.topic_id,
+        );
       },
       color: Colors.transparent,
       widget: Container(

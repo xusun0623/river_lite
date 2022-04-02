@@ -23,7 +23,11 @@ class _HomeState extends State<Home> {
     return [
       MyHome(),
       HomeNewReply(),
-      Msg(),
+      Msg(
+        refresh: () {
+          _getNewMsg();
+        },
+      ),
       Me(),
     ];
   }
@@ -72,9 +76,18 @@ class _HomeState extends State<Home> {
       count += data["body"]["pmInfos"].length;
       data = data["body"];
       if (count != 0) {
-        _isNewMsg = true;
-        setState(() {});
+        setState(() {
+          _isNewMsg = true;
+        });
+      } else {
+        setState(() {
+          _isNewMsg = false;
+        });
       }
+    } else {
+      setState(() {
+        _isNewMsg = false;
+      });
     }
   }
 

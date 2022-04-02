@@ -15,8 +15,10 @@ import 'package:offer_show/util/interface.dart';
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
 class Msg extends StatefulWidget {
+  Function refresh;
   Msg({
     Key key,
+    this.refresh,
   }) : super(key: key);
 
   @override
@@ -171,6 +173,9 @@ class _MsgState extends State<Msg> {
                           children: [
                             ColorBtn(
                               tap: () {
+                                msg["atMeInfo"]["count"] = 0;
+                                setState(() {});
+                                if (widget.refresh != null) widget.refresh();
                                 Navigator.pushNamed(
                                   context,
                                   "/msg_three",
@@ -186,6 +191,9 @@ class _MsgState extends State<Msg> {
                               title: "回复",
                               data: msg["replyInfo"],
                               tap: () {
+                                msg["replyInfo"]["count"] = 0;
+                                setState(() {});
+                                if (widget.refresh != null) widget.refresh();
                                 Navigator.pushNamed(
                                   context,
                                   "/msg_three",
@@ -198,6 +206,9 @@ class _MsgState extends State<Msg> {
                               title: "通知",
                               data: msg["systemInfo"],
                               tap: () {
+                                msg["systemInfo"]["count"] = 0;
+                                setState(() {});
+                                if (widget.refresh != null) widget.refresh();
                                 Navigator.pushNamed(
                                   context,
                                   "/msg_three",
