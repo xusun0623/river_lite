@@ -151,6 +151,7 @@ class _MsgState extends State<Msg> {
       body: Container(
         color: os_white,
         child: RefreshIndicator(
+          color: Color(0xFF2FCC7E),
           onRefresh: () async {
             await _getData();
             await _getPm();

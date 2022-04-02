@@ -12,10 +12,12 @@ class BackToTop extends StatefulWidget {
   bool animation;
   bool attachBtn;
   Function tap;
+  Color color;
   BackToTop({
     Key key,
     this.child,
-    this.show,
+    @required this.show,
+    this.color,
     this.controller,
     this.bottom,
     this.animation,
@@ -35,7 +37,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     widget.controller.addListener(() {
-      if (widget.show) {
+      if (widget.show ?? false) {
         controller.forward();
       } else {
         controller.reverse();
@@ -64,7 +66,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
     return Stack(
       children: [
         Positioned(
-          child: widget.child,
+          child: widget.child ?? Container(),
         ),
         widget.attachBtn == null
             ? Container()
@@ -84,9 +86,9 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                   ),
                   child: myInkWell(
                     tap: () {
-                      widget.tap();
+                      if (widget.tap != null) widget.tap();
                     },
-                    color: os_color,
+                    color: widget.color ?? os_color,
                     widget: Container(
                       width: 55,
                       height: 55,
@@ -126,7 +128,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                   widget.show = false;
                   setState(() {});
                 },
-                color: os_color,
+                color: widget.color ?? os_color,
                 widget: Container(
                   width: 55,
                   height: 55,

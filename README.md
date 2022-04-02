@@ -246,5 +246,19 @@ RefreshIndicator(
 );
 ```
 
-
+### 12.回顶
+```dart
+bool showBackToTop = false;
+ScrollController _controller = new ScrollController();
+if (_controller.position.pixels > 1000 && !showBackToTop) {
+  setState(() {
+    showBackToTop = true;
+  });
+}
+if (_controller.position.pixels < 1000 && showBackToTop) {
+  setState(() {
+    showBackToTop = false;
+  });
+}
+```
 

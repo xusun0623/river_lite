@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/topic.dart';
@@ -309,8 +310,8 @@ class _DefineTabBarState extends State<DefineTabBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width - 30,
-      margin: EdgeInsets.symmetric(horizontal: 15),
+      width: MediaQuery.of(context).size.width - os_edge * 2,
+      margin: EdgeInsets.symmetric(horizontal: os_edge),
       child: myInkWell(
         tap: () {
           widget.fold();
