@@ -404,17 +404,7 @@ class _ForumCardState extends State<ForumCard> {
                     ],
                   ),
                   Container(height: 5),
-                  Container(
-                    width: MediaQuery.of(context).size.width - headImgSize - 90,
-                    child: Text(
-                      widget.forum["topic_subject"].toString().trim(),
-                      style: TextStyle(
-                        color: Color(0xFFA0A0A0),
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                  widget.forum["reply_content"].toString().trim() == ""
+                  widget.forum["topic_subject"].toString().trim() == ""
                       ? Container()
                       : Container(
                           decoration: BoxDecoration(
@@ -430,15 +420,7 @@ class _ForumCardState extends State<ForumCard> {
                                   headImgSize -
                                   90,
                               child: Text(
-                                widget.forum["reply_content"]
-                                        .toString()
-                                        .trim() +
-                                    " · " +
-                                    RelativeDateFormat.format(
-                                      DateTime.fromMillisecondsSinceEpoch(
-                                        int.parse(widget.forum["replied_date"]),
-                                      ),
-                                    ),
+                                widget.forum["topic_subject"].toString().trim(),
                                 style: TextStyle(
                                   color: Color(0xFFA0A0A0),
                                   fontSize: 14,
@@ -447,6 +429,30 @@ class _ForumCardState extends State<ForumCard> {
                             ),
                           ]),
                         ),
+                  Container(height: 5),
+                  Container(
+                    width: MediaQuery.of(context).size.width - headImgSize - 90,
+                    child: Text(
+                      widget.forum["reply_content"].toString().trim() +
+                          (widget.forum["reply_content"]
+                                      .toString()
+                                      .trim()
+                                      .length ==
+                                  0
+                              ? "查看图片"
+                              : "") +
+                          " · " +
+                          RelativeDateFormat.format(
+                            DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(widget.forum["replied_date"]),
+                            ),
+                          ),
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 100, 100, 100),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             )
