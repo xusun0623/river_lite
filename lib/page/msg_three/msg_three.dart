@@ -149,6 +149,11 @@ class _MsgThreeState extends State<MsgThree> {
       ));
     }
     if (!load_done) tmp.add(BottomLoading(color: Colors.transparent));
+    if (datas.length < 6) {
+      tmp.add(Container(
+        height: (6 - datas.length) * 100.0,
+      ));
+    }
     tmp.add(Container(height: 10));
     return tmp;
   }

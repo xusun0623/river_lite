@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
@@ -43,6 +44,11 @@ class _MsgState extends State<Msg> {
         ),
       );
     });
+    if (pmMsgArr.length < 6) {
+      tmp.add(Container(
+        height: (6 - pmMsgArr.length) * 100.0,
+      ));
+    }
     return tmp;
   }
 
@@ -94,9 +100,9 @@ class _MsgState extends State<Msg> {
     } else {
       setState(() {
         msg = {
-          "atMeInfo": 0,
-          "replyInfo": 0,
-          "systemInfo": 0,
+          "atMeInfo": {"count": 0},
+          "replyInfo": {"count": 0},
+          "systemInfo": {"count": 0},
         };
       });
     }
@@ -167,7 +173,7 @@ class _MsgState extends State<Msg> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 7),
-                  child: msg == null
+                  child: msg == null || msg is int
                       ? Container()
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -331,6 +337,10 @@ class _MsgCardState extends State<MsgCard> {
   @override
   Widget build(BuildContext context) {
     return myInkWell(
+      tap: () {
+        Navigator.pushNamed(context, "/msg_detail",
+            arguments: widget.data["toUserId"]);
+      },
       radius: 0,
       color: Colors.transparent,
       widget: Container(
