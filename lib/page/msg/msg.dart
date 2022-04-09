@@ -338,8 +338,10 @@ class _MsgCardState extends State<MsgCard> {
   Widget build(BuildContext context) {
     return myInkWell(
       tap: () {
-        Navigator.pushNamed(context, "/msg_detail",
-            arguments: widget.data["toUserId"]);
+        Navigator.pushNamed(context, "/msg_detail", arguments: {
+          "uid": widget.data["toUserId"],
+          "name": widget.data["toUserName"],
+        });
       },
       radius: 0,
       color: Colors.transparent,

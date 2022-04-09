@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/page/hot/homeHot.dart';
@@ -69,7 +70,6 @@ class _HomeState extends State<Home> {
     var data = await Api().message_heart({});
     var count = 0;
     if (data != null && data["body"] != null) {
-      print("${data}");
       count += data["body"]["replyInfo"]["count"];
       count += data["body"]["atMeInfo"]["count"];
       count += data["body"]["systemInfo"]["count"];
@@ -125,6 +125,7 @@ class _HomeState extends State<Home> {
           backgroundColor: os_white,
           type: BottomNavigationBarType.fixed,
           onTap: (index) {
+            Vibrate.feedback(FeedbackType.impact);
             _getNewMsg(); //获得新消息提醒
             setState(() {
               _tabBarIndex = index;

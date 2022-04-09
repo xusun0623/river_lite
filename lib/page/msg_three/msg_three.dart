@@ -4,14 +4,13 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/totop.dart';
+import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
-
-import '../../asset/time.dart';
-import '../../outer/cached_network_image/cached_image_widget.dart';
 
 class MsgThree extends StatefulWidget {
   int type; //0-@我 1-回复 2-通知
@@ -453,7 +452,7 @@ class _ForumCardState extends State<ForumCard> {
                             ),
                           ),
                       style: TextStyle(
-                        color: Color.fromARGB(255, 100, 100, 100),
+                        color: Color.fromARGB(255, 57, 57, 57),
                         fontSize: 14,
                       ),
                     ),

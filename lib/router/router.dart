@@ -26,7 +26,7 @@ final routers = {
   "/hot": () => Hot(),
   "/new": (data) => PostNew(board: data),
   "/msg_three": (data) => MsgThree(type: data),
-  "/msg_detail": (data) => MsgDetail(fromUid: data),
+  "/msg_detail": (data) => MsgDetail(usrInfo: data),
   "/photo_view": ({data}) => PhotoPreview(
         galleryItems: data.galleryItems,
         defaultImage: data.defaultImage,
