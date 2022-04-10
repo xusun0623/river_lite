@@ -1,9 +1,13 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/saveImg.dart';
+import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
@@ -30,8 +34,11 @@ class MsgDetail extends StatefulWidget {
 class MsgDetailState extends State<MsgDetail> {
   Map userInfo = {};
   List pmList = [];
-  ScrollController _controller = new ScrollController();
   bool vibrate = false;
+  ScrollController _controller = new ScrollController();
+  TextEditingController _textEditingController = new TextEditingController();
+
+  int space = 50;
 
   _getCont() async {
     var data = await Api().message_pmlist({
@@ -41,10 +48,10 @@ class MsgDetailState extends State<MsgDetail> {
           "pmInfos": [
             {
               "startTime": 0,
-              "cacheCount": 20,
+              "cacheCount": space,
               "stopTime": 0,
               "fromUid": widget.usrInfo["uid"],
-              "pmLimit": 20
+              "pmLimit": space
             }
           ]
         }
@@ -66,7 +73,7 @@ class MsgDetailState extends State<MsgDetail> {
 
   _getMore() async {
     List msgList = pmList[0]["msgList"];
-    if (msgList.length % 20 != 0) return;
+    if (msgList.length % space != 0) return;
     var data = await Api().message_pmlist({
       "pmlist": {
         "body": {
@@ -74,10 +81,10 @@ class MsgDetailState extends State<MsgDetail> {
           "pmInfos": [
             {
               "startTime": 0,
-              "cacheCount": 20,
-              "stopTime": msgList[msgList.length - 1]["time"],
+              "cacheCount": space,
+              "stopTime": msgList[0]["time"],
               "fromUid": widget.usrInfo["uid"],
-              "pmLimit": 20
+              "pmLimit": space
             }
           ]
         }
@@ -99,6 +106,7 @@ class MsgDetailState extends State<MsgDetail> {
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
+    tmp.add(Container(height: 90));
     if (pmList.length != 0) {
       List msgList = pmList[0]["msgList"];
       msgList = msgList.reversed.toList();
@@ -118,7 +126,7 @@ class MsgDetailState extends State<MsgDetail> {
         ));
       });
     }
-    if (tmp.length % 20 == 0 && pmList.length != 0) {
+    if (tmp.length % space == 1 && pmList.length != 0) {
       tmp.add(Center(
         child: Container(
           width: 160,
@@ -126,7 +134,6 @@ class MsgDetailState extends State<MsgDetail> {
           margin: EdgeInsets.symmetric(vertical: 20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(100)),
-            // color: Color.fromRGBO(69, 119, 246, 0.1),
           ),
           child: Center(
             child: Row(
@@ -151,6 +158,7 @@ class MsgDetailState extends State<MsgDetail> {
   @override
   void initState() {
     _getCont();
+
     _controller.addListener(() {
       if (_controller.position.pixels - _controller.position.maxScrollExtent >
           100) {
@@ -177,6 +185,7 @@ class MsgDetailState extends State<MsgDetail> {
         backgroundColor: os_white,
         foregroundColor: os_black,
         elevation: 0,
+        toolbarHeight: 56,
         leading: BackButton(),
         centerTitle: true,
         actions: [
@@ -188,18 +197,193 @@ class MsgDetailState extends State<MsgDetail> {
           name: widget.usrInfo["name"],
         ),
       ),
-      body: RefreshIndicator(
-        color: theme,
-        onRefresh: () async {
-          await _getMore();
-          return;
-        },
-        child: ListView(
-          physics: BouncingScrollPhysics(),
-          controller: _controller,
-          shrinkWrap: true,
-          reverse: true,
-          children: _buildCont(),
+      body: Stack(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height -
+                MediaQuery.of(context).padding.top,
+            child: RefreshIndicator(
+              color: theme,
+              onRefresh: () async {
+                await _getMore();
+                return;
+              },
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                controller: _controller,
+                shrinkWrap: true,
+                reverse: true,
+                children: _buildCont(),
+              ),
+            ),
+          ),
+          BottomFuncBar(
+            uid: widget.usrInfo["uid"],
+            sended: () {
+              _getCont();
+              _controller.animateTo(
+                0,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.ease,
+              );
+            },
+            textEditingController: _textEditingController,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BottomFuncBar extends StatefulWidget {
+  TextEditingController textEditingController;
+  Function sended;
+  int uid;
+  BottomFuncBar({
+    Key key,
+    this.textEditingController,
+    this.sended,
+    this.uid,
+  }) : super(key: key);
+
+  @override
+  State<BottomFuncBar> createState() => _BottomFuncBarState();
+}
+
+class _BottomFuncBarState extends State<BottomFuncBar> {
+  FocusNode _focusNode = new FocusNode();
+  bool sending = false;
+  @override
+  void initState() {
+    _focusNode.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  _send() async {
+    if (widget.textEditingController.text == "") {
+      _focusNode.unfocus();
+      setState(() {});
+      return;
+    }
+    setState(() {
+      sending = true;
+      _focusNode.requestFocus();
+    });
+    await Api().message_pmadmin({
+      "json":
+          '{"action": "send","msg": {"type": "text","content": "${widget.textEditingController.text}"},"toUid": ${widget.uid}}'
+    });
+    showToast(
+      context: context,
+      type: XSToast.success,
+      txt: "发送成功！",
+    );
+    setState(() {
+      widget.textEditingController.text = "";
+      sending = false;
+      _focusNode.unfocus();
+    });
+    //可能需要延时一下再请求
+    await Future.delayed(Duration(milliseconds: 500));
+    widget.sended();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 25,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: os_edge),
+        decoration: BoxDecoration(
+          color: _focusNode.hasFocus ? os_white : Color(0xFFEEEEEE),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          border: Border.all(
+            color: _focusNode.hasFocus ? os_deep_blue : Colors.transparent,
+            width: 2,
+          ),
+        ),
+        child: Container(
+          width: MediaQuery.of(context).size.width - 2 * os_edge,
+          height: 60,
+          child: Container(
+            child: Row(children: [
+              Container(
+                width: MediaQuery.of(context).size.width - 120,
+                height: 53,
+                child: TextField(
+                  controller: widget.textEditingController,
+                  focusNode: _focusNode,
+                  cursorColor: os_deep_blue,
+                  onSubmitted: (e) {
+                    _send();
+                  },
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.only(left: 15),
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(
+                      height: 1.8,
+                      color: Color(0xFFA3A3A3),
+                    ),
+                    hintText: "说点什么吧…",
+                  ),
+                ),
+              ),
+              myInkWell(
+                color: Colors.transparent,
+                widget: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: os_svg(
+                    path: "lib/img/topic_emoji.svg",
+                    width: 25,
+                    height: 25,
+                  ),
+                ),
+                radius: 100,
+              ),
+              _focusNode.hasFocus
+                  ? (sending
+                      ? Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: os_deep_blue,
+                              strokeWidth: 3,
+                            ),
+                          ),
+                        )
+                      : myInkWell(
+                          tap: () {
+                            _send();
+                          },
+                          color: Colors.transparent,
+                          widget: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: os_svg(
+                              path: "lib/img/msg_send.svg",
+                              width: 25,
+                              height: 25,
+                            ),
+                          ),
+                          radius: 100,
+                        ))
+                  : myInkWell(
+                      color: Colors.transparent,
+                      widget: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: os_svg(
+                          path: "lib/img/topic_picture.svg",
+                          width: 25,
+                          height: 25,
+                        ),
+                      ),
+                      radius: 100,
+                    ),
+            ]),
+          ),
         ),
       ),
     );
