@@ -646,7 +646,12 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
 
 class YourEmoji extends StatefulWidget {
   Function tap;
-  YourEmoji({Key key, @required this.tap}) : super(key: key);
+  Color backgroundColor;
+  YourEmoji({
+    Key key,
+    @required this.tap,
+    this.backgroundColor,
+  }) : super(key: key);
 
   @override
   State<YourEmoji> createState() => _YourEmojiState();
@@ -733,7 +738,7 @@ class _YourEmojiState extends State<YourEmoji> {
     return Container(
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: os_grey,
+        color: widget.backgroundColor ?? os_grey,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: ListView(

@@ -18,6 +18,7 @@ import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
+import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -286,6 +287,9 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
 
   bool dont_send_flag = false;
   int dont_send_clock = 12;
+
+  bool selecting_emoji = false;
+
   var time;
 
   @override
@@ -293,6 +297,9 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
     _focusNode.addListener(() {
       setState(() {
         if (_focusNode.hasFocus) {
+          setState(() {
+            selecting_emoji = false;
+          });
           widget.pagecontroller.animateTo(
             widget.pagecontroller.position.minScrollExtent,
             duration: Duration(milliseconds: 500),
@@ -404,7 +411,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
         ),
         child: Container(
           width: MediaQuery.of(context).size.width - 2 * os_edge,
-          height: 60,
+          height: 60 + (selecting_emoji ? 300.0 : 0.0),
           child: uploadingImgs
               ? Center(
                   child: Row(
@@ -424,183 +431,221 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                   ),
                 )
               : Container(
-                  child: Row(children: [
-                    img_urls.length != 0
-                        ? Container()
-                        : Container(
-                            width: MediaQuery.of(context).size.width - 120,
-                            height: 53,
-                            child: TextField(
-                              enabled: !dont_send_flag,
-                              controller: widget.textEditingController,
-                              focusNode: _focusNode,
-                              cursorColor: os_deep_blue,
-                              onSubmitted: (e) {
-                                _send();
-                              },
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.only(left: 15),
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(
-                                  height: 1.8,
-                                  color: Color(0xFFA3A3A3),
-                                ),
-                                hintText: dont_send_flag
-                                    ? "请稍等 ${dont_send_clock} 秒…"
-                                    : "说点什么吧…",
-                              ),
-                            ),
-                          ),
-                    img_urls.length != 0
-                        ? Container(
-                            width: 10,
-                          )
-                        : myInkWell(
-                            color: Colors.transparent,
-                            widget: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: os_svg(
-                                path: "lib/img/topic_emoji.svg",
-                                width: 25,
-                                height: 25,
-                              ),
-                            ),
-                            radius: 100,
-                          ),
-                    _focusNode.hasFocus
-                        ? (sending
-                            ? Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Container(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    color: os_deep_blue,
-                                    strokeWidth: 3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(children: [
+                        img_urls.length != 0
+                            ? Container()
+                            : Container(
+                                width: MediaQuery.of(context).size.width - 120,
+                                height: 53,
+                                child: TextField(
+                                  enabled: !dont_send_flag,
+                                  controller: widget.textEditingController,
+                                  focusNode: _focusNode,
+                                  cursorColor: os_deep_blue,
+                                  onSubmitted: (e) {
+                                    _send();
+                                  },
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.only(left: 15),
+                                    border: InputBorder.none,
+                                    hintStyle: TextStyle(
+                                      height: 1.8,
+                                      color: Color(0xFFA3A3A3),
+                                    ),
+                                    hintText: dont_send_flag
+                                        ? "请稍等 ${dont_send_clock} 秒…"
+                                        : "说点什么吧…",
                                   ),
                                 ),
+                              ),
+                        img_urls.length != 0
+                            ? Container(
+                                width: 10,
                               )
                             : myInkWell(
                                 tap: () {
-                                  _send();
+                                  if (dont_send_flag) return;
+                                  setState(() {
+                                    selecting_emoji = !selecting_emoji;
+                                  });
+                                  if (selecting_emoji) {
+                                    _focusNode.unfocus();
+                                  }
                                 },
                                 color: Colors.transparent,
                                 widget: Padding(
                                   padding: const EdgeInsets.all(10),
                                   child: os_svg(
-                                    path: "lib/img/msg_send.svg",
+                                    path: "lib/img/topic_emoji.svg",
                                     width: 25,
                                     height: 25,
                                   ),
                                 ),
                                 radius: 100,
-                              ))
-                        : myInkWell(
-                            tap: () async {
-                              _focusNode.unfocus();
-                              if (dont_send_flag) return;
-                              final ImagePicker _picker = ImagePicker();
-                              var image = await _picker.pickImage(
-                                source: ImageSource.gallery,
-                                imageQuality: 50,
-                              );
-                              setState(() {
-                                uploadingImgs = true;
-                              });
-                              if (image != null) {
-                                img_urls = await Api().uploadImage([image]);
-                              }
-                              setState(() {
-                                uploadingImgs = false;
-                              });
-                              print("${img_urls}");
-                            },
-                            color: Colors.transparent,
-                            widget: Badge(
-                              showBadge: img_urls.length != 0,
-                              badgeContent: Text(
-                                img_urls.length.toString(),
-                                style: TextStyle(
-                                  color: os_white,
-                                  fontSize: 10,
-                                ),
                               ),
-                              badgeColor: os_deep_blue,
-                              position: BadgePosition.topEnd(top: 0, end: 0),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: os_svg(
-                                  path: "lib/img/topic_picture.svg",
-                                  width: 25,
-                                  height: 25,
-                                ),
-                              ),
-                            ),
-                            radius: 100,
-                          ),
-                    img_urls.length != 0 ? Container(width: 12.5) : Container(),
-                    img_urls.length != 0
-                        ? myInkWell(
-                            tap: () {
-                              _sendImg();
-                            },
-                            color: os_deep_blue,
-                            widget: Container(
-                              width: MediaQuery.of(context).size.width - 200,
-                              height: 45,
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    sending
-                                        ? Container(
-                                            width: 15,
-                                            height: 15,
-                                            child: CircularProgressIndicator(
-                                              color: os_white,
-                                              strokeWidth: 2,
-                                            ),
-                                          )
-                                        : Icon(Icons.upload,
-                                            color: os_white, size: 18),
-                                    Container(width: 5),
-                                    Text(
-                                      "发送这张 图片",
-                                      style: TextStyle(color: os_white),
+                        _focusNode.hasFocus
+                            ? (sending
+                                ? Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        color: os_deep_blue,
+                                        strokeWidth: 3,
+                                      ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            radius: 15,
-                          )
-                        : Container(),
-                    img_urls.length != 0 ? Container(width: 7.5) : Container(),
-                    img_urls.length != 0
-                        ? myInkWell(
-                            tap: () {
-                              img_urls = [];
-                              setState(() {});
-                            },
-                            widget: Container(
-                              width: 97.5,
-                              height: 45,
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "取消发送",
-                                      style: TextStyle(color: os_deep_grey),
+                                  )
+                                : myInkWell(
+                                    tap: () {
+                                      _send();
+                                    },
+                                    color: Colors.transparent,
+                                    widget: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: os_svg(
+                                        path: "lib/img/msg_send.svg",
+                                        width: 25,
+                                        height: 25,
+                                      ),
                                     ),
-                                  ],
+                                    radius: 100,
+                                  ))
+                            : myInkWell(
+                                tap: () async {
+                                  _focusNode.unfocus();
+                                  setState(() {
+                                    selecting_emoji = false;
+                                  });
+                                  if (dont_send_flag) return;
+                                  final ImagePicker _picker = ImagePicker();
+                                  var image = await _picker.pickImage(
+                                    source: ImageSource.gallery,
+                                    imageQuality: 50,
+                                  );
+                                  setState(() {
+                                    uploadingImgs = true;
+                                  });
+                                  if (image != null) {
+                                    img_urls = await Api().uploadImage([image]);
+                                  }
+                                  setState(() {
+                                    uploadingImgs = false;
+                                  });
+                                  print("${img_urls}");
+                                },
+                                color: Colors.transparent,
+                                widget: Badge(
+                                  showBadge: img_urls.length != 0,
+                                  badgeContent: Text(
+                                    img_urls.length.toString(),
+                                    style: TextStyle(
+                                      color: os_white,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                  badgeColor: os_deep_blue,
+                                  position:
+                                      BadgePosition.topEnd(top: 0, end: 0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: os_svg(
+                                      path: "lib/img/topic_picture.svg",
+                                      width: 25,
+                                      height: 25,
+                                    ),
+                                  ),
                                 ),
+                                radius: 100,
+                              ),
+                        img_urls.length != 0
+                            ? Container(width: 12.5)
+                            : Container(),
+                        img_urls.length != 0
+                            ? myInkWell(
+                                tap: () {
+                                  _sendImg();
+                                },
+                                color: os_deep_blue,
+                                widget: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width - 200,
+                                  height: 45,
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        sending
+                                            ? Container(
+                                                width: 15,
+                                                height: 15,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: os_white,
+                                                  strokeWidth: 2,
+                                                ),
+                                              )
+                                            : Icon(Icons.upload,
+                                                color: os_white, size: 18),
+                                        Container(width: 5),
+                                        Text(
+                                          "发送这张 图片",
+                                          style: TextStyle(color: os_white),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                radius: 15,
+                              )
+                            : Container(),
+                        img_urls.length != 0
+                            ? Container(width: 7.5)
+                            : Container(),
+                        img_urls.length != 0
+                            ? myInkWell(
+                                tap: () {
+                                  img_urls = [];
+                                  setState(() {});
+                                },
+                                widget: Container(
+                                  width: 97.5,
+                                  height: 45,
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "取消发送",
+                                          style: TextStyle(color: os_deep_grey),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                radius: 15,
+                              )
+                            : Container(),
+                      ]),
+                      !selecting_emoji
+                          ? Container()
+                          : Container(
+                              height: 300,
+                              child: YourEmoji(
+                                tap: (e) {
+                                  widget.textEditingController.text =
+                                      widget.textEditingController.text + e;
+                                  setState(() {});
+                                },
                               ),
                             ),
-                            radius: 15,
-                          )
-                        : Container(),
-                  ]),
+                    ],
+                  ),
                 ),
         ),
       ),
@@ -672,17 +717,24 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
     for (var i = 1; i < tmp.length; i++) {
       var first_idx = tmp[i].indexOf(']');
       ret.add(WidgetSpan(
-        child: SizedBox(
-          width: 30,
-          height: 30,
-          child: CachedNetworkImage(
-            placeholder: (context, url) => Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: os_grey,
+        child: Container(
+          decoration: BoxDecoration(
+            color: os_white,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          margin: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+          child: SizedBox(
+            width: 30,
+            height: 30,
+            child: CachedNetworkImage(
+              placeholder: (context, url) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: os_grey,
+                ),
               ),
+              imageUrl: tmp[i].substring(0, first_idx),
             ),
-            imageUrl: tmp[i].substring(0, first_idx),
           ),
         ),
       ));
@@ -720,7 +772,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                     bottomActionItem: BottomActionItem(title: "取消"));
               }
             },
-            color: widget.index == 0 ? Color(0xFFEEEEEE) : Color(0xFF3179FF),
+            color: widget.index == 0 ? Color(0xFFEEEEEE) : theme,
             splashColor:
                 widget.index == 0 ? Color(0x44707070) : Color(0x44002873),
             highlightColor:
