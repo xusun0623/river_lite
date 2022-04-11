@@ -647,10 +647,12 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
 class YourEmoji extends StatefulWidget {
   Function tap;
   Color backgroundColor;
+  double size;
   YourEmoji({
     Key key,
     @required this.tap,
     this.backgroundColor,
+    this.size,
   }) : super(key: key);
 
   @override
@@ -675,8 +677,8 @@ class _YourEmojiState extends State<YourEmoji> {
           padding: const EdgeInsets.all(5),
           child: Image.asset(
             "lib/emoji/1/[a_${element}].gif",
-            width: 37,
-            height: 37,
+            width: widget.size ?? 37,
+            height: widget.size ?? 37,
           ),
         ),
       ));
@@ -694,13 +696,13 @@ class _YourEmojiState extends State<YourEmoji> {
           widget.tap("[s:${element}]");
         },
         widget: Padding(
-          padding: const EdgeInsets.all(5),
+          padding: EdgeInsets.all(5),
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(12.5)),
             child: Container(
               color: os_white,
-              width: 37,
-              height: 37,
+              width: widget.size ?? 37,
+              height: widget.size ?? 37,
               child: Image.asset(
                 "lib/emoji/2/[s_${element}].gif",
               ),
@@ -725,7 +727,9 @@ class _YourEmojiState extends State<YourEmoji> {
           padding: const EdgeInsets.all(5),
           child: Text(
             emoji[index].characters.elementAt(i),
-            style: TextStyle(fontSize: 30),
+            style: TextStyle(
+              fontSize: widget.size == null ? 30 : widget.size - 5,
+            ),
           ),
         ),
       ));

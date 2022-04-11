@@ -38,7 +38,10 @@ class MsgDetail extends StatefulWidget {
 class MsgDetailState extends State<MsgDetail> {
   Map userInfo = {};
   List pmList = [];
+
   bool vibrate = false;
+  bool i_am_selectimg_img = false;
+
   ScrollController _controller = new ScrollController();
   TextEditingController _textEditingController = new TextEditingController();
 
@@ -107,7 +110,7 @@ class MsgDetailState extends State<MsgDetail> {
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
-    tmp.add(Container(height: 90));
+    tmp.add(Container(height: 90 + (i_am_selectimg_img ? 300.0 : 0.0)));
     if (pmList.length != 0) {
       List msgList = pmList[0]["msgList"];
       msgList = msgList.reversed.toList();
@@ -244,6 +247,11 @@ class MsgDetailState extends State<MsgDetail> {
             ),
           ),
           BottomFuncBar(
+            i_am_selectimg_img: (flag) {
+              setState(() {
+                i_am_selectimg_img = flag;
+              });
+            },
             pagecontroller: _controller,
             uid: widget.usrInfo["uid"],
             sended: () {
@@ -265,6 +273,7 @@ class MsgDetailState extends State<MsgDetail> {
 class BottomFuncBar extends StatefulWidget {
   TextEditingController textEditingController;
   Function sended;
+  Function i_am_selectimg_img;
   ScrollController pagecontroller;
   int uid;
   BottomFuncBar({
@@ -273,6 +282,7 @@ class BottomFuncBar extends StatefulWidget {
     this.sended,
     this.uid,
     this.pagecontroller,
+    this.i_am_selectimg_img,
   }) : super(key: key);
 
   @override
@@ -299,6 +309,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
         if (_focusNode.hasFocus) {
           setState(() {
             selecting_emoji = false;
+            widget.i_am_selectimg_img(selecting_emoji);
           });
           widget.pagecontroller.animateTo(
             widget.pagecontroller.position.minScrollExtent,
@@ -471,6 +482,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                   setState(() {
                                     selecting_emoji = !selecting_emoji;
                                   });
+                                  widget.i_am_selectimg_img(selecting_emoji);
                                   if (selecting_emoji) {
                                     _focusNode.unfocus();
                                   }
@@ -519,6 +531,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                   _focusNode.unfocus();
                                   setState(() {
                                     selecting_emoji = false;
+                                    widget.i_am_selectimg_img(selecting_emoji);
                                   });
                                   if (dont_send_flag) return;
                                   final ImagePicker _picker = ImagePicker();
@@ -637,6 +650,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                           : Container(
                               height: 300,
                               child: YourEmoji(
+                                size: 35,
                                 tap: (e) {
                                   widget.textEditingController.text =
                                       widget.textEditingController.text + e;
