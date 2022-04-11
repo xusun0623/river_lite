@@ -404,23 +404,24 @@ class _PostNewState extends State<PostNew> {
                             myInkWell(
                               tap: () async {
                                 showModal(
-                                    context: context,
-                                    title: "请注意",
-                                    cont: "你即将跳转到系统图片选择页面，请从【系统相册】多项选择文件",
-                                    confirm: () async {
-                                      title_focus.unfocus();
-                                      tip_focus.unfocus();
-                                      final ImagePicker _picker = ImagePicker();
-                                      //选好了图片
-                                      var image = await _picker.pickMultiImage(
-                                            imageQuality: 50,
-                                          ) ??
-                                          [];
-                                      img_urls =
-                                          await Api().uploadImage(image) ?? [];
-                                      print("${img_urls}");
-                                      setState(() {});
-                                    });
+                                  context: context,
+                                  title: "请注意",
+                                  cont: "你即将跳转到系统图片选择页面，请从【系统相册】多项选择文件",
+                                  confirm: () async {
+                                    title_focus.unfocus();
+                                    tip_focus.unfocus();
+                                    final ImagePicker _picker = ImagePicker();
+                                    //选好了图片
+                                    var image = await _picker.pickMultiImage(
+                                          imageQuality: 50,
+                                        ) ??
+                                        [];
+                                    img_urls =
+                                        await Api().uploadImage(image) ?? [];
+                                    print("${img_urls}");
+                                    setState(() {});
+                                  },
+                                );
                               },
                               widget: Stack(
                                 children: [

@@ -394,7 +394,9 @@ class _MsgCardState extends State<MsgCard> {
                   ),
                   Container(height: 5),
                   Text(
-                    widget.data["lastSummary"] +
+                    (widget.data["lastSummary"] == ""
+                            ? "查看图片"
+                            : widget.data["lastSummary"]) +
                         " · " +
                         RelativeDateFormat.format(
                           DateTime.fromMillisecondsSinceEpoch(

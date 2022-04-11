@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:ui';
 
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/saveImg.dart';
@@ -98,9 +101,6 @@ class MsgDetailState extends State<MsgDetail> {
       setState(() {
         pmList[0]["msgList"] = data["body"]["pmList"][0]["msgList"];
       });
-      // setState(() {
-      //   pmList[0]["msgList"].addAll(data["body"]["pmList"][0]["msgList"]);
-      // });
     }
   }
 
@@ -149,6 +149,31 @@ class MsgDetailState extends State<MsgDetail> {
               ],
             ),
           ),
+        ),
+      ));
+    }
+    if (tmp.length > 52) {
+      tmp.add(Container(
+        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        decoration: BoxDecoration(
+          color: os_wonderful_color_opa[0],
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.info, color: os_wonderful_color[0]),
+            Container(width: 10),
+            Container(
+              width: MediaQuery.of(context).size.width - 96,
+              child: Text(
+                "客户端仅能显示最近100条信息，如有更多请前往网页版查看",
+                style: TextStyle(
+                  color: os_wonderful_color[0],
+                ),
+              ),
+            ),
+          ],
         ),
       ));
     }
@@ -218,6 +243,7 @@ class MsgDetailState extends State<MsgDetail> {
             ),
           ),
           BottomFuncBar(
+            pagecontroller: _controller,
             uid: widget.usrInfo["uid"],
             sended: () {
               _getCont();
@@ -238,12 +264,14 @@ class MsgDetailState extends State<MsgDetail> {
 class BottomFuncBar extends StatefulWidget {
   TextEditingController textEditingController;
   Function sended;
+  ScrollController pagecontroller;
   int uid;
   BottomFuncBar({
     Key key,
     this.textEditingController,
     this.sended,
     this.uid,
+    this.pagecontroller,
   }) : super(key: key);
 
   @override
@@ -253,12 +281,62 @@ class BottomFuncBar extends StatefulWidget {
 class _BottomFuncBarState extends State<BottomFuncBar> {
   FocusNode _focusNode = new FocusNode();
   bool sending = false;
+  bool uploadingImgs = false;
+  List img_urls = [];
+
+  bool dont_send_flag = false;
+  int dont_send_clock = 12;
+  var time;
+
   @override
   void initState() {
     _focusNode.addListener(() {
-      setState(() {});
+      setState(() {
+        if (_focusNode.hasFocus) {
+          widget.pagecontroller.animateTo(
+            widget.pagecontroller.position.minScrollExtent,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.ease,
+          );
+        }
+      });
     });
     super.initState();
+  }
+
+  _sendImg() async {
+    setState(() {
+      sending = true;
+    });
+    await Api().message_pmadmin({
+      "json":
+          '{"action": "send","msg": {"type": "image","content": "${img_urls[0]["urlName"]}"},"toUid": ${widget.uid}}'
+    });
+    showToast(
+      context: context,
+      type: XSToast.success,
+      txt: "发送成功！",
+    );
+    setState(() {
+      dont_send_flag = true;
+      dont_send_clock = 12;
+      sending = false;
+      img_urls = [];
+      _focusNode.unfocus();
+    });
+    //可能需要延时一下再请求
+    await Future.delayed(Duration(milliseconds: 750));
+    widget.sended();
+    dont_send_clock = 12;
+    time = Timer.periodic(Duration(milliseconds: 1000), (t) {
+      setState(() {
+        dont_send_clock--;
+      });
+    });
+    await Future.delayed(Duration(milliseconds: 12000));
+    time.cancel();
+    dont_send_flag = false;
+    setState(() {});
   }
 
   _send() async {
@@ -281,13 +359,33 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
       txt: "发送成功！",
     );
     setState(() {
+      dont_send_flag = true;
+      dont_send_clock = 12;
       widget.textEditingController.text = "";
       sending = false;
       _focusNode.unfocus();
     });
     //可能需要延时一下再请求
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(Duration(milliseconds: 750));
+    dont_send_clock = 12;
     widget.sended();
+    time = Timer.periodic(Duration(milliseconds: 1000), (t) {
+      setState(() {
+        dont_send_clock--;
+      });
+    });
+    await Future.delayed(Duration(milliseconds: 12000));
+    time.cancel();
+    dont_send_flag = false;
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    if (time != null) {
+      time.cancel();
+    }
+    super.dispose();
   }
 
   @override
@@ -307,83 +405,203 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
         child: Container(
           width: MediaQuery.of(context).size.width - 2 * os_edge,
           height: 60,
-          child: Container(
-            child: Row(children: [
-              Container(
-                width: MediaQuery.of(context).size.width - 120,
-                height: 53,
-                child: TextField(
-                  controller: widget.textEditingController,
-                  focusNode: _focusNode,
-                  cursorColor: os_deep_blue,
-                  onSubmitted: (e) {
-                    _send();
-                  },
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(left: 15),
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(
-                      height: 1.8,
-                      color: Color(0xFFA3A3A3),
-                    ),
-                    hintText: "说点什么吧…",
-                  ),
-                ),
-              ),
-              myInkWell(
-                color: Colors.transparent,
-                widget: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: os_svg(
-                    path: "lib/img/topic_emoji.svg",
-                    width: 25,
-                    height: 25,
-                  ),
-                ),
-                radius: 100,
-              ),
-              _focusNode.hasFocus
-                  ? (sending
-                      ? Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Container(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              color: os_deep_blue,
-                              strokeWidth: 3,
-                            ),
-                          ),
-                        )
-                      : myInkWell(
-                          tap: () {
-                            _send();
-                          },
-                          color: Colors.transparent,
-                          widget: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: os_svg(
-                              path: "lib/img/msg_send.svg",
-                              width: 25,
-                              height: 25,
-                            ),
-                          ),
-                          radius: 100,
-                        ))
-                  : myInkWell(
-                      color: Colors.transparent,
-                      widget: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: os_svg(
-                          path: "lib/img/topic_picture.svg",
-                          width: 25,
-                          height: 25,
+          child: uploadingImgs
+              ? Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: os_deep_blue,
+                          strokeWidth: 3,
                         ),
                       ),
-                      radius: 100,
-                    ),
-            ]),
-          ),
+                      Container(width: 10),
+                      Text("上传图片中…")
+                    ],
+                  ),
+                )
+              : Container(
+                  child: Row(children: [
+                    img_urls.length != 0
+                        ? Container()
+                        : Container(
+                            width: MediaQuery.of(context).size.width - 120,
+                            height: 53,
+                            child: TextField(
+                              enabled: !dont_send_flag,
+                              controller: widget.textEditingController,
+                              focusNode: _focusNode,
+                              cursorColor: os_deep_blue,
+                              onSubmitted: (e) {
+                                _send();
+                              },
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.only(left: 15),
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(
+                                  height: 1.8,
+                                  color: Color(0xFFA3A3A3),
+                                ),
+                                hintText: dont_send_flag
+                                    ? "请稍等 ${dont_send_clock} 秒…"
+                                    : "说点什么吧…",
+                              ),
+                            ),
+                          ),
+                    img_urls.length != 0
+                        ? Container(
+                            width: 10,
+                          )
+                        : myInkWell(
+                            color: Colors.transparent,
+                            widget: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: os_svg(
+                                path: "lib/img/topic_emoji.svg",
+                                width: 25,
+                                height: 25,
+                              ),
+                            ),
+                            radius: 100,
+                          ),
+                    _focusNode.hasFocus
+                        ? (sending
+                            ? Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    color: os_deep_blue,
+                                    strokeWidth: 3,
+                                  ),
+                                ),
+                              )
+                            : myInkWell(
+                                tap: () {
+                                  _send();
+                                },
+                                color: Colors.transparent,
+                                widget: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: os_svg(
+                                    path: "lib/img/msg_send.svg",
+                                    width: 25,
+                                    height: 25,
+                                  ),
+                                ),
+                                radius: 100,
+                              ))
+                        : myInkWell(
+                            tap: () async {
+                              _focusNode.unfocus();
+                              if (dont_send_flag) return;
+                              final ImagePicker _picker = ImagePicker();
+                              var image = await _picker.pickImage(
+                                source: ImageSource.gallery,
+                                imageQuality: 50,
+                              );
+                              setState(() {
+                                uploadingImgs = true;
+                              });
+                              if (image != null) {
+                                img_urls = await Api().uploadImage([image]);
+                              }
+                              setState(() {
+                                uploadingImgs = false;
+                              });
+                              print("${img_urls}");
+                            },
+                            color: Colors.transparent,
+                            widget: Badge(
+                              showBadge: img_urls.length != 0,
+                              badgeContent: Text(
+                                img_urls.length.toString(),
+                                style: TextStyle(
+                                  color: os_white,
+                                  fontSize: 10,
+                                ),
+                              ),
+                              badgeColor: os_deep_blue,
+                              position: BadgePosition.topEnd(top: 0, end: 0),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: os_svg(
+                                  path: "lib/img/topic_picture.svg",
+                                  width: 25,
+                                  height: 25,
+                                ),
+                              ),
+                            ),
+                            radius: 100,
+                          ),
+                    img_urls.length != 0 ? Container(width: 12.5) : Container(),
+                    img_urls.length != 0
+                        ? myInkWell(
+                            tap: () {
+                              _sendImg();
+                            },
+                            color: os_deep_blue,
+                            widget: Container(
+                              width: MediaQuery.of(context).size.width - 200,
+                              height: 45,
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    sending
+                                        ? Container(
+                                            width: 15,
+                                            height: 15,
+                                            child: CircularProgressIndicator(
+                                              color: os_white,
+                                              strokeWidth: 2,
+                                            ),
+                                          )
+                                        : Icon(Icons.upload,
+                                            color: os_white, size: 18),
+                                    Container(width: 5),
+                                    Text(
+                                      "发送这张 图片",
+                                      style: TextStyle(color: os_white),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            radius: 15,
+                          )
+                        : Container(),
+                    img_urls.length != 0 ? Container(width: 7.5) : Container(),
+                    img_urls.length != 0
+                        ? myInkWell(
+                            tap: () {
+                              img_urls = [];
+                              setState(() {});
+                            },
+                            widget: Container(
+                              width: 97.5,
+                              height: 45,
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "取消发送",
+                                      style: TextStyle(color: os_deep_grey),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            radius: 15,
+                          )
+                        : Container(),
+                  ]),
+                ),
         ),
       ),
     );
@@ -650,7 +868,15 @@ class MsgImg extends StatefulWidget {
 class _MsgImgState extends State<MsgImg> {
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(imageUrl: widget.url);
+    return CachedNetworkImage(
+      imageUrl: widget.url,
+      placeholder: (context, url) => Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: os_grey,
+        ),
+      ),
+    );
   }
 }
 

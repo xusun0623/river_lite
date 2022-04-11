@@ -7,7 +7,7 @@ class ServerConfig {
   String url = "https://bbs.uestc.edu.cn/mobcent/app/web/index.php";
 }
 
-bool isLog = true;
+bool isLog = false;
 
 class XHttp {
   netWorkRequest({
