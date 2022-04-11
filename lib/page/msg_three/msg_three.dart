@@ -506,12 +506,21 @@ class Head extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "   ${titles[widget.type]}",
-              style: TextStyle(
-                color: os_white,
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
+            Hero(
+              tag: "${titles[widget.type]}",
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  width: 100,
+                  child: Text(
+                    "   ${titles[widget.type]}",
+                    style: TextStyle(
+                      color: os_white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
               ),
             ),
             os_svg(

@@ -301,12 +301,21 @@ class _ColorBtnState extends State<ColorBtn> {
                   ),
                 ),
                 child: Container(
-                  child: Text(
-                    widget.title,
-                    style: TextStyle(
-                      color: os_white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  child: Hero(
+                    tag: widget.title,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Container(
+                        width: 100,
+                        child: Text(
+                          widget.title,
+                          style: TextStyle(
+                            color: os_white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
