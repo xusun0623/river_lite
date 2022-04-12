@@ -190,18 +190,21 @@ class _TopicState extends State<Topic> {
                   ),
                 ),
                 Padding(padding: EdgeInsets.all(2)),
-                Container(
-                  width: MediaQuery.of(context).size.width - 60,
-                  child: Text(
-                    (widget.data["summary"] ?? widget.data["subject"]) ?? "",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFFA3A3A3),
-                    ),
-                  ),
-                ),
+                ((widget.data["summary"] ?? widget.data["subject"]) ?? "") == ""
+                    ? Container()
+                    : Container(
+                        width: MediaQuery.of(context).size.width - 60,
+                        child: Text(
+                          (widget.data["summary"] ?? widget.data["subject"]) ??
+                              "",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFFA3A3A3),
+                          ),
+                        ),
+                      ),
                 Padding(padding: EdgeInsets.all(7)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

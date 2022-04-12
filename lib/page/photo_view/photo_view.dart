@@ -1,14 +1,6 @@
-import 'dart:typed_data';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart'; // Import package
-import 'package:flutter_vibrate/flutter_vibrate.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/saveImg.dart';
-import 'package:offer_show/outer/showActionSheet/action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 typedef PageChanged = void Function(int index);

@@ -130,7 +130,7 @@ class MsgDetailState extends State<MsgDetail> {
         ));
       });
     }
-    if (tmp.length % space == 1 && pmList.length != 0) {
+    if (tmp.length % space == 1 && pmList.length != 0 && tmp.length != 101) {
       tmp.add(Center(
         child: Container(
           width: 160,
@@ -796,7 +796,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                 ? Stack(
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.width - 130,
+                        width: 125,
                         child: GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -812,11 +812,27 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                             child: CachedNetworkImage(
+                              filterQuality: FilterQuality.low,
+                              width: 125,
+                              height: 125,
+                              fit: BoxFit.cover,
+                              placeholderFadeInDuration:
+                                  Duration(milliseconds: 500),
                               placeholder: (context, url) => Container(
+                                width: 125,
+                                height: 125,
+                                padding: EdgeInsets.all(50),
+                                child: CircularProgressIndicator(
+                                  color: widget.index == 0
+                                      ? os_deep_grey
+                                      : os_white,
+                                ),
                                 decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10)),
-                                  color: os_grey,
+                                  color: widget.index == 0
+                                      ? os_grey
+                                      : os_deep_blue,
                                 ),
                               ),
                               imageUrl: widget.cont,
@@ -917,32 +933,6 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
           children:
               widget.index == 0 ? [avatar, space, txt] : [txt, space, avatar],
         ));
-  }
-}
-
-class MsgImg extends StatefulWidget {
-  String url;
-  MsgImg({
-    Key key,
-    this.url,
-  }) : super(key: key);
-
-  @override
-  State<MsgImg> createState() => _MsgImgState();
-}
-
-class _MsgImgState extends State<MsgImg> {
-  @override
-  Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: widget.url,
-      placeholder: (context, url) => Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: os_grey,
-        ),
-      ),
-    );
   }
 }
 

@@ -33,7 +33,7 @@ saveImge(
         final result = await ImageGallerySaver.saveImage(
           Uint8List.fromList(response.data),
           quality: 60,
-          name: "hello",
+          name: "河畔-" + new DateTime.now().millisecondsSinceEpoch.toString(),
         );
         if (result["isSuccess"]) {
           showToast(context: context, type: XSToast.success, txt: "保存成功！");
@@ -60,7 +60,7 @@ saveImge(
           var result = await ImageGallerySaver.saveImage(
             Uint8List.fromList(response.data),
             quality: 60,
-            name: "hello",
+            name: "河畔-" + new DateTime.now().millisecondsSinceEpoch.toString(),
           );
         }
         hideToast();

@@ -243,7 +243,9 @@ class _MsgState extends State<Msg> {
                 ),
                 (load_done || pmMsgArr.length == 0)
                     ? Container()
-                    : BottomLoading(),
+                    : Container(
+                        margin: EdgeInsets.only(bottom: 20),
+                        child: BottomLoading(color: os_white)),
               ],
             ),
           ),
