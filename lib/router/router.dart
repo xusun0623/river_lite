@@ -5,6 +5,7 @@ import 'package:offer_show/page/home.dart';
 import 'package:offer_show/page/hot/homeHot.dart';
 import 'package:offer_show/page/home/myhome.dart';
 import 'package:offer_show/page/me/me.dart';
+import 'package:offer_show/page/me_func/me_func.dart';
 import 'package:offer_show/page/msg_detail/msg_detail.dart';
 import 'package:offer_show/page/msg_three/msg_three.dart';
 import 'package:offer_show/page/new/new.dart';
@@ -20,6 +21,7 @@ final routers = {
   "/myhome": () => MyHome(),
   "/square": () => Square(),
   "/404": () => Page404(),
+  "/me_func": (data) => MeFunc(type: data),
   "/topic_detail": (data) => TopicDetail(topicID: data),
   "/search": () => Search(),
   "/column": (data) => TopicColumn(columnID: data),

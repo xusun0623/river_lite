@@ -1,23 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/util/interface.dart';
-
-//lv1 - 0
-//lv2 - 30
-//lv3 - 100
-//lv4 - 500
-//lv5 - 800
-//lv6 - 1200
-//lv7 - 2000
-//lv8 - 3000
-//lv9 - 4500
-//lv10 - 7000
-//lv11 - 10000
-//lv12 - 15000
-//lv13 - 30000
 
 class Me extends StatefulWidget {
   Me({Key key}) : super(key: key);
@@ -54,6 +41,7 @@ class _MeState extends State<Me> {
       body: data == null
           ? Container()
           : ListView(
+              physics: BouncingScrollPhysics(),
               children: [
                 MeInfoHead(
                   head: data["icon"],
@@ -61,8 +49,108 @@ class _MeState extends State<Me> {
                   score: data["score"],
                 ),
                 MeFiveBtns(),
+                Container(height: 17.5),
+                MeListGroup(),
+                Container(height: 100),
+                MeBottom(),
               ],
             ),
+    );
+  }
+}
+
+class MeBottom extends StatefulWidget {
+  MeBottom({Key key}) : super(key: key);
+
+  @override
+  State<MeBottom> createState() => _MeBottomState();
+}
+
+class _MeBottomState extends State<MeBottom> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+        child: CupertinoButton(
+          padding: EdgeInsets.all(0),
+          onPressed: () {},
+          child: Container(
+            padding:
+                EdgeInsets.only(left: 17.5, right: 17.5, top: 13, bottom: 15),
+            child: Text(
+              "@UESTC 河畔Lite",
+              style: TextStyle(color: Color(0xFFCCCCCC), fontSize: 15),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MeListGroup extends StatefulWidget {
+  MeListGroup({Key key}) : super(key: key);
+
+  @override
+  State<MeListGroup> createState() => _MeListGroupState();
+}
+
+class _MeListGroupState extends State<MeListGroup> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        MeList(txt: "水滴相关"),
+        MeList(txt: "在线用户"),
+        MeList(txt: "意见&Bug反馈"),
+        MeList(txt: "应用设置"),
+        MeList(txt: "关于"),
+      ],
+    );
+  }
+}
+
+class MeList extends StatefulWidget {
+  String txt;
+  MeList({
+    Key key,
+    this.txt,
+  }) : super(key: key);
+
+  @override
+  State<MeList> createState() => _MeListState();
+}
+
+class _MeListState extends State<MeList> {
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton(
+      pressedOpacity: 0.6,
+      padding: EdgeInsets.all(0),
+      onPressed: () {
+        print("hhhhh");
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 27.5, vertical: 18.5),
+        color: os_white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              widget.txt ?? "水滴相关",
+              style: TextStyle(
+                color: Color(0xFF5C5C5C),
+                fontSize: 16,
+              ),
+            ),
+            os_svg(
+              path: "lib/img/me_arrow_right.svg",
+              width: 7,
+              height: 14,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -98,7 +186,7 @@ class _MeFiveBtnsState extends State<MeFiveBtns> {
           ),
           MeBtnHero(
             img: "lib/img/me/btn4.svg",
-            txt: "足迹",
+            txt: "浏览历史",
             type: 4,
           ),
           MeBtnHero(
@@ -132,24 +220,43 @@ class _MeBtnHeroState extends State<MeBtnHero> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(5),
+      margin: EdgeInsets.symmetric(horizontal: 4, vertical: 5),
       child: myInkWell(
-        radius: 17,
+        tap: () {
+          Navigator.pushNamed(context, "/me_func", arguments: widget.type);
+        },
+        radius: 20,
         color: Color(0xFFF3F3F3),
         widget: Container(
-          width: 64 + (widget.txt ?? "收藏").length * 14.0,
-          padding: EdgeInsets.symmetric(vertical: 7.5),
+          width: 60 + (widget.txt ?? "收藏").length * 14.0,
+          padding: EdgeInsets.symmetric(vertical: 12.5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              os_svg(
-                path: widget.img ?? "lib/img/me/btn1.svg",
-                width: 33.5,
-                height: 33.5,
+              Hero(
+                tag: widget.img ?? "lib/img/me/btn1.svg",
+                child: Material(
+                  color: Colors.transparent,
+                  child: os_svg(
+                    path: widget.img ?? "lib/img/me/btn1.svg",
+                    width: 30,
+                    height: 30,
+                  ),
+                ),
               ),
-              Text(
-                widget.txt ?? "收藏",
-                style: TextStyle(fontSize: 14),
+              Container(width: 2),
+              Hero(
+                tag: widget.txt ?? "收藏",
+                child: Material(
+                  color: Colors.transparent,
+                  child: Text(
+                    widget.txt ?? "收藏",
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Color(0xFF505050),
+                    ),
+                  ),
+                ),
               ),
               Container(width: 5),
             ],
@@ -215,7 +322,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
   Widget build(BuildContext context) {
     return Container(
       color: os_white,
-      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 30),
+      padding: EdgeInsets.only(left: 25, right: 25, bottom: 40, top: 50),
       child: Row(
         children: [
           Container(

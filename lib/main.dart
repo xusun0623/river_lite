@@ -15,7 +15,8 @@ void main() {
   runApp(MyApp());
   if (Platform.isAndroid) {
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+    );
   }
 }
 
