@@ -46,5 +46,6 @@ flutter:
     - lib/img/square/
     - lib/img/home/
     - lib/img/msg/
+    - lib/img/me/
     - lib/collect_btn/
     - lib/page/msg_three/

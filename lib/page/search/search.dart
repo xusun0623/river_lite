@@ -29,6 +29,8 @@ class _SearchState extends State<Search> {
     setState(() {
       loading = true;
     });
+    _scrollController.animateTo(0,
+        duration: Duration(milliseconds: 500), curve: Curves.ease);
     var tmp = await Api().forum_search({
       "keyword": _controller.text ?? "",
       "page": 1,
