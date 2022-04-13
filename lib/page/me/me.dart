@@ -331,6 +331,14 @@ class MeInfo_HeadState extends State<MeInfoHead> {
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(100)),
               child: CachedNetworkImage(
+                placeholder: (context, url) => Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: os_grey,
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                  ),
+                ),
                 width: 60,
                 height: 60,
                 fit: BoxFit.cover,

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
@@ -172,24 +174,34 @@ class _DetailContState extends State<DetailCont> {
         return myInkWell(
           radius: 0,
           tap: () {
-            showModal(
-                context: context,
-                title: "请确认",
-                cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
-                confirmTxt: "立即前往",
-                cancelTxt: "复制链接",
-                confirm: () {
-                  launch(widget.data['url']);
-                },
-                cancel: () {
-                  Clipboard.setData(ClipboardData(text: widget.data['url']));
-                  showToast(
-                    context: context,
-                    type: XSToast.success,
-                    txt: "复制成功",
-                    duration: 500,
-                  );
-                });
+            if (widget.data['url'].toString().indexOf(
+                    "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=") >
+                -1) {
+              Navigator.pushNamed(
+                context,
+                "/topic_detail",
+                arguments:
+                    int.parse(widget.data["url"].toString().split("tid=")[1]),
+              );
+            } else
+              showModal(
+                  context: context,
+                  title: "请确认",
+                  cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
+                  confirmTxt: "立即前往",
+                  cancelTxt: "复制链接",
+                  confirm: () {
+                    launch(widget.data['url']);
+                  },
+                  cancel: () {
+                    Clipboard.setData(ClipboardData(text: widget.data['url']));
+                    showToast(
+                      context: context,
+                      type: XSToast.success,
+                      txt: "复制成功",
+                      duration: 500,
+                    );
+                  });
           },
           color: Colors.transparent,
           widget: Container(

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/components/topic.dart';
+import 'package:offer_show/components/totop.dart';
+import 'package:offer_show/page/topic/topic_detail.dart';
+import 'package:offer_show/util/interface.dart';
 
 class MeFunc extends StatefulWidget {
   int type;
+  int uid;
   MeFunc({
     Key key,
     this.type,
+    this.uid,
   }) : super(key: key);
 
   @override
@@ -13,7 +19,88 @@ class MeFunc extends StatefulWidget {
 }
 
 class _MeFuncState extends State<MeFunc> {
-  _getData() async {}
+  List data = [];
+  bool load_done = false;
+  bool loading = false;
+  ScrollController _scrollController = new ScrollController();
+  bool _showBackToTop = false;
+
+  _getData() async {
+    if (loading) return;
+    loading = true;
+    if (widget.type <= 3) {
+      //收藏、发表、回复
+      var tmp = await Api().user_topiclist({
+        "type": ["favorite", "topic", "reply"][widget.type - 1],
+        "uid": widget.uid ?? 221788,
+        "page": 1,
+        "pageSize": 10,
+      });
+      if (tmp != null && tmp["list"] != null) {
+        data = tmp["list"];
+        load_done = data.length % 10 != 0;
+        setState(() {});
+      }
+    }
+    loading = false;
+  }
+
+  _getMore() async {
+    if (loading) return;
+    loading = true;
+    if (load_done) return;
+    if (widget.type <= 3) {
+      //收藏、发表、回复
+      var tmp = await Api().user_topiclist({
+        "type": ["favorite", "topic", "reply"][widget.type - 1],
+        "uid": widget.uid ?? 221788,
+        "page": (data.length / 10).ceil() + 1,
+        "pageSize": 10,
+      });
+      if (tmp != null && tmp["list"] != null) {
+        data.addAll(tmp["list"]);
+        load_done = data.length % 10 != 0;
+        setState(() {});
+      }
+    }
+    loading = false;
+  }
+
+  List<Widget> _buildCont() {
+    List<Widget> tmp = [];
+    tmp.add(MeFuncHead(type: widget.type));
+    data.forEach((element) {
+      tmp.add(Topic(data: element));
+    });
+    if (!load_done) {
+      tmp.add(BottomLoading(color: Colors.transparent));
+    } else {
+      tmp.add(Container(height: 15));
+    }
+    return tmp;
+  }
+
+  @override
+  void initState() {
+    _getData();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _getMore();
+      }
+      if (_scrollController.position.pixels > 1000 && !_showBackToTop) {
+        setState(() {
+          _showBackToTop = true;
+        });
+      }
+      if (_scrollController.position.pixels < 1000 && _showBackToTop) {
+        setState(() {
+          _showBackToTop = false;
+        });
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +120,20 @@ class _MeFuncState extends State<MeFunc> {
         ),
       ),
       backgroundColor: Color(0xFFF3F3F3),
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        children: [
-          MeFuncHead(type: widget.type),
-          Center(
-            child: Container(
-              child: Text(widget.type.toString()),
-            ),
+      body: BackToTop(
+        bottom: 100,
+        controller: _scrollController,
+        show: _showBackToTop,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            return await _getData();
+          },
+          child: ListView(
+            controller: _scrollController,
+            physics: BouncingScrollPhysics(),
+            children: _buildCont(),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -97,5 +188,25 @@ class _MeFuncHeadState extends State<MeFuncHead> {
         ],
       ),
     );
+  }
+}
+
+class FuncWidget extends StatefulWidget {
+  int type;
+  Map data;
+  FuncWidget({
+    Key key,
+    this.type,
+    this.data,
+  }) : super(key: key);
+
+  @override
+  State<FuncWidget> createState() => _FuncWidgetState();
+}
+
+class _FuncWidgetState extends State<FuncWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return [Topic(data: widget.data)][widget.type - 1];
   }
 }
