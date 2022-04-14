@@ -1,9 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
+import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/storage.dart';
 
 class MeFunc extends StatefulWidget {
   int type;
@@ -42,6 +49,13 @@ class _MeFuncState extends State<MeFunc> {
         setState(() {});
       }
     }
+    if (widget.type == 4) {
+      //浏览记录
+      var arr_txt = await getStorage(key: "history", initData: "[]");
+      data = jsonDecode(arr_txt);
+      load_done = true;
+      setState(() {});
+    }
     loading = false;
   }
 
@@ -70,7 +84,7 @@ class _MeFuncState extends State<MeFunc> {
     List<Widget> tmp = [];
     tmp.add(MeFuncHead(type: widget.type));
     data.forEach((element) {
-      tmp.add(Topic(data: element));
+      tmp.add(FuncWidget(data: element, type: widget.type));
     });
     if (!load_done) {
       tmp.add(BottomLoading(color: Colors.transparent));
@@ -154,7 +168,7 @@ class _MeFuncHeadState extends State<MeFuncHead> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 35, vertical: 60),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 60),
       child: Row(
         children: [
           Hero(
@@ -207,6 +221,124 @@ class FuncWidget extends StatefulWidget {
 class _FuncWidgetState extends State<FuncWidget> {
   @override
   Widget build(BuildContext context) {
-    return [Topic(data: widget.data)][widget.type - 1];
+    return [
+      Topic(data: widget.data),
+      Topic(data: widget.data),
+      Topic(data: widget.data),
+      HistoryCard(data: widget.data),
+    ][widget.type - 1];
+  }
+}
+
+class HistoryCard extends StatefulWidget {
+  Map data;
+  HistoryCard({
+    Key key,
+    this.data,
+  }) : super(key: key);
+
+  @override
+  State<HistoryCard> createState() => _HistoryCardState();
+}
+
+class _HistoryCardState extends State<HistoryCard> {
+  _setHistory() async {
+    var history_data = await getStorage(key: "history", initData: "[]");
+    List history_arr = jsonDecode(history_data);
+    bool flag = false;
+    for (int i = 0; i < history_arr.length; i++) {
+      var ele = history_arr[i];
+      if (ele["userAvatar"] == widget.data["userAvatar"] &&
+          ele["title"] == widget.data["title"] &&
+          ele["subject"] == widget.data["subject"]) {
+        history_arr.removeAt(i);
+      }
+    }
+    List tmp_list_history = [
+      {
+        "userAvatar": widget.data["userAvatar"],
+        "title": widget.data["title"],
+        "subject": widget.data["subject"],
+        "time": widget.data["time"],
+        "topic_id": widget.data["topic_id"],
+      }
+    ];
+    tmp_list_history.addAll(history_arr);
+    setStorage(key: "history", value: jsonEncode(tmp_list_history));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: os_edge, right: os_edge, bottom: 10),
+      child: myInkWell(
+        radius: 10,
+        tap: () {
+          _setHistory();
+          Navigator.pushNamed(
+            context,
+            "/topic_detail",
+            arguments: widget.data["topic_id"],
+          );
+        },
+        widget: Container(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(100)),
+                child: CachedNetworkImage(
+                  imageUrl: widget.data["userAvatar"],
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Container(width: 15),
+              Container(
+                width: MediaQuery.of(context).size.width - 120,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 200,
+                      child: Text(
+                        widget.data["title"],
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    Container(height: 5),
+                    Text(
+                      RelativeDateFormat.format(
+                        DateTime.fromMillisecondsSinceEpoch(
+                          int.parse(widget.data["time"]),
+                        ),
+                      ),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFFBBBBBB),
+                      ),
+                    ),
+                    Container(height: 5),
+                    Text(
+                      widget.data["subject"] == ""
+                          ? "无"
+                          : widget.data["subject"],
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFFA3A3A3),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

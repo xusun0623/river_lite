@@ -221,12 +221,22 @@ class _MeBtnHeroState extends State<MeBtnHero> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromRGBO(0, 0, 0, 0.05),
+              blurRadius: 3,
+              spreadRadius: 1,
+              offset: Offset(1.5, 1.5),
+            ),
+          ]),
       child: myInkWell(
         tap: () {
           Navigator.pushNamed(context, "/me_func", arguments: widget.type);
         },
         radius: 20,
-        color: Color(0xFFF3F3F3),
+        color: os_white,
         widget: Container(
           width: 60 + (widget.txt ?? "收藏").length * 14.0,
           padding: EdgeInsets.symmetric(vertical: 12.5),
@@ -239,12 +249,11 @@ class _MeBtnHeroState extends State<MeBtnHero> {
                   color: Colors.transparent,
                   child: os_svg(
                     path: widget.img ?? "lib/img/me/btn1.svg",
-                    width: 30,
-                    height: 30,
+                    width: 32,
+                    height: 32,
                   ),
                 ),
               ),
-              Container(width: 2),
               Hero(
                 tag: widget.txt ?? "收藏",
                 child: Material(
