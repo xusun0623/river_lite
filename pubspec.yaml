@@ -44,8 +44,10 @@ flutter:
     - lib/emoji/2/
     - lib/img/
     - lib/img/square/
+    - lib/img/person/
     - lib/img/home/
     - lib/img/msg/
     - lib/img/me/
     - lib/collect_btn/
     - lib/page/msg_three/
+    

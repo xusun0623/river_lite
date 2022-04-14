@@ -329,78 +329,88 @@ class MeInfo_HeadState extends State<MeInfoHead> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: os_white,
-      padding: EdgeInsets.only(left: 25, right: 25, bottom: 40, top: 50),
-      child: Row(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(100)),
-              child: CachedNetworkImage(
-                placeholder: (context, url) => Container(
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          "/person_center",
+          arguments: {"uid": 221788, "isMe": true},
+        );
+      },
+      child: Container(
+        color: os_white,
+        padding: EdgeInsets.only(left: 25, right: 25, bottom: 40, top: 50),
+        child: Row(
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(100)),
+                child: CachedNetworkImage(
+                  placeholder: (context, url) => Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: os_grey,
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                    ),
+                  ),
                   width: 60,
                   height: 60,
-                  decoration: BoxDecoration(
-                    color: os_grey,
-                    borderRadius: BorderRadius.all(Radius.circular(100)),
-                  ),
+                  fit: BoxFit.cover,
+                  imageUrl: widget.head,
                 ),
-                width: 60,
-                height: 60,
-                fit: BoxFit.cover,
-                imageUrl: widget.head,
               ),
             ),
-          ),
-          Container(width: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.name,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+            Container(width: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.name,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Container(height: 5),
-              Row(
-                children: [
-                  Text("Lv.${_getLevel()}",
-                      style: TextStyle(color: Color(0xFF707070))),
-                  Container(width: 5),
-                  Stack(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width - 200,
-                        height: 7,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFE3E3E3),
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
-                        ),
-                      ),
-                      Positioned(
-                        child: Container(
-                          width: (MediaQuery.of(context).size.width - 200) *
-                              _getRate(),
+                Container(height: 5),
+                Row(
+                  children: [
+                    Text("Lv.${_getLevel()}",
+                        style: TextStyle(color: Color(0xFF707070))),
+                    Container(width: 5),
+                    Stack(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width - 200,
                           height: 7,
                           decoration: BoxDecoration(
-                            color: os_deep_blue,
+                            color: Color(0xFFE3E3E3),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(100)),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
+                        Positioned(
+                          child: Container(
+                            width: (MediaQuery.of(context).size.width - 200) *
+                                _getRate(),
+                            height: 7,
+                            decoration: BoxDecoration(
+                              color: os_deep_blue,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(100)),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

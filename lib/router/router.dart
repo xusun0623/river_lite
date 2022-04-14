@@ -9,6 +9,7 @@ import 'package:offer_show/page/me_func/me_func.dart';
 import 'package:offer_show/page/msg_detail/msg_detail.dart';
 import 'package:offer_show/page/msg_three/msg_three.dart';
 import 'package:offer_show/page/new/new.dart';
+import 'package:offer_show/page/personal/personal.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/search/search.dart';
 import 'package:offer_show/page/square/square.dart';
@@ -22,6 +23,7 @@ final routers = {
   "/square": () => Square(),
   "/404": () => Page404(),
   "/me_func": (data) => MeFunc(type: data),
+  "/person_center": (data) => PersonCenter(param: data),
   "/topic_detail": (data) => TopicDetail(topicID: data),
   "/search": () => Search(),
   "/column": (data) => TopicColumn(columnID: data),
