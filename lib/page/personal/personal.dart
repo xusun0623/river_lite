@@ -4,10 +4,15 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/components/topic.dart';
+import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
+import 'package:offer_show/page/topic/topic_detail.dart';
+import 'package:offer_show/util/interface.dart';
 
 class PersonCenter extends StatefulWidget {
   Map param;
+  //{"uid": 221788, "isMe": true},
   PersonCenter({
     Key key,
     this.param,
@@ -19,6 +24,111 @@ class PersonCenter extends StatefulWidget {
 
 class _PersonCenterState extends State<PersonCenter> {
   int index = 0;
+  List data = [];
+
+  int sendNum = 0;
+  int replyNum = 0;
+
+  bool loading = false;
+  bool load_done = false;
+  bool showBackToTop = false;
+
+  ScrollController _controller = new ScrollController();
+
+  _getData() async {
+    if (loading) return;
+    loading = true;
+    var tmp = await Api().user_topiclist({
+      "type": ["topic", "reply"][index],
+      "uid": widget.param["uid"],
+      "page": 1,
+      "pageSize": 10,
+    });
+    if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
+      data = tmp["list"];
+      load_done = data.length % 10 != 0;
+      sendNum = index == 0 ? tmp["total_num"] : sendNum;
+      replyNum = index == 1 ? tmp["total_num"] : replyNum;
+      setState(() {});
+    }
+    loading = false;
+  }
+
+  _getMore() async {
+    if (loading) return;
+    loading = true;
+    var tmp = await Api().user_topiclist({
+      "type": ["topic", "reply"][index],
+      "uid": widget.param["uid"],
+      "page": (data.length / 10).ceil() + 1,
+      "pageSize": 10,
+    });
+    if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
+      data.addAll(tmp["list"]);
+      load_done = data.length % 10 != 0;
+      setState(() {});
+    }
+    loading = false;
+  }
+
+  List<Widget> _buildCont() {
+    List<Widget> tmp = [
+      PersonCard(),
+      PersonIndex(
+        index: index,
+        sendNum: sendNum,
+        replyNum: replyNum,
+        isMe: widget.param["isMe"],
+        tapIndex: (idx) {
+          setState(() {
+            index = idx;
+            data = [];
+            load_done = false;
+          });
+          _getData();
+        },
+      ),
+    ];
+    if (data.length == 0 && load_done) {
+      tmp.add(Empty());
+    }
+    data.forEach((element) {
+      tmp.add(Topic(
+        backgroundColor: Colors.white54,
+        data: element,
+        top: 0,
+        bottom: 10,
+      ));
+    });
+    if (!load_done) {
+      tmp.add(BottomLoading(color: Colors.transparent));
+    }
+    tmp.add(Container(height: 20));
+    return tmp;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _getData();
+    _controller.addListener(() {
+      if (_controller.position.pixels > 1000 && !showBackToTop) {
+        setState(() {
+          showBackToTop = true;
+        });
+      }
+      if (_controller.position.pixels < 1000 && showBackToTop) {
+        setState(() {
+          showBackToTop = false;
+        });
+      }
+      if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+        _getMore();
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,20 +144,15 @@ class _PersonCenterState extends State<PersonCenter> {
         backgroundColor: Color(0xFFF3F3F3),
       ),
       backgroundColor: Color(0xFFF3F3F3),
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        children: [
-          PersonCard(),
-          PersonIndex(
-            index: index,
-            tapIndex: (idx) {
-              setState(() {
-                index = idx;
-              });
-            },
-          ),
-          Empty(),
-        ],
+      body: BackToTop(
+        show: showBackToTop,
+        controller: _controller,
+        bottom: 100,
+        child: ListView(
+          physics: BouncingScrollPhysics(),
+          controller: _controller,
+          children: _buildCont(),
+        ),
       ),
     );
   }
@@ -55,11 +160,18 @@ class _PersonCenterState extends State<PersonCenter> {
 
 class PersonIndex extends StatefulWidget {
   int index;
+  bool isMe;
   Function tapIndex;
+  int sendNum;
+  int replyNum;
+
   PersonIndex({
     Key key,
     this.index = 0,
     this.tapIndex,
+    this.isMe,
+    this.replyNum,
+    this.sendNum,
   }) : super(key: key);
 
   @override
@@ -77,6 +189,8 @@ class _PersonIndexState extends State<PersonIndex> {
             tap: (idx) {
               widget.tapIndex(0);
             },
+            countNum: widget.sendNum,
+            isMe: widget.isMe,
             select: widget.index == 0,
             index: 0,
           ),
@@ -84,6 +198,8 @@ class _PersonIndexState extends State<PersonIndex> {
             tap: (idx) {
               widget.tapIndex(1);
             },
+            countNum: widget.replyNum,
+            isMe: widget.isMe,
             select: widget.index == 1,
             index: 1,
           ),
@@ -96,12 +212,17 @@ class _PersonIndexState extends State<PersonIndex> {
 class PersonIndexTab extends StatefulWidget {
   Function tap;
   int index;
+  int countNum;
   bool select;
+  bool isMe;
+
   PersonIndexTab({
     Key key,
     this.tap,
     this.index,
     this.select,
+    this.isMe,
+    this.countNum,
   }) : super(key: key);
 
   @override
@@ -125,7 +246,11 @@ class _PersonIndexTabState extends State<PersonIndexTab> {
           child: Column(
             children: [
               Text(
-                ["ta的发表", "ta的回复"][widget.index],
+                [
+                      widget.isMe ? "我的发表" : "ta的发表",
+                      widget.isMe ? "我的回复" : "ta的回复"
+                    ][widget.index] +
+                    (widget.countNum == 0 ? "" : "(${widget.countNum})"),
                 style: TextStyle(
                   color: widget.select ? os_black : Color(0xFF7B7B7B),
                 ),

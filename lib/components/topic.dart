@@ -13,8 +13,17 @@ import '../outer/cached_network_image/cached_image_widget.dart';
 
 class Topic extends StatefulWidget {
   Map data;
+  double top;
+  double bottom;
+  Color backgroundColor;
 
-  Topic({Key key, this.data}) : super(key: key);
+  Topic({
+    Key key,
+    this.data,
+    this.top,
+    this.bottom,
+    this.backgroundColor,
+  }) : super(key: key);
 
   @override
   _TopicState createState() => _TopicState();
@@ -87,8 +96,14 @@ class _TopicState extends State<Topic> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(os_edge, 10, os_edge, 0),
+      padding: EdgeInsets.fromLTRB(
+        os_edge,
+        widget.top ?? 10,
+        os_edge,
+        widget.bottom ?? 0,
+      ),
       child: myInkWell(
+        color: widget.backgroundColor ?? os_white,
         tap: () {
           _setHistory();
           Navigator.pushNamed(
