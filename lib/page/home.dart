@@ -123,7 +123,7 @@ class _HomeState extends State<Home> {
           selectedItemColor: os_color,
           backgroundColor: os_white,
           type: BottomNavigationBarType.fixed,
-          onTap: (index) {
+          onTap: (index) async {
             Vibrate.feedback(FeedbackType.impact);
             _getNewMsg(); //获得新消息提醒
             setState(() {

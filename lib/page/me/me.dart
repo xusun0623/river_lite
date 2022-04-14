@@ -19,6 +19,7 @@ class _MeState extends State<Me> {
     var tmp = await Api().user_userinfo({});
     if (tmp != null && tmp["body"] != null) {
       data = tmp;
+      setState(() {});
     }
   }
 

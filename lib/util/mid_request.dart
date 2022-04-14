@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 
-import 'package:offer_show/asset/modal.dart';
-
 class ServerConfig {
   String url = "https://bbs.uestc.edu.cn/mobcent/app/web/index.php";
 }
 
-bool isLog = false;
+bool isLog = true;
 
 class XHttp {
   netWorkRequest({

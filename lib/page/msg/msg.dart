@@ -1,6 +1,5 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
@@ -52,7 +51,7 @@ class _MsgState extends State<Msg> {
     return tmp;
   }
 
-  _getPm() async {
+  getPm() async {
     var tmp = await Api().message_pmsessionlist({
       "json": {
         "page": 1,
@@ -91,7 +90,7 @@ class _MsgState extends State<Msg> {
     setState(() {});
   }
 
-  _getData() async {
+  getData() async {
     var data = await Api().message_heart({});
     if (data != null && data["body"] != null) {
       setState(() {
@@ -110,8 +109,8 @@ class _MsgState extends State<Msg> {
 
   @override
   void initState() {
-    _getData();
-    _getPm();
+    getData();
+    getPm();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels > 1000 && !showBackToTop) {
         setState(() {
@@ -140,9 +139,23 @@ class _MsgState extends State<Msg> {
     super.initState();
   }
 
+  GlobalKey<RefreshIndicatorState> _indicatorKey =
+      GlobalKey<RefreshIndicatorState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        elevation: 2,
+        backgroundColor: os_white,
+        foregroundColor: os_black,
+        onPressed: () {
+          _indicatorKey.currentState.show();
+          getData();
+          getPm();
+        },
+        child: Icon(Icons.refresh_rounded),
+      ),
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: os_white,
@@ -157,97 +170,98 @@ class _MsgState extends State<Msg> {
       body: Container(
         color: os_white,
         child: RefreshIndicator(
+          key: _indicatorKey,
           color: Color(0xFF2FCC7E),
           onRefresh: () async {
-            await _getData();
-            await _getPm();
+            await getData();
+            await getPm();
             return;
           },
-          child: BackToTop(
-            show: showBackToTop,
+          child: ListView(
+            physics: BouncingScrollPhysics(),
             controller: _scrollController,
-            animation: true,
-            child: ListView(
-              physics: BouncingScrollPhysics(),
-              controller: _scrollController,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 7),
-                  child: msg == null || msg is int
-                      ? Container()
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ColorBtn(
-                              tap: () {
-                                msg["atMeInfo"]["count"] = 0;
-                                setState(() {});
-                                if (widget.refresh != null) widget.refresh();
-                                Navigator.pushNamed(
-                                  context,
-                                  "/msg_three",
-                                  arguments: 0,
-                                );
-                              },
-                              path: "lib/img/msg/@.svg",
-                              title: "@我",
-                              data: msg["atMeInfo"],
-                            ),
-                            ColorBtn(
-                              path: "lib/img/msg/reply.svg",
-                              title: "回复",
-                              data: msg["replyInfo"],
-                              tap: () {
-                                msg["replyInfo"]["count"] = 0;
-                                setState(() {});
-                                if (widget.refresh != null) widget.refresh();
-                                Navigator.pushNamed(
-                                  context,
-                                  "/msg_three",
-                                  arguments: 1,
-                                );
-                              },
-                            ),
-                            ColorBtn(
-                              path: "lib/img/msg/noti.svg",
-                              title: "通知",
-                              data: msg["systemInfo"],
-                              tap: () {
-                                msg["systemInfo"]["count"] = 0;
-                                setState(() {});
-                                if (widget.refresh != null) widget.refresh();
-                                Navigator.pushNamed(
-                                  context,
-                                  "/msg_three",
-                                  arguments: 2,
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                ),
-                pmMsgArr.length == 0
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 7),
+                child: msg == null || msg is int
                     ? Container()
-                    : BottomTip(
-                        top: 25,
-                        bottom: 5,
-                        txt: "- 私信内容 -",
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ColorBtn(
+                            tap: () {
+                              msg["atMeInfo"]["count"] = 0;
+                              setState(() {});
+                              if (widget.refresh != null) widget.refresh();
+                              Navigator.pushNamed(
+                                context,
+                                "/msg_three",
+                                arguments: 0,
+                              );
+                            },
+                            path: "lib/img/msg/@.svg",
+                            title: "@我",
+                            data: msg["atMeInfo"],
+                          ),
+                          ColorBtn(
+                            path: "lib/img/msg/reply.svg",
+                            title: "回复",
+                            data: msg["replyInfo"],
+                            tap: () {
+                              msg["replyInfo"]["count"] = 0;
+                              setState(() {});
+                              if (widget.refresh != null) widget.refresh();
+                              Navigator.pushNamed(
+                                context,
+                                "/msg_three",
+                                arguments: 1,
+                              );
+                            },
+                          ),
+                          ColorBtn(
+                            path: "lib/img/msg/noti.svg",
+                            title: "通知",
+                            data: msg["systemInfo"],
+                            tap: () {
+                              msg["systemInfo"]["count"] = 0;
+                              setState(() {});
+                              if (widget.refresh != null) widget.refresh();
+                              Navigator.pushNamed(
+                                context,
+                                "/msg_three",
+                                arguments: 2,
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                pmMsgArr.length != 0
-                    ? Container()
-                    : Empty(
-                        txt: "暂无私信内容",
-                      ),
-                Column(
-                  children: _buildPMMsg(),
-                ),
-                (load_done || pmMsgArr.length == 0)
-                    ? Container()
-                    : Container(
-                        margin: EdgeInsets.only(bottom: 20),
-                        child: BottomLoading(color: os_white)),
-              ],
-            ),
+              ),
+              pmMsgArr.length == 0
+                  ? Container()
+                  : BottomTip(
+                      top: 25,
+                      bottom: 5,
+                      txt: "- 私信内容 -",
+                    ),
+              pmMsgArr.length != 0
+                  ? Container()
+                  : Empty(
+                      txt: "暂无私信内容",
+                    ),
+              Column(
+                children: _buildPMMsg(),
+              ),
+              (load_done || pmMsgArr.length == 0)
+                  ? Container()
+                  : Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: BottomLoading(color: os_white)),
+              Container(
+                height: MediaQuery.of(context).size.height -
+                    pmMsgArr.length * 200 -
+                    200,
+              ),
+            ],
           ),
         ),
       ),

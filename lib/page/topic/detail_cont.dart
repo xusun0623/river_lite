@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/saveImg.dart';
+import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/emoji/emoji.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
@@ -173,6 +174,15 @@ class _DetailContState extends State<DetailCont> {
       case 4: //网页链接
         return myInkWell(
           radius: 0,
+          longPress: () {
+            Clipboard.setData(ClipboardData(text: widget.data['url']));
+            showToast(
+              context: context,
+              type: XSToast.success,
+              txt: "复制成功",
+              duration: 500,
+            );
+          },
           tap: () {
             if (widget.data['url'].toString().indexOf(
                     "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=") >
@@ -183,25 +193,24 @@ class _DetailContState extends State<DetailCont> {
                 arguments:
                     int.parse(widget.data["url"].toString().split("tid=")[1]),
               );
+            } else if (widget.data['url'].toString().indexOf(
+                    "https://bbs.uestc.edu.cn/home.php?mod=space&uid=") >
+                -1) {
+              toUserSpace(
+                context,
+                int.parse(widget.data["url"].toString().split("uid=")[1]),
+              );
             } else
               showModal(
                   context: context,
                   title: "请确认",
                   cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
                   confirmTxt: "立即前往",
-                  cancelTxt: "复制链接",
+                  cancelTxt: "取消",
                   confirm: () {
                     launch(widget.data['url']);
                   },
-                  cancel: () {
-                    Clipboard.setData(ClipboardData(text: widget.data['url']));
-                    showToast(
-                      context: context,
-                      type: XSToast.success,
-                      txt: "复制成功",
-                      duration: 500,
-                    );
-                  });
+                  cancel: () {});
           },
           color: Colors.transparent,
           widget: Container(

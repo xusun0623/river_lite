@@ -5,6 +5,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
@@ -126,17 +127,23 @@ class _TopicState extends State<Topic> {
                   children: [
                     Row(
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: CachedNetworkImage(
-                            width: 30,
-                            height: 30,
-                            fit: BoxFit.cover,
-                            imageUrl: widget.data["userAvatar"],
-                            placeholder: (context, url) =>
-                                Container(color: os_grey),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                        GestureDetector(
+                          onTap: () {
+                            if (widget.data["user_nick_name"] != "匿名")
+                              toUserSpace(context, widget.data["user_id"]);
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: CachedNetworkImage(
+                              width: 30,
+                              height: 30,
+                              fit: BoxFit.cover,
+                              imageUrl: widget.data["userAvatar"],
+                              placeholder: (context, url) =>
+                                  Container(color: os_grey),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                            ),
                           ),
                         ),
                         Padding(padding: EdgeInsets.all(4)),

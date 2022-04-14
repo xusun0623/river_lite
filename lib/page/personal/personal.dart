@@ -25,6 +25,7 @@ class PersonCenter extends StatefulWidget {
 class _PersonCenterState extends State<PersonCenter> {
   int index = 0;
   List data = [];
+  Map userInfo;
 
   int sendNum = 0;
   int replyNum = 0;
@@ -34,6 +35,17 @@ class _PersonCenterState extends State<PersonCenter> {
   bool showBackToTop = false;
 
   ScrollController _controller = new ScrollController();
+
+  _getInfo() async {
+    var data = await Api().user_userinfo({
+      "userId": widget.param["uid"],
+    });
+    if (data != null && data["body"] != null) {
+      setState(() {
+        userInfo = data;
+      });
+    }
+  }
 
   _getData() async {
     if (loading) return;
@@ -49,6 +61,9 @@ class _PersonCenterState extends State<PersonCenter> {
       load_done = data.length % 10 != 0;
       sendNum = index == 0 ? tmp["total_num"] : sendNum;
       replyNum = index == 1 ? tmp["total_num"] : replyNum;
+      setState(() {});
+    } else {
+      load_done = true;
       setState(() {});
     }
     loading = false;
@@ -73,13 +88,16 @@ class _PersonCenterState extends State<PersonCenter> {
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [
-      PersonCard(),
+      PersonCard(
+        data: userInfo,
+      ),
       PersonIndex(
         index: index,
         sendNum: sendNum,
         replyNum: replyNum,
         isMe: widget.param["isMe"],
         tapIndex: (idx) {
+          if (idx == index) return;
           setState(() {
             index = idx;
             data = [];
@@ -111,6 +129,7 @@ class _PersonCenterState extends State<PersonCenter> {
   void initState() {
     // TODO: implement initState
     _getData();
+    _getInfo();
     _controller.addListener(() {
       if (_controller.position.pixels > 1000 && !showBackToTop) {
         setState(() {
@@ -144,16 +163,18 @@ class _PersonCenterState extends State<PersonCenter> {
         backgroundColor: Color(0xFFF3F3F3),
       ),
       backgroundColor: Color(0xFFF3F3F3),
-      body: BackToTop(
-        show: showBackToTop,
-        controller: _controller,
-        bottom: 100,
-        child: ListView(
-          physics: BouncingScrollPhysics(),
-          controller: _controller,
-          children: _buildCont(),
-        ),
-      ),
+      body: userInfo == null
+          ? Container()
+          : BackToTop(
+              show: showBackToTop,
+              controller: _controller,
+              bottom: 100,
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                controller: _controller,
+                children: _buildCont(),
+              ),
+            ),
     );
   }
 }
@@ -241,7 +262,7 @@ class _PersonIndexTabState extends State<PersonIndexTab> {
         color: Colors.transparent,
         radius: 25,
         widget: Container(
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
           width: (MediaQuery.of(context).size.width - 90) / 2,
           child: Column(
             children: [
@@ -273,14 +294,18 @@ class _PersonIndexTabState extends State<PersonIndexTab> {
 }
 
 class PersonCard extends StatefulWidget {
-  PersonCard({Key key}) : super(key: key);
+  Map data;
+  PersonCard({
+    Key key,
+    this.data,
+  }) : super(key: key);
 
   @override
   State<PersonCard> createState() => _PersonCardState();
 }
 
 class _PersonCardState extends State<PersonCard> {
-  int gender = 1;
+  int gender = 2;
   BoxDecoration _getBoxDecoration() {
     return BoxDecoration(
         color: os_white,
@@ -311,11 +336,20 @@ class _PersonCardState extends State<PersonCard> {
                 decoration: _getBoxDecoration(),
                 child: Column(
                   children: [
-                    PersonName(name: "xusun000"),
+                    PersonName(name: widget.data["name"]),
                     Container(height: 10),
-                    PersonScore(score: 388, gender: gender),
+                    PersonScore(
+                      score: widget.data["score"],
+                      gender: widget.data["gender"] == 0
+                          ? 1
+                          : widget.data["gender"],
+                    ),
                     Container(height: 30),
-                    PersonRow(),
+                    PersonRow(
+                      follow: widget.data["follow_num"],
+                      friend: widget.data["friend_num"],
+                      score: widget.data["score"],
+                    ),
                   ],
                 ),
               ),
@@ -324,7 +358,8 @@ class _PersonCardState extends State<PersonCard> {
           Positioned(
             right: 20,
             child: os_svg(
-              path: "lib/img/person/${gender}.svg",
+              path:
+                  "lib/img/person/${widget.data["gender"] == 0 ? 1 : widget.data["gender"]}.svg",
               width: 143,
               height: 166,
             ),
@@ -335,8 +370,7 @@ class _PersonCardState extends State<PersonCard> {
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(100)),
               child: CachedNetworkImage(
-                imageUrl:
-                    "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=221788&size=middle",
+                imageUrl: widget.data["icon"],
                 width: 66,
                 height: 66,
                 fit: BoxFit.cover,
@@ -356,7 +390,15 @@ class _PersonCardState extends State<PersonCard> {
 }
 
 class PersonRow extends StatefulWidget {
-  PersonRow({Key key}) : super(key: key);
+  int follow;
+  int friend;
+  int score;
+  PersonRow({
+    Key key,
+    this.follow,
+    this.friend,
+    this.score,
+  }) : super(key: key);
 
   @override
   State<PersonRow> createState() => _PersonRowState();
@@ -368,11 +410,20 @@ class _PersonRowState extends State<PersonRow> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        PersonColumn(index: 0),
+        PersonColumn(
+          index: 0,
+          count: widget.follow,
+        ),
         Container(width: 1, height: 27, color: Color(0xFFF1F1F1)),
-        PersonColumn(index: 1),
+        PersonColumn(
+          index: 1,
+          count: widget.friend,
+        ),
         Container(width: 1, height: 27, color: Color(0xFFF1F1F1)),
-        PersonColumn(index: 2),
+        PersonColumn(
+          index: 2,
+          count: widget.score,
+        ),
       ],
     );
   }
@@ -380,9 +431,11 @@ class _PersonRowState extends State<PersonRow> {
 
 class PersonColumn extends StatefulWidget {
   int index;
+  int count;
   PersonColumn({
     Key key,
     this.index,
+    this.count,
   }) : super(key: key);
 
   @override
@@ -390,6 +443,25 @@ class PersonColumn extends StatefulWidget {
 }
 
 class _PersonColumnState extends State<PersonColumn> {
+  int _getScoreLevel(int score) {
+    if (score > 10000) {
+      return 5;
+    }
+    if (score > 1000) {
+      return 4;
+    }
+    if (score > 500) {
+      return 3;
+    }
+    if (score > 100) {
+      return 2;
+    }
+    if (score > 50) {
+      return 1;
+    }
+    return 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -397,19 +469,38 @@ class _PersonColumnState extends State<PersonColumn> {
       child: Column(
         children: [
           Text(
-            ["粉丝", "关注", "好友"][widget.index],
+            ["粉丝", "关注", "威望"][widget.index],
             style: TextStyle(
               color: Color(0xFF939393),
               fontSize: 12,
             ),
           ),
           Container(height: 7.5),
-          Text(
-            ["1", "0", "0"][widget.index],
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w900,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              widget.index == 2
+                  ? Icon(
+                      Icons.gpp_good_rounded,
+                      size: 16,
+                      color: [
+                        Color(0xFF888888),
+                        Color(0xFF3E8B1B),
+                        Color(0xFF468ef0),
+                        Color(0xFF0d28f5),
+                        Color(0xFFFF5E00),
+                        Color(0xFFe93625),
+                      ][_getScoreLevel(widget.count)],
+                    )
+                  : Container(),
+              Text(
+                (widget.count ?? 0).toString(),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -8,6 +8,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
@@ -1506,15 +1507,26 @@ class _CommentState extends State<Comment> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(100)),
-              child: CachedNetworkImage(
-                imageUrl: widget.data["icon"],
-                placeholder: (context, url) =>
-                    Container(color: os_grey, width: 35, height: 35),
-                width: 35,
-                height: 35,
-                fit: BoxFit.cover,
+            GestureDetector(
+              onTap: () {
+                if (widget.data["reply_name"] != "匿名")
+                  toUserSpace(
+                      context,
+                      int.parse(widget.data["icon"]
+                          .toString()
+                          .split("uid=")[1]
+                          .split("&size=")[0]));
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(100)),
+                child: CachedNetworkImage(
+                  imageUrl: widget.data["icon"],
+                  placeholder: (context, url) =>
+                      Container(color: os_grey, width: 35, height: 35),
+                  width: 35,
+                  height: 35,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Container(
@@ -2066,6 +2078,10 @@ class TopicDetailHead extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return myInkWell(
+        tap: () {
+          if (data["topic"]["user_nick_name"] != "匿名")
+            toUserSpace(context, data["topic"]["user_id"]);
+        },
         color: Colors.transparent,
         widget: Container(
           margin: EdgeInsets.fromLTRB(5, 12, 5, 12),
