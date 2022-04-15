@@ -318,6 +318,8 @@ class PersonCard extends StatefulWidget {
 
 class _PersonCardState extends State<PersonCard> {
   int gender = 2;
+  TextEditingController _sign_controller = new TextEditingController();
+
   BoxDecoration _getBoxDecoration() {
     return BoxDecoration(
         color: os_white,
@@ -330,6 +332,125 @@ class _PersonCardState extends State<PersonCard> {
             spreadRadius: 2,
           )
         ]);
+  }
+
+  _editSign() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      context: context,
+      builder: (context) {
+        return Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: 30,
+          ),
+          height: MediaQuery.of(context).size.height - 100,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(height: 30),
+              Text(
+                "请输入新的签名",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Container(height: 10),
+              Container(
+                height: 60,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 15,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  color: os_grey,
+                ),
+                child: Center(
+                  child: TextField(
+                    controller: _sign_controller,
+                    cursorColor: os_deep_blue,
+                    decoration: InputDecoration(
+                      hintText: "请输入",
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ),
+              Container(height: 10),
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: myInkWell(
+                      tap: () {
+                        Navigator.pop(context);
+                      },
+                      color: Color(0x16004DFF),
+                      widget: Container(
+                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                        height: 40,
+                        child: Center(
+                          child: Text(
+                            "取消",
+                            style: TextStyle(
+                              color: os_deep_blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      radius: 12.5,
+                    ),
+                  ),
+                  Container(
+                    child: myInkWell(
+                      tap: () async {
+                        String tmp = _sign_controller.text;
+                        await Api().user_updateuserinfo({
+                          "type": "info",
+                          "gender": widget.data["gender"],
+                          "sign": tmp,
+                        });
+                        widget.data["sign"] = tmp;
+                        setState(() {});
+                        Navigator.pop(context);
+                      },
+                      color: os_deep_blue,
+                      widget: Container(
+                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                        height: 40,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.done, color: os_white, size: 18),
+                              Container(width: 5),
+                              Text(
+                                "完成",
+                                style: TextStyle(
+                                  color: os_white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      radius: 12.5,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -349,11 +470,19 @@ class _PersonCardState extends State<PersonCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PersonName(name: widget.data["name"], isMe: widget.isMe),
+                    GestureDetector(
+                        onTap: () {
+                          // if (widget.isMe) _editSign();
+                        },
+                        child: PersonName(
+                            name: widget.data["name"], isMe: widget.isMe)),
                     widget.isMe
                         ? Sign(
                             data: widget.data,
-                            tap: () {},
+                            tap: () {
+                              _sign_controller.text = widget.data["sign"];
+                              _editSign();
+                            },
                           )
                         : (widget.data["sign"].toString().trim() == ""
                             ? Container()
@@ -477,39 +606,39 @@ class _SignState extends State<Sign> {
         },
         radius: 10,
         color: os_grey,
-        widget: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 12.5,
-                vertical: 10,
+        widget: Container(
+          width: MediaQuery.of(context).size.width - 60,
+          padding: EdgeInsets.symmetric(
+            horizontal: 12.5,
+            vertical: 10,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.edit_calendar_outlined,
+                size: 15,
+                color: Color(0xFF666666),
               ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.edit_calendar_outlined,
-                    size: 15,
+              Container(width: 5),
+              Container(
+                width: MediaQuery.of(context).size.width - 120,
+                child: Text(
+                  widget.data["sign"].toString().trim() == ""
+                      ? "点我编辑签名"
+                      : widget.data["sign"],
+                  style: TextStyle(
+                    fontSize: 13,
                     color: Color(0xFF666666),
                   ),
-                  Container(width: 5),
-                  Text(
-                    widget.data["sign"].toString().trim() == ""
-                        ? "点我编辑签名"
-                        : widget.data["sign"],
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF666666),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -742,17 +871,11 @@ class _PersonNameState extends State<PersonName> {
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           Container(width: 5),
-          widget.isMe
-              ? Icon(
-                  Icons.edit_note_sharp,
-                  color: Color(0xFF000000),
-                  size: 20,
-                )
-              : Icon(
-                  Icons.chevron_right_rounded,
-                  color: Color(0xFF000000),
-                  size: 20,
-                ),
+          Icon(
+            Icons.chevron_right_rounded,
+            color: Color(0xFF000000),
+            size: 20,
+          ),
         ],
       ),
     );
