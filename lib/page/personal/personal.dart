@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
@@ -7,8 +9,15 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
+import 'package:offer_show/outer/showActionSheet/action_item.dart';
+import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
+import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
+import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+
+Color boy_color = os_deep_blue;
+Color girl_color = Color(0xFFFF6B3D);
 
 class PersonCenter extends StatefulWidget {
   Map param;
@@ -89,6 +98,7 @@ class _PersonCenterState extends State<PersonCenter> {
   List<Widget> _buildCont() {
     List<Widget> tmp = [
       PersonCard(
+        isMe: widget.param["isMe"],
         data: userInfo,
       ),
       PersonIndex(
@@ -112,7 +122,7 @@ class _PersonCenterState extends State<PersonCenter> {
     }
     data.forEach((element) {
       tmp.add(Topic(
-        backgroundColor: Colors.white54,
+        // backgroundColor: Colors.white54,
         data: element,
         top: 0,
         bottom: 10,
@@ -295,9 +305,11 @@ class _PersonIndexTabState extends State<PersonIndexTab> {
 
 class PersonCard extends StatefulWidget {
   Map data;
+  bool isMe;
   PersonCard({
     Key key,
     this.data,
+    this.isMe,
   }) : super(key: key);
 
   @override
@@ -335,8 +347,17 @@ class _PersonCardState extends State<PersonCard> {
                 width: MediaQuery.of(context).size.width - 2 * os_edge,
                 decoration: _getBoxDecoration(),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PersonName(name: widget.data["name"]),
+                    PersonName(name: widget.data["name"], isMe: widget.isMe),
+                    widget.isMe
+                        ? Sign(
+                            data: widget.data,
+                            tap: () {},
+                          )
+                        : (widget.data["sign"].toString().trim() == ""
+                            ? Container()
+                            : Sign(data: widget.data)),
                     Container(height: 10),
                     PersonScore(
                       score: widget.data["score"],
@@ -357,33 +378,139 @@ class _PersonCardState extends State<PersonCard> {
           ),
           Positioned(
             right: 20,
-            child: os_svg(
-              path:
-                  "lib/img/person/${widget.data["gender"] == 0 ? 1 : widget.data["gender"]}.svg",
-              width: 143,
-              height: 166,
+            child: GestureDetector(
+              onTap: () {
+                if (widget.isMe)
+                  showActionSheet(
+                    context: context,
+                    topActionItem: TopActionItem(title: "请选择你的性别"),
+                    actions: [
+                      ActionItem(
+                        title: "男生",
+                        onPressed: () async {
+                          await Api().user_updateuserinfo({
+                            "type": "info",
+                            "gender": 1,
+                            "sign": widget.data["sign"],
+                          });
+                          widget.data["gender"] = 1;
+                          setState(() {});
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ActionItem(
+                        title: "女生",
+                        onPressed: () async {
+                          await Api().user_updateuserinfo({
+                            "type": "info",
+                            "gender": 2,
+                            "sign": widget.data["sign"],
+                          });
+                          widget.data["gender"] = 2;
+                          setState(() {});
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                    bottomActionItem: BottomActionItem(title: "取消"),
+                  );
+              },
+              child: os_svg(
+                path:
+                    "lib/img/person/${widget.data["gender"] == 0 ? 1 : widget.data["gender"]}.svg",
+                width: 143,
+                height: 166,
+              ),
             ),
           ),
           Positioned(
             left: 32,
             top: 20,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(100)),
-              child: CachedNetworkImage(
-                imageUrl: widget.data["icon"],
-                width: 66,
-                height: 66,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(100)),
-                    color: os_grey,
+            child: GestureDetector(
+              onTap: () {
+                // Navigator.pushNamed(context, "/crop");
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(100)),
+                child: CachedNetworkImage(
+                  imageUrl: widget.data["icon"],
+                  width: 66,
+                  height: 66,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      color: os_grey,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class Sign extends StatefulWidget {
+  var data;
+  Function tap;
+  Sign({
+    Key key,
+    this.data,
+    this.tap,
+  }) : super(key: key);
+
+  @override
+  State<Sign> createState() => _SignState();
+}
+
+class _SignState extends State<Sign> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      child: myInkWell(
+        tap: () {
+          if (widget.tap != null) widget.tap();
+        },
+        radius: 10,
+        color: os_grey,
+        widget: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 12.5,
+                vertical: 10,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.edit_calendar_outlined,
+                    size: 15,
+                    color: Color(0xFF666666),
+                  ),
+                  Container(width: 5),
+                  Text(
+                    widget.data["sign"].toString().trim() == ""
+                        ? "点我编辑签名"
+                        : widget.data["sign"],
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF666666),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -579,7 +706,7 @@ class PersonScoreState extends State<PersonScore> {
                 width: (MediaQuery.of(context).size.width - 220) * _getRate(),
                 height: 7,
                 decoration: BoxDecoration(
-                  color: widget.gender == 1 ? os_deep_blue : Color(0xFFFF6B3D),
+                  color: widget.gender == 1 ? os_deep_blue : girl_color,
                   borderRadius: BorderRadius.all(Radius.circular(100)),
                 ),
               ),
@@ -591,28 +718,41 @@ class PersonScoreState extends State<PersonScore> {
   }
 }
 
-class PersonName extends StatelessWidget {
+class PersonName extends StatefulWidget {
   String name;
+  bool isMe;
   PersonName({
     Key key,
     this.name,
+    this.isMe,
   }) : super(key: key);
 
+  @override
+  State<PersonName> createState() => _PersonNameState();
+}
+
+class _PersonNameState extends State<PersonName> {
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Row(
         children: [
           Text(
-            name,
+            widget.name,
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           Container(width: 5),
-          Icon(
-            Icons.edit_note_sharp,
-            color: Color(0xFFBABABA),
-            size: 20,
-          ),
+          widget.isMe
+              ? Icon(
+                  Icons.edit_note_sharp,
+                  color: Color(0xFF000000),
+                  size: 20,
+                )
+              : Icon(
+                  Icons.chevron_right_rounded,
+                  color: Color(0xFF000000),
+                  size: 20,
+                ),
         ],
       ),
     );

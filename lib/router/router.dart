@@ -1,6 +1,7 @@
 import 'package:offer_show/page/404.dart';
 import 'package:offer_show/page/broke.dart';
 import 'package:offer_show/page/column/column.dart';
+import 'package:offer_show/page/crop/crop.dart';
 import 'package:offer_show/page/home.dart';
 import 'package:offer_show/page/hot/homeHot.dart';
 import 'package:offer_show/page/home/myhome.dart';
@@ -26,6 +27,7 @@ final routers = {
   "/person_center": (data) => PersonCenter(param: data),
   "/topic_detail": (data) => TopicDetail(topicID: data),
   "/search": () => Search(),
+  "/crop": () => CropImg(),
   "/column": (data) => TopicColumn(columnID: data),
   "/hot": () => Hot(),
   "/new": (data) => PostNew(board: data),

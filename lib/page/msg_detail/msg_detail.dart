@@ -12,6 +12,7 @@ import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
@@ -951,8 +952,7 @@ class _LookRoomState extends State<LookRoom> {
       padding: EdgeInsets.symmetric(vertical: 10),
       child: myInkWell(
         tap: () {
-          print("前往个人空间，uid是${widget.uid ?? 0}");
-          // Navigator.pushNamed(context, "/search", arguments: widget.uid ?? 0);
+          toUserSpace(context, widget.uid);
         },
         color: Color(0xFFEEEEEE),
         widget: Container(

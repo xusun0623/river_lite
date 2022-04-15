@@ -30,7 +30,7 @@ dependencies:
   flutter_cache_manager: ^3.3.0
   cached_network_image_platform_interface: ^1.0.0
   cached_network_image_web: ^1.0.0
-
+  crop_your_image: ^0.7.2
 
 dev_dependencies:
   flutter_test:
