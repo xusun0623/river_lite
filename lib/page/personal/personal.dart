@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/empty.dart';
@@ -13,6 +15,7 @@ import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
+import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 
@@ -170,6 +173,43 @@ class _PersonCenterState extends State<PersonCenter> {
           },
           icon: Icon(Icons.chevron_left_rounded),
         ),
+        actions: userInfo == null
+            ? []
+            : widget.param["isMe"]
+                ? []
+                : [
+                    IconButton(
+                      onPressed: () async {
+                        await Api().user_useradmin({
+                          "type": userInfo["is_follow"] == 0
+                              ? "follow"
+                              : "unfollow",
+                          "uid": widget.param["uid"],
+                        });
+                        setState(() {
+                          userInfo["is_follow"] = 1 - userInfo["is_follow"];
+                        });
+                      },
+                      icon: Icon(
+                        Icons.person_add_rounded,
+                        color: userInfo["is_follow"] == 0
+                            ? Color(0xFFAAAAAA)
+                            : os_color,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/msg_detail", arguments: {
+                          "uid": widget.param["uid"],
+                          "name": userInfo["name"],
+                        });
+                      },
+                      icon: Icon(
+                        Icons.mail,
+                        color: Color(0xFFAAAAAA),
+                      ),
+                    )
+                  ],
         backgroundColor: Color(0xFFF3F3F3),
       ),
       backgroundColor: Color(0xFFF3F3F3),
@@ -179,12 +219,61 @@ class _PersonCenterState extends State<PersonCenter> {
               show: showBackToTop,
               controller: _controller,
               bottom: 100,
-              child: ListView(
-                physics: BouncingScrollPhysics(),
-                controller: _controller,
-                children: _buildCont(),
+              child: RefreshIndicator(
+                color: os_deep_blue,
+                onRefresh: () async {
+                  return await _getInfo();
+                },
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  controller: _controller,
+                  children: _buildCont(),
+                ),
               ),
             ),
+    );
+  }
+}
+
+class ActionButton extends StatefulWidget {
+  Function tap;
+  String txt;
+  Color color;
+  Color backgroundColor;
+  ActionButton({
+    Key key,
+    this.tap,
+    this.txt,
+    this.color,
+    this.backgroundColor,
+  }) : super(key: key);
+
+  @override
+  State<ActionButton> createState() => _ActionButtonState();
+}
+
+class _ActionButtonState extends State<ActionButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: myInkWell(
+        tap: () {
+          if (widget.tap != null) widget.tap();
+        },
+        color: widget.backgroundColor ?? Color(0xFFEEEEEE),
+        widget: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Center(
+              child: Text(
+            widget.txt ?? "私信",
+            style: TextStyle(
+              color: widget.color ?? os_black,
+            ),
+          )),
+        ),
+        radius: 100,
+      ),
     );
   }
 }
@@ -463,19 +552,21 @@ class _PersonCardState extends State<PersonCard> {
               Container(height: 60),
               Container(
                 margin: EdgeInsets.only(left: os_edge, right: os_edge),
-                padding:
-                    EdgeInsets.only(left: 25, right: 25, top: 40, bottom: 30),
+                padding: EdgeInsets.only(left: 25, right: 25, top: 40),
                 width: MediaQuery.of(context).size.width - 2 * os_edge,
                 decoration: _getBoxDecoration(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
-                        onTap: () {
-                          // if (widget.isMe) _editSign();
-                        },
-                        child: PersonName(
-                            name: widget.data["name"], isMe: widget.isMe)),
+                      onTap: () {
+                        // if (widget.isMe) _editSign();
+                      },
+                      child: PersonName(
+                        name: widget.data["name"],
+                        isMe: widget.isMe,
+                      ),
+                    ),
                     widget.isMe
                         ? Sign(
                             data: widget.data,
@@ -494,8 +585,11 @@ class _PersonCardState extends State<PersonCard> {
                           ? 1
                           : widget.data["gender"],
                     ),
-                    Container(height: 30),
                     PersonRow(
+                      uid: int.parse(widget.data["icon"]
+                          .toString()
+                          .split("uid=")[1]
+                          .split("&size")[0]),
                       follow: widget.data["follow_num"],
                       friend: widget.data["friend_num"],
                       score: widget.data["score"],
@@ -557,7 +651,18 @@ class _PersonCardState extends State<PersonCard> {
             top: 20,
             child: GestureDetector(
               onTap: () {
-                // Navigator.pushNamed(context, "/crop");
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (_) => PhotoPreview(
+                      galleryItems: [
+                        widget.data["icon"].toString().split("middle")[0] +
+                            "big"
+                      ],
+                      defaultImage: 0,
+                    ),
+                  ),
+                );
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
@@ -649,11 +754,13 @@ class PersonRow extends StatefulWidget {
   int follow;
   int friend;
   int score;
+  int uid;
   PersonRow({
     Key key,
     this.follow,
     this.friend,
     this.score,
+    this.uid,
   }) : super(key: key);
 
   @override
@@ -667,11 +774,13 @@ class _PersonRowState extends State<PersonRow> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         PersonColumn(
+          uid: widget.uid,
           index: 0,
           count: widget.follow,
         ),
         Container(width: 1, height: 27, color: Color(0xFFF1F1F1)),
         PersonColumn(
+          uid: widget.uid,
           index: 1,
           count: widget.friend,
         ),
@@ -688,10 +797,12 @@ class _PersonRowState extends State<PersonRow> {
 class PersonColumn extends StatefulWidget {
   int index;
   int count;
+  int uid;
   PersonColumn({
     Key key,
     this.index,
     this.count,
+    this.uid,
   }) : super(key: key);
 
   @override
@@ -720,45 +831,58 @@ class _PersonColumnState extends State<PersonColumn> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: (MediaQuery.of(context).size.width - 100) / 3,
-      child: Column(
-        children: [
-          Text(
-            ["粉丝", "关注", "威望"][widget.index],
-            style: TextStyle(
-              color: Color(0xFF939393),
-              fontSize: 12,
-            ),
-          ),
-          Container(height: 7.5),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              widget.index == 2
-                  ? Icon(
-                      Icons.gpp_good_rounded,
-                      size: 16,
-                      color: [
-                        Color(0xFF888888),
-                        Color(0xFF3E8B1B),
-                        Color(0xFF468ef0),
-                        Color(0xFF0d28f5),
-                        Color(0xFFFF5E00),
-                        Color(0xFFe93625),
-                      ][_getScoreLevel(widget.count)],
-                    )
-                  : Container(),
-              Text(
-                (widget.count ?? 0).toString(),
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                ),
+    return GestureDetector(
+      onTap: () {
+        if (widget.index == 0 || widget.index == 1) {
+          Navigator.pushNamed(context, "/user_list", arguments: {
+            "type": widget.index,
+            "uid": widget.uid,
+          });
+        }
+      },
+      child: Container(
+        width: (MediaQuery.of(context).size.width - 100) / 3,
+        height: 90,
+        color: os_white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              ["粉丝", "关注", "威望"][widget.index],
+              style: TextStyle(
+                color: Color(0xFF939393),
+                fontSize: 12,
               ),
-            ],
-          ),
-        ],
+            ),
+            Container(height: 7.5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                widget.index == 2
+                    ? Icon(
+                        Icons.gpp_good_rounded,
+                        size: 16,
+                        color: [
+                          Color(0xFF888888),
+                          Color(0xFF3E8B1B),
+                          Color(0xFF468ef0),
+                          Color(0xFF0d28f5),
+                          Color(0xFFFF5E00),
+                          Color(0xFFe93625),
+                        ][_getScoreLevel(widget.count)],
+                      )
+                    : Container(),
+                Text(
+                  (widget.count ?? 0).toString(),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

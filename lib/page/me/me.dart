@@ -39,23 +39,34 @@ class _MeState extends State<Me> {
         elevation: 0,
       ),
       backgroundColor: os_white,
-      body: data == null
-          ? Container()
-          : ListView(
-              physics: BouncingScrollPhysics(),
-              children: [
-                MeInfoHead(
-                  head: data["icon"],
-                  name: data["name"],
-                  score: data["score"],
-                ),
-                MeFiveBtns(),
-                Container(height: 17.5),
-                MeListGroup(),
-                Container(height: 100),
-                MeBottom(),
-              ],
-            ),
+      body: RefreshIndicator(
+        color: os_deep_blue,
+        onRefresh: () async {
+          return await _getData();
+        },
+        child: ListView(
+          physics: BouncingScrollPhysics(),
+          children: [
+            data == null
+                ? MeInfoHead(
+                    head: null,
+                    name: "请登陆",
+                    score: 0,
+                  )
+                : MeInfoHead(
+                    head: data["icon"],
+                    name: data["name"],
+                    score: data["score"],
+                  ),
+            MeFiveBtns(),
+            Container(height: 17.5),
+            MeListGroup(),
+            Container(height: 100),
+            MeBottom(),
+            Container(height: 80),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -332,11 +343,15 @@ class MeInfo_HeadState extends State<MeInfoHead> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(
-          context,
-          "/person_center",
-          arguments: {"uid": 221788, "isMe": true},
-        );
+        if (widget.head == null) {
+          print("前往授权登陆");
+        } else {
+          Navigator.pushNamed(
+            context,
+            "/person_center",
+            arguments: {"uid": 221788, "isMe": true},
+          );
+        }
       },
       child: Container(
         color: os_white,
@@ -348,20 +363,35 @@ class MeInfo_HeadState extends State<MeInfoHead> {
               height: 60,
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
-                child: CachedNetworkImage(
-                  placeholder: (context, url) => Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: os_grey,
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                    ),
-                  ),
-                  width: 60,
-                  height: 60,
-                  fit: BoxFit.cover,
-                  imageUrl: widget.head,
-                ),
+                child: widget.head == null
+                    ? Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: os_grey,
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                        ),
+                        child: os_svg(
+                          path: "lib/img/anoy.svg",
+                          width: 60,
+                          height: 60,
+                        ),
+                      )
+                    : CachedNetworkImage(
+                        placeholder: (context, url) => Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: os_grey,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100)),
+                          ),
+                        ),
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
+                        imageUrl: widget.head,
+                      ),
               ),
             ),
             Container(width: 20),

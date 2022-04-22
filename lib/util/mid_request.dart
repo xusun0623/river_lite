@@ -1,13 +1,46 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 
 class ServerConfig {
   String url = "https://bbs.uestc.edu.cn/mobcent/app/web/index.php";
+  // String url = "http://124.223.79.175:8000";
 }
 
 bool isLog = true;
 
 class XHttp {
+  // 有代理
+  // netWorkRequest({
+  //   String url = "",
+  //   Map header,
+  //   Map param, //参数
+  // }) async {
+  //   param.forEach((key, value) {
+  //     if (value is int) {
+  //       param[key] = "$value";
+  //     }
+  //   });
+  //   print("${param}");
+
+  //   var request = http.Request('GET', Uri.parse('http://124.223.79.175:8000'));
+  //   request.bodyFields = new Map<String, String>.from(param);
+  //   request.followRedirects = false;
+
+  //   http.StreamedResponse response = await request.send();
+
+  //   if (response != null) {
+  //     Map<String, dynamic> user =
+  //         jsonDecode(await response.stream.bytesToString());
+  //     if (isLog) print("地址:$url入参:$param回参:$user");
+  //     return user;
+  //   } else {
+  //     print(response.reasonPhrase);
+  //     return new Map();
+  //   }
+  // }
+
+  // 无代理
   netWorkRequest({
     String url = "",
     Map header,

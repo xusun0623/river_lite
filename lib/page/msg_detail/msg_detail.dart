@@ -76,6 +76,7 @@ class MsgDetailState extends State<MsgDetail> {
     } else {
       userInfo = {};
       pmList = [];
+      setState(() {});
     }
   }
 
@@ -131,7 +132,14 @@ class MsgDetailState extends State<MsgDetail> {
         ));
       });
     }
-    if (tmp.length % space == 1 && pmList.length != 0 && tmp.length != 101) {
+    print("${pmList}");
+    if (tmp.length % space == 1 &&
+        pmList != null &&
+        pmList.length != 0 &&
+        pmList[0] != null &&
+        pmList[0]["msgList"] != null &&
+        pmList[0]["msgList"].length != 0 &&
+        tmp.length != 101) {
       tmp.add(Center(
         child: Container(
           width: 160,
@@ -297,7 +305,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
   List img_urls = [];
 
   bool dont_send_flag = false;
-  int dont_send_clock = 12;
+  int dont_send_clock = 10;
 
   bool selecting_emoji = false;
 
@@ -338,7 +346,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
     );
     setState(() {
       dont_send_flag = true;
-      dont_send_clock = 12;
+      dont_send_clock = 10;
       sending = false;
       img_urls = [];
       _focusNode.unfocus();
@@ -346,13 +354,13 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
     //可能需要延时一下再请求
     await Future.delayed(Duration(milliseconds: 750));
     widget.sended();
-    dont_send_clock = 12;
+    dont_send_clock = 10;
     time = Timer.periodic(Duration(milliseconds: 1000), (t) {
       setState(() {
         dont_send_clock--;
       });
     });
-    await Future.delayed(Duration(milliseconds: 12000));
+    await Future.delayed(Duration(milliseconds: 10000));
     time.cancel();
     dont_send_flag = false;
     setState(() {});
@@ -468,7 +476,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                       color: Color(0xFFA3A3A3),
                                     ),
                                     hintText: dont_send_flag
-                                        ? "请稍等 ${dont_send_clock} 秒…"
+                                        ? "由于河畔后台限制，请稍等 ${dont_send_clock} 秒…"
                                         : "说点什么吧…",
                                   ),
                                 ),
@@ -815,14 +823,17 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                             child: CachedNetworkImage(
                               filterQuality: FilterQuality.low,
                               width: 125,
-                              height: 125,
+                              height: 180,
                               fit: BoxFit.cover,
                               placeholderFadeInDuration:
                                   Duration(milliseconds: 500),
                               placeholder: (context, url) => Container(
                                 width: 125,
-                                height: 125,
-                                padding: EdgeInsets.all(50),
+                                height: 180,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 50,
+                                  vertical: 77.5,
+                                ),
                                 child: CircularProgressIndicator(
                                   color: widget.index == 0
                                       ? os_deep_grey

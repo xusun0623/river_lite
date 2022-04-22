@@ -15,6 +15,7 @@ import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/search/search.dart';
 import 'package:offer_show/page/square/square.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
+import 'package:offer_show/page/user_list/user_list.dart';
 
 final routers = {
   "/": () => Home(),
@@ -33,6 +34,7 @@ final routers = {
   "/new": (data) => PostNew(board: data),
   "/msg_three": (data) => MsgThree(type: data),
   "/msg_detail": (data) => MsgDetail(usrInfo: data),
+  "/user_list": (data) => UserList(data: data),
   "/photo_view": ({data}) => PhotoPreview(
         galleryItems: data.galleryItems,
         defaultImage: data.defaultImage,
