@@ -7,7 +7,8 @@ class ServerConfig {
   // String url = "http://124.223.79.175:8000";
 }
 
-bool isLog = true;
+// bool isLog = false; //控制是否打印网络输出日志
+bool isLog = true; //控制是否打印网络输出日志
 
 class XHttp {
   // 有代理

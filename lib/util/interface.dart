@@ -10,6 +10,28 @@ import 'package:http/http.dart' as http;
 /// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 
 class Api {
+  user_report(Map m) async {
+    Map tmp = {
+      "r": "user/report",
+    };
+    tmp.addAll(m);
+    return await XHttp().postWithGlobalToken(
+      url: "",
+      param: tmp,
+    );
+  }
+
+  user_userfavorite(Map m) async {
+    Map tmp = {
+      "r": "user/userfavorite",
+    };
+    tmp.addAll(m);
+    return await XHttp().postWithGlobalToken(
+      url: "",
+      param: tmp,
+    );
+  }
+
   user_useradmin(Map m) async {
     Map tmp = {
       "r": "user/useradmin",
@@ -253,9 +275,9 @@ class Api {
   }
 
   //搜索
-  forum_search(Map m) async {
+  forum_search(int select, Map m) async {
     Map tmp = {
-      "r": "forum/search",
+      "r": ["forum/search", "user/searchuser"][select], //0-搜索帖子 1-搜索用户
     };
     tmp.addAll(m);
     return await XHttp().postWithGlobalToken(

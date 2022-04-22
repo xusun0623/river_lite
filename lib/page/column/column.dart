@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/topic.dart';
@@ -244,7 +245,11 @@ class _TopicColumnState extends State<TopicColumn> {
           elevation: 0,
         ),
         body: data == null || data["list"] == null
-            ? Container()
+            ? Loading(
+                showError: load_done,
+                msg: "帖子专栏走丢了，或许网页端可以连接该星球",
+                backgroundColor: os_back,
+              )
             : BackToTop(
                 animation: false,
                 show: showBackToTop,

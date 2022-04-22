@@ -10,15 +10,21 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/empty.dart';
+import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/totop.dart';
+import 'package:offer_show/outer/showActionSheet/action_item.dart';
+import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
+import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
+import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/page/topic/emoji.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
@@ -268,11 +274,11 @@ class _TopicDetailState extends State<TopicDetail> {
               title: Text(""),
               actions: [
                 TopicDetailHead(data: data),
-                TopicDetailMore(),
+                TopicDetailMore(data: data),
               ],
             ),
       body: data == null || data["topic"] == null
-          ? Container()
+          ? Loading()
           : Stack(
               children: [
                 Container(
@@ -805,7 +811,6 @@ class AtSomeone extends StatefulWidget {
 class _AtSomeoneState extends State<AtSomeone> {
   var list = [];
   bool load_done = false;
-  bool load_finish = false;
   ScrollController _scrollController = new ScrollController();
 
   @override
@@ -821,17 +826,19 @@ class _AtSomeoneState extends State<AtSomeone> {
   }
 
   _getData() async {
-    if (load_finish) return;
+    if (load_done) return;
     var pageSize = 20;
     var data = await Api().forum_atuserlist({
-      "page": (list.length / pageSize + 1).toInt(),
+      "page": (list.length / pageSize + 1).ceil(),
       "pageSize": pageSize,
     });
     if (data != null && data["list"] != null && data["list"].length != 0) {
       list.addAll(data["list"]);
-      load_finish = data["list"].length < pageSize;
+      load_done =
+          (data["list"].length % pageSize != 0 || data["list"].length == 0);
+    } else {
+      load_done = true;
     }
-    load_done = true;
     setState(() {});
   }
 
@@ -874,7 +881,7 @@ class _AtSomeoneState extends State<AtSomeone> {
         ),
       ));
     });
-    if (list.length != 0 && !load_finish) {
+    if (list.length != 0 && !load_done) {
       tmp.add(Container(
         padding: EdgeInsets.only(top: 15, bottom: 25),
         child: Center(
@@ -1133,36 +1140,53 @@ class _TopicVoteState extends State<TopicVote> {
               Container(
                 width: MediaQuery.of(context).size.width - 50,
                 padding: EdgeInsets.symmetric(vertical: 7.5, horizontal: 12),
+                decoration: !selected
+                    ? null
+                    : BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(6.5)),
+                        gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          stops: [
+                            (element["total_num"] / widget.poll_info["voters"]),
+                            (element["total_num"] /
+                                    widget.poll_info["voters"]) +
+                                0.00001
+                          ],
+                          colors: [os_color_opa, os_white],
+                        ),
+                      ),
                 child: Center(
-                  child: Text(
-                    (selected && select == (ele_idx) ? "【已选】" : "") +
-                        (element["name"].length > 12
-                            ? element["name"].toString().substring(0, 12) + "…"
-                            : element["name"].toString()),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: selected ? os_color : os_black,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 180,
+                    child: Text(
+                      (selected && select == (ele_idx) ? "【已选】" : "") +
+                          (element["name"].toString()),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: selected ? os_color : os_black,
+                      ),
                     ),
                   ),
                 ),
               ),
-              selected
-                  ? Positioned(
-                      left: 0.5,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: os_color_opa,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(6),
-                            bottomLeft: Radius.circular(6),
-                          ),
-                        ),
-                        width: (MediaQuery.of(context).size.width - 50) *
-                            (element["total_num"] / widget.poll_info["voters"]),
-                        height: 34.5,
-                      ),
-                    )
-                  : Container(),
+              // selected
+              //     ? Positioned(
+              //         left: 0.5,
+              //         child: Container(
+              //           decoration: BoxDecoration(
+              //             color: os_color_opa,
+              //             borderRadius: BorderRadius.only(
+              //               topLeft: Radius.circular(6),
+              //               bottomLeft: Radius.circular(6),
+              //             ),
+              //           ),
+              //           width: (MediaQuery.of(context).size.width - 50) *
+              //               (element["total_num"] / widget.poll_info["voters"]),
+              //           height: 34.5,
+              //         ),
+              //       )
+              //     : Container(),
               Positioned(
                 child: Text(
                   selected
@@ -1983,9 +2007,10 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         os_svg(
-                            path: "lib/img/topic_water.svg",
-                            width: 14,
-                            height: 17),
+                          path: "lib/img/topic_water.svg",
+                          width: 14,
+                          height: 17,
+                        ),
                         Padding(
                             padding: EdgeInsets.all(
                                 widget.data["topic"]["reward"] != null
@@ -2003,11 +2028,27 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                 ),
                 radius: 10),
             myInkWell(
+                tap: () async {
+                  await Api().user_userfavorite({
+                    "idType": "tid",
+                    "action": [
+                      "favorite",
+                      "delfavorite"
+                    ][widget.data["topic"]["is_favor"]],
+                    "id": widget.data["topic"]["topic_id"],
+                  });
+                  setState(() {
+                    widget.data["topic"]["is_favor"] =
+                        1 - widget.data["topic"]["is_favor"];
+                  });
+                },
                 widget: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(children: [
                     os_svg(
-                        path: "lib/img/topic_collect.svg",
+                        path: widget.data["topic"]["is_favor"] == 1
+                            ? "lib/img/topic_collect_blue.svg"
+                            : "lib/img/topic_collect.svg",
                         width: 14,
                         height: 17),
                   ]),
@@ -2046,13 +2087,72 @@ class TopicDetailTitle extends StatelessWidget {
 
 // 更多操作
 class TopicDetailMore extends StatelessWidget {
-  const TopicDetailMore({
+  Map data;
+  TopicDetailMore({
     Key key,
+    this.data,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return myInkWell(
+      tap: () {
+        showActionSheet(
+          context: context,
+          bottomActionItem: BottomActionItem(title: "取消"),
+          actions: [
+            ActionItem(
+              title: "举报",
+              onPressed: () async {
+                Navigator.pop(context);
+                await Api().user_report({
+                  "idType": "thread",
+                  "message": data["topic"]["title"],
+                  "id": data["topic"]["topic_id"]
+                });
+                showModal(
+                    context: context,
+                    title: "请确认",
+                    cont: "是否要举报该帖子？",
+                    confirm: () {
+                      showToast(
+                        context: context,
+                        type: XSToast.success,
+                        txt: "已举报",
+                      );
+                    });
+              },
+            ),
+            ActionItem(
+              title: "分享",
+              onPressed: () {
+                Navigator.pop(context);
+                Share.share("【河畔Lite客户端】分享给你一个帖子" +
+                    "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
+                    data["topic"]["topic_id"].toString());
+              },
+            ),
+            ActionItem(
+              title: "复制帖子链接",
+              onPressed: () {
+                Clipboard.setData(
+                  ClipboardData(
+                    text:
+                        "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
+                            data["topic"]["topic_id"].toString(),
+                  ),
+                );
+                Navigator.pop(context);
+                showToast(
+                  context: context,
+                  type: XSToast.success,
+                  txt: "复制成功！",
+                );
+              },
+            ),
+          ],
+        );
+      },
       widget: Padding(
         padding: const EdgeInsets.all(10.0),
         child: os_svg(

@@ -31,6 +31,8 @@ dependencies:
   cached_network_image_platform_interface: ^1.0.0
   cached_network_image_web: ^1.0.0
   crop_your_image: ^0.7.2
+  share_plus: ^4.0.4
+  lottie: ^1.3.0
 
 dev_dependencies:
   flutter_test:
@@ -50,4 +52,5 @@ flutter:
     - lib/img/me/
     - lib/collect_btn/
     - lib/page/msg_three/
+    - lib/lottie/
     

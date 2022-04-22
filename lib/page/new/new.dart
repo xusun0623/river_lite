@@ -12,6 +12,7 @@ import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/storage.dart';
 
 class PostNew extends StatefulWidget {
   var board;
@@ -108,6 +109,36 @@ class _PostNewState extends State<PostNew> {
           },
         ),
         actions: [
+          GestureDetector(
+            onTap: () async {
+              print(tip_controller.text);
+              String tmp = await getStorage(key: "draft", initData: "[]");
+              List tmp_arr = jsonDecode(tmp);
+              List tmp_tmp_arr = [tip_controller.text];
+              tmp_tmp_arr.addAll(tmp_arr);
+              await setStorage(key: "draft", value: jsonEncode(tmp_tmp_arr));
+              showToast(context: context, type: XSToast.success, txt: "保存成功！");
+              tip_focus.unfocus();
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 14),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 14),
+                decoration: BoxDecoration(
+                  color: os_color_opa,
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                ),
+                child: Center(
+                  child: Container(
+                    child: Text(
+                      "保存草稿",
+                      style: TextStyle(color: os_color),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
           RightTopSend(
             tap: () async {
               var contents = [
@@ -936,7 +967,7 @@ class _RightTopSendState extends State<RightTopSend> {
         widget.tap();
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+        padding: EdgeInsets.only(left: 5, right: 10, top: 14, bottom: 14),
         child: Container(
           width: 60,
           height: 25,

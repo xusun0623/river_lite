@@ -153,8 +153,9 @@ class _TopicState extends State<Topic> {
                             Text(
                               widget.data["user_nick_name"],
                               style: TextStyle(
-                                color: Color(0xFF636363),
+                                color: Color(0xFF333333),
                                 fontSize: 15,
+                                // fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
@@ -211,19 +212,6 @@ class _TopicState extends State<Topic> {
                             });
                           },
                         ),
-                        myInkWell(
-                          color: Colors.transparent,
-                          widget: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: os_svg(
-                              path: "lib/img/more.svg",
-                              width: 14,
-                              height: 14,
-                            ),
-                          ),
-                          radius: 100,
-                          tap: () {},
-                        )
                       ],
                     )
                   ],

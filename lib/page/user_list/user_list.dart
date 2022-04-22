@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -33,7 +34,11 @@ class _UserListState extends State<UserList> {
     if (tmp != null && tmp["list"] != null) {
       setState(() {
         data = tmp["list"];
-        load_done = data.length % 10 != 0;
+        load_done = data.length % 10 != 0 || data.length == 0;
+      });
+    } else {
+      setState(() {
+        load_done = true;
       });
     }
   }
@@ -49,7 +54,11 @@ class _UserListState extends State<UserList> {
     if (tmp != null && tmp["list"] != null) {
       setState(() {
         data.addAll(tmp["list"]);
-        load_done = data.length % 10 != 0;
+        load_done = data.length % 10 != 0 || data.length == 0;
+      });
+    } else {
+      setState(() {
+        load_done = true;
       });
     }
   }
@@ -59,7 +68,9 @@ class _UserListState extends State<UserList> {
     data.forEach((element) {
       tmp.add(UserListCard(data: element));
     });
-    if (!load_done) tmp.add(BottomLoading(color: Colors.transparent));
+    if (!load_done) {
+      tmp.add(BottomLoading(color: Colors.transparent));
+    } else if (load_done && data.length == 0) tmp.add(Empty(txt: "这里是一颗空的星球"));
     return tmp;
   }
 

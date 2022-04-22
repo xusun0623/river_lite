@@ -1,9 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
@@ -56,6 +60,13 @@ class _MeFuncState extends State<MeFunc> {
       load_done = true;
       setState(() {});
     }
+    if (widget.type == 5) {
+      //草稿
+      var arr_txt = await getStorage(key: "draft", initData: "[]");
+      data = jsonDecode(arr_txt);
+      load_done = true;
+      setState(() {});
+    }
     loading = false;
   }
 
@@ -83,9 +94,18 @@ class _MeFuncState extends State<MeFunc> {
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
     tmp.add(MeFuncHead(type: widget.type));
-    data.forEach((element) {
-      tmp.add(FuncWidget(data: element, type: widget.type));
-    });
+    if (widget.type == 5) {
+      data.forEach((element) {
+        tmp.add(DraftCard(data: element));
+      });
+    } else {
+      data.forEach((element) {
+        tmp.add(FuncWidget(data: element, type: widget.type));
+      });
+    }
+    if (data.length == 0 && load_done) {
+      tmp.add(Empty(txt: "这里是一颗空的星球"));
+    }
     if (!load_done) {
       tmp.add(BottomLoading(color: Colors.transparent));
     } else {
@@ -123,6 +143,30 @@ class _MeFuncState extends State<MeFunc> {
         backgroundColor: Color(0xFFF3F3F3),
         foregroundColor: Color(0xFF505050),
         elevation: 0,
+        actions: widget.type == 4 || widget.type == 5
+            ? [
+                IconButton(
+                    onPressed: () {
+                      showModal(
+                        context: context,
+                        cont: "确定清除所有记录?",
+                        title: "请确认",
+                        confirm: () async {
+                          if (widget.type == 4) {
+                            await setStorage(key: "history", value: "[]");
+                            _getData();
+                          }
+                          if (widget.type == 5) {
+                            await setStorage(key: "draft", value: "[]");
+                            _getData();
+                          }
+                        },
+                      );
+                    },
+                    icon: Icon(Icons.clear_all)),
+                Container(width: 10),
+              ]
+            : [],
         leading: IconButton(
           icon: Icon(
             Icons.chevron_left_rounded,
@@ -227,6 +271,60 @@ class _FuncWidgetState extends State<FuncWidget> {
       Topic(data: widget.data),
       HistoryCard(data: widget.data),
     ][widget.type - 1];
+  }
+}
+
+class DraftCard extends StatefulWidget {
+  String data;
+  DraftCard({
+    Key key,
+    this.data,
+  }) : super(key: key);
+
+  @override
+  State<DraftCard> createState() => _DraftCardState();
+}
+
+class _DraftCardState extends State<DraftCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
+      decoration: BoxDecoration(
+        // color: os_white,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: myInkWell(
+        radius: 10,
+        longPress: () {
+          Clipboard.setData(ClipboardData(text: widget.data));
+          showToast(context: context, type: XSToast.success, txt: "复制成功！");
+        },
+        tap: () {
+          Clipboard.setData(ClipboardData(text: widget.data));
+          showToast(context: context, type: XSToast.success, txt: "复制成功！");
+        },
+        widget: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width - 100,
+                child: Text(widget.data),
+              ),
+              Text(
+                "复制",
+                style: TextStyle(
+                  color: os_color,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
