@@ -31,7 +31,7 @@ class _UserListState extends State<UserList> {
       "uid": widget.data["uid"],
       "type": ["followed", "follow"][widget.data["type"]],
     });
-    if (tmp != null && tmp["list"] != null) {
+    if (tmp != null && tmp["rs"] != 0 && tmp["list"] != null) {
       setState(() {
         data = tmp["list"];
         load_done = data.length % 10 != 0 || data.length == 0;

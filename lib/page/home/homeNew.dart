@@ -89,7 +89,10 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       "pageSize": pageSize,
       "sortby": "new"
     });
-    if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
+    if (tmp != null &&
+        tmp["rs"] != 0 &&
+        tmp["list"] != null &&
+        tmp["list"].length != 0) {
       data.addAll(tmp["list"]);
       setStorage(key: "home_new_reply", value: jsonEncode(data));
     }

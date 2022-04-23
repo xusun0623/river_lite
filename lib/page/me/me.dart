@@ -5,6 +5,9 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:offer_show/util/storage.dart';
+import 'package:provider/provider.dart';
 
 class Me extends StatefulWidget {
   Me({Key key}) : super(key: key);
@@ -17,9 +20,11 @@ class _MeState extends State<Me> {
   Map data;
   _getData() async {
     var tmp = await Api().user_userinfo({});
-    if (tmp != null && tmp["body"] != null) {
-      data = tmp;
-      setState(() {});
+    if (tmp != null && tmp["rs"] != 0 && tmp["body"] != null) {
+      UserInfoProvider provider =
+          Provider.of<UserInfoProvider>(context, listen: false);
+      provider.data = tmp;
+      provider.refresh();
     }
   }
 
@@ -31,6 +36,7 @@ class _MeState extends State<Me> {
 
   @override
   Widget build(BuildContext context) {
+    UserInfoProvider provider = Provider.of<UserInfoProvider>(context);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -47,16 +53,16 @@ class _MeState extends State<Me> {
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
-            data == null
+            provider.data == null
                 ? MeInfoHead(
                     head: null,
                     name: "请登陆",
                     score: 0,
                   )
                 : MeInfoHead(
-                    head: data["icon"],
-                    name: data["name"],
-                    score: data["score"],
+                    head: provider.data["icon"] ?? provider.data["avatar"],
+                    name: provider.data["name"] ?? provider.data["userName"],
+                    score: provider.data["score"],
                   ),
             MeFiveBtns(),
             Container(height: 17.5),
@@ -85,12 +91,23 @@ class _MeBottomState extends State<MeBottom> {
       child: Center(
         child: CupertinoButton(
           padding: EdgeInsets.all(0),
-          onPressed: () {},
+          onPressed: () {
+            UserInfoProvider provider =
+                Provider.of<UserInfoProvider>(context, listen: false);
+            provider.data = null;
+            provider.refresh();
+            setStorage(key: "myinfo", value: "");
+            setStorage(key: "topic_like", value: "");
+            setStorage(key: "history", value: "[]");
+            setStorage(key: "draft", value: "[]");
+            setStorage(key: "search-history", value: "[]");
+            setState(() {});
+          },
           child: Container(
             padding:
                 EdgeInsets.only(left: 17.5, right: 17.5, top: 13, bottom: 15),
             child: Text(
-              "@UESTC 河畔Lite",
+              "退出登录 >",
               style: TextStyle(color: Color(0xFFCCCCCC), fontSize: 15),
             ),
           ),
@@ -344,7 +361,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
     return GestureDetector(
       onTap: () {
         if (widget.head == null) {
-          print("前往授权登陆");
+          Navigator.pushNamed(context, "/login");
         } else {
           Navigator.pushNamed(
             context,

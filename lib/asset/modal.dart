@@ -187,6 +187,29 @@ void showToast({
 }) {
   if (isShown) return;
   isShown = true;
+  if (type == XSToast.none) {
+    popDialog(
+      delay: duration ?? 1500,
+      context: context,
+      widget: Container(
+        // padding: EdgeInsets.all(30),
+        width: 240,
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: Color(0xBB000000),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              child: Text(txt ?? "加载中…", style: TextStyle(color: os_white)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   if (type == XSToast.loading) {
     popDialog(
       delay: duration ?? 3000,

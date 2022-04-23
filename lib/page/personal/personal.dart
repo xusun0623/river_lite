@@ -68,7 +68,10 @@ class _PersonCenterState extends State<PersonCenter> {
       "page": 1,
       "pageSize": 10,
     });
-    if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
+    if (tmp != null &&
+        tmp["rs"] != 0 &&
+        tmp["list"] != null &&
+        tmp["list"].length != 0) {
       data = tmp["list"];
       load_done = data.length % 10 != 0;
       sendNum = index == 0 ? tmp["total_num"] : sendNum;

@@ -58,7 +58,7 @@ class _MsgState extends State<Msg> {
         "pageSize": 10,
       }.toString()
     });
-    if (tmp != null && tmp["body"] != null) {
+    if (tmp != null && tmp["rs"] != 0 && tmp["body"] != null) {
       pmMsgArr = tmp["body"]["list"];
       load_done = tmp["body"]["list"].length < 10;
     } else {
@@ -260,11 +260,6 @@ class _MsgState extends State<Msg> {
                   : Container(
                       margin: EdgeInsets.only(bottom: 20),
                       child: BottomLoading(color: os_white)),
-              Container(
-                height: MediaQuery.of(context).size.height -
-                    pmMsgArr.length * 200 -
-                    200,
-              ),
             ],
           ),
         ),

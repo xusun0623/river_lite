@@ -20,7 +20,7 @@ class _SquareState extends State<Square> {
 
   _getData() async {
     var tmp = await Api().forum_forumlist({});
-    if (tmp != null && tmp["list"] != null) {
+    if (tmp != null && tmp["rs"] != 0 && tmp["list"] != null) {
       data = tmp["list"];
     }
     setState(() {});

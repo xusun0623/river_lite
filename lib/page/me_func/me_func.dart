@@ -47,7 +47,7 @@ class _MeFuncState extends State<MeFunc> {
         "page": 1,
         "pageSize": 10,
       });
-      if (tmp != null && tmp["list"] != null) {
+      if (tmp != null && tmp["rs"] != 0 && tmp["list"] != null) {
         data = tmp["list"];
         load_done = data.length % 10 != 0;
         setState(() {});
@@ -82,7 +82,7 @@ class _MeFuncState extends State<MeFunc> {
         "page": (data.length / 10).ceil() + 1,
         "pageSize": 10,
       });
-      if (tmp != null && tmp["list"] != null) {
+      if (tmp != null && tmp["rs"] != 0 && tmp["list"] != null) {
         data.addAll(tmp["list"]);
         load_done = data.length % 10 != 0;
         setState(() {});

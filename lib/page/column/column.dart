@@ -74,16 +74,21 @@ class _TopicColumnState extends State<TopicColumn> {
               ["classificationType_id"],
       "sortby": "new",
     });
-    // await Future.delayed(Duration(milliseconds: 200));
-    var list = data["classificationType_list"];
-    theme = ["全部分栏"];
-    if (list != null && list.length != 0) {
-      for (var i = 0; i < list.length; i++) {
-        theme.add(list[i]["classificationType_name"]);
+    if (data["rs"] != 0) {
+      // await Future.delayed(Duration(milliseconds: 200));
+      var list = data["classificationType_list"];
+      theme = ["全部分栏"];
+      if (list != null && list.length != 0) {
+        for (var i = 0; i < list.length; i++) {
+          theme.add(list[i]["classificationType_name"]);
+        }
       }
+      loading = false;
+      load_done = (data["list"] ?? []).length < 10;
+    } else {
+      loading = false;
+      load_done = true;
     }
-    loading = false;
-    load_done = (data["list"] ?? []).length < 10;
     setState(() {});
     return;
   }

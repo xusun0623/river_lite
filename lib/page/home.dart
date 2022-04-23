@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
   _getNewMsg() async {
     var data = await Api().message_heart({});
     var count = 0;
-    if (data != null && data["body"] != null) {
+    if (data != null && data["rs"] != 0 && data["body"] != null) {
       count += data["body"]["replyInfo"]["count"];
       count += data["body"]["atMeInfo"]["count"];
       count += data["body"]["systemInfo"]["count"];

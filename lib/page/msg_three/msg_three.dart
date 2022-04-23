@@ -57,7 +57,10 @@ class _MsgThreeState extends State<MsgThree> {
         "page": 1,
         "pageSize": 10,
       });
-      if (tmp != null && tmp["body"] != null && tmp["body"]["data"] != null) {
+      if (tmp != null &&
+          tmp["rs"] != 0 &&
+          tmp["body"] != null &&
+          tmp["body"]["data"] != null) {
         setState(() {
           datas = tmp["body"]["data"];
           if (tmp["list"] != null) lists = tmp["list"];
@@ -75,7 +78,10 @@ class _MsgThreeState extends State<MsgThree> {
         "page": 1,
         "pageSize": 10,
       });
-      if (tmp != null && tmp["body"] != null && tmp["body"]["data"] != null) {
+      if (tmp != null &&
+          tmp["rs"] != 0 &&
+          tmp["body"] != null &&
+          tmp["body"]["data"] != null) {
         setState(() {
           datas = tmp["body"]["data"];
           load_done = datas.length % 10 != 0 || datas.length == 0;

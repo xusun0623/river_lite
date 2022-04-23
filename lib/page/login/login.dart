@@ -1,9 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:offer_show/util/storage.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   Login({Key key}) : super(key: key);
@@ -16,6 +23,38 @@ class _LoginState extends State<Login> {
   String username;
   String password;
 
+  bool showSuccess = false;
+
+  _login() async {
+    if (username == "" ||
+        password == "" ||
+        username == null ||
+        password == null) return;
+    showToast(context: context, type: XSToast.loading, txt: "加载中…");
+    await Future.delayed(Duration(milliseconds: 500));
+    var data = await Api().user_login({
+      "type": "login",
+      "username": username,
+      "password": password,
+    });
+    hideToast();
+    if (data != null) {
+      if (data["rs"] == 0) {
+        showToast(context: context, type: XSToast.none, txt: data["errcode"]);
+      }
+      if (data["rs"] == 1) {
+        setStorage(key: "myinfo", value: jsonEncode(data));
+        UserInfoProvider provider =
+            Provider.of<UserInfoProvider>(context, listen: false);
+        provider.data = data;
+        provider.refresh();
+        setState(() {
+          showSuccess = true;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,22 +64,86 @@ class _LoginState extends State<Login> {
         elevation: 0,
       ),
       backgroundColor: os_white,
-      body: Container(
-        child: ListView(
-          physics: BouncingScrollPhysics(),
-          children: [
-            LoginHead(),
-            LoginInput(
-              change: (uname, pword) {
-                username = uname;
-                password = pword;
-              },
+      body: showSuccess
+          ? Container(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.done,
+                    size: 50,
+                    color: os_deep_blue,
+                  ),
+                  Container(height: 10),
+                  Text(
+                    "登录成功",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                  Container(height: 10),
+                  Container(
+                    width: 300,
+                    child: Text(
+                      "你已成功登录清水河畔，请敬请享受来自河畔的体验吧",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  Container(height: 300),
+                  GestureDetector(
+                    onTap: () {
+                      if (Navigator.canPop(context)) Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 150,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        color: Color.fromRGBO(0, 77, 255, 0.1),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "确定",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromRGBO(0, 77, 255, 1),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(height: 100),
+                ],
+              ),
+            )
+          : Container(
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                children: [
+                  LoginHead(),
+                  LoginInput(
+                    change: (uname, pword) {
+                      username = uname;
+                      password = pword;
+                    },
+                  ),
+                  Container(height: 50),
+                  LiginSubmit(
+                    tap: () {
+                      _login();
+                    },
+                  ),
+                  Container(height: 150),
+                ],
+              ),
             ),
-            Container(height: 50),
-            LiginSubmit(),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -61,7 +164,9 @@ class _LiginSubmitState extends State<LiginSubmit> {
   Widget build(BuildContext context) {
     return Bounce(
       duration: Duration(milliseconds: 80),
-      onPressed: () {},
+      onPressed: () {
+        if (widget.tap != null) widget.tap();
+      },
       child: Container(
         width: MediaQuery.of(context).size.width - 4 * os_edge,
         margin: EdgeInsets.symmetric(horizontal: os_edge * 2),
@@ -95,7 +200,9 @@ class _LoginHelpState extends State<LoginHelp> {
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pushNamed(context, "/login_helper");
+      },
       padding: EdgeInsets.all(0),
       child: Container(
         margin: EdgeInsets.only(top: 10),

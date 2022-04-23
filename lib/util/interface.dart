@@ -10,6 +10,17 @@ import 'package:http/http.dart' as http;
 /// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 
 class Api {
+  user_login(Map m) async {
+    Map tmp = {
+      "r": "user/login",
+    };
+    tmp.addAll(m);
+    return await XHttp().post(
+      url: "",
+      param: tmp,
+    );
+  }
+
   user_report(Map m) async {
     Map tmp = {
       "r": "user/report",

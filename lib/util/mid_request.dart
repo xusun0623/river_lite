@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
+import 'package:offer_show/util/storage.dart';
 
 class ServerConfig {
   String url = "https://bbs.uestc.edu.cn/mobcent/app/web/index.php";
@@ -74,23 +75,19 @@ class XHttp {
     Map param,
     String url,
   }) async {
-    // final prefs = await SharedPreferences.getInstance();
-    // final String accessToken = prefs.getString('accessToken');
-    // final String accessSecret = prefs.getString('accessSecret');
-    // if (accessToken == "" || accessSecret == "") {
-    //   print("需要登录");
-    //   return new Map();
-    // }
     // param.addAll({
     //   //肖坤
     //   "accessToken": "cb9c6e29e87b7963721083e5d2bf2",
     //   "accessSecret": "bb1d53d63486c01b120e1585e044c",
     // });
-    param.addAll({
-      //许孙
-      "accessToken": "e9f49ac6acace2b9f6582800f32ff",
-      "accessSecret": "8aef222107fcd2cedcc5f60b4edd1",
-    });
+    String myinfo_txt = await getStorage(key: "myinfo", initData: "");
+    if (myinfo_txt != "") {
+      Map myinfo = jsonDecode(myinfo_txt);
+      param.addAll({
+        "accessToken": myinfo["token"],
+        "accessSecret": myinfo["secret"],
+      });
+    }
     return await netWorkRequest(
       url: url,
       param: param,

@@ -62,8 +62,10 @@ class _TopicDetailState extends State<TopicDetail> {
       "page": 1,
       "pageSize": 20,
     });
-    comment = data["list"];
-    load_done = ((data["list"] ?? []).length < 20);
+    if (data["rs"] != 0) {
+      comment = data["list"];
+      load_done = ((data["list"] ?? []).length < 20);
+    }
     setState(() {});
     return;
   }
@@ -832,7 +834,10 @@ class _AtSomeoneState extends State<AtSomeone> {
       "page": (list.length / pageSize + 1).ceil(),
       "pageSize": pageSize,
     });
-    if (data != null && data["list"] != null && data["list"].length != 0) {
+    if (data != null &&
+        data["rs"] != 0 &&
+        data["list"] != null &&
+        data["list"].length != 0) {
       list.addAll(data["list"]);
       load_done =
           (data["list"].length % pageSize != 0 || data["list"].length == 0);

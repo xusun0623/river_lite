@@ -51,7 +51,10 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
 
   _getData() async {
     var tmp = await Api().portal_newslist();
-    if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
+    if (tmp != null &&
+        tmp["rs"] != 0 &&
+        tmp["list"] != null &&
+        tmp["list"].length != 0) {
       await setStorage(key: "home_hot_lists", value: jsonEncode(tmp["list"]));
       list = tmp["list"];
     }

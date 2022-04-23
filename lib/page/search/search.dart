@@ -46,10 +46,11 @@ class _SearchState extends State<Search> {
       "page": 1,
       "pageSize": 20,
     });
-    if (select == 0 && tmp != null && tmp["list"] != null) {
+    if (select == 0 && tmp["rs"] != 0 && tmp != null && tmp["list"] != null) {
       data = tmp["list"] ?? [];
     }
     if (select == 1 &&
+        tmp["rs"] != 0 &&
         tmp != null &&
         tmp["body"] != null &&
         tmp["body"]["list"] != null) {
