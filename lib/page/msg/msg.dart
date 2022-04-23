@@ -94,14 +94,18 @@ class _MsgState extends State<Msg> {
     var data = await Api().message_heart({});
     if (data != null && data["body"] != null) {
       setState(() {
-        msg = data["body"];
+        msg = {
+          "atMeInfoCount": data["body"]["atMeInfo"]["count"],
+          "replyInfoCount": data["body"]["replyInfo"]["count"],
+          "systemInfoCount": data["body"]["systemInfo"]["count"],
+        };
       });
     } else {
       setState(() {
         msg = {
-          "atMeInfo": {"count": 0},
-          "replyInfo": {"count": 0},
-          "systemInfo": {"count": 0},
+          "atMeInfoCount": 0,
+          "replyInfoCount": 0,
+          "systemInfoCount": 0,
         };
       });
     }
@@ -190,7 +194,7 @@ class _MsgState extends State<Msg> {
                         children: [
                           ColorBtn(
                             tap: () {
-                              msg["atMeInfo"]["count"] = 0;
+                              msg["atMeInfoCount"] = 0;
                               setState(() {});
                               if (widget.refresh != null) widget.refresh();
                               Navigator.pushNamed(
@@ -201,14 +205,14 @@ class _MsgState extends State<Msg> {
                             },
                             path: "lib/img/msg/@.svg",
                             title: "@我",
-                            data: msg["atMeInfo"],
+                            count: msg["atMeInfoCount"],
                           ),
                           ColorBtn(
                             path: "lib/img/msg/reply.svg",
                             title: "回复",
-                            data: msg["replyInfo"],
+                            count: msg["replyInfoCount"],
                             tap: () {
-                              msg["replyInfo"]["count"] = 0;
+                              msg["replyInfoCount"] = 0;
                               setState(() {});
                               if (widget.refresh != null) widget.refresh();
                               Navigator.pushNamed(
@@ -221,16 +225,16 @@ class _MsgState extends State<Msg> {
                           ColorBtn(
                             path: "lib/img/msg/noti.svg",
                             title: "通知",
-                            data: msg["systemInfo"],
+                            count: msg["systemInfoCount"],
                             tap: () {
-                              msg["systemInfo"]["count"] = 0;
-                              setState(() {});
+                              msg["systemInfoCount"] = 0;
                               if (widget.refresh != null) widget.refresh();
                               Navigator.pushNamed(
                                 context,
                                 "/msg_three",
                                 arguments: 2,
                               );
+                              setState(() {});
                             },
                           ),
                         ],
@@ -270,13 +274,13 @@ class _MsgState extends State<Msg> {
 }
 
 class ColorBtn extends StatefulWidget {
-  Map data;
+  int count;
   String path;
   String title;
   Function tap;
   ColorBtn({
     Key key,
-    this.data,
+    this.count,
     this.path,
     this.title,
     this.tap,
@@ -307,10 +311,10 @@ class _ColorBtnState extends State<ColorBtn> {
               top: 14,
               left: 20,
               child: Badge(
-                position: BadgePosition(top: -12, end: -12),
-                showBadge: widget.data["count"] != 0,
+                position: BadgePosition(top: -10, end: 50),
+                showBadge: widget.count != 0,
                 badgeContent: Text(
-                  widget.data["count"].toString(),
+                  widget.count.toString(),
                   style: TextStyle(
                     color: os_white,
                     fontSize: 10,
