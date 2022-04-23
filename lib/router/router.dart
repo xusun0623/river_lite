@@ -5,6 +5,7 @@ import 'package:offer_show/page/crop/crop.dart';
 import 'package:offer_show/page/home.dart';
 import 'package:offer_show/page/hot/homeHot.dart';
 import 'package:offer_show/page/home/myhome.dart';
+import 'package:offer_show/page/login/login.dart';
 import 'package:offer_show/page/me/me.dart';
 import 'package:offer_show/page/me_func/me_func.dart';
 import 'package:offer_show/page/msg_detail/msg_detail.dart';
@@ -18,7 +19,9 @@ import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/page/user_list/user_list.dart';
 
 final routers = {
-  "/": () => Home(),
+  // "/": () => Home(),
+  "/": () => Login(),
+  "/login": () => Login(),
   "/broke": () => Broke(),
   "/me": () => Me(),
   "/myhome": () => MyHome(),
