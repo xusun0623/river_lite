@@ -132,10 +132,19 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     t.add(Padding(
       padding: EdgeInsets.all(load_done || data.length == 0 ? 7.5 : 0),
     ));
-    return ListView(
-      physics: BouncingScrollPhysics(),
+    return BackToTop(
+      show: showBackToTop,
+      animation: true,
+      attachBtn: true,
+      tap: () {
+        Navigator.pushNamed(context, "/new", arguments: {});
+      },
+      child: ListView(
+        physics: BouncingScrollPhysics(),
+        controller: _scrollController,
+        children: t,
+      ),
       controller: _scrollController,
-      children: t,
     );
   }
 
@@ -144,12 +153,6 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     HomeRefrshProvider provider = Provider.of<HomeRefrshProvider>(context);
     return Scaffold(
       backgroundColor: os_back,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, "/new", arguments: {});
-        },
-        child: Icon(Icons.add),
-      ),
       body: RefreshIndicator(
         color: os_color,
         key: provider.homeRefreshIndicator,

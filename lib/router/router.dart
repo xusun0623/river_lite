@@ -15,6 +15,7 @@ import 'package:offer_show/page/new/new.dart';
 import 'package:offer_show/page/personal/personal.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/search/search.dart';
+import 'package:offer_show/page/setting/setting.dart';
 import 'package:offer_show/page/square/square.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/page/user_list/user_list.dart';
@@ -22,13 +23,14 @@ import 'package:offer_show/page/user_list/user_list.dart';
 final routers = {
   "/": () => Home(),
   "/login": () => Login(),
+  "/setting": () => Setting(),
   "/login_helper": () => LoginHelper(),
   "/broke": () => Broke(),
   "/me": () => Me(),
   "/myhome": () => MyHome(),
   "/square": () => Square(),
   "/404": () => Page404(),
-  "/me_func": (data) => MeFunc(type: data),
+  "/me_func": (data) => MeFunc(type: data["type"], uid: data["uid"]),
   "/person_center": (data) => PersonCenter(param: data),
   "/topic_detail": (data) => TopicDetail(topicID: data),
   "/search": () => Search(),

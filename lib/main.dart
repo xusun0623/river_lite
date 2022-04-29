@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserInfoProvider()),
+        ChangeNotifierProvider(create: (context) => TabShowProvider()),
         ChangeNotifierProvider(create: (context) => HomeRefrshProvider())
       ],
       child: MaterialApp(

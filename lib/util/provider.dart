@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 
+class TabShowProvider extends ChangeNotifier {
+  bool isShowExplore;
+  int index = 0;
+  List<int> loadIndex = [0, 2, 3];
+
+  refresh() {
+    notifyListeners();
+  }
+}
+
 class UserInfoProvider extends ChangeNotifier {
   Map data;
 
@@ -23,13 +33,13 @@ class HomeRefrshProvider extends ChangeNotifier {
   ScrollController msgScrollController = new ScrollController();
   ScrollController meScrollController = new ScrollController();
 
-  void invoke(int index) {
+  void invoke(List<int> loadIndex, int index) {
     [
       homeRefreshIndicator,
       recentRefreshIndicator,
       msgRefreshIndicator,
       meRefreshIndicator
-    ][index]
+    ][loadIndex[index]]
         .currentState
         .show();
     [
@@ -37,7 +47,7 @@ class HomeRefrshProvider extends ChangeNotifier {
       recentScrollController,
       msgScrollController,
       meScrollController
-    ][index]
+    ][loadIndex[index]]
         .animateTo(
       0,
       duration: Duration(milliseconds: 300),

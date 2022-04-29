@@ -1355,7 +1355,7 @@ class _CommentTabState extends State<CommentTab> {
                     ),
                     Container(height: 3),
                     Container(
-                      width: 18,
+                      width: 20,
                       height: 3,
                       decoration: BoxDecoration(
                         color:

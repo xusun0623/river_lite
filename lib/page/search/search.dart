@@ -100,13 +100,6 @@ class _SearchState extends State<Search> {
   List<Widget> _buildTopic() {
     print("${data}");
     List<Widget> tmp = [];
-    tmp.add(loading
-        ? BottomLoading(
-            color: Colors.transparent,
-            txt: "加载中…",
-          )
-        : NoMore());
-    tmp.add(loading ? Container(height: 15) : Container());
     if (data.length == 0) {
       tmp.add(
         History(
@@ -122,6 +115,13 @@ class _SearchState extends State<Search> {
         ),
       );
     }
+    tmp.add(loading
+        ? BottomLoading(
+            color: Colors.transparent,
+            txt: "加载中…",
+          )
+        : NoMore());
+    tmp.add(loading ? Container(height: 15) : Container());
     tmp.add(data.length == 0 && load_done
         ? Container(
             width: MediaQuery.of(context).size.width - 30,

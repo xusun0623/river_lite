@@ -134,7 +134,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                   height: 55,
                   // padding: EdgeInsets.all(20),
                   child: Icon(
-                    Icons.arrow_upward_rounded,
+                    Icons.arrow_drop_up,
                     size: 25,
                     color: os_white,
                   ),

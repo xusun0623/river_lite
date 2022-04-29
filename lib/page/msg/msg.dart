@@ -46,7 +46,7 @@ class _MsgState extends State<Msg> {
     });
     if (pmMsgArr.length < 6) {
       tmp.add(Container(
-        height: (6 - pmMsgArr.length) * 100.0,
+        height: MediaQuery.of(context).size.height / 2,
       ));
     }
     return tmp;

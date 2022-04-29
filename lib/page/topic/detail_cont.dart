@@ -184,24 +184,25 @@ class _DetailContState extends State<DetailCont> {
             );
           },
           tap: () {
-            if (widget.data['url'].toString().indexOf(
-                    "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=") >
-                -1) {
-              Navigator.pushNamed(
-                context,
-                "/topic_detail",
-                arguments:
-                    int.parse(widget.data["url"].toString().split("tid=")[1]),
-              );
-            } else if (widget.data['url'].toString().indexOf(
-                    "https://bbs.uestc.edu.cn/home.php?mod=space&uid=") >
-                -1) {
-              toUserSpace(
-                context,
-                int.parse(widget.data["url"].toString().split("uid=")[1]),
-              );
-            } else
-              showModal(
+            try {
+              if (widget.data['url'].toString().indexOf(
+                      "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=") >
+                  -1) {
+                Navigator.pushNamed(
+                  context,
+                  "/topic_detail",
+                  arguments:
+                      int.parse(widget.data["url"].toString().split("tid=")[1]),
+                );
+              } else if (widget.data['url'].toString().indexOf(
+                      "https://bbs.uestc.edu.cn/home.php?mod=space&uid=") >
+                  -1) {
+                toUserSpace(
+                  context,
+                  int.parse(widget.data["url"].toString().split("uid=")[1]),
+                );
+              } else
+                showModal(
                   context: context,
                   title: "请确认",
                   cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
@@ -210,7 +211,19 @@ class _DetailContState extends State<DetailCont> {
                   confirm: () {
                     launch(widget.data['url']);
                   },
-                  cancel: () {});
+                );
+            } catch (e) {
+              showModal(
+                context: context,
+                title: "请确认",
+                cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
+                confirmTxt: "立即前往",
+                cancelTxt: "取消",
+                confirm: () {
+                  launch(widget.data['url']);
+                },
+              );
+            }
           },
           color: Colors.transparent,
           widget: Container(

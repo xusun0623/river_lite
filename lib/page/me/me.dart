@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
@@ -25,6 +27,12 @@ class _MeState extends State<Me> {
       UserInfoProvider provider =
           Provider.of<UserInfoProvider>(context, listen: false);
       provider.data = tmp;
+      provider.refresh();
+    } else {
+      UserInfoProvider provider =
+          Provider.of<UserInfoProvider>(context, listen: false);
+      var arr_txt = await getStorage(key: "myinfo", initData: "");
+      provider.data = jsonDecode(arr_txt);
       provider.refresh();
     }
   }
@@ -75,7 +83,6 @@ class _MeState extends State<Me> {
             Container(height: 17.5),
             MeListGroup(),
             Container(height: 100),
-            MeBottom(),
             Container(height: 80),
           ],
         ),
@@ -136,11 +143,10 @@ class _MeListGroupState extends State<MeListGroup> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MeList(txt: "水滴相关"),
-        MeList(txt: "在线用户"),
-        MeList(txt: "意见&Bug反馈"),
-        MeList(txt: "应用设置"),
-        MeList(txt: "关于"),
+        MeList(txt: "应用设置", index: 0),
+        MeList(txt: "账号管理", index: 1),
+        MeList(txt: "意见&Bug反馈", index: 2),
+        MeList(txt: "关于", index: 3),
       ],
     );
   }
@@ -148,9 +154,11 @@ class _MeListGroupState extends State<MeListGroup> {
 
 class MeList extends StatefulWidget {
   String txt;
+  int index;
   MeList({
     Key key,
     this.txt,
+    this.index,
   }) : super(key: key);
 
   @override
@@ -164,7 +172,9 @@ class _MeListState extends State<MeList> {
       pressedOpacity: 0.6,
       padding: EdgeInsets.all(0),
       onPressed: () {
-        print("hhhhh");
+        if (widget.index == 0) {
+          Navigator.pushNamed(context, "/setting");
+        }
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 27.5, vertical: 18.5),
@@ -268,8 +278,19 @@ class _MeBtnHeroState extends State<MeBtnHero> {
             ),
           ]),
       child: myInkWell(
-        tap: () {
-          Navigator.pushNamed(context, "/me_func", arguments: widget.type);
+        tap: () async {
+          String myinfo_txt = await getStorage(key: "myinfo", initData: "");
+          if (myinfo_txt != "" && widget.type < 3) {
+            Map myinfo = jsonDecode(myinfo_txt);
+            print("${myinfo["uid"]}");
+            Navigator.pushNamed(context, "/me_func", arguments: {
+              "type": widget.type,
+              "uid": myinfo["uid"],
+            });
+          } else
+            Navigator.pushNamed(context, "/me_func", arguments: {
+              "type": widget.type,
+            });
         },
         radius: 20,
         color: os_white,

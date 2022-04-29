@@ -1,16 +1,15 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
-import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/me/me.dart';
 import 'package:offer_show/page/msg/msg.dart';
 import 'package:offer_show/page/home/myhome.dart';
 import 'package:offer_show/page/new_reply/homeNewReply.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
+import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -20,52 +19,23 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool _isNewMsg = false;
-  var _tabBarIndex = 0;
+  List<int> loadIndex = [];
 
   List<Widget> homePages() {
-    return [
-      MyHome(),
-      HomeNewReply(),
-      Msg(
-        refresh: () {
-          _getNewMsg();
-        },
-      ),
-      Me(),
-    ];
-  }
-
-  List<BottomNavigationBarItem> _buildNavItem() {
-    return [
-      BottomNavigationBarItem(
-        backgroundColor: Colors.blue,
-        icon: Icon(Icons.explore_outlined),
-        label: "首页",
-        tooltip: "",
-      ),
-      BottomNavigationBarItem(
-        backgroundColor: Colors.blue,
-        icon: Icon(Icons.lightbulb_outline_sharp),
-        label: "最近回复",
-        tooltip: "",
-      ),
-      BottomNavigationBarItem(
-        backgroundColor: Colors.blue,
-        icon: Badge(
-          showBadge: _isNewMsg,
-          position: BadgePosition.topEnd(top: 0, end: 0),
-          child: Icon(Icons.messenger_outline_rounded),
+    List<Widget> tmp = [];
+    loadIndex.forEach((element) {
+      tmp.add([
+        MyHome(),
+        HomeNewReply(),
+        Msg(
+          refresh: () {
+            _getNewMsg();
+          },
         ),
-        label: "消息",
-        tooltip: "",
-      ),
-      BottomNavigationBarItem(
-        backgroundColor: Colors.red,
-        icon: Icon(Icons.circle_outlined),
-        label: "我",
-        tooltip: "",
-      ),
-    ];
+        Me(),
+      ][element]);
+    });
+    return tmp;
   }
 
   _getNewMsg() async {
@@ -93,8 +63,18 @@ class _HomeState extends State<Home> {
     }
   }
 
+  _setTab() async {
+    String txt = await getStorage(key: "showExplore");
+    List<int> getListInt = txt == "" ? [0, 2, 3] : [0, 1, 2, 3];
+    Provider.of<TabShowProvider>(context, listen: false).loadIndex = getListInt;
+    setState(() {
+      loadIndex = getListInt;
+    });
+  }
+
   @override
   void initState() {
+    _setTab();
     _getNewMsg();
     super.initState();
   }
@@ -102,37 +82,45 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     HomeRefrshProvider provider = Provider.of<HomeRefrshProvider>(context);
+    TabShowProvider tabShowProvider = Provider.of<TabShowProvider>(context);
     os_width = MediaQuery.of(context).size.width;
     os_height = MediaQuery.of(context).size.height;
     os_padding = os_width * 0.025;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-    double barHeight = 55;
+    double barHeight = 65;
+    double barPadding = 10;
 
-    List<Widget> _buildWidget() {
+    List<Widget> _buildWidget(List<int> _loadIndex) {
+      loadIndex = _loadIndex;
       List<Widget> tmp = [];
-      List<IconData> select_icons = [
-        Icons.home,
-        Icons.explore,
-        Icons.notifications,
-        Icons.person
-      ];
-      List<IconData> icons = [
-        Icons.home_outlined,
-        Icons.explore_outlined,
-        Icons.notifications_outlined,
-        Icons.person_outlined
-      ];
+      List<IconData> select_icons = [];
+      List<IconData> icons = [];
+      loadIndex.forEach((element) {
+        icons.add([
+          Icons.home_outlined,
+          Icons.explore_outlined,
+          Icons.notifications_outlined,
+          Icons.person_outlined
+        ][element]);
+        select_icons.add([
+          Icons.home,
+          Icons.explore,
+          Icons.notifications,
+          Icons.person
+        ][element]);
+      });
       for (int i = 0; i < icons.length; i++) {
         tmp.add(GestureDetector(
           onTapDown: (e) {
             Vibrate.feedback(FeedbackType.impact);
             setState(() {
-              _tabBarIndex = i;
+              tabShowProvider.index = i;
             });
           },
-          onDoubleTap: _tabBarIndex == i
+          onDoubleTap: tabShowProvider.index == i
               ? () {
-                  provider.invoke(i);
+                  Vibrate.feedback(FeedbackType.impact);
+                  provider.invoke(loadIndex, i);
                 }
               : null,
           child: Container(
@@ -140,9 +128,11 @@ class _HomeState extends State<Home> {
             height: barHeight,
             color: Color(0xFFFFFFFF),
             child: Icon(
-              _tabBarIndex == i ? select_icons[i] : icons[i],
+              tabShowProvider.index == i ? select_icons[i] : icons[i],
               size: 26,
-              color: _tabBarIndex == i ? Color(0xFF222222) : Color(0xFFa4a4a6),
+              color: tabShowProvider.index == i
+                  ? Color(0xFF222222)
+                  : Color(0xFFa4a4a6),
             ),
           ),
         ));
@@ -153,12 +143,12 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: IndexedStack(
         children: homePages(),
-        index: _tabBarIndex,
+        index: tabShowProvider.index,
       ),
       bottomNavigationBar: Container(
         width: MediaQuery.of(context).size.width,
-        height: barHeight + 5,
-        padding: EdgeInsets.only(bottom: 5),
+        height: barHeight + barPadding,
+        padding: EdgeInsets.only(bottom: barPadding),
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
@@ -176,7 +166,7 @@ class _HomeState extends State<Home> {
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: _buildWidget(),
+          children: _buildWidget(tabShowProvider.loadIndex),
         ),
       ),
     );
