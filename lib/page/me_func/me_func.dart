@@ -43,7 +43,7 @@ class _MeFuncState extends State<MeFunc> {
       //收藏、发表、回复
       var tmp = await Api().user_topiclist({
         "type": ["favorite", "topic", "reply"][widget.type - 1],
-        "uid": widget.uid ?? 221788,
+        "uid": widget.uid,
         "page": 1,
         "pageSize": 10,
       });
@@ -78,7 +78,7 @@ class _MeFuncState extends State<MeFunc> {
       //收藏、发表、回复
       var tmp = await Api().user_topiclist({
         "type": ["favorite", "topic", "reply"][widget.type - 1],
-        "uid": widget.uid ?? 221788,
+        "uid": widget.uid,
         "page": (data.length / 10).ceil() + 1,
         "pageSize": 10,
       });

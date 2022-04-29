@@ -48,6 +48,18 @@ class _LoginState extends State<Login> {
             Provider.of<UserInfoProvider>(context, listen: false);
         provider.data = data;
         provider.refresh();
+        String quick_txt = await getStorage(key: "quick", initData: "[]");
+        List quick_tmp = jsonDecode(quick_txt);
+        bool isExist = false;
+        quick_tmp.forEach(((element) {
+          if (element["name"] == username) {
+            isExist = true;
+          }
+        }));
+        if (!isExist) {
+          quick_tmp.add({"name": username, "password": password});
+        }
+        setStorage(key: "quick", value: jsonEncode(quick_tmp));
         setState(() {
           showSuccess = true;
         });
@@ -129,6 +141,9 @@ class _LoginState extends State<Login> {
                 children: [
                   LoginHead(),
                   LoginInput(
+                    submit: () {
+                      _login();
+                    },
                     change: (uname, pword) {
                       username = uname;
                       password = pword;
@@ -235,9 +250,11 @@ class _LoginHelpState extends State<LoginHelp> {
 
 class LoginInput extends StatefulWidget {
   Function change;
+  Function submit;
   LoginInput({
     Key key,
     this.change,
+    this.submit,
   }) : super(key: key);
 
   @override
@@ -248,6 +265,8 @@ class _LoginInputState extends State<LoginInput> {
   bool isHide = true;
   TextEditingController u_controller = new TextEditingController();
   TextEditingController p_controller = new TextEditingController();
+  FocusNode u_focus = new FocusNode();
+  FocusNode p_focus = new FocusNode();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -264,7 +283,11 @@ class _LoginInputState extends State<LoginInput> {
               color: Color.fromRGBO(0, 0, 0, 0.05),
             ),
             child: TextField(
+              onSubmitted: (e) {
+                p_focus.requestFocus();
+              },
               controller: u_controller,
+              focusNode: u_focus,
               style: TextStyle(
                 letterSpacing: 0.5,
               ),
@@ -299,12 +322,16 @@ class _LoginInputState extends State<LoginInput> {
             ),
             child: TextField(
               controller: p_controller,
+              focusNode: p_focus,
               obscureText: isHide,
               style: TextStyle(
                 letterSpacing: 0.5,
               ),
               onChanged: (t) {
                 widget.change(u_controller.text, p_controller.text);
+              },
+              onSubmitted: (e) {
+                widget.submit();
               },
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(

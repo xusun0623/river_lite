@@ -30,18 +30,6 @@ class _MsgThreeState extends State<MsgThree> {
     Color(0xFFFF9F23)
   ];
   List<String> titles = ["@我", "回复", "通知"];
-  Map data = {
-    "dateline": "1647182840000",
-    "type": "at",
-    "note": "xusun000 在主题 水水 中提到了您水水 @北冥小鱼 \n🥰🥰现在去看看。",
-    "fromId": 1923366,
-    "fromIdType": "at",
-    "author": "xusun000",
-    "authorId": 221788,
-    "authorAvatar":
-        "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=221788&size=middle",
-    "actions": []
-  };
   List datas = [];
   List lists = [];
   ScrollController _scrollController = new ScrollController();

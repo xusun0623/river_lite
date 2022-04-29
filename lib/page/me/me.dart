@@ -281,7 +281,6 @@ class _MeBtnHeroState extends State<MeBtnHero> {
           String myinfo_txt = await getStorage(key: "myinfo", initData: "");
           if (myinfo_txt != "" && widget.type < 3) {
             Map myinfo = jsonDecode(myinfo_txt);
-            print("${myinfo["uid"]}");
             Navigator.pushNamed(context, "/me_func", arguments: {
               "type": widget.type,
               "uid": myinfo["uid"],
@@ -386,14 +385,16 @@ class MeInfo_HeadState extends State<MeInfoHead> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         if (widget.head == null) {
           Navigator.pushNamed(context, "/login");
         } else {
+          String myinfo_txt = await getStorage(key: "myinfo", initData: "");
+          Map myinfo = jsonDecode(myinfo_txt);
           Navigator.pushNamed(
             context,
             "/person_center",
-            arguments: {"uid": 221788, "isMe": true},
+            arguments: {"uid": myinfo["uid"], "isMe": true},
           );
         }
       },

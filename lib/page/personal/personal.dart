@@ -24,7 +24,6 @@ Color girl_color = Color(0xFFFF6B3D);
 
 class PersonCenter extends StatefulWidget {
   Map param;
-  //{"uid": 221788, "isMe": true},
   PersonCenter({
     Key key,
     this.param,
