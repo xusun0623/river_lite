@@ -4,11 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/me/me.dart';
 import 'package:offer_show/page/msg/msg.dart';
 import 'package:offer_show/page/home/myhome.dart';
 import 'package:offer_show/page/new_reply/homeNewReply.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -98,40 +101,82 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    HomeRefrshProvider provider = Provider.of<HomeRefrshProvider>(context);
     os_width = MediaQuery.of(context).size.width;
     os_height = MediaQuery.of(context).size.height;
     os_padding = os_width * 0.025;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    double barHeight = 55;
+
+    List<Widget> _buildWidget() {
+      List<Widget> tmp = [];
+      List<IconData> select_icons = [
+        Icons.home,
+        Icons.explore,
+        Icons.notifications,
+        Icons.person
+      ];
+      List<IconData> icons = [
+        Icons.home_outlined,
+        Icons.explore_outlined,
+        Icons.notifications_outlined,
+        Icons.person_outlined
+      ];
+      for (int i = 0; i < icons.length; i++) {
+        tmp.add(GestureDetector(
+          onTapDown: (e) {
+            Vibrate.feedback(FeedbackType.impact);
+            setState(() {
+              _tabBarIndex = i;
+            });
+          },
+          onDoubleTap: _tabBarIndex == i
+              ? () {
+                  provider.invoke(i);
+                }
+              : null,
+          child: Container(
+            width: MediaQuery.of(context).size.width / icons.length,
+            height: barHeight,
+            color: Color(0xFFFFFFFF),
+            child: Icon(
+              _tabBarIndex == i ? select_icons[i] : icons[i],
+              size: 26,
+              color: _tabBarIndex == i ? Color(0xFF222222) : Color(0xFFa4a4a6),
+            ),
+          ),
+        ));
+      }
+      return tmp;
+    }
+
     return Scaffold(
       body: IndexedStack(
         children: homePages(),
         index: _tabBarIndex,
       ),
-      bottomNavigationBar: Theme(
-        data: ThemeData(
-          brightness: Brightness.light,
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
+      bottomNavigationBar: Container(
+        width: MediaQuery.of(context).size.width,
+        height: barHeight + 5,
+        padding: EdgeInsets.only(bottom: 5),
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Color(0xFFEEEEEE),
+            ),
+          ),
+          color: os_white,
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x22000000),
+              blurRadius: 10,
+              offset: Offset(3, 3),
+            ),
+          ],
         ),
-        child: BottomNavigationBar(
-          elevation: 8,
-          showUnselectedLabels: true,
-          unselectedFontSize: 11,
-          selectedFontSize: 11,
-          selectedIconTheme: IconThemeData(size: 26),
-          unselectedIconTheme: IconThemeData(size: 26),
-          selectedItemColor: os_color,
-          backgroundColor: os_white,
-          type: BottomNavigationBarType.fixed,
-          onTap: (index) async {
-            Vibrate.feedback(FeedbackType.impact);
-            _getNewMsg(); //获得新消息提醒
-            setState(() {
-              _tabBarIndex = index;
-            });
-          },
-          currentIndex: _tabBarIndex,
-          items: _buildNavItem(),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: _buildWidget(),
         ),
       ),
     );

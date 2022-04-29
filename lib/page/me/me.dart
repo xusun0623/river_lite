@@ -18,6 +18,7 @@ class Me extends StatefulWidget {
 
 class _MeState extends State<Me> {
   Map data;
+  ScrollController _scrollController;
   _getData() async {
     var tmp = await Api().user_userinfo({});
     if (tmp != null && tmp["rs"] != 0 && tmp["body"] != null) {
@@ -31,12 +32,16 @@ class _MeState extends State<Me> {
   @override
   void initState() {
     _getData();
+    _scrollController = Provider.of<HomeRefrshProvider>(context, listen: false)
+        .meScrollController;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     UserInfoProvider provider = Provider.of<UserInfoProvider>(context);
+    HomeRefrshProvider refreshProvider =
+        Provider.of<HomeRefrshProvider>(context);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -47,10 +52,12 @@ class _MeState extends State<Me> {
       backgroundColor: os_white,
       body: RefreshIndicator(
         color: os_deep_blue,
+        key: refreshProvider.meRefreshIndicator,
         onRefresh: () async {
           return await _getData();
         },
         child: ListView(
+          controller: _scrollController,
           physics: BouncingScrollPhysics(),
           children: [
             provider.data == null

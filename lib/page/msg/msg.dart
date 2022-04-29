@@ -8,9 +8,10 @@ import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/BottomTip.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
-import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
@@ -115,6 +116,8 @@ class _MsgState extends State<Msg> {
   void initState() {
     getData();
     getPm();
+    _scrollController = Provider.of<HomeRefrshProvider>(context, listen: false)
+        .msgScrollController;
     _scrollController.addListener(() {
       if (_scrollController.position.pixels > 1000 && !showBackToTop) {
         setState(() {
@@ -148,18 +151,8 @@ class _MsgState extends State<Msg> {
 
   @override
   Widget build(BuildContext context) {
+    HomeRefrshProvider provider = Provider.of<HomeRefrshProvider>(context);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        elevation: 2,
-        backgroundColor: os_white,
-        foregroundColor: os_black,
-        onPressed: () {
-          _indicatorKey.currentState.show();
-          getData();
-          getPm();
-        },
-        child: Icon(Icons.refresh_rounded),
-      ),
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: os_white,
@@ -174,7 +167,7 @@ class _MsgState extends State<Msg> {
       body: Container(
         color: os_white,
         child: RefreshIndicator(
-          key: _indicatorKey,
+          key: provider.msgRefreshIndicator,
           color: Color(0xFF2FCC7E),
           onRefresh: () async {
             await getData();

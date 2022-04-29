@@ -55,16 +55,20 @@ class _TopicDetailState extends State<TopicDetail> {
   FocusNode _focusNode = new FocusNode();
 
   Future _getData() async {
-    data = await Api().forum_postlist({
+    var tmp = await Api().forum_postlist({
       "topicId": widget.topicID,
       "authorId": _select == 0 ? 0 : data["topic"]["user_id"],
       "order": _sort,
       "page": 1,
       "pageSize": 20,
     });
-    if (data["rs"] != 0) {
-      comment = data["list"];
-      load_done = ((data["list"] ?? []).length < 20);
+    if (tmp["rs"] != 0) {
+      comment = tmp["list"];
+      data = tmp;
+      load_done = ((tmp["list"] ?? []).length < 20);
+    } else {
+      load_done = true;
+      data = null;
     }
     setState(() {});
     return;
@@ -280,7 +284,9 @@ class _TopicDetailState extends State<TopicDetail> {
               ],
             ),
       body: data == null || data["topic"] == null
-          ? Loading()
+          ? Loading(
+              showError: load_done,
+            )
           : Stack(
               children: [
                 Container(
