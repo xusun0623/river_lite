@@ -1,4 +1,4 @@
-# OfferShow客户端
+# 河畔Lite客户端
 
 ## API文档  
 https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API

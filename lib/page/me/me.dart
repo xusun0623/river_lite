@@ -10,6 +10,7 @@ import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Me extends StatefulWidget {
   Me({Key key}) : super(key: key);
@@ -173,6 +174,9 @@ class _MeListState extends State<MeList> {
       onPressed: () {
         if (widget.index == 0) {
           Navigator.pushNamed(context, "/setting");
+        }
+        if (widget.index == 1) {
+          launch("https://www.wjx.cn/vj/mzgzO5S.aspx");
         }
       },
       child: Container(
