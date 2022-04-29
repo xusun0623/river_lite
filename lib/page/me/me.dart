@@ -178,6 +178,9 @@ class _MeListState extends State<MeList> {
         if (widget.index == 1) {
           launch("https://www.wjx.cn/vj/mzgzO5S.aspx");
         }
+        if (widget.index == 2) {
+          Navigator.pushNamed(context, "/about");
+        }
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 27.5, vertical: 18.5),
