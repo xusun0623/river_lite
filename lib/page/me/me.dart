@@ -144,9 +144,8 @@ class _MeListGroupState extends State<MeListGroup> {
     return Column(
       children: [
         MeList(txt: "应用设置", index: 0),
-        MeList(txt: "账号管理", index: 1),
-        MeList(txt: "意见&Bug反馈", index: 2),
-        MeList(txt: "关于", index: 3),
+        MeList(txt: "意见&Bug反馈", index: 1),
+        MeList(txt: "关于", index: 2),
       ],
     );
   }

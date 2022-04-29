@@ -93,7 +93,9 @@ class _MsgState extends State<Msg> {
 
   getData() async {
     var data = await Api().message_heart({});
-    if (data != null && data["body"] != null) {
+    if (data != null &&
+        data["body"] != null &&
+        data["body"]["atMeInfo"] != null) {
       setState(() {
         msg = {
           "atMeInfoCount": data["body"]["atMeInfo"]["count"],

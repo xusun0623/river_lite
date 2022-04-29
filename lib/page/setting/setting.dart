@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/page/login/login_helper.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -48,6 +49,7 @@ class _SettingState extends State<Setting> {
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: [
+          Container(height: 25),
           SwitchListTile(
             onChanged: (change_val) {
               setStorage(key: "showExplore", value: change_val ? "1" : "");
@@ -59,8 +61,39 @@ class _SettingState extends State<Setting> {
               });
             },
             value: showExplore,
-            title: Text("展示探索页面"),
+            title: Row(
+              children: [
+                Text("展示探索页面"),
+              ],
+            ),
             subtitle: Text("是否要在首页展示探索页面，关闭后仅显示主页、消息页、我的页面"),
+          ),
+          Container(height: 25),
+          ListTile(
+            onTap: () {
+              showModal(
+                  context: context,
+                  title: "请确认",
+                  cont: "即将退出登录，并删除你在本地的所有个人信息和收藏，请确认",
+                  confirm: () {
+                    UserInfoProvider provider =
+                        Provider.of<UserInfoProvider>(context, listen: false);
+                    provider.data = null;
+                    provider.refresh();
+                    setStorage(key: "myinfo", value: "");
+                    setStorage(key: "topic_like", value: "");
+                    setStorage(key: "history", value: "[]");
+                    setStorage(key: "draft", value: "[]");
+                    setStorage(key: "search-history", value: "[]");
+                    setState(() {});
+                  });
+            },
+            title: Row(
+              children: [
+                Text("退出登录"),
+              ],
+            ),
+            subtitle: Text("即将退出登录，并删除你在本地的所有个人信息和收藏，请确认"),
           ),
         ],
       ),
