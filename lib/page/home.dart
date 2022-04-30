@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
   }
 
   _setTab() async {
-    String txt = await getStorage(key: "showExplore");
+    String txt = await getStorage(key: "showExplore", initData: "1");
     List<int> getListInt = txt == "" ? [0, 2, 3] : [0, 1, 2, 3];
     Provider.of<TabShowProvider>(context, listen: false).loadIndex = getListInt;
     setState(() {
