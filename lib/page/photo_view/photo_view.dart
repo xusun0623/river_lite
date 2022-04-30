@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart'; // Import package
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/saveImg.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 typedef PageChanged = void Function(int index);
@@ -37,43 +37,50 @@ class _PhotoPreviewState extends State<PhotoPreview> {
       body: Stack(
         children: [
           Container(
-              child: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: PhotoViewGallery.builder(
-              loadingBuilder: (context, event) => Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                color: os_black,
-                child: Center(
-                  child: Text(
-                    "加载图片中…",
-                    style: TextStyle(color: os_white),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              onLongPress: () {
+                saveImge(context, widget.galleryItems, tempSelect - 1);
+              },
+              child: PhotoViewGallery.builder(
+                loadingBuilder: (context, event) => Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    color: os_black,
+                    child: Center(
+                      child: Text(
+                        "加载图片中…",
+                        style: TextStyle(color: os_white),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              scrollPhysics: const BouncingScrollPhysics(),
-              builder: (BuildContext context, int index) {
-                return PhotoViewGalleryPageOptions(
-                  imageProvider: NetworkImage(widget.galleryItems[index]),
-                );
-              },
-              scrollDirection: widget.direction,
-              itemCount: widget.galleryItems.length,
-              backgroundDecoration:
-                  widget.decoration ?? BoxDecoration(color: Colors.black),
-              pageController: PageController(initialPage: widget.defaultImage),
-              onPageChanged: (index) => setState(
-                () {
-                  tempSelect = index + 1;
-                  if (widget.pageChanged != null) {
-                    widget.pageChanged(index);
-                  }
+                scrollPhysics: const BouncingScrollPhysics(),
+                builder: (BuildContext context, int index) {
+                  return PhotoViewGalleryPageOptions(
+                    imageProvider: NetworkImage(widget.galleryItems[index]),
+                  );
                 },
+                scrollDirection: widget.direction,
+                itemCount: widget.galleryItems.length,
+                backgroundDecoration:
+                    widget.decoration ?? BoxDecoration(color: Colors.black),
+                pageController:
+                    PageController(initialPage: widget.defaultImage),
+                onPageChanged: (index) => setState(
+                  () {
+                    tempSelect = index + 1;
+                    if (widget.pageChanged != null) {
+                      widget.pageChanged(index);
+                    }
+                  },
+                ),
               ),
             ),
-          )),
+          ),
           Positioned(
             ///布局自己换
             left: 20,
@@ -91,7 +98,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-
-import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/util/storage.dart';
 
 class ServerConfig {
   String url = "https://bbs.uestc.edu.cn/mobcent/app/web/index.php";
 }
+
+bool isLog = true; //控制是否打印网络输出日志
 
 class XHttp {
   netWorkRequest({
@@ -19,17 +20,20 @@ class XHttp {
     dio.options.responseType = ResponseType.plain;
     dio.options.connectTimeout = 10000;
     dio.options.receiveTimeout = 10000;
-    print("地址:$url入参:$param");
+    if (isLog) print("地址:$url入参:$param");
     Response response = await dio
         .request(url, data: param, options: Options(method: "POST"))
-        .catchError((err) {});
-    hideToast();
+        .catchError(
+      (err) {
+        // if (isLog) print("${err}");
+      },
+    );
     if (response != null) {
-      Map<String, dynamic> user = jsonDecode(response.toString());
-      print("地址:$url入参:$param回参:$user");
-      return user;
+      Map<String, dynamic> data = jsonDecode(response.toString());
+      if (isLog) print("地址:$url入参:$param回参:$data");
+      return data;
     } else {
-      return new Map();
+      return {};
     }
   }
 
@@ -37,17 +41,14 @@ class XHttp {
     Map param,
     String url,
   }) async {
-    // final prefs = await SharedPreferences.getInstance();
-    // final String accessToken = prefs.getString('accessToken');
-    // final String accessSecret = prefs.getString('accessSecret');
-    // if (accessToken == "" || accessSecret == "") {
-    //   print("需要登录");
-    //   return new Map();
-    // }
-    param.addAll({
-      "accessToken": "e9f49ac6acace2b9f6582800f32ff",
-      "accessSecret": "8aef222107fcd2cedcc5f60b4edd1",
-    });
+    String myinfo_txt = await getStorage(key: "myinfo", initData: "");
+    if (myinfo_txt != "") {
+      Map myinfo = jsonDecode(myinfo_txt);
+      param.addAll({
+        "accessToken": myinfo["token"],
+        "accessSecret": myinfo["secret"],
+      });
+    }
     return await netWorkRequest(
       url: url,
       param: param,

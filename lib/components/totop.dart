@@ -9,12 +9,20 @@ class BackToTop extends StatefulWidget {
   Widget child;
   bool show;
   double bottom;
+  bool animation;
+  bool attachBtn;
+  Function tap;
+  Color color;
   BackToTop({
     Key key,
     this.child,
-    this.show,
+    @required this.show,
+    this.color,
     this.controller,
     this.bottom,
+    this.animation,
+    this.attachBtn,
+    this.tap,
   }) : super(key: key);
 
   @override
@@ -29,7 +37,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     widget.controller.addListener(() {
-      if (widget.show) {
+      if (widget.show ?? false) {
         controller.forward();
       } else {
         controller.reverse();
@@ -37,7 +45,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
     });
     controller = new AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 400),
+      duration: Duration(milliseconds: 400),
     )..addListener(() {
         setState(() {});
       });
@@ -58,8 +66,43 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
     return Stack(
       children: [
         Positioned(
-          child: widget.child,
+          child: widget.child ?? Container(),
         ),
+        widget.attachBtn == null
+            ? Container()
+            : Positioned(
+                right: 20,
+                bottom: (widget.bottom ?? 25) + (_right + 200) / 3.5,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0x22000000),
+                        blurRadius: 10,
+                        offset: Offset(3, 3),
+                      ),
+                    ],
+                  ),
+                  child: myInkWell(
+                    tap: () {
+                      if (widget.tap != null) widget.tap();
+                    },
+                    color: widget.color ?? os_color,
+                    widget: Container(
+                      width: 55,
+                      height: 55,
+                      child: Center(
+                        child: Icon(
+                          Icons.add_rounded,
+                          color: os_white,
+                          size: 22,
+                        ),
+                      ),
+                    ),
+                    radius: 100,
+                  ),
+                )),
         Positioned(
             right: _right,
             bottom: widget.bottom ?? 20,
@@ -78,22 +121,27 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                 tap: () {
                   widget.controller.animateTo(
                     0,
-                    duration: Duration(milliseconds: 500),
+                    duration: Duration(
+                        milliseconds: (widget.animation ?? true ? 500 : 1)),
                     curve: Curves.ease,
                   );
+                  widget.show = false;
+                  setState(() {});
                 },
-                color: Color(0xFF3179FF),
+                color: widget.color ?? os_color,
                 widget: Container(
-                  width: 50,
-                  height: 50,
-                  padding: EdgeInsets.all(15),
-                  child: os_svg(
-                    path: "lib/img/to_top.svg",
+                  width: 55,
+                  height: 55,
+                  // padding: EdgeInsets.all(20),
+                  child: Icon(
+                    Icons.arrow_drop_up,
+                    size: 25,
+                    color: os_white,
                   ),
                 ),
                 radius: 100,
               ),
-            ))
+            )),
       ],
     );
   }

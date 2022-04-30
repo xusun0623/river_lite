@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
 
-void showActionSheet({
+void showMidActionSheet({
   @required BuildContext context,
   String title,
   @required List<String> list,
@@ -79,6 +79,7 @@ void showModal({
   String confirmTxt,
   String cancelTxt,
   Function confirm,
+  Function cancel,
 }) {
   AlertDialog alert = AlertDialog(
     shape: RoundedRectangleBorder(
@@ -110,7 +111,7 @@ void showModal({
           children: [
             myInkWell(
               widget: Container(
-                width: 140,
+                width: 130,
                 height: 50,
                 child: Center(
                   child: Text(
@@ -124,12 +125,13 @@ void showModal({
               radius: 10,
               tap: () {
                 Navigator.pop(context);
+                if (cancel != null) cancel();
               },
             ),
             myInkWell(
               color: os_color_opa,
               widget: Container(
-                width: 140,
+                width: 130,
                 height: 50,
                 child: Center(
                   child: Text(
@@ -143,7 +145,8 @@ void showModal({
               ),
               radius: 10,
               tap: () {
-                confirm();
+                Navigator.pop(context);
+                if (confirm != null) confirm();
               },
             ),
           ],
@@ -184,7 +187,29 @@ void showToast({
 }) {
   if (isShown) return;
   isShown = true;
-
+  if (type == XSToast.none) {
+    popDialog(
+      delay: duration ?? 1500,
+      context: context,
+      widget: Container(
+        // padding: EdgeInsets.all(30),
+        width: 240,
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: Color(0xBB000000),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              child: Text(txt ?? "加载中…", style: TextStyle(color: os_white)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   if (type == XSToast.loading) {
     popDialog(
       delay: duration ?? 3000,
@@ -202,7 +227,9 @@ void showToast({
           children: [
             CircularProgressIndicator(color: os_white, strokeWidth: 4),
             Container(height: 20),
-            Text(txt ?? "加载中…", style: TextStyle(color: os_white)),
+            Container(
+              child: Text(txt ?? "加载中…", style: TextStyle(color: os_white)),
+            ),
           ],
         ),
       ),
@@ -249,21 +276,24 @@ void popDialog({
     barrierColor: back,
     barrierDismissible: false,
     builder: (ctx) {
-      return WillPopScope(
-        //阻止用户返回
-        onWillPop: () {
-          return;
-        },
-        child: Container(
-          margin: EdgeInsets.only(bottom: 150),
-          child: Center(child: widget),
+      return Material(
+        color: Colors.transparent,
+        child: WillPopScope(
+          //阻止用户返回
+          onWillPop: () {
+            return;
+          },
+          child: Container(
+            margin: EdgeInsets.only(bottom: 150),
+            child: Container(child: Center(child: widget)),
+          ),
         ),
       );
     },
   );
   Future.delayed(Duration(milliseconds: delay)).then((value) {
     if (!isShown) return; //已经取消弹窗了
-    Navigator.pop(context);
     isShown = false;
+    Navigator.pop(context);
   });
 }

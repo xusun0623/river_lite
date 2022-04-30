@@ -8,34 +8,32 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  photo_view: ^0.10.2
-  shelf_proxy: ^1.0.0
-  shelf: ^1.1.4
-  shared_preferences: ^2.0.5
-  sqflite: ^2.0.0+3
-  flutter_easyloading: ^3.0.0
-  loading: ^1.0.2
-  direct_select: ^2.0.0
-  fluttertoast: ^8.0.6
-  flutter_easyrefresh: ^2.2.1
+  flutter_picker: ^2.0.3
+  badges: ^2.0.2
+  characters: ^1.2.0
+  flutter_vibrate: ^1.3.0
+  vibration: ^1.7.3
+  image_picker: ^0.8.4+10
+  file_picker: ^4.5.0
   flutter:
     sdk: flutter
-  flutter_icons: ^1.1.0
+  photo_view: ^0.10.2
+  provider: 
+  shared_preferences: ^2.0.5
+  fluttertoast: ^8.0.6
   flutter_svg: ^0.21.0+1
-  cupertino_icons: ^1.0.2
-  crypto: ^3.0.1
   dio: ^4.0.0
-  provider: ^5.0.0
-  noripple_overscroll:
-  card_swiper: ^2.0.1
-  cached_network_image: ^3.2.0
-  loading_indicator_view: 
-  webview_flutter: ^3.0.0
   url_launcher: ^6.0.20
-  flutter_webview_plugin: ^0.3.11
-  sticky_headers: ^0.2.0
-  vibrate: ^0.0.4
-
+  heic_to_jpg: ^0.2.0
+  image_gallery_saver: ^1.7.1
+  octo_image: ^1.0.1
+  flutter_cache_manager: ^3.3.0
+  cached_network_image_platform_interface: ^1.0.0
+  cached_network_image_web: ^1.0.0
+  crop_your_image: ^0.7.2
+  share_plus: ^4.0.4
+  lottie: ^1.3.0
+  flutter_bounce: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -45,23 +43,16 @@ flutter:
   uses-material-design: true
 
   assets:
-    - lib/img/logo.svg
-    - lib/img/search.svg
-    - lib/img/home.svg
-    - lib/img/banner.svg
-    - lib/img/like_blue.svg
-    - lib/img/like_grey.svg
-    - lib/img/comment.svg
-    - lib/img/right_arrow.svg
-    - lib/img/more.svg
-    - lib/img/right_arrow_grey.svg
-    - lib/img/topic_detail_more.svg
-    - lib/img/topic_water.svg
-    - lib/img/topic_collect.svg
-    - lib/img/detail_sort.svg
-    - lib/img/detail_like.svg
-    - lib/img/detail_like_blue.svg
-    - lib/img/detail_comment_more.svg
-    - lib/img/search_filter.svg
-    - lib/img/empty.png
-    - lib/img/to_top.svg
+    - lib/emoji/1/
+    - lib/emoji/2/
+    - lib/img/
+    - lib/img/square/
+    - lib/img/person/
+    - lib/img/home/
+    - lib/img/msg/
+    - lib/img/me/
+    - lib/collect_btn/
+    - lib/page/msg_three/
+    - lib/lottie/
+    - lib/img/about/1.png
+    

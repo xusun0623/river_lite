@@ -1,10 +1,17 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/saveImg.dart';
+import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/emoji/emoji.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../outer/cached_network_image/cached_image_widget.dart';
 
 class DetailCont extends StatefulWidget {
   var data;
@@ -27,6 +34,7 @@ class _DetailContState extends State<DetailCont> {
 
   List<InlineSpan> _getRichText(String t) {
     List<InlineSpan> ret = [];
+    t = t.replaceAll("&nbsp;", " ");
     List<String> tmp = t.split("[mobcent_phiz=");
     ret.add(TextSpan(text: tmp[0]));
     for (var i = 1; i < tmp.length; i++) {
@@ -55,46 +63,103 @@ class _DetailContState extends State<DetailCont> {
   Widget build(BuildContext context) {
     switch (widget.data["type"]) {
       case 0: //纯文字
-        return Container(
-          width: MediaQuery.of(context).size.width - 30,
-          child: Text.rich(
-            TextSpan(
-              style: TextStyle(
-                fontSize: 16,
-                height: 1.6,
-              ),
-              children: _getRichText(widget.data["infor"]),
-            ),
-          ),
-        );
+        return widget.data["infor"].toString().trim() == ""
+            ? Container()
+            : (widget.data["infor"].toString().characters.length == 1 &&
+                    emoji
+                        .toString()
+                        .characters
+                        .contains(widget.data["infor"].toString().trim())
+                ? Container(
+                    width: MediaQuery.of(context).size.width - 30,
+                    child: Text.rich(
+                      TextSpan(
+                        style: TextStyle(
+                          fontSize: 60,
+                          height: 1.6,
+                        ),
+                        text: widget.data["infor"].toString().trim(),
+                      ),
+                    ),
+                  )
+                : Container(
+                    width: MediaQuery.of(context).size.width - 30,
+                    child: Text.rich(
+                      TextSpan(
+                        style: TextStyle(
+                          fontSize: 16,
+                          height: 1.6,
+                        ),
+                        children: _getRichText(
+                          widget.data["infor"].indexOf("本帖最后由") > -1
+                              ? widget.data["infor"].substring(
+                                  (widget.data["infor"].indexOf("编辑") + 7) >=
+                                          widget.data["infor"].length
+                                      ? widget.data["infor"].length - 1
+                                      : widget.data["infor"].indexOf("编辑") + 7)
+                              : widget.data["infor"],
+                        ),
+                      ),
+                    ),
+                  ));
         break;
       case 1: //图片
-        return ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(7.5)),
-          child: Container(
-            decoration: BoxDecoration(
-              color: os_grey,
-              borderRadius: BorderRadius.all(Radius.circular(7.5)),
-            ),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => PhotoPreview(
-                      galleryItems: widget.imgLists,
-                      defaultImage:
-                          widget.imgLists.indexOf(widget.data["infor"]),
+        return GestureDetector(
+          onLongPress: () {
+            saveImge(
+              context,
+              widget.imgLists,
+              widget.imgLists.indexOf(widget.data["infor"]),
+            );
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(7.5)),
+            child: Container(
+              decoration: BoxDecoration(
+                color: os_grey,
+                borderRadius: BorderRadius.all(Radius.circular(7.5)),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PhotoPreview(
+                        galleryItems: widget.imgLists,
+                        defaultImage:
+                            widget.imgLists.indexOf(widget.data["infor"]),
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: CachedNetworkImage(
-                imageUrl: widget.data["infor"],
-                placeholder: (context, url) => Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: CircularProgressIndicator(color: os_deep_grey),
-                ),
+                  );
+                },
+                child: widget.imgLists.length > 5
+                    ? Image.network(
+                        widget.data["infor"],
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.cover,
+                      )
+                    // CachedNetworkImage(
+                    //     height: 100,
+                    //     width: 100,
+                    //     filterQuality: FilterQuality.low,
+                    //     fit: BoxFit.cover,
+                    //     imageUrl: widget.data["infor"],
+                    //     placeholder: (context, url) => Padding(
+                    //       padding: const EdgeInsets.all(40.0),
+                    //       child: CircularProgressIndicator(
+                    //         color: os_deep_grey,
+                    //         strokeWidth: 2.0,
+                    //       ),
+                    //     ),
+                    //   )
+                    : CachedNetworkImage(
+                        imageUrl: widget.data["infor"],
+                        placeholder: (context, url) => Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: CircularProgressIndicator(color: os_deep_grey),
+                        ),
+                      ),
               ),
             ),
           ),
@@ -109,18 +174,56 @@ class _DetailContState extends State<DetailCont> {
       case 4: //网页链接
         return myInkWell(
           radius: 0,
-          tap: () {
-            showModal(
+          longPress: () {
+            Clipboard.setData(ClipboardData(text: widget.data['url']));
+            showToast(
               context: context,
-              title: "请确认",
-              cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
-              confirmTxt: "立即前往",
-              cancelTxt: "取消",
-              confirm: () {
-                Navigator.pop(context);
-                launch(widget.data['url']);
-              },
+              type: XSToast.success,
+              txt: "复制成功",
+              duration: 500,
             );
+          },
+          tap: () {
+            try {
+              if (widget.data['url'].toString().indexOf(
+                      "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=") >
+                  -1) {
+                Navigator.pushNamed(
+                  context,
+                  "/topic_detail",
+                  arguments:
+                      int.parse(widget.data["url"].toString().split("tid=")[1]),
+                );
+              } else if (widget.data['url'].toString().indexOf(
+                      "https://bbs.uestc.edu.cn/home.php?mod=space&uid=") >
+                  -1) {
+                toUserSpace(
+                  context,
+                  int.parse(widget.data["url"].toString().split("uid=")[1]),
+                );
+              } else
+                showModal(
+                  context: context,
+                  title: "请确认",
+                  cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
+                  confirmTxt: "立即前往",
+                  cancelTxt: "取消",
+                  confirm: () {
+                    launch(widget.data['url']);
+                  },
+                );
+            } catch (e) {
+              showModal(
+                context: context,
+                title: "请确认",
+                cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
+                confirmTxt: "立即前往",
+                cancelTxt: "取消",
+                confirm: () {
+                  launch(widget.data['url']);
+                },
+              );
+            }
           },
           color: Colors.transparent,
           widget: Container(
@@ -133,20 +236,28 @@ class _DetailContState extends State<DetailCont> {
         );
         break;
       case 5: //附件下载
-        return myInkWell(
+        return //图片链接就不用下载了
+            myInkWell(
           color: Color(0xFFF6F6F6),
           tap: () {
             showModal(
-              context: context,
-              title: "请确认",
-              cont: "即将调用外部浏览器下载此附件，河畔App不保证此链接的安全性",
-              confirmTxt: "立即前往",
-              cancelTxt: "取消",
-              confirm: () {
-                Navigator.pop(context);
-                launch(widget.data['url']);
-              },
-            );
+                context: context,
+                title: "请确认",
+                cont: "即将调用外部浏览器下载此附件，河畔App不保证此链接的安全性",
+                confirmTxt: "立即前往",
+                cancelTxt: "复制链接",
+                confirm: () {
+                  launch(widget.data['url']);
+                },
+                cancel: () {
+                  Clipboard.setData(ClipboardData(text: widget.data['url']));
+                  showToast(
+                    context: context,
+                    type: XSToast.success,
+                    txt: "复制成功",
+                    duration: 500,
+                  );
+                });
           },
           radius: 10,
           widget: Container(

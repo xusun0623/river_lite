@@ -43,7 +43,7 @@ class RelativeDateFormat {
       return (months <= 0 ? 1 : months).toInt().toString() + ONE_MONTH_AGO;
     } else {
       num years = toYears(delta);
-      return (years <= 0 ? 1 : years).toInt().toString() + ONE_YEAR_AGO;
+      return "${date.year}-${date.month}-${date.day} ${date.hour}:${date.minute}";
     }
   }
 

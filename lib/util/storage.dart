@@ -17,6 +17,6 @@ getStorage({@required String key, String initData = ""}) async {
 setStorage({@required String key, @required String value}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String s = await prefs.getString(key);
-  print("存储数据:$key-$value");
+  // print("存储数据:$key-$value");
   return await prefs.setString(key, value);
 }

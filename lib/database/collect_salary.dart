@@ -5,7 +5,7 @@ class CollectSalary {
   ///查看收藏
   lookCollect() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getString("collect-salary"));
+    // print(prefs.getString("collect-salary"));
   }
 
   clear() async {

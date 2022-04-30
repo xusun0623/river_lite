@@ -1,30 +1,31 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+import 'dart:io';
+import 'package:http_parser/http_parser.dart';
+import 'package:dio/dio.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+_upload() async {
+  var dio = new Dio();
+  var formData = FormData();
+  formData.files.addAll([
+    MapEntry(
+      'uploadFile[]',
+      MultipartFile.fromFileSync(
+        './test.png',
+        filename: 'test.png',
+        /* 一定要写！！！！！！！！！！！！！！！！！！！！！！！*/
+        contentType: MediaType("image", "png"), //"image/png",
+      ),
+    ),
+  ]);
+  var response = await dio.post(
+    'https://bbs.uestc.edu.cn/mobcent/app/web/index.php?r=forum/sendattachmentex&type=image&module=forum&accessToken=e9f49ac6acace2b9f6582800f32ff&accessSecret=8aef222107fcd2cedcc5f60b4edd1',
+    options: Options(headers: {
+      "Content-Type": "multipart/form-data;",
+    }),
+    data: formData,
+  );
+  print(response.data);
+}
 
-import 'package:offer_show/main.dart';
-
-void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+void main(List<String> args) {
+  _upload();
 }

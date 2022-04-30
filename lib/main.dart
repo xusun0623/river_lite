@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/router/router.dart';
 import 'package:offer_show/util/provider.dart';
@@ -12,12 +11,14 @@ import 'package:provider/provider.dart';
 void main() {
   if (Platform.isAndroid) {
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+    );
   }
   runApp(MyApp());
   if (Platform.isAndroid) {
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+    );
   }
 }
 
@@ -31,17 +32,11 @@ class MyApp extends StatelessWidget {
     }
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => MainProvider()),
-        ChangeNotifierProvider(create: (context) => HomeTabIndex()),
-        ChangeNotifierProvider(create: (context) => KeyBoard()),
-        ChangeNotifierProvider(create: (context) => FilterSchool()),
-        ChangeNotifierProvider(create: (context) => HomeSchoolSalarys()),
-        ChangeNotifierProvider(create: (context) => HomePartSalarys()),
-        ChangeNotifierProvider(create: (context) => SearchProvider()),
-        ChangeNotifierProvider(create: (context) => CollectData()),
+        ChangeNotifierProvider(create: (context) => UserInfoProvider()),
+        ChangeNotifierProvider(create: (context) => TabShowProvider()),
+        ChangeNotifierProvider(create: (context) => HomeRefrshProvider())
       ],
       child: MaterialApp(
-        builder: EasyLoading.init(),
         debugShowCheckedModeBanner: false,
         initialRoute: "/",
         theme: ThemeData(

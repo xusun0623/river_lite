@@ -1,4 +1,4 @@
-# OfferShow客户端
+# 河畔Lite客户端
 
 ## API文档  
 https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
@@ -185,4 +185,80 @@ _scrollController.addListener(() {
 ```
 
 
+### 9.震动
+```dart
+bool vibrate = false;
+if (_scrollController.position.pixels < -100) {
+  if (!vibrate) {
+    vibrate = true; //不允许再震动
+    Vibrate.feedback(FeedbackType.impact);
+  }
+}
+if (_scrollController.position.pixels >= 0) {
+  vibrate = false; //允许震动
+}
+```
+
+### 10.动画
+```dart
+AnimationController controller; //动画控制器
+Animation<double> animation;
+double _right = -200;
+@override
+void initState() {
+  super.initState();
+  widget.controller.addListener(() {
+    if (widget.show) {
+      controller.forward();
+    } else {
+      controller.reverse();
+    }
+  });
+  controller = new AnimationController(
+    vsync: this,
+    duration: Duration(milliseconds: 400),
+  )..addListener(() {
+      setState(() {});
+    });
+  final CurvedAnimation curve = CurvedAnimation(
+    parent: controller,
+    curve: Curves.easeInOut,
+  );
+  animation = Tween(begin: -200.0, end: 20.0).animate(curve)
+    ..addListener(() {
+      setState(() {
+        _right = animation.value;
+      });
+    });
+}
+```
+
+### 11.下拉刷新
+```dart
+RefreshIndicator(
+  color: os_color,
+  onRefresh: () async {
+    var data = await _getInitData();
+    vibrate = false;
+    return data;
+  },
+  child: _buildComponents(),
+);
+```
+
+### 12.回顶
+```dart
+bool showBackToTop = false;
+ScrollController _controller = new ScrollController();
+if (_controller.position.pixels > 1000 && !showBackToTop) {
+  setState(() {
+    showBackToTop = true;
+  });
+}
+if (_controller.position.pixels < 1000 && showBackToTop) {
+  setState(() {
+    showBackToTop = false;
+  });
+}
+```
 

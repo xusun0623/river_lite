@@ -1,16 +1,30 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+
+import '../outer/cached_network_image/cached_image_widget.dart';
 
 class Topic extends StatefulWidget {
   Map data;
+  double top;
+  double bottom;
+  Color backgroundColor;
 
-  Topic({Key key, this.data}) : super(key: key);
+  Topic({
+    Key key,
+    this.data,
+    this.top,
+    this.bottom,
+    this.backgroundColor,
+  }) : super(key: key);
 
   @override
   _TopicState createState() => _TopicState();
@@ -54,12 +68,45 @@ class _TopicState extends State<Topic> {
     super.initState();
   }
 
+  _setHistory() async {
+    var history_data = await getStorage(key: "history", initData: "[]");
+    List history_arr = jsonDecode(history_data);
+    bool flag = false;
+    for (int i = 0; i < history_arr.length; i++) {
+      var ele = history_arr[i];
+      if (ele["userAvatar"] == widget.data["userAvatar"] &&
+          ele["title"] == widget.data["title"] &&
+          ele["subject"] ==
+              ((widget.data["summary"] ?? widget.data["subject"]) ?? "")) {
+        history_arr.removeAt(i);
+      }
+    }
+    List tmp_list_history = [
+      {
+        "userAvatar": widget.data["userAvatar"],
+        "title": widget.data["title"],
+        "subject": (widget.data["summary"] ?? widget.data["subject"]) ?? "",
+        "time": widget.data["last_reply_date"],
+        "topic_id": (widget.data["source_id"] ?? widget.data["topic_id"]),
+      }
+    ];
+    tmp_list_history.addAll(history_arr);
+    setStorage(key: "history", value: jsonEncode(tmp_list_history));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
+      padding: EdgeInsets.fromLTRB(
+        os_edge,
+        widget.top ?? 10,
+        os_edge,
+        widget.bottom ?? 0,
+      ),
       child: myInkWell(
+        color: widget.backgroundColor ?? os_white,
         tap: () {
+          _setHistory();
           Navigator.pushNamed(
             context,
             "/topic_detail",
@@ -80,16 +127,23 @@ class _TopicState extends State<Topic> {
                   children: [
                     Row(
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: CachedNetworkImage(
-                            width: 30,
-                            height: 30,
-                            imageUrl: widget.data["userAvatar"],
-                            placeholder: (context, url) =>
-                                Container(color: os_grey),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                        GestureDetector(
+                          onTap: () {
+                            if (widget.data["user_nick_name"] != "匿名")
+                              toUserSpace(context, widget.data["user_id"]);
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: CachedNetworkImage(
+                              width: 30,
+                              height: 30,
+                              fit: BoxFit.cover,
+                              imageUrl: widget.data["userAvatar"],
+                              placeholder: (context, url) =>
+                                  Container(color: os_grey),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                            ),
                           ),
                         ),
                         Padding(padding: EdgeInsets.all(4)),
@@ -99,8 +153,9 @@ class _TopicState extends State<Topic> {
                             Text(
                               widget.data["user_nick_name"],
                               style: TextStyle(
-                                color: Color(0xFF636363),
+                                color: Color(0xFF333333),
                                 fontSize: 15,
+                                // fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
@@ -157,19 +212,6 @@ class _TopicState extends State<Topic> {
                             });
                           },
                         ),
-                        myInkWell(
-                          color: Colors.transparent,
-                          widget: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: os_svg(
-                              path: "lib/img/more.svg",
-                              width: 14,
-                              height: 14,
-                            ),
-                          ),
-                          radius: 100,
-                          tap: () {},
-                        )
                       ],
                     )
                   ],
@@ -187,18 +229,21 @@ class _TopicState extends State<Topic> {
                   ),
                 ),
                 Padding(padding: EdgeInsets.all(2)),
-                Container(
-                  width: MediaQuery.of(context).size.width - 60,
-                  child: Text(
-                    (widget.data["summary"] ?? widget.data["subject"]) ?? "",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFFA3A3A3),
-                    ),
-                  ),
-                ),
+                ((widget.data["summary"] ?? widget.data["subject"]) ?? "") == ""
+                    ? Container()
+                    : Container(
+                        width: MediaQuery.of(context).size.width - 60,
+                        child: Text(
+                          (widget.data["summary"] ?? widget.data["subject"]) ??
+                              "",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFFA3A3A3),
+                          ),
+                        ),
+                      ),
                 Padding(padding: EdgeInsets.all(7)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -221,7 +266,10 @@ class _TopicState extends State<Topic> {
                       ],
                     ),
                     myInkWell(
-                      tap: () {},
+                      tap: () {
+                        Navigator.pushNamed(context, "/column",
+                            arguments: widget.data["board_id"]);
+                      },
                       color: Colors.transparent,
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,

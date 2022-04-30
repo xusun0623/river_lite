@@ -1,13 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/components/nomore.dart';
+import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/storage.dart';
 
 class Search extends StatefulWidget {
   const Search({Key key}) : super(key: key);
@@ -25,37 +32,96 @@ class _SearchState extends State<Search> {
   ScrollController _scrollController = new ScrollController();
   TextEditingController _controller = new TextEditingController();
   _getData() async {
-    showToast(
-      context: context,
-      type: XSToast.loading,
-      duration: 10000,
+    if (_controller.text == "") return;
+    setState(() {
+      loading = true;
+    });
+    _scrollController.animateTo(
+      0,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.ease,
     );
-    var tmp = await Api().forum_search({
+    var tmp = await Api().forum_search(select, {
       "keyword": _controller.text ?? "",
       "page": 1,
       "pageSize": 20,
     });
-    data = tmp["list"] ?? [];
+    if (select == 0 && tmp["rs"] != 0 && tmp != null && tmp["list"] != null) {
+      data = tmp["list"] ?? [];
+    }
+    if (select == 1 &&
+        tmp["rs"] != 0 &&
+        tmp != null &&
+        tmp["body"] != null &&
+        tmp["body"]["list"] != null) {
+      data = tmp["body"]["list"] ?? [];
+    }
     load_done = data.length < 20;
+    loading = false;
+    String tmp_history = await getStorage(
+      key: "search-history",
+      initData: "[]",
+    );
+    List tmp_arr_history = jsonDecode(tmp_history);
+    if (tmp_arr_history.indexOf(_controller.text) > -1) {
+      tmp_arr_history.remove(_controller.text);
+    }
+    List tmp_tmp = [_controller.text];
+    tmp_tmp.addAll(tmp_arr_history);
+    setStorage(key: "search-history", value: jsonEncode(tmp_tmp));
+    _commentFocus.unfocus();
     setState(() {});
   }
 
   _getMore() async {
     if (loading) return;
     loading = true;
-    print("${data.length}");
-    var tmp = await Api().forum_search({
+    var tmp = await Api().forum_search(select, {
       "keyword": _controller.text,
-      "page": (data.length / 20 + 1).toInt(),
+      "page": (data.length / 20 + 1).ceil(),
       "pageSize": 20,
     });
-    data.addAll(tmp["list"] ?? []);
+
+    if (select == 0 && tmp != null && tmp["list"] != null) {
+      data.addAll(tmp["list"]);
+    }
+    if (select == 1 &&
+        tmp != null &&
+        tmp["body"] != null &&
+        tmp["body"]["list"] != null) {
+      data.addAll(tmp["body"]["list"]);
+    }
+
+    load_done = data.length % 20 != 0;
     setState(() {});
     loading = false;
   }
 
   List<Widget> _buildTopic() {
+    print("${data}");
     List<Widget> tmp = [];
+    if (data.length == 0) {
+      tmp.add(
+        History(
+          confirm: (String txt) {
+            _commentFocus.unfocus();
+            if (txt != "") {
+              _controller.text = txt;
+              setState(() {
+                _getData();
+              });
+            }
+          },
+        ),
+      );
+    }
+    tmp.add(loading
+        ? BottomLoading(
+            color: Colors.transparent,
+            txt: "加载中…",
+          )
+        : NoMore());
+    tmp.add(loading ? Container(height: 15) : Container());
     tmp.add(data.length == 0 && load_done
         ? Container(
             width: MediaQuery.of(context).size.width - 30,
@@ -71,18 +137,22 @@ class _SearchState extends State<Search> {
         : Container());
     if (data.length > 0) {
       for (int i = 0; i < data.length; i++) {
-        tmp.add(SearchTopicCard(
-          tap: () {
-            _commentFocus.unfocus();
-          },
-          index: i,
-          data: data[i],
-        ));
+        tmp.add(select == 1
+            ? UserListCard(
+                data: data[i],
+              )
+            : SearchTopicCard(
+                tap: () {
+                  _commentFocus.unfocus();
+                },
+                index: i,
+                data: data[i],
+              ));
       }
     }
     tmp.add(
       load_done || data.length == 0
-          ? Container()
+          ? NoMore()
           : BottomLoading(
               color: Colors.transparent,
             ),
@@ -98,7 +168,7 @@ class _SearchState extends State<Search> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        print("触底");
+        // print("触底");
         _getMore();
       }
     });
@@ -122,17 +192,38 @@ class _SearchState extends State<Search> {
             },
           )
         ],
-        leadingWidth: 0,
-        leading: Container(width: 0),
+        leadingWidth: 30,
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left_rounded,
+            size: 28,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: SearchLeft(
           confirm: () {
             _getData();
             _commentFocus.unfocus();
           },
+          focus: () async {
+            await _scrollController.animateTo(
+              0,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.ease,
+            );
+            setState(() {
+              data = [];
+              load_done = false;
+            });
+          },
           commentFocus: _commentFocus,
           controller: _controller,
           select: (idx) {
             setState(() {
+              data = [];
+              load_done = false;
               select = idx;
             });
           },
@@ -149,6 +240,280 @@ class _SearchState extends State<Search> {
             children: _buildTopic(),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class History extends StatefulWidget {
+  Function confirm;
+  History({
+    Key key,
+    this.confirm,
+  }) : super(key: key);
+
+  @override
+  State<History> createState() => _HistoryState();
+}
+
+class _HistoryState extends State<History> {
+  List data = [];
+  List<Widget> _buildCont() {
+    List<Widget> tmp = [];
+    if (data.length != 0) {
+      for (int i = 0; i < data.length; i++) {
+        tmp.add(HistoryTag(
+          refresh: () {
+            widget.confirm("");
+            _getData();
+          },
+          tap: (txt) {
+            if (widget.confirm != null) {
+              widget.confirm(txt);
+            }
+          },
+          txt: data[i],
+        ));
+      }
+      tmp.add(Container(height: 10));
+    }
+    return tmp;
+  }
+
+  _getData() async {
+    String tmp = await getStorage(key: "search-history", initData: "[]");
+    List tmp_arr = jsonDecode(tmp);
+    setState(() {
+      data = tmp_arr;
+    });
+  }
+
+  @override
+  void initState() {
+    _getData();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return data.length == 0
+        ? Container()
+        : Container(
+            margin: EdgeInsets.symmetric(horizontal: os_edge),
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              // color: os_white,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "搜索历史",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFFBBBBBB),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        widget.confirm("");
+                        showModal(
+                          context: context,
+                          title: "请确认",
+                          cont: "是否要删除所有历史记录，该操作不可逆",
+                          confirm: () {
+                            setStorage(key: "search-history", value: "[]");
+                            setState(() {
+                              data = [];
+                            });
+                          },
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.clear,
+                            color: Color(0xFFBBBBBB),
+                            size: 20,
+                          ),
+                          Text(
+                            "清除全部",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFFBBBBBB),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Container(height: 15),
+                Wrap(
+                  children: _buildCont(),
+                ),
+              ],
+            ),
+          );
+  }
+}
+
+class HistoryTag extends StatefulWidget {
+  Function tap;
+  Function refresh;
+  String txt;
+  HistoryTag({
+    Key key,
+    this.tap,
+    this.txt,
+    this.refresh,
+  }) : super(key: key);
+
+  @override
+  State<HistoryTag> createState() => _HistoryTagState();
+}
+
+class _HistoryTagState extends State<HistoryTag> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(right: 7.5, bottom: 7.5),
+      child: myInkWell(
+        radius: 15,
+        longPress: () {
+          Vibrate.feedback(FeedbackType.impact);
+          showModal(
+              context: context,
+              title: "请确认",
+              cont: "是否要删除此条搜索记录，该操作不可被撤销",
+              confirm: () async {
+                var tmp_string = await getStorage(
+                  key: "search-history",
+                  initData: "[]",
+                );
+                List tmp_arr = jsonDecode(tmp_string);
+                tmp_arr.remove(widget.txt);
+                await setStorage(
+                  key: "search-history",
+                  value: jsonEncode(tmp_arr),
+                );
+                widget.refresh();
+              });
+        },
+        tap: () {
+          if (widget.tap != null) {
+            widget.tap(widget.txt);
+          }
+        },
+        color: os_white,
+        widget: Container(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7.5),
+          child: Text(
+            widget.txt ?? "历史记录",
+            style: TextStyle(
+              fontSize: 14,
+              color: os_deep_grey,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class UserListCard extends StatefulWidget {
+  Map data;
+  UserListCard({
+    Key key,
+    this.data,
+  }) : super(key: key);
+
+  @override
+  State<UserListCard> createState() => _UserListCardState();
+}
+
+class _UserListCardState extends State<UserListCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
+      child: myInkWell(
+        tap: () {
+          Navigator.pushNamed(
+            context,
+            "/person_center",
+            arguments: {"uid": widget.data["uid"], "isMe": false},
+          );
+        },
+        widget: Container(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(100)),
+                child: CachedNetworkImage(
+                  placeholder: (context, url) => Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: os_grey,
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                    ),
+                  ),
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
+                  imageUrl: widget.data["icon"],
+                ),
+              ),
+              Container(width: 15),
+              Container(
+                width: MediaQuery.of(context).size.width - 120,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          widget.data["name"],
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Container(width: 5),
+                        widget.data["userTitle"].toString().length < 6
+                            ? Tag(
+                                txt: widget.data["userTitle"],
+                                color: os_white,
+                                color_opa: os_wonderful_color[1],
+                              )
+                            : Container(),
+                      ],
+                    ),
+                    Container(height: 5),
+                    Text(
+                      widget.data["signture"] == ""
+                          ? "这位畔友很懒，什么也没写"
+                          : widget.data["signture"],
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF9F9F9F),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        radius: 10,
       ),
     );
   }
@@ -194,10 +559,12 @@ class SearchLeft extends StatefulWidget {
   Function confirm;
   TextEditingController controller;
   FocusNode commentFocus;
+  Function focus;
   SearchLeft({
     Key key,
     @required this.select,
     this.controller,
+    this.focus,
     @required this.commentFocus,
     @required this.confirm,
   }) : super(key: key);
@@ -211,7 +578,7 @@ class _SearchLeftState extends State<SearchLeft> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width - 83,
+      width: MediaQuery.of(context).size.width - 105,
       height: 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -224,7 +591,7 @@ class _SearchLeftState extends State<SearchLeft> {
           myInkWell(
             tap: () {
               widget.commentFocus.unfocus();
-              showActionSheet(
+              showMidActionSheet(
                 context: context,
                 list: ["帖子", "用户"],
                 select: (idx) {
@@ -263,10 +630,13 @@ class _SearchLeftState extends State<SearchLeft> {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width - 165.5,
+            width: MediaQuery.of(context).size.width - 195,
             child: TextField(
               onSubmitted: (context) {
                 widget.confirm();
+              },
+              onTap: () {
+                if (widget.focus != null) widget.focus();
               },
               controller: widget.controller,
               cursorColor: os_black,
@@ -279,6 +649,7 @@ class _SearchLeftState extends State<SearchLeft> {
                 suffixIcon: IconButton(
                   onPressed: () {
                     FocusScope.of(context).requestFocus(widget.commentFocus);
+                    if (widget.focus != null) widget.focus();
                     widget.controller.clear();
                   },
                   icon: Icon(
@@ -327,6 +698,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
       child: myInkWell(
         tap: () {
           widget.tap();
+          // print("hhhhhh${widget.data}");
           Navigator.pushNamed(
             context,
             "/topic_detail",
@@ -397,7 +769,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                 Container(
                   width: MediaQuery.of(context).size.width - 60,
                   child: Text(
-                    widget.data["title"],
+                    widget.data["title"].replaceAll("&nbsp1", " "),
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 17,
