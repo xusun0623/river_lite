@@ -26,7 +26,7 @@ class PostNew extends StatefulWidget {
 }
 
 class _PostNewState extends State<PostNew> {
-  bool sendSuccess = true;
+  bool sendSuccess = false;
 
   String select_section = "水手之家";
   int select_section_id = 25;
@@ -68,10 +68,6 @@ class _PostNewState extends State<PostNew> {
         }
       }
       total = tmp;
-      total.add({
-        "board_id": 371,
-        "board_name": "密语",
-      });
       setState(() {});
     }
   }
@@ -234,7 +230,7 @@ class _PostNewState extends State<PostNew> {
                     Container(
                       width: 300,
                       child: Text(
-                        "你已成功发送该帖子，你可以点击下方按钮查看，也可以点击左上角返回",
+                        "你已成功发送该帖子，帖子显示在首页会有延时，你可以点击下方按钮查看",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16,

@@ -33,6 +33,21 @@ class HomeRefrshProvider extends ChangeNotifier {
   ScrollController msgScrollController = new ScrollController();
   ScrollController meScrollController = new ScrollController();
 
+  void toTop(List<int> loadIndex, int index) {
+    [
+      homeScrollController,
+      recentScrollController,
+      msgScrollController,
+      meScrollController
+    ][loadIndex[index]]
+        .animateTo(
+      0,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeIn,
+    );
+    notifyListeners();
+  }
+
   void invoke(List<int> loadIndex, int index) {
     [
       homeRefreshIndicator,

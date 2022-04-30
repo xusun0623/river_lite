@@ -119,7 +119,7 @@ class _TopicState extends State<Topic> {
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           child: Padding(
-            padding: EdgeInsets.fromLTRB(15, 16, 15, 16),
+            padding: EdgeInsets.fromLTRB(16, 18, 16, 18),
             child: Column(
               children: [
                 Row(
@@ -135,8 +135,8 @@ class _TopicState extends State<Topic> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: CachedNetworkImage(
-                              width: 30,
-                              height: 30,
+                              width: 27,
+                              height: 27,
                               fit: BoxFit.cover,
                               imageUrl: widget.data["userAvatar"],
                               placeholder: (context, url) =>
@@ -146,27 +146,27 @@ class _TopicState extends State<Topic> {
                             ),
                           ),
                         ),
-                        Padding(padding: EdgeInsets.all(4)),
+                        Padding(padding: EdgeInsets.all(5)),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               widget.data["user_nick_name"],
                               style: TextStyle(
-                                color: Color(0xFF333333),
-                                fontSize: 15,
+                                color: os_black,
+                                fontSize: 14,
                                 // fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Text(
-                              RelativeDateFormat.format(
-                                  DateTime.fromMillisecondsSinceEpoch(int.parse(
-                                      widget.data["last_reply_date"]))),
-                              style: TextStyle(
-                                color: Color(0xFFC4C4C4),
-                                fontSize: 12,
-                              ),
-                            ),
+                            // Text(
+                            //   RelativeDateFormat.format(
+                            //       DateTime.fromMillisecondsSinceEpoch(int.parse(
+                            //           widget.data["last_reply_date"]))),
+                            //   style: TextStyle(
+                            //     color: Color(0xFFC4C4C4),
+                            //     fontSize: 12,
+                            //   ),
+                            // ),
                           ],
                         )
                       ],
@@ -174,6 +174,11 @@ class _TopicState extends State<Topic> {
                     Row(
                       children: [
                         myInkWell(
+                          tap: () {
+                            setState(() {
+                              // _tapLike();
+                            });
+                          },
                           color: Colors.transparent,
                           widget: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -183,114 +188,124 @@ class _TopicState extends State<Topic> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  (widget.data["recommendAdd"] ??
-                                          0 + (_isRated ? 1 : 0))
-                                      .toString(),
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color:
-                                        _isRated ? os_color : Color(0xFFB1B1B1),
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                Icon(
+                                  Icons.more_horiz_sharp,
+                                  size: 18,
+                                  color: Color(0xFF585858),
                                 ),
-                                Padding(padding: EdgeInsets.all(2)),
-                                os_svg(
-                                  path: _isRated
-                                      ? "lib/img/detail_like_blue.svg"
-                                      : "lib/img/detail_like.svg",
-                                  width: 24,
-                                  height: 24,
-                                ),
+                                // Text(
+                                //   (widget.data["recommendAdd"] ??
+                                //           0 + (_isRated ? 1 : 0))
+                                //       .toString(),
+                                //   style: TextStyle(
+                                //     fontSize: 12,
+                                //     color:
+                                //         _isRated ? os_color : Color(0xFFB1B1B1),
+                                //     fontWeight: FontWeight.w600,
+                                //   ),
+                                // ),
+                                // Padding(padding: EdgeInsets.all(2)),
+                                // os_svg(
+                                //   path: _isRated
+                                //       ? "lib/img/detail_like_blue.svg"
+                                //       : "lib/img/detail_like.svg",
+                                //   width: 24,
+                                //   height: 24,
+                                // ),
                               ],
                             ),
                           ),
                           radius: 100,
-                          tap: () {
-                            setState(() {
-                              _tapLike();
-                            });
-                          },
                         ),
                       ],
                     )
                   ],
                 ),
-                Padding(padding: EdgeInsets.all(1)),
+                Padding(padding: EdgeInsets.all(3)),
                 Container(
-                  width: MediaQuery.of(context).size.width - 60,
+                  width: MediaQuery.of(context).size.width,
                   child: Text(
                     widget.data["title"],
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 17,
-                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.5,
                     ),
                   ),
                 ),
-                Padding(padding: EdgeInsets.all(2)),
+                Padding(padding: EdgeInsets.all(3)),
                 ((widget.data["summary"] ?? widget.data["subject"]) ?? "") == ""
                     ? Container()
                     : Container(
-                        width: MediaQuery.of(context).size.width - 60,
+                        width: MediaQuery.of(context).size.width,
                         child: Text(
                           (widget.data["summary"] ?? widget.data["subject"]) ??
                               "",
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFFA3A3A3),
+                            fontSize: 16,
+                            height: 1.5,
+                            color: Color(0xFF999999),
                           ),
                         ),
                       ),
-                Padding(padding: EdgeInsets.all(7)),
+                Padding(padding: EdgeInsets.all(8)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
                         os_svg(
-                          path: "lib/img/comment.svg",
-                          width: 12.8,
-                          height: 12.8,
+                          path: "lib/img/topic_component_view.svg",
+                          width: 20,
+                          height: 20,
                         ),
-                        Padding(padding: EdgeInsets.all(2)),
+                        Container(width: 5),
                         Text(
-                          "评论 ${widget.data['replies']} · 浏览量 ${widget.data['hits']}",
+                          "${widget.data['hits']}",
                           style: TextStyle(
-                            color: Color(0xFFC5C5C5),
-                            fontSize: 14,
+                            color: Color(0xFF6B6B6B),
+                            fontSize: 12,
                           ),
-                        )
+                        ),
+                        Container(width: 20),
+                        os_svg(
+                          path: "lib/img/topic_component_comment.svg",
+                          width: 20,
+                          height: 20,
+                        ),
+                        Container(width: 5),
+                        Text(
+                          "${widget.data['replies']}",
+                          style: TextStyle(
+                            color: Color(0xFF6B6B6B),
+                            fontSize: 12,
+                          ),
+                        ),
+                        Container(width: 20),
+                        os_svg(
+                          path: "lib/img/topic_component_like.svg",
+                          width: 20,
+                          height: 20,
+                        ),
+                        Container(width: 5),
+                        Text(
+                          (widget.data["recommendAdd"] ?? 0).toString(),
+                          style: TextStyle(
+                            color: Color(0xFF6B6B6B),
+                            fontSize: 12,
+                          ),
+                        ),
                       ],
                     ),
-                    myInkWell(
-                      tap: () {
-                        Navigator.pushNamed(context, "/column",
-                            arguments: widget.data["board_id"]);
-                      },
-                      color: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      widget: Row(
-                        children: [
-                          Text(
-                            "#${widget.data['board_name']}",
-                            style: TextStyle(
-                              color: os_color,
-                              fontSize: 14,
-                            ),
-                          ),
-                          Padding(padding: EdgeInsets.all(3)),
-                          os_svg(
-                            path: "lib/img/right_arrow.svg",
-                            width: 4.66,
-                            height: 8.37,
-                          ),
-                        ],
+                    Text(
+                      RelativeDateFormat.format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(widget.data["last_reply_date"]))),
+                      style: TextStyle(
+                        color: Color(0xFF9C9C9C),
+                        fontSize: 12,
                       ),
-                      radius: 5,
                     ),
                   ],
                 ),

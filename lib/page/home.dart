@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -111,14 +112,22 @@ class _HomeState extends State<Home> {
       });
       for (int i = 0; i < icons.length; i++) {
         tmp.add(GestureDetector(
-          onTapDown: (e) {
-            Vibrate.feedback(FeedbackType.impact);
-            setState(() {
-              tabShowProvider.index = i;
-            });
-          },
+          onTapDown: tabShowProvider.index == i
+              ? (e) {
+                  // Vibrate.feedback(FeedbackType.impact);
+                  // provider.toTop(loadIndex, i);
+                  _getNewMsg();
+                }
+              : (e) {
+                  _getNewMsg();
+                  Vibrate.feedback(FeedbackType.impact);
+                  setState(() {
+                    tabShowProvider.index = i;
+                  });
+                },
           onDoubleTap: tabShowProvider.index == i
               ? () {
+                  _getNewMsg();
                   Vibrate.feedback(FeedbackType.impact);
                   provider.invoke(loadIndex, i);
                 }
@@ -127,12 +136,19 @@ class _HomeState extends State<Home> {
             width: MediaQuery.of(context).size.width / icons.length,
             height: barHeight,
             color: Color(0xFFFFFFFF),
-            child: Icon(
-              tabShowProvider.index == i ? select_icons[i] : icons[i],
-              size: 26,
-              color: tabShowProvider.index == i
-                  ? Color(0xFF222222)
-                  : Color(0xFFa4a4a6),
+            child: Badge(
+              position: BadgePosition(
+                end: 35,
+                top: 20,
+              ),
+              showBadge: i == 2 && _isNewMsg,
+              child: Icon(
+                tabShowProvider.index == i ? select_icons[i] : icons[i],
+                size: 26,
+                color: tabShowProvider.index == i
+                    ? Color(0xFF222222)
+                    : Color(0xFFa4a4a6),
+              ),
             ),
           ),
         ));
