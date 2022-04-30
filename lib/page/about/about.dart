@@ -17,7 +17,9 @@ class _AboutState extends State<About> {
         elevation: 0,
         foregroundColor: os_black,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: Icon(Icons.chevron_left_rounded),
         ),
       ),

@@ -277,7 +277,6 @@ class _LoginInputState extends State<LoginInput> {
             width: MediaQuery.of(context).size.width - 4 * os_edge,
             margin:
                 EdgeInsets.symmetric(horizontal: 2 * os_edge, vertical: 7.5),
-            height: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(15)),
               color: Color.fromRGBO(0, 0, 0, 0.05),
@@ -297,7 +296,7 @@ class _LoginInputState extends State<LoginInput> {
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 15,
-                  vertical: 18,
+                  vertical: 25,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),
@@ -315,7 +314,6 @@ class _LoginInputState extends State<LoginInput> {
             width: MediaQuery.of(context).size.width - 4 * os_edge,
             margin:
                 EdgeInsets.symmetric(horizontal: 2 * os_edge, vertical: 7.5),
-            height: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(15)),
               color: Color.fromRGBO(0, 0, 0, 0.05),
@@ -336,7 +334,7 @@ class _LoginInputState extends State<LoginInput> {
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 15,
-                  vertical: 18,
+                  vertical: 25,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),
