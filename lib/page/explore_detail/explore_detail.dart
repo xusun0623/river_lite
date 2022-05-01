@@ -110,6 +110,7 @@ class _ExploreCardState extends State<ExploreCard> {
           child: Stack(
             children: [
               ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(0)),
                 child: Image.asset("lib/img/explore/${widget.index}.png"),
               ),
               Positioned(

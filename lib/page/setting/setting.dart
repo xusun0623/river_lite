@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -85,20 +87,24 @@ class _SettingState extends State<Setting> {
     _setManage();
   }
 
+  void setExplore(bool isShow) {
+    setStorage(key: "showExplore", value: isShow ? "1" : "");
+    Provider.of<TabShowProvider>(context, listen: false).loadIndex =
+        isShow ? [0, 1, 2, 3] : [0, 2, 3];
+    Provider.of<TabShowProvider>(context, listen: false).index = 0;
+    Provider.of<TabShowProvider>(context, listen: false).refresh();
+    setState(() {
+      showExplore = isShow;
+    });
+  }
+
   List<Widget> _buildWidget() {
     List<Widget> tmp = [];
     tmp.addAll([
       Container(height: 25),
       SwitchListTile(
         onChanged: (change_val) {
-          setStorage(key: "showExplore", value: change_val ? "1" : "");
-          Provider.of<TabShowProvider>(context, listen: false).loadIndex =
-              change_val ? [0, 1, 2, 3] : [0, 2, 3];
-          Provider.of<TabShowProvider>(context, listen: false).index = 0;
-          Provider.of<TabShowProvider>(context, listen: false).refresh();
-          setState(() {
-            showExplore = change_val;
-          });
+          setExplore(change_val);
         },
         value: showExplore,
         title: Row(
@@ -109,6 +115,13 @@ class _SettingState extends State<Setting> {
         subtitle: Text("是否要在首页展示探索页面，关闭后仅显示主页、消息页、我的页面"),
       ),
       Container(height: 25),
+      SelectCard(
+        index: showExplore ? 0 : 1,
+        tap: (index) {
+          setExplore(index == 1);
+        },
+      ),
+      Container(height: 50),
       ListTile(
         onTap: () {
           showModal(
@@ -263,6 +276,55 @@ class _SettingState extends State<Setting> {
         physics: BouncingScrollPhysics(),
         children: _buildWidget(),
       ),
+    );
+  }
+}
+
+class SelectCard extends StatefulWidget {
+  int index;
+  Function tap;
+  SelectCard({
+    Key key,
+    this.index,
+    this.tap,
+  }) : super(key: key);
+
+  @override
+  State<SelectCard> createState() => _SelectCardState();
+}
+
+class _SelectCardState extends State<SelectCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () {
+            widget.tap(0);
+          },
+          child: os_svg(
+            width: 150,
+            height: 250,
+            path: widget.index == 1
+                ? "lib/img/setting/2-se.svg"
+                : "lib/img/setting/2.svg",
+          ),
+        ),
+        Container(width: 15),
+        GestureDetector(
+          onTap: () {
+            widget.tap(1);
+          },
+          child: os_svg(
+            width: 150,
+            height: 250,
+            path: widget.index == 0
+                ? "lib/img/setting/1-se.svg"
+                : "lib/img/setting/1.svg",
+          ),
+        ),
+      ],
     );
   }
 }

@@ -46,6 +46,7 @@ flutter:
     - lib/emoji/1/
     - lib/emoji/2/
     - lib/img/
+    - lib/img/setting/
     - lib/img/square/
     - lib/img/person/
     - lib/img/home/

@@ -63,9 +63,6 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
 
   List<Widget> _buildComponents() {
     List<Widget> t = [];
-    t.addAll([
-      HomeBtnCollect(),
-    ]);
     for (var i in list) {
       t.add(Topic(data: i));
     }

@@ -296,7 +296,7 @@ class _LoginInputState extends State<LoginInput> {
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 15,
-                  vertical: 25,
+                  vertical: 20,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),
@@ -334,7 +334,7 @@ class _LoginInputState extends State<LoginInput> {
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 15,
-                  vertical: 25,
+                  vertical: 20,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),

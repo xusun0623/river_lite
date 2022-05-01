@@ -105,14 +105,20 @@ class _TopicState extends State<Topic> {
       ),
       child: myInkWell(
         color: widget.backgroundColor ?? os_white,
-        tap: () {
+        tap: () async {
+          String info_txt = await getStorage(key: "myinfo", initData: "");
+          print("${info_txt}");
           _setHistory();
-          Navigator.pushNamed(
-            context,
-            "/topic_detail",
-            arguments: (widget.data["source_id"] ?? widget.data["topic_id"]),
-            // arguments: 1903247,
-          );
+          if (info_txt == "") {
+            Navigator.pushNamed(context, "/login");
+          } else {
+            Navigator.pushNamed(
+              context,
+              "/topic_detail",
+              arguments: (widget.data["source_id"] ?? widget.data["topic_id"]),
+              // arguments: 1903247,
+            );
+          }
         },
         widget: Container(
           decoration: BoxDecoration(
@@ -128,7 +134,7 @@ class _TopicState extends State<Topic> {
                     Row(
                       children: [
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
                             if (widget.data["user_nick_name"] != "匿名")
                               toUserSpace(context, widget.data["user_id"]);
                           },

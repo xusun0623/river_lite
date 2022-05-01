@@ -93,27 +93,21 @@ class _LinkState extends State<Link> {
                     },
                   );
                 },
-                color: Color.fromRGBO(0, 146, 255, 0.05),
                 radius: 5,
                 widget: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.5, vertical: 10),
-                  width: MediaQuery.of(context).size.width - 4 * os_edge,
                   decoration: BoxDecoration(),
                   child: Row(
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width -
-                            4 * os_edge -
-                            50,
+                            2 * os_edge -
+                            20,
                         child: Text(
-                          widget.txt ?? "标题",
-                          style: TextStyle(color: os_color),
+                          (widget.txt ?? "标题").split("").join("\u{200B}"),
+                          style: TextStyle(
+                            color: os_color,
+                          ),
                         ),
-                      ),
-                      Icon(
-                        Icons.chevron_right_outlined,
-                        size: 16,
-                        color: os_color,
                       ),
                     ],
                   ),

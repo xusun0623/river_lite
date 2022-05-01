@@ -3,24 +3,19 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/components/banner.dart';
-import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
-import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
-import 'package:provider/provider.dart';
 
-class HomeNewReply extends StatefulWidget {
+class Essence extends StatefulWidget {
   @override
-  _HomeNewReplyState createState() => _HomeNewReplyState();
+  _EssenceState createState() => _EssenceState();
 }
 
-class _HomeNewReplyState extends State<HomeNewReply>
-    with AutomaticKeepAliveClientMixin {
+class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
   var data = [];
   var loading = false;
@@ -33,8 +28,6 @@ class _HomeNewReplyState extends State<HomeNewReply>
     super.initState();
     _getStorageData();
     _getInitData();
-    _scrollController = Provider.of<HomeRefrshProvider>(context, listen: false)
-        .recentScrollController;
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
@@ -47,7 +40,6 @@ class _HomeNewReplyState extends State<HomeNewReply>
       }
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        // print("触底");
         _getData();
       }
       if (_scrollController.position.pixels > 1000 && !showBackToTop) {
@@ -64,19 +56,22 @@ class _HomeNewReplyState extends State<HomeNewReply>
   }
 
   _getInitData() async {
-    var tmp = await Api()
-        .forum_topiclist({"page": 1, "pageSize": 20, "sortby": "all"});
+    var tmp = await Api().forum_topiclist({
+      "page": 1,
+      "pageSize": 20,
+      "sortby": "essence",
+    });
     if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
       data = tmp["list"];
     }
     if (data != null && data.length != 0)
-      setStorage(key: "home_new_reply", value: jsonEncode(data));
+      setStorage(key: "essence_reply", value: jsonEncode(data));
     load_done = false;
     setState(() {});
   }
 
   _getStorageData() async {
-    var tmp = await getStorage(key: "home_new_reply", initData: "[]");
+    var tmp = await getStorage(key: "essence_reply", initData: "[]");
     setState(() {
       data = jsonDecode(tmp);
     });
@@ -89,14 +84,14 @@ class _HomeNewReplyState extends State<HomeNewReply>
     var tmp = await Api().forum_topiclist({
       "page": (data.length / pageSize + 1).toInt(),
       "pageSize": pageSize,
-      "sortby": "all"
+      "sortby": "essence"
     });
     if (tmp != null &&
         tmp["rs"] != 0 &&
         tmp["list"] != null &&
         tmp["list"].length != 0) {
       data.addAll(tmp["list"]);
-      setStorage(key: "home_new_reply", value: jsonEncode(data));
+      setStorage(key: "essence_reply", value: jsonEncode(data));
     }
     load_done = tmp == null || ((tmp["list"] ?? []).length < pageSize);
     loading = false;
@@ -105,6 +100,7 @@ class _HomeNewReplyState extends State<HomeNewReply>
 
   Widget _buildComponents() {
     List<Widget> t = [];
+    // t.add(Container(height: 5));
     if (data != null && data.length != 0) {
       for (var i in data) {
         t.add(Topic(data: i));
@@ -140,11 +136,9 @@ class _HomeNewReplyState extends State<HomeNewReply>
 
   @override
   Widget build(BuildContext context) {
-    HomeRefrshProvider provider = Provider.of<HomeRefrshProvider>(context);
     return Scaffold(
       backgroundColor: os_back,
       body: RefreshIndicator(
-        key: provider.recentRefreshIndicator,
         color: os_color,
         onRefresh: () async {
           var data = await _getInitData();
