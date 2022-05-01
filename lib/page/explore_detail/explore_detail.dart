@@ -75,6 +75,7 @@ class _ExploreDetailState extends State<ExploreDetail> {
         controller: _scrollController,
         show: showBackToTop,
         child: ListView(
+          physics: BouncingScrollPhysics(),
           controller: _scrollController,
           children: _buildWidget(),
         ),
