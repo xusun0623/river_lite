@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/img/explore/explore.dart';
@@ -104,8 +103,6 @@ class _ExploreCardState extends State<ExploreCard> {
       },
       child: Padding(
         padding: EdgeInsets.only(
-          left: os_edge,
-          right: os_edge,
           top: 10,
         ),
         child: Hero(
@@ -113,7 +110,6 @@ class _ExploreCardState extends State<ExploreCard> {
           child: Stack(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
                 child: Image.asset("lib/img/explore/${widget.index}.png"),
               ),
               Positioned(
