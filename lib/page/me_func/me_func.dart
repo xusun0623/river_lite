@@ -49,7 +49,10 @@ class _MeFuncState extends State<MeFunc> {
       });
       if (tmp != null && tmp["rs"] != 0 && tmp["list"] != null) {
         data = tmp["list"];
-        load_done = data.length % 10 != 0;
+        load_done = data.length % 10 != 0 || data.length == 0;
+        setState(() {});
+      } else {
+        load_done = true;
         setState(() {});
       }
     }

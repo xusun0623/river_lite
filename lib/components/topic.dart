@@ -304,7 +304,7 @@ class _TopicState extends State<Topic> {
                               int.parse(widget.data["last_reply_date"]))),
                       style: TextStyle(
                         color: Color(0xFF9C9C9C),
-                        fontSize: 12,
+                        fontSize: 12.5,
                       ),
                     ),
                   ],

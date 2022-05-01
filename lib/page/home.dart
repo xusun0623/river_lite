@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/page/explore/explore.dart';
 import 'package:offer_show/page/me/me.dart';
 import 'package:offer_show/page/msg/msg.dart';
 import 'package:offer_show/page/home/myhome.dart';
-import 'package:offer_show/page/new_reply/homeNewReply.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
     loadIndex.forEach((element) {
       tmp.add([
         MyHome(),
-        HomeNewReply(),
+        Explore(),
         Msg(
           refresh: () {
             _getNewMsg();

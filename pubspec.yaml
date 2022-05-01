@@ -55,4 +55,5 @@ flutter:
     - lib/page/msg_three/
     - lib/lottie/
     - lib/img/about/1.png
+    - lib/img/explore/
     

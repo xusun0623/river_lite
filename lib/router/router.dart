@@ -3,6 +3,8 @@ import 'package:offer_show/page/about/about.dart';
 import 'package:offer_show/page/broke.dart';
 import 'package:offer_show/page/column/column.dart';
 import 'package:offer_show/page/crop/crop.dart';
+import 'package:offer_show/page/explore/explore.dart';
+import 'package:offer_show/page/explore_detail/explore_detail.dart';
 import 'package:offer_show/page/home.dart';
 import 'package:offer_show/page/hot/homeHot.dart';
 import 'package:offer_show/page/home/myhome.dart';
@@ -26,6 +28,8 @@ final routers = {
   "/login": () => Login(),
   "/about": () => About(),
   "/setting": () => Setting(),
+  "/explore": () => Explore(),
+  "/explore_detail": (data) => ExploreDetail(index: data),
   "/login_helper": () => LoginHelper(),
   "/broke": () => Broke(),
   "/me": () => Me(),

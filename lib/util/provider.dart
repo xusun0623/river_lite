@@ -49,14 +49,24 @@ class HomeRefrshProvider extends ChangeNotifier {
   }
 
   void invoke(List<int> loadIndex, int index) {
-    [
-      homeRefreshIndicator,
-      recentRefreshIndicator,
-      msgRefreshIndicator,
-      meRefreshIndicator
-    ][loadIndex[index]]
-        .currentState
-        .show();
+    if ([
+          homeRefreshIndicator,
+          recentRefreshIndicator,
+          msgRefreshIndicator,
+          meRefreshIndicator
+        ][loadIndex[index]]
+            .currentState !=
+        null) {
+      [
+        homeRefreshIndicator,
+        recentRefreshIndicator,
+        msgRefreshIndicator,
+        meRefreshIndicator
+      ][loadIndex[index]]
+          .currentState
+          .show();
+    }
+
     [
       homeScrollController,
       recentScrollController,
