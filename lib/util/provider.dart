@@ -19,65 +19,41 @@ class UserInfoProvider extends ChangeNotifier {
 }
 
 class HomeRefrshProvider extends ChangeNotifier {
-  GlobalKey<RefreshIndicatorState> homeRefreshIndicator =
-      GlobalKey<RefreshIndicatorState>();
-  GlobalKey<RefreshIndicatorState> recentRefreshIndicator =
-      GlobalKey<RefreshIndicatorState>();
-  GlobalKey<RefreshIndicatorState> msgRefreshIndicator =
-      GlobalKey<RefreshIndicatorState>();
-  GlobalKey<RefreshIndicatorState> meRefreshIndicator =
-      GlobalKey<RefreshIndicatorState>();
+  int index = 0;
 
-  ScrollController homeScrollController = new ScrollController();
-  ScrollController recentScrollController = new ScrollController();
-  ScrollController msgScrollController = new ScrollController();
-  ScrollController meScrollController = new ScrollController();
+  ScrollController send = new ScrollController();
+  ScrollController reply = new ScrollController();
+  ScrollController hot = new ScrollController();
+  ScrollController essence = new ScrollController();
 
-  void toTop(List<int> loadIndex, int index) {
-    [
-      homeScrollController,
-      recentScrollController,
-      msgScrollController,
-      meScrollController
-    ][loadIndex[index]]
-        .animateTo(
-      0,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeIn,
-    );
-    notifyListeners();
+  void totop() {
+    if (index == 0)
+      send.animateTo(
+        0,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+    if (index == 1)
+      reply.animateTo(
+        0,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+    if (index == 2)
+      hot.animateTo(
+        0,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+    if (index == 3)
+      essence.animateTo(
+        0,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
   }
 
-  void invoke(List<int> loadIndex, int index) {
-    if ([
-          homeRefreshIndicator,
-          recentRefreshIndicator,
-          msgRefreshIndicator,
-          meRefreshIndicator
-        ][loadIndex[index]]
-            .currentState !=
-        null) {
-      [
-        homeRefreshIndicator,
-        recentRefreshIndicator,
-        msgRefreshIndicator,
-        meRefreshIndicator
-      ][loadIndex[index]]
-          .currentState
-          .show();
-    }
-
-    [
-      homeScrollController,
-      recentScrollController,
-      msgScrollController,
-      meScrollController
-    ][loadIndex[index]]
-        .animateTo(
-      0,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeIn,
-    );
+  void refresh() {
     notifyListeners();
   }
 }

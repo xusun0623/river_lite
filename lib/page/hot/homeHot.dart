@@ -7,7 +7,9 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/home_btn.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
+import 'package:provider/provider.dart';
 
 class Hot extends StatefulWidget {
   @override
@@ -26,6 +28,8 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
     super.initState();
     _getTmpData();
     _getData();
+    _scrollController =
+        Provider.of<HomeRefrshProvider>(context, listen: false).hot;
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {

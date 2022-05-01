@@ -26,7 +26,7 @@ class HomeNew extends StatefulWidget {
 }
 
 class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
-  ScrollController _scrollController;
+  ScrollController _scrollController = new ScrollController();
   var data = [];
   var loading = false;
   var load_done = false;
@@ -39,8 +39,8 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
     _getStorageData();
     _getInitData();
     tabController = TabController(length: 4, vsync: this);
-    _scrollController = Provider.of<HomeRefrshProvider>(context, listen: false)
-        .homeScrollController;
+    _scrollController =
+        Provider.of<HomeRefrshProvider>(context, listen: false).send;
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
@@ -137,6 +137,7 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
     ));
     return BackToTop(
       show: showBackToTop,
+      bottom: 50,
       animation: true,
       attachBtn: true,
       tap: () {
@@ -152,7 +153,6 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
   }
 
   TabController tabController;
-  int stack_index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +202,14 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
               ],
               onTap: (index) {
                 setState(() {
-                  stack_index = index;
+                  Provider.of<HomeRefrshProvider>(
+                    context,
+                    listen: false,
+                  ).index = index;
+                  Provider.of<HomeRefrshProvider>(
+                    context,
+                    listen: false,
+                  ).refresh();
                 });
               },
               controller: tabController,
@@ -211,13 +218,12 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
         ),
         backgroundColor: os_back,
         body: IndexedStack(
-          index: stack_index,
+          index: Provider.of<HomeRefrshProvider>(context).index,
           children: [
             Container(
               padding: EdgeInsets.only(top: 10),
               child: RefreshIndicator(
                 color: os_color,
-                key: provider.homeRefreshIndicator,
                 onRefresh: () async {
                   var data = await _getInitData();
                   vibrate = false;

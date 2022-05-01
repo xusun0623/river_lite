@@ -118,8 +118,6 @@ class _MsgState extends State<Msg> {
   void initState() {
     getData();
     getPm();
-    _scrollController = Provider.of<HomeRefrshProvider>(context, listen: false)
-        .msgScrollController;
     _scrollController.addListener(() {
       if (_scrollController.position.pixels > 1000 && !showBackToTop) {
         setState(() {
@@ -169,7 +167,6 @@ class _MsgState extends State<Msg> {
       body: Container(
         color: os_white,
         child: RefreshIndicator(
-          key: provider.msgRefreshIndicator,
           color: Color(0xFF2FCC7E),
           onRefresh: () async {
             await getData();
@@ -245,7 +242,7 @@ class _MsgState extends State<Msg> {
               pmMsgArr.length != 0
                   ? Container()
                   : Empty(
-                      txt: "暂无私信内容",
+                      txt: "暂无私信内容，请尝试下拉刷新",
                     ),
               Column(
                 children: _buildPMMsg(),

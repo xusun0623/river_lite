@@ -8,7 +8,9 @@ import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
+import 'package:provider/provider.dart';
 
 class Essence extends StatefulWidget {
   @override
@@ -28,6 +30,8 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
     super.initState();
     _getStorageData();
     _getInitData();
+    _scrollController =
+        Provider.of<HomeRefrshProvider>(context, listen: false).essence;
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
@@ -124,6 +128,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
     ));
     return BackToTop(
       show: showBackToTop,
+      bottom: 50,
       animation: true,
       child: ListView(
         physics: BouncingScrollPhysics(),

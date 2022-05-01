@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/components/banner.dart';
-import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
@@ -33,8 +31,8 @@ class _HomeNewReplyState extends State<HomeNewReply>
     super.initState();
     _getStorageData();
     _getInitData();
-    _scrollController = Provider.of<HomeRefrshProvider>(context, listen: false)
-        .recentScrollController;
+    _scrollController =
+        Provider.of<HomeRefrshProvider>(context, listen: false).reply;
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
@@ -129,6 +127,7 @@ class _HomeNewReplyState extends State<HomeNewReply>
     return BackToTop(
       show: showBackToTop,
       animation: true,
+      bottom: 50,
       child: ListView(
         physics: BouncingScrollPhysics(),
         controller: _scrollController,
@@ -144,7 +143,6 @@ class _HomeNewReplyState extends State<HomeNewReply>
     return Scaffold(
       backgroundColor: os_back,
       body: RefreshIndicator(
-        key: provider.recentRefreshIndicator,
         color: os_color,
         onRefresh: () async {
           var data = await _getInitData();

@@ -128,8 +128,9 @@ class _HomeState extends State<Home> {
           onDoubleTap: tabShowProvider.index == i
               ? () {
                   _getNewMsg();
+                  Provider.of<HomeRefrshProvider>(context, listen: false)
+                      .totop();
                   Vibrate.feedback(FeedbackType.impact);
-                  provider.invoke(loadIndex, i);
                 }
               : null,
           child: Container(
