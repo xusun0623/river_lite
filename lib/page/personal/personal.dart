@@ -7,6 +7,7 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/empty.dart';
+import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
@@ -108,8 +109,8 @@ class _PersonCenterState extends State<PersonCenter> {
       ),
       PersonIndex(
         index: index,
-        sendNum: sendNum,
-        replyNum: replyNum,
+        sendNum: userInfo["topic_num"],
+        replyNum: userInfo["reply_posts_num"],
         isMe: widget.param["isMe"],
         tapIndex: (idx) {
           if (idx == index) return;
@@ -216,7 +217,9 @@ class _PersonCenterState extends State<PersonCenter> {
       ),
       backgroundColor: Color(0xFFF3F3F3),
       body: userInfo == null
-          ? Container()
+          ? Loading(
+              backgroundColor: os_back,
+            )
           : BackToTop(
               show: showBackToTop,
               controller: _controller,
@@ -560,14 +563,25 @@ class _PersonCardState extends State<PersonCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        // if (widget.isMe) _editSign();
-                      },
-                      child: PersonName(
-                        name: widget.data["name"],
-                        isMe: widget.isMe,
-                      ),
+                    PersonName(
+                      name: widget.data["name"],
+                      isMe: widget.isMe,
+                    ),
+                    Container(height: 5),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.water_drop_rounded,
+                          size: 16,
+                          color: os_deep_grey,
+                        ),
+                        Text(
+                          "水滴 " +
+                              widget.data["body"]["creditShowList"][1]["data"]
+                                  .toString(),
+                          style: TextStyle(color: os_deep_grey),
+                        ),
+                      ],
                     ),
                     widget.isMe
                         ? Sign(
@@ -586,6 +600,7 @@ class _PersonCardState extends State<PersonCard> {
                       gender: widget.data["gender"] == 0
                           ? 1
                           : widget.data["gender"],
+                      water: widget.data["body"]["creditShowList"][1]["data"],
                     ),
                     PersonRow(
                       uid: int.parse(widget.data["icon"]
@@ -906,10 +921,12 @@ class _PersonColumnState extends State<PersonColumn> {
 class PersonScore extends StatefulWidget {
   int score;
   int gender;
+  int water;
   PersonScore({
     Key key,
     @required this.score,
     this.gender,
+    this.water,
   }) : super(key: key);
 
   @override
@@ -956,30 +973,39 @@ class PersonScoreState extends State<PersonScore> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text("Lv.${_getLevel()}", style: TextStyle(color: Color(0xFF707070))),
-        Container(width: 5),
-        Stack(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width - 220,
-              height: 7,
-              decoration: BoxDecoration(
-                color: Color(0xFFE3E3E3),
-                borderRadius: BorderRadius.all(Radius.circular(100)),
+        Container(
+          child: Row(
+            children: [
+              Text("Lv.${_getLevel()}",
+                  style: TextStyle(color: Color(0xFF707070))),
+              Container(width: 5),
+              Stack(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width - 220,
+                    height: 7,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFE3E3E3),
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                    ),
+                  ),
+                  Positioned(
+                    child: Container(
+                      width: (MediaQuery.of(context).size.width - 220) *
+                          _getRate(),
+                      height: 7,
+                      decoration: BoxDecoration(
+                        color: widget.gender == 1 ? os_deep_blue : girl_color,
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Positioned(
-              child: Container(
-                width: (MediaQuery.of(context).size.width - 220) * _getRate(),
-                height: 7,
-                decoration: BoxDecoration(
-                  color: widget.gender == 1 ? os_deep_blue : girl_color,
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

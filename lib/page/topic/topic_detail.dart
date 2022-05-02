@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
@@ -177,6 +178,35 @@ class _TopicDetailState extends State<TopicDetail> {
   _buildTotal() {
     List<Widget> tmp = [];
     tmp = [
+      data["topic"]["essence"] == 0
+          ? Container()
+          : Container(
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                color: os_color_opa,
+              ),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.gpp_good_sharp,
+                      color: os_color,
+                    ),
+                    Container(width: 5),
+                    Text(
+                      "您现在浏览的是本版块的精选内容",
+                      style: TextStyle(
+                        color: os_color,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
       TopicDetailTitle(data: data),
       TopicDetailTime(
         data: data,
@@ -2157,14 +2187,18 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(widget.data["topic"]["create_date"]))) +
-                " · 浏览量${widget.data['topic']['hits'].toString()}",
-            style: TextStyle(
-              fontSize: 14,
-              color: Color(0xFFAAAAAA),
-            ),
+          Row(
+            children: [
+              Text(
+                RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                        int.parse(widget.data["topic"]["create_date"]))) +
+                    " · 浏览量${widget.data['topic']['hits'].toString()}",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFFAAAAAA),
+                ),
+              ),
+            ],
           ),
           Row(children: [
             myInkWell(

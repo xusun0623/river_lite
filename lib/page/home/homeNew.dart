@@ -182,14 +182,14 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
               labelPadding: EdgeInsets.symmetric(horizontal: 12),
               isScrollable: true,
               splashBorderRadius: BorderRadius.all(Radius.circular(5)),
-              labelColor: os_deep_blue,
+              labelColor: Colors.black87,
               unselectedLabelColor: Color(0xFF7A7A7A),
               unselectedLabelStyle: TextStyle(
                 fontSize: 16,
               ),
               indicator: TabSizeIndicator(
                 wantWidth: 20,
-                borderSide: BorderSide(width: 3.0, color: os_deep_blue),
+                borderSide: BorderSide(width: 3.0, color: Colors.black87),
               ),
               labelStyle: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -309,7 +309,7 @@ class _ToSearchState extends State<ToSearch> {
 class TabSizeIndicator extends Decoration {
   final double wantWidth; //传入的指示器宽度，默认20
   const TabSizeIndicator(
-      {this.borderSide = const BorderSide(width: 2.0, color: Colors.blue),
+      {this.borderSide = const BorderSide(width: 2.0, color: Colors.black87),
       this.insets = EdgeInsets.zero,
       this.wantWidth = 20})
       : assert(borderSide != null),

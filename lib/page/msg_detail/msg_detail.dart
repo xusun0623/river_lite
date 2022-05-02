@@ -13,6 +13,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
@@ -42,6 +43,7 @@ class MsgDetailState extends State<MsgDetail> {
 
   bool vibrate = false;
   bool i_am_selectimg_img = false;
+  bool load_done = false;
 
   ScrollController _controller = new ScrollController();
   TextEditingController _textEditingController = new TextEditingController();
@@ -65,6 +67,7 @@ class MsgDetailState extends State<MsgDetail> {
         }
       }.toString()
     });
+    load_done = true;
     if (data != null &&
         data["body"] != null &&
         data["body"]["userInfo"] != null &&
@@ -237,24 +240,26 @@ class MsgDetailState extends State<MsgDetail> {
       ),
       body: Stack(
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height -
-                MediaQuery.of(context).padding.top,
-            child: RefreshIndicator(
-              color: theme,
-              onRefresh: () async {
-                await _getMore();
-                return;
-              },
-              child: ListView(
-                physics: BouncingScrollPhysics(),
-                controller: _controller,
-                shrinkWrap: true,
-                reverse: true,
-                children: _buildCont(),
-              ),
-            ),
-          ),
+          pmList.length == 0 && !load_done
+              ? Loading()
+              : Container(
+                  height: MediaQuery.of(context).size.height -
+                      MediaQuery.of(context).padding.top,
+                  child: RefreshIndicator(
+                    color: theme,
+                    onRefresh: () async {
+                      await _getMore();
+                      return;
+                    },
+                    child: ListView(
+                      physics: BouncingScrollPhysics(),
+                      controller: _controller,
+                      shrinkWrap: true,
+                      reverse: true,
+                      children: _buildCont(),
+                    ),
+                  ),
+                ),
           BottomFuncBar(
             i_am_selectimg_img: (flag) {
               setState(() {
