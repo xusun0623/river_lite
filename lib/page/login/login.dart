@@ -7,13 +7,20 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/outer/card_swiper/swiper.dart';
+import 'package:offer_show/outer/card_swiper/swiper_controller.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatefulWidget {
-  Login({Key key}) : super(key: key);
+  int index;
+  Login({
+    Key key,
+    this.index,
+  }) : super(key: key);
 
   @override
   _LoginState createState() => _LoginState();
@@ -66,6 +73,8 @@ class _LoginState extends State<Login> {
       }
     }
   }
+
+  SwiperController _swiperController = new SwiperController();
 
   @override
   Widget build(BuildContext context) {
@@ -136,45 +145,85 @@ class _LoginState extends State<Login> {
               ),
             )
           : Container(
-              child: ListView(
-                physics: BouncingScrollPhysics(),
-                children: [
-                  LoginHead(),
-                  LoginInput(
-                    submit: () {
-                      _login();
-                    },
-                    change: (uname, pword) {
-                      username = uname;
-                      password = pword;
-                    },
-                  ),
-                  Container(height: 50),
-                  LiginSubmit(
-                    tap: () {
-                      _login();
-                    },
-                  ),
-                  Container(height: 150),
-                ],
+              child: Swiper(
+                itemCount: 2,
+                loop: false,
+                index: widget.index,
+                controller: _swiperController,
+                itemBuilder: (BuildContext context, int index) {
+                  return [
+                    ListView(
+                      physics: BouncingScrollPhysics(),
+                      children: [
+                        LoginHead(),
+                        Container(height: 200),
+                        LoginSubmit(
+                          color: Color(0xFF222222),
+                          tap: () {
+                            _swiperController.move(1);
+                          },
+                        ),
+                        Container(height: 15),
+                        LoginSubmit(
+                          txt: "注册账号",
+                          color: Color.fromRGBO(34, 34, 34, 0.1),
+                          fontColor: os_black,
+                          tap: () {
+                            launch(
+                                "http://bbs.uestc.edu.cn/member.php?mod=register&mobile=no");
+                          },
+                        ),
+                        Container(height: 150),
+                      ],
+                    ),
+                    ListView(
+                      physics: BouncingScrollPhysics(),
+                      children: [
+                        LoginInput(
+                          submit: () {
+                            _login();
+                          },
+                          change: (uname, pword) {
+                            username = uname;
+                            password = pword;
+                          },
+                        ),
+                        Container(height: 50),
+                        LoginSubmit(
+                          txt: "提交",
+                          tap: () {
+                            _login();
+                          },
+                        ),
+                        Container(height: 150),
+                      ],
+                    ),
+                  ][index];
+                },
               ),
             ),
     );
   }
 }
 
-class LiginSubmit extends StatefulWidget {
+class LoginSubmit extends StatefulWidget {
   Function tap;
-  LiginSubmit({
+  Color color;
+  Color fontColor;
+  String txt;
+  LoginSubmit({
     Key key,
     this.tap,
+    this.txt,
+    this.color,
+    this.fontColor,
   }) : super(key: key);
 
   @override
-  State<LiginSubmit> createState() => _LiginSubmitState();
+  State<LoginSubmit> createState() => _LoginSubmitState();
 }
 
-class _LiginSubmitState extends State<LiginSubmit> {
+class _LoginSubmitState extends State<LoginSubmit> {
   @override
   Widget build(BuildContext context) {
     return Bounce(
@@ -187,14 +236,14 @@ class _LiginSubmitState extends State<LiginSubmit> {
         margin: EdgeInsets.symmetric(horizontal: os_edge * 2),
         padding: EdgeInsets.symmetric(vertical: 15),
         decoration: BoxDecoration(
-          color: os_color,
+          color: widget.color ?? os_color,
           borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
         child: Center(
           child: Text(
-            "登录",
+            widget.txt ?? "登录",
             style: TextStyle(
-              color: os_white,
+              color: widget.fontColor ?? os_white,
               fontSize: 16,
             ),
           ),
@@ -229,7 +278,7 @@ class _LoginHelpState extends State<LoginHelp> {
               margin: EdgeInsets.only(top: 2.5),
               child: Icon(
                 Icons.info_outline,
-                color: Color(0xFFB7B7B7),
+                color: Color.fromARGB(255, 129, 129, 129),
                 size: 18,
               ),
             ),
@@ -237,7 +286,7 @@ class _LoginHelpState extends State<LoginHelp> {
             Text(
               "无法登录？",
               style: TextStyle(
-                color: Color(0xFFB7B7B7),
+                color: Color.fromARGB(255, 129, 129, 129),
                 fontSize: 14,
               ),
             ),
@@ -270,7 +319,6 @@ class _LoginInputState extends State<LoginInput> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 42.5),
       child: Column(
         children: [
           Container(
@@ -279,12 +327,9 @@ class _LoginInputState extends State<LoginInput> {
                 EdgeInsets.symmetric(horizontal: 2 * os_edge, vertical: 7.5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color.fromRGBO(0, 0, 0, 0.05),
+              color: Color.fromRGBO(0, 0, 0, 0.08),
             ),
             child: TextField(
-              onSubmitted: (e) {
-                p_focus.requestFocus();
-              },
               controller: u_controller,
               focusNode: u_focus,
               style: TextStyle(
@@ -303,7 +348,7 @@ class _LoginInputState extends State<LoginInput> {
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
                 hintText: "请输入用户名",
-                hintStyle: TextStyle(color: Colors.grey),
+                hintStyle: TextStyle(color: Colors.grey[600]),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
@@ -316,7 +361,7 @@ class _LoginInputState extends State<LoginInput> {
                 EdgeInsets.symmetric(horizontal: 2 * os_edge, vertical: 7.5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color.fromRGBO(0, 0, 0, 0.05),
+              color: Color.fromRGBO(0, 0, 0, 0.08),
             ),
             child: TextField(
               controller: p_controller,
@@ -327,9 +372,6 @@ class _LoginInputState extends State<LoginInput> {
               ),
               onChanged: (t) {
                 widget.change(u_controller.text, p_controller.text);
-              },
-              onSubmitted: (e) {
-                widget.submit();
               },
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
@@ -355,7 +397,7 @@ class _LoginInputState extends State<LoginInput> {
                   ),
                 ),
                 hintText: "请输入密码",
-                hintStyle: TextStyle(color: Colors.grey),
+                hintStyle: TextStyle(color: Colors.grey[600]),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),

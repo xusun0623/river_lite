@@ -110,7 +110,7 @@ class _TopicState extends State<Topic> {
           print("${info_txt}");
           _setHistory();
           if (info_txt == "") {
-            Navigator.pushNamed(context, "/login");
+            Navigator.pushNamed(context, "/login", arguments: null);
           } else {
             Navigator.pushNamed(
               context,

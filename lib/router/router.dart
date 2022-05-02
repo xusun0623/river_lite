@@ -1,5 +1,6 @@
 import 'package:offer_show/page/404.dart';
 import 'package:offer_show/page/about/about.dart';
+import 'package:offer_show/page/account/account.dart';
 import 'package:offer_show/page/broke.dart';
 import 'package:offer_show/page/column/column.dart';
 import 'package:offer_show/page/crop/crop.dart';
@@ -25,9 +26,12 @@ import 'package:offer_show/page/user_list/user_list.dart';
 
 final routers = {
   "/": () => Home(),
-  "/login": () => Login(),
+  "/login": (data) => Login(
+        index: data ?? 0,
+      ),
   "/about": () => About(),
   "/setting": () => Setting(),
+  "/account": () => Account(),
   "/explore": () => Explore(),
   "/explore_detail": (data) => ExploreDetail(index: data),
   "/login_helper": () => LoginHelper(),
