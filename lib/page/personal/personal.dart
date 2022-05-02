@@ -605,7 +605,7 @@ class _PersonCardState extends State<PersonCard> {
             right: 20,
             child: GestureDetector(
               onTap: () {
-                if (widget.isMe)
+                if (widget.isMe) {
                   showActionSheet(
                     context: context,
                     topActionItem: TopActionItem(title: "请选择你的性别"),
@@ -613,11 +613,17 @@ class _PersonCardState extends State<PersonCard> {
                       ActionItem(
                         title: "男生",
                         onPressed: () async {
+                          showToast(
+                            context: context,
+                            type: XSToast.loading,
+                            txt: "请稍后…",
+                          );
                           await Api().user_updateuserinfo({
                             "type": "info",
                             "gender": 1,
                             "sign": widget.data["sign"],
                           });
+                          hideToast();
                           widget.data["gender"] = 1;
                           setState(() {});
                           Navigator.pop(context);
@@ -626,11 +632,17 @@ class _PersonCardState extends State<PersonCard> {
                       ActionItem(
                         title: "女生",
                         onPressed: () async {
+                          showToast(
+                            context: context,
+                            type: XSToast.loading,
+                            txt: "请稍后…",
+                          );
                           await Api().user_updateuserinfo({
                             "type": "info",
                             "gender": 2,
                             "sign": widget.data["sign"],
                           });
+                          hideToast();
                           widget.data["gender"] = 2;
                           setState(() {});
                           Navigator.pop(context);
@@ -639,6 +651,7 @@ class _PersonCardState extends State<PersonCard> {
                     ],
                     bottomActionItem: BottomActionItem(title: "取消"),
                   );
+                }
               },
               child: os_svg(
                 path:

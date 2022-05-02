@@ -25,6 +25,7 @@ import 'package:offer_show/util/storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
@@ -1523,6 +1524,29 @@ class _CommentState extends State<Comment> {
     return Column(children: tmp);
   }
 
+  void _showMore() async {
+    print(widget.data["extraPanel"].toString());
+    List<ActionItem> _buildAction() {
+      List<ActionItem> tmp = [];
+      widget.data["extraPanel"].forEach((ele) {
+        tmp.add(
+          ActionItem(
+              title: ele["title"] + "（需跳转到网页）",
+              onPressed: () {
+                launch(ele["action"]);
+              }),
+        );
+      });
+      return tmp;
+    }
+
+    showActionSheet(
+      context: context,
+      actions: _buildAction(),
+      bottomActionItem: BottomActionItem(title: "取消"),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -1532,6 +1556,9 @@ class _CommentState extends State<Comment> {
   @override
   Widget build(BuildContext context) {
     return myInkWell(
+      longPress: () {
+        _showMore();
+      },
       tap: () {
         widget.tap(widget.data["reply_posts_id"], widget.data["reply_name"]);
       },
@@ -1656,25 +1683,7 @@ class _CommentState extends State<Comment> {
                           ),
                           myInkWell(
                             tap: () {
-                              showModalBottomSheet(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20),
-                                  ),
-                                ),
-                                context: context,
-                                builder: (context) {
-                                  return ConstrainedBox(
-                                    constraints: BoxConstraints(maxHeight: 300),
-                                    child: Container(
-                                      child: Center(
-                                        child: Text("哈哈哈"),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
+                              _showMore();
                             },
                             color: Colors.transparent,
                             widget: Container(
@@ -2108,10 +2117,9 @@ class TopicDetailMore extends StatelessWidget {
   Widget build(BuildContext context) {
     return myInkWell(
       tap: () {
-        showActionSheet(
-          context: context,
-          bottomActionItem: BottomActionItem(title: "取消"),
-          actions: [
+        List<ActionItem> _buildAction() {
+          List<ActionItem> tmp = [];
+          tmp.addAll([
             ActionItem(
               title: "举报",
               onPressed: () async {
@@ -2161,7 +2169,23 @@ class TopicDetailMore extends StatelessWidget {
                 );
               },
             ),
-          ],
+          ]);
+          data["topic"]["extraPanel"].forEach((ele) {
+            tmp.add(
+              ActionItem(
+                  title: ele["title"] + "（需跳转到网页）",
+                  onPressed: () {
+                    launch(ele["action"]);
+                  }),
+            );
+          });
+          return tmp;
+        }
+
+        showActionSheet(
+          context: context,
+          bottomActionItem: BottomActionItem(title: "取消"),
+          actions: _buildAction(),
         );
       },
       widget: Padding(
