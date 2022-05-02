@@ -21,10 +21,12 @@ import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/page/topic/emoji.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
@@ -176,7 +178,14 @@ class _TopicDetailState extends State<TopicDetail> {
     List<Widget> tmp = [];
     tmp = [
       TopicDetailTitle(data: data),
-      TopicDetailTime(data: data),
+      TopicDetailTime(
+        data: data,
+        refresh: () async {
+          _getData();
+          await Future.delayed(Duration(milliseconds: 500));
+          showToast(context: context, type: XSToast.success, txt: "操作成功！");
+        },
+      ),
       _buildContBody(),
       data["topic"]["poll_info"] != null
           ? TopicVote(
@@ -1993,8 +2002,10 @@ class _TopicBottomState extends State<TopicBottom> {
 // 帖子浏览量和时间
 class TopicDetailTime extends StatefulWidget {
   var data;
+  Function refresh;
   TopicDetailTime({
     Key key,
+    this.refresh,
     @required this.data,
   }) : super(key: key);
 
@@ -2003,6 +2014,142 @@ class TopicDetailTime extends StatefulWidget {
 }
 
 class _TopicDetailTimeState extends State<TopicDetailTime> {
+  int _value = 5;
+
+  _giveWater() async {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      context: context,
+      builder: (context) {
+        return Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: 30,
+          ),
+          height: MediaQuery.of(context).size.height - 100,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(height: 30),
+              Text(
+                "请给楼主加水",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Container(height: 10),
+              Text(
+                "注意：会扣除你等量的水",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: os_deep_grey,
+                ),
+              ),
+              Container(height: 10),
+              Container(
+                height: 60,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 15,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  color: os_grey,
+                ),
+                child: Center(
+                  child: TextField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly
+                    ], //只允许输入数字
+                    cursorColor: os_deep_blue,
+                    onChanged: (ele) {
+                      _value = int.parse(ele);
+                    },
+                    decoration: InputDecoration(
+                      hintText: "请输入水滴数，从0~30",
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ),
+              Container(height: 10),
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: myInkWell(
+                      tap: () {
+                        Navigator.pop(context);
+                      },
+                      color: Color(0x16004DFF),
+                      widget: Container(
+                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                        height: 40,
+                        child: Center(
+                          child: Text(
+                            "取消",
+                            style: TextStyle(
+                              color: os_deep_blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      radius: 12.5,
+                    ),
+                  ),
+                  Container(
+                    child: myInkWell(
+                      tap: () async {
+                        await XHttp().pureHttp(
+                            url: widget.data["topic"]["extraPanel"][0]["action"]
+                                    .toString() +
+                                "&modsubmit=确定",
+                            param: {
+                              "score2": _value,
+                              "sendreasonpm": "on",
+                              "reason": "我在你的帖子下给你加水了哦",
+                            });
+                        if (widget.refresh != null) widget.refresh();
+                        Navigator.pop(context);
+                      },
+                      color: os_deep_blue,
+                      widget: Container(
+                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                        height: 40,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.done, color: os_white, size: 18),
+                              Container(width: 5),
+                              Text(
+                                "完成",
+                                style: TextStyle(
+                                  color: os_white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      radius: 12.5,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -2021,6 +2168,9 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
           ),
           Row(children: [
             myInkWell(
+                tap: () {
+                  _giveWater();
+                },
                 widget: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(

@@ -9,6 +9,29 @@ class ServerConfig {
 bool isLog = true; //控制是否打印网络输出日志
 
 class XHttp {
+  pureHttp({String url, Map param}) async {
+    var dio = Dio();
+    dio.options.contentType = Headers.formUrlEncodedContentType;
+    dio.options.responseType = ResponseType.plain;
+    dio.options.connectTimeout = 10000;
+    dio.options.receiveTimeout = 10000;
+    if (isLog) print("地址:$url入参:$param");
+    Response response = await dio
+        .request(url, data: param, options: Options(method: "POST"))
+        .catchError(
+      (err) {
+        // if (isLog) print("${err}");
+      },
+    );
+    if (response != null) {
+      Map<String, dynamic> data = jsonDecode(response.toString());
+      if (isLog) print("地址:$url入参:$param回参:$data");
+      return data;
+    } else {
+      return {};
+    }
+  }
+
   netWorkRequest({
     String url = "",
     Map header,
