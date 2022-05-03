@@ -37,6 +37,7 @@ class _TopicColumnState extends State<TopicColumn> {
   bool showBackToTop = false;
   bool fold = true;
   bool manualPull = false;
+  bool showTopTitle = false; //是否显示顶部标题
 
   _getMore() async {
     if (loading_more || load_done) return;
@@ -202,6 +203,15 @@ class _TopicColumnState extends State<TopicColumn> {
   void initState() {
     _getData();
     _controller.addListener(() {
+      if (_controller.position.pixels > 80) {
+        setState(() {
+          showTopTitle = true;
+        });
+      } else {
+        setState(() {
+          showTopTitle = false;
+        });
+      }
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
         _getMore();
       }
@@ -245,6 +255,13 @@ class _TopicColumnState extends State<TopicColumn> {
             onPressed: () {
               Navigator.pop(context);
             },
+          ),
+          title: Text(
+            showTopTitle ? data["forumInfo"]["title"] : "",
+            style: TextStyle(
+              color: os_black,
+              fontSize: 16,
+            ),
           ),
           backgroundColor: os_back,
           elevation: 0,

@@ -350,9 +350,13 @@ class _PostNewState extends State<PostNew> {
                         ),
                       ),
                       width: MediaQuery.of(context).size.width,
-                      height: 100,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      height: 110,
+                      padding: EdgeInsets.only(
+                        left: 15,
+                        right: 15,
+                        top: 10,
+                        bottom: 20,
+                      ),
                       child: Column(
                         children: [
                           Row(

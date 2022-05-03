@@ -43,11 +43,16 @@ class _HomeBtnState extends State<HomeBtn> {
             board_id: 305,
           ),
           Btn(
+            txt: "鹊桥",
+            img: "lib/img/home/5.svg",
+            url: "/column",
+            board_id: 313,
+          ),
+          Btn(
             txt: "十大热门",
             img: "lib/img/home/4.svg",
             url: "/hot",
           ),
-          Btn(txt: "专辑", img: "lib/img/home/5.svg", url: ""),
         ],
       ),
     );

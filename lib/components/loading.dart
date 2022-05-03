@@ -56,7 +56,11 @@ class _LoadingState extends State<Loading> {
                 child: Text(
                   widget.showError ?? false ? widget.msg ?? "未知错误" : "加载中…",
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Color(0xFFBBBBBB), fontSize: 14),
+                  style: TextStyle(
+                    color: Color(0xFFBBBBBB),
+                    fontSize: 14,
+                    height: 1.8,
+                  ),
                 ),
               ),
             ),

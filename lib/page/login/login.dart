@@ -419,6 +419,17 @@ class LoginHead extends StatefulWidget {
 }
 
 class _LoginHeadState extends State<LoginHead> {
+  int time = 0; //0-早安 1-午安 2-晚安
+
+  @override
+  void initState() {
+    DateTime dateTime = DateTime.now();
+    setState(() {
+      time = dateTime.hour < 12 ? 0 : (dateTime.hour < 18 ? 1 : 2);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -427,7 +438,7 @@ class _LoginHeadState extends State<LoginHead> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "早安",
+            ["早安", "午安", "晚安"][time],
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.w900,

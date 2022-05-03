@@ -143,7 +143,6 @@ class _PersonCenterState extends State<PersonCenter> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _getData();
     _getInfo();
     _controller.addListener(() {

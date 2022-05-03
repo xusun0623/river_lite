@@ -325,7 +325,7 @@ class _TopicDetailState extends State<TopicDetail> {
       body: data == null || data["topic"] == null
           ? Loading(
               showError: load_done,
-              msg: "帖子被删除或者你没有权限访问，你可以尝试网页端看看能不能访问",
+              msg: "河畔Lite客户端没有权限访问或者帖子被删除，可以尝试网页端是否能访问",
               tapTxt: "访问网页版>",
               tap: () async {
                 launch(
@@ -2317,13 +2317,145 @@ class TopicDetailTitle extends StatelessWidget {
   }
 }
 
-// 更多操作
-class TopicDetailMore extends StatelessWidget {
+class TopicDetailMore extends StatefulWidget {
   Map data;
   TopicDetailMore({
     Key key,
     this.data,
   }) : super(key: key);
+
+  @override
+  State<TopicDetailMore> createState() => _TopicDetailMoreState();
+}
+
+class _TopicDetailMoreState extends State<TopicDetailMore> {
+  _feedbackSuccess() async {
+    showToast(
+      context: context,
+      type: XSToast.success,
+      txt: "已举报",
+    );
+  }
+
+  _feedback() async {
+    String txt = "";
+    showModalBottomSheet(
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      context: context,
+      builder: (context) {
+        return Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: 30,
+          ),
+          height: MediaQuery.of(context).size.height - 100,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(height: 30),
+              Text(
+                "请输入举报内容",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Container(height: 10),
+              Container(
+                height: 60,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 15,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  color: os_grey,
+                ),
+                child: Center(
+                  child: TextField(
+                    onChanged: (e) {
+                      txt = e;
+                    },
+                    cursorColor: os_deep_blue,
+                    decoration: InputDecoration(
+                      hintText: "请输入",
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ),
+              Container(height: 10),
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: myInkWell(
+                      tap: () {
+                        Navigator.pop(context);
+                      },
+                      color: Color(0x16004DFF),
+                      widget: Container(
+                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                        height: 40,
+                        child: Center(
+                          child: Text(
+                            "取消",
+                            style: TextStyle(
+                              color: os_deep_blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      radius: 12.5,
+                    ),
+                  ),
+                  Container(
+                    child: myInkWell(
+                      tap: () async {
+                        await Api().user_report({
+                          "idType": "thread",
+                          "message": txt,
+                          "id": widget.data["topic"]["topic_id"]
+                        });
+                        Navigator.pop(context);
+                        _feedbackSuccess();
+                      },
+                      color: os_deep_blue,
+                      widget: Container(
+                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                        height: 40,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.done, color: os_white, size: 18),
+                              Container(width: 5),
+                              Text(
+                                "完成",
+                                style: TextStyle(
+                                  color: os_white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      radius: 12.5,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -2336,22 +2468,7 @@ class TopicDetailMore extends StatelessWidget {
               title: "举报",
               onPressed: () async {
                 Navigator.pop(context);
-                await Api().user_report({
-                  "idType": "thread",
-                  "message": data["topic"]["title"],
-                  "id": data["topic"]["topic_id"]
-                });
-                showModal(
-                    context: context,
-                    title: "请确认",
-                    cont: "是否要举报该帖子？",
-                    confirm: () {
-                      showToast(
-                        context: context,
-                        type: XSToast.success,
-                        txt: "已举报",
-                      );
-                    });
+                _feedback();
               },
             ),
             ActionItem(
@@ -2360,7 +2477,7 @@ class TopicDetailMore extends StatelessWidget {
                 Navigator.pop(context);
                 Share.share("【河畔Lite客户端】分享给你一个帖子" +
                     "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
-                    data["topic"]["topic_id"].toString());
+                    widget.data["topic"]["topic_id"].toString());
               },
             ),
             ActionItem(
@@ -2370,7 +2487,7 @@ class TopicDetailMore extends StatelessWidget {
                   ClipboardData(
                     text:
                         "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
-                            data["topic"]["topic_id"].toString(),
+                            widget.data["topic"]["topic_id"].toString(),
                   ),
                 );
                 Navigator.pop(context);
@@ -2382,7 +2499,7 @@ class TopicDetailMore extends StatelessWidget {
               },
             ),
           ]);
-          data["topic"]["extraPanel"].forEach((ele) {
+          widget.data["topic"]["extraPanel"].forEach((ele) {
             tmp.add(
               ActionItem(
                   title: ele["title"] + "（需跳转到网页）",
