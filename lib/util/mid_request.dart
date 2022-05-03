@@ -48,7 +48,7 @@ class XHttp {
         .request(url, data: param, options: Options(method: "POST"))
         .catchError(
       (err) {
-        // if (isLog) print("${err}");
+        if (isLog) print("${err}");
       },
     );
     if (response != null) {
@@ -56,6 +56,7 @@ class XHttp {
       if (isLog) print("地址:$url入参:$param回参:$data");
       return data;
     } else {
+      print(response.toString());
       return {};
     }
   }

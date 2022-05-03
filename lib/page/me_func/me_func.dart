@@ -35,6 +35,7 @@ class _MeFuncState extends State<MeFunc> {
   bool loading = false;
   ScrollController _scrollController = new ScrollController();
   bool _showBackToTop = false;
+  bool _showTopTitle = false;
 
   _getData() async {
     if (loading) return;
@@ -121,6 +122,15 @@ class _MeFuncState extends State<MeFunc> {
   void initState() {
     _getData();
     _scrollController.addListener(() {
+      if (_scrollController.position.pixels >= 100) {
+        setState(() {
+          _showTopTitle = true;
+        });
+      } else {
+        setState(() {
+          _showTopTitle = false;
+        });
+      }
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         _getMore();
@@ -146,13 +156,21 @@ class _MeFuncState extends State<MeFunc> {
         backgroundColor: Color(0xFFF3F3F3),
         foregroundColor: Color(0xFF505050),
         elevation: 0,
-        actions: widget.type == 4 || widget.type == 5
+        title: Text(
+          _showTopTitle
+              ? ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type]
+              : "",
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        actions: (widget.type == 4 || widget.type == 5) && !_showTopTitle
             ? [
                 IconButton(
                     onPressed: () {
                       showModal(
                         context: context,
-                        cont: "确定清除所有记录?",
+                        cont: "确定清除所有记录?此操作不可逆，请谨慎操作",
                         title: "请确认",
                         confirm: () async {
                           if (widget.type == 4) {
@@ -166,7 +184,7 @@ class _MeFuncState extends State<MeFunc> {
                         },
                       );
                     },
-                    icon: Icon(Icons.clear_all)),
+                    icon: Icon(Icons.delete_outline_rounded)),
                 Container(width: 10),
               ]
             : [],

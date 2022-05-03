@@ -18,7 +18,6 @@ import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
-import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/page/topic/emoji.dart';
 import 'package:offer_show/util/interface.dart';
@@ -27,7 +26,6 @@ import 'package:offer_show/util/storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
@@ -50,6 +48,7 @@ class _TopicDetailState extends State<TopicDetail> {
   var showBackToTop = false;
   var uploadImgUrls = [];
   var replyId = 0;
+  double bottom_safeArea = 10;
   bool editing = false; //是否处于编辑状态
   String placeholder = "请在此编辑回复";
   List<Map> atUser = [];
@@ -285,7 +284,7 @@ class _TopicDetailState extends State<TopicDetail> {
           : Container(
               height: 30,
             ),
-      Container(height: editing ? 250 : 60)
+      Container(height: editing ? 250 : 60 + bottom_safeArea)
     ]);
     return tmp;
   }
@@ -326,6 +325,14 @@ class _TopicDetailState extends State<TopicDetail> {
       body: data == null || data["topic"] == null
           ? Loading(
               showError: load_done,
+              msg: "帖子被删除或者你没有权限访问，你可以尝试网页端看看能不能访问",
+              tapTxt: "访问网页版>",
+              tap: () async {
+                launch(
+                    "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
+                        widget.topicID.toString() +
+                        "&mobile=2");
+              },
             )
           : Stack(
               children: [
@@ -340,7 +347,7 @@ class _TopicDetailState extends State<TopicDetail> {
                       return;
                     },
                     child: BackToTop(
-                      bottom: 100,
+                      bottom: 115,
                       show: showBackToTop,
                       animation: true,
                       controller: _scrollController,
@@ -438,6 +445,7 @@ class _TopicDetailState extends State<TopicDetail> {
                         },
                       )
                     : DetailFixBottom(
+                        bottom: bottom_safeArea,
                         tapEdit: () {
                           _focusNode.requestFocus();
                           editing = true;
@@ -1564,9 +1572,27 @@ class _CommentState extends State<Comment> {
   }
 
   void _showMore() async {
+    Vibrate.feedback(FeedbackType.impact);
     print(widget.data["extraPanel"].toString());
     List<ActionItem> _buildAction() {
       List<ActionItem> tmp = [];
+      String copy_txt = "";
+      widget.data["reply_content"].forEach((e) {
+        if (e["type"] == 0) {
+          copy_txt += e["infor"].toString();
+        }
+      });
+      tmp.add(
+        ActionItem(
+            title: "复制文本内容",
+            onPressed: () {
+              Clipboard.setData(
+                ClipboardData(text: copy_txt),
+              );
+              Navigator.pop(context);
+              showToast(context: context, type: XSToast.success, txt: "复制成功！");
+            }),
+      );
       widget.data["extraPanel"].forEach((ele) {
         tmp.add(
           ActionItem(
@@ -1843,12 +1869,14 @@ class _TagState extends State<Tag> {
 class DetailFixBottom extends StatefulWidget {
   var topic_id;
   var count;
+  double bottom;
   Function tapEdit;
   DetailFixBottom({
     Key key,
     this.topic_id,
     this.count,
     this.tapEdit,
+    this.bottom,
   }) : super(key: key);
 
   @override
@@ -1908,8 +1936,8 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
             ),
           ),
         ),
-        height: 62,
-        padding: EdgeInsets.fromLTRB(7, 7, 7, 7),
+        height: 62 + widget.bottom ?? 0,
+        padding: EdgeInsets.fromLTRB(7, 7, 7, 7 + widget.bottom ?? 0),
         width: MediaQuery.of(context).size.width,
         child: Row(
           children: [
