@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/util/interface.dart';
@@ -47,7 +48,8 @@ class _AccountState extends State<Account> {
 
   _switchLogin(String username, String password, int index) async {
     showToast(context: context, type: XSToast.loading, txt: "加载中…");
-    await Future.delayed(Duration(milliseconds: 500));
+    await getWebCookie(username: username, password: password);
+    await Future.delayed(Duration(milliseconds: 400));
     var data = await Api().user_login({
       "type": "login",
       "username": username,

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -38,7 +39,8 @@ class _LoginState extends State<Login> {
         username == null ||
         password == null) return;
     showToast(context: context, type: XSToast.loading, txt: "加载中…");
-    await Future.delayed(Duration(milliseconds: 500));
+    await getWebCookie(username: username, password: password);
+    await Future.delayed(Duration(milliseconds: 400));
     var data = await Api().user_login({
       "type": "login",
       "username": username,

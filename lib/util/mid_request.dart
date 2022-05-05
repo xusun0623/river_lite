@@ -24,9 +24,13 @@ class XHttp {
       },
     );
     if (response != null) {
-      Map<String, dynamic> data = jsonDecode(response.toString());
-      if (isLog) print("地址:$url入参:$param回参:$data");
-      return data;
+      try {
+        Map<String, dynamic> data = jsonDecode(response.toString());
+        if (isLog) print("地址:$url入参:$param回参:$data");
+        return data;
+      } catch (e) {
+        return response;
+      }
     } else {
       return {};
     }

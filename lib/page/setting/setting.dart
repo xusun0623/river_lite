@@ -1,11 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
-import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
@@ -44,32 +41,6 @@ class _SettingState extends State<Setting> {
     setState(() {
       accountData = quick;
     });
-  }
-
-  _switchLogin(String username, String password, int index) async {
-    showToast(context: context, type: XSToast.loading, txt: "加载中…");
-    await Future.delayed(Duration(milliseconds: 500));
-    var data = await Api().user_login({
-      "type": "login",
-      "username": username,
-      "password": password,
-    });
-    hideToast();
-    if (data != null) {
-      if (data["rs"] == 0) {
-        showToast(context: context, type: XSToast.none, txt: data["errcode"]);
-      }
-      if (data["rs"] == 1) {
-        setStorage(key: "myinfo", value: jsonEncode(data));
-        UserInfoProvider provider =
-            Provider.of<UserInfoProvider>(context, listen: false);
-        provider.data = data;
-        provider.refresh();
-        setState(() {
-          logined = index;
-        });
-      }
-    }
   }
 
   //删除某账号
