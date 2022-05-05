@@ -45,6 +45,7 @@ class _PersonCenterState extends State<PersonCenter> {
   bool loading = false;
   bool load_done = false;
   bool showBackToTop = false;
+  bool showTopTitle = false;
 
   ScrollController _controller = new ScrollController();
 
@@ -146,6 +147,15 @@ class _PersonCenterState extends State<PersonCenter> {
     _getData();
     _getInfo();
     _controller.addListener(() {
+      if (_controller.position.pixels > 120) {
+        setState(() {
+          showTopTitle = true;
+        });
+      } else {
+        setState(() {
+          showTopTitle = false;
+        });
+      }
       if (_controller.position.pixels > 1000 && !showBackToTop) {
         setState(() {
           showBackToTop = true;
@@ -169,6 +179,12 @@ class _PersonCenterState extends State<PersonCenter> {
       appBar: AppBar(
         elevation: 0,
         foregroundColor: os_black,
+        title: Text(
+          showTopTitle ? userInfo["name"] : "",
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
