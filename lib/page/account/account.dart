@@ -61,7 +61,7 @@ class _AccountState extends State<Account> {
         showToast(context: context, type: XSToast.none, txt: data["errcode"]);
       }
       if (data["rs"] == 1) {
-        setStorage(key: "myinfo", value: jsonEncode(data));
+        await setStorage(key: "myinfo", value: jsonEncode(data));
         UserInfoProvider provider =
             Provider.of<UserInfoProvider>(context, listen: false);
         provider.data = data;
@@ -69,6 +69,7 @@ class _AccountState extends State<Account> {
         setState(() {
           logined = index;
         });
+        Provider.of<MsgProvider>(context, listen: false).getMsg();
       }
     }
   }
@@ -112,6 +113,7 @@ class _AccountState extends State<Account> {
               confirm: () {
                 UserInfoProvider provider =
                     Provider.of<UserInfoProvider>(context, listen: false);
+                Provider.of<MsgProvider>(context, listen: false).clearMsg();
                 provider.data = null;
                 provider.refresh();
                 setStorage(key: "myinfo", value: "");

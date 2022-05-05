@@ -68,7 +68,8 @@ class _LoginState extends State<Login> {
         if (!isExist) {
           quick_tmp.add({"name": username, "password": password});
         }
-        setStorage(key: "quick", value: jsonEncode(quick_tmp));
+        await setStorage(key: "quick", value: jsonEncode(quick_tmp));
+        Provider.of<MsgProvider>(context, listen: false).getMsg();
         setState(() {
           showSuccess = true;
         });

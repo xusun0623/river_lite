@@ -27,15 +27,15 @@ class Msg extends StatefulWidget {
 }
 
 class _MsgState extends State<Msg> {
-  Map msg;
-  List pmMsgArr = [];
+  // Map msg;
+  // List pmMsgArr = [];
   bool vibrate = false;
   ScrollController _scrollController = new ScrollController();
-  bool load_done = false;
-  bool loading = false;
+  // bool load_done = false;
+  // bool loading = false;
   bool showBackToTop = false;
 
-  List<Widget> _buildPMMsg() {
+  List<Widget> _buildPMMsg(List pmMsgArr) {
     List<Widget> tmp = [];
     pmMsgArr.forEach((element) {
       tmp.add(
@@ -52,72 +52,9 @@ class _MsgState extends State<Msg> {
     return tmp;
   }
 
-  getPm() async {
-    var tmp = await Api().message_pmsessionlist({
-      "json": {
-        "page": 1,
-        "pageSize": 10,
-      }.toString()
-    });
-    if (tmp != null && tmp["rs"] != 0 && tmp["body"] != null) {
-      pmMsgArr = tmp["body"]["list"];
-      load_done = tmp["body"]["list"].length < 10;
-    } else {
-      pmMsgArr = [];
-      load_done = true;
-    }
-    setState(() {});
-  }
-
-  _getMore() async {
-    if (load_done || loading) return;
-    loading = true;
-    var tmp = await Api().message_pmsessionlist({
-      "json": {
-        "page": (pmMsgArr.length / 10 + 1).toInt(),
-        "pageSize": 10,
-      }.toString()
-    });
-    if (tmp != null &&
-        tmp["body"] != null &&
-        int.parse(tmp["body"]["list"][0]["lastDateline"]) <
-            int.parse(pmMsgArr[pmMsgArr.length - 1]["lastDateline"])) {
-      pmMsgArr.addAll(tmp["body"]["list"]);
-      load_done = tmp["body"]["list"].length < 10;
-    } else {
-      load_done = true;
-    }
-    loading = false;
-    setState(() {});
-  }
-
-  getData() async {
-    var data = await Api().message_heart({});
-    if (data != null &&
-        data["body"] != null &&
-        data["body"]["atMeInfo"] != null) {
-      setState(() {
-        msg = {
-          "atMeInfoCount": data["body"]["atMeInfo"]["count"],
-          "replyInfoCount": data["body"]["replyInfo"]["count"],
-          "systemInfoCount": data["body"]["systemInfo"]["count"],
-        };
-      });
-    } else {
-      setState(() {
-        msg = {
-          "atMeInfoCount": 0,
-          "replyInfoCount": 0,
-          "systemInfoCount": 0,
-        };
-      });
-    }
-  }
-
   @override
   void initState() {
-    getData();
-    getPm();
+    Provider.of<MsgProvider>(context, listen: false).getMsg();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels > 1000 && !showBackToTop) {
         setState(() {
@@ -131,7 +68,7 @@ class _MsgState extends State<Msg> {
       }
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        _getMore();
+        Provider.of<MsgProvider>(context, listen: false).getMore();
       }
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
@@ -152,6 +89,7 @@ class _MsgState extends State<Msg> {
   @override
   Widget build(BuildContext context) {
     HomeRefrshProvider provider = Provider.of<HomeRefrshProvider>(context);
+    MsgProvider _msgProvider = Provider.of<MsgProvider>(context);
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -169,8 +107,8 @@ class _MsgState extends State<Msg> {
         child: RefreshIndicator(
           color: Color(0xFF2FCC7E),
           onRefresh: () async {
-            await getData();
-            await getPm();
+            _msgProvider.getMsg();
+            _msgProvider.getMore();
             return;
           },
           child: ListView(
@@ -179,14 +117,14 @@ class _MsgState extends State<Msg> {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 7),
-                child: msg == null || msg is int
+                child: _msgProvider.msg == null || _msgProvider.msg is int
                     ? Container()
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ColorBtn(
                             tap: () {
-                              msg["atMeInfoCount"] = 0;
+                              _msgProvider.msg["atMeInfoCount"] = 0;
                               setState(() {});
                               if (widget.refresh != null) widget.refresh();
                               Navigator.pushNamed(
@@ -197,14 +135,14 @@ class _MsgState extends State<Msg> {
                             },
                             path: "lib/img/msg/@.svg",
                             title: "@我",
-                            count: msg["atMeInfoCount"],
+                            count: _msgProvider.msg["atMeInfoCount"],
                           ),
                           ColorBtn(
                             path: "lib/img/msg/reply.svg",
                             title: "回复",
-                            count: msg["replyInfoCount"],
+                            count: _msgProvider.msg["replyInfoCount"],
                             tap: () {
-                              msg["replyInfoCount"] = 0;
+                              _msgProvider.msg["replyInfoCount"] = 0;
                               setState(() {});
                               if (widget.refresh != null) widget.refresh();
                               Navigator.pushNamed(
@@ -217,9 +155,9 @@ class _MsgState extends State<Msg> {
                           ColorBtn(
                             path: "lib/img/msg/noti.svg",
                             title: "通知",
-                            count: msg["systemInfoCount"],
+                            count: _msgProvider.msg["systemInfoCount"],
                             tap: () {
-                              msg["systemInfoCount"] = 0;
+                              _msgProvider.msg["systemInfoCount"] = 0;
                               if (widget.refresh != null) widget.refresh();
                               Navigator.pushNamed(
                                 context,
@@ -232,22 +170,22 @@ class _MsgState extends State<Msg> {
                         ],
                       ),
               ),
-              pmMsgArr.length == 0
+              _msgProvider.pmMsgArr.length == 0
                   ? Container()
                   : BottomTip(
                       top: 25,
                       bottom: 5,
                       txt: "- 私信内容 -",
                     ),
-              pmMsgArr.length != 0
+              _msgProvider.pmMsgArr.length != 0
                   ? Container()
                   : Empty(
                       txt: "暂无私信内容，请尝试下拉刷新",
                     ),
               Column(
-                children: _buildPMMsg(),
+                children: _buildPMMsg(_msgProvider.pmMsgArr),
               ),
-              (load_done || pmMsgArr.length == 0)
+              (_msgProvider.load_done || _msgProvider.pmMsgArr.length == 0)
                   ? Container()
                   : Container(
                       margin: EdgeInsets.only(bottom: 20),

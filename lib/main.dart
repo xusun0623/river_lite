@@ -34,7 +34,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => UserInfoProvider()),
         ChangeNotifierProvider(create: (context) => TabShowProvider()),
-        ChangeNotifierProvider(create: (context) => HomeRefrshProvider())
+        ChangeNotifierProvider(create: (context) => HomeRefrshProvider()),
+        ChangeNotifierProvider(create: (context) => MsgProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

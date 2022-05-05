@@ -1,4 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:offer_show/util/interface.dart';
+
+class MsgProvider extends ChangeNotifier {
+  Map msg;
+  List pmMsgArr = [];
+  ScrollController scrollController = new ScrollController();
+  bool load_done = false;
+  bool loading = false;
+
+  clearMsg() async {
+    msg = null;
+    pmMsgArr = [];
+    load_done = true;
+    loading = false;
+    refresh();
+  }
+
+  getMsg() async {
+    var tmp = await Api().message_pmsessionlist({
+      "json": {
+        "page": 1,
+        "pageSize": 10,
+      }.toString()
+    });
+    if (tmp != null && tmp["rs"] != 0 && tmp["body"] != null) {
+      pmMsgArr = tmp["body"]["list"];
+      load_done = tmp["body"]["list"].length < 10;
+    } else {
+      pmMsgArr = [];
+      load_done = true;
+    }
+
+    var data = await Api().message_heart({});
+    if (data != null &&
+        data["body"] != null &&
+        data["body"]["atMeInfo"] != null) {
+      msg = {
+        "atMeInfoCount": data["body"]["atMeInfo"]["count"],
+        "replyInfoCount": data["body"]["replyInfo"]["count"],
+        "systemInfoCount": data["body"]["systemInfo"]["count"],
+      };
+    } else {
+      msg = {
+        "atMeInfoCount": 0,
+        "replyInfoCount": 0,
+        "systemInfoCount": 0,
+      };
+    }
+    refresh();
+  }
+
+  getMore() async {
+    if (load_done || loading) return;
+    loading = true;
+    var tmp = await Api().message_pmsessionlist({
+      "json": {
+        "page": (pmMsgArr.length / 10 + 1).toInt(),
+        "pageSize": 10,
+      }.toString()
+    });
+    if (tmp != null &&
+        tmp["body"] != null &&
+        int.parse(tmp["body"]["list"][0]["lastDateline"]) <
+            int.parse(pmMsgArr[pmMsgArr.length - 1]["lastDateline"])) {
+      pmMsgArr.addAll(tmp["body"]["list"]);
+      load_done = tmp["body"]["list"].length < 10;
+    } else {
+      load_done = true;
+    }
+    loading = false;
+    refresh();
+  }
+
+  refresh() {
+    notifyListeners();
+  }
+}
 
 class TabShowProvider extends ChangeNotifier {
   bool isShowExplore;
