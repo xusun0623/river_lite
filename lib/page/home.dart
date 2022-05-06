@@ -114,12 +114,13 @@ class _HomeState extends State<Home> {
         tmp.add(GestureDetector(
           onTapDown: tabShowProvider.index == i
               ? (e) {
-                  // Vibrate.feedback(FeedbackType.impact);
-                  // provider.toTop(loadIndex, i);
                   _getNewMsg();
                 }
               : (e) {
                   _getNewMsg();
+                  if (_isNewMsg) {
+                    Provider.of<MsgProvider>(context, listen: false).getMsg();
+                  }
                   Vibrate.feedback(FeedbackType.impact);
                   setState(() {
                     tabShowProvider.index = i;
