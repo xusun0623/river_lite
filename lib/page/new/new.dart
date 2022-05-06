@@ -35,8 +35,9 @@ class _PostNewState extends State<PostNew> {
   TextEditingController tip_controller = new TextEditingController();
   FocusNode tip_focus = new FocusNode();
   bool pop_section = false;
-  int pop_section_index = -1;
   bool show_vote = false;
+  bool uploading = false;
+  int pop_section_index = -1;
   List<String> vote_options = [];
   ScrollController listview_controller = new ScrollController();
   int secret_see = 0;
@@ -69,6 +70,64 @@ class _PostNewState extends State<PostNew> {
       }
       total = tmp;
       setState(() {});
+    }
+  }
+
+  _send() async {
+    var contents = [
+      {
+        "type": 0, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
+        "infor": tip_controller.text,
+      },
+    ];
+    for (var i = 0; i < img_urls.length; i++) {
+      contents.add({
+        "type": 1, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
+        "infor": img_urls[i]["urlName"],
+      });
+    }
+    Map poll = {
+      "expiration": 3,
+      "options": vote_options,
+      "maxChoices": 1,
+      "visibleAfterVote": false,
+      "showVoters": false,
+    };
+    Map json = {
+      "body": {
+        "json": {
+          "isAnonymous": 0,
+          "isOnlyAuthor": 0,
+          "typeId": "",
+          "aid": "",
+          "fid": select_section_id,
+          "isQuote": 0, //"是否引用之前回复的内容
+          // "replyId": 123456, //回复 ID（pid）
+          // "aid": "1,2,3", // 附件 ID，逗号隔开
+          "title": title_controller.text,
+          "content": jsonEncode(contents),
+          "poll": show_vote ? poll : "",
+        }
+      }
+    };
+    showToast(
+      context: context,
+      type: XSToast.loading,
+      txt: "发表中…",
+    );
+    var ret_tip = await Api().forum_topicadmin(
+      {
+        "act": "new",
+        "json": jsonEncode(json),
+      },
+    );
+    hideToast();
+    if (ret_tip["rs"] == 1) {
+      setState(() {
+        sendSuccess = true;
+      });
+    } else {
+      showToast(context: context, type: XSToast.none, txt: ret_tip["errcode"]);
     }
   }
 
@@ -109,170 +168,23 @@ class _PostNewState extends State<PostNew> {
         actions: sendSuccess
             ? []
             : [
-                GestureDetector(
-                  onTap: () async {
-                    print(tip_controller.text);
-                    String tmp = await getStorage(key: "draft", initData: "[]");
-                    List tmp_arr = jsonDecode(tmp);
-                    List tmp_tmp_arr = [tip_controller.text];
-                    tmp_tmp_arr.addAll(tmp_arr);
-                    await setStorage(
-                        key: "draft", value: jsonEncode(tmp_tmp_arr));
-                    showToast(
-                        context: context, type: XSToast.success, txt: "保存成功！");
-                    tip_focus.unfocus();
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 14),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 14),
-                      decoration: BoxDecoration(
-                        color: os_color_opa,
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Center(
-                        child: Container(
-                          child: Text(
-                            "保存草稿",
-                            style: TextStyle(color: os_color),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                SaveDraftBtn(
+                  tip_controller: tip_controller,
+                  tip_focus: tip_focus,
                 ),
-                RightTopSend(
-                  tap: () async {
-                    var contents = [
-                      {
-                        "type": 0, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
-                        "infor": tip_controller.text,
-                      },
-                    ];
-                    for (var i = 0; i < img_urls.length; i++) {
-                      contents.add({
-                        "type": 1, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
-                        "infor": img_urls[i]["urlName"],
-                      });
-                    }
-                    Map poll = {
-                      "expiration": 3,
-                      "options": vote_options,
-                      "maxChoices": 1,
-                      "visibleAfterVote": false,
-                      "showVoters": false,
-                    };
-                    Map json = {
-                      "body": {
-                        "json": {
-                          "isAnonymous": 0,
-                          "isOnlyAuthor": 0,
-                          "typeId": "",
-                          "aid": "",
-                          "fid": select_section_id,
-                          "isQuote": 0, //"是否引用之前回复的内容
-                          // "replyId": 123456, //回复 ID（pid）
-                          // "aid": "1,2,3", // 附件 ID，逗号隔开
-                          "title": title_controller.text,
-                          "content": jsonEncode(contents),
-                          "poll": show_vote ? poll : "",
-                        }
-                      }
-                    };
-                    showToast(
-                      context: context,
-                      type: XSToast.loading,
-                      txt: "发表中…",
-                    );
-                    var ret_tip = await Api().forum_topicadmin(
-                      {
-                        "act": "new",
-                        "json": jsonEncode(json),
-                      },
-                    );
-                    hideToast();
-                    if (ret_tip["rs"] == 1) {
-                      setState(() {
-                        sendSuccess = true;
-                      });
-                    } else {
-                      showToast(
-                          context: context,
-                          type: XSToast.none,
-                          txt: ret_tip["errcode"]);
-                    }
-                  },
-                )
+                uploading
+                    ? Container(width: 10)
+                    : RightTopSend(
+                        tap: () async {
+                          _send();
+                        },
+                      )
               ],
       ),
       body: Container(
         color: os_back,
         child: sendSuccess
-            ? Container(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.done,
-                      size: 50,
-                      color: os_deep_blue,
-                    ),
-                    Container(height: 10),
-                    Text(
-                      "发表成功",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                      ),
-                    ),
-                    Container(height: 10),
-                    Container(
-                      width: 300,
-                      child: Text(
-                        "你已成功发送该帖子，帖子显示在首页会有延时，你可以点击下方按钮查看",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    Container(height: 300),
-                    GestureDetector(
-                      onTap: () async {
-                        String myinfo_txt =
-                            await getStorage(key: "myinfo", initData: "");
-                        Map myinfo = jsonDecode(myinfo_txt);
-                        Navigator.pushNamed(
-                          context,
-                          "/me_func",
-                          arguments: {"type": 2, "uid": myinfo["uid"]},
-                        );
-                      },
-                      child: Container(
-                        width: 150,
-                        height: 45,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: Color.fromRGBO(0, 77, 255, 1),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "查看帖子",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: os_white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(height: 100),
-                  ],
-                ),
-              )
+            ? SuccessDisplay()
             : Stack(
                 children: [
                   Positioned(
@@ -390,37 +302,8 @@ class _PostNewState extends State<PostNew> {
                                         BottomActionItem(title: "取消"),
                                   );
                                 },
-                                child: Container(
-                                  height: 27,
-                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(100),
-                                    ),
-                                    border: Border.all(
-                                      color: os_color,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(width: 7.5),
-                                      Text(
-                                        select_section,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: os_color,
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.chevron_right_rounded,
-                                        size: 18,
-                                        color: os_color,
-                                      )
-                                    ],
-                                  ),
-                                ),
+                                child: SelectColumn(
+                                    select_section: select_section),
                               ),
                               Container(
                                 width: MediaQuery.of(context).size.width -
@@ -451,323 +334,58 @@ class _PostNewState extends State<PostNew> {
                               )
                             ],
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width - 30,
-                            height: 1,
-                            margin: EdgeInsets.symmetric(vertical: 10),
-                            color: Color(0xFFEFEFEF),
-                          ),
+                          ColumnSpace(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                //左边按键区
-                                children: [
-                                  myInkWell(
-                                    tap: () {
-                                      title_focus.unfocus();
-                                      tip_focus.unfocus();
-                                      if (pop_section_index == 0 &&
-                                          pop_section) {
-                                        pop_section = false;
-                                      } else {
-                                        pop_section = true;
-                                      }
-                                      pop_section_index = 0;
-                                      setState(() {});
-                                    },
-                                    widget: Container(
-                                      padding: EdgeInsets.all(2.5),
-                                      child: os_svg(
-                                        path: "lib/img/topic_emoji_black.svg",
-                                        width: 22,
-                                        height: 22,
-                                      ),
-                                    ),
-                                    radius: 10,
-                                    width: 30,
-                                    height: 29,
-                                  ),
-                                  Container(width: 15),
-                                  myInkWell(
-                                    tap: () {
-                                      title_focus.unfocus();
-                                      tip_focus.unfocus();
-                                      if (pop_section_index == 1 &&
-                                          pop_section) {
-                                        pop_section = false;
-                                      } else {
-                                        pop_section = true;
-                                      }
-                                      pop_section_index = 1;
-                                      setState(() {});
-                                    },
-                                    widget: Container(
-                                      padding: EdgeInsets.all(2.5),
-                                      child: os_svg(
-                                        path: "lib/img/topic_@_black.svg",
-                                        width: 22,
-                                        height: 22,
-                                      ),
-                                    ),
-                                    radius: 10,
-                                    width: 30,
-                                    height: 29,
-                                  ),
-                                  Container(width: 15),
-                                  myInkWell(
-                                    tap: () async {
-                                      showModal(
-                                        context: context,
-                                        title: "请注意",
-                                        cont: "你即将跳转到系统图片选择页面，请从【系统相册】多项选择文件",
-                                        confirm: () async {
-                                          title_focus.unfocus();
-                                          tip_focus.unfocus();
-                                          final ImagePicker _picker =
-                                              ImagePicker();
-                                          //选好了图片
-                                          var image =
-                                              await _picker.pickMultiImage(
-                                                    imageQuality: 50,
-                                                  ) ??
-                                                  [];
-                                          img_urls =
-                                              await Api().uploadImage(image) ??
-                                                  [];
-                                          print("${img_urls}");
-                                          setState(() {});
-                                        },
-                                      );
-                                    },
-                                    widget: Stack(
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.all(2.5),
-                                          child: os_svg(
-                                            path:
-                                                "lib/img/topic_line_image.svg",
-                                            width: 20,
-                                            height: 20,
-                                          ),
-                                        ),
-                                        img_urls.length == 0
-                                            ? Container()
-                                            : Positioned(
-                                                right: 0,
-                                                top: 0,
-                                                child: Container(
-                                                  width: 14,
-                                                  height: 14,
-                                                  decoration: BoxDecoration(
-                                                    color: os_color,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                10)),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      img_urls.length
-                                                          .toString(),
-                                                      style: TextStyle(
-                                                        color: os_white,
-                                                        fontSize: 10,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                      ],
-                                    ),
-                                    radius: 10,
-                                    width: 30,
-                                    height: 29,
-                                  ),
-                                ],
+                              LeftRowBtn(
+                                title_focus: title_focus,
+                                tip_focus: tip_focus,
+                                pop_section_index: pop_section_index,
+                                pop_section: pop_section,
+                                uploading: uploading,
+                                setPopSection: (setPopSection) {
+                                  setState(() {
+                                    pop_section = setPopSection;
+                                  });
+                                },
+                                setPopSectionIndex: (setPopSectionIndex) {
+                                  setState(() {
+                                    pop_section_index = setPopSectionIndex;
+                                  });
+                                },
+                                setUploading: (setUploading) {
+                                  setState(() {
+                                    uploading = setUploading;
+                                  });
+                                },
+                                setImgUrls: (setImgUrls) {
+                                  setState(() {
+                                    img_urls = setImgUrls;
+                                  });
+                                },
+                                img_urls: img_urls,
                               ),
-                              Row(
-                                //右边功能区
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: Container(
-                                      height: 25,
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 7),
-                                      margin: EdgeInsets.only(left: 5),
-                                      decoration: BoxDecoration(
-                                        color: os_white,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(100),
-                                        ),
-                                        border: Border.all(
-                                          color: show_vote
-                                              ? Colors.red
-                                              : Color(0xFF9D9D9D),
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            pop_section = false;
-                                            if (show_vote) {
-                                              showModal(
-                                                context: context,
-                                                title: "请确认",
-                                                cont: "是否要删除此投票，请谨慎操作",
-                                                confirm: () {
-                                                  setState(() {
-                                                    show_vote = false;
-                                                  });
-                                                },
-                                              );
-                                            } else {
-                                              setState(() {
-                                                show_vote = true;
-                                              });
-                                            }
-                                          },
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                show_vote
-                                                    ? Icons.no_sim_outlined
-                                                    : Icons.add,
-                                                size: 12,
-                                                color: show_vote
-                                                    ? Colors.red
-                                                    : Color(0xFF9D9D9D),
-                                              ),
-                                              show_vote
-                                                  ? Text(
-                                                      "删除投票",
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: Colors.red,
-                                                      ),
-                                                    )
-                                                  : Text(
-                                                      "插入投票",
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                        color:
-                                                            Color(0xFF9D9D9D),
-                                                      ),
-                                                    ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  select_section != "密语"
-                                      ? Container()
-                                      : GestureDetector(
-                                          onTap: () {
-                                            showActionSheet(
-                                              context: context,
-                                              topActionItem: TopActionItem(
-                                                title: "评论有哪些人可以👀",
-                                                titleTextStyle: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                              actions: [
-                                                ActionItem(
-                                                  title: "评论所有人可见",
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                    setState(() {
-                                                      secret_see = 0;
-                                                    });
-                                                  },
-                                                ),
-                                                ActionItem(
-                                                  title: "评论仅作者可见",
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                    setState(() {
-                                                      secret_see = 1;
-                                                    });
-                                                  },
-                                                ),
-                                              ],
-                                              bottomActionItem:
-                                                  BottomActionItem(title: "取消"),
-                                            );
-                                          },
-                                          child: Container(
-                                            height: 25,
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 7),
-                                            margin: EdgeInsets.only(left: 5),
-                                            decoration: BoxDecoration(
-                                              color: os_white,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(100),
-                                              ),
-                                              border: Border.all(
-                                                color: Color(0xFF9D9D9D),
-                                              ),
-                                            ),
-                                            child: Center(
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    secret_see == 0
-                                                        ? "所有人可见"
-                                                        : "仅作者可见",
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Color(0xFF9D9D9D),
-                                                    ),
-                                                  ),
-                                                  Icon(
-                                                    Icons
-                                                        .keyboard_arrow_up_rounded,
-                                                    size: 12,
-                                                    color: Color(0xFF9D9D9D),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                  !tip_focus.hasFocus
-                                      ? Container()
-                                      : GestureDetector(
-                                          onTap: () {
-                                            tip_focus.unfocus();
-                                          },
-                                          child: Container(
-                                            height: 25,
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 12),
-                                            margin: EdgeInsets.only(left: 5),
-                                            decoration: BoxDecoration(
-                                              color: os_color,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(100),
-                                              ),
-                                            ),
-                                            child: Center(
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    "完成",
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: os_white,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                ],
+                              RightRowBtn(
+                                show_vote: show_vote,
+                                changeVoteStatus: (changeVoteStatus) {
+                                  setState(() {
+                                    show_vote = changeVoteStatus;
+                                  });
+                                },
+                                changePopStatus: (changePopStatus) {
+                                  setState(() {
+                                    pop_section = changePopStatus;
+                                  });
+                                },
+                                select_section: select_section,
+                                changeSecretSee: (changeSecretSee) {
+                                  setState(() {
+                                    secret_see = changeSecretSee;
+                                  });
+                                },
+                                secret_see: secret_see,
+                                tip_focus: tip_focus,
                               ),
                             ],
                           ),
@@ -777,6 +395,553 @@ class _PostNewState extends State<PostNew> {
                   ),
                 ],
               ),
+      ),
+    );
+  }
+}
+
+class LeftRowBtn extends StatefulWidget {
+  FocusNode title_focus;
+  FocusNode tip_focus;
+  int pop_section_index;
+  bool pop_section;
+  bool uploading;
+  Function setPopSection;
+  Function setPopSectionIndex;
+  Function setUploading;
+  Function setImgUrls;
+  List img_urls;
+  LeftRowBtn({
+    Key key,
+    @required this.title_focus,
+    @required this.tip_focus,
+    @required this.pop_section_index,
+    @required this.pop_section,
+    @required this.uploading,
+    @required this.setPopSection,
+    @required this.setPopSectionIndex,
+    @required this.setUploading,
+    @required this.setImgUrls,
+    @required this.img_urls,
+  }) : super(key: key);
+
+  @override
+  State<LeftRowBtn> createState() => _LeftRowBtnState();
+}
+
+class _LeftRowBtnState extends State<LeftRowBtn> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      //左边按键区
+      children: [
+        myInkWell(
+          tap: () {
+            widget.title_focus.unfocus();
+            widget.tip_focus.unfocus();
+            if (widget.pop_section_index == 0 && widget.pop_section) {
+              widget.setPopSection(false);
+            } else {
+              widget.setPopSection(true);
+            }
+            widget.setPopSectionIndex(0);
+            setState(() {});
+          },
+          widget: Container(
+            padding: EdgeInsets.all(2.5),
+            child: os_svg(
+              path: "lib/img/topic_emoji_black.svg",
+              width: 22,
+              height: 22,
+            ),
+          ),
+          radius: 10,
+          width: 30,
+          height: 29,
+        ),
+        Container(width: 15),
+        myInkWell(
+          tap: () {
+            widget.title_focus.unfocus();
+            widget.tip_focus.unfocus();
+            if (widget.pop_section_index == 1 && widget.pop_section) {
+              widget.setPopSection(false);
+            } else {
+              widget.setPopSection(true);
+            }
+            widget.setPopSectionIndex(1);
+            setState(() {});
+          },
+          widget: Container(
+            padding: EdgeInsets.all(2.5),
+            child: os_svg(
+              path: "lib/img/topic_@_black.svg",
+              width: 22,
+              height: 22,
+            ),
+          ),
+          radius: 10,
+          width: 30,
+          height: 29,
+        ),
+        Container(width: 15),
+        myInkWell(
+          tap: () async {
+            showModal(
+              context: context,
+              title: "请注意",
+              cont: "你即将跳转到系统图片选择页面，请从【系统相册】多项选择文件",
+              confirm: () async {
+                widget.title_focus.unfocus();
+                widget.tip_focus.unfocus();
+                final ImagePicker _picker = ImagePicker();
+                //选好了图片
+                widget.setUploading(true);
+                var image = await _picker.pickMultiImage(
+                      imageQuality: 50,
+                    ) ??
+                    [];
+                if (image.length != 0) {
+                  widget.setImgUrls([]);
+                }
+                widget.setImgUrls(await Api().uploadImage(image) ?? []);
+                widget.setUploading(false);
+                setState(() {});
+              },
+            );
+          },
+          widget: Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.all(2.5),
+                child: widget.uploading
+                    ? Container(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          color: os_deep_grey,
+                        ),
+                      )
+                    : os_svg(
+                        path: "lib/img/topic_line_image.svg",
+                        width: 20,
+                        height: 20,
+                      ),
+              ),
+              widget.img_urls.length == 0
+                  ? Container()
+                  : Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        width: 14,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: os_color,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              10,
+                            ),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            widget.img_urls.length.toString(),
+                            style: TextStyle(
+                              color: os_white,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+            ],
+          ),
+          radius: 10,
+          width: 30,
+          height: 29,
+        ),
+      ],
+    );
+  }
+}
+
+class RightRowBtn extends StatefulWidget {
+  bool show_vote;
+  Function changeVoteStatus;
+  Function changePopStatus;
+  Function changeSecretSee;
+  String select_section;
+  int secret_see;
+  FocusNode tip_focus;
+  RightRowBtn({
+    Key key,
+    @required this.show_vote,
+    @required this.changeVoteStatus,
+    @required this.changePopStatus,
+    @required this.select_section,
+    @required this.changeSecretSee,
+    @required this.secret_see,
+    @required this.tip_focus,
+  }) : super(key: key);
+
+  @override
+  State<RightRowBtn> createState() => _RightRowBtnState();
+}
+
+class _RightRowBtnState extends State<RightRowBtn> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      //右边功能区
+      children: [
+        GestureDetector(
+          onTap: () {},
+          child: Container(
+            height: 25,
+            padding: EdgeInsets.symmetric(horizontal: 7),
+            margin: EdgeInsets.only(left: 5),
+            decoration: BoxDecoration(
+              color: os_white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(100),
+              ),
+              border: Border.all(
+                color: widget.show_vote ? Colors.red : Color(0xFF9D9D9D),
+              ),
+            ),
+            child: Center(
+              child: GestureDetector(
+                onTap: () {
+                  widget.changePopStatus(false);
+                  if (widget.show_vote) {
+                    showModal(
+                      context: context,
+                      title: "请确认",
+                      cont: "是否要删除此投票，请谨慎操作",
+                      confirm: () {
+                        widget.changeVoteStatus(false);
+                      },
+                    );
+                  } else {
+                    widget.changeVoteStatus(true);
+                  }
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      widget.show_vote ? Icons.no_sim_outlined : Icons.add,
+                      size: 12,
+                      color: widget.show_vote ? Colors.red : Color(0xFF9D9D9D),
+                    ),
+                    widget.show_vote
+                        ? Text(
+                            "删除投票",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.red,
+                            ),
+                          )
+                        : Text(
+                            "插入投票",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xFF9D9D9D),
+                            ),
+                          ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        widget.select_section != "密语"
+            ? Container()
+            : GestureDetector(
+                onTap: () {
+                  showActionSheet(
+                    context: context,
+                    topActionItem: TopActionItem(
+                      title: "评论有哪些人可以👀",
+                      titleTextStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    actions: [
+                      ActionItem(
+                        title: "评论所有人可见",
+                        onPressed: () {
+                          Navigator.pop(context);
+                          widget.changeSecretSee(0);
+                        },
+                      ),
+                      ActionItem(
+                        title: "评论仅作者可见",
+                        onPressed: () {
+                          Navigator.pop(context);
+                          widget.changeSecretSee(1);
+                        },
+                      ),
+                    ],
+                    bottomActionItem: BottomActionItem(title: "取消"),
+                  );
+                },
+                child: Container(
+                  height: 25,
+                  padding: EdgeInsets.symmetric(horizontal: 7),
+                  margin: EdgeInsets.only(left: 5),
+                  decoration: BoxDecoration(
+                    color: os_white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(100),
+                    ),
+                    border: Border.all(
+                      color: Color(0xFF9D9D9D),
+                    ),
+                  ),
+                  child: Center(
+                    child: Row(
+                      children: [
+                        Text(
+                          widget.secret_see == 0 ? "所有人可见" : "仅作者可见",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF9D9D9D),
+                          ),
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_up_rounded,
+                          size: 12,
+                          color: Color(0xFF9D9D9D),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+        !widget.tip_focus.hasFocus
+            ? Container()
+            : GestureDetector(
+                onTap: () {
+                  widget.tip_focus.unfocus();
+                },
+                child: Container(
+                  height: 25,
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  margin: EdgeInsets.only(left: 5),
+                  decoration: BoxDecoration(
+                    color: os_color,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(100),
+                    ),
+                  ),
+                  child: Center(
+                    child: Row(
+                      children: [
+                        Text(
+                          "完成",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: os_white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+      ],
+    );
+  }
+}
+
+class ColumnSpace extends StatelessWidget {
+  const ColumnSpace({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 30,
+      height: 1,
+      margin: EdgeInsets.symmetric(vertical: 10),
+      color: Color(0xFFEFEFEF),
+    );
+  }
+}
+
+class SelectColumn extends StatelessWidget {
+  const SelectColumn({
+    Key key,
+    @required this.select_section,
+  }) : super(key: key);
+
+  final String select_section;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 27,
+      padding: EdgeInsets.symmetric(horizontal: 5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(100),
+        ),
+        border: Border.all(
+          color: os_color,
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(width: 7.5),
+          Text(
+            select_section,
+            style: TextStyle(
+              fontSize: 14,
+              color: os_color,
+            ),
+          ),
+          Icon(
+            Icons.chevron_right_rounded,
+            size: 18,
+            color: os_color,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class SuccessDisplay extends StatelessWidget {
+  const SuccessDisplay({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.done,
+            size: 50,
+            color: os_deep_blue,
+          ),
+          Container(height: 10),
+          Text(
+            "发表成功",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+          Container(height: 10),
+          Container(
+            width: 300,
+            child: Text(
+              "你已成功发送该帖子，帖子显示在首页会有延时，你可以点击下方按钮查看",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ),
+          Container(height: 300),
+          GestureDetector(
+            onTap: () async {
+              String myinfo_txt = await getStorage(key: "myinfo", initData: "");
+              Map myinfo = jsonDecode(myinfo_txt);
+              Navigator.pushNamed(
+                context,
+                "/me_func",
+                arguments: {"type": 2, "uid": myinfo["uid"]},
+              );
+            },
+            child: Container(
+              width: 150,
+              height: 45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                color: Color.fromRGBO(0, 77, 255, 1),
+              ),
+              child: Center(
+                child: Text(
+                  "查看帖子",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: os_white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(height: 100),
+        ],
+      ),
+    );
+  }
+}
+
+class SaveDraftBtn extends StatelessWidget {
+  const SaveDraftBtn({
+    Key key,
+    @required this.tip_controller,
+    @required this.tip_focus,
+  }) : super(key: key);
+
+  final TextEditingController tip_controller;
+  final FocusNode tip_focus;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        if (tip_controller.text == "") return;
+        String tmp = await getStorage(key: "draft", initData: "[]");
+        List tmp_arr = jsonDecode(tmp);
+        List tmp_tmp_arr = [tip_controller.text];
+        tmp_tmp_arr.addAll(tmp_arr);
+        await setStorage(key: "draft", value: jsonEncode(tmp_tmp_arr));
+        showToast(context: context, type: XSToast.success, txt: "保存成功！");
+        tip_focus.unfocus();
+      },
+      child: SaveDraft(),
+    );
+  }
+}
+
+class SaveDraft extends StatelessWidget {
+  const SaveDraft({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 14),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 14),
+        decoration: BoxDecoration(
+          color: os_color_opa,
+          borderRadius: BorderRadius.all(Radius.circular(100)),
+        ),
+        child: Center(
+          child: Container(
+            child: Text(
+              "保存草稿",
+              style: TextStyle(color: os_color),
+            ),
+          ),
+        ),
       ),
     );
   }
