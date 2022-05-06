@@ -51,9 +51,23 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                     height: MediaQuery.of(context).size.height,
                     color: os_black,
                     child: Center(
-                      child: Text(
-                        "加载图片中…",
-                        style: TextStyle(color: os_white),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: os_white,
+                              strokeWidth: 2.5,
+                            ),
+                          ),
+                          Container(width: 10),
+                          Text(
+                            "加载图片中…",
+                            style: TextStyle(color: os_white),
+                          ),
+                        ],
                       ),
                     ),
                   ),

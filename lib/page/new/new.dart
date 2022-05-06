@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/color.dart';
@@ -10,6 +11,7 @@ import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
+import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
@@ -501,6 +503,7 @@ class _ChildColumnTipState extends State<ChildColumnTip> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        color: os_white,
         child: Text(
           widget.name,
           style: TextStyle(
@@ -620,6 +623,26 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                     widget.setImgUrls(await Api().uploadImage(imgs: image));
                     widget.setUploading(false);
                     setState(() {});
+                  },
+                ),
+                ActionItem(
+                  title: "查看图片",
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    if (widget.img_urls.length != 0) {
+                      print("${widget.img_urls}");
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (_) => PhotoPreview(
+                            galleryItems: widget.img_urls
+                                .map((e) => e["urlName"])
+                                .toList(),
+                            defaultImage: 0,
+                          ),
+                        ),
+                      );
+                    }
                   },
                 ),
                 ActionItem(
