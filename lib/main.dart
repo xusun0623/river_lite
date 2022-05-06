@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 void main() {
   if (Platform.isAndroid) {
     SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+      SystemUiOverlayStyle(statusBarColor: Color.fromRGBO(0, 0, 0, 0)),
     );
   }
   runApp(MyApp());

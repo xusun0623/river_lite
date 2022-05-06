@@ -563,8 +563,9 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                       uploadingImgs = true;
                                     });
                                     if (image != null) {
-                                      img_urls =
-                                          await Api().uploadImage([image]);
+                                      img_urls = await Api().uploadImage(
+                                        imgs: [image],
+                                      );
                                     }
                                     setState(() {
                                       uploadingImgs = false;

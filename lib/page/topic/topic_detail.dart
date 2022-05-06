@@ -588,7 +588,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                   ) ??
                                   [];
                               var img_urls =
-                                  await Api().uploadImage(image) ?? [];
+                                  await Api().uploadImage(imgs: image) ?? [];
                               widget.uploadImg(img_urls);
                               setState(() {});
                             },

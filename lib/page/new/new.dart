@@ -487,27 +487,38 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
         Container(width: 15),
         myInkWell(
           tap: () async {
-            showModal(
+            showActionSheet(
               context: context,
-              title: "请注意",
-              cont: "你即将跳转到系统图片选择页面，请从【系统相册】多项选择文件",
-              confirm: () async {
-                widget.title_focus.unfocus();
-                widget.tip_focus.unfocus();
-                final ImagePicker _picker = ImagePicker();
-                //选好了图片
-                widget.setUploading(true);
-                var image = await _picker.pickMultiImage(
+              actions: [
+                ActionItem(
+                  title: "选择图片",
+                  onPressed: () async {
+                    widget.setImgUrls([]);
+                    Navigator.pop(context);
+                    widget.title_focus.unfocus();
+                    widget.tip_focus.unfocus();
+                    final ImagePicker _picker = ImagePicker();
+                    var image = await _picker.pickMultiImage(
                       imageQuality: 50,
-                    ) ??
-                    [];
-                if (image.length != 0) {
-                  widget.setImgUrls([]);
-                }
-                widget.setImgUrls(await Api().uploadImage(image) ?? []);
-                widget.setUploading(false);
-                setState(() {});
-              },
+                    );
+                    if (image == null || image.length == 0) {
+                      return;
+                    }
+                    widget.setUploading(true);
+                    widget.setImgUrls(await Api().uploadImage(imgs: image));
+                    widget.setUploading(false);
+                    setState(() {});
+                  },
+                ),
+                ActionItem(
+                  title: "清空已选",
+                  onPressed: () {
+                    widget.setImgUrls([]);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+              bottomActionItem: BottomActionItem(title: "取消"),
             );
           },
           widget: Stack(

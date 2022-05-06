@@ -177,7 +177,9 @@ class Api {
   }
 
   //此处有
-  uploadImage(List<XFile> imgs) async {
+  uploadImage({
+    List<XFile> imgs,
+  }) async {
     var request = http.MultipartRequest(
       'POST',
       Uri.parse(
@@ -202,10 +204,6 @@ class Api {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String data = await response.stream.bytesToString();
-      // {
-      //    id: 2109629,
-      //    urlName: https://bbs.uestc.edu.cn/data/attachment//forum/202203/07/231221mdoxxgxxxeou2j11.png
-      // }
       return jsonDecode(data)["body"]["attachment"];
     } else {
       print(response.reasonPhrase);
