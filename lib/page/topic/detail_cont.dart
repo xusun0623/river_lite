@@ -133,26 +133,21 @@ class _DetailContState extends State<DetailCont> {
                   );
                 },
                 child: widget.imgLists.length > 5
-                    ? Image.network(
-                        widget.data["infor"],
-                        height: 100,
+                    ? CachedNetworkImage(
+                        imageUrl: widget.data["infor"],
                         width: 100,
+                        height: 100,
+                        maxHeightDiskCache: 200,
+                        maxWidthDiskCache: 200,
+                        memCacheWidth: 200,
+                        memCacheHeight: 200,
+                        filterQuality: FilterQuality.low,
                         fit: BoxFit.cover,
+                        placeholder: (context, url) => Padding(
+                          padding: const EdgeInsets.all(30.0),
+                          child: CircularProgressIndicator(color: os_deep_grey),
+                        ),
                       )
-                    // CachedNetworkImage(
-                    //     height: 100,
-                    //     width: 100,
-                    //     filterQuality: FilterQuality.low,
-                    //     fit: BoxFit.cover,
-                    //     imageUrl: widget.data["infor"],
-                    //     placeholder: (context, url) => Padding(
-                    //       padding: const EdgeInsets.all(40.0),
-                    //       child: CircularProgressIndicator(
-                    //         color: os_deep_grey,
-                    //         strokeWidth: 2.0,
-                    //       ),
-                    //     ),
-                    //   )
                     : CachedNetworkImage(
                         imageUrl: widget.data["infor"],
                         placeholder: (context, url) => Padding(

@@ -606,7 +606,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
               context: context,
               actions: [
                 ActionItem(
-                  title: "选择图片",
+                  title: "选择图片（建议5张以内）",
                   onPressed: () async {
                     widget.setImgUrls([]);
                     Navigator.pop(context);
