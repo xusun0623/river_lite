@@ -30,6 +30,7 @@ class _PostNewState extends State<PostNew> {
 
   String select_section = "水手之家";
   int select_section_id = 25;
+  int select_section_child_id = 0;
   TextEditingController title_controller = new TextEditingController();
   FocusNode title_focus = new FocusNode();
   TextEditingController tip_controller = new TextEditingController();
@@ -41,9 +42,8 @@ class _PostNewState extends State<PostNew> {
   List<String> vote_options = [];
   ScrollController listview_controller = new ScrollController();
   int secret_see = 0;
-  List<Map> total = [
-    // {"board_id": 45, "board_name": "情感专区"},
-  ];
+  List<Map> total = []; //全部帖子专栏
+  List<Map> child = []; //子帖子专栏
   List img_urls = [];
   List<Map> quick = [
     {"board_id": 45, "board_name": "情感专区"},
@@ -55,6 +55,35 @@ class _PostNewState extends State<PostNew> {
     {"board_id": 309, "board_name": "成电锐评"},
     {"board_id": 25, "board_name": "水手之家"},
   ];
+
+  _getChildColumnTip() async {
+    setState(() {
+      select_section_child_id = 0;
+    });
+    var data = await Api().certain_forum_topiclist({
+      "page": 1,
+      "pageSize": 0,
+      "boardId": select_section_id,
+      "filterType": "typeid",
+      "filterId": "",
+      "sortby": "new",
+    });
+
+    if (data != null &&
+        data["classificationType_list"] != null &&
+        data["classificationType_list"].length != 0) {
+      List<Map> tmp = [];
+      for (var board in data["classificationType_list"]) {
+        tmp.add({
+          "board_id": board["classificationType_id"],
+          "board_name": board["classificationType_name"],
+        });
+      }
+      setState(() {
+        child = tmp;
+      });
+    }
+  }
 
   _getTotalColumn() async {
     var data = await Api().forum_forumlist({});
@@ -98,7 +127,7 @@ class _PostNewState extends State<PostNew> {
         "json": {
           "isAnonymous": 0,
           "isOnlyAuthor": 0,
-          "typeId": "",
+          "typeId": select_section_child_id == 0 ? "" : select_section_child_id,
           "aid": "",
           "fid": select_section_id,
           "isQuote": 0, //"是否引用之前回复的内容
@@ -134,6 +163,7 @@ class _PostNewState extends State<PostNew> {
   @override
   void initState() {
     _getTotalColumn();
+    _getChildColumnTip();
     tip_focus.addListener(() {
       if (tip_focus.hasFocus) {
         pop_section = false;
@@ -147,6 +177,38 @@ class _PostNewState extends State<PostNew> {
       }
     });
     super.initState();
+  }
+
+  List<Widget> _buildChildList() {
+    List<Widget> tmp = [];
+    tmp.add(Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Text("可以选择子板块:", style: TextStyle(color: os_deep_grey)),
+    ));
+    if (child.length == 0) {
+      tmp.add(Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5),
+        child: Text(
+          "加载中…",
+          style: TextStyle(
+            color: os_deep_grey,
+          ),
+        ),
+      ));
+    }
+    child.forEach((element) {
+      tmp.add(ChildColumnTip(
+        select: element["board_id"] == select_section_child_id,
+        child_id: element["board_id"],
+        name: element["board_name"],
+        tap: (child_id) {
+          setState(() {
+            select_section_child_id = child_id;
+          });
+        },
+      ));
+    });
+    return tmp;
   }
 
   @override
@@ -262,7 +324,7 @@ class _PostNewState extends State<PostNew> {
                         ),
                       ),
                       width: MediaQuery.of(context).size.width,
-                      height: 110,
+                      height: tip_focus.hasFocus ? 110 : 150,
                       padding: EdgeInsets.only(
                         left: 15,
                         right: 15,
@@ -271,6 +333,17 @@ class _PostNewState extends State<PostNew> {
                       ),
                       child: Column(
                         children: [
+                          tip_focus.hasFocus
+                              ? Container()
+                              : Container(
+                                  height: 40,
+                                  child: Center(
+                                    child: ListView(
+                                      scrollDirection: Axis.horizontal,
+                                      children: _buildChildList(),
+                                    ),
+                                  ),
+                                ),
                           Row(
                             children: [
                               GestureDetector(
@@ -286,6 +359,7 @@ class _PostNewState extends State<PostNew> {
                                         onPressed: () {
                                           select_section = e["board_name"];
                                           select_section_id = e["board_id"];
+                                          _getChildColumnTip();
                                           Navigator.pop(context);
                                           setState(() {});
                                         },
@@ -325,6 +399,7 @@ class _PostNewState extends State<PostNew> {
                                               tap_board["board_name"];
                                           select_section_id =
                                               tap_board["board_id"];
+                                          _getChildColumnTip();
                                         });
                                       },
                                       quick: e,
@@ -395,6 +470,43 @@ class _PostNewState extends State<PostNew> {
                   ),
                 ],
               ),
+      ),
+    );
+  }
+}
+
+class ChildColumnTip extends StatefulWidget {
+  bool select;
+  String name;
+  int child_id;
+  Function tap;
+  ChildColumnTip({
+    Key key,
+    this.select,
+    this.name,
+    this.child_id,
+    this.tap,
+  }) : super(key: key);
+
+  @override
+  State<ChildColumnTip> createState() => _ChildColumnTipState();
+}
+
+class _ChildColumnTipState extends State<ChildColumnTip> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        widget.tap(widget.child_id);
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: Text(
+          widget.name,
+          style: TextStyle(
+            color: widget.select ? os_color : os_deep_grey,
+          ),
+        ),
       ),
     );
   }
@@ -511,7 +623,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                   },
                 ),
                 ActionItem(
-                  title: "清空已选",
+                  title: "清空已上传图片",
                   onPressed: () {
                     widget.setImgUrls([]);
                     Navigator.pop(context);
