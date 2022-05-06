@@ -143,7 +143,9 @@ class _HomeState extends State<Home> {
                 end: 35,
                 top: 20,
               ),
-              showBadge: i == 2 && _isNewMsg,
+              showBadge: tabShowProvider.loadIndex.length == 4
+                  ? (i == 2 && _isNewMsg)
+                  : (i == 1 && _isNewMsg),
               child: Icon(
                 tabShowProvider.index == i ? select_icons[i] : icons[i],
                 size: 26,
