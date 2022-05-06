@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -16,7 +13,6 @@ import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
-import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 
@@ -64,7 +60,7 @@ class _PersonCenterState extends State<PersonCenter> {
     if (loading) return;
     loading = true;
     var tmp = await Api().user_topiclist({
-      "type": ["topic", "reply"][index],
+      "type": ["topic", "reply", "favorite"][index],
       "uid": widget.param["uid"],
       "page": 1,
       "pageSize": 10,
@@ -89,7 +85,7 @@ class _PersonCenterState extends State<PersonCenter> {
     if (loading) return;
     loading = true;
     var tmp = await Api().user_topiclist({
-      "type": ["topic", "reply"][index],
+      "type": ["topic", "reply", "favorite"][index],
       "uid": widget.param["uid"],
       "page": (data.length / 10).ceil() + 1,
       "pageSize": 10,
@@ -323,7 +319,7 @@ class _PersonIndexState extends State<PersonIndex> {
   Widget build(BuildContext context) {
     return Container(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           PersonIndexTab(
             tap: (idx) {
@@ -342,6 +338,15 @@ class _PersonIndexState extends State<PersonIndex> {
             isMe: widget.isMe,
             select: widget.index == 1,
             index: 1,
+          ),
+          PersonIndexTab(
+            tap: (idx) {
+              widget.tapIndex(2);
+            },
+            countNum: widget.replyNum,
+            isMe: widget.isMe,
+            select: widget.index == 2,
+            index: 2,
           ),
         ],
       ),
@@ -382,17 +387,17 @@ class _PersonIndexTabState extends State<PersonIndexTab> {
         radius: 25,
         widget: Container(
           padding: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
-          width: (MediaQuery.of(context).size.width - 90) / 2,
+          width: (MediaQuery.of(context).size.width - 90) / 3,
           child: Column(
             children: [
               Text(
-                [
-                      widget.isMe ? "我的发表" : "ta的发表",
-                      widget.isMe ? "我的回复" : "ta的回复"
-                    ][widget.index] +
-                    (widget.countNum == 0 ? "" : "(${widget.countNum})"),
+                ["发表", "回复", "收藏"][widget.index] +
+                    (widget.countNum == 0 || widget.index == 2
+                        ? ""
+                        : "(${widget.countNum})"),
                 style: TextStyle(
                   color: widget.select ? os_black : Color(0xFF7B7B7B),
+                  fontSize: 15,
                 ),
               ),
               Container(height: 5),
@@ -1041,12 +1046,12 @@ class _PersonNameState extends State<PersonName> {
             widget.name,
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
-          Container(width: 5),
-          Icon(
-            Icons.chevron_right_rounded,
-            color: Color(0xFF000000),
-            size: 20,
-          ),
+          // Container(width: 5),
+          // Icon(
+          //   Icons.chevron_right_rounded,
+          //   color: Color(0xFF000000),
+          //   size: 20,
+          // ),
         ],
       ),
     );
