@@ -1,12 +1,18 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:crop_your_image/crop_your_image.dart';
 import 'package:flutter/material.dart';
+import "package:image/image.dart" as IMG;
 import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
+import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/storage.dart';
 
 class CropImg extends StatefulWidget {
   CropImg({Key key}) : super(key: key);
@@ -18,6 +24,7 @@ class CropImg extends StatefulWidget {
 class _CropImgState extends State<CropImg> {
   final _controller = CropController();
   Uint8List img;
+  bool edit_done = false;
 
   _pickImg() async {
     final ImagePicker _picker = ImagePicker();
@@ -37,9 +44,10 @@ class _CropImgState extends State<CropImg> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: os_back,
+        elevation: 0,
+        backgroundColor: os_white,
         foregroundColor: os_black,
-        title: Text("上传新头像", style: TextStyle(fontSize: 16)),
+        title: Text(edit_done ? "" : "上传新头像", style: TextStyle(fontSize: 16)),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
@@ -48,73 +56,178 @@ class _CropImgState extends State<CropImg> {
           icon: Icon(Icons.chevron_left_rounded),
         ),
       ),
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        children: [
-          img == null
-              ? GestureDetector(
-                  onTap: () {
-                    _pickImg();
-                  },
-                  child: Container(
-                    height: MediaQuery.of(context).size.width - 40,
-                    margin: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: os_grey,
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.photo_size_select_actual_rounded),
-                          Container(width: 10),
-                          Text("点此选择您的新头像"),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              : Container(
-                  color: Colors.black.withAlpha(150),
-                  child: Container(
-                    height: MediaQuery.of(context).size.width,
-                    child: Material(
-                      child: Crop(
-                        controller: _controller,
-                        image: img,
-                        onCropped: (image) {},
-                        radius: 15,
-                        aspectRatio: 1,
-                        maskColor: Colors.black.withAlpha(150),
-                        cornerDotBuilder: (size, edgeAlignment) =>
-                            const DotControl(
-                          color: Colors.white,
+      backgroundColor: os_white,
+      body: edit_done
+          ? EditDoneDisplay()
+          : ListView(
+              physics: BouncingScrollPhysics(),
+              children: [
+                img == null
+                    ? GestureDetector(
+                        onTap: () {
+                          _pickImg();
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.width - 40,
+                          margin: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: os_grey,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.photo_size_select_actual_rounded),
+                                Container(width: 10),
+                                Text("点此选择您的新头像"),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        color: Colors.black.withAlpha(150),
+                        child: Container(
+                          height: MediaQuery.of(context).size.width,
+                          child: Material(
+                            child: Crop(
+                              controller: _controller,
+                              image: img,
+                              onCropped: (image) async {
+                                IMG.Image img = IMG.decodeImage(image);
+                                Uint8List resizedData200 = IMG.encodeJpg(IMG
+                                    .copyResize(img, width: 200, height: 200));
+                                Uint8List resizedData120 = IMG.encodeJpg(IMG
+                                    .copyResize(img, width: 120, height: 120));
+                                Uint8List resizedData48 = IMG.encodeJpg(
+                                    IMG.copyResize(img, width: 48, height: 48));
+                                String base64_200 =
+                                    base64Encode(resizedData200);
+                                String base64_120 =
+                                    base64Encode(resizedData120);
+                                String base64_48 = base64Encode(resizedData48);
+                                await Api().edit_avator(
+                                  base64_1: base64_200,
+                                  base64_2: base64_120,
+                                  base64_3: base64_48,
+                                );
+                                int uid = await getUid();
+                                CachedNetworkImage.evictFromCache(
+                                  "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=big",
+                                );
+                                CachedNetworkImage.evictFromCache(
+                                  "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=middle",
+                                );
+                                CachedNetworkImage.evictFromCache(
+                                  "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=small",
+                                );
+                                hideToast();
+                                setState(() {
+                                  edit_done = true;
+                                });
+                              },
+                              radius: 15,
+                              aspectRatio: 1,
+                              maskColor: Colors.black.withAlpha(150),
+                              cornerDotBuilder: (size, edgeAlignment) =>
+                                  const DotControl(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                img == null ? Container() : InfoTip(),
+                MyButton(
+                  index: 0,
+                  show: img != null,
+                  tap: () {
+                    showToast(
+                        context: context, type: XSToast.loading, txt: "请稍后…");
+                    _controller.crop();
+                  },
+                  txt: "完成并上传",
+                ),
+                MyButton(
+                  index: 1,
+                  show: img != null,
+                  tap: () {
+                    setState(() {
+                      img = null;
+                    });
+                    _pickImg();
+                  },
+                  txt: "重新选择图片",
+                ),
+              ],
+            ),
+    );
+  }
+}
+
+class EditDoneDisplay extends StatelessWidget {
+  const EditDoneDisplay({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.done,
+            size: 50,
+            color: os_deep_blue,
+          ),
+          Container(height: 10),
+          Text(
+            "上传头像成功",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+          Container(height: 10),
+          Container(
+            width: 300,
+            child: Text(
+              "您已成功上传新的头像，在其它具有缓存的客户端可能有延时，你可以尝试清除缓存后查看新头像",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ),
+          Container(height: 300),
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              width: 150,
+              height: 45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                color: Color.fromRGBO(0, 77, 255, 1),
+              ),
+              child: Center(
+                child: Text(
+                  "返回",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: os_white,
                   ),
                 ),
-          img == null ? Container() : InfoTip(),
-          MyButton(
-            index: 0,
-            show: img != null,
-            tap: () {
-              _controller.crop();
-            },
-            txt: "完成并上传",
+              ),
+            ),
           ),
-          MyButton(
-            index: 1,
-            show: img != null,
-            tap: () {
-              setState(() {
-                img = null;
-              });
-              _pickImg();
-            },
-            txt: "重新选择图片",
-          ),
+          Container(height: 100),
         ],
       ),
     );

@@ -6,10 +6,50 @@ import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:heic_to_jpg/heic_to_jpg.dart';
 import 'package:http/http.dart' as http;
+import 'package:offer_show/util/storage.dart';
 
 /// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 
 class Api {
+  edit_avator({String base64_1, String base64_2, String base64_3}) async {
+    String cookie = await getStorage(key: "cookie", initData: "");
+    if (cookie != "") {
+      //换取网页的agent和input值
+      var request1 = http.Request(
+        'POST',
+        Uri.parse('https://bbs.uestc.edu.cn/home.php?mod=spacecp&ac=avatar'),
+      );
+      request1.headers.addAll({'Cookie': cookie});
+      http.StreamedResponse response1 = await request1.send();
+      if (response1.statusCode == 200) {
+        String web_txt = await response1.stream.bytesToString();
+        String input = web_txt.split("appid=1&input=")[1].split("&agent=")[0];
+        String agent = web_txt.split("&agent=")[1].split("&ucapi=")[0];
+        var request2 = http.MultipartRequest(
+          'POST',
+          Uri.parse(
+            'https://bbs.uestc.edu.cn/uc_server/index.php?m=user&a=rectavatar&base64=yes&appid=1&ucapi=bbs.uestc.edu.cn%2Fuc_server&avatartype=virtual&uploadSize=2048&input=${input}&agent=${agent}',
+          ),
+        );
+        request2.fields.addAll({
+          'avatar1': base64_1,
+          'avatar2': base64_2,
+          'avatar3': base64_3,
+        });
+        request2.headers.addAll({'Cookie': cookie});
+        http.StreamedResponse response2 = await request2.send();
+        if (response2.statusCode == 200) {
+          print(await response2.stream.bytesToString());
+          return;
+        } else {
+          print(response2.reasonPhrase);
+        }
+      } else {
+        print(response1.reasonPhrase);
+      }
+    }
+  }
+
   user_login(Map m) async {
     Map tmp = {
       "r": "user/login",

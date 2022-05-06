@@ -696,18 +696,9 @@ class _PersonCardState extends State<PersonCard> {
             top: 20,
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (_) => PhotoPreview(
-                      galleryItems: [
-                        widget.data["icon"].toString().split("middle")[0] +
-                            "big"
-                      ],
-                      defaultImage: 0,
-                    ),
-                  ),
-                );
+                if (widget.isMe) {
+                  Navigator.pushNamed(context, "/crop");
+                }
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
