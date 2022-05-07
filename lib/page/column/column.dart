@@ -263,6 +263,17 @@ class _TopicColumnState extends State<TopicColumn> {
               Navigator.pop(context);
             },
           ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/search");
+                },
+                icon: Icon(
+                  Icons.search,
+                  color: os_deep_grey,
+                )),
+            Container(width: 5),
+          ],
           title: Text(
             showTopTitle ? data["forumInfo"]["title"] : "",
             style: TextStyle(
