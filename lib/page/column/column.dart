@@ -13,6 +13,7 @@ import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TopicColumn extends StatefulWidget {
   int columnID;
@@ -271,6 +272,11 @@ class _TopicColumnState extends State<TopicColumn> {
                 showError: load_done,
                 msg: "帖子专栏走丢了，或许网页端可以连接该星球",
                 backgroundColor: os_back,
+                tapTxt: "前往网页版 >",
+                tap: () {
+                  launch(
+                      "https://bbs.uestc.edu.cn/forum.php?mod=forumdisplay&fid=${widget.columnID}");
+                },
               )
             : BackToTop(
                 animation: false,

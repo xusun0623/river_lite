@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/util/interface.dart';
 
+class AdShowProvider extends ChangeNotifier {
+  bool showAd;
+
+  refresh() {
+    notifyListeners();
+  }
+}
+
 class MsgProvider extends ChangeNotifier {
   Map msg;
   List pmMsgArr = [];

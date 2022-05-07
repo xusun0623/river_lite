@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
     }
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => AdShowProvider()),
         ChangeNotifierProvider(create: (context) => UserInfoProvider()),
         ChangeNotifierProvider(create: (context) => TabShowProvider()),
         ChangeNotifierProvider(create: (context) => HomeRefrshProvider()),
