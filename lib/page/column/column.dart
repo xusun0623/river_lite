@@ -311,6 +311,14 @@ class _TopicColumnState extends State<TopicColumn> {
                 show: showBackToTop,
                 bottom: 100,
                 controller: _controller,
+                attachBtn: true,
+                tap: () {
+                  Navigator.pushNamed(
+                    context,
+                    "/new",
+                    arguments: widget.columnID,
+                  );
+                },
                 child: RefreshIndicator(
                   onRefresh: () async {
                     manualPull = true;

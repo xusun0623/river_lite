@@ -72,7 +72,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
             ? Container()
             : Positioned(
                 right: 20,
-                bottom: (widget.bottom ?? 25) + (_right + 200) / 3.5,
+                bottom: (widget.bottom ?? 25) + (_right + 200) / 3.5 + 10,
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(100)),

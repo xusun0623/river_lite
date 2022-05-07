@@ -148,7 +148,7 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
       animation: true,
       attachBtn: true,
       tap: () {
-        Navigator.pushNamed(context, "/new", arguments: {});
+        Navigator.pushNamed(context, "/new", arguments: 25);
       },
       child: ListView(
         physics: BouncingScrollPhysics(),

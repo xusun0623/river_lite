@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +18,11 @@ import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 
 class PostNew extends StatefulWidget {
-  var board;
+  int board_id;
+
   PostNew({
     Key key,
-    this.board,
+    this.board_id,
   }) : super(key: key);
 
   @override
@@ -44,6 +46,7 @@ class _PostNewState extends State<PostNew> {
   List<String> vote_options = [];
   ScrollController listview_controller = new ScrollController();
   int secret_see = 0;
+  bool child_load_done = false;
   List<Map> total = []; //全部帖子专栏
   List<Map> child = []; //子帖子专栏
   List img_urls = [];
@@ -70,7 +73,6 @@ class _PostNewState extends State<PostNew> {
       "filterId": "",
       "sortby": "new",
     });
-
     if (data != null &&
         data["classificationType_list"] != null &&
         data["classificationType_list"].length != 0) {
@@ -81,10 +83,12 @@ class _PostNewState extends State<PostNew> {
           "board_name": board["classificationType_name"],
         });
       }
-      setState(() {
-        child = tmp;
-      });
+      child = tmp;
+    } else {
+      child = [];
     }
+    child_load_done = true;
+    setState(() {});
   }
 
   _getTotalColumn() async {
@@ -93,6 +97,11 @@ class _PostNewState extends State<PostNew> {
       List<Map> tmp = [];
       for (var board in data["list"]) {
         for (var board_tip in board["board_list"]) {
+          if (board_tip["board_id"] == select_section_id) {
+            setState(() {
+              select_section = board_tip["board_name"];
+            });
+          }
           tmp.add({
             "board_id": board_tip["board_id"],
             "board_name": board_tip["board_name"],
@@ -133,8 +142,6 @@ class _PostNewState extends State<PostNew> {
           "aid": "",
           "fid": select_section_id,
           "isQuote": 0, //"是否引用之前回复的内容
-          // "replyId": 123456, //回复 ID（pid）
-          // "aid": "1,2,3", // 附件 ID，逗号隔开
           "title": title_controller.text,
           "content": jsonEncode(contents),
           "poll": show_vote ? poll : "",
@@ -164,6 +171,7 @@ class _PostNewState extends State<PostNew> {
 
   @override
   void initState() {
+    select_section_id = widget.board_id;
     _getTotalColumn();
     _getChildColumnTip();
     tip_focus.addListener(() {
@@ -183,11 +191,20 @@ class _PostNewState extends State<PostNew> {
 
   List<Widget> _buildChildList() {
     List<Widget> tmp = [];
-    tmp.add(Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Text("可以选择子板块:", style: TextStyle(color: os_deep_grey)),
+    tmp.add(GestureDetector(
+      onTap: () {
+        setState(() {
+          select_section_child_id = 0;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5),
+        child: Text(
+            child.length == 0 && child_load_done ? "你不可以在此板块发布信息" : "可以选择子板块:",
+            style: TextStyle(color: os_deep_grey)),
+      ),
     ));
-    if (child.length == 0) {
+    if (child.length == 0 && !child_load_done) {
       tmp.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 5),
         child: Text(
