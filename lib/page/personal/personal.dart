@@ -13,6 +13,7 @@ import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
+import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 
@@ -703,6 +704,16 @@ class _PersonCardState extends State<PersonCard> {
               onTap: () {
                 if (widget.isMe) {
                   Navigator.pushNamed(context, "/crop");
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PhotoPreview(
+                        galleryItems: [widget.data["icon"]],
+                        defaultImage: 0,
+                      ),
+                    ),
+                  );
                 }
               },
               child: ClipRRect(
@@ -1046,12 +1057,6 @@ class _PersonNameState extends State<PersonName> {
             widget.name,
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
-          // Container(width: 5),
-          // Icon(
-          //   Icons.chevron_right_rounded,
-          //   color: Color(0xFF000000),
-          //   size: 20,
-          // ),
         ],
       ),
     );

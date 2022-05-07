@@ -18,26 +18,20 @@ class _ImgBannerState extends State<ImgBanner> {
       height: (MediaQuery.of(context).size.width - os_edge * 2) / 360 * 144,
       child: Swiper(
         physics: BouncingScrollPhysics(),
-        itemCount: 3,
+        itemCount: 1,
         autoplay: true,
         duration: 800,
-        autoplayDelay: 3000,
         loop: false,
+        autoplayDelay: 15000,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
               if (index == 0) {
-                Navigator.pushNamed(context, "/about");
-              }
-              if (index == 1) {
                 Navigator.pushNamed(context, "/explore");
-              }
-              if (index == 2) {
-                Navigator.pushNamed(context, "/about");
               }
             },
             child: os_svg(
-              path: "lib/img/banner/banner${index + 1}.svg",
+              path: "lib/img/banner/banner2.svg",
               width: MediaQuery.of(context).size.width - os_edge * 2,
               height:
                   (MediaQuery.of(context).size.width - os_edge * 2) / 360 * 144,
