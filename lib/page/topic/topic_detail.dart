@@ -2261,6 +2261,8 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                 radius: 10),
             myInkWell(
                 tap: () async {
+                  showToast(
+                      context: context, type: XSToast.loading, txt: "请稍后");
                   await Api().user_userfavorite({
                     "idType": "tid",
                     "action": [
@@ -2273,6 +2275,13 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                     widget.data["topic"]["is_favor"] =
                         1 - widget.data["topic"]["is_favor"];
                   });
+                  hideToast();
+                  showToast(
+                      context: context,
+                      type: XSToast.success,
+                      txt: widget.data["topic"]["is_favor"] == 1
+                          ? "收藏成功"
+                          : "取消收藏成功");
                 },
                 widget: Padding(
                   padding: const EdgeInsets.all(8.0),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/empty.dart';
@@ -137,11 +138,15 @@ class _UserListCardState extends State<UserListCard> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
       child: myInkWell(
-        tap: () {
+        tap: () async {
+          int uid = await getUid();
           Navigator.pushNamed(
             context,
             "/person_center",
-            arguments: {"uid": widget.data["uid"], "isMe": false},
+            arguments: {
+              "uid": widget.data["uid"],
+              "isMe": uid == widget.data["uid"],
+            },
           );
         },
         widget: Container(
