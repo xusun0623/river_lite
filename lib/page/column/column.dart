@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:lottie/lottie.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/loading.dart';
@@ -277,16 +278,19 @@ class _TopicColumnState extends State<TopicColumn> {
                 showError: load_done,
                 msg: "帖子专栏走丢了，或许网页端可以连接该星球",
                 backgroundColor: os_back,
-                tapTxt: "前往网页版 >",
-                tapTxt1: "重新刷新 >",
-                tap1: () {
+                tapTxt1: "前往网页版 >",
+                tapTxt: "重新刷新一次 >",
+                loadingWidget: Lottie.asset("lib/lottie/book.json"),
+                tap: () {
+                  Vibrate.feedback(FeedbackType.impact);
                   setState(() {
                     load_done = false;
                     loading = false;
                     _getData();
                   });
                 },
-                tap: () {
+                tap1: () {
+                  Vibrate.feedback(FeedbackType.impact);
                   launch(
                       "https://bbs.uestc.edu.cn/forum.php?mod=forumdisplay&fid=${widget.columnID}");
                 },
@@ -381,6 +385,8 @@ class _TopSectionState extends State<TopSection> {
         child: Swiper(
           physics: BouncingScrollPhysics(),
           loop: false,
+          autoplay: true,
+          autoplayDelay: 3000,
           itemCount: widget.data.length,
           itemBuilder: (context, index) {
             return myInkWell(
@@ -388,10 +394,6 @@ class _TopSectionState extends State<TopSection> {
                 Navigator.pushNamed(context, "/topic_detail",
                     arguments: widget.data[widget.data.length - 1 - index]
                         ["id"]);
-                // launch(
-                //     "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
-                //         widget.data[widget.data.length - 1 - index]["id"]
-                //             .toString());
               },
               radius: 0,
               widget: Container(

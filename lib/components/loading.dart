@@ -12,6 +12,7 @@ class Loading extends StatefulWidget {
   Function tap1;
   String tapTxt;
   String tapTxt1;
+  Widget loadingWidget;
   Loading({
     Key key,
     this.backgroundColor,
@@ -21,6 +22,7 @@ class Loading extends StatefulWidget {
     this.tap1,
     this.tapTxt,
     this.tapTxt1,
+    this.loadingWidget,
   }) : super(key: key);
 
   @override
@@ -45,14 +47,15 @@ class _LoadingState extends State<Loading> {
                       size: 100,
                     ),
                   )
-                : Container(
-                    width: 40,
-                    height: 40,
-                    child: CircularProgressIndicator(
-                      color: Color(0xFFCCCCCC),
-                      strokeWidth: 3,
+                : widget.loadingWidget ??
+                    Container(
+                      width: 40,
+                      height: 40,
+                      child: CircularProgressIndicator(
+                        color: Color(0xFFCCCCCC),
+                        strokeWidth: 3,
+                      ),
                     ),
-                  ),
             widget.showError ?? false ? Container() : Container(height: 20),
             Center(
               child: Container(
