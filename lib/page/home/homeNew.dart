@@ -126,7 +126,16 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
     }
     t.add(
       load_done || data.length == 0
-          ? NoMore()
+          ? TapMore(
+              tap: () {
+                Vibrate.feedback(FeedbackType.impact);
+                setState(() {
+                  loading = false;
+                  load_done = false;
+                  _getData();
+                });
+              },
+            )
           : BottomLoading(
               color: Colors.transparent,
               txt: "加载中…",
@@ -240,8 +249,50 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => throw UnimplementedError();
+}
+
+class TapMore extends StatefulWidget {
+  Function tap;
+  TapMore({
+    Key key,
+    this.tap,
+  }) : super(key: key);
+
+  @override
+  State<TapMore> createState() => _TapMoreState();
+}
+
+class _TapMoreState extends State<TapMore> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        widget.tap();
+      },
+      child: Container(
+        color: os_back,
+        child: Center(
+            child: Padding(
+          padding: EdgeInsets.only(top: 20, bottom: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "加载更多",
+                style: TextStyle(color: os_deep_grey),
+              ),
+              Icon(
+                Icons.keyboard_double_arrow_down_rounded,
+                size: 16,
+                color: os_deep_grey,
+              )
+            ],
+          ),
+        )),
+      ),
+    );
+  }
 }
 
 class StackIndex extends StatefulWidget {

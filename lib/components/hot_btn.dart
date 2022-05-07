@@ -20,38 +20,77 @@ class _HomeBtnState extends State<HomeBtn> {
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       margin: EdgeInsets.only(left: os_edge, right: os_edge),
-      padding: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       width: MediaQuery.of(context).size.width - os_edge * 2,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Btn(
-            txt: "专栏",
-            img: "lib/img/home/1.svg",
-            url: "/square",
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Btn(
+                txt: "专栏",
+                img: "lib/img/home/1.svg",
+                url: "/square",
+              ),
+              Btn(
+                txt: "淘二手",
+                img: "lib/img/home/2.svg",
+                url: "/column",
+                board_id: 61,
+              ),
+              Btn(
+                txt: "失物",
+                img: "lib/img/home/3.svg",
+                url: "/column",
+                board_id: 305,
+              ),
+              Btn(
+                txt: "鹊桥",
+                img: "lib/img/home/5.svg",
+                url: "/column",
+                board_id: 313,
+              ),
+              Btn(
+                txt: "十大热门",
+                img: "lib/img/home/4.svg",
+                url: "/hot",
+              ),
+            ],
           ),
-          Btn(
-            txt: "淘二手",
-            img: "lib/img/home/2.svg",
-            url: "/column",
-            board_id: 61,
-          ),
-          Btn(
-            txt: "失物",
-            img: "lib/img/home/3.svg",
-            url: "/column",
-            board_id: 305,
-          ),
-          Btn(
-            txt: "鹊桥",
-            img: "lib/img/home/5.svg",
-            url: "/column",
-            board_id: 313,
-          ),
-          Btn(
-            txt: "十大热门",
-            img: "lib/img/home/4.svg",
-            url: "/hot",
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Btn(
+                txt: "程序员之家",
+                img: "lib/img/home/6.svg",
+                url: "/column",
+                board_id: 70,
+              ),
+              Btn(
+                txt: "兼职信息",
+                img: "lib/img/home/7.svg",
+                url: "/column",
+                board_id: 183,
+              ),
+              Btn(
+                txt: "保研考研",
+                img: "lib/img/home/8.svg",
+                url: "/column",
+                board_id: 199,
+              ),
+              Btn(
+                txt: "出国留学",
+                img: "lib/img/home/9.svg",
+                url: "/column",
+                board_id: 219,
+              ),
+              Btn(
+                txt: "交通出行",
+                img: "lib/img/home/10.svg",
+                url: "/column",
+                board_id: 225,
+              ),
+            ],
           ),
         ],
       ),
@@ -89,7 +128,7 @@ class _BtnState extends State<Btn> {
       },
       widget: Container(
         width: (MediaQuery.of(context).size.width - os_edge * 2 - 10) / 5,
-        padding: EdgeInsets.only(top: 20, bottom: 15),
+        padding: EdgeInsets.only(top: 10, bottom: 15),
         child: Column(
           children: [
             os_svg(path: widget.img, width: 30, height: 30),

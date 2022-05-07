@@ -177,6 +177,7 @@ class _TopicDetailState extends State<TopicDetail> {
   _buildTotal() {
     List<Widget> tmp = [];
     tmp = [
+      TopicDetailTitle(data: data),
       data["topic"]["essence"] == 0
           ? Container()
           : Container(
@@ -206,7 +207,6 @@ class _TopicDetailState extends State<TopicDetail> {
                 ),
               ),
             ),
-      TopicDetailTitle(data: data),
       TopicDetailTime(
         data: data,
         refresh: () async {

@@ -9,14 +9,18 @@ class Loading extends StatefulWidget {
   bool showError;
   String msg;
   Function tap;
+  Function tap1;
   String tapTxt;
+  String tapTxt1;
   Loading({
     Key key,
     this.backgroundColor,
     this.showError,
     this.msg,
     this.tap,
+    this.tap1,
     this.tapTxt,
+    this.tapTxt1,
   }) : super(key: key);
 
   @override
@@ -83,6 +87,31 @@ class _LoadingState extends State<Loading> {
                       child: Center(
                         child: Text(
                           widget.tapTxt ?? "查看帖子",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFFAAAAAA),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+            widget.tap1 == null || !widget.showError
+                ? Container()
+                : GestureDetector(
+                    onTap: () async {
+                      widget.tap1();
+                    },
+                    child: Container(
+                      width: 150,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        // color: Color.fromRGBO(0, 0, 0, 0.05),
+                      ),
+                      child: Center(
+                        child: Text(
+                          widget.tapTxt1 ?? "刷新",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 14,

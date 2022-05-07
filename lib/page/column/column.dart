@@ -7,6 +7,7 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
+import 'package:offer_show/outer/card_swiper/swiper.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
@@ -30,6 +31,7 @@ class _TopicColumnState extends State<TopicColumn> {
   ScrollController _controller = new ScrollController();
   ScrollController _tabController = new ScrollController();
   List<String> theme = [];
+  List topData = []; //置顶信息
   var select = 0;
   var data;
   bool loading = false;
@@ -65,7 +67,7 @@ class _TopicColumnState extends State<TopicColumn> {
       if (!manualPull) loading = true;
       fold = true;
     });
-    data = await Api().certain_forum_topiclist({
+    var tmp = await Api().certain_forum_topiclist({
       "page": 1,
       "pageSize": 10,
       "boardId": widget.columnID,
@@ -75,10 +77,12 @@ class _TopicColumnState extends State<TopicColumn> {
           : data["classificationType_list"][select - 1]
               ["classificationType_id"],
       "sortby": "new",
+      "topOrder": 1,
     });
-    if (data["rs"] != 0) {
-      // await Future.delayed(Duration(milliseconds: 200));
-      var list = data["classificationType_list"];
+    if (tmp["rs"] != 0) {
+      topData = tmp["topTopicList"];
+      data = tmp;
+      var list = tmp["classificationType_list"];
       theme = ["全部分栏"];
       if (list != null && list.length != 0) {
         for (var i = 0; i < list.length; i++) {
@@ -187,6 +191,7 @@ class _TopicColumnState extends State<TopicColumn> {
         },
       )
     ]);
+    tmp.add(TopSection(data: topData));
     data["list"].forEach((e) {
       tmp.add(Topic(
         data: e,
@@ -273,6 +278,14 @@ class _TopicColumnState extends State<TopicColumn> {
                 msg: "帖子专栏走丢了，或许网页端可以连接该星球",
                 backgroundColor: os_back,
                 tapTxt: "前往网页版 >",
+                tapTxt1: "重新刷新 >",
+                tap1: () {
+                  setState(() {
+                    load_done = false;
+                    loading = false;
+                    _getData();
+                  });
+                },
                 tap: () {
                   launch(
                       "https://bbs.uestc.edu.cn/forum.php?mod=forumdisplay&fid=${widget.columnID}");
@@ -298,6 +311,117 @@ class _TopicColumnState extends State<TopicColumn> {
                   ),
                 ),
               ));
+  }
+}
+
+class TopSection extends StatefulWidget {
+  List data;
+  TopSection({
+    Key key,
+    this.data,
+  }) : super(key: key);
+
+  @override
+  State<TopSection> createState() => _TopSectionState();
+}
+
+class _TopSectionState extends State<TopSection> {
+  List<Widget> _buildComponent() {
+    List<Widget> tmp = [];
+    widget.data.forEach((element) {
+      tmp.add(
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: os_edge),
+          margin: EdgeInsets.only(top: 10),
+          child: myInkWell(
+            tap: () {
+              launch("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
+                  element["id"].toString());
+            },
+            radius: 10,
+            widget: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.vertical_align_top_rounded,
+                    size: 18,
+                    color: os_deep_grey,
+                  ),
+                  Container(width: 7.5),
+                  Container(
+                    width: MediaQuery.of(context).size.width - 80,
+                    child: Text(
+                      element["title"].toString().split("").join("\u{200B}"),
+                      style: TextStyle(
+                        color: os_deep_grey,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    });
+    return tmp;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: os_edge),
+      margin: EdgeInsets.only(top: 10),
+      width: MediaQuery.of(context).size.width,
+      height: 50,
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        child: Swiper(
+          physics: BouncingScrollPhysics(),
+          loop: false,
+          itemCount: widget.data.length,
+          itemBuilder: (context, index) {
+            return myInkWell(
+              tap: () {
+                Navigator.pushNamed(context, "/topic_detail",
+                    arguments: widget.data[widget.data.length - 1 - index]
+                        ["id"]);
+                // launch(
+                //     "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
+                //         widget.data[widget.data.length - 1 - index]["id"]
+                //             .toString());
+              },
+              radius: 0,
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.vertical_align_top_rounded,
+                      size: 18,
+                      color: os_black,
+                    ),
+                    Container(width: 7.5),
+                    Container(
+                      width: MediaQuery.of(context).size.width - 80,
+                      child: Text(
+                        widget.data[widget.data.length - 1 - index]["title"]
+                            .toString()
+                            .split("")
+                            .join("\u{200B}"),
+                        style: TextStyle(color: os_black),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
 

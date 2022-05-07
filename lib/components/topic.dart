@@ -1,12 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/outer/showActionSheet/action_item.dart';
+import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
+import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 
@@ -68,6 +74,174 @@ class _TopicState extends State<Topic> {
     super.initState();
   }
 
+  _feedbackSuccess() async {
+    showToast(
+      context: context,
+      type: XSToast.success,
+      txt: "已举报",
+    );
+  }
+
+  _feedback() async {
+    String txt = "";
+    showModalBottomSheet(
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      context: context,
+      builder: (context) {
+        return Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: 30,
+          ),
+          height: MediaQuery.of(context).size.height - 100,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(height: 30),
+              Text(
+                "请输入举报内容",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Container(height: 10),
+              Container(
+                height: 60,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 15,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  color: os_grey,
+                ),
+                child: Center(
+                  child: TextField(
+                    onChanged: (e) {
+                      txt = e;
+                    },
+                    cursorColor: os_deep_blue,
+                    decoration: InputDecoration(
+                      hintText: "请输入",
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              ),
+              Container(height: 10),
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: myInkWell(
+                      tap: () {
+                        Navigator.pop(context);
+                      },
+                      color: Color(0x16004DFF),
+                      widget: Container(
+                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                        height: 40,
+                        child: Center(
+                          child: Text(
+                            "取消",
+                            style: TextStyle(
+                              color: os_deep_blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      radius: 12.5,
+                    ),
+                  ),
+                  Container(
+                    child: myInkWell(
+                      tap: () async {
+                        await Api().user_report({
+                          "idType": "thread",
+                          "message": txt,
+                          "id": widget.data["topic_id"]
+                        });
+                        Navigator.pop(context);
+                        _feedbackSuccess();
+                      },
+                      color: os_deep_blue,
+                      widget: Container(
+                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                        height: 40,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.done, color: os_white, size: 18),
+                              Container(width: 5),
+                              Text(
+                                "完成",
+                                style: TextStyle(
+                                  color: os_white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      radius: 12.5,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  _moreAction() async {
+    showActionSheet(
+      context: context,
+      actions: [
+        ActionItem(
+            title: "收藏",
+            onPressed: () async {
+              Navigator.pop(context);
+              showToast(context: context, type: XSToast.loading);
+              await Api().user_userfavorite({
+                "idType": "tid",
+                "action": "favorite",
+                "id": widget.data["topic_id"],
+              });
+              hideToast();
+              showToast(context: context, type: XSToast.success, txt: "收藏成功");
+            }),
+        ActionItem(
+            title: "复制帖子链接",
+            onPressed: () async {
+              Clipboard.setData(
+                ClipboardData(
+                    text:
+                        "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
+                            widget.data["topic_id"].toString()),
+              );
+              Navigator.pop(context);
+              showToast(context: context, type: XSToast.success, txt: "复制成功");
+            }),
+        ActionItem(
+            title: "举报反馈",
+            onPressed: () async {
+              Navigator.pop(context);
+              _feedback();
+            }),
+      ],
+      bottomActionItem: BottomActionItem(title: "取消"),
+    );
+  }
+
   _setHistory() async {
     var history_data = await getStorage(key: "history", initData: "[]");
     List history_arr = jsonDecode(history_data);
@@ -105,6 +279,10 @@ class _TopicState extends State<Topic> {
       ),
       child: myInkWell(
         color: widget.backgroundColor ?? os_white,
+        longPress: () {
+          Vibrate.feedback(FeedbackType.impact);
+          _moreAction();
+        },
         tap: () async {
           String info_txt = await getStorage(key: "myinfo", initData: "");
           print("${info_txt}");
@@ -164,15 +342,6 @@ class _TopicState extends State<Topic> {
                                 // fontWeight: FontWeight.bold,
                               ),
                             ),
-                            // Text(
-                            //   RelativeDateFormat.format(
-                            //       DateTime.fromMillisecondsSinceEpoch(int.parse(
-                            //           widget.data["last_reply_date"]))),
-                            //   style: TextStyle(
-                            //     color: Color(0xFFC4C4C4),
-                            //     fontSize: 12,
-                            //   ),
-                            // ),
                           ],
                         )
                       ],
@@ -181,9 +350,8 @@ class _TopicState extends State<Topic> {
                       children: [
                         myInkWell(
                           tap: () {
-                            setState(() {
-                              // _tapLike();
-                            });
+                            Vibrate.feedback(FeedbackType.impact);
+                            _moreAction();
                           },
                           color: Colors.transparent,
                           widget: Padding(
@@ -199,25 +367,6 @@ class _TopicState extends State<Topic> {
                                   size: 18,
                                   color: Color(0xFF585858),
                                 ),
-                                // Text(
-                                //   (widget.data["recommendAdd"] ??
-                                //           0 + (_isRated ? 1 : 0))
-                                //       .toString(),
-                                //   style: TextStyle(
-                                //     fontSize: 12,
-                                //     color:
-                                //         _isRated ? os_color : Color(0xFFB1B1B1),
-                                //     fontWeight: FontWeight.w600,
-                                //   ),
-                                // ),
-                                // Padding(padding: EdgeInsets.all(2)),
-                                // os_svg(
-                                //   path: _isRated
-                                //       ? "lib/img/detail_like_blue.svg"
-                                //       : "lib/img/detail_like.svg",
-                                //   width: 24,
-                                //   height: 24,
-                                // ),
                               ],
                             ),
                           ),

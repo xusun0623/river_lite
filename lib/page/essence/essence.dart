@@ -6,6 +6,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
+import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -117,7 +118,16 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
     }
     t.add(
       load_done || data.length == 0
-          ? NoMore()
+          ? TapMore(
+              tap: () {
+                Vibrate.feedback(FeedbackType.impact);
+                setState(() {
+                  loading = false;
+                  load_done = false;
+                  _getData();
+                });
+              },
+            )
           : BottomLoading(
               color: Colors.transparent,
               txt: "加载中…",
