@@ -5,10 +5,8 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
-import 'package:offer_show/components/banner.dart';
 import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/niw.dart';
-import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/essence/essence.dart';
@@ -112,6 +110,15 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
   Widget _buildComponents() {
     List<Widget> t = [];
     t.add(HomeBtn());
+    if (data.length == 0 && !load_done) {
+      t.add(Container(
+        padding: EdgeInsets.symmetric(vertical: 50),
+        child: BottomLoading(
+          color: Colors.transparent,
+          txt: "初次连接星球中，请稍后…",
+        ),
+      ));
+    }
     if (data != null && data.length != 0) {
       for (var i in data) {
         t.add(Topic(data: i));
