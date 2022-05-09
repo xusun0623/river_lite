@@ -143,9 +143,7 @@ class _HomeState extends State<Home> {
                 end: 35,
                 top: 20,
               ),
-              showBadge: tabShowProvider.loadIndex.length == 4
-                  ? (i == 2 && _isNewMsg)
-                  : (i == 1 && _isNewMsg),
+              showBadge: (i == 1 && _isNewMsg),
               child: Icon(
                 tabShowProvider.index == i ? select_icons[i] : icons[i],
                 size: 26,
@@ -186,7 +184,8 @@ class _HomeState extends State<Home> {
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: _buildWidget(tabShowProvider.loadIndex),
+          // children: _buildWidget(tabShowProvider.loadIndex),
+          children: _buildWidget([0, 2, 3]),
         ),
       ),
     );
