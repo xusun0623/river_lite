@@ -10,6 +10,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/asset/uploadAttachment.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
@@ -361,6 +362,7 @@ class _TopicDetailState extends State<TopicDetail> {
                 ),
                 editing //编辑回复框
                     ? RichInput(
+                        tid: widget.topicID,
                         uploadImg: (img_urls) {
                           if (img_urls != null && img_urls.length != 0) {
                             uploadImgUrls = [];
@@ -465,6 +467,7 @@ class RichInput extends StatefulWidget {
   double bottom;
   TextEditingController controller;
   FocusNode focusNode;
+  int tid;
   Function cancel;
   Function send;
   Function uploadImg;
@@ -473,6 +476,7 @@ class RichInput extends StatefulWidget {
   RichInput({
     Key key,
     this.bottom,
+    @required this.tid,
     @required this.controller,
     @required this.focusNode,
     @required this.cancel,
@@ -596,6 +600,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                           //上传附件，暂时不支持
                           // SendFunc(
                           //   path: "lib/img/topic_attach.svg",
+                          //   tap: () async {
+                          //     await getUploadAid(widget.tid);
+                          //   },
                           // ),
                         ],
                       ),

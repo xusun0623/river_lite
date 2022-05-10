@@ -1,6 +1,7 @@
 import 'package:offer_show/page/404.dart';
 import 'package:offer_show/page/about/about.dart';
 import 'package:offer_show/page/account/account.dart';
+import 'package:offer_show/page/blacklist/black_list.dart';
 import 'package:offer_show/page/broke.dart';
 import 'package:offer_show/page/column/column.dart';
 import 'package:offer_show/page/crop/crop.dart';
@@ -48,6 +49,7 @@ final routers = {
   "/column": (data) => TopicColumn(columnID: data),
   "/hot": () => Hot(),
   "/new": (data) => PostNew(board_id: data),
+  "/black_list": () => BlackList(),
   "/msg_three": (data) => MsgThree(type: data),
   "/msg_detail": (data) => MsgDetail(usrInfo: data),
   "/user_list": (data) => UserList(data: data),

@@ -136,6 +136,7 @@ class _AccountState extends State<Account> {
       Container(height: 20),
       ListTile(
         subtitle: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("快速切换账号"),
             IconButton(

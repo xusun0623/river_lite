@@ -113,9 +113,13 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
     if (data.length == 0 && !load_done) {
       t.add(Container(
         padding: EdgeInsets.symmetric(vertical: 50),
-        child: BottomLoading(
-          color: Colors.transparent,
-          txt: "初次连接星球中，请稍后…",
+        child: Column(
+          children: [
+            BottomLoading(
+              color: Colors.transparent,
+              txt: "初次连接星球中(下拉可以刷新)…",
+            ),
+          ],
         ),
       ));
     }

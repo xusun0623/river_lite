@@ -141,6 +141,7 @@ class _MeListGroupState extends State<MeListGroup> {
         // MeList(txt: "应用设置", index: 0),
         MeList(txt: "账号管理", index: 1),
         MeList(txt: "意见&Bug反馈", index: 2),
+        MeList(txt: "拉黑&黑名单", index: 4),
         MeList(txt: "关于", index: 3),
       ],
     );
@@ -178,6 +179,9 @@ class _MeListState extends State<MeList> {
         }
         if (widget.index == 3) {
           Navigator.pushNamed(context, "/about");
+        }
+        if (widget.index == 4) {
+          Navigator.pushNamed(context, "/black_list");
         }
       },
       child: Container(

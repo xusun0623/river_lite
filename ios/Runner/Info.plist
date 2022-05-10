@@ -4,11 +4,11 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key><true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>App需要您的同意,才能访问相册</string>
+	<string>App会在您使用发帖、回帖、修改头像等相关功能时，访问您的相册权限</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>App需要您的同意,才能访问相册</string>
+	<string>App会在您使用发帖、回帖、修改头像等相关功能时，访问您的相册权限</string>
 	<key>NSCameraUsageDescription</key>
-	<string>App需要您的同意,才能访问相机</string>
+	<string>App会在您使用发帖、回帖、修改头像等相关功能时，访问您的相机权限</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
