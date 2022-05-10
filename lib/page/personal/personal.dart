@@ -16,6 +16,8 @@ import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 Color boy_color = os_deep_blue;
 Color girl_color = Color(0xFFFF6B3D);
@@ -45,6 +47,16 @@ class _PersonCenterState extends State<PersonCenter> {
   bool showTopTitle = false;
 
   ScrollController _controller = new ScrollController();
+
+  bool _isBlack() {
+    bool flag = false;
+    Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
+      if (userInfo["name"].toString().contains(element)) {
+        flag = true;
+      }
+    });
+    return flag;
+  }
 
   _getInfo() async {
     var data = await Api().user_userinfo({
@@ -190,64 +202,72 @@ class _PersonCenterState extends State<PersonCenter> {
         ),
         actions: userInfo == null
             ? []
-            : widget.param["isMe"]
+            : _isBlack()
                 ? []
-                : [
-                    IconButton(
-                      onPressed: () async {
-                        await Api().user_useradmin({
-                          "type": userInfo["is_follow"] == 0
-                              ? "follow"
-                              : "unfollow",
-                          "uid": widget.param["uid"],
-                        });
-                        setState(() {
-                          userInfo["is_follow"] = 1 - userInfo["is_follow"];
-                        });
-                      },
-                      icon: Icon(
-                        Icons.person_add_rounded,
-                        color: userInfo["is_follow"] == 0
-                            ? Color(0xFFAAAAAA)
-                            : os_color,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/msg_detail", arguments: {
-                          "uid": widget.param["uid"],
-                          "name": userInfo["name"],
-                        });
-                      },
-                      icon: Icon(
-                        Icons.mail,
-                        color: Color(0xFFAAAAAA),
-                      ),
-                    )
-                  ],
+                : widget.param["isMe"]
+                    ? []
+                    : [
+                        IconButton(
+                          onPressed: () async {
+                            await Api().user_useradmin({
+                              "type": userInfo["is_follow"] == 0
+                                  ? "follow"
+                                  : "unfollow",
+                              "uid": widget.param["uid"],
+                            });
+                            setState(() {
+                              userInfo["is_follow"] = 1 - userInfo["is_follow"];
+                            });
+                          },
+                          icon: Icon(
+                            Icons.person_add_rounded,
+                            color: userInfo["is_follow"] == 0
+                                ? Color(0xFFAAAAAA)
+                                : os_color,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, "/msg_detail",
+                                arguments: {
+                                  "uid": widget.param["uid"],
+                                  "name": userInfo["name"],
+                                });
+                          },
+                          icon: Icon(
+                            Icons.mail,
+                            color: Color(0xFFAAAAAA),
+                          ),
+                        )
+                      ],
         backgroundColor: Color(0xFFF3F3F3),
       ),
       backgroundColor: Color(0xFFF3F3F3),
       body: userInfo == null
           ? Loading(
-              backgroundColor: os_back,
+              backgroundColor: Color(0xFFF3F3F3),
             )
-          : BackToTop(
-              show: showBackToTop,
-              controller: _controller,
-              bottom: 100,
-              child: RefreshIndicator(
-                color: os_deep_blue,
-                onRefresh: () async {
-                  return await _getInfo();
-                },
-                child: ListView(
-                  physics: BouncingScrollPhysics(),
+          : _isBlack()
+              ? Container(
+                  margin: EdgeInsets.only(bottom: 150),
+                  child: Center(child: Text("该用户已被你拉黑")),
+                )
+              : BackToTop(
+                  show: showBackToTop,
                   controller: _controller,
-                  children: _buildCont(),
+                  bottom: 100,
+                  child: RefreshIndicator(
+                    color: os_deep_blue,
+                    onRefresh: () async {
+                      return await _getInfo();
+                    },
+                    child: ListView(
+                      physics: BouncingScrollPhysics(),
+                      controller: _controller,
+                      children: _buildCont(),
+                    ),
+                  ),
                 ),
-              ),
-            ),
     );
   }
 }

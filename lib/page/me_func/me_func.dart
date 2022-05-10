@@ -287,9 +287,9 @@ class _FuncWidgetState extends State<FuncWidget> {
   @override
   Widget build(BuildContext context) {
     return [
-      Topic(data: widget.data),
-      Topic(data: widget.data),
-      Topic(data: widget.data),
+      Topic(data: widget.data, blackOccu: true),
+      Topic(data: widget.data, blackOccu: true),
+      Topic(data: widget.data, blackOccu: true),
       HistoryCard(data: widget.data),
     ][widget.type - 1];
   }

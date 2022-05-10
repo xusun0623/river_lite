@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -73,10 +75,17 @@ class _HomeState extends State<Home> {
     });
   }
 
+  _getBlackStatus() async {
+    String black_info_txt = await getStorage(key: "black", initData: "[]");
+    List black_info_map = jsonDecode(black_info_txt);
+    Provider.of<BlackProvider>(context, listen: false).black = black_info_map;
+  }
+
   @override
   void initState() {
     _setTab();
     _getNewMsg();
+    _getBlackStatus();
     super.initState();
   }
 

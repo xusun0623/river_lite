@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
@@ -14,7 +16,9 @@ import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
+import 'package:provider/provider.dart';
 
 import '../outer/cached_network_image/cached_image_widget.dart';
 
@@ -22,6 +26,7 @@ class Topic extends StatefulWidget {
   Map data;
   double top;
   double bottom;
+  bool blackOccu;
   Color backgroundColor;
 
   Topic({
@@ -29,6 +34,7 @@ class Topic extends StatefulWidget {
     this.data,
     this.top,
     this.bottom,
+    this.blackOccu,
     this.backgroundColor,
   }) : super(key: key);
 
@@ -38,6 +44,21 @@ class Topic extends StatefulWidget {
 
 class _TopicState extends State<Topic> {
   var _isRated = false;
+  bool isBlack = false;
+  String blackKeyWord = "";
+
+  bool _isBlack() {
+    bool flag = false;
+    Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
+      if (widget.data["title"].toString().contains(element) ||
+          widget.data["subject"].toString().contains(element) ||
+          widget.data["user_nick_name"].toString().contains(element)) {
+        flag = true;
+        blackKeyWord = element;
+      }
+    });
+    return flag;
+  }
 
   void _getLikeStatus() async {
     String tmp = await getStorage(
@@ -207,6 +228,26 @@ class _TopicState extends State<Topic> {
       context: context,
       actions: [
         ActionItem(
+            title: "【不感兴趣】屏蔽此贴",
+            onPressed: () async {
+              await setBlackWord(widget.data["title"], context);
+              Navigator.pop(context);
+              showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
+              setState(() {
+                isBlack = true;
+              });
+            }),
+        ActionItem(
+            title: "【不感兴趣】屏蔽此人",
+            onPressed: () async {
+              await setBlackWord(widget.data["user_nick_name"], context);
+              Navigator.pop(context);
+              showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
+              setState(() {
+                isBlack = true;
+              });
+            }),
+        ActionItem(
             title: "收藏",
             onPressed: () async {
               Navigator.pop(context);
@@ -270,208 +311,238 @@ class _TopicState extends State<Topic> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        os_edge,
-        widget.top ?? 10,
-        os_edge,
-        widget.bottom ?? 0,
-      ),
-      child: myInkWell(
-        color: widget.backgroundColor ?? os_white,
-        longPress: () {
-          Vibrate.feedback(FeedbackType.impact);
-          _moreAction();
-        },
-        tap: () async {
-          String info_txt = await getStorage(key: "myinfo", initData: "");
-          print("${info_txt}");
-          _setHistory();
-          if (info_txt == "") {
-            Navigator.pushNamed(context, "/login", arguments: 0);
-          } else {
-            Navigator.pushNamed(
-              context,
-              "/topic_detail",
-              arguments: (widget.data["source_id"] ?? widget.data["topic_id"]),
-              // arguments: 1903247,
-            );
-          }
-        },
-        widget: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16, 18, 16, 18),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            if (widget.data["user_nick_name"] != "匿名")
-                              toUserSpace(context, widget.data["user_id"]);
-                          },
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: CachedNetworkImage(
-                              width: 27,
-                              height: 27,
-                              fit: BoxFit.cover,
-                              imageUrl: widget.data["userAvatar"],
-                              placeholder: (context, url) =>
-                                  Container(color: os_grey),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
-                            ),
+    return _isBlack() || isBlack
+        ? Container(
+            child: (widget.blackOccu ?? false)
+                ? Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      os_edge,
+                      widget.top ?? 10,
+                      os_edge,
+                      widget.bottom ?? 0,
+                    ),
+                    child: myInkWell(
+                      radius: 10,
+                      widget: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Text(
+                          "此贴已被你屏蔽，屏蔽关键词为:" + blackKeyWord,
+                          style: TextStyle(
+                            color: os_deep_grey,
                           ),
                         ),
-                        Padding(padding: EdgeInsets.all(5)),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.data["user_nick_name"],
-                              style: TextStyle(
-                                color: os_black,
-                                fontSize: 14,
-                                // fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
+                      ),
                     ),
-                    Row(
-                      children: [
-                        myInkWell(
-                          tap: () {
-                            Vibrate.feedback(FeedbackType.impact);
-                            _moreAction();
-                          },
-                          color: Colors.transparent,
-                          widget: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 5,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.more_horiz_sharp,
-                                  size: 18,
-                                  color: Color(0xFF585858),
+                  )
+                : Container(),
+          )
+        : Padding(
+            padding: EdgeInsets.fromLTRB(
+              os_edge,
+              widget.top ?? 10,
+              os_edge,
+              widget.bottom ?? 0,
+            ),
+            child: myInkWell(
+              color: widget.backgroundColor ?? os_white,
+              longPress: () {
+                Vibrate.feedback(FeedbackType.impact);
+                _moreAction();
+              },
+              tap: () async {
+                String info_txt = await getStorage(key: "myinfo", initData: "");
+                print("${info_txt}");
+                _setHistory();
+                if (info_txt == "") {
+                  Navigator.pushNamed(context, "/login", arguments: 0);
+                } else {
+                  Navigator.pushNamed(
+                    context,
+                    "/topic_detail",
+                    arguments:
+                        (widget.data["source_id"] ?? widget.data["topic_id"]),
+                    // arguments: 1903247,
+                  );
+                }
+              },
+              widget: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(16, 18, 16, 18),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+                                  if (widget.data["user_nick_name"] != "匿名")
+                                    toUserSpace(
+                                        context, widget.data["user_id"]);
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: CachedNetworkImage(
+                                    width: 27,
+                                    height: 27,
+                                    fit: BoxFit.cover,
+                                    imageUrl: widget.data["userAvatar"],
+                                    placeholder: (context, url) =>
+                                        Container(color: os_grey),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  ),
                                 ),
-                              ],
-                            ),
+                              ),
+                              Padding(padding: EdgeInsets.all(5)),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.data["user_nick_name"],
+                                    style: TextStyle(
+                                      color: os_black,
+                                      fontSize: 14,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
-                          radius: 100,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                Padding(padding: EdgeInsets.all(3)),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Text(
-                    widget.data["title"],
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 17,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-                Padding(padding: EdgeInsets.all(3)),
-                ((widget.data["summary"] ?? widget.data["subject"]) ?? "") == ""
-                    ? Container()
-                    : Container(
+                          Row(
+                            children: [
+                              myInkWell(
+                                tap: () {
+                                  Vibrate.feedback(FeedbackType.impact);
+                                  _moreAction();
+                                },
+                                color: Colors.transparent,
+                                widget: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 5,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.more_horiz_sharp,
+                                        size: 18,
+                                        color: Color(0xFF585858),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                radius: 100,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      Padding(padding: EdgeInsets.all(3)),
+                      Container(
                         width: MediaQuery.of(context).size.width,
                         child: Text(
-                          (widget.data["summary"] ?? widget.data["subject"]) ??
-                              "",
+                          widget.data["title"],
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            fontSize: 16,
-                            height: 1.5,
-                            color: Color(0xFF999999),
+                            fontSize: 17,
+                            letterSpacing: 0.5,
                           ),
                         ),
                       ),
-                Padding(padding: EdgeInsets.all(8)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        os_svg(
-                          path: "lib/img/topic_component_view.svg",
-                          width: 20,
-                          height: 20,
-                        ),
-                        Container(width: 5),
-                        Text(
-                          "${widget.data['hits']}",
-                          style: TextStyle(
-                            color: Color(0xFF6B6B6B),
-                            fontSize: 12,
+                      Padding(padding: EdgeInsets.all(3)),
+                      ((widget.data["summary"] ?? widget.data["subject"]) ??
+                                  "") ==
+                              ""
+                          ? Container()
+                          : Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Text(
+                                (widget.data["summary"] ??
+                                        widget.data["subject"]) ??
+                                    "",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  height: 1.5,
+                                  color: Color(0xFF999999),
+                                ),
+                              ),
+                            ),
+                      Padding(padding: EdgeInsets.all(8)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              os_svg(
+                                path: "lib/img/topic_component_view.svg",
+                                width: 20,
+                                height: 20,
+                              ),
+                              Container(width: 5),
+                              Text(
+                                "${widget.data['hits']}",
+                                style: TextStyle(
+                                  color: Color(0xFF6B6B6B),
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Container(width: 20),
+                              os_svg(
+                                path: "lib/img/topic_component_comment.svg",
+                                width: 20,
+                                height: 20,
+                              ),
+                              Container(width: 5),
+                              Text(
+                                "${widget.data['replies']}",
+                                style: TextStyle(
+                                  color: Color(0xFF6B6B6B),
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Container(width: 20),
+                              os_svg(
+                                path: "lib/img/topic_component_like.svg",
+                                width: 20,
+                                height: 20,
+                              ),
+                              Container(width: 5),
+                              Text(
+                                (widget.data["recommendAdd"] ?? 0).toString(),
+                                style: TextStyle(
+                                  color: Color(0xFF6B6B6B),
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Container(width: 20),
-                        os_svg(
-                          path: "lib/img/topic_component_comment.svg",
-                          width: 20,
-                          height: 20,
-                        ),
-                        Container(width: 5),
-                        Text(
-                          "${widget.data['replies']}",
-                          style: TextStyle(
-                            color: Color(0xFF6B6B6B),
-                            fontSize: 12,
+                          Text(
+                            RelativeDateFormat.format(
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    int.parse(widget.data["last_reply_date"]))),
+                            style: TextStyle(
+                              color: Color(0xFF9C9C9C),
+                              fontSize: 12.5,
+                            ),
                           ),
-                        ),
-                        Container(width: 20),
-                        os_svg(
-                          path: "lib/img/topic_component_like.svg",
-                          width: 20,
-                          height: 20,
-                        ),
-                        Container(width: 5),
-                        Text(
-                          (widget.data["recommendAdd"] ?? 0).toString(),
-                          style: TextStyle(
-                            color: Color(0xFF6B6B6B),
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      RelativeDateFormat.format(
-                          DateTime.fromMillisecondsSinceEpoch(
-                              int.parse(widget.data["last_reply_date"]))),
-                      style: TextStyle(
-                        color: Color(0xFF9C9C9C),
-                        fontSize: 12.5,
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ],
+              ),
+              // width: width,
+              // height: height,
+              radius: 10,
             ),
-          ),
-        ),
-        // width: width,
-        // height: height,
-        radius: 10,
-      ),
-    );
+          );
   }
 }

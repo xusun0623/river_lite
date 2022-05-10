@@ -23,9 +23,11 @@ import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/page/topic/emoji.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
+import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -40,6 +42,8 @@ class TopicDetail extends StatefulWidget {
 }
 
 class _TopicDetailState extends State<TopicDetail> {
+  bool isBlack = false;
+
   var data;
   var comment = [];
   var load_done = false;
@@ -53,10 +57,23 @@ class _TopicDetailState extends State<TopicDetail> {
   bool editing = false; //是否处于编辑状态
   String placeholder = "请在此编辑回复";
   List<Map> atUser = [];
-  ScrollController _scrollController = new ScrollController();
+  String blackKeyWord = "";
 
+  ScrollController _scrollController = new ScrollController();
   TextEditingController _txtController = new TextEditingController();
   FocusNode _focusNode = new FocusNode();
+
+  bool _isBlack() {
+    bool flag = false;
+    Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
+      if (data["topic"]["title"].toString().contains(element) ||
+          data["topic"]["user_nick_name"].toString().contains(element)) {
+        flag = true;
+        blackKeyWord = element;
+      }
+    });
+    return flag;
+  }
 
   Future _getData() async {
     var tmp = await Api().forum_postlist({
@@ -318,10 +335,12 @@ class _TopicDetailState extends State<TopicDetail> {
                 },
               ),
               title: Text(""),
-              actions: [
-                TopicDetailHead(data: data),
-                TopicDetailMore(data: data),
-              ],
+              actions: _isBlack()
+                  ? []
+                  : [
+                      TopicDetailHead(data: data),
+                      TopicDetailMore(data: data),
+                    ],
             ),
       body: data == null || data["topic"] == null
           ? Loading(
@@ -335,130 +354,143 @@ class _TopicDetailState extends State<TopicDetail> {
                         "&mobile=2");
               },
             )
-          : Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: os_white,
-                  ),
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      await _getData();
-                      vibrate = false;
-                      return;
-                    },
-                    child: BackToTop(
-                      bottom: 115,
-                      show: showBackToTop,
-                      animation: true,
-                      controller: _scrollController,
-                      child: ListView(
-                        physics: BouncingScrollPhysics(),
-                        controller: _scrollController,
-                        children: _buildTotal(),
+          : _isBlack()
+              ? Container(
+                  color: os_white,
+                  padding: EdgeInsets.only(bottom: 150),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 80),
+                    child: Center(
+                      child: Text(
+                        "该帖子内容或用户已被你屏蔽，屏蔽关键词为：" + blackKeyWord,
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                  ),
-                ),
-                editing //编辑回复框
-                    ? RichInput(
-                        tid: widget.topicID,
-                        uploadImg: (img_urls) {
-                          if (img_urls != null && img_urls.length != 0) {
-                            uploadImgUrls = [];
-                            for (var i = 0; i < img_urls.length; i++) {
-                              uploadImgUrls.add(img_urls[i]["urlName"]);
-                            }
-                          }
-                        },
-                        atUser: (List<Map> map) {
-                          atUser = map;
-                        },
-                        placeholder: placeholder,
-                        controller: _txtController,
-                        focusNode: _focusNode,
-                        cancel: () {
-                          _focusNode.unfocus();
-                          _txtController.clear();
-                          placeholder = "请在此编辑回复";
-                          uploadImgUrls = [];
-                          editing = false;
-                          setState(() {});
-                        },
-                        send: () async {
-                          var contents = [
-                            {
-                              "type": 0, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
-                              "infor": _txtController.text,
-                            },
-                          ];
-                          for (var i = 0; i < uploadImgUrls.length; i++) {
-                            contents.add({
-                              "type": 1, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
-                              "infor": uploadImgUrls[i],
-                            });
-                          }
-                          Map json = {
-                            "body": {
-                              "json": {
-                                "isAnonymous": 0,
-                                "isOnlyAuthor": 0,
-                                "typeId": "",
-                                "aid": "",
-                                "fid": "",
-                                "replyId": replyId,
-                                "tid": widget.topicID, // 回复时指定帖子
-                                "isQuote": placeholder == "请在此编辑回复"
-                                    ? 0
-                                    : 1, //"是否引用之前回复的内容
-                                // "replyId": 123456, //回复 ID（pid）
-                                // "aid": "1,2,3", // 附件 ID，逗号隔开
-                                "title": "",
-                                "content": jsonEncode(contents),
-                              }
-                            }
-                          };
-                          showToast(
-                            context: context,
-                            type: XSToast.loading,
-                            txt: "发表中…",
-                          );
-                          await Api().forum_topicadmin(
-                            {
-                              "act": "reply",
-                              "json": jsonEncode(json),
-                            },
-                          );
-                          hideToast();
-                          _focusNode.unfocus();
-                          _txtController.clear();
-                          placeholder = "请在此编辑回复";
-                          uploadImgUrls = [];
-                          editing = false;
-                          setState(() {});
-                          await Future.delayed(Duration(milliseconds: 30));
+                  ))
+              : Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: os_white,
+                      ),
+                      child: RefreshIndicator(
+                        onRefresh: () async {
                           await _getData();
-                          showToast(
-                            context: context,
-                            type: XSToast.success,
-                            duration: 200,
-                            txt: "发表成功!",
-                          );
+                          vibrate = false;
+                          return;
                         },
-                      )
-                    : DetailFixBottom(
-                        bottom: bottom_safeArea,
-                        tapEdit: () {
-                          _focusNode.requestFocus();
-                          editing = true;
-                          setState(() {});
-                        },
-                        topic_id: data["topic"]["topic_id"],
-                        count: data["topic"]["extraPanel"][1]["extParams"]
-                            ["recommendAdd"],
-                      )
-              ],
-            ),
+                        child: BackToTop(
+                          bottom: 115,
+                          show: showBackToTop,
+                          animation: true,
+                          controller: _scrollController,
+                          child: ListView(
+                            physics: BouncingScrollPhysics(),
+                            controller: _scrollController,
+                            children: _buildTotal(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    editing //编辑回复框
+                        ? RichInput(
+                            tid: widget.topicID,
+                            uploadImg: (img_urls) {
+                              if (img_urls != null && img_urls.length != 0) {
+                                uploadImgUrls = [];
+                                for (var i = 0; i < img_urls.length; i++) {
+                                  uploadImgUrls.add(img_urls[i]["urlName"]);
+                                }
+                              }
+                            },
+                            atUser: (List<Map> map) {
+                              atUser = map;
+                            },
+                            placeholder: placeholder,
+                            controller: _txtController,
+                            focusNode: _focusNode,
+                            cancel: () {
+                              _focusNode.unfocus();
+                              _txtController.clear();
+                              placeholder = "请在此编辑回复";
+                              uploadImgUrls = [];
+                              editing = false;
+                              setState(() {});
+                            },
+                            send: () async {
+                              var contents = [
+                                {
+                                  "type": 0, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
+                                  "infor": _txtController.text,
+                                },
+                              ];
+                              for (var i = 0; i < uploadImgUrls.length; i++) {
+                                contents.add({
+                                  "type": 1, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
+                                  "infor": uploadImgUrls[i],
+                                });
+                              }
+                              Map json = {
+                                "body": {
+                                  "json": {
+                                    "isAnonymous": 0,
+                                    "isOnlyAuthor": 0,
+                                    "typeId": "",
+                                    "aid": "",
+                                    "fid": "",
+                                    "replyId": replyId,
+                                    "tid": widget.topicID, // 回复时指定帖子
+                                    "isQuote": placeholder == "请在此编辑回复"
+                                        ? 0
+                                        : 1, //"是否引用之前回复的内容
+                                    // "replyId": 123456, //回复 ID（pid）
+                                    // "aid": "1,2,3", // 附件 ID，逗号隔开
+                                    "title": "",
+                                    "content": jsonEncode(contents),
+                                  }
+                                }
+                              };
+                              showToast(
+                                context: context,
+                                type: XSToast.loading,
+                                txt: "发表中…",
+                              );
+                              await Api().forum_topicadmin(
+                                {
+                                  "act": "reply",
+                                  "json": jsonEncode(json),
+                                },
+                              );
+                              hideToast();
+                              _focusNode.unfocus();
+                              _txtController.clear();
+                              placeholder = "请在此编辑回复";
+                              uploadImgUrls = [];
+                              editing = false;
+                              setState(() {});
+                              await Future.delayed(Duration(milliseconds: 30));
+                              await _getData();
+                              showToast(
+                                context: context,
+                                type: XSToast.success,
+                                duration: 200,
+                                txt: "发表成功!",
+                              );
+                            },
+                          )
+                        : DetailFixBottom(
+                            bottom: bottom_safeArea,
+                            tapEdit: () {
+                              _focusNode.requestFocus();
+                              editing = true;
+                              setState(() {});
+                            },
+                            topic_id: data["topic"]["topic_id"],
+                            count: data["topic"]["extraPanel"][1]["extParams"]
+                                ["recommendAdd"],
+                          )
+                  ],
+                ),
     );
   }
 }

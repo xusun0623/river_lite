@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/util/interface.dart';
 
+class BlackProvider extends ChangeNotifier {
+  List black = [];
+
+  refresh() {
+    notifyListeners();
+  }
+}
+
 class AdShowProvider extends ChangeNotifier {
   bool showAd;
 

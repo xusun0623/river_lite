@@ -30,6 +30,7 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
   var load_done = false;
   bool showBackToTop = false;
   bool vibrate = false;
+  int pageSize = 50;
 
   @override
   void initState() {
@@ -69,7 +70,7 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
 
   _getInitData() async {
     var tmp = await Api()
-        .forum_topiclist({"page": 1, "pageSize": 20, "sortby": "new"});
+        .forum_topiclist({"page": 1, "pageSize": pageSize, "sortby": "new"});
     if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
       data = tmp["list"];
     }
@@ -89,7 +90,6 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
   _getData() async {
     if (loading || load_done) return;
     loading = true;
-    int pageSize = 20;
     var tmp = await Api().forum_topiclist({
       "page": (data.length / pageSize + 1).toInt(),
       "pageSize": pageSize,

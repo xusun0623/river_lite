@@ -6,7 +6,9 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
+import 'package:provider/provider.dart';
 
 class BlackList extends StatefulWidget {
   BlackList({Key key}) : super(key: key);
@@ -22,6 +24,10 @@ class _BlackListState extends State<BlackList> {
   String tmp_txt = "";
 
   _confirm() async {
+    if (tmp_txt == "") {
+      showToast(context: context, type: XSToast.none, txt: "关键词不能为空");
+      return;
+    }
     if (data.indexOf(tmp_txt) > -1) {
       showToast(context: context, type: XSToast.none, txt: "已有关键词");
       return;
@@ -192,10 +198,11 @@ class _BlackListState extends State<BlackList> {
 
   _update() async {
     await setStorage(key: "black", value: jsonEncode(data));
+    Provider.of<BlackProvider>(context, listen: false).black = data;
   }
 
   _log() async {
-    data = jsonDecode(await getStorage(key: "black", initData: ""));
+    data = jsonDecode(await getStorage(key: "black", initData: "[]"));
     setState(() {});
   }
 
@@ -218,9 +225,7 @@ class _BlackListState extends State<BlackList> {
         ),
         actions: [
           IconButton(
-            icon: Icon(select.length == data.length
-                ? Icons.cancel_outlined
-                : Icons.check_circle_outline_rounded),
+            icon: Text(select.length == data.length ? "取消" : "全选"),
             onPressed: () {
               if (select.length != data.length) {
                 select = [];
