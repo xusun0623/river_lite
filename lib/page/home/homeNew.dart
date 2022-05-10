@@ -30,7 +30,7 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
   var load_done = false;
   bool showBackToTop = false;
   bool vibrate = false;
-  int pageSize = 50;
+  int pageSize = 25;
 
   @override
   void initState() {

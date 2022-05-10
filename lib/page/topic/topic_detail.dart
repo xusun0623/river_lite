@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
@@ -42,8 +43,6 @@ class TopicDetail extends StatefulWidget {
 }
 
 class _TopicDetailState extends State<TopicDetail> {
-  bool isBlack = false;
-
   var data;
   var comment = [];
   var load_done = false;
@@ -55,6 +54,7 @@ class _TopicDetailState extends State<TopicDetail> {
   var replyId = 0;
   double bottom_safeArea = 10;
   bool editing = false; //是否处于编辑状态
+  bool isBlack = false;
   String placeholder = "请在此编辑回复";
   List<Map> atUser = [];
   String blackKeyWord = "";
@@ -335,11 +335,17 @@ class _TopicDetailState extends State<TopicDetail> {
                 },
               ),
               title: Text(""),
-              actions: _isBlack()
+              actions: _isBlack() || isBlack
                   ? []
                   : [
                       TopicDetailHead(data: data),
-                      TopicDetailMore(data: data),
+                      TopicDetailMore(
+                          data: data,
+                          block: () {
+                            setState(() {
+                              isBlack = true;
+                            });
+                          }),
                     ],
             ),
       body: data == null || data["topic"] == null
@@ -354,7 +360,7 @@ class _TopicDetailState extends State<TopicDetail> {
                         "&mobile=2");
               },
             )
-          : _isBlack()
+          : _isBlack() || isBlack
               ? Container(
                   color: os_white,
                   padding: EdgeInsets.only(bottom: 150),
@@ -2367,9 +2373,11 @@ class TopicDetailTitle extends StatelessWidget {
 
 class TopicDetailMore extends StatefulWidget {
   Map data;
+  Function block;
   TopicDetailMore({
     Key key,
     this.data,
+    this.block,
   }) : super(key: key);
 
   @override
@@ -2513,19 +2521,19 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
           List<ActionItem> tmp = [];
           tmp.addAll([
             ActionItem(
-              title: "举报",
-              onPressed: () async {
-                Navigator.pop(context);
-                _feedback();
-              },
-            ),
-            ActionItem(
               title: "分享",
               onPressed: () {
                 Navigator.pop(context);
                 Share.share("【河畔Lite客户端】分享给你一个帖子" +
                     "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
                     widget.data["topic"]["topic_id"].toString());
+              },
+            ),
+            ActionItem(
+              title: "举报",
+              onPressed: () async {
+                Navigator.pop(context);
+                _feedback();
               },
             ),
             ActionItem(
@@ -2556,6 +2564,24 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                   }),
             );
           });
+          tmp.addAll([
+            ActionItem(
+              title: "【不感兴趣】屏蔽此贴",
+              onPressed: () async {
+                Navigator.pop(context);
+                setBlackWord(widget.data["topic"]["title"], context);
+                widget.block();
+              },
+            ),
+            ActionItem(
+              title: "【不感兴趣】屏蔽此人",
+              onPressed: () async {
+                Navigator.pop(context);
+                setBlackWord(widget.data["topic"]["user_nick_name"], context);
+                widget.block();
+              },
+            )
+          ]);
           return tmp;
         }
 
