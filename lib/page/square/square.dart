@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
 
@@ -16,6 +17,7 @@ class _SquareState extends State<Square> {
   FocusNode _focusNode = new FocusNode();
   TextEditingController _controller = new TextEditingController();
   bool showCancel = false;
+  bool get_done = false;
   var data = [];
 
   _getData() async {
@@ -23,7 +25,9 @@ class _SquareState extends State<Square> {
     if (tmp != null && tmp["rs"] != 0 && tmp["list"] != null) {
       data = tmp["list"];
     }
-    setState(() {});
+    setState(() {
+      get_done = true;
+    });
   }
 
   List<Widget> _buildCont() {
@@ -68,7 +72,7 @@ class _SquareState extends State<Square> {
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: os_back,
         foregroundColor: os_black,
-        title: Text("全部板块"),
+        title: Text("全部板块", style: TextStyle(fontSize: 16)),
         leading: IconButton(
           icon: Icon(Icons.chevron_left_rounded),
           onPressed: () {
@@ -77,10 +81,12 @@ class _SquareState extends State<Square> {
         ),
         elevation: 0,
       ),
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        children: _buildCont(),
-      ),
+      body: !get_done
+          ? Loading(backgroundColor: os_back)
+          : ListView(
+              physics: BouncingScrollPhysics(),
+              children: _buildCont(),
+            ),
     );
   }
 

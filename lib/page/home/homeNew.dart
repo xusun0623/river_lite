@@ -11,6 +11,7 @@ import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/essence/essence.dart';
 import 'package:offer_show/page/hot/homeHot.dart';
+import 'package:offer_show/page/hot/homeHotNoScaffold.dart';
 import 'package:offer_show/page/new_reply/homeNewReply.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
@@ -251,7 +252,7 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
               ),
             ),
             HomeNewReply(),
-            Hot(),
+            HotNoScaffold(),
             Essence(),
           ],
         ));
