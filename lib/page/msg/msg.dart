@@ -44,9 +44,9 @@ class _MsgState extends State<Msg> {
         ),
       );
     });
-    if (pmMsgArr.length < 6) {
+    if (pmMsgArr.length < 8) {
       tmp.add(Container(
-        height: MediaQuery.of(context).size.height / 2,
+        height: MediaQuery.of(context).size.height - 51 - 74 * pmMsgArr.length,
       ));
     }
     return tmp;

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
@@ -21,7 +22,7 @@ class Me extends StatefulWidget {
 
 class _MeState extends State<Me> {
   Map data;
-  ScrollController _scrollController;
+  ScrollController _scrollController = new ScrollController();
   _getData() async {
     var tmp = await Api().user_userinfo({});
     if (tmp != null && tmp["rs"] != 0 && tmp["body"] != null) {
@@ -38,9 +39,22 @@ class _MeState extends State<Me> {
     }
   }
 
+  bool vibrate = false;
+
   @override
   void initState() {
     _getData();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels < -100) {
+        if (!vibrate) {
+          vibrate = true; //不允许再震动
+          Vibrate.feedback(FeedbackType.impact);
+        }
+      }
+      if (_scrollController.position.pixels >= 0) {
+        vibrate = false; //允许震动
+      }
+    });
     super.initState();
   }
 

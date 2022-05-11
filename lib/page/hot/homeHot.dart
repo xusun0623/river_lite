@@ -93,9 +93,6 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
         child: RefreshIndicator(
           color: os_color,
           onRefresh: () async {
-            setState(() {
-              vibrate = false;
-            });
             var data = await _getData();
             return data;
           },
