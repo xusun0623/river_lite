@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -87,6 +88,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       ),
       backgroundColor: os_back,
       body: TabBarView(
+        physics: CustomTabBarViewScrollPhysics(),
         controller: tabController,
         children: [
           HomeNew(),
@@ -97,4 +99,21 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       ),
     );
   }
+}
+
+class CustomTabBarViewScrollPhysics extends ScrollPhysics {
+  const CustomTabBarViewScrollPhysics({ScrollPhysics parent})
+      : super(parent: parent);
+
+  @override
+  CustomTabBarViewScrollPhysics applyTo(ScrollPhysics ancestor) {
+    return CustomTabBarViewScrollPhysics(parent: buildParent(ancestor));
+  }
+
+  @override
+  SpringDescription get spring => const SpringDescription(
+        mass: 50,
+        stiffness: 100,
+        damping: 0.8,
+      );
 }
