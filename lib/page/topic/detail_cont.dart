@@ -204,7 +204,7 @@ class _DetailContState extends State<DetailCont> {
                   confirmTxt: "立即前往",
                   cancelTxt: "取消",
                   confirm: () {
-                    launch(widget.data['url']);
+                    launch(Uri.encodeFull(widget.data['url'].toString()));
                   },
                 );
             } catch (e) {
@@ -215,7 +215,7 @@ class _DetailContState extends State<DetailCont> {
                 confirmTxt: "立即前往",
                 cancelTxt: "取消",
                 confirm: () {
-                  launch(widget.data['url']);
+                  launch(Uri.encodeFull(widget.data['url']));
                 },
               );
             }
@@ -242,7 +242,7 @@ class _DetailContState extends State<DetailCont> {
                 confirmTxt: "立即前往",
                 cancelTxt: "复制链接",
                 confirm: () {
-                  launch(widget.data['url']);
+                  launch(Uri.encodeFull(widget.data['url']));
                 },
                 cancel: () {
                   Clipboard.setData(ClipboardData(text: widget.data['url']));

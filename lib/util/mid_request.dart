@@ -75,6 +75,7 @@ class XHttp {
       param.addAll({
         "accessToken": myinfo["token"],
         "accessSecret": myinfo["secret"],
+        "platType": 5,
       });
     }
     return await netWorkRequest(

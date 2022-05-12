@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:crop_your_image/crop_your_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import "package:image/image.dart" as IMG;
 import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/color.dart';
@@ -63,10 +64,11 @@ class _CropImgState extends State<CropImg> {
               physics: BouncingScrollPhysics(),
               children: [
                 img == null
-                    ? GestureDetector(
-                        onTap: () {
+                    ? Bounce(
+                        onPressed: () {
                           _pickImg();
                         },
+                        duration: Duration(milliseconds: 200),
                         child: Container(
                           height: MediaQuery.of(context).size.width - 40,
                           margin: EdgeInsets.all(20),

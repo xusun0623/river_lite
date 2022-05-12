@@ -302,7 +302,7 @@ class _MeBtnHeroState extends State<MeBtnHero> {
       child: myInkWell(
         tap: () async {
           String myinfo_txt = await getStorage(key: "myinfo", initData: "");
-          if (myinfo_txt != "" && widget.type < 3) {
+          if (myinfo_txt != "" && widget.type <= 3) {
             Map myinfo = jsonDecode(myinfo_txt);
             Navigator.pushNamed(context, "/me_func", arguments: {
               "type": widget.type,

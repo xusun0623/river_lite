@@ -468,6 +468,9 @@ class _TopicDetailState extends State<TopicDetail> {
                                 },
                               );
                               hideToast();
+                              _scrollController.animateTo(0,
+                                  duration: Duration(milliseconds: 1),
+                                  curve: Curves.ease);
                               _focusNode.unfocus();
                               _txtController.clear();
                               placeholder = "请在此编辑回复";
@@ -1643,7 +1646,7 @@ class _CommentState extends State<Comment> {
           ActionItem(
               title: ele["title"] + "（需跳转到网页）",
               onPressed: () {
-                launch(ele["action"]);
+                launch(Uri.encodeFull(ele["action"]));
               }),
         );
       });
