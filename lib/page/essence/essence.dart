@@ -106,7 +106,6 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
 
   Widget _buildComponents() {
     List<Widget> t = [];
-    // t.add(Container(height: 5));
     if (data != null && data.length != 0) {
       for (var i in data) {
         t.add(Topic(data: i));
@@ -154,16 +153,14 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: os_back,
-      body: data.length == 0
-          ? OccuLoading()
-          : RefreshIndicator(
-              color: os_color,
-              onRefresh: () async {
-                var data = await _getInitData();
-                return data;
-              },
-              child: _buildComponents(),
-            ),
+      body: RefreshIndicator(
+        color: os_color,
+        onRefresh: () async {
+          var data = await _getInitData();
+          return data;
+        },
+        child: data.length == 0 ? OccuLoading() : _buildComponents(),
+      ),
     );
   }
 

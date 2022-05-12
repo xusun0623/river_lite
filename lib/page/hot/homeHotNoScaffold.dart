@@ -79,26 +79,25 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
 
   @override
   Widget build(BuildContext context) {
-    return list.length == 0
-        ? OccuLoading()
-        : Container(
-            color: os_back,
-            child: RefreshIndicator(
-              color: os_color,
-              onRefresh: () async {
-                var data = await _getData();
-                return data;
-              },
-              child: ListView(
+    return Container(
+      color: os_back,
+      child: RefreshIndicator(
+        color: os_color,
+        onRefresh: () async {
+          var data = await _getData();
+          return data;
+        },
+        child: list.length == 0
+            ? OccuLoading()
+            : ListView(
                 controller: _scrollController,
                 physics: BouncingScrollPhysics(),
                 children: _buildComponents(),
               ),
-            ),
-          );
+      ),
+    );
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
