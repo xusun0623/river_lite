@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -14,7 +15,8 @@ class HotNoScaffold extends StatefulWidget {
   _HotNoScaffoldState createState() => _HotNoScaffoldState();
 }
 
-class _HotNoScaffoldState extends State<HotNoScaffold> {
+class _HotNoScaffoldState extends State<HotNoScaffold>
+    with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
   var list = [];
   bool vibrate = false;
@@ -77,20 +79,26 @@ class _HotNoScaffoldState extends State<HotNoScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: os_back,
-      child: RefreshIndicator(
-        color: os_color,
-        onRefresh: () async {
-          var data = await _getData();
-          return data;
-        },
-        child: ListView(
-          controller: _scrollController,
-          physics: BouncingScrollPhysics(),
-          children: _buildComponents(),
-        ),
-      ),
-    );
+    return list.length == 0
+        ? OccuLoading()
+        : Container(
+            color: os_back,
+            child: RefreshIndicator(
+              color: os_color,
+              onRefresh: () async {
+                var data = await _getData();
+                return data;
+              },
+              child: ListView(
+                controller: _scrollController,
+                physics: BouncingScrollPhysics(),
+                children: _buildComponents(),
+              ),
+            ),
+          );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

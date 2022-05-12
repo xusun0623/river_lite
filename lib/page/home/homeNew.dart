@@ -24,7 +24,7 @@ class HomeNew extends StatefulWidget {
   _HomeNewState createState() => _HomeNewState();
 }
 
-class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
+class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
   var data = [];
   var loading = false;
@@ -38,7 +38,6 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
     super.initState();
     _getStorageData();
     _getInitData();
-    tabController = TabController(length: 4, vsync: this);
     _scrollController =
         Provider.of<HomeRefrshProvider>(context, listen: false).send;
     _scrollController.addListener(() {
@@ -171,95 +170,29 @@ class _HomeNewState extends State<HomeNew> with SingleTickerProviderStateMixin {
     );
   }
 
-  TabController tabController;
-
   @override
   Widget build(BuildContext context) {
     HomeRefrshProvider provider = Provider.of<HomeRefrshProvider>(context);
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: os_back,
-          foregroundColor: os_black,
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, "/search");
-              },
-              icon: os_svg(
-                path: "lib/img/search.svg",
-                width: 24,
-                height: 24,
-              ),
-            ),
-            Container(width: 5),
-          ],
-          title: Container(
-            width: 300,
-            height: 60,
-            child: TabBar(
-              labelPadding: EdgeInsets.symmetric(horizontal: 12),
-              isScrollable: true,
-              splashBorderRadius: BorderRadius.all(Radius.circular(5)),
-              labelColor: Colors.black87,
-              unselectedLabelColor: Color(0xFF7A7A7A),
-              unselectedLabelStyle: TextStyle(
-                fontSize: 16,
-              ),
-              indicator: TabSizeIndicator(
-                wantWidth: 20,
-                borderSide: BorderSide(width: 3.0, color: Colors.black87),
-              ),
-              labelStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-              tabs: [
-                Tab(text: "新发表"),
-                Tab(text: "新回复"),
-                Tab(text: "热门"),
-                Tab(text: "精华"),
-              ],
-              onTap: (index) {
-                setState(() {
-                  Provider.of<HomeRefrshProvider>(
-                    context,
-                    listen: false,
-                  ).index = index;
-                  Provider.of<HomeRefrshProvider>(
-                    context,
-                    listen: false,
-                  ).refresh();
-                });
-              },
-              controller: tabController,
-            ),
-          ),
+      backgroundColor: os_back,
+      body: Container(
+        padding: EdgeInsets.only(top: 10),
+        child: RefreshIndicator(
+          color: os_color,
+          onRefresh: () async {
+            var data = await _getInitData();
+            vibrate = false;
+            return data;
+          },
+          child: _buildComponents(),
         ),
-        backgroundColor: os_back,
-        body: IndexedStack(
-          index: Provider.of<HomeRefrshProvider>(context).index,
-          children: [
-            Container(
-              padding: EdgeInsets.only(top: 10),
-              child: RefreshIndicator(
-                color: os_color,
-                onRefresh: () async {
-                  var data = await _getInitData();
-                  vibrate = false;
-                  return data;
-                },
-                child: _buildComponents(),
-              ),
-            ),
-            HomeNewReply(),
-            HotNoScaffold(),
-            Essence(),
-          ],
-        ));
+      ),
+    );
   }
 
   @override
-  bool get wantKeepAlive => throw UnimplementedError();
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 class TapMore extends StatefulWidget {

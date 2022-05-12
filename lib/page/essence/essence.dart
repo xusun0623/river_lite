@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/nomore.dart';
+import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/home/homeNew.dart';
@@ -153,14 +154,16 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: os_back,
-      body: RefreshIndicator(
-        color: os_color,
-        onRefresh: () async {
-          var data = await _getInitData();
-          return data;
-        },
-        child: _buildComponents(),
-      ),
+      body: data.length == 0
+          ? OccuLoading()
+          : RefreshIndicator(
+              color: os_color,
+              onRefresh: () async {
+                var data = await _getInitData();
+                return data;
+              },
+              child: _buildComponents(),
+            ),
     );
   }
 

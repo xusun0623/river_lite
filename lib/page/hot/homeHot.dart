@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/util/interface.dart';
-import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
-import 'package:provider/provider.dart';
 
 class Hot extends StatefulWidget {
   @override
@@ -27,8 +26,6 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
     super.initState();
     _getTmpData();
     _getData();
-    // _scrollController =
-    //     Provider.of<HomeRefrshProvider>(context, listen: false).hot;
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
@@ -40,9 +37,7 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
         vibrate = false; //允许震动
       }
       if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        // print("滑动到底部");
-      }
+          _scrollController.position.maxScrollExtent) {}
     });
   }
 
@@ -94,21 +89,23 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
         ),
         elevation: 0,
       ),
-      body: Container(
-        color: os_back,
-        child: RefreshIndicator(
-          color: os_color,
-          onRefresh: () async {
-            var data = await _getData();
-            return data;
-          },
-          child: ListView(
-            controller: _scrollController,
-            physics: BouncingScrollPhysics(),
-            children: _buildComponents(),
-          ),
-        ),
-      ),
+      body: list.length == 0
+          ? OccuLoading()
+          : Container(
+              color: os_back,
+              child: RefreshIndicator(
+                color: os_color,
+                onRefresh: () async {
+                  var data = await _getData();
+                  return data;
+                },
+                child: ListView(
+                  controller: _scrollController,
+                  physics: BouncingScrollPhysics(),
+                  children: _buildComponents(),
+                ),
+              ),
+            ),
     );
   }
 }

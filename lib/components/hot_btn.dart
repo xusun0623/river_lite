@@ -28,10 +28,10 @@ class _HomeBtnState extends State<HomeBtn> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Btn(
-                txt: "交通出行",
+                txt: "视觉艺术",
                 img: "lib/img/home/10.svg",
                 url: "/column",
-                board_id: 225,
+                board_id: 55,
               ),
               Btn(
                 txt: "淘二手",
@@ -68,10 +68,10 @@ class _HomeBtnState extends State<HomeBtn> {
                 board_id: 70,
               ),
               Btn(
-                txt: "兼职信息",
+                txt: "吃喝玩乐",
                 img: "lib/img/home/7.svg",
                 url: "/column",
-                board_id: 183,
+                board_id: 370,
               ),
               Btn(
                 txt: "保研考研",
