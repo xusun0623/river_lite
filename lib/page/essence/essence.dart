@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
@@ -67,6 +66,11 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
       "pageSize": 20,
       "sortby": "essence",
     });
+    Api().forum_topiclist({
+      "page": 2,
+      "pageSize": 20,
+      "sortby": "essence",
+    });
     if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
       data = tmp["list"];
     }
@@ -89,6 +93,11 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
     int pageSize = 20;
     var tmp = await Api().forum_topiclist({
       "page": (data.length / pageSize + 1).toInt(),
+      "pageSize": pageSize,
+      "sortby": "essence"
+    });
+    Api().forum_topiclist({
+      "page": (data.length / pageSize + 1).toInt() + 1,
       "pageSize": pageSize,
       "sortby": "essence"
     });

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -344,7 +343,9 @@ class _TopicState extends State<Topic> {
               widget.bottom ?? 0,
             ),
             child: myInkWell(
-              color: widget.backgroundColor ?? os_white,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : (widget.backgroundColor ?? os_white),
               longPress: () {
                 Vibrate.feedback(FeedbackType.impact);
                 _moreAction();
@@ -391,8 +392,12 @@ class _TopicState extends State<Topic> {
                                     height: 27,
                                     fit: BoxFit.cover,
                                     imageUrl: widget.data["userAvatar"],
-                                    placeholder: (context, url) =>
-                                        Container(color: os_grey),
+                                    placeholder: (context, url) => Container(
+                                        color:
+                                            Provider.of<ColorProvider>(context)
+                                                    .isDark
+                                                ? Color(0x22FFFFFF)
+                                                : os_grey),
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
                                   ),
@@ -405,7 +410,10 @@ class _TopicState extends State<Topic> {
                                   Text(
                                     widget.data["user_nick_name"],
                                     style: TextStyle(
-                                      color: os_black,
+                                      color: Provider.of<ColorProvider>(context)
+                                              .isDark
+                                          ? os_grey
+                                          : os_black,
                                       fontSize: 14,
                                       // fontWeight: FontWeight.bold,
                                     ),
@@ -433,7 +441,11 @@ class _TopicState extends State<Topic> {
                                       Icon(
                                         Icons.more_horiz_sharp,
                                         size: 18,
-                                        color: Color(0xFF585858),
+                                        color:
+                                            Provider.of<ColorProvider>(context)
+                                                    .isDark
+                                                ? os_deep_grey
+                                                : Color(0xFF585858),
                                       ),
                                     ],
                                   ),
@@ -451,9 +463,11 @@ class _TopicState extends State<Topic> {
                           widget.data["title"],
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            fontSize: 17,
-                            letterSpacing: 0.5,
-                          ),
+                              fontSize: 17,
+                              letterSpacing: 0.5,
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_grey
+                                  : os_black),
                         ),
                       ),
                       Padding(padding: EdgeInsets.all(3)),

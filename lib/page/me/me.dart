@@ -34,8 +34,10 @@ class _MeState extends State<Me> {
       UserInfoProvider provider =
           Provider.of<UserInfoProvider>(context, listen: false);
       var arr_txt = await getStorage(key: "myinfo", initData: "");
-      provider.data = jsonDecode(arr_txt);
-      provider.refresh();
+      if (arr_txt != "") {
+        provider.data = jsonDecode(arr_txt);
+        provider.refresh();
+      }
     }
   }
 
@@ -152,7 +154,7 @@ class _MeListGroupState extends State<MeListGroup> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // MeList(txt: "应用设置", index: 0),
+        MeList(txt: "应用设置", index: 0),
         MeList(txt: "账号管理", index: 1),
         MeList(txt: "意见&Bug反馈", index: 2),
         MeList(txt: "拉黑&黑名单", index: 4),

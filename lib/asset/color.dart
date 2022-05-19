@@ -15,6 +15,9 @@ final os_light_grey = Color(0xFFFAFAFA); //浅灰
 final os_deep_grey = Color(0xFF8B8B8B); //浅灰
 final os_middle_grey = Color(0xFFD3D3D3); //浅灰
 
+final os_dark_white = Color(0xFF303030);
+
+final os_dark_back = Color(0xFF1f2121);
 final os_back = Color(0xFFF1F4F8); //浅灰
 
 final os_wonderful_color = [

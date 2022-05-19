@@ -1,6 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/util/interface.dart';
 
+class ColorProvider extends ChangeNotifier {
+  bool isDark = false;
+  Color os_back = Color(0xFFF1F4F8); //浅灰
+
+  switchLightMode() {
+    os_back = Color(0xFFF1F4F8); //浅灰
+    isDark = false;
+  }
+
+  switchDarkMode() {
+    os_back = Color(0xFF1f2121); //深色
+    isDark = true;
+  }
+
+  switchMode() {
+    if (isDark) {
+      switchDarkMode();
+    } else {
+      switchLightMode();
+    }
+    refresh();
+  }
+
+  refresh() {
+    notifyListeners();
+  }
+}
+
 class BlackProvider extends ChangeNotifier {
   List black = [];
 

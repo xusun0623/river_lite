@@ -9,10 +9,6 @@ import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
-import 'package:offer_show/page/essence/essence.dart';
-import 'package:offer_show/page/hot/homeHot.dart';
-import 'package:offer_show/page/hot/homeHotNoScaffold.dart';
-import 'package:offer_show/page/new_reply/homeNewReply.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -95,6 +91,11 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       "pageSize": pageSize,
       "sortby": "new"
     });
+    Api().forum_topiclist({
+      "page": (data.length / pageSize + 1).toInt() + 1,
+      "pageSize": pageSize,
+      "sortby": "new"
+    });
     if (tmp != null &&
         tmp["rs"] != 0 &&
         tmp["list"] != null &&
@@ -173,8 +174,9 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     HomeRefrshProvider provider = Provider.of<HomeRefrshProvider>(context);
+    ColorProvider provider_color = Provider.of<ColorProvider>(context);
     return Scaffold(
-      backgroundColor: os_back,
+      backgroundColor: provider_color.os_back,
       body: Container(
         padding: EdgeInsets.only(top: 10),
         child: RefreshIndicator(
@@ -209,12 +211,13 @@ class TapMore extends StatefulWidget {
 class _TapMoreState extends State<TapMore> {
   @override
   Widget build(BuildContext context) {
+    ColorProvider provider = Provider.of<ColorProvider>(context);
     return GestureDetector(
       onTap: () {
         widget.tap();
       },
       child: Container(
-        color: os_back,
+        color: provider.os_back,
         child: Center(
             child: Padding(
           padding: EdgeInsets.only(top: 20, bottom: 5),

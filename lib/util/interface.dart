@@ -343,6 +343,7 @@ class Api {
     tmp.addAll(m);
     return await XHttp().postWithGlobalToken(
       url: "",
+      noTimeOut: true,
       param: tmp,
     );
   }

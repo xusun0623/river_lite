@@ -15,58 +15,9 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
-  bool showExplore = true;
-  _getShowExplore() async {
-    String txt =
-        await getStorage(key: "showExplore", initData: ""); //空代表不显示探索页面
-    setState(() {
-      showExplore = txt != "";
-    });
-  }
-
-  List accountData = [];
-  int logined = 0;
-
-  _setManage() async {
-    List quick = [];
-    String txt_quick = await getStorage(key: "quick", initData: "[]");
-    quick = jsonDecode(txt_quick);
-    String txt_manage = await getStorage(key: "myinfo", initData: "");
-    Map map_manage = jsonDecode(txt_manage);
-    for (int i = 0; i < quick.length; i++) {
-      if (map_manage["userName"] == quick[i]["name"]) {
-        logined = i;
-      }
-    }
-    setState(() {
-      accountData = quick;
-    });
-  }
-
-  //删除某账号
-  _deleteAccount(String name) async {
-    List quick = [];
-    String txt_quick = await getStorage(key: "quick", initData: "[]");
-    quick = jsonDecode(txt_quick);
-    for (int i = 0; i < quick.length; i++) {
-      if (name == quick[i]["name"]) {
-        quick.removeAt(i);
-      }
-    }
-    accountData = quick;
-    await setStorage(key: "quick", value: jsonEncode(quick));
-    _setManage();
-  }
-
   void setExplore(bool isShow) {
-    setStorage(key: "showExplore", value: isShow ? "1" : "");
-    Provider.of<TabShowProvider>(context, listen: false).loadIndex =
-        isShow ? [0, 1, 2, 3] : [0, 2, 3];
-    Provider.of<TabShowProvider>(context, listen: false).index = 0;
-    Provider.of<TabShowProvider>(context, listen: false).refresh();
-    setState(() {
-      showExplore = isShow;
-    });
+    Provider.of<ColorProvider>(context, listen: false).isDark = isShow;
+    Provider.of<ColorProvider>(context, listen: false).switchMode();
   }
 
   List<Widget> _buildWidget() {
@@ -77,20 +28,13 @@ class _SettingState extends State<Setting> {
         onChanged: (change_val) {
           setExplore(change_val);
         },
-        value: showExplore,
+        value: Provider.of<ColorProvider>(context).isDark,
         title: Row(
           children: [
-            Text("展示探索页面"),
+            Text("深色模式"),
           ],
         ),
-        subtitle: Text("是否要在首页展示探索页面，关闭后仅显示主页、消息页、我的页面"),
-      ),
-      Container(height: 25),
-      SelectCard(
-        index: showExplore ? 0 : 1,
-        tap: (index) {
-          setExplore(index == 1);
-        },
+        subtitle: Text("你可以在此手动切换深色模式"),
       ),
     ]);
     tmp.add(Container(height: 10));
@@ -99,8 +43,6 @@ class _SettingState extends State<Setting> {
 
   @override
   void initState() {
-    _getShowExplore();
-    _setManage();
     super.initState();
   }
 

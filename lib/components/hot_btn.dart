@@ -3,6 +3,8 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class HomeBtn extends StatefulWidget {
   HomeBtn({Key key}) : super(key: key);
@@ -16,7 +18,9 @@ class _HomeBtnState extends State<HomeBtn> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       margin: EdgeInsets.only(left: os_edge, right: os_edge),
@@ -126,6 +130,8 @@ class _BtnState extends State<Btn> {
           Navigator.pushNamed(context, widget.url);
         }
       },
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_white : os_white,
       widget: Container(
         width: (MediaQuery.of(context).size.width - os_edge * 2 - 10) / 5,
         padding: EdgeInsets.only(top: 10, bottom: 15),
@@ -137,7 +143,9 @@ class _BtnState extends State<Btn> {
               widget.txt,
               style: TextStyle(
                 fontSize: 13,
-                color: Color.fromARGB(255, 52, 52, 52),
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_grey
+                    : Color.fromARGB(255, 52, 52, 52),
               ),
             ),
           ],

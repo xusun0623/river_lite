@@ -90,6 +90,11 @@ class _HomeNewReplyState extends State<HomeNewReply>
       "pageSize": pageSize,
       "sortby": "all"
     });
+    Api().forum_topiclist({
+      "page": (data.length / pageSize + 1).toInt() + 1,
+      "pageSize": pageSize,
+      "sortby": "all"
+    });
     if (tmp != null &&
         tmp["rs"] != 0 &&
         tmp["list"] != null &&

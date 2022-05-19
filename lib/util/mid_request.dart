@@ -37,6 +37,7 @@ class XHttp {
   }
 
   netWorkRequest({
+    bool noTimeOut,
     String url = "",
     Map header,
     Map param, //参数
@@ -45,8 +46,8 @@ class XHttp {
     dio.options.baseUrl = ServerConfig().url;
     dio.options.contentType = Headers.formUrlEncodedContentType;
     dio.options.responseType = ResponseType.plain;
-    dio.options.connectTimeout = 10000;
-    dio.options.receiveTimeout = 10000;
+    dio.options.connectTimeout = noTimeOut ?? false ? 10000000 : 10000;
+    dio.options.receiveTimeout = noTimeOut ?? false ? 10000000 : 10000;
     if (isLog) print("地址:$url入参:$param");
     Response response = await dio
         .request(url, data: param, options: Options(method: "POST"))
@@ -66,6 +67,7 @@ class XHttp {
   }
 
   postWithGlobalToken({
+    bool noTimeOut,
     Map param,
     String url,
   }) async {
@@ -81,6 +83,7 @@ class XHttp {
     return await netWorkRequest(
       url: url,
       param: param,
+      noTimeOut: noTimeOut,
       header: {"Content-Type": "application/x-www-form-urlencoded"},
     );
   }
