@@ -34,15 +34,17 @@ class _AccountState extends State<Account> {
     String txt_quick = await getStorage(key: "quick", initData: "[]");
     quick = jsonDecode(txt_quick);
     String txt_manage = await getStorage(key: "myinfo", initData: "");
-    Map map_manage = jsonDecode(txt_manage);
-    for (int i = 0; i < quick.length; i++) {
-      if (map_manage["userName"] == quick[i]["name"]) {
-        logined = i;
+    if (txt_manage != "") {
+      Map map_manage = jsonDecode(txt_manage);
+      for (int i = 0; i < quick.length; i++) {
+        if (map_manage["userName"] == quick[i]["name"]) {
+          logined = i;
+        }
       }
+      setState(() {
+        accountData = quick;
+      });
     }
-    setState(() {
-      accountData = quick;
-    });
   }
 
   _switchLogin(String username, String password, int index) async {
@@ -97,12 +99,6 @@ class _AccountState extends State<Account> {
     setState(() {
       showExplore = isShow;
     });
-  }
-
-  void _switchMode(bool isShow) {
-    Provider.of<ColorProvider>(context, listen: false).isDark = isShow;
-    Provider.of<ColorProvider>(context, listen: false).switchMode();
-    Provider.of<ColorProvider>(context).refresh();
   }
 
   List<Widget> _buildWidget() {
