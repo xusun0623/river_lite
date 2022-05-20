@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/saveImg.dart';
@@ -95,7 +96,7 @@ class _DetailContState extends State<DetailCont> {
                           fontSize: 16,
                           height: 1.6,
                           color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
+                              ? os_dark_dark_white
                               : os_black,
                         ),
                         children: _getRichText(
@@ -120,49 +121,54 @@ class _DetailContState extends State<DetailCont> {
               widget.imgLists.indexOf(widget.data["infor"]),
             );
           },
-          child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(7.5)),
-            child: Container(
-              decoration: BoxDecoration(
-                color: os_grey,
-                borderRadius: BorderRadius.all(Radius.circular(7.5)),
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => PhotoPreview(
-                        galleryItems: widget.imgLists,
-                        defaultImage:
-                            widget.imgLists.indexOf(widget.data["infor"]),
-                      ),
-                    ),
-                  );
-                },
-                child: widget.imgLists.length > 5
-                    ? CachedNetworkImage(
-                        imageUrl: widget.data["infor"],
-                        width: 100,
-                        height: 100,
-                        maxHeightDiskCache: 200,
-                        maxWidthDiskCache: 200,
-                        memCacheWidth: 200,
-                        memCacheHeight: 200,
-                        filterQuality: FilterQuality.low,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Padding(
-                          padding: const EdgeInsets.all(30.0),
-                          child: CircularProgressIndicator(color: os_deep_grey),
-                        ),
-                      )
-                    : CachedNetworkImage(
-                        imageUrl: widget.data["infor"],
-                        placeholder: (context, url) => Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: CircularProgressIndicator(color: os_deep_grey),
+          child: Opacity(
+            opacity: Provider.of<ColorProvider>(context).isDark ? 0.6 : 1,
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(7.5)),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: os_grey,
+                  borderRadius: BorderRadius.all(Radius.circular(7.5)),
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => PhotoPreview(
+                          galleryItems: widget.imgLists,
+                          defaultImage:
+                              widget.imgLists.indexOf(widget.data["infor"]),
                         ),
                       ),
+                    );
+                  },
+                  child: widget.imgLists.length > 5
+                      ? CachedNetworkImage(
+                          imageUrl: widget.data["infor"],
+                          width: 100,
+                          height: 100,
+                          maxHeightDiskCache: 200,
+                          maxWidthDiskCache: 200,
+                          memCacheWidth: 200,
+                          memCacheHeight: 200,
+                          filterQuality: FilterQuality.low,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Padding(
+                            padding: const EdgeInsets.all(30.0),
+                            child:
+                                CircularProgressIndicator(color: os_deep_grey),
+                          ),
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: widget.data["infor"],
+                          placeholder: (context, url) => Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child:
+                                CircularProgressIndicator(color: os_deep_grey),
+                          ),
+                        ),
+                ),
               ),
             ),
           ),
@@ -241,26 +247,25 @@ class _DetailContState extends State<DetailCont> {
       case 5: //附件下载
         return //图片链接就不用下载了
             myInkWell(
-          color: Color(0xFFF6F6F6),
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? Color(0x0AFFFFFF)
+              : Color(0xFFF6F6F6),
+          longPress: () {
+            Vibrate.feedback(FeedbackType.impact);
+            Clipboard.setData(ClipboardData(text: widget.data['url']));
+            showToast(context: context, type: XSToast.success, txt: "复制链接成功");
+          },
           tap: () {
             showModal(
                 context: context,
                 title: "请确认",
                 cont: "即将调用外部浏览器下载此附件，河畔App不保证此链接的安全性",
                 confirmTxt: "立即前往",
-                cancelTxt: "复制链接",
+                cancelTxt: "取消",
                 confirm: () {
                   launch(Uri.encodeFull(widget.data['url']));
                 },
-                cancel: () {
-                  Clipboard.setData(ClipboardData(text: widget.data['url']));
-                  showToast(
-                    context: context,
-                    type: XSToast.success,
-                    txt: "复制成功",
-                    duration: 500,
-                  );
-                });
+                cancel: () {});
           },
           radius: 10,
           widget: Container(

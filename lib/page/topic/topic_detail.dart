@@ -892,9 +892,10 @@ class _YourEmojiState extends State<YourEmoji> {
     return Container(
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_card
-            : (widget.backgroundColor ?? os_grey),
+        color: widget.backgroundColor ??
+            (Provider.of<ColorProvider>(context).isDark
+                ? os_dark_card
+                : os_grey),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: ListView(
@@ -965,7 +966,12 @@ class _YourEmojiState extends State<YourEmoji> {
 
 class AtSomeone extends StatefulWidget {
   Function tap;
-  AtSomeone({Key key, @required this.tap}) : super(key: key);
+  Color backgroundColor;
+  AtSomeone({
+    Key key,
+    @required this.tap,
+    this.backgroundColor,
+  }) : super(key: key);
 
   @override
   State<AtSomeone> createState() => _AtSomeoneState();
@@ -1101,8 +1107,10 @@ class _AtSomeoneState extends State<AtSomeone> {
     return Container(
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color:
-            Provider.of<ColorProvider>(context).isDark ? os_dark_card : os_grey,
+        color: widget.backgroundColor ??
+            (Provider.of<ColorProvider>(context).isDark
+                ? os_dark_card
+                : os_grey),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: ListView(
@@ -2225,6 +2233,9 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
   _giveWater() async {
     showModalBottomSheet(
       isScrollControlled: true,
+      backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
+          ? os_dark_back
+          : os_white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
@@ -2248,6 +2259,9 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : os_black,
                 ),
               ),
               Container(height: 10),
@@ -2266,7 +2280,10 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
-                  color: os_grey,
+                  color:
+                      Provider.of<ColorProvider>(context, listen: false).isDark
+                          ? os_dark_card
+                          : os_grey,
                 ),
                 child: Center(
                   child: TextField(
@@ -2277,10 +2294,22 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                     onChanged: (ele) {
                       _value = int.parse(ele);
                     },
-                    decoration: InputDecoration(
-                      hintText: "请输入水滴数，从0~30",
-                      border: InputBorder.none,
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? os_dark_white
+                          : os_black,
                     ),
+                    decoration: InputDecoration(
+                        hintText: "请输入水滴数，从0~30",
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color:
+                              Provider.of<ColorProvider>(context, listen: false)
+                                      .isDark
+                                  ? os_dark_dark_white
+                                  : os_deep_grey,
+                        )),
                   ),
                 ),
               ),
@@ -2293,7 +2322,10 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                       tap: () {
                         Navigator.pop(context);
                       },
-                      color: Color(0x16004DFF),
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? Color(0x33004DFF)
+                          : Color(0x16004DFF),
                       widget: Container(
                         width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
                         height: 40,
@@ -2509,6 +2541,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
     String txt = "";
     showModalBottomSheet(
       isScrollControlled: true,
+      backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
+          ? os_dark_back
+          : os_white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
@@ -2532,6 +2567,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : os_black,
                 ),
               ),
               Container(height: 10),
@@ -2542,18 +2580,33 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
-                  color: os_grey,
+                  color:
+                      Provider.of<ColorProvider>(context, listen: false).isDark
+                          ? os_dark_card
+                          : os_grey,
                 ),
                 child: Center(
                   child: TextField(
                     onChanged: (e) {
                       txt = e;
                     },
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? os_dark_white
+                          : os_black,
+                    ),
                     cursorColor: os_deep_blue,
                     decoration: InputDecoration(
-                      hintText: "请输入",
-                      border: InputBorder.none,
-                    ),
+                        hintText: "请输入",
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color:
+                              Provider.of<ColorProvider>(context, listen: false)
+                                      .isDark
+                                  ? os_dark_dark_white
+                                  : os_deep_grey,
+                        )),
                   ),
                 ),
               ),
@@ -2566,7 +2619,10 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                       tap: () {
                         Navigator.pop(context);
                       },
-                      color: Color(0x16004DFF),
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? Color(0x33004DFF)
+                          : Color(0x16004DFF),
                       widget: Container(
                         width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
                         height: 40,

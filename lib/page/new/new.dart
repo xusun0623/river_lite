@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,9 @@ import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
+import 'package:provider/provider.dart';
 
 class PostNew extends StatefulWidget {
   int board_id;
@@ -234,14 +235,22 @@ class _PostNewState extends State<PostNew> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: os_back,
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
         elevation: 0,
         title: Text(
           sendSuccess ? "" : "发帖",
-          style: TextStyle(fontSize: 16, color: Color(0xFF2E2E2E)),
+          style: TextStyle(
+              fontSize: 16,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : Color(0xFF2E2E2E)),
         ),
         leading: IconButton(
-          icon: Icon(Icons.chevron_left_rounded, color: Color(0xFF2E2E2E)),
+          icon: Icon(Icons.chevron_left_rounded,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : Color(0xFF2E2E2E)),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -263,7 +272,8 @@ class _PostNewState extends State<PostNew> {
               ],
       ),
       body: Container(
-        color: os_back,
+        color:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
         child: sendSuccess
             ? SuccessDisplay()
             : Stack(
@@ -318,15 +328,28 @@ class _PostNewState extends State<PostNew> {
                         ? Container(
                             width: MediaQuery.of(context).size.width,
                             height: 250,
-                            color: os_white,
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_card
+                                : os_white,
                             child: [
-                              YourEmoji(tap: (emoji) {
-                                tip_controller.text += emoji;
-                              }),
-                              AtSomeone(tap: (uid, name) {
-                                tip_controller.text =
-                                    tip_controller.text + " @${name} ";
-                              }),
+                              YourEmoji(
+                                backgroundColor:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_back
+                                        : os_grey,
+                                tap: (emoji) {
+                                  tip_controller.text += emoji;
+                                },
+                              ),
+                              AtSomeone(
+                                  backgroundColor:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_back
+                                          : os_grey,
+                                  tap: (uid, name) {
+                                    tip_controller.text =
+                                        tip_controller.text + " @${name} ";
+                                  }),
                             ][pop_section_index],
                           )
                         : Container(),
@@ -336,7 +359,9 @@ class _PostNewState extends State<PostNew> {
                     bottom: pop_section ? 250 : 0,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: os_white,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_card
+                            : os_white,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(7),
                           topRight: Radius.circular(7),
@@ -358,6 +383,7 @@ class _PostNewState extends State<PostNew> {
                                   height: 40,
                                   child: Center(
                                     child: ListView(
+                                      physics: BouncingScrollPhysics(),
                                       scrollDirection: Axis.horizontal,
                                       children: _buildChildList(),
                                     ),
@@ -520,7 +546,9 @@ class _ChildColumnTipState extends State<ChildColumnTip> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_card
+            : os_white,
         child: Text(
           widget.name,
           style: TextStyle(
@@ -568,6 +596,9 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
       //左边按键区
       children: [
         myInkWell(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_card
+              : os_white,
           tap: () {
             widget.title_focus.unfocus();
             widget.tip_focus.unfocus();
@@ -593,6 +624,9 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
         ),
         Container(width: 15),
         myInkWell(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_card
+              : os_white,
           tap: () {
             widget.title_focus.unfocus();
             widget.tip_focus.unfocus();
@@ -618,6 +652,9 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
         ),
         Container(width: 15),
         myInkWell(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_card
+              : os_white,
           tap: () async {
             showActionSheet(
               context: context,
@@ -766,7 +803,7 @@ class _RightRowBtnState extends State<RightRowBtn> {
             padding: EdgeInsets.symmetric(horizontal: 7),
             margin: EdgeInsets.only(left: 5),
             decoration: BoxDecoration(
-              color: os_white,
+              color: Colors.transparent,
               borderRadius: BorderRadius.all(
                 Radius.circular(100),
               ),
@@ -931,7 +968,9 @@ class ColumnSpace extends StatelessWidget {
       width: MediaQuery.of(context).size.width - 30,
       height: 1,
       margin: EdgeInsets.symmetric(vertical: 10),
-      color: Color(0xFFEFEFEF),
+      color: Provider.of<ColorProvider>(context).isDark
+          ? Color.fromRGBO(255, 255, 255, 0.1)
+          : Color(0xFFEFEFEF),
     );
   }
 }
@@ -1094,7 +1133,9 @@ class SaveDraft extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
-          color: os_color_opa,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? Color.fromRGBO(0, 146, 255, 0.2)
+              : os_color_opa,
           borderRadius: BorderRadius.all(Radius.circular(100)),
         ),
         child: Center(
@@ -1132,13 +1173,18 @@ class ContInput extends StatelessWidget {
         cursorColor: os_color,
         style: TextStyle(
           height: 1.8,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_dark_white
+              : os_black,
         ),
         decoration: InputDecoration(
           contentPadding: EdgeInsets.only(bottom: 200, top: 10),
           border: InputBorder.none,
           hintStyle: TextStyle(
             height: 1.8,
-            color: Color(0xFFA3A3A3),
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_deep_grey
+                : Color(0xFFA3A3A3),
           ),
           hintText: "说点什么吧…",
         ),
@@ -1162,20 +1208,29 @@ class TitleInput extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_card
+            : os_white,
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
       child: TextField(
         controller: title_controller,
         focusNode: title_focus,
-        style: TextStyle(fontSize: 17),
+        style: TextStyle(
+          fontSize: 17,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+        ),
         cursorColor: os_color,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(15)),
             borderSide: BorderSide(
               width: 2,
-              color: os_color,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_color,
               style: BorderStyle.solid,
             ),
           ),
@@ -1183,7 +1238,9 @@ class TitleInput extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(15)),
             borderSide: BorderSide(
               width: 2,
-              color: os_white,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_card
+                  : os_white,
               style: BorderStyle.solid,
             ),
           ),
@@ -1226,7 +1283,9 @@ class _VoteMachineState extends State<VoteMachine> {
       margin: EdgeInsets.only(left: 15, right: 15, bottom: 115),
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       decoration: BoxDecoration(
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_card
+            : os_white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
@@ -1239,7 +1298,15 @@ class _VoteMachineState extends State<VoteMachine> {
                 children: [
                   os_svg(path: "lib/img/vote.svg", width: 22, height: 22),
                   Container(width: 2),
-                  Text("投票", style: TextStyle(fontSize: 15)),
+                  Text(
+                    "投票",
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_white
+                          : os_black,
+                    ),
+                  ),
                 ],
               ),
               GestureDetector(
@@ -1267,7 +1334,9 @@ class _VoteMachineState extends State<VoteMachine> {
               return Container(
                 margin: EdgeInsets.symmetric(vertical: 5),
                 decoration: BoxDecoration(
-                  color: Color(0xFFF1F4F8),
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_light_dark_card
+                      : Color(0xFFF1F4F8),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Row(
@@ -1280,6 +1349,11 @@ class _VoteMachineState extends State<VoteMachine> {
                         onTap: () {
                           widget.focus();
                         },
+                        style: TextStyle(
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
+                        ),
                         onChanged: (value) {
                           options[e["index"]]["txt"] = value;
                           print("${options}");
@@ -1288,6 +1362,11 @@ class _VoteMachineState extends State<VoteMachine> {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "请输入选项",
+                          hintStyle: TextStyle(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_dark_white
+                                : os_black,
+                          ),
                         ),
                       ),
                     ),
@@ -1348,7 +1427,13 @@ class _SelectTagState extends State<SelectTag> {
         padding: EdgeInsets.symmetric(horizontal: 10),
         margin: EdgeInsets.only(left: 5),
         decoration: BoxDecoration(
-          color: widget.selected ?? false ? os_color_opa : Color(0xFFF6F6F6),
+          color: widget.selected ?? false
+              ? (Provider.of<ColorProvider>(context).isDark
+                  ? Color.fromRGBO(0, 146, 255, 0.2)
+                  : os_color_opa)
+              : (Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_card
+                  : Color(0xFFF6F6F6)),
           borderRadius: BorderRadius.all(
             Radius.circular(100),
           ),

@@ -5,6 +5,8 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class Square extends StatefulWidget {
   const Square({Key key}) : super(key: key);
@@ -66,12 +68,17 @@ class _SquareState extends State<Square> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: os_back,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       appBar: AppBar(
-        // toolbarHeight: 0,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: os_back,
-        foregroundColor: os_black,
+        systemOverlayStyle: Provider.of<ColorProvider>(context).isDark
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark,
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         title: Text("全部板块", style: TextStyle(fontSize: 16)),
         leading: IconButton(
           icon: Icon(Icons.chevron_left_rounded),
@@ -169,6 +176,9 @@ class _SquareCardState extends State<SquareCard> {
             tap: () {
               Navigator.pushNamed(context, "/column", arguments: e["board_id"]);
             },
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_light_dark_card
+                : os_white,
             widget: Container(
               decoration: BoxDecoration(
                 color: Color.fromRGBO(0, 0, 0, 0.05),
@@ -177,7 +187,12 @@ class _SquareCardState extends State<SquareCard> {
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 17),
               child: Text(
                 e["board_name"],
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : os_black,
+                ),
               ),
             ),
             radius: 15,
@@ -195,7 +210,9 @@ class _SquareCardState extends State<SquareCard> {
       margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       decoration: BoxDecoration(
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_card
+            : os_white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
@@ -216,6 +233,9 @@ class _SquareCardState extends State<SquareCard> {
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : os_black,
                 ),
               ),
             ],

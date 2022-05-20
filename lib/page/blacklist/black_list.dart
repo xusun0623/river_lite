@@ -43,6 +43,9 @@ class _BlackListState extends State<BlackList> {
   _addNewWord() async {
     showModalBottomSheet(
       isScrollControlled: true,
+      backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
+          ? os_dark_back
+          : os_white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
@@ -66,6 +69,9 @@ class _BlackListState extends State<BlackList> {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : os_black,
                 ),
               ),
               Container(height: 10),
@@ -76,7 +82,10 @@ class _BlackListState extends State<BlackList> {
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
-                  color: os_grey,
+                  color:
+                      Provider.of<ColorProvider>(context, listen: false).isDark
+                          ? os_dark_card
+                          : os_grey,
                 ),
                 child: Center(
                   child: TextField(
@@ -86,11 +95,23 @@ class _BlackListState extends State<BlackList> {
                     onSubmitted: (e) {
                       _confirm();
                     },
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? os_dark_white
+                          : os_black,
+                    ),
                     cursorColor: os_deep_blue,
                     decoration: InputDecoration(
-                      hintText: "请输入",
-                      border: InputBorder.none,
-                    ),
+                        hintText: "请输入",
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color:
+                              Provider.of<ColorProvider>(context, listen: false)
+                                      .isDark
+                                  ? os_dark_dark_white
+                                  : os_deep_grey,
+                        )),
                   ),
                 ),
               ),
@@ -103,7 +124,10 @@ class _BlackListState extends State<BlackList> {
                       tap: () {
                         Navigator.pop(context);
                       },
-                      color: Color(0x16004DFF),
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? Color(0x33004DFF)
+                          : Color(0x16004DFF),
                       widget: Container(
                         width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
                         height: 40,
