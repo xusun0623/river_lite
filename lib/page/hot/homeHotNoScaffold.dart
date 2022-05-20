@@ -80,7 +80,8 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: os_back,
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       child: RefreshIndicator(
         color: os_color,
         onRefresh: () async {

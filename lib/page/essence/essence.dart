@@ -161,7 +161,8 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: os_back,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: RefreshIndicator(
         color: os_color,
         onRefresh: () async {

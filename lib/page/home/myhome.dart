@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
-import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/page/essence/essence.dart';
@@ -30,15 +29,20 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: os_back,
-        foregroundColor: os_black,
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         actions: [
           IconButton(
             onPressed: () {
               Navigator.pushNamed(context, "/search");
             },
             icon: os_svg(
-              path: "lib/img/search.svg",
+              path: Provider.of<ColorProvider>(context).isDark
+                  ? "lib/img/search_white.svg"
+                  : "lib/img/search.svg",
               width: 24,
               height: 24,
             ),
@@ -52,14 +56,20 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
             labelPadding: EdgeInsets.symmetric(horizontal: 12),
             isScrollable: true,
             splashBorderRadius: BorderRadius.all(Radius.circular(5)),
-            labelColor: Colors.black87,
+            labelColor: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : Colors.black87,
             unselectedLabelColor: Color(0xFF7A7A7A),
             unselectedLabelStyle: TextStyle(
               fontSize: 16,
             ),
             indicator: TabSizeIndicator(
               wantWidth: 20,
-              borderSide: BorderSide(width: 3.0, color: Colors.black87),
+              borderSide: BorderSide(
+                  width: 3.0,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : Colors.black87),
             ),
             labelStyle: TextStyle(
               fontWeight: FontWeight.bold,
@@ -86,7 +96,8 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           ),
         ),
       ),
-      backgroundColor: os_back,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: TabBarView(
         physics: CustomTabBarViewScrollPhysics(),
         controller: tabController,

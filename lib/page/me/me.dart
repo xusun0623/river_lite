@@ -66,11 +66,16 @@ class _MeState extends State<Me> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
-        backgroundColor: os_white,
-        foregroundColor: os_black,
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         elevation: 0,
       ),
-      backgroundColor: os_white,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
       body: RefreshIndicator(
         color: os_deep_blue,
         onRefresh: () async {
@@ -202,21 +207,27 @@ class _MeListState extends State<MeList> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 27.5, vertical: 18.5),
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               widget.txt ?? "水滴相关",
               style: TextStyle(
-                color: Color(0xFF5C5C5C),
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : Color(0xFF5C5C5C),
                 fontSize: 16,
               ),
             ),
-            os_svg(
-              path: "lib/img/me_arrow_right.svg",
-              width: 7,
-              height: 14,
+            Icon(
+              Icons.chevron_right_rounded,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : Color(0xFFD3D3D3),
+              size: 24,
             ),
           ],
         ),
@@ -316,7 +327,9 @@ class _MeBtnHeroState extends State<MeBtnHero> {
             });
         },
         radius: 20,
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_card
+            : os_white,
         widget: Container(
           width: 60 + (widget.txt ?? "收藏").length * 14.0,
           padding: EdgeInsets.symmetric(vertical: 12.5),
@@ -324,25 +337,29 @@ class _MeBtnHeroState extends State<MeBtnHero> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Hero(
-                tag: widget.img ?? "lib/img/me/btn1.svg",
+                tag:
+                    "lib/img/${Provider.of<ColorProvider>(context).isDark ? "me_dark" : "me"}/btn${widget.type}.svg",
                 child: Material(
                   color: Colors.transparent,
                   child: os_svg(
-                    path: widget.img ?? "lib/img/me/btn1.svg",
+                    path:
+                        "lib/img/${Provider.of<ColorProvider>(context).isDark ? "me_dark" : "me"}/btn${widget.type}.svg",
                     width: 32,
                     height: 32,
                   ),
                 ),
               ),
               Hero(
-                tag: widget.txt ?? "收藏",
+                tag: widget.txt,
                 child: Material(
                   color: Colors.transparent,
                   child: Text(
-                    widget.txt ?? "收藏",
+                    widget.txt,
                     style: TextStyle(
                       fontSize: 15,
-                      color: Color(0xFF505050),
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_white
+                          : Color(0xFF505050),
                     ),
                   ),
                 ),
@@ -424,7 +441,9 @@ class MeInfo_HeadState extends State<MeInfoHead> {
         }
       },
       child: Container(
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
         padding: EdgeInsets.only(left: 25, right: 25, bottom: 40, top: 50),
         child: Row(
           children: [
@@ -452,7 +471,9 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                            color: os_grey,
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_deep_grey
+                                : os_grey,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(100)),
                           ),
@@ -473,13 +494,19 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_black,
                   ),
                 ),
                 Container(height: 5),
                 Row(
                   children: [
                     Text("Lv.${_getLevel()}",
-                        style: TextStyle(color: Color(0xFF707070))),
+                        style: TextStyle(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : Color(0xFF707070))),
                     Container(width: 5),
                     Stack(
                       children: [

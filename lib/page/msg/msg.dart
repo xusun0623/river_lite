@@ -9,7 +9,6 @@ import 'package:offer_show/components/BottomTip.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
-import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -93,8 +92,12 @@ class _MsgState extends State<Msg> {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: os_white,
-        foregroundColor: os_black,
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         elevation: 0,
         title: Text(
           "消息",
@@ -103,7 +106,9 @@ class _MsgState extends State<Msg> {
         centerTitle: true,
       ),
       body: Container(
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
         child: RefreshIndicator(
           color: Color(0xFF2FCC7E),
           onRefresh: () async {
@@ -175,6 +180,7 @@ class _MsgState extends State<Msg> {
                   : BottomTip(
                       top: 25,
                       bottom: 5,
+                      color: os_deep_grey,
                       txt: "- 私信内容 -",
                     ),
               _msgProvider.pmMsgArr.length != 0
@@ -241,7 +247,9 @@ class _ColorBtnState extends State<ColorBtn> {
                 badgeContent: Text(
                   widget.count.toString(),
                   style: TextStyle(
-                    color: os_white,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_white,
                     fontSize: 10,
                   ),
                 ),
@@ -336,7 +344,9 @@ class _MsgCardState extends State<MsgCard> {
                         widget.data["toUserName"],
                         style: TextStyle(
                           fontSize: 16,
-                          color: Color(0xFF000000),
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : Color(0xFF000000),
                         ),
                       ),
                       os_svg(
@@ -358,7 +368,9 @@ class _MsgCardState extends State<MsgCard> {
                           ),
                         ).toString(),
                     style: TextStyle(
-                      color: Color(0xFFA0A0A0),
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_deep_grey
+                          : Color(0xFFA0A0A0),
                       fontSize: 14,
                     ),
                   ),

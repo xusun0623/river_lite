@@ -55,6 +55,7 @@ flutter:
     - lib/img/home/
     - lib/img/msg/
     - lib/img/me/
+    - lib/img/me_dark/
     - lib/collect_btn/
     - lib/page/msg_three/
     - lib/lottie/

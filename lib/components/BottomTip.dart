@@ -4,11 +4,13 @@ class BottomTip extends StatefulWidget {
   String txt;
   double top;
   double bottom;
+  Color color;
   BottomTip({
     Key key,
     this.txt,
     this.top,
     this.bottom,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -25,7 +27,7 @@ class _BottomTipState extends State<BottomTip> {
         child: Text(
           widget.txt ?? "分割线",
           style: TextStyle(
-            color: Color(0xFFDBDBDB),
+            color: widget.color ?? Color(0xFFDBDBDB),
           ),
         ),
       ),

@@ -155,7 +155,8 @@ class _HomeNewReplyState extends State<HomeNewReply>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: os_back,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: RefreshIndicator(
         color: os_color,
         onRefresh: () async {
