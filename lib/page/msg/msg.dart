@@ -233,10 +233,13 @@ class _ColorBtnState extends State<ColorBtn> {
       child: Container(
         child: Stack(
           children: [
-            os_svg(
-              path: widget.path,
-              width: 108,
-              height: 51,
+            Opacity(
+              opacity: Provider.of<ColorProvider>(context).isDark ? 0.6 : 1,
+              child: os_svg(
+                path: widget.path,
+                width: 108,
+                height: 51,
+              ),
             ),
             Positioned(
               top: 14,
@@ -263,7 +266,9 @@ class _ColorBtnState extends State<ColorBtn> {
                         child: Text(
                           widget.title,
                           style: TextStyle(
-                            color: os_white,
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : os_white,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),

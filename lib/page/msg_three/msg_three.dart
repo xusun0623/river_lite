@@ -11,6 +11,8 @@ import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class MsgThree extends StatefulWidget {
   int type; //0-@我 1-回复 2-通知
@@ -186,14 +188,18 @@ class _MsgThreeState extends State<MsgThree> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: colors[widget.type],
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : colors[widget.type],
         foregroundColor: os_white,
         systemOverlayStyle: SystemUiOverlayStyle.light,
         elevation: 0,
         leading: BackIcon(),
       ),
       body: Container(
-        color: colors[widget.type],
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : colors[widget.type],
         height: MediaQuery.of(context).size.height,
         child: Stack(
           children: [
@@ -206,7 +212,9 @@ class _MsgThreeState extends State<MsgThree> {
                     MediaQuery.of(context).padding.top -
                     125,
                 decoration: BoxDecoration(
-                  color: os_white,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_card
+                      : os_white,
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
                 margin: EdgeInsets.symmetric(horizontal: os_edge),
@@ -288,7 +296,9 @@ class _SysNotiState extends State<SysNoti> {
                           widget.data["user_name"],
                           style: TextStyle(
                             fontSize: 16,
-                            color: Color(0xFF000000),
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_dark_white
+                                : Color(0xFF000000),
                           ),
                         ),
                         Row(
@@ -300,7 +310,10 @@ class _SysNotiState extends State<SysNoti> {
                                 ),
                               ),
                               style: TextStyle(
-                                color: Color(0xFFCCCCCC),
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_deep_grey
+                                        : Color(0xFFCCCCCC),
                                 fontSize: 14,
                               ),
                             ),
@@ -391,7 +404,9 @@ class _ForumCardState extends State<ForumCard> {
                         widget.data["author"],
                         style: TextStyle(
                           fontSize: 16,
-                          color: Color(0xFF000000),
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_dark_white
+                              : Color(0xFF000000),
                         ),
                       ),
                       os_svg(
@@ -406,7 +421,9 @@ class _ForumCardState extends State<ForumCard> {
                       ? Container()
                       : Container(
                           decoration: BoxDecoration(
-                            color: os_black_opa_opa,
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? Color(0x11FFFFFF)
+                                : os_black_opa_opa,
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           margin: EdgeInsets.symmetric(vertical: 5),
@@ -446,7 +463,9 @@ class _ForumCardState extends State<ForumCard> {
                             ),
                           ),
                       style: TextStyle(
-                        color: Color.fromARGB(255, 57, 57, 57),
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_dark_white
+                            : Color.fromARGB(255, 57, 57, 57),
                         fontSize: 14,
                       ),
                     ),
@@ -509,7 +528,9 @@ class Head extends StatelessWidget {
                   child: Text(
                     "   ${titles[widget.type]}",
                     style: TextStyle(
-                      color: os_white,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_white
+                          : os_white,
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
                     ),
@@ -517,10 +538,13 @@ class Head extends StatelessWidget {
                 ),
               ),
             ),
-            os_svg(
-              path: "lib/page/msg_three/${widget.type + 1}.svg",
-              width: 80,
-              height: 80,
+            Opacity(
+              opacity: Provider.of<ColorProvider>(context).isDark ? 0 : 1,
+              child: os_svg(
+                path: "lib/page/msg_three/${widget.type + 1}.svg",
+                width: 80,
+                height: 80,
+              ),
             )
           ],
         ),

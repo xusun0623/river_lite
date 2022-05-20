@@ -22,6 +22,8 @@ import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Color theme = Color(0xFF4577f6);
@@ -222,9 +224,15 @@ class MsgDetailState extends State<MsgDetail> {
     return Scaffold(
       backgroundColor: os_white,
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: os_white,
-        foregroundColor: os_black,
+        systemOverlayStyle: Provider.of<ColorProvider>(context).isDark
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark,
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         elevation: 0,
         toolbarHeight: 56,
         leading: BackButton(),
@@ -243,6 +251,9 @@ class MsgDetailState extends State<MsgDetail> {
           pmList.length == 0 && !load_done
               ? Loading()
               : Container(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_back
+                      : os_white,
                   height: MediaQuery.of(context).size.height -
                       MediaQuery.of(context).padding.top,
                   child: RefreshIndicator(
@@ -425,15 +436,27 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
     return Positioned(
       bottom: 0,
       child: Container(
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
         padding: EdgeInsets.only(bottom: 30, top: 10),
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: os_edge),
           decoration: BoxDecoration(
-            color: _focusNode.hasFocus ? os_white : Color(0xFFEEEEEE),
+            color: _focusNode.hasFocus
+                ? (Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : os_white)
+                : (Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : Color(0xFFEEEEEE)),
             borderRadius: BorderRadius.all(Radius.circular(20)),
             border: Border.all(
-              color: _focusNode.hasFocus ? os_deep_blue : Colors.transparent,
+              color: _focusNode.hasFocus
+                  ? (Provider.of<ColorProvider>(context).isDark
+                      ? os_light_dark_card
+                      : os_deep_blue)
+                  : Colors.transparent,
               width: 2,
             ),
           ),
@@ -477,12 +500,22 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                     onSubmitted: (e) {
                                       _send();
                                     },
+                                    style: TextStyle(
+                                      color: Provider.of<ColorProvider>(context)
+                                              .isDark
+                                          ? os_dark_white
+                                          : os_black,
+                                    ),
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.only(left: 15),
                                       border: InputBorder.none,
                                       hintStyle: TextStyle(
                                         height: 1.8,
-                                        color: Color(0xFFA3A3A3),
+                                        color:
+                                            Provider.of<ColorProvider>(context)
+                                                    .isDark
+                                                ? os_dark_dark_white
+                                                : Color(0xFFA3A3A3),
                                       ),
                                       hintText: dont_send_flag
                                           ? "由于河畔后台限制，请稍等 ${dont_send_clock} 秒…"
@@ -508,11 +541,18 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                   color: Colors.transparent,
                                   widget: Padding(
                                     padding: const EdgeInsets.all(10),
-                                    child: os_svg(
-                                      path: "lib/img/topic_emoji.svg",
-                                      width: 25,
-                                      height: 25,
-                                    ),
+                                    child: Provider.of<ColorProvider>(context)
+                                            .isDark
+                                        ? Icon(
+                                            Icons.emoji_emotions,
+                                            size: 30,
+                                            color: Color(0xFF004DFF),
+                                          )
+                                        : os_svg(
+                                            path: "lib/img/topic_emoji.svg",
+                                            width: 25,
+                                            height: 25,
+                                          ),
                                   ),
                                   radius: 100,
                                 ),
@@ -643,6 +683,10 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                               : Container(),
                           img_urls.length != 0
                               ? myInkWell(
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_back
+                                          : os_white,
                                   tap: () {
                                     img_urls = [];
                                     setState(() {});
@@ -980,10 +1024,20 @@ class _LookRoomState extends State<LookRoom> {
         tap: () {
           toUserSpace(context, widget.uid);
         },
-        color: Color(0xFFEEEEEE),
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_light_dark_card
+            : Color(0xFFEEEEEE),
         widget: Container(
           padding: EdgeInsets.symmetric(horizontal: 12.5),
-          child: Center(child: Text("查看空间")),
+          child: Center(
+              child: Text(
+            "查看空间",
+            style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_black,
+            ),
+          )),
         ),
         radius: 100,
       ),
@@ -1077,7 +1131,10 @@ class BackButton extends StatelessWidget {
       onPressed: () {
         Navigator.pop(context);
       },
-      icon: Icon(Icons.chevron_left_rounded, color: os_black),
+      icon: Icon(Icons.chevron_left_rounded,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black),
     );
   }
 }
