@@ -46,14 +46,17 @@ class _DetailContState extends State<DetailCont> {
         child: SizedBox(
           width: 30,
           height: 30,
-          child: CachedNetworkImage(
-            placeholder: (context, url) => Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: os_grey,
+          child: Opacity(
+            opacity: Provider.of<ColorProvider>(context).isDark ? 0.65 : 1,
+            child: CachedNetworkImage(
+              placeholder: (context, url) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: os_grey,
+                ),
               ),
+              imageUrl: tmp[i].substring(0, first_idx),
             ),
-            imageUrl: tmp[i].substring(0, first_idx),
           ),
         ),
       ));
@@ -122,7 +125,7 @@ class _DetailContState extends State<DetailCont> {
             );
           },
           child: Opacity(
-            opacity: Provider.of<ColorProvider>(context).isDark ? 0.6 : 1,
+            opacity: Provider.of<ColorProvider>(context).isDark ? 0.65 : 1,
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(7.5)),
               child: Container(

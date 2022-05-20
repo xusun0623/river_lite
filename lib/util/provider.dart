@@ -3,15 +3,10 @@ import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 
 class ColorProvider extends ChangeNotifier {
-  bool autoDark = false;
   bool isDark = false;
 
   switchMode() async {
     await setStorage(key: "dark", value: isDark ? "1" : "");
-  }
-
-  switchAutoMode() async {
-    await setStorage(key: "auto", value: autoDark ? "1" : "");
   }
 
   refresh() {

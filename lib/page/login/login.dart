@@ -110,6 +110,9 @@ class _LoginState extends State<Login> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_white
+                          : os_black,
                     ),
                   ),
                   Container(height: 10),
@@ -120,6 +123,9 @@ class _LoginState extends State<Login> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_dark_white
+                            : os_black,
                       ),
                     ),
                   ),
@@ -133,7 +139,9 @@ class _LoginState extends State<Login> {
                       height: 45,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
-                        color: Color.fromRGBO(0, 77, 255, 0.1),
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_light_dark_card
+                            : Color.fromRGBO(0, 77, 255, 0.1),
                       ),
                       child: Center(
                         child: Text(
@@ -142,7 +150,9 @@ class _LoginState extends State<Login> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Color.fromRGBO(0, 77, 255, 1),
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_dark_white
+                                : Color.fromRGBO(0, 77, 255, 1),
                           ),
                         ),
                       ),
@@ -351,6 +361,9 @@ class _LoginInputState extends State<LoginInput> {
               focusNode: u_focus,
               style: TextStyle(
                 letterSpacing: 0.5,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
               ),
               onChanged: (t) {
                 widget.change(u_controller.text, p_controller.text);
@@ -393,6 +406,9 @@ class _LoginInputState extends State<LoginInput> {
               obscureText: isHide,
               style: TextStyle(
                 letterSpacing: 0.5,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
               ),
               onChanged: (t) {
                 widget.change(u_controller.text, p_controller.text);

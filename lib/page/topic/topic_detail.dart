@@ -1324,9 +1324,16 @@ class _TopicVoteState extends State<TopicVote> {
           width: MediaQuery.of(context).size.width - 50,
           margin: EdgeInsets.symmetric(vertical: 4),
           decoration: BoxDecoration(
-            color: os_white,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_light_dark_card
+                : os_white,
             borderRadius: BorderRadius.all(Radius.circular(7.5)),
-            border: Border.all(color: selected ? os_color : Color(0xFFCCCCCC)),
+            border: Border.all(
+                color: selected
+                    ? (Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : os_color)
+                    : Color(0xFFCCCCCC)),
           ),
           child: Stack(
             alignment: AlignmentDirectional.center,
@@ -1347,7 +1354,14 @@ class _TopicVoteState extends State<TopicVote> {
                                     widget.poll_info["voters"]) +
                                 0.00001
                           ],
-                          colors: [os_color_opa, os_white],
+                          colors: [
+                            Provider.of<ColorProvider>(context).isDark
+                                ? Color(0x22FFFFFF)
+                                : os_color_opa,
+                            Provider.of<ColorProvider>(context).isDark
+                                ? os_light_dark_card
+                                : os_white
+                          ],
                         ),
                       ),
                 child: Center(
@@ -1358,29 +1372,18 @@ class _TopicVoteState extends State<TopicVote> {
                           (element["name"].toString()),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: selected ? os_color : os_black,
+                        color: selected
+                            ? (Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : os_color)
+                            : (Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_dark_white
+                                : os_black),
                       ),
                     ),
                   ),
                 ),
               ),
-              // selected
-              //     ? Positioned(
-              //         left: 0.5,
-              //         child: Container(
-              //           decoration: BoxDecoration(
-              //             color: os_color_opa,
-              //             borderRadius: BorderRadius.only(
-              //               topLeft: Radius.circular(6),
-              //               bottomLeft: Radius.circular(6),
-              //             ),
-              //           ),
-              //           width: (MediaQuery.of(context).size.width - 50) *
-              //               (element["total_num"] / widget.poll_info["voters"]),
-              //           height: 34.5,
-              //         ),
-              //       )
-              //     : Container(),
               Positioned(
                 child: Text(
                   selected
@@ -1391,7 +1394,13 @@ class _TopicVoteState extends State<TopicVote> {
                           "%"
                       : "投票",
                   style: TextStyle(
-                    color: selected ? os_color : os_black,
+                    color: selected
+                        ? (Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_white
+                            : os_color)
+                        : (Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_white
+                            : os_black),
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                   ),
@@ -1425,7 +1434,9 @@ class _TopicVoteState extends State<TopicVote> {
             margin: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
             padding: EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-              color: Color(0xFFF6F6F6),
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_light_dark_card
+                  : Color(0xFFF6F6F6),
               borderRadius: BorderRadius.all(Radius.circular(7.5)),
             ),
             child: Column(
@@ -1789,21 +1800,31 @@ class _CommentState extends State<Comment> {
               onTap: () {
                 if (widget.data["reply_name"] != "匿名")
                   toUserSpace(
-                      context,
-                      int.parse(widget.data["icon"]
-                          .toString()
-                          .split("uid=")[1]
-                          .split("&size=")[0]));
+                    context,
+                    int.parse(widget.data["icon"]
+                        .toString()
+                        .split("uid=")[1]
+                        .split("&size=")[0]),
+                  );
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
-                child: CachedNetworkImage(
-                  imageUrl: widget.data["icon"],
-                  placeholder: (context, url) =>
-                      Container(color: os_grey, width: 35, height: 35),
-                  width: 35,
-                  height: 35,
-                  fit: BoxFit.cover,
+                child: Opacity(
+                  opacity:
+                      Provider.of<ColorProvider>(context).isDark ? 0.65 : 1,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.data["icon"],
+                    placeholder: (context, url) => Container(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? Color(0x22FFFFFF)
+                          : os_grey,
+                      width: 35,
+                      height: 35,
+                    ),
+                    width: 35,
+                    height: 35,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -1850,10 +1871,16 @@ class _CommentState extends State<Comment> {
                           Container(width: 5),
                           widget.data["reply_id"] == widget.host_id &&
                                   widget.data["reply_name"] != "匿名"
-                              ? Tag(
-                                  txt: "楼主",
-                                  color: os_white,
-                                  color_opa: Color(0xFF2EA6FF),
+                              ? Opacity(
+                                  opacity:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? 0.65
+                                          : 1,
+                                  child: Tag(
+                                    txt: "楼主",
+                                    color: os_white,
+                                    color_opa: Color(0xFF2EA6FF),
+                                  ),
                                 )
                               : Container(),
                         ],

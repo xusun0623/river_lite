@@ -105,57 +105,6 @@ class _AccountState extends State<Account> {
     List<Widget> tmp = [];
     tmp.addAll([
       Container(height: 25),
-      SwitchListTile(
-        onChanged: (change_val) {
-          Provider.of<ColorProvider>(context, listen: false).autoDark =
-              change_val;
-          Provider.of<ColorProvider>(context, listen: false).switchAutoMode();
-          Provider.of<ColorProvider>(context, listen: false).refresh();
-        },
-        value: Provider.of<ColorProvider>(context).autoDark,
-        title: Text(
-          "深色模式跟随系统",
-          style: TextStyle(
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_white
-                : os_black,
-          ),
-        ),
-        subtitle: Text(
-          "开启后将随着系统自动切换深色模式",
-          style: TextStyle(
-            color: os_deep_grey,
-          ),
-        ),
-      ),
-      Provider.of<ColorProvider>(context).autoDark
-          ? Container()
-          : SwitchListTile(
-              onChanged: (change_val) {
-                Provider.of<ColorProvider>(context, listen: false).isDark =
-                    change_val;
-                Provider.of<ColorProvider>(context, listen: false).switchMode();
-                Provider.of<ColorProvider>(context, listen: false).refresh();
-              },
-              value: Provider.of<ColorProvider>(context).isDark,
-              title: Text(
-                "深色模式",
-                style: TextStyle(
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : os_black,
-                ),
-              ),
-              subtitle: Text(
-                Provider.of<ColorProvider>(context).isDark
-                    ? "已开启深色模式"
-                    : "已关闭深色模式",
-                style: TextStyle(
-                  color: os_deep_grey,
-                ),
-              ),
-            ),
-      Container(height: 25),
       ListTile(
         onTap: () {
           showModal(

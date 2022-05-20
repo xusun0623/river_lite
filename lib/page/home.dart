@@ -90,27 +90,18 @@ class _HomeState extends State<Home> {
     Provider.of<ColorProvider>(context, listen: false).refresh();
   }
 
-  _getAutoDarkMode() async {
-    String auto_dark_mode_txt = await getStorage(key: "auto", initData: "1");
-    Provider.of<ColorProvider>(context, listen: false).autoDark =
-        auto_dark_mode_txt != "";
-    Provider.of<ColorProvider>(context, listen: false).refresh();
-  }
-
   _nowMode(BuildContext context) {
-    if (Provider.of<ColorProvider>(context).autoDark) {
-      if (window.platformBrightness == Brightness.dark &&
-          !Provider.of<ColorProvider>(context, listen: false).isDark) {
-        Provider.of<ColorProvider>(context, listen: false).isDark = true;
-        Provider.of<ColorProvider>(context, listen: false).switchMode();
-        Provider.of<ColorProvider>(context, listen: false).refresh();
-      }
-      if (window.platformBrightness == Brightness.light &&
-          Provider.of<ColorProvider>(context, listen: false).isDark) {
-        Provider.of<ColorProvider>(context, listen: false).isDark = false;
-        Provider.of<ColorProvider>(context, listen: false).switchMode();
-        Provider.of<ColorProvider>(context, listen: false).refresh();
-      }
+    if (window.platformBrightness == Brightness.dark &&
+        !Provider.of<ColorProvider>(context, listen: false).isDark) {
+      Provider.of<ColorProvider>(context, listen: false).isDark = true;
+      Provider.of<ColorProvider>(context, listen: false).switchMode();
+      Provider.of<ColorProvider>(context, listen: false).refresh();
+    }
+    if (window.platformBrightness == Brightness.light &&
+        Provider.of<ColorProvider>(context, listen: false).isDark) {
+      Provider.of<ColorProvider>(context, listen: false).isDark = false;
+      Provider.of<ColorProvider>(context, listen: false).switchMode();
+      Provider.of<ColorProvider>(context, listen: false).refresh();
     }
   }
 
@@ -118,7 +109,6 @@ class _HomeState extends State<Home> {
   void initState() {
     _setTab();
     _getDarkMode();
-    _getAutoDarkMode();
     _getNewMsg();
     _getBlackStatus();
     super.initState();

@@ -1034,7 +1034,9 @@ class SuccessDisplay extends StatelessWidget {
           Icon(
             Icons.done,
             size: 50,
-            color: os_deep_blue,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_deep_blue,
           ),
           Container(height: 10),
           Text(
@@ -1042,6 +1044,9 @@ class SuccessDisplay extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 24,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
             ),
           ),
           Container(height: 10),
@@ -1052,6 +1057,9 @@ class SuccessDisplay extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : os_black,
               ),
             ),
           ),
@@ -1071,7 +1079,9 @@ class SuccessDisplay extends StatelessWidget {
               height: 45,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: Color.fromRGBO(0, 77, 255, 1),
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : Color.fromRGBO(0, 77, 255, 1),
               ),
               child: Center(
                 child: Text(
@@ -1080,7 +1090,9 @@ class SuccessDisplay extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: os_white,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_white,
                   ),
                 ),
               ),
