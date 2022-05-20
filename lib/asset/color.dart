@@ -18,6 +18,8 @@ final os_middle_grey = Color(0xFFD3D3D3); //浅灰
 final os_dark_white = Color(0xFFd1d1d1); //深色模式下的文字白
 final os_dark_dark_white = Color(0xFF999999); //深色模式下的文字白
 final os_dark_card = Color(0xFF191919); //深色模式下的卡片
+final os_light_dark_card = Color(0xFF222222); //深色模式下的卡片
+final os_light_light_dark_card = Color(0xFF333333); //深色模式下的卡片
 final os_dark_back = Color(0xFF111111); //深色模式下的背景
 
 final os_back = Color(0xFFF1F4F8); //浅灰

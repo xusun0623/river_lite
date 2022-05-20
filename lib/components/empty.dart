@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class Empty extends StatefulWidget {
   String txt;
@@ -19,11 +22,20 @@ class _EmptyState extends State<Empty> {
       padding: EdgeInsets.symmetric(vertical: 60),
       child: Column(
         children: [
-          Image(
-            image: AssetImage("lib/img/empty.png"),
-            width: 200,
-            height: 200,
-          ),
+          Provider.of<ColorProvider>(context).isDark
+              ? Icon(
+                  Icons.hourglass_empty_rounded,
+                  color: os_deep_grey,
+                  size: 75,
+                )
+              : Image(
+                  image: AssetImage("lib/img/empty.png"),
+                  width: 200,
+                  height: 200,
+                ),
+          Provider.of<ColorProvider>(context).isDark
+              ? Container(height: 20)
+              : Container(),
           Text(
             widget.txt ?? "暂无评论, 快去抢沙发吧~",
             style: TextStyle(

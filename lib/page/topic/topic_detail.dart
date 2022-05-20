@@ -11,7 +11,6 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
-import 'package:offer_show/asset/uploadAttachment.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
@@ -312,11 +311,13 @@ class _TopicDetailState extends State<TopicDetail> {
     return Scaffold(
       appBar: data == null || data["topic"] == null
           ? AppBar(
-              backgroundColor: os_white,
+              backgroundColor: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_card
+                  : os_white,
               foregroundColor: os_black,
               leading: IconButton(
                 icon: Icon(Icons.chevron_left_rounded),
-                color: os_black,
+                color: os_dark_card,
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -324,12 +325,16 @@ class _TopicDetailState extends State<TopicDetail> {
               elevation: 0,
             )
           : AppBar(
-              backgroundColor: os_white,
+              backgroundColor: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_card
+                  : os_white,
               foregroundColor: os_black,
               elevation: 0,
               leading: IconButton(
                 icon: Icon(Icons.chevron_left_rounded),
-                color: os_black,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : os_dark_card,
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -348,6 +353,8 @@ class _TopicDetailState extends State<TopicDetail> {
                           }),
                     ],
             ),
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_card : os_white,
       body: data == null || data["topic"] == null
           ? Loading(
               showError: load_done,
@@ -377,7 +384,9 @@ class _TopicDetailState extends State<TopicDetail> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: os_white,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_card
+                            : os_white,
                       ),
                       child: RefreshIndicator(
                         onRefresh: () async {
@@ -582,7 +591,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
             width: MediaQuery.of(context).size.width,
             height: popSection ? 200 : 250,
             decoration: BoxDecoration(
-                color: os_white,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : os_white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15),
@@ -603,7 +614,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                       child: Row(
                         children: [
                           SendFunc(
-                            path: "lib/img/topic_emoji.svg",
+                            path: Provider.of<ColorProvider>(context).isDark
+                                ? "lib/img/topic_dark_func/topic_emoji.svg"
+                                : "lib/img/topic_emoji.svg",
                             tap: () {
                               widget.focusNode.unfocus();
                               popSectionIndex = 0;
@@ -613,7 +626,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                             },
                           ),
                           SendFunc(
-                            path: "lib/img/topic_@.svg",
+                            path: Provider.of<ColorProvider>(context).isDark
+                                ? "lib/img/topic_dark_func/topic_@.svg"
+                                : "lib/img/topic_@.svg",
                             tap: () async {
                               widget.focusNode.unfocus();
                               popSectionIndex = 1;
@@ -624,7 +639,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                           ),
                           SendFunc(
                             nums: image.length == 0 ? null : image.length,
-                            path: "lib/img/topic_picture.svg",
+                            path: Provider.of<ColorProvider>(context).isDark
+                                ? "lib/img/topic_dark_func/topic_picture.svg"
+                                : "lib/img/topic_picture.svg",
                             tap: () async {
                               final ImagePicker _picker = ImagePicker();
                               //选好了图片
@@ -660,6 +677,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                           controller: widget.controller,
                           style: TextStyle(
                             height: 1.8,
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : os_black,
                           ),
                           cursorColor: Color(0xFF004DFF),
                           decoration: InputDecoration(
@@ -667,7 +687,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                             hintText: widget.placeholder ?? "请在此编辑回复",
                             hintStyle: TextStyle(
                               height: 1.8,
-                              color: Color(0xFFBBBBBB),
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_dark_white
+                                  : Color(0xFFBBBBBB),
                             ),
                           ),
                         ),
@@ -679,6 +701,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     myInkWell(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_light_dark_card
+                          : os_white,
                       tap: () {
                         widget.cancel();
                       },
@@ -690,7 +715,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                             "取消",
                             style: TextStyle(
                               fontSize: 16,
-                              color: Color(0xFF656565),
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_white
+                                  : Color(0xFF656565),
                             ),
                           ),
                         ),
@@ -728,7 +755,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
           popSection
               ? Container(
                   width: MediaQuery.of(context).size.width,
-                  color: os_white,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_light_dark_card
+                      : os_white,
                   height: popHeight,
                   child: popSectionIndex == 0
                       ? YourEmoji(
@@ -786,10 +815,20 @@ class _YourEmojiState extends State<YourEmoji> {
         },
         widget: Padding(
           padding: const EdgeInsets.all(5),
-          child: Image.asset(
-            "lib/emoji/1/[a_${element}].gif",
-            width: widget.size ?? 37,
-            height: widget.size ?? 37,
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(12.5)),
+            child: Container(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_white
+                  : Colors.transparent,
+              width: widget.size ?? 37,
+              height: widget.size ?? 37,
+              child: Image.asset(
+                "lib/emoji/1/[a_${element}].gif",
+                width: widget.size ?? 37,
+                height: widget.size ?? 37,
+              ),
+            ),
           ),
         ),
       ));
@@ -853,7 +892,9 @@ class _YourEmojiState extends State<YourEmoji> {
     return Container(
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: widget.backgroundColor ?? os_grey,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_card
+            : (widget.backgroundColor ?? os_grey),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: ListView(
@@ -863,7 +904,13 @@ class _YourEmojiState extends State<YourEmoji> {
             padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
             child: Text(
               "阿鲁",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
+              ),
             ),
           ),
           Padding(
@@ -876,7 +923,13 @@ class _YourEmojiState extends State<YourEmoji> {
             padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Text(
               "兔斯基",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
+              ),
             ),
           ),
           Padding(
@@ -889,7 +942,13 @@ class _YourEmojiState extends State<YourEmoji> {
             padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Text(
               "Emoji",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
+              ),
             ),
           ),
           Padding(
@@ -958,7 +1017,13 @@ class _AtSomeoneState extends State<AtSomeone> {
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: Text(
             "可以@的人",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
           ),
         ),
       ));
@@ -979,7 +1044,11 @@ class _AtSomeoneState extends State<AtSomeone> {
                 Container(width: 10),
                 Text(
                   element["name"],
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : os_black),
                 ),
               ],
             ),
@@ -1032,7 +1101,8 @@ class _AtSomeoneState extends State<AtSomeone> {
     return Container(
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: os_grey,
+        color:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_card : os_grey,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: ListView(
@@ -1063,6 +1133,9 @@ class _SendFuncState extends State<SendFunc> {
   @override
   Widget build(BuildContext context) {
     return myInkWell(
+      color: Provider.of<ColorProvider>(context).isDark
+          ? os_light_dark_card
+          : os_white,
       tap: () {
         widget.tap();
       },
@@ -1075,14 +1148,18 @@ class _SendFuncState extends State<SendFunc> {
                     width: 15,
                     height: 15,
                     decoration: BoxDecoration(
-                      color: Color(0x22004DFF),
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : Color(0x22004DFF),
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Center(
                       child: Text(
                         widget.nums.toString(),
                         style: TextStyle(
-                          color: Color(0xFF004DFF),
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_back
+                              : Color(0xFF004DFF),
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                         ),
@@ -1121,7 +1198,9 @@ class Divider extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: 15,
       decoration: BoxDecoration(
-        color: Color(0xFFF6F6F6),
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_light_dark_card
+            : Color(0xFFF6F6F6),
         borderRadius: BorderRadius.all(Radius.circular(2)),
       ),
     );
@@ -1397,13 +1476,6 @@ class _CommentsTabState extends State<CommentsTab> {
         if (idx != widget.sort) {
           widget.bindSort(idx);
         }
-        // showMidActionSheet(
-        //     context: context,
-        //     list: ["按时间正序", "按时间倒序"],
-        //     title: "排序方式",
-        //     select: (idx) {
-        //       widget.bindSort(idx);
-        //     });
       },
       select: widget.select,
       sort: widget.sort,
@@ -1428,7 +1500,8 @@ class _CommentTabState extends State<CommentTab> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      color: os_white,
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_card : os_white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -1444,7 +1517,9 @@ class _CommentTabState extends State<CommentTab> {
                     Text(
                       "评论区",
                       style: TextStyle(
-                        color: Color(0xFF454545),
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_dark_white
+                            : Color(0xFF454545),
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -1472,7 +1547,9 @@ class _CommentTabState extends State<CommentTab> {
                     Text(
                       "只看楼主",
                       style: TextStyle(
-                        color: Color(0xFF454545),
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_dark_white
+                            : Color(0xFF454545),
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -1495,7 +1572,9 @@ class _CommentTabState extends State<CommentTab> {
           Container(
             padding: EdgeInsets.all(2),
             decoration: BoxDecoration(
-              color: Color(0xFFF3F3F3),
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_light_dark_card
+                  : Color(0xFFF3F3F3),
               borderRadius: BorderRadius.all(Radius.circular(100)),
             ),
             child: Row(
@@ -1508,13 +1587,21 @@ class _CommentTabState extends State<CommentTab> {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 9, vertical: 2),
                     decoration: BoxDecoration(
-                      color: widget.sort == 0 ? os_white : Colors.transparent,
+                      color: widget.sort == 0
+                          ? (Provider.of<ColorProvider>(context).isDark
+                              ? os_light_light_dark_card
+                              : os_white)
+                          : Colors.transparent,
                       borderRadius: BorderRadius.all(Radius.circular(100)),
                     ),
                     child: Text(
                       "正序",
                       style: TextStyle(
-                        color: widget.sort == 0 ? os_black : os_deep_grey,
+                        color: widget.sort == 0
+                            ? (Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : os_black)
+                            : os_deep_grey,
                       ),
                     ),
                   ),
@@ -1526,13 +1613,21 @@ class _CommentTabState extends State<CommentTab> {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 9, vertical: 2),
                     decoration: BoxDecoration(
-                      color: widget.sort == 1 ? os_white : Colors.transparent,
+                      color: widget.sort == 1
+                          ? (Provider.of<ColorProvider>(context).isDark
+                              ? os_light_light_dark_card
+                              : os_white)
+                          : Colors.transparent,
                       borderRadius: BorderRadius.all(Radius.circular(100)),
                     ),
                     child: Text(
                       "倒序",
                       style: TextStyle(
-                        color: widget.sort == 1 ? os_black : os_deep_grey,
+                        color: widget.sort == 1
+                            ? (Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : os_black)
+                            : os_deep_grey,
                       ),
                     ),
                   ),
@@ -1716,7 +1811,9 @@ class _CommentState extends State<Comment> {
                           Text(
                             widget.data["reply_name"],
                             style: TextStyle(
-                              color: Color(0xFF333333),
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_dark_white
+                                  : Color(0xFF333333),
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
@@ -1834,7 +1931,9 @@ class _CommentState extends State<Comment> {
                           padding: EdgeInsets.fromLTRB(16, 13, 16, 13),
                           margin: EdgeInsets.only(top: 10),
                           decoration: BoxDecoration(
-                            color: Color(0x09000000),
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? Color(0x0AFFFFFF)
+                                : Color(0x09000000),
                             borderRadius: BorderRadius.all(Radius.circular(13)),
                           ),
                           child: RichText(
@@ -1854,7 +1953,12 @@ class _CommentState extends State<Comment> {
                                     text: widget.data["quote_content"]
                                         .split("发表于")[1]
                                         .split("\n")[1],
-                                    style: TextStyle(color: Color(0xFF464646)),
+                                    style: TextStyle(
+                                        color:
+                                            Provider.of<ColorProvider>(context)
+                                                    .isDark
+                                                ? os_dark_dark_white
+                                                : Color(0xFF464646)),
                                   ),
                                 ]),
                           ),
@@ -1975,7 +2079,9 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
     return Positioned(
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_light_dark_card
+              : Colors.white,
           border: Border(
             top: BorderSide(
               color: os_black_opa_opa,
@@ -1994,7 +2100,9 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
                 widget.tapEdit();
               },
               radius: 10,
-              color: os_white,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_light_dark_card
+                  : os_white,
               widget: Container(
                 width: MediaQuery.of(context).size.width - 76,
                 height: 47,
@@ -2032,10 +2140,6 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Icon(
-                          //   Icons.favorite,
-                          //   color: liked == 1 ? os_color : Color(0xFFcccccc),
-                          // ),
                           os_svg(
                             path: liked == 1
                                 ? "lib/img/detail_like_blue.svg"
@@ -2088,10 +2192,6 @@ class _TopicBottomState extends State<TopicBottom> {
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 0, vertical: 2),
-              decoration: BoxDecoration(
-                  // color: os_color_opa,
-                  // borderRadius: BorderRadius.all(Radius.circular(5))
-                  ),
               child: Text(
                 "收录自专栏: " + widget.data["forumName"] + " >",
                 style: TextStyle(color: os_color),
@@ -2278,6 +2378,9 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
           ),
           Row(children: [
             myInkWell(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_card
+                    : os_white,
                 tap: () {
                   _giveWater();
                 },
@@ -2308,6 +2411,9 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                 ),
                 radius: 10),
             myInkWell(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_card
+                    : os_white,
                 tap: () async {
                   showToast(
                       context: context, type: XSToast.loading, txt: "请稍后");
@@ -2368,6 +2474,9 @@ class TopicDetailTitle extends StatelessWidget {
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
         ),
       ),
     );
@@ -2519,6 +2628,8 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
   @override
   Widget build(BuildContext context) {
     return myInkWell(
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_card : os_white,
       tap: () {
         List<ActionItem> _buildAction() {
           List<ActionItem> tmp = [];
@@ -2596,11 +2707,16 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       },
       widget: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: os_svg(
-          path: "lib/img/topic_detail_more.svg",
-          width: 29,
-          height: 29,
-        ),
+        child: Provider.of<ColorProvider>(context).isDark
+            ? Icon(
+                Icons.more_horiz_rounded,
+                color: os_dark_dark_white,
+              )
+            : os_svg(
+                path: "lib/img/topic_detail_more.svg",
+                width: 29,
+                height: 29,
+              ),
       ),
       radius: 100,
     );
@@ -2634,7 +2750,11 @@ class TopicDetailHead extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: os_white, width: 2),
+                  border: Border.all(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_card
+                          : os_white,
+                      width: 2),
                   borderRadius: BorderRadius.all(Radius.circular(100)),
                 ),
                 child: ClipRRect(

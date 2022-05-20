@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/page/me/me.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Loading extends StatefulWidget {
@@ -33,7 +35,9 @@ class _LoadingState extends State<Loading> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: widget.backgroundColor ?? os_white,
+      color: Provider.of<ColorProvider>(context, listen: false).isDark
+          ? os_dark_card
+          : (widget.backgroundColor ?? os_white),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -15,7 +15,9 @@ import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
+import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
   const Search({Key key}) : super(key: key);
@@ -128,7 +130,9 @@ class _SearchState extends State<Search> {
             width: MediaQuery.of(context).size.width - 30,
             margin: EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
-              color: os_white,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_card
+                  : os_white,
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             child: Empty(
@@ -181,9 +185,14 @@ class _SearchState extends State<Search> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: os_back,
-        foregroundColor: os_black,
+        systemOverlayStyle: Provider.of<ColorProvider>(context).isDark
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark,
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         elevation: 0,
         actions: [
           SearchBtn(
@@ -198,6 +207,9 @@ class _SearchState extends State<Search> {
           icon: Icon(
             Icons.chevron_left_rounded,
             size: 28,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_deep_grey
+                : os_black,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -234,7 +246,9 @@ class _SearchState extends State<Search> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          color: Color(0xFFF1F4F8),
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
           child: ListView(
             controller: _scrollController,
             physics: BouncingScrollPhysics(),
@@ -411,7 +425,9 @@ class _HistoryTagState extends State<HistoryTag> {
             widget.tap(widget.txt);
           }
         },
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_light_dark_card
+            : os_white,
         widget: Container(
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7.5),
           child: Text(
@@ -444,6 +460,9 @@ class _UserListCardState extends State<UserListCard> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
       child: myInkWell(
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_card
+            : os_white,
         tap: () async {
           int uid = await getUid();
           Navigator.pushNamed(
@@ -467,7 +486,9 @@ class _UserListCardState extends State<UserListCard> {
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: os_grey,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_deep_grey
+                          : os_grey,
                       borderRadius: BorderRadius.all(Radius.circular(100)),
                     ),
                   ),
@@ -488,9 +509,11 @@ class _UserListCardState extends State<UserListCard> {
                         Text(
                           widget.data["name"],
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_white
+                                  : os_black),
                         ),
                         Container(width: 5),
                         widget.data["userTitle"].toString().length < 6
@@ -587,13 +610,18 @@ class _SearchLeftState extends State<SearchLeft> {
       height: 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_light_dark_card
+            : os_white,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           myInkWell(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_light_dark_card
+                : os_white,
             tap: () {
               widget.commentFocus.unfocus();
               showMidActionSheet(
@@ -617,17 +645,20 @@ class _SearchLeftState extends State<SearchLeft> {
                   Text(
                     select_idx == 0 ? "帖子" : "用户",
                     style: TextStyle(
-                      color: Color(0xFF004DFF),
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : os_deep_blue,
                       fontSize: 16,
                     ),
                   ),
                   Container(width: 2),
                   Container(
                     margin: EdgeInsets.only(top: 2),
-                    child: os_svg(
-                      path: "lib/img/search_filter.svg",
-                      width: 7.9,
-                      height: 10,
+                    child: Icon(
+                      Icons.arrow_drop_down_outlined,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : os_deep_blue,
                     ),
                   ),
                 ],
@@ -635,7 +666,7 @@ class _SearchLeftState extends State<SearchLeft> {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width - 195,
+            width: MediaQuery.of(context).size.width - 207,
             child: TextField(
               onSubmitted: (context) {
                 widget.confirm();
@@ -644,11 +675,16 @@ class _SearchLeftState extends State<SearchLeft> {
                 if (widget.focus != null) widget.focus();
               },
               controller: widget.controller,
-              cursorColor: os_black,
+              cursorColor: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_black,
               cursorWidth: 1.5,
               focusNode: widget.commentFocus,
               style: TextStyle(
                 fontSize: 16,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : os_black,
               ),
               decoration: InputDecoration(
                 suffixIcon: IconButton(
@@ -666,6 +702,11 @@ class _SearchLeftState extends State<SearchLeft> {
                     ),
                     size: 20,
                   ),
+                ),
+                hintStyle: TextStyle(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_deep_grey
+                      : os_middle_grey,
                 ),
                 hintText: "搜一搜",
                 border: InputBorder.none,
@@ -701,14 +742,15 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
     return Padding(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
       child: myInkWell(
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_card
+            : os_white,
         tap: () {
           widget.tap();
-          // print("hhhhhh${widget.data}");
           Navigator.pushNamed(
             context,
             "/topic_detail",
             arguments: widget.data["topic_id"],
-            // arguments: 1903247,
           );
         },
         widget: Container(
@@ -729,14 +771,19 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                           child: Container(
                             width: 35,
                             height: 35,
-                            color: os_wonderful_color_opa[widget.index % 7],
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_light_light_dark_card
+                                : os_wonderful_color_opa[widget.index % 7],
                             child: Center(
                               child: Text(
                                 widget.data["user_nick_name"].length == 0
                                     ? "X"
                                     : widget.data["user_nick_name"][0],
                                 style: TextStyle(
-                                  color: os_wonderful_color[widget.index % 7],
+                                  color: Provider.of<ColorProvider>(context)
+                                          .isDark
+                                      ? os_dark_white
+                                      : os_wonderful_color[widget.index % 7],
                                 ),
                               ),
                             ),
@@ -749,7 +796,10 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                             Text(
                               widget.data["user_nick_name"],
                               style: TextStyle(
-                                color: Color(0xFF636363),
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_dark_white
+                                        : Color(0xFF636363),
                                 fontSize: 15,
                               ),
                             ),
@@ -760,7 +810,10 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                                 ),
                               ),
                               style: TextStyle(
-                                color: Color(0xFFC4C4C4),
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_deep_grey
+                                        : Color(0xFFC4C4C4),
                                 fontSize: 12,
                               ),
                             ),
@@ -779,6 +832,9 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w500,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_white
+                          : os_black,
                     ),
                   ),
                 ),
@@ -791,7 +847,9 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFFA3A3A3),
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_deep_grey
+                          : Color(0xFFA3A3A3),
                     ),
                   ),
                 ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 void showMidActionSheet({
   @required BuildContext context,
@@ -13,6 +15,9 @@ void showMidActionSheet({
     for (var i = 0; i < list.length; i++) {
       tmp.add(
         myInkWell(
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_dark_card
+              : os_white,
           tap: () {
             select(i);
             Navigator.pop(context);
@@ -25,7 +30,13 @@ void showMidActionSheet({
               child: Center(
                 child: Text(
                   list[i],
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Provider.of<ColorProvider>(context, listen: false)
+                            .isDark
+                        ? os_dark_white
+                        : os_black,
+                  ),
                 ),
               ),
             ),
@@ -37,6 +48,9 @@ void showMidActionSheet({
   }
 
   AlertDialog alert = AlertDialog(
+    backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
+        ? os_dark_card
+        : os_white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
         Radius.circular(15),
@@ -50,6 +64,9 @@ void showMidActionSheet({
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
+            color: Provider.of<ColorProvider>(context, listen: false).isDark
+                ? os_dark_white
+                : os_black,
           ),
         ),
       ),
@@ -82,6 +99,9 @@ void showModal({
   Function cancel,
 }) {
   AlertDialog alert = AlertDialog(
+    backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
+        ? os_dark_card
+        : os_white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
         Radius.circular(15),
@@ -95,6 +115,9 @@ void showModal({
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
+            color: Provider.of<ColorProvider>(context, listen: false).isDark
+                ? os_dark_white
+                : os_black,
           ),
         ),
       ),
@@ -102,6 +125,11 @@ void showModal({
     content: Text(
       cont ?? "内容",
       textAlign: TextAlign.center,
+      style: TextStyle(
+        color: Provider.of<ColorProvider>(context, listen: false).isDark
+            ? os_dark_dark_white
+            : os_black,
+      ),
     ),
     actions: [
       Padding(
@@ -110,6 +138,9 @@ void showModal({
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             myInkWell(
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_dark_card
+                  : os_white,
               widget: Container(
                 width: 130,
                 height: 50,
@@ -118,6 +149,10 @@ void showModal({
                     cancelTxt ?? "取消",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? os_dark_dark_white
+                          : os_black,
                     ),
                   ),
                 ),
@@ -129,7 +164,9 @@ void showModal({
               },
             ),
             myInkWell(
-              color: os_color_opa,
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_light_dark_card
+                  : os_color_opa,
               widget: Container(
                 width: 130,
                 height: 50,
@@ -137,7 +174,10 @@ void showModal({
                   child: Text(
                     confirmTxt ?? "确认",
                     style: TextStyle(
-                      color: os_color,
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? os_dark_white
+                          : os_color,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -273,7 +313,9 @@ void popDialog({
   context_tmp = context;
   showDialog(
     context: context,
-    barrierColor: back,
+    barrierColor: Provider.of<ColorProvider>(context, listen: false).isDark
+        ? Colors.transparent
+        : back,
     barrierDismissible: false,
     builder: (ctx) {
       return Material(
@@ -284,6 +326,9 @@ void popDialog({
             return;
           },
           child: Container(
+            color: Provider.of<ColorProvider>(context, listen: false).isDark
+                ? Colors.transparent
+                : os_white,
             margin: EdgeInsets.only(bottom: 150),
             child: Container(child: Center(child: widget)),
           ),

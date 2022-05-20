@@ -15,6 +15,8 @@ import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TopicColumn extends StatefulWidget {
@@ -57,6 +59,17 @@ class _TopicColumnState extends State<TopicColumn> {
               ["classificationType_id"],
       "sortby": "new",
     });
+    Api().certain_forum_topiclist({
+      "page": (data["list"].length / 10 + 1).toInt() + 1,
+      "pageSize": 10,
+      "boardId": widget.columnID,
+      "filterType": "typeid",
+      "filterId": data == null || select == 0
+          ? ""
+          : data["classificationType_list"][select - 1]
+              ["classificationType_id"],
+      "sortby": "new",
+    });
     if (tmp != null && tmp["list"] != null) data["list"].addAll(tmp["list"]);
     load_done = data["list"].length < 10;
     loading_more = false;
@@ -70,6 +83,18 @@ class _TopicColumnState extends State<TopicColumn> {
     });
     var tmp = await Api().certain_forum_topiclist({
       "page": 1,
+      "pageSize": 10,
+      "boardId": widget.columnID,
+      "filterType": "typeid",
+      "filterId": data == null || select == 0
+          ? ""
+          : data["classificationType_list"][select - 1]
+              ["classificationType_id"],
+      "sortby": "new",
+      "topOrder": 1,
+    });
+    Api().certain_forum_topiclist({
+      "page": 2,
       "pageSize": 10,
       "boardId": widget.columnID,
       "filterType": "typeid",
@@ -138,6 +163,9 @@ class _TopicColumnState extends State<TopicColumn> {
               style: TextStyle(
                 fontSize: 29,
                 fontWeight: FontWeight.w900,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
               ),
             ),
             Container(width: 10),
@@ -148,7 +176,9 @@ class _TopicColumnState extends State<TopicColumn> {
                       width: 20,
                       height: 20,
                       child: CircularProgressIndicator(
-                        color: os_black,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_white
+                            : os_black,
                         strokeWidth: 2.5,
                       ),
                     ),
@@ -254,11 +284,14 @@ class _TopicColumnState extends State<TopicColumn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: os_back,
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.chevron_left_rounded),
-            color: os_black,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_dark_white
+                : os_black,
             onPressed: () {
               Navigator.pop(context);
             },
@@ -277,11 +310,15 @@ class _TopicColumnState extends State<TopicColumn> {
           title: Text(
             showTopTitle ? data["forumInfo"]["title"] : "",
             style: TextStyle(
-              color: os_black,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_black,
               fontSize: 16,
             ),
           ),
-          backgroundColor: os_back,
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? (!loading ? os_dark_back : os_dark_card)
+              : os_back,
           elevation: 0,
         ),
         body: data == null || data["list"] == null
@@ -357,6 +394,9 @@ class _TopSectionState extends State<TopSection> {
           padding: EdgeInsets.symmetric(horizontal: os_edge),
           margin: EdgeInsets.only(top: 10),
           child: myInkWell(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_card
+                : os_white,
             tap: () {
               launch("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
                   element["id"].toString());
@@ -409,6 +449,9 @@ class _TopSectionState extends State<TopSection> {
           itemCount: widget.data.length,
           itemBuilder: (context, index) {
             return myInkWell(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_card
+                  : os_white,
               tap: () {
                 Navigator.pushNamed(context, "/topic_detail",
                     arguments: widget.data[widget.data.length - 1 - index]
@@ -422,7 +465,9 @@ class _TopSectionState extends State<TopSection> {
                     Icon(
                       Icons.vertical_align_top_rounded,
                       size: 18,
-                      color: os_black,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : os_black,
                     ),
                     Container(width: 7.5),
                     Container(
@@ -432,7 +477,10 @@ class _TopSectionState extends State<TopSection> {
                             .toString()
                             .split("")
                             .join("\u{200B}"),
-                        style: TextStyle(color: os_black),
+                        style: TextStyle(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_dark_white
+                                : os_black),
                       ),
                     ),
                   ],
@@ -491,6 +539,9 @@ class _DefineTabBarState extends State<DefineTabBar> {
       width: MediaQuery.of(context).size.width - os_edge * 2,
       margin: EdgeInsets.symmetric(horizontal: os_edge),
       child: myInkWell(
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_card
+            : os_white,
         tap: () {
           widget.fold();
         },
@@ -510,6 +561,9 @@ class _DefineTabBarState extends State<DefineTabBar> {
                   widget.themes[widget.select],
                   style: TextStyle(
                     fontSize: 17,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : os_black,
                   ),
                 ),
               ),

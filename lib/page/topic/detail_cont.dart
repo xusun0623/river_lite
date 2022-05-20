@@ -9,6 +9,8 @@ import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/emoji/emoji.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
@@ -77,6 +79,9 @@ class _DetailContState extends State<DetailCont> {
                         style: TextStyle(
                           fontSize: 60,
                           height: 1.6,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
                         ),
                         text: widget.data["infor"].toString().trim(),
                       ),
@@ -89,6 +94,9 @@ class _DetailContState extends State<DetailCont> {
                         style: TextStyle(
                           fontSize: 16,
                           height: 1.6,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
                         ),
                         children: _getRichText(
                           widget.data["infor"].indexOf("本帖最后由") > -1

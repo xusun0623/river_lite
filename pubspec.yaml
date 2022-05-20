@@ -61,4 +61,6 @@ flutter:
     - lib/lottie/
     - lib/img/about/1.png
     - lib/img/explore/
+    - lib/img/topic_dark_func/
+    
     
