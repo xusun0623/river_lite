@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/modal.dart';
-import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -100,9 +99,66 @@ class _AccountState extends State<Account> {
     });
   }
 
+  void _switchMode(bool isShow) {
+    Provider.of<ColorProvider>(context, listen: false).isDark = isShow;
+    Provider.of<ColorProvider>(context, listen: false).switchMode();
+    Provider.of<ColorProvider>(context).refresh();
+  }
+
   List<Widget> _buildWidget() {
     List<Widget> tmp = [];
     tmp.addAll([
+      Container(height: 25),
+      SwitchListTile(
+        onChanged: (change_val) {
+          Provider.of<ColorProvider>(context, listen: false).autoDark =
+              change_val;
+          Provider.of<ColorProvider>(context, listen: false).switchAutoMode();
+          Provider.of<ColorProvider>(context, listen: false).refresh();
+        },
+        value: Provider.of<ColorProvider>(context).autoDark,
+        title: Text(
+          "深色模式跟随系统",
+          style: TextStyle(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
+          ),
+        ),
+        subtitle: Text(
+          "开启后将随着系统自动切换深色模式",
+          style: TextStyle(
+            color: os_deep_grey,
+          ),
+        ),
+      ),
+      Provider.of<ColorProvider>(context).autoDark
+          ? Container()
+          : SwitchListTile(
+              onChanged: (change_val) {
+                Provider.of<ColorProvider>(context, listen: false).isDark =
+                    change_val;
+                Provider.of<ColorProvider>(context, listen: false).switchMode();
+                Provider.of<ColorProvider>(context, listen: false).refresh();
+              },
+              value: Provider.of<ColorProvider>(context).isDark,
+              title: Text(
+                "深色模式",
+                style: TextStyle(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
+                ),
+              ),
+              subtitle: Text(
+                Provider.of<ColorProvider>(context).isDark
+                    ? "已开启深色模式"
+                    : "已关闭深色模式",
+                style: TextStyle(
+                  color: os_deep_grey,
+                ),
+              ),
+            ),
       Container(height: 25),
       ListTile(
         onTap: () {
@@ -122,23 +178,44 @@ class _AccountState extends State<Account> {
                 setStorage(key: "draft", value: "[]");
                 setStorage(key: "search-history", value: "[]");
                 setState(() {});
+                Navigator.pop(context);
               });
         },
         title: Row(
           children: [
-            Icon(Icons.logout, color: os_black),
+            Icon(Icons.logout,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black),
             Container(width: 5),
-            Text("退出登录"),
+            Text(
+              "退出登录",
+              style: TextStyle(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
+              ),
+            ),
           ],
         ),
-        subtitle: Text("即将退出登录，并删除你在本地的所有个人信息和收藏，请确认"),
+        subtitle: Text(
+          "即将退出登录，并删除你在本地的所有个人信息和收藏，请确认",
+          style: TextStyle(
+            color: os_deep_grey,
+          ),
+        ),
       ),
       Container(height: 20),
       ListTile(
         subtitle: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("快速切换账号"),
+            Text(
+              "快速切换账号",
+              style: TextStyle(
+                color: os_deep_grey,
+              ),
+            ),
             IconButton(
               onPressed: () {
                 _setManage();
@@ -160,7 +237,14 @@ class _AccountState extends State<Account> {
     ]);
     for (int i = 0; i < accountData.length; i++) {
       tmp.add(ListTile(
-        title: Text(accountData[i]["name"]),
+        title: Text(
+          accountData[i]["name"],
+          style: TextStyle(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
+          ),
+        ),
         onTap: () {
           if (i == logined) return;
           _switchLogin(accountData[i]["name"], accountData[i]["password"], i);
@@ -195,7 +279,10 @@ class _AccountState extends State<Account> {
                     },
                   );
                 },
-                icon: Icon(Icons.delete_outline_rounded),
+                icon: Icon(
+                  Icons.delete_outline_rounded,
+                  color: os_deep_grey,
+                ),
               ),
             ],
           ),
@@ -213,10 +300,19 @@ class _AccountState extends State<Account> {
           style: ButtonStyle(
             padding: MaterialStateProperty.all(
                 EdgeInsets.symmetric(vertical: 20, horizontal: 40)),
-            backgroundColor: MaterialStateProperty.all(os_white),
-            foregroundColor: MaterialStateProperty.all(os_black),
+            backgroundColor: MaterialStateProperty.all(
+                Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_back
+                    : os_white),
+            foregroundColor: MaterialStateProperty.all(
+                Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black),
             elevation: MaterialStateProperty.all(0),
-            overlayColor: MaterialStateProperty.all(os_grey),
+            overlayColor: MaterialStateProperty.all(
+                Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : os_grey),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -243,12 +339,17 @@ class _AccountState extends State<Account> {
   Widget build(BuildContext context) {
     TabShowProvider provider = Provider.of<TabShowProvider>(context);
     return Scaffold(
-      backgroundColor: os_white,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
       appBar: AppBar(
-        backgroundColor: os_white,
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
         elevation: 0,
         title: Text("账号管理", style: TextStyle(fontSize: 16)),
-        foregroundColor: os_black,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);

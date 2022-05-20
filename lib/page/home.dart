@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:ui';
 
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -81,9 +83,42 @@ class _HomeState extends State<Home> {
     Provider.of<BlackProvider>(context, listen: false).black = black_info_map;
   }
 
+  _getDarkMode() async {
+    String dark_mode_txt = await getStorage(key: "dark", initData: "");
+    Provider.of<ColorProvider>(context, listen: false).isDark =
+        dark_mode_txt != "";
+    Provider.of<ColorProvider>(context, listen: false).refresh();
+  }
+
+  _getAutoDarkMode() async {
+    String auto_dark_mode_txt = await getStorage(key: "auto", initData: "1");
+    Provider.of<ColorProvider>(context, listen: false).autoDark =
+        auto_dark_mode_txt != "";
+    Provider.of<ColorProvider>(context, listen: false).refresh();
+  }
+
+  _nowMode(BuildContext context) {
+    if (Provider.of<ColorProvider>(context).autoDark) {
+      if (window.platformBrightness == Brightness.dark &&
+          !Provider.of<ColorProvider>(context, listen: false).isDark) {
+        Provider.of<ColorProvider>(context, listen: false).isDark = true;
+        Provider.of<ColorProvider>(context, listen: false).switchMode();
+        Provider.of<ColorProvider>(context, listen: false).refresh();
+      }
+      if (window.platformBrightness == Brightness.light &&
+          Provider.of<ColorProvider>(context, listen: false).isDark) {
+        Provider.of<ColorProvider>(context, listen: false).isDark = false;
+        Provider.of<ColorProvider>(context, listen: false).switchMode();
+        Provider.of<ColorProvider>(context, listen: false).refresh();
+      }
+    }
+  }
+
   @override
   void initState() {
     _setTab();
+    _getDarkMode();
+    _getAutoDarkMode();
     _getNewMsg();
     _getBlackStatus();
     super.initState();
@@ -91,6 +126,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    _nowMode(context);
     HomeRefrshProvider provider = Provider.of<HomeRefrshProvider>(context);
     TabShowProvider tabShowProvider = Provider.of<TabShowProvider>(context);
     os_width = MediaQuery.of(context).size.width;

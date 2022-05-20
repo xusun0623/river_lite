@@ -1,27 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/storage.dart';
 
 class ColorProvider extends ChangeNotifier {
+  bool autoDark = false;
   bool isDark = false;
-  Color os_back = Color(0xFFF1F4F8); //浅灰
 
-  switchLightMode() {
-    os_back = Color(0xFFF1F4F8); //浅灰
-    isDark = false;
+  switchMode() async {
+    await setStorage(key: "dark", value: isDark ? "1" : "");
   }
 
-  switchDarkMode() {
-    os_back = Color(0xFF1f2121); //深色
-    isDark = true;
-  }
-
-  switchMode() {
-    if (isDark) {
-      switchDarkMode();
-    } else {
-      switchLightMode();
-    }
-    refresh();
+  switchAutoMode() async {
+    await setStorage(key: "auto", value: autoDark ? "1" : "");
   }
 
   refresh() {

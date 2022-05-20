@@ -8,6 +8,8 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class UserList extends StatefulWidget {
   Map data;
@@ -90,8 +92,11 @@ class _UserListState extends State<UserList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: os_back,
-        foregroundColor: os_black,
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         elevation: 0,
         title: Text(
           widget.data["type"] == 0 ? "粉丝" : "关注",
@@ -106,7 +111,8 @@ class _UserListState extends State<UserList> {
           },
         ),
       ),
-      backgroundColor: os_back,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: RefreshIndicator(
         onRefresh: () async {
           return await _getData();
@@ -138,6 +144,9 @@ class _UserListCardState extends State<UserListCard> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
       child: myInkWell(
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_card
+            : os_white,
         tap: () async {
           int uid = await getUid();
           Navigator.pushNamed(
@@ -184,6 +193,9 @@ class _UserListCardState extends State<UserListCard> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : os_black,
                           ),
                         ),
                         Container(width: 5),

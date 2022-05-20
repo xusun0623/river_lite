@@ -83,11 +83,16 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: os_white,
-        foregroundColor: os_black,
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         elevation: 0,
       ),
-      backgroundColor: os_white,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
       body: showSuccess
           ? Container(
               width: MediaQuery.of(context).size.width,
@@ -170,7 +175,9 @@ class _LoginState extends State<Login> {
                         LoginSubmit(
                           txt: "注册账号",
                           color: Color.fromRGBO(34, 34, 34, 0.1),
-                          fontColor: os_black,
+                          fontColor: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_dark_white
+                              : os_black,
                           tap: () {
                             launch(
                                 "http://bbs.uestc.edu.cn/member.php?mod=register&mobile=no");
@@ -329,8 +336,15 @@ class _LoginInputState extends State<LoginInput> {
             margin:
                 EdgeInsets.symmetric(horizontal: 2 * os_edge, vertical: 7.5),
             decoration: BoxDecoration(
+              border: Border.all(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? Color(0x11FFFFFF)
+                    : os_white,
+              ),
               borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color.fromRGBO(0, 0, 0, 0.08),
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_card
+                  : Color.fromRGBO(0, 0, 0, 0.08),
             ),
             child: TextField(
               controller: u_controller,
@@ -363,8 +377,15 @@ class _LoginInputState extends State<LoginInput> {
             margin:
                 EdgeInsets.symmetric(horizontal: 2 * os_edge, vertical: 7.5),
             decoration: BoxDecoration(
+              border: Border.all(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? Color(0x11FFFFFF)
+                    : os_white,
+              ),
               borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Color.fromRGBO(0, 0, 0, 0.08),
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_card
+                  : Color.fromRGBO(0, 0, 0, 0.08),
             ),
             child: TextField(
               controller: p_controller,
@@ -445,7 +466,9 @@ class _LoginHeadState extends State<LoginHead> {
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.w900,
-              color: os_black,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
             ),
           ),
           Container(height: 5),

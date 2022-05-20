@@ -138,7 +138,6 @@ class _PersonCenterState extends State<PersonCenter> {
     }
     data.forEach((element) {
       tmp.add(Topic(
-        // backgroundColor: Colors.white54,
         data: element,
         top: 0,
         bottom: 10,
@@ -187,12 +186,16 @@ class _PersonCenterState extends State<PersonCenter> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        foregroundColor: os_black,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         title: Text(
           showTopTitle ? userInfo["name"] : "",
           style: TextStyle(
-            fontSize: 16,
-          ),
+              fontSize: 16,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black),
         ),
         leading: IconButton(
           onPressed: () {
@@ -240,9 +243,13 @@ class _PersonCenterState extends State<PersonCenter> {
                           ),
                         )
                       ],
-        backgroundColor: Color(0xFFF3F3F3),
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : Color(0xFFF3F3F3),
       ),
-      backgroundColor: Color(0xFFF3F3F3),
+      backgroundColor: Provider.of<ColorProvider>(context).isDark
+          ? os_dark_back
+          : Color(0xFFF3F3F3),
       body: userInfo == null
           ? Loading(
               backgroundColor: Color(0xFFF3F3F3),
@@ -417,7 +424,11 @@ class _PersonIndexTabState extends State<PersonIndexTab> {
                         ? ""
                         : "(${widget.countNum})"),
                 style: TextStyle(
-                  color: widget.select ? os_black : Color(0xFF7B7B7B),
+                  color: widget.select
+                      ? (Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_white
+                          : os_black)
+                      : Color(0xFF7B7B7B),
                   fontSize: 15,
                 ),
               ),
@@ -457,8 +468,15 @@ class _PersonCardState extends State<PersonCard> {
 
   BoxDecoration _getBoxDecoration() {
     return BoxDecoration(
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_light_dark_card
+            : os_white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
+        border: Border.all(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? Color(0x11FFFFFF)
+              : os_white,
+        ),
         boxShadow: [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.05),
@@ -806,7 +824,9 @@ class _SignState extends State<Sign> {
           if (widget.tap != null) widget.tap();
         },
         radius: 10,
-        color: os_grey,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? Color(0x11FFFFFF)
+            : os_grey,
         widget: Container(
           width: MediaQuery.of(context).size.width - 60,
           padding: EdgeInsets.symmetric(
@@ -823,7 +843,9 @@ class _SignState extends State<Sign> {
               Icon(
                 Icons.edit_calendar_outlined,
                 size: 15,
-                color: Color(0xFF666666),
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : Color(0xFF666666),
               ),
               Container(width: 5),
               Container(
@@ -834,7 +856,9 @@ class _SignState extends State<Sign> {
                       : widget.data["sign"],
                   style: TextStyle(
                     fontSize: 13,
-                    color: Color(0xFF666666),
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : Color(0xFF666666),
                   ),
                 ),
               ),
@@ -874,13 +898,23 @@ class _PersonRowState extends State<PersonRow> {
           index: 0,
           count: widget.follow,
         ),
-        Container(width: 1, height: 27, color: Color(0xFFF1F1F1)),
+        Container(
+            width: 1,
+            height: 27,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? Color(0x11FFFFFF)
+                : Color(0xFFF1F1F1)),
         PersonColumn(
           uid: widget.uid,
           index: 1,
           count: widget.friend,
         ),
-        Container(width: 1, height: 27, color: Color(0xFFF1F1F1)),
+        Container(
+            width: 1,
+            height: 27,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? Color(0x11FFFFFF)
+                : Color(0xFFF1F1F1)),
         PersonColumn(
           index: 2,
           count: widget.score,
@@ -939,7 +973,9 @@ class _PersonColumnState extends State<PersonColumn> {
       child: Container(
         width: (MediaQuery.of(context).size.width - 100) / 3,
         height: 90,
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_light_dark_card
+            : os_white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -973,6 +1009,9 @@ class _PersonColumnState extends State<PersonColumn> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : os_black,
                   ),
                 ),
               ],
@@ -1099,7 +1138,13 @@ class _PersonNameState extends State<PersonName> {
         children: [
           Text(
             widget.name,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
           ),
         ],
       ),

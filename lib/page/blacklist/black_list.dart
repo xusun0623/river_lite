@@ -193,7 +193,14 @@ class _BlackListState extends State<BlackList> {
           }
           setState(() {});
         },
-        title: Text(data[i]),
+        title: Text(
+          data[i],
+          style: TextStyle(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
+          ),
+        ),
         trailing: Icon(
           select.indexOf(i) > -1
               ? Icons.radio_button_checked_rounded
@@ -240,9 +247,12 @@ class _BlackListState extends State<BlackList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: os_back,
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
         elevation: 0,
-        foregroundColor: os_black,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         title: Text(
           "黑名单关键词",
           style: TextStyle(fontSize: 16),
@@ -290,7 +300,8 @@ class _BlackListState extends State<BlackList> {
           },
         ),
       ),
-      backgroundColor: os_back,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: _buildWidget(),
@@ -309,7 +320,9 @@ class InfoTip extends StatelessWidget {
           EdgeInsets.only(left: os_edge, right: os_edge, top: 20, bottom: 10),
       padding: EdgeInsets.symmetric(horizontal: os_edge * 1.5, vertical: 20),
       decoration: BoxDecoration(
-        color: os_color_opa,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? Color.fromRGBO(0, 146, 255, 0.2)
+            : os_color_opa,
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
       child: Row(

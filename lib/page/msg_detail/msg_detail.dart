@@ -801,7 +801,9 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
       ret.add(WidgetSpan(
         child: Container(
           decoration: BoxDecoration(
-            color: os_white,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_light_dark_card
+                : os_white,
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           margin: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
@@ -820,7 +822,11 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
           ),
         ),
       ));
-      ret.add(TextSpan(text: tmp[i].substring(first_idx + 1)));
+      ret.add(
+        TextSpan(
+          text: tmp[i].substring(first_idx + 1),
+        ),
+      );
     }
     return ret;
   }
@@ -854,7 +860,13 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                     bottomActionItem: BottomActionItem(title: "取消"));
               }
             },
-            color: widget.index == 0 ? Color(0xFFEEEEEE) : theme,
+            color: widget.index == 0
+                ? (Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : Color(0xFFEEEEEE))
+                : (Provider.of<ColorProvider>(context).isDark
+                    ? Color(0x994577f6)
+                    : theme),
             splashColor:
                 widget.index == 0 ? Color(0x44707070) : Color(0x44002873),
             highlightColor:
@@ -954,22 +966,29 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   height: 1.6,
-                                  color:
-                                      widget.index == 0 ? os_black : os_white,
+                                  color: widget.index == 0
+                                      ? (Provider.of<ColorProvider>(context)
+                                              .isDark
+                                          ? os_dark_dark_white
+                                          : os_black)
+                                      : (os_white),
                                 ),
                                 children: _getRichText(widget.cont),
                               ),
                             ),
                           ),
-                          // Container(height: 5),
                           Text(
                             RelativeDateFormat.format(
                               DateTime.fromMillisecondsSinceEpoch(widget.time),
                             ),
                             style: TextStyle(
                               color: widget.index == 0
-                                  ? Color.fromRGBO(0, 0, 0, 0.3)
-                                  : Color.fromRGBO(255, 255, 255, 0.6),
+                                  ? (Provider.of<ColorProvider>(context).isDark
+                                      ? os_dark_back
+                                      : Color.fromRGBO(0, 0, 0, 0.3))
+                                  : (Provider.of<ColorProvider>(context).isDark
+                                      ? os_dark_white
+                                      : Color.fromRGBO(255, 255, 255, 0.6)),
                               fontSize: 14,
                             ),
                           ),

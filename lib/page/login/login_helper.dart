@@ -3,6 +3,8 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginHelper extends StatefulWidget {
@@ -17,15 +19,20 @@ class _LoginHelperState extends State<LoginHelper> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: os_white,
-        foregroundColor: os_black,
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         title: Text(
           "登录帮助",
           style: TextStyle(fontWeight: FontWeight.w100),
         ),
         elevation: 0,
       ),
-      backgroundColor: os_white,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
       body: Container(
         padding: EdgeInsets.symmetric(
           horizontal: os_edge * 2,
@@ -81,6 +88,7 @@ class _LinkState extends State<Link> {
           child: Row(
             children: [
               myInkWell(
+                color: Colors.transparent,
                 tap: () {
                   showModal(
                     context: context,
@@ -141,6 +149,9 @@ class _TipState extends State<Tip> {
         widget.txt ?? "标题",
         style: TextStyle(
           fontSize: 17,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
         ),
       ),
     );
@@ -168,6 +179,9 @@ class _TitleState extends State<Title> {
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
         ),
       ),
     );

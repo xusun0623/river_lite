@@ -65,7 +65,7 @@ class _MeState extends State<Me> {
     UserInfoProvider provider = Provider.of<UserInfoProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 0,
+        toolbarHeight: 40,
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : os_white,
@@ -73,6 +73,24 @@ class _MeState extends State<Me> {
             ? os_dark_white
             : os_black,
         elevation: 0,
+        actions: [
+          // IconButton(
+          //   onPressed: () {
+          //     Provider.of<ColorProvider>(context, listen: false).isDark =
+          //         !Provider.of<ColorProvider>(context, listen: false).isDark;
+          //     Provider.of<ColorProvider>(context, listen: false).switchMode();
+          //     Provider.of<ColorProvider>(context, listen: false).refresh();
+          //   },
+          //   icon: Icon(
+          //     Provider.of<ColorProvider>(context, listen: false).isDark
+          //         ? Icons.light_mode
+          //         : Icons.dark_mode,
+          //     color: Provider.of<ColorProvider>(context, listen: false).isDark
+          //         ? os_middle_grey
+          //         : os_middle_grey,
+          //   ),
+          // ),
+        ],
       ),
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
@@ -159,8 +177,8 @@ class _MeListGroupState extends State<MeListGroup> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MeList(txt: "应用设置", index: 0),
-        MeList(txt: "账号管理", index: 1),
+        // MeList(txt: "应用设置", index: 0),
+        MeList(txt: "应用设置", index: 1),
         MeList(txt: "意见&Bug反馈", index: 2),
         MeList(txt: "拉黑&黑名单", index: 4),
         MeList(txt: "关于", index: 3),
@@ -333,6 +351,14 @@ class _MeBtnHeroState extends State<MeBtnHero> {
         widget: Container(
           width: 60 + (widget.txt ?? "收藏").length * 14.0,
           padding: EdgeInsets.symmetric(vertical: 12.5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            border: Border.all(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? Color(0x11FFFFFF)
+                  : os_white,
+            ),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -444,7 +470,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
         color: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : os_white,
-        padding: EdgeInsets.only(left: 25, right: 25, bottom: 40, top: 50),
+        padding: EdgeInsets.only(left: 25, right: 25, bottom: 40, top: 0),
         child: Row(
           children: [
             Container(

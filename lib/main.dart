@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:ui';
 
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,47 +32,52 @@ class MyApp extends StatelessWidget {
           SystemUiOverlayStyle(statusBarColor: Colors.transparent);
       SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     }
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => ColorProvider()),
-        ChangeNotifierProvider(create: (context) => AdShowProvider()),
-        ChangeNotifierProvider(create: (context) => UserInfoProvider()),
-        ChangeNotifierProvider(create: (context) => TabShowProvider()),
-        ChangeNotifierProvider(create: (context) => HomeRefrshProvider()),
-        ChangeNotifierProvider(create: (context) => MsgProvider()),
-        ChangeNotifierProvider(create: (context) => BlackProvider()),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        initialRoute: "/",
-        theme: ThemeData(
-          primaryColor: os_color,
+    return AdaptiveTheme(
+      builder: (light, dark) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => ColorProvider()),
+          ChangeNotifierProvider(create: (context) => AdShowProvider()),
+          ChangeNotifierProvider(create: (context) => UserInfoProvider()),
+          ChangeNotifierProvider(create: (context) => TabShowProvider()),
+          ChangeNotifierProvider(create: (context) => HomeRefrshProvider()),
+          ChangeNotifierProvider(create: (context) => MsgProvider()),
+          ChangeNotifierProvider(create: (context) => BlackProvider()),
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          initialRoute: "/",
+          theme: ThemeData(
+            primaryColor: os_color,
+          ),
+          onGenerateRoute: (settings) {
+            final String routersname = settings.name;
+            final Function cotrollerFn = routers[routersname];
+            //判断访问不存在的路由地址
+            if (cotrollerFn == null) {
+              return CupertinoPageRoute(
+                builder: (context) => routers['/404'](),
+              );
+            }
+            if (settings.arguments == null) {
+              return CupertinoPageRoute(
+                builder: (context) => cotrollerFn(),
+              );
+            } else {
+              return CupertinoPageRoute(
+                builder: (context) => cotrollerFn(settings.arguments),
+              );
+            }
+          },
+          onUnknownRoute: (setting) {
+            return CupertinoPageRoute(
+              builder: (context) => routers["/404"](),
+            );
+          },
         ),
-        onGenerateRoute: (settings) {
-          final String routersname = settings.name;
-          final Function cotrollerFn = routers[routersname];
-          //判断访问不存在的路由地址
-          if (cotrollerFn == null) {
-            return CupertinoPageRoute(
-              builder: (context) => routers['/404'](),
-            );
-          }
-          if (settings.arguments == null) {
-            return CupertinoPageRoute(
-              builder: (context) => cotrollerFn(),
-            );
-          } else {
-            return CupertinoPageRoute(
-              builder: (context) => cotrollerFn(settings.arguments),
-            );
-          }
-        },
-        onUnknownRoute: (setting) {
-          return CupertinoPageRoute(
-            builder: (context) => routers["/404"](),
-          );
-        },
       ),
+      light: ThemeData(),
+      dark: ThemeData(),
+      initial: AdaptiveThemeMode.light,
     );
   }
 }

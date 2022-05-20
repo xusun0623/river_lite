@@ -14,7 +14,9 @@ import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
+import 'package:provider/provider.dart';
 
 class MeFunc extends StatefulWidget {
   int type;
@@ -153,8 +155,12 @@ class _MeFuncState extends State<MeFunc> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFF3F3F3),
-        foregroundColor: Color(0xFF505050),
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : Color(0xFFF3F3F3),
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : Color(0xFF505050),
         elevation: 0,
         title: Text(
           _showTopTitle
@@ -191,14 +197,18 @@ class _MeFuncState extends State<MeFunc> {
         leading: IconButton(
           icon: Icon(
             Icons.chevron_left_rounded,
-            color: Color(0xFF505050),
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : Color(0xFF505050),
           ),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
-      backgroundColor: Color(0xFFF3F3F3),
+      backgroundColor: Provider.of<ColorProvider>(context).isDark
+          ? os_dark_back
+          : Color(0xFFF3F3F3),
       body: BackToTop(
         bottom: 100,
         controller: _scrollController,
@@ -237,11 +247,15 @@ class _MeFuncHeadState extends State<MeFuncHead> {
       child: Row(
         children: [
           Hero(
-            tag: "lib/img/me/btn${widget.type}.svg",
+            tag: Provider.of<ColorProvider>(context).isDark
+                ? "lib/img/me_dark/btn${widget.type}.svg"
+                : "lib/img/me/btn${widget.type}.svg",
             child: Material(
               color: Colors.transparent,
               child: os_svg(
-                path: "lib/img/me/btn${widget.type}.svg",
+                path: Provider.of<ColorProvider>(context).isDark
+                    ? "lib/img/me_dark/btn${widget.type}.svg"
+                    : "lib/img/me/btn${widget.type}.svg",
                 width: 50,
                 height: 50,
               ),
@@ -258,7 +272,9 @@ class _MeFuncHeadState extends State<MeFuncHead> {
                   ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type],
                   style: TextStyle(
                     fontSize: 22,
-                    color: Color(0xFF505050),
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : Color(0xFF505050),
                   ),
                 ),
               ),
@@ -392,6 +408,9 @@ class _HistoryCardState extends State<HistoryCard> {
       margin: EdgeInsets.only(left: os_edge, right: os_edge, bottom: 10),
       child: myInkWell(
         radius: 10,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_card
+            : os_white,
         tap: () {
           _setHistory();
           Navigator.pushNamed(
@@ -426,6 +445,9 @@ class _HistoryCardState extends State<HistoryCard> {
                         widget.data["title"],
                         style: TextStyle(
                           fontSize: 16,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
                         ),
                       ),
                     ),
@@ -438,7 +460,9 @@ class _HistoryCardState extends State<HistoryCard> {
                       ),
                       style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFFBBBBBB),
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_deep_grey
+                            : Color(0xFFBBBBBB),
                       ),
                     ),
                     Container(height: 5),

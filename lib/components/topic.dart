@@ -393,6 +393,11 @@ class _TopicState extends State<Topic> {
               widget: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? Color(0x08FFFFFF)
+                        : os_white,
+                  ),
                 ),
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(16, 18, 16, 18),

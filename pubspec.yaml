@@ -36,6 +36,7 @@ dependencies:
   flutter_bounce: ^1.1.0
   syncfusion_flutter_sliders: ^20.1.51
   sticky_headers: ^0.2.0
+  adaptive_theme: ^3.0.0
 
 dev_dependencies:
   flutter_test:
