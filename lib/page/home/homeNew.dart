@@ -176,7 +176,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     HomeRefrshProvider provider = Provider.of<HomeRefrshProvider>(context);
     ColorProvider provider_color = Provider.of<ColorProvider>(context);
     return Scaffold(
-      backgroundColor: provider_color.os_back,
+      backgroundColor: provider_color.isDark ? Color(0xFF111111) : os_back,
       body: Container(
         padding: EdgeInsets.only(top: 10),
         child: RefreshIndicator(
@@ -217,7 +217,7 @@ class _TapMoreState extends State<TapMore> {
         widget.tap();
       },
       child: Container(
-        color: provider.os_back,
+        color: provider.isDark ? Color(0xFF111111) : os_back,
         child: Center(
             child: Padding(
           padding: EdgeInsets.only(top: 20, bottom: 5),

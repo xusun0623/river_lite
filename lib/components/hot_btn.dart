@@ -19,7 +19,7 @@ class _HomeBtnState extends State<HomeBtn> {
     return Container(
       decoration: BoxDecoration(
         color: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
+            ? Color(0xFF191919)
             : os_white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
@@ -130,8 +130,9 @@ class _BtnState extends State<Btn> {
           Navigator.pushNamed(context, widget.url);
         }
       },
-      color:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_white : os_white,
+      color: Provider.of<ColorProvider>(context).isDark
+          ? Color(0xFF191919)
+          : os_white,
       widget: Container(
         width: (MediaQuery.of(context).size.width - os_edge * 2 - 10) / 5,
         padding: EdgeInsets.only(top: 10, bottom: 15),
@@ -144,7 +145,7 @@ class _BtnState extends State<Btn> {
               style: TextStyle(
                 fontSize: 13,
                 color: Provider.of<ColorProvider>(context).isDark
-                    ? os_grey
+                    ? os_dark_white
                     : Color.fromARGB(255, 52, 52, 52),
               ),
             ),

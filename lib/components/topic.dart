@@ -344,7 +344,7 @@ class _TopicState extends State<Topic> {
             ),
             child: myInkWell(
               color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_white
+                  ? os_dark_card
                   : (widget.backgroundColor ?? os_white),
               longPress: () {
                 Vibrate.feedback(FeedbackType.impact);
@@ -396,7 +396,7 @@ class _TopicState extends State<Topic> {
                                         color:
                                             Provider.of<ColorProvider>(context)
                                                     .isDark
-                                                ? Color(0x22FFFFFF)
+                                                ? os_dark_white
                                                 : os_grey),
                                     errorWidget: (context, url, error) =>
                                         Icon(Icons.error),
@@ -412,7 +412,7 @@ class _TopicState extends State<Topic> {
                                     style: TextStyle(
                                       color: Provider.of<ColorProvider>(context)
                                               .isDark
-                                          ? os_grey
+                                          ? os_dark_white
                                           : os_black,
                                       fontSize: 14,
                                       // fontWeight: FontWeight.bold,
@@ -466,7 +466,7 @@ class _TopicState extends State<Topic> {
                               fontSize: 17,
                               letterSpacing: 0.5,
                               color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_grey
+                                  ? os_dark_white
                                   : os_black),
                         ),
                       ),

@@ -146,7 +146,9 @@ class _HomeState extends State<Home> {
           child: Container(
             width: MediaQuery.of(context).size.width / icons.length,
             height: barHeight,
-            color: Color(0xFFFFFFFF),
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_card
+                : Color(0xFFFFFFFF),
             child: Badge(
               position: BadgePosition(
                 end: 35,
@@ -157,8 +159,12 @@ class _HomeState extends State<Home> {
                 tabShowProvider.index == i ? select_icons[i] : icons[i],
                 size: 26,
                 color: tabShowProvider.index == i
-                    ? Color(0xFF222222)
-                    : Color(0xFFa4a4a6),
+                    ? (Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : Color(0xFF222222))
+                    : (Provider.of<ColorProvider>(context).isDark
+                        ? os_deep_grey
+                        : Color(0xFFa4a4a6)),
               ),
             ),
           ),
@@ -179,13 +185,19 @@ class _HomeState extends State<Home> {
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
-              color: Color(0xFFEEEEEE),
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_card
+                  : Color(0xFFEEEEEE),
             ),
           ),
-          color: os_white,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_card
+              : os_white,
           boxShadow: [
             BoxShadow(
-              color: Color(0x22000000),
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? Color(0x55000000)
+                  : Color(0x22000000),
               blurRadius: 10,
               offset: Offset(3, 3),
             ),
