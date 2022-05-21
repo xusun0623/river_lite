@@ -313,9 +313,7 @@ void popDialog({
   context_tmp = context;
   showDialog(
     context: context,
-    barrierColor: Provider.of<ColorProvider>(context, listen: false).isDark
-        ? Colors.transparent
-        : back,
+    barrierColor: back,
     barrierDismissible: false,
     builder: (ctx) {
       return Material(
@@ -328,7 +326,7 @@ void popDialog({
           child: Container(
             color: Provider.of<ColorProvider>(context, listen: false).isDark
                 ? Colors.transparent
-                : os_white,
+                : Colors.transparent,
             margin: EdgeInsets.only(bottom: 150),
             child: Container(child: Center(child: widget)),
           ),

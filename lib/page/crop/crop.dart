@@ -139,6 +139,7 @@ class _CropImgState extends State<CropImg> {
                                 );
                                 int uid = await getUid();
                                 CachedNetworkImage.evictFromCache(
+                                  //清除原有缓存
                                   "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=big",
                                 );
                                 CachedNetworkImage.evictFromCache(
@@ -147,10 +148,10 @@ class _CropImgState extends State<CropImg> {
                                 CachedNetworkImage.evictFromCache(
                                   "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=small",
                                 );
-                                hideToast();
                                 setState(() {
                                   edit_done = true;
                                 });
+                                hideToast();
                               },
                               radius: 15,
                               aspectRatio: 1,
@@ -169,7 +170,11 @@ class _CropImgState extends State<CropImg> {
                   show: img != null,
                   tap: () {
                     showToast(
-                        context: context, type: XSToast.loading, txt: "请稍后…");
+                      context: context,
+                      type: XSToast.loading,
+                      txt: "努力上传中…",
+                      duration: 10000,
+                    );
                     _controller.crop();
                   },
                   txt: "完成并上传",

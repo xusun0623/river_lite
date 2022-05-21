@@ -177,7 +177,7 @@ class _SquareCardState extends State<SquareCard> {
               Navigator.pushNamed(context, "/column", arguments: e["board_id"]);
             },
             color: Provider.of<ColorProvider>(context).isDark
-                ? os_light_dark_card
+                ? os_white_opa
                 : os_white,
             widget: Container(
               decoration: BoxDecoration(
@@ -216,7 +216,7 @@ class _SquareCardState extends State<SquareCard> {
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       decoration: BoxDecoration(
         color: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_card
+            ? os_light_dark_card
             : os_white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
@@ -226,10 +226,19 @@ class _SquareCardState extends State<SquareCard> {
             children: [
               Container(
                 padding: EdgeInsets.all(5),
-                child: os_svg(
-                  path: "lib/img/square/${widget.index + 1}.svg",
-                  width: 22,
-                  height: 22,
+                child: Opacity(
+                  opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: os_white,
+                      borderRadius: BorderRadius.all(Radius.circular(7)),
+                    ),
+                    child: os_svg(
+                      path: "lib/img/square/${widget.index + 1}.svg",
+                      width: 22,
+                      height: 22,
+                    ),
+                  ),
                 ),
               ),
               Container(width: 3),
@@ -239,7 +248,7 @@ class _SquareCardState extends State<SquareCard> {
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_dark_white
+                      ? os_dark_white
                       : os_black,
                 ),
               ),
