@@ -386,52 +386,6 @@ class TopSection extends StatefulWidget {
 }
 
 class _TopSectionState extends State<TopSection> {
-  List<Widget> _buildComponent() {
-    List<Widget> tmp = [];
-    widget.data.forEach((element) {
-      tmp.add(
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: os_edge),
-          margin: EdgeInsets.only(top: 10),
-          child: myInkWell(
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_card
-                : os_white,
-            tap: () {
-              launch("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
-                  element["id"].toString());
-            },
-            radius: 10,
-            widget: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.vertical_align_top_rounded,
-                    size: 18,
-                    color: os_deep_grey,
-                  ),
-                  Container(width: 7.5),
-                  Container(
-                    width: MediaQuery.of(context).size.width - 80,
-                    child: Text(
-                      element["title"].toString().split("").join("\u{200B}"),
-                      style: TextStyle(
-                        color: os_deep_grey,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    });
-    return tmp;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -450,7 +404,7 @@ class _TopSectionState extends State<TopSection> {
           itemBuilder: (context, index) {
             return myInkWell(
               color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_card
+                  ? os_light_dark_card
                   : os_white,
               tap: () {
                 Navigator.pushNamed(context, "/topic_detail",
@@ -466,7 +420,7 @@ class _TopSectionState extends State<TopSection> {
                       Icons.vertical_align_top_rounded,
                       size: 18,
                       color: Provider.of<ColorProvider>(context).isDark
-                          ? os_dark_dark_white
+                          ? os_dark_white
                           : os_black,
                     ),
                     Container(width: 7.5),
@@ -479,7 +433,7 @@ class _TopSectionState extends State<TopSection> {
                             .join("\u{200B}"),
                         style: TextStyle(
                             color: Provider.of<ColorProvider>(context).isDark
-                                ? os_dark_dark_white
+                                ? os_dark_white
                                 : os_black),
                       ),
                     ),
@@ -540,7 +494,7 @@ class _DefineTabBarState extends State<DefineTabBar> {
       margin: EdgeInsets.symmetric(horizontal: os_edge),
       child: myInkWell(
         color: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_card
+            ? os_light_dark_card
             : os_white,
         tap: () {
           widget.fold();
@@ -562,7 +516,7 @@ class _DefineTabBarState extends State<DefineTabBar> {
                   style: TextStyle(
                     fontSize: 17,
                     color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_dark_white
+                        ? os_dark_white
                         : os_black,
                   ),
                 ),

@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 import 'action_item.dart';
 import 'bottom_action_item.dart';
@@ -67,7 +70,13 @@ class _TopActionItemWidget extends StatelessWidget {
         child: Center(
           child: Text(
             topActionItem.title,
-            style: const TextStyle().merge(topActionItem.titleTextStyle),
+            style: const TextStyle()
+                .merge(topActionItem.titleTextStyle)
+                .merge(TextStyle(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
+                )),
             textAlign: TextAlign.center,
           ),
         ),
@@ -88,21 +97,26 @@ class _TopActionItemWidget extends StatelessWidget {
     }
 
     return Container(
+        decoration: BoxDecoration(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_back
+                : os_white,
+            borderRadius: BorderRadius.all(Radius.circular(10))),
         child: Column(
-      children: [
-        Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: widgets,
-        ),
-        if (topActionItem.showBottomLine)
-          const Divider(
-            height: 0,
-          )
-        else
-          const SizedBox(height: 0, width: 0)
-      ],
-    ));
+          children: [
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: widgets,
+            ),
+            if (topActionItem.showBottomLine)
+              const Divider(
+                height: 0,
+              )
+            else
+              const SizedBox(height: 0, width: 0)
+          ],
+        ));
   }
 }
 
@@ -117,29 +131,40 @@ class _BottomActionItemWidget extends StatelessWidget {
     if (bottomActionItem == null) {
       return const SizedBox(height: 0, width: 0);
     }
-    return Column(children: [
-      Container(
-        height: 10,
-        color: Theme.of(context).brightness == Brightness.dark
-            ? const Color.fromRGBO(247, 248, 250, 1)
-            : const Color.fromRGBO(247, 248, 250, 1),
+    return Container(
+      decoration: BoxDecoration(
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
       ),
-      InkWell(
-        onTap: bottomActionItem.onPressed ?? () => Navigator.of(context).pop(),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              bottomActionItem.title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+      child: Column(children: [
+        Container(
+          height: 10,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_light_dark_card
+              : const Color.fromRGBO(247, 248, 250, 1),
+        ),
+        InkWell(
+          onTap:
+              bottomActionItem.onPressed ?? () => Navigator.of(context).pop(),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                bottomActionItem.title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
+                ),
               ),
             ),
           ),
-        ),
-      )
-    ]);
+        )
+      ]),
+    );
   }
 }
 
@@ -194,7 +219,9 @@ class _ActionSheetState extends State<_ActionSheet> {
           final index = widget.actions.indexOf(action);
           widgets.add(Container(
             width: double.infinity,
-            // color: Colors.redAccent,
+            color: Provider.of<ColorProvider>(context, listen: false).isDark
+                ? os_dark_back
+                : os_white,
             // splashColor: Colors.redAccent,
             // onTap: action.onPressed,
             child: InkWell(
@@ -203,9 +230,15 @@ class _ActionSheetState extends State<_ActionSheet> {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   action.title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
-                  ).merge(action.titleTextStyle),
+                  ).merge(action.titleTextStyle).merge(TextStyle(
+                        color:
+                            Provider.of<ColorProvider>(context, listen: false)
+                                    .isDark
+                                ? os_dark_white
+                                : os_black,
+                      )),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -267,55 +300,64 @@ class _ActionSheetState extends State<_ActionSheet> {
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
-    return SafeArea(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxHeight: screenHeight - (screenHeight / 10),
-        ),
-        child: AnimatedPadding(
-          padding: MediaQuery.of(context).viewInsets,
-          duration: const Duration(milliseconds: 275),
-          curve: Curves.easeOutQuad,
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (widget.topActionItem != null) ...{
-                  _TopActionItemWidget(
-                    topActionItem: widget.topActionItem,
-                    onDonePress: () {
-                      if (widget.topActionItem.doneAction != null) {
-                        if (widget.choiceConfig.isCheckBox) {
-                          widget.topActionItem
-                              .doneAction(_checkBoxValue.toList());
-                        } else {
-                          widget.topActionItem.doneAction([_groupValue]);
-                        }
-                      } else {
-                        Navigator.pop(context);
-                      }
+    return Container(
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
+      child: SafeArea(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: screenHeight - (screenHeight / 10),
+          ),
+          child: AnimatedPadding(
+            padding: MediaQuery.of(context).viewInsets,
+            duration: const Duration(milliseconds: 275),
+            curve: Curves.easeOutQuad,
+            child: Container(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_back
+                  : os_white,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (widget.topActionItem != null) ...{
+                      _TopActionItemWidget(
+                        topActionItem: widget.topActionItem,
+                        onDonePress: () {
+                          if (widget.topActionItem.doneAction != null) {
+                            if (widget.choiceConfig.isCheckBox) {
+                              widget.topActionItem
+                                  .doneAction(_checkBoxValue.toList());
+                            } else {
+                              widget.topActionItem.doneAction([_groupValue]);
+                            }
+                          } else {
+                            Navigator.pop(context);
+                          }
+                        },
+                      ),
                     },
-                  ),
-                },
-                Flexible(
-                  child: Theme(
-                    data: ThemeData(
-                      splashColor: Colors.white70,
-                    ),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          ...widgets,
-                          ..._buildChoiceItems(),
-                        ],
+                    Flexible(
+                      child: Theme(
+                        data: ThemeData(
+                          splashColor: Colors.white70,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              ...widgets,
+                              ..._buildChoiceItems(),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                if (widget.bottomActionItem != null) ...{
-                  _BottomActionItemWidget(widget.bottomActionItem)
-                }
-              ]),
+                    if (widget.bottomActionItem != null) ...{
+                      _BottomActionItemWidget(widget.bottomActionItem)
+                    }
+                  ]),
+            ),
+          ),
         ),
       ),
     );
