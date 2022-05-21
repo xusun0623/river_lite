@@ -45,33 +45,35 @@ class _TopicColumnState extends State<TopicColumn> {
   bool manualPull = false;
   bool showTopTitle = false; //是否显示顶部标题
 
+  int pageSize = 25;
+
   _getMore() async {
     if (loading_more || load_done) return;
     loading_more = true;
     var tmp = await Api().certain_forum_topiclist({
-      "page": (data["list"].length / 10 + 1).toInt(),
-      "pageSize": 10,
+      "page": (data["list"].length / pageSize + 1).toInt(),
+      "pageSize": pageSize,
       "boardId": widget.columnID,
       "filterType": "typeid",
       "filterId": data == null || select == 0
           ? ""
           : data["classificationType_list"][select - 1]
               ["classificationType_id"],
-      "sortby": "new",
+      "sortby": "all",
     });
     Api().certain_forum_topiclist({
-      "page": (data["list"].length / 10 + 1).toInt() + 1,
-      "pageSize": 10,
+      "page": (data["list"].length / pageSize + 1).toInt() + 1,
+      "pageSize": pageSize,
       "boardId": widget.columnID,
       "filterType": "typeid",
       "filterId": data == null || select == 0
           ? ""
           : data["classificationType_list"][select - 1]
               ["classificationType_id"],
-      "sortby": "new",
+      "sortby": "all",
     });
     if (tmp != null && tmp["list"] != null) data["list"].addAll(tmp["list"]);
-    load_done = data["list"].length < 10;
+    load_done = data["list"].length < pageSize;
     loading_more = false;
     setState(() {});
   }
@@ -83,26 +85,26 @@ class _TopicColumnState extends State<TopicColumn> {
     });
     var tmp = await Api().certain_forum_topiclist({
       "page": 1,
-      "pageSize": 10,
+      "pageSize": pageSize,
       "boardId": widget.columnID,
       "filterType": "typeid",
       "filterId": data == null || select == 0
           ? ""
           : data["classificationType_list"][select - 1]
               ["classificationType_id"],
-      "sortby": "new",
+      "sortby": "all",
       "topOrder": 1,
     });
     Api().certain_forum_topiclist({
       "page": 2,
-      "pageSize": 10,
+      "pageSize": pageSize,
       "boardId": widget.columnID,
       "filterType": "typeid",
       "filterId": data == null || select == 0
           ? ""
           : data["classificationType_list"][select - 1]
               ["classificationType_id"],
-      "sortby": "new",
+      "sortby": "all",
       "topOrder": 1,
     });
     if (tmp["rs"] != 0) {
@@ -116,21 +118,13 @@ class _TopicColumnState extends State<TopicColumn> {
         }
       }
       loading = false;
-      load_done = (data["list"] ?? []).length < 10;
+      load_done = (data["list"] ?? []).length < pageSize;
     } else {
       loading = false;
       load_done = true;
     }
     setState(() {});
     return;
-  }
-
-  void _toTop() {
-    _controller.animateTo(
-      0.0,
-      duration: Duration(milliseconds: 200),
-      curve: Curves.easeOut,
-    );
   }
 
   List<ActionItem> _buildSheet() {
@@ -277,7 +271,6 @@ class _TopicColumnState extends State<TopicColumn> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -317,7 +310,7 @@ class _TopicColumnState extends State<TopicColumn> {
             ),
           ),
           backgroundColor: Provider.of<ColorProvider>(context).isDark
-              ? (!loading ? os_dark_back : os_dark_card)
+              ? (!loading ? os_dark_back : os_light_dark_card)
               : os_back,
           elevation: 0,
         ),

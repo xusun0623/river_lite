@@ -32,10 +32,10 @@ class _HomeBtnState extends State<HomeBtn> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Btn(
-                txt: "视觉艺术",
+                txt: "成电Photo",
                 img: "lib/img/home/10.svg",
                 url: "/column",
-                board_id: 55,
+                board_id: 307,
               ),
               Btn(
                 txt: "淘二手",
@@ -50,15 +50,16 @@ class _HomeBtnState extends State<HomeBtn> {
                 board_id: 305,
               ),
               Btn(
-                txt: "鹊桥",
+                txt: "情感专区",
                 img: "lib/img/home/5.svg",
                 url: "/column",
-                board_id: 313,
+                board_id: 45,
               ),
               Btn(
-                txt: "十大热门",
+                txt: "就业创业",
                 img: "lib/img/home/4.svg",
-                url: "/hot",
+                url: "/column",
+                board_id: 174,
               ),
             ],
           ),
@@ -66,10 +67,10 @@ class _HomeBtnState extends State<HomeBtn> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Btn(
-                txt: "程序员之家",
+                txt: "水手之家",
                 img: "lib/img/home/6.svg",
                 url: "/column",
-                board_id: 70,
+                board_id: 25,
               ),
               Btn(
                 txt: "吃喝玩乐",

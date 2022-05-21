@@ -6,7 +6,6 @@ import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/page/question/answer.dart';
 import 'package:offer_show/util/interface.dart';
-import 'package:offer_show/util/storage.dart';
 
 class Question extends StatefulWidget {
   Question({Key key}) : super(key: key);
@@ -46,7 +45,7 @@ class _QuestionState extends State<Question> {
     return tmp;
   }
 
-  _getInitQuestion() async {
+  _getQuestion() async {
     await getWebCookie();
     String get_q_a = await Api().get_question();
     if (get_q_a == "") {
@@ -65,14 +64,17 @@ class _QuestionState extends State<Question> {
 
   _queryAns() async {
     match_answer = query_answer(q_a["q"]);
-    print("查询结果: ${match_answer}");
     setState(() {});
     await Future.delayed(Duration(milliseconds: 50));
-    print("查询Value: ${ret_value}");
+    if (match_answer != null && match_answer != "") {
+      print("OKKKKKK");
+      _submit();
+    }
   }
 
   _next() async {
     await Api().next_question();
+    _getQuestion();
   }
 
   _finish() async {
@@ -81,11 +83,12 @@ class _QuestionState extends State<Question> {
 
   _submit() async {
     await Api().submit_question(answer: ret_value);
+    _next();
   }
 
   @override
   void initState() {
-    _getInitQuestion();
+    _getQuestion();
     super.initState();
   }
 

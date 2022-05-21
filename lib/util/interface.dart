@@ -52,7 +52,7 @@ class Api {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      // print(await response.stream.bytesToString());
     } else {
       print(response.reasonPhrase);
     }
@@ -80,7 +80,7 @@ class Api {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      // print(await response.stream.bytesToString());
     } else {
       print(response.reasonPhrase);
     }
@@ -112,7 +112,7 @@ class Api {
       } else if (html.contains("恭喜您完成了全部的挑战关卡")) {
         return "1";
       } else {
-        print("${html}");
+        // print("${html}");
         String tmp_q = html
             .split("【题目】</b>&nbsp;")[1]
             .split("</font>")[0]
