@@ -348,7 +348,7 @@ class _MeBtnHeroState extends State<MeBtnHero> {
         },
         radius: 20,
         color: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_card
+            ? os_dark_back
             : os_white,
         widget: Container(
           width: 60 + (widget.txt ?? "收藏").length * 14.0,

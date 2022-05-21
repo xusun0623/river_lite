@@ -500,7 +500,7 @@ class _PersonCardState extends State<PersonCard> {
     showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
-          ? os_dark_back
+          ? os_light_dark_card
           : os_white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -526,7 +526,7 @@ class _PersonCardState extends State<PersonCard> {
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_dark_white
+                      ? os_dark_white
                       : os_black,
                 ),
               ),
@@ -540,7 +540,7 @@ class _PersonCardState extends State<PersonCard> {
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_dark_card
+                          ? os_white_opa
                           : os_grey,
                 ),
                 child: Center(
@@ -577,7 +577,7 @@ class _PersonCardState extends State<PersonCard> {
                       },
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
-                          ? Color(0x33004DFF)
+                          ? os_white_opa
                           : Color(0x16004DFF),
                       widget: Container(
                         width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
@@ -586,7 +586,9 @@ class _PersonCardState extends State<PersonCard> {
                           child: Text(
                             "取消",
                             style: TextStyle(
-                              color: os_deep_blue,
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_dark_white
+                                  : os_deep_blue,
                             ),
                           ),
                         ),

@@ -177,7 +177,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     HomeRefrshProvider provider = Provider.of<HomeRefrshProvider>(context);
     ColorProvider provider_color = Provider.of<ColorProvider>(context);
     return Scaffold(
-      backgroundColor: provider_color.isDark ? Color(0xFF111111) : os_back,
+      backgroundColor: provider_color.isDark ? os_dark_back : os_back,
       body: Container(
         padding: EdgeInsets.only(top: 10),
         child: RefreshIndicator(

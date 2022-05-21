@@ -173,7 +173,7 @@ class _HomeState extends State<Home> {
             width: MediaQuery.of(context).size.width / icons.length,
             height: barHeight,
             color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_card
+                ? os_dark_back
                 : Color(0xFFFFFFFF),
             child: Badge(
               position: BadgePosition(
@@ -212,12 +212,12 @@ class _HomeState extends State<Home> {
           border: Border(
             top: BorderSide(
               color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_card
+                  ? os_dark_back
                   : Color(0xFFEEEEEE),
             ),
           ),
           color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_card
+              ? os_dark_back
               : os_white,
           boxShadow: [
             BoxShadow(

@@ -8,6 +8,7 @@ final os_black = Color(0xFF000000); //纯黑色
 final os_black_opa = Color.fromRGBO(0, 0, 0, 0.1); //透黑色
 final os_black_opa_opa = Color.fromRGBO(0, 0, 0, 0.05); //主题蓝色
 final os_white = Color(0xFFFFFFFF); //纯白色
+final os_white_opa = Color(0x11FFFFFF); //纯白色
 final os_red = Color(0xFFFF1F1F); //红色
 final os_grey = Color(0xFFEEEEEE); //浅灰
 final os_subtitle = Color(0xFFB8B8B8); //浅灰
@@ -18,9 +19,11 @@ final os_middle_grey = Color(0xFFD3D3D3); //浅灰
 final os_dark_white = Color(0xFFd1d1d1); //深色模式下的文字白
 final os_dark_dark_white = Color(0xFF999999); //深色模式下的文字白
 final os_dark_card = Color(0xFF191919); //深色模式下的卡片
-final os_light_dark_card = Color(0xFF222222); //深色模式下的卡片
+// final os_light_dark_card = Color(0xFF222222); //深色模式下的卡片
+final os_light_dark_card = Color(0xFF303030); //深色模式下的卡片
 final os_light_light_dark_card = Color(0xFF333333); //深色模式下的卡片
-final os_dark_back = Color(0xFF111111); //深色模式下的背景
+// final os_dark_back = Color(0xFF111111); //深色模式下的背景
+final os_dark_back = Color(0xFF272727); //深色模式下的背景
 
 final os_back = Color(0xFFF1F4F8); //浅灰
 

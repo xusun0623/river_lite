@@ -194,6 +194,11 @@ class _TopicDetailState extends State<TopicDetail> {
   _buildTotal() {
     List<Widget> tmp = [];
     tmp = [
+      Provider.of<ColorProvider>(context).isDark
+          ? Container(
+              height: 20,
+            )
+          : Container(),
       TopicDetailTitle(data: data),
       data["topic"]["essence"] == 0
           ? Container()
@@ -312,7 +317,7 @@ class _TopicDetailState extends State<TopicDetail> {
       appBar: data == null || data["topic"] == null
           ? AppBar(
               backgroundColor: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_card
+                  ? os_light_dark_card
                   : os_white,
               foregroundColor: os_black,
               leading: IconButton(
@@ -326,7 +331,7 @@ class _TopicDetailState extends State<TopicDetail> {
             )
           : AppBar(
               backgroundColor: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_card
+                  ? os_dark_back
                   : os_white,
               foregroundColor: os_black,
               elevation: 0,
@@ -353,8 +358,9 @@ class _TopicDetailState extends State<TopicDetail> {
                           }),
                     ],
             ),
-      backgroundColor:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_card : os_white,
+      backgroundColor: Provider.of<ColorProvider>(context).isDark
+          ? os_light_dark_card
+          : os_white,
       body: data == null || data["topic"] == null
           ? Loading(
               showError: load_done,
@@ -392,7 +398,7 @@ class _TopicDetailState extends State<TopicDetail> {
                     Container(
                       decoration: BoxDecoration(
                         color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_card
+                            ? os_light_dark_card
                             : os_white,
                       ),
                       child: RefreshIndicator(
@@ -599,7 +605,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
             height: popSection ? 200 : 250,
             decoration: BoxDecoration(
                 color: Provider.of<ColorProvider>(context).isDark
-                    ? os_light_dark_card
+                    ? os_dark_back
                     : os_white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15),
@@ -708,9 +714,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     myInkWell(
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_light_dark_card
-                          : os_white,
+                      color: Colors.transparent,
                       tap: () {
                         widget.cancel();
                       },
@@ -1148,9 +1152,7 @@ class _SendFuncState extends State<SendFunc> {
   @override
   Widget build(BuildContext context) {
     return myInkWell(
-      color: Provider.of<ColorProvider>(context).isDark
-          ? os_light_dark_card
-          : os_white,
+      color: Colors.transparent,
       tap: () {
         widget.tap();
       },
@@ -1477,19 +1479,6 @@ class CommentsTab extends StatefulWidget {
 }
 
 class _CommentsTabState extends State<CommentsTab> {
-  Widget _buildComment() {
-    List<Widget> t = [];
-    for (var i = 0; i < widget.data.length; i++) {
-      t.add(Comment(
-        host_id: widget.host_id,
-        topic_id: widget.topic_id,
-        data: widget.data[i],
-        is_last: i == widget.data.length - 1,
-      ));
-    }
-    return Column(children: t);
-  }
-
   @override
   Widget build(BuildContext context) {
     return CommentTab(
@@ -1526,8 +1515,9 @@ class _CommentTabState extends State<CommentTab> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      color:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_card : os_white,
+      color: Provider.of<ColorProvider>(context).isDark
+          ? Color(0xFF2B2B2B)
+          : os_white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -1799,229 +1789,243 @@ class _CommentState extends State<Comment> {
       color: Colors.transparent,
       widget: Padding(
         padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GestureDetector(
-              onTap: () {
-                if (widget.data["reply_name"] != "匿名")
-                  toUserSpace(
-                    context,
-                    int.parse(widget.data["icon"]
-                        .toString()
-                        .split("uid=")[1]
-                        .split("&size=")[0]),
-                  );
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(100)),
-                child: Opacity(
-                  opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
-                  child: CachedNetworkImage(
-                    imageUrl: widget.data["icon"],
-                    placeholder: (context, url) => Container(
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? Color(0x22FFFFFF)
-                          : os_grey,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? Color(0xFF292929)
+                    : Colors.transparent,
+              ),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (widget.data["reply_name"] != "匿名")
+                    toUserSpace(
+                      context,
+                      int.parse(widget.data["icon"]
+                          .toString()
+                          .split("uid=")[1]
+                          .split("&size=")[0]),
+                    );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                  child: Opacity(
+                    opacity:
+                        Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
+                    child: CachedNetworkImage(
+                      imageUrl: widget.data["icon"],
+                      placeholder: (context, url) => Container(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? Color(0x22FFFFFF)
+                            : os_grey,
+                        width: 35,
+                        height: 35,
+                      ),
                       width: 35,
                       height: 35,
+                      fit: BoxFit.cover,
                     ),
-                    width: 35,
-                    height: 35,
-                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width - 75,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            widget.data["reply_name"],
-                            style: TextStyle(
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_white
-                                  : Color(0xFF333333),
-                              fontWeight:
-                                  Provider.of<ColorProvider>(context).isDark
-                                      ? FontWeight.normal
-                                      : FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                          Container(width: 8),
-                          widget.data["userTitle"] == null ||
-                                  widget.data["userTitle"].length == 0
-                              ? Container()
-                              : Tag(
-                                  txt: widget.data["poststick"] == 1
-                                      ? "置顶"
-                                      : "" + widget.data["userTitle"],
-                                  color: widget.data["userTitle"]
-                                              .toString()
-                                              .length <
-                                          7
-                                      ? Color(0xFFFE6F61)
-                                      : Color(0xFF0092FF),
-                                  color_opa: widget.data["userTitle"]
-                                              .toString()
-                                              .length <
-                                          7
-                                      ? Color(0x10FE6F61)
-                                      : Color(0x100092FF),
-                                ),
-                          Container(width: 5),
-                          widget.data["reply_id"] == widget.host_id &&
-                                  widget.data["reply_name"] != "匿名"
-                              ? Opacity(
-                                  opacity:
-                                      Provider.of<ColorProvider>(context).isDark
-                                          ? 0.8
-                                          : 1,
-                                  child: Tag(
-                                    txt: "楼主",
-                                    color: os_white,
-                                    color_opa: Color(0xFF2EA6FF),
-                                  ),
-                                )
-                              : Container(),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          myInkWell(
-                            tap: () {
-                              _tapLike();
-                            },
-                            color: Colors.transparent,
-                            widget: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 2,
-                                horizontal: 5,
+              Container(
+                width: MediaQuery.of(context).size.width - 75,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              widget.data["reply_name"],
+                              style: TextStyle(
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_white
+                                        : Color(0xFF333333),
+                                fontWeight:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? FontWeight.normal
+                                        : FontWeight.bold,
+                                fontSize: 14,
                               ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(top: 4),
-                                    child: Text(
-                                      widget.data["extraPanel"][0]["extParams"]
-                                              ["recommendAdd"]
-                                          .toString(),
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: liked == 1
-                                            ? os_color
-                                            : Color(0xFFB1B1B1),
+                            ),
+                            Container(width: 8),
+                            widget.data["userTitle"] == null ||
+                                    widget.data["userTitle"].length == 0
+                                ? Container()
+                                : Tag(
+                                    txt: widget.data["poststick"] == 1
+                                        ? "置顶"
+                                        : "" + widget.data["userTitle"],
+                                    color: widget.data["userTitle"]
+                                                .toString()
+                                                .length <
+                                            7
+                                        ? Color(0xFFFE6F61)
+                                        : Color(0xFF0092FF),
+                                    color_opa: widget.data["userTitle"]
+                                                .toString()
+                                                .length <
+                                            7
+                                        ? Color(0x10FE6F61)
+                                        : Color(0x100092FF),
+                                  ),
+                            Container(width: 5),
+                            widget.data["reply_id"] == widget.host_id &&
+                                    widget.data["reply_name"] != "匿名"
+                                ? Opacity(
+                                    opacity: Provider.of<ColorProvider>(context)
+                                            .isDark
+                                        ? 0.8
+                                        : 1,
+                                    child: Tag(
+                                      txt: "楼主",
+                                      color: os_white,
+                                      color_opa: Color(0xFF2EA6FF),
+                                    ),
+                                  )
+                                : Container(),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            myInkWell(
+                              tap: () {
+                                _tapLike();
+                              },
+                              color: Colors.transparent,
+                              widget: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 2,
+                                  horizontal: 5,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(top: 4),
+                                      child: Text(
+                                        widget.data["extraPanel"][0]
+                                                ["extParams"]["recommendAdd"]
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: liked == 1
+                                              ? os_color
+                                              : Color(0xFFB1B1B1),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Container(width: 3),
-                                  os_svg(
-                                    path: liked == 1
-                                        ? "lib/img/detail_like_blue.svg"
-                                        : "lib/img/detail_like.svg",
-                                    width: 24,
-                                    height: 24,
-                                  ),
-                                ],
+                                    Container(width: 3),
+                                    os_svg(
+                                      path: liked == 1
+                                          ? "lib/img/detail_like_blue.svg"
+                                          : "lib/img/detail_like.svg",
+                                      width: 24,
+                                      height: 24,
+                                    ),
+                                  ],
+                                ),
                               ),
+                              radius: 7.5,
                             ),
-                            radius: 7.5,
-                          ),
-                          myInkWell(
-                            tap: () {
-                              _showMore();
-                            },
-                            color: Colors.transparent,
-                            widget: Container(
-                              padding: EdgeInsets.all(5),
-                              child: os_svg(
-                                path: "lib/img/detail_comment_more.svg",
-                                width: 17,
-                                height: 17,
+                            myInkWell(
+                              tap: () {
+                                _showMore();
+                              },
+                              color: Colors.transparent,
+                              widget: Container(
+                                padding: EdgeInsets.all(5),
+                                child: os_svg(
+                                  path: "lib/img/detail_comment_more.svg",
+                                  width: 17,
+                                  height: 17,
+                                ),
                               ),
-                            ),
-                            radius: 7.5,
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 3, 0, 10),
-                    width: MediaQuery.of(context).size.width - 75,
-                    child: Text(
-                      RelativeDateFormat.format(
-                        DateTime.fromMillisecondsSinceEpoch(
-                            int.parse(widget.data["posts_date"])),
-                      ),
-                      style: TextStyle(
-                        color: Color(0xFF9F9F9F),
-                        fontSize: 12,
+                              radius: 7.5,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 3, 0, 10),
+                      width: MediaQuery.of(context).size.width - 75,
+                      child: Text(
+                        RelativeDateFormat.format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(widget.data["posts_date"])),
+                        ),
+                        style: TextStyle(
+                          color: Color(0xFF9F9F9F),
+                          fontSize: 12,
+                        ),
                       ),
                     ),
-                  ),
-                  _buildContBody(widget.data["reply_content"]),
-                  widget.data["quote_content"] != ""
-                      ? Container(
-                          width: MediaQuery.of(context).size.width - 75,
-                          padding: EdgeInsets.fromLTRB(16, 13, 16, 13),
-                          margin: EdgeInsets.only(top: 10),
-                          decoration: BoxDecoration(
-                            color: Provider.of<ColorProvider>(context).isDark
-                                ? Color(0x0AFFFFFF)
-                                : Color(0x09000000),
-                            borderRadius: BorderRadius.all(Radius.circular(13)),
-                          ),
-                          child: RichText(
-                            text: TextSpan(
-                                style: TextStyle(fontSize: 14),
-                                children: [
-                                  TextSpan(
-                                    text: "回复@" +
-                                        widget.data["quote_content"]
-                                            .split(" 发表于")[0] +
-                                        ": ",
-                                    style: TextStyle(
-                                      color: os_color,
+                    _buildContBody(widget.data["reply_content"]),
+                    widget.data["quote_content"] != ""
+                        ? Container(
+                            width: MediaQuery.of(context).size.width - 75,
+                            padding: EdgeInsets.fromLTRB(16, 13, 16, 13),
+                            margin: EdgeInsets.only(top: 10),
+                            decoration: BoxDecoration(
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? Color(0xFF282828)
+                                  : Color(0x09000000),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(13)),
+                            ),
+                            child: RichText(
+                              text: TextSpan(
+                                  style: TextStyle(fontSize: 14),
+                                  children: [
+                                    TextSpan(
+                                      text: "回复@" +
+                                          widget.data["quote_content"]
+                                              .split(" 发表于")[0] +
+                                          ": ",
+                                      style: TextStyle(
+                                        color: os_color,
+                                      ),
                                     ),
-                                  ),
-                                  TextSpan(
-                                    text: widget.data["quote_content"]
-                                        .split("发表于")[1]
-                                        .split("\n")[1],
-                                    style: TextStyle(
-                                        color:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? os_dark_white
-                                                : Color(0xFF464646)),
-                                  ),
-                                ]),
+                                    TextSpan(
+                                      text: widget.data["quote_content"]
+                                          .split("发表于")[1]
+                                          .split("\n")[1],
+                                      style: TextStyle(
+                                          color: Provider.of<ColorProvider>(
+                                                      context)
+                                                  .isDark
+                                              ? os_dark_white
+                                              : Color(0xFF464646)),
+                                    ),
+                                  ]),
+                            ),
+                          )
+                        : Container(),
+                    widget.is_last
+                        ? Container(
+                            margin: EdgeInsets.only(top: 20),
+                          )
+                        : Container(
+                            width: MediaQuery.of(context).size.width - 75,
+                            height: 1,
+                            margin: EdgeInsets.only(top: 20),
+                            color: Color(0x00000000),
                           ),
-                        )
-                      : Container(),
-                  widget.is_last
-                      ? Container(
-                          margin: EdgeInsets.only(top: 20),
-                        )
-                      : Container(
-                          width: MediaQuery.of(context).size.width - 75,
-                          height: 1,
-                          margin: EdgeInsets.only(top: 20),
-                          color: Color(0x00000000),
-                        ),
-                ],
-              ),
-            )
-          ],
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
       radius: 0,
@@ -2124,7 +2128,7 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
       child: Container(
         decoration: BoxDecoration(
           color: Provider.of<ColorProvider>(context).isDark
-              ? os_light_dark_card
+              ? os_dark_back
               : Colors.white,
           border: Border(
             top: BorderSide(
@@ -2144,9 +2148,7 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
                 widget.tapEdit();
               },
               radius: 10,
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_light_dark_card
-                  : os_white,
+              color: Colors.transparent,
               widget: Container(
                 width: MediaQuery.of(context).size.width - 76,
                 height: 47,
@@ -2270,7 +2272,7 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
     showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
-          ? os_dark_back
+          ? os_light_dark_card
           : os_white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -2296,7 +2298,7 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_dark_white
+                      ? os_dark_white
                       : os_black,
                 ),
               ),
@@ -2318,7 +2320,7 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_dark_card
+                          ? os_white_opa
                           : os_grey,
                 ),
                 child: Center(
@@ -2360,7 +2362,7 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                       },
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
-                          ? Color(0x33004DFF)
+                          ? os_white_opa
                           : Color(0x16004DFF),
                       widget: Container(
                         width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
@@ -2369,7 +2371,9 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                           child: Text(
                             "取消",
                             style: TextStyle(
-                              color: os_deep_blue,
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_dark_white
+                                  : os_deep_blue,
                             ),
                           ),
                         ),
@@ -2446,9 +2450,7 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
           ),
           Row(children: [
             myInkWell(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_card
-                    : os_white,
+                color: Colors.transparent,
                 tap: () {
                   _giveWater();
                 },
@@ -2479,9 +2481,7 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                 ),
                 radius: 10),
             myInkWell(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_card
-                    : os_white,
+                color: Colors.transparent,
                 tap: () async {
                   showToast(
                       context: context, type: XSToast.loading, txt: "请稍后");
@@ -2580,7 +2580,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
     showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
-          ? os_dark_back
+          ? os_light_dark_card
           : os_white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -2606,7 +2606,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_dark_white
+                      ? os_dark_white
                       : os_black,
                 ),
               ),
@@ -2620,7 +2620,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_dark_card
+                          ? os_white_opa
                           : os_grey,
                 ),
                 child: Center(
@@ -2659,7 +2659,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                       },
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
-                          ? Color(0x33004DFF)
+                          ? os_white_opa
                           : Color(0x16004DFF),
                       widget: Container(
                         width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
@@ -2668,7 +2668,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                           child: Text(
                             "取消",
                             style: TextStyle(
-                              color: os_deep_blue,
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_dark_white
+                                  : os_deep_blue,
                             ),
                           ),
                         ),
@@ -2722,8 +2724,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
   @override
   Widget build(BuildContext context) {
     return myInkWell(
-      color:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_card : os_white,
+      color: Colors.transparent,
       tap: () {
         List<ActionItem> _buildAction() {
           List<ActionItem> tmp = [];
