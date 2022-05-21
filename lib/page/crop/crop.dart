@@ -13,7 +13,9 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
+import 'package:provider/provider.dart';
 
 class CropImg extends StatefulWidget {
   CropImg({Key key}) : super(key: key);
@@ -46,8 +48,12 @@ class _CropImgState extends State<CropImg> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: os_white,
-        foregroundColor: os_black,
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         title: Text(edit_done ? "" : "上传新头像", style: TextStyle(fontSize: 16)),
         centerTitle: true,
         leading: IconButton(
@@ -57,7 +63,8 @@ class _CropImgState extends State<CropImg> {
           icon: Icon(Icons.chevron_left_rounded),
         ),
       ),
-      backgroundColor: os_white,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
       body: edit_done
           ? EditDoneDisplay()
           : ListView(
@@ -73,16 +80,32 @@ class _CropImgState extends State<CropImg> {
                           height: MediaQuery.of(context).size.width - 40,
                           margin: EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: os_grey,
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_light_dark_card
+                                : os_grey,
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.photo_size_select_actual_rounded),
+                                Icon(
+                                  Icons.photo_size_select_actual_rounded,
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_white
+                                          : os_black,
+                                ),
                                 Container(width: 10),
-                                Text("点此选择您的新头像"),
+                                Text(
+                                  "点此选择您的新头像",
+                                  style: TextStyle(
+                                    color: Provider.of<ColorProvider>(context)
+                                            .isDark
+                                        ? os_dark_white
+                                        : os_black,
+                                  ),
+                                ),
                               ],
                             ),
                           ),

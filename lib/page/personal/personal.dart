@@ -560,7 +560,7 @@ class _PersonCardState extends State<PersonCard> {
                           color:
                               Provider.of<ColorProvider>(context, listen: false)
                                       .isDark
-                                  ? os_dark_dark_white
+                                  ? os_dark_white
                                   : os_deep_grey,
                         )),
                   ),
@@ -762,11 +762,14 @@ class _PersonCardState extends State<PersonCard> {
                   );
                 }
               },
-              child: os_svg(
-                path:
-                    "lib/img/person/${widget.data["gender"] == 0 ? 1 : widget.data["gender"]}.svg",
-                width: 143,
-                height: 166,
+              child: Opacity(
+                opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
+                child: os_svg(
+                  path:
+                      "lib/img/person/${widget.data["gender"] == 0 ? 1 : widget.data["gender"]}.svg",
+                  width: 143,
+                  height: 166,
+                ),
               ),
             ),
           ),
@@ -855,7 +858,7 @@ class _SignState extends State<Sign> {
                 Icons.edit_calendar_outlined,
                 size: 15,
                 color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_dark_white
+                    ? os_dark_white
                     : Color(0xFF666666),
               ),
               Container(width: 5),
@@ -868,7 +871,7 @@ class _SignState extends State<Sign> {
                   style: TextStyle(
                     fontSize: 13,
                     color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_dark_white
+                        ? os_dark_white
                         : Color(0xFF666666),
                   ),
                 ),
@@ -993,7 +996,9 @@ class _PersonColumnState extends State<PersonColumn> {
             Text(
               ["粉丝", "关注", "威望"][widget.index],
               style: TextStyle(
-                color: Color(0xFF939393),
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : Color(0xFF939393),
                 fontSize: 12,
               ),
             ),
@@ -1021,7 +1026,7 @@ class _PersonColumnState extends State<PersonColumn> {
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                     color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_dark_white
+                        ? os_dark_white
                         : os_black,
                   ),
                 ),

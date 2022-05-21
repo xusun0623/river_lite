@@ -23,11 +23,7 @@ class _EmptyState extends State<Empty> {
       child: Column(
         children: [
           Provider.of<ColorProvider>(context).isDark
-              ? Icon(
-                  Icons.hourglass_empty_rounded,
-                  color: os_deep_grey,
-                  size: 75,
-                )
+              ? Container()
               : Image(
                   image: AssetImage("lib/img/empty.png"),
                   width: 200,

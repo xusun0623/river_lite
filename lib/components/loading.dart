@@ -36,7 +36,7 @@ class _LoadingState extends State<Loading> {
   Widget build(BuildContext context) {
     return Container(
       color: Provider.of<ColorProvider>(context, listen: false).isDark
-          ? os_dark_card
+          ? os_light_dark_card
           : (widget.backgroundColor ?? os_white),
       child: Center(
         child: Column(
