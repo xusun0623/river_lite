@@ -99,7 +99,7 @@ class _DetailContState extends State<DetailCont> {
                           fontSize: 16,
                           height: 1.6,
                           color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_dark_white
+                              ? os_dark_white
                               : os_black,
                         ),
                         children: _getRichText(

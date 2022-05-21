@@ -213,7 +213,7 @@ class _MsgThreeState extends State<MsgThree> {
                     125,
                 decoration: BoxDecoration(
                   color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_card
+                      ? os_light_dark_card
                       : os_white,
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),

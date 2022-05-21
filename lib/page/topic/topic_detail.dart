@@ -369,7 +369,9 @@ class _TopicDetailState extends State<TopicDetail> {
             )
           : _isBlack() || isBlack
               ? Container(
-                  color: os_white,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_back
+                      : os_white,
                   padding: EdgeInsets.only(bottom: 150),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 80),
@@ -377,6 +379,11 @@ class _TopicDetailState extends State<TopicDetail> {
                       child: Text(
                         "该帖子内容或用户已被你屏蔽，屏蔽关键词为：" + blackKeyWord,
                         textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
+                        ),
                       ),
                     ),
                   ))
@@ -1810,8 +1817,7 @@ class _CommentState extends State<Comment> {
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
                 child: Opacity(
-                  opacity:
-                      Provider.of<ColorProvider>(context).isDark ? 0.65 : 1,
+                  opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
                   child: CachedNetworkImage(
                     imageUrl: widget.data["icon"],
                     placeholder: (context, url) => Container(
@@ -1841,9 +1847,12 @@ class _CommentState extends State<Comment> {
                             widget.data["reply_name"],
                             style: TextStyle(
                               color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_dark_white
+                                  ? os_dark_white
                                   : Color(0xFF333333),
-                              fontWeight: FontWeight.bold,
+                              fontWeight:
+                                  Provider.of<ColorProvider>(context).isDark
+                                      ? FontWeight.normal
+                                      : FontWeight.bold,
                               fontSize: 14,
                             ),
                           ),
@@ -1874,7 +1883,7 @@ class _CommentState extends State<Comment> {
                               ? Opacity(
                                   opacity:
                                       Provider.of<ColorProvider>(context).isDark
-                                          ? 0.65
+                                          ? 0.8
                                           : 1,
                                   child: Tag(
                                     txt: "楼主",
@@ -1992,7 +2001,7 @@ class _CommentState extends State<Comment> {
                                         color:
                                             Provider.of<ColorProvider>(context)
                                                     .isDark
-                                                ? os_dark_dark_white
+                                                ? os_dark_white
                                                 : Color(0xFF464646)),
                                   ),
                                 ]),
@@ -2532,7 +2541,9 @@ class TopicDetailTitle extends StatelessWidget {
         data["topic"]["title"].replaceAll("&nbsp1", " "),
         style: TextStyle(
           fontSize: 18,
-          fontWeight: FontWeight.bold,
+          fontWeight: Provider.of<ColorProvider>(context).isDark
+              ? FontWeight.normal
+              : FontWeight.bold,
           color: Provider.of<ColorProvider>(context).isDark
               ? os_dark_white
               : os_black,

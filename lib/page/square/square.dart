@@ -183,6 +183,11 @@ class _SquareCardState extends State<SquareCard> {
               decoration: BoxDecoration(
                 color: Color.fromRGBO(0, 0, 0, 0.05),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
+                border: Border.all(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? Color(0x11FFFFFF)
+                      : os_white,
+                ),
               ),
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 17),
               child: Text(
@@ -190,7 +195,7 @@ class _SquareCardState extends State<SquareCard> {
                 style: TextStyle(
                   fontSize: 14,
                   color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_dark_white
+                      ? os_dark_white
                       : os_black,
                 ),
               ),

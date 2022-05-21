@@ -257,7 +257,16 @@ class _PersonCenterState extends State<PersonCenter> {
           : _isBlack()
               ? Container(
                   margin: EdgeInsets.only(bottom: 150),
-                  child: Center(child: Text("该用户已被你拉黑")),
+                  child: Center(
+                    child: Text(
+                      "该用户已被你拉黑",
+                      style: TextStyle(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_dark_white
+                            : os_black,
+                      ),
+                    ),
+                  ),
                 )
               : BackToTop(
                   show: showBackToTop,

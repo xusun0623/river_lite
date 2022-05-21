@@ -969,7 +969,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                                   color: widget.index == 0
                                       ? (Provider.of<ColorProvider>(context)
                                               .isDark
-                                          ? os_dark_dark_white
+                                          ? os_dark_white
                                           : os_black)
                                       : (os_white),
                                 ),
@@ -984,7 +984,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                             style: TextStyle(
                               color: widget.index == 0
                                   ? (Provider.of<ColorProvider>(context).isDark
-                                      ? os_dark_back
+                                      ? os_dark_dark_white
                                       : Color.fromRGBO(0, 0, 0, 0.3))
                                   : (Provider.of<ColorProvider>(context).isDark
                                       ? os_dark_white

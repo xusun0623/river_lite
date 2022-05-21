@@ -19,7 +19,7 @@ class _HomeBtnState extends State<HomeBtn> {
     return Container(
       decoration: BoxDecoration(
         color: Provider.of<ColorProvider>(context).isDark
-            ? Color(0xFF191919)
+            ? os_light_dark_card
             : os_white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
@@ -131,7 +131,7 @@ class _BtnState extends State<Btn> {
         }
       },
       color: Provider.of<ColorProvider>(context).isDark
-          ? Color(0xFF191919)
+          ? os_light_dark_card
           : os_white,
       widget: Container(
         width: (MediaQuery.of(context).size.width - os_edge * 2 - 10) / 5,

@@ -147,7 +147,7 @@ class _TopicState extends State<Topic> {
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_dark_card
+                          ? os_light_dark_card
                           : os_grey,
                 ),
                 child: Center(
@@ -345,6 +345,9 @@ class _TopicState extends State<Topic> {
                       widget.bottom ?? 0,
                     ),
                     child: myInkWell(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_light_dark_card
+                          : os_white,
                       radius: 10,
                       widget: Padding(
                         padding: const EdgeInsets.all(15),
@@ -368,7 +371,7 @@ class _TopicState extends State<Topic> {
             ),
             child: myInkWell(
               color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_card
+                  ? os_light_dark_card
                   : (widget.backgroundColor ?? os_white),
               longPress: () {
                 Vibrate.feedback(FeedbackType.impact);
@@ -441,7 +444,7 @@ class _TopicState extends State<Topic> {
                                     style: TextStyle(
                                       color: Provider.of<ColorProvider>(context)
                                               .isDark
-                                          ? os_dark_white
+                                          ? Color(0xffF1f1f1)
                                           : os_black,
                                       fontSize: 14,
                                       // fontWeight: FontWeight.bold,
