@@ -743,7 +743,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
       padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
       child: myInkWell(
         color: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_card
+            ? os_light_dark_card
             : os_white,
         tap: () {
           widget.tap();

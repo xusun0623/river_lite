@@ -43,11 +43,6 @@ class _MsgState extends State<Msg> {
         ),
       );
     });
-    if (pmMsgArr.length < 8) {
-      tmp.add(Container(
-        height: MediaQuery.of(context).size.height - 51 - 74 * pmMsgArr.length,
-      ));
-    }
     return tmp;
   }
 
@@ -188,9 +183,19 @@ class _MsgState extends State<Msg> {
                   : Empty(
                       txt: "暂无私信内容，请尝试下拉刷新",
                     ),
-              Column(
-                children: _buildPMMsg(_msgProvider.pmMsgArr),
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                child: Column(
+                  children: _buildPMMsg(_msgProvider.pmMsgArr),
+                ),
               ),
+              _msgProvider.pmMsgArr.length < 8
+                  ? Container(
+                      height: MediaQuery.of(context).size.height -
+                          51 -
+                          74 * _msgProvider.pmMsgArr.length,
+                    )
+                  : Container(),
               (_msgProvider.load_done || _msgProvider.pmMsgArr.length == 0)
                   ? Container()
                   : Container(
@@ -311,7 +316,9 @@ class _MsgCardState extends State<MsgCard> {
         });
       },
       radius: 0,
-      color: Colors.transparent,
+      color: Provider.of<ColorProvider>(context).isDark
+          ? os_light_dark_card
+          : Colors.transparent,
       widget: Container(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         child: Row(
