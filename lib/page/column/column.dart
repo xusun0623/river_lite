@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:lottie/lottie.dart';
@@ -44,6 +47,7 @@ class _TopicColumnState extends State<TopicColumn> {
   bool fold = true;
   bool manualPull = false;
   bool showTopTitle = false; //是否显示顶部标题
+  bool need_50_water = false; //密语区需要支付50水滴才行
 
   int pageSize = 25;
 
@@ -120,6 +124,13 @@ class _TopicColumnState extends State<TopicColumn> {
       loading = false;
       load_done = (data["list"] ?? []).length < pageSize;
     } else {
+      String tmp_txt = jsonEncode(tmp);
+      if (tmp_txt.contains("您需要支付 50 滴水滴才能进入此版块")) {
+        print("您需要支付 50 滴水滴才能进入此版块");
+        setState(() {
+          need_50_water = true;
+        });
+      }
       loading = false;
       load_done = true;
     }
@@ -317,23 +328,39 @@ class _TopicColumnState extends State<TopicColumn> {
         body: data == null || data["list"] == null
             ? Loading(
                 showError: load_done,
-                msg: "帖子专栏走丢了，或许网页端可以连接该星球",
+                msg: need_50_water
+                    ? "您需要支付50滴水滴才能进入此版块，支付一次，永久有效。客户端可能有延时，需要等候后才能查看"
+                    : "帖子专栏走丢了，或许网页端可以连接该星球",
                 backgroundColor: os_back,
-                tapTxt1: "前往网页版 >",
-                tapTxt: "重新刷新一次 >",
+                tapTxt1: need_50_water ? "重新刷新一次 >" : "前往网页版 >",
+                tapTxt: need_50_water ? "去网页版河畔支付 >" : "重新刷新一次 >",
                 loadingWidget: Lottie.asset("lib/lottie/book.json"),
                 tap: () {
-                  setState(() {
-                    load_done = false;
-                    loading = false;
-                    _getData();
-                  });
+                  if (need_50_water) {
+                    launch(
+                      "https://bbs.uestc.edu.cn/forum.php?mod=forumdisplay&fid=371&mobile=no",
+                    );
+                  } else {
+                    setState(() {
+                      load_done = false;
+                      loading = false;
+                      _getData();
+                    });
+                  }
                 },
-                tap1: () {
-                  launch(
-                    "https://bbs.uestc.edu.cn/forum.php?mod=forumdisplay&fid=${widget.columnID}",
-                  );
-                },
+                tap1: need_50_water
+                    ? () {
+                        setState(() {
+                          load_done = false;
+                          loading = false;
+                          _getData();
+                        });
+                      }
+                    : () {
+                        launch(
+                          "https://bbs.uestc.edu.cn/forum.php?mod=forumdisplay&fid=${widget.columnID}",
+                        );
+                      },
               )
             : BackToTop(
                 animation: false,

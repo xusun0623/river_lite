@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
@@ -794,15 +795,37 @@ class _PersonCardState extends State<PersonCard> {
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
-                child: CachedNetworkImage(
-                  imageUrl: widget.data["icon"],
-                  width: 66,
-                  height: 66,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                      color: os_grey,
+                child: GestureDetector(
+                  onLongPress: () {
+                    Vibrate.feedback(FeedbackType.impact);
+                    CachedNetworkImage.evictFromCache("url");
+                    int uid = int.parse(widget.data["icon"]
+                        .toString()
+                        .split("uid=")[1]
+                        .split("&size")[0]);
+                    CachedNetworkImage.evictFromCache(
+                      //清除原有头像缓存
+                      "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=big",
+                    );
+                    CachedNetworkImage.evictFromCache(
+                      "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=middle",
+                    );
+                    CachedNetworkImage.evictFromCache(
+                      "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=small",
+                    );
+                    showToast(
+                        context: context, type: XSToast.success, txt: "清除缓存成功");
+                  },
+                  child: CachedNetworkImage(
+                    imageUrl: widget.data["icon"],
+                    width: 66,
+                    height: 66,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                        color: os_grey,
+                      ),
                     ),
                   ),
                 ),

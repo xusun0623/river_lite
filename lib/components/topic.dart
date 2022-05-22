@@ -401,7 +401,7 @@ class _TopicState extends State<Topic> {
                   border: Border.all(
                     color: Provider.of<ColorProvider>(context).isDark
                         ? Color(0x08FFFFFF)
-                        : os_white,
+                        : Colors.transparent,
                   ),
                 ),
                 child: Padding(

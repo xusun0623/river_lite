@@ -274,6 +274,38 @@ class _TopicDetailState extends State<TopicDetail> {
         : Container());
     for (var i = 0; i < comment.length; i++) {
       tmp.add(Comment(
+        add_1: () async {
+          Map json = {
+            "body": {
+              "json": {
+                "isAnonymous": 0,
+                "isOnlyAuthor": 0,
+                "typeId": "",
+                "aid": "",
+                "fid": "",
+                "replyId": "",
+                "tid": widget.topicID, // 回复时指定帖子
+                "isQuote": 0, //"是否引用之前回复的内容
+                "title": "",
+                "content": jsonEncode(comment[i]["reply_content"]),
+              }
+            }
+          };
+          showToast(
+            context: context,
+            type: XSToast.loading,
+            txt: "请稍后…",
+          );
+          await Api().forum_topicadmin(
+            {
+              "act": "reply",
+              "json": jsonEncode(json),
+            },
+          );
+          await _getData();
+          Navigator.pop(context);
+          hideToast();
+        },
         index: i,
         tap: (reply_id, reply_name) {
           //回复别人
@@ -1659,8 +1691,10 @@ class Comment extends StatefulWidget {
   var is_last;
   var topic_id;
   var host_id;
+  Function add_1;
   int index;
   Function tap;
+
   Comment(
       {Key key,
       this.data,
@@ -1668,6 +1702,7 @@ class Comment extends StatefulWidget {
       this.topic_id,
       this.host_id,
       this.tap,
+      this.add_1,
       this.index})
       : super(key: key);
 
@@ -1729,7 +1764,7 @@ class _CommentState extends State<Comment> {
 
   void _showMore() async {
     Vibrate.feedback(FeedbackType.impact);
-    print(widget.data["extraPanel"].toString());
+    // print(widget.data["extraPanel"].toString());
     List<ActionItem> _buildAction() {
       List<ActionItem> tmp = [];
       String copy_txt = "";
@@ -1738,6 +1773,13 @@ class _CommentState extends State<Comment> {
           copy_txt += e["infor"].toString();
         }
       });
+      tmp.add(
+        ActionItem(
+            title: "+1",
+            onPressed: () {
+              if (widget.add_1 != null) widget.add_1();
+            }),
+      );
       tmp.add(
         ActionItem(
             title: "复制文本内容",

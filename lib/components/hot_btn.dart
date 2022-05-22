@@ -79,10 +79,10 @@ class _HomeBtnState extends State<HomeBtn> {
                 board_id: 370,
               ),
               Btn(
-                txt: "保研考研",
+                txt: "密语",
                 img: "lib/img/home/8.svg",
                 url: "/column",
-                board_id: 199,
+                board_id: 371,
               ),
               Btn(
                 txt: "水滴答题",
