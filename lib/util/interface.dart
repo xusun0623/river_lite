@@ -111,12 +111,15 @@ class Api {
         return "";
       } else if (html.contains("恭喜您完成了全部的挑战关卡")) {
         return "1";
+      } else if (html.contains("您有勇气挑战下一关吗")) {
+        return "2";
       } else {
         // print("${html}");
         String tmp_q = html
             .split("【题目】</b>&nbsp;")[1]
             .split("</font>")[0]
             .toString(); //题目文本
+        String progress = html.split("【关卡】</b>")[1].split("</font>")[0];
         List<String> tmp_a = []; //题目答案
         List<int> tmp_value = []; //题目答案值
         List<String> tmp_split = html.split("radio");
@@ -138,6 +141,7 @@ class Api {
           "q": tmp_q, //题目
           "a_list": tmp_a, //题目的答案
           "v_list": tmp_value, //题目答案的值
+          "progress": progress.replaceAll(" ", ""), //答题进度
         };
         // print("${q_a}");
         return jsonEncode(q_a);
