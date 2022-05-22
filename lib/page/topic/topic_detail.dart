@@ -344,7 +344,7 @@ class _TopicDetailState extends State<TopicDetail> {
       appBar: data == null || data["topic"] == null
           ? AppBar(
               backgroundColor: Provider.of<ColorProvider>(context).isDark
-                  ? os_light_dark_card
+                  ? os_dark_card
                   : os_white,
               foregroundColor: os_black,
               leading: IconButton(
@@ -360,7 +360,7 @@ class _TopicDetailState extends State<TopicDetail> {
             )
           : AppBar(
               backgroundColor: Provider.of<ColorProvider>(context).isDark
-                  ? os_light_dark_card
+                  ? os_detail_back
                   : os_white,
               foregroundColor: os_black,
               elevation: 0,
@@ -388,7 +388,7 @@ class _TopicDetailState extends State<TopicDetail> {
                     ],
             ),
       backgroundColor: Provider.of<ColorProvider>(context).isDark
-          ? os_light_dark_card
+          ? os_detail_back
           : os_white,
       body: data == null || data["topic"] == null
           ? Loading(
@@ -405,7 +405,7 @@ class _TopicDetailState extends State<TopicDetail> {
           : _isBlack() || isBlack
               ? Container(
                   color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_back
+                      ? os_detail_back
                       : os_white,
                   padding: EdgeInsets.only(bottom: 150),
                   child: Container(
@@ -427,7 +427,7 @@ class _TopicDetailState extends State<TopicDetail> {
                     Container(
                       decoration: BoxDecoration(
                         color: Provider.of<ColorProvider>(context).isDark
-                            ? os_light_dark_card
+                            ? os_detail_back
                             : os_white,
                       ),
                       child: RefreshIndicator(
@@ -634,7 +634,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
             height: popSection ? 200 : 250,
             decoration: BoxDecoration(
                 color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_back
+                    ? Color(0xFF222222)
                     : os_white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15),
@@ -1245,7 +1245,7 @@ class Divider extends StatelessWidget {
       height: 15,
       decoration: BoxDecoration(
         color: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_back
+            ? Color(0xFF222222)
             : Color(0xFFF6F6F6),
         borderRadius: BorderRadius.all(Radius.circular(2)),
       ),
@@ -1415,7 +1415,7 @@ class _TopicVoteState extends State<TopicVote> {
                                 ? os_dark_white
                                 : os_color)
                             : (Provider.of<ColorProvider>(context).isDark
-                                ? os_dark_dark_white
+                                ? os_dark_white
                                 : os_black),
                       ),
                     ),
@@ -1473,7 +1473,7 @@ class _TopicVoteState extends State<TopicVote> {
             padding: EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
               color: Provider.of<ColorProvider>(context).isDark
-                  ? os_light_dark_card
+                  ? Color(0x11FFFFFF)
                   : Color(0xFFF6F6F6),
               borderRadius: BorderRadius.all(Radius.circular(7.5)),
             ),
@@ -1545,7 +1545,7 @@ class _CommentTabState extends State<CommentTab> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
       color: Provider.of<ColorProvider>(context).isDark
-          ? os_light_dark_card
+          ? os_detail_back
           : os_white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -2008,7 +2008,7 @@ class _CommentState extends State<Comment> {
                             margin: EdgeInsets.only(top: 10),
                             decoration: BoxDecoration(
                               color: Provider.of<ColorProvider>(context).isDark
-                                  ? Color(0x22000000)
+                                  ? Color(0x11FFFFFF)
                                   : Color(0x09000000),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(13)),
@@ -2158,7 +2158,7 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
       child: Container(
         decoration: BoxDecoration(
           color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_back
+              ? Color(0xFF222222)
               : Colors.white,
           border: Border(
             top: BorderSide(

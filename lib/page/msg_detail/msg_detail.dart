@@ -862,10 +862,10 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
             },
             color: widget.index == 0
                 ? (Provider.of<ColorProvider>(context).isDark
-                    ? os_light_dark_card
+                    ? Color(0x22FFFFFF)
                     : Color(0xFFEEEEEE))
                 : (Provider.of<ColorProvider>(context).isDark
-                    ? Color(0x994577f6)
+                    ? Color(0xFF0C4AE7)
                     : theme),
             splashColor:
                 widget.index == 0 ? Color(0x44707070) : Color(0x44002873),

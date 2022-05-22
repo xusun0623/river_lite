@@ -409,7 +409,7 @@ class _HistoryCardState extends State<HistoryCard> {
       child: myInkWell(
         radius: 10,
         color: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_card
+            ? os_light_dark_card
             : os_white,
         tap: () {
           _setHistory();

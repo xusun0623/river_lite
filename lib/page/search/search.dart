@@ -772,7 +772,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                             width: 35,
                             height: 35,
                             color: Provider.of<ColorProvider>(context).isDark
-                                ? os_light_light_dark_card
+                                ? Color(0x19FFFFFF)
                                 : os_wonderful_color_opa[widget.index % 7],
                             child: Center(
                               child: Text(
@@ -798,7 +798,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                               style: TextStyle(
                                 color:
                                     Provider.of<ColorProvider>(context).isDark
-                                        ? os_dark_dark_white
+                                        ? os_dark_white
                                         : Color(0xFF636363),
                                 fontSize: 15,
                               ),

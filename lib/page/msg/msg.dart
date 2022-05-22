@@ -239,7 +239,7 @@ class _ColorBtnState extends State<ColorBtn> {
         child: Stack(
           children: [
             Opacity(
-              opacity: Provider.of<ColorProvider>(context).isDark ? 0.6 : 1,
+              opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
               child: os_svg(
                 path: widget.path,
                 width: 108,

@@ -334,7 +334,10 @@ class _TopicColumnState extends State<TopicColumn> {
                 backgroundColor: os_back,
                 tapTxt1: need_50_water ? "重新刷新一次 >" : "前往网页版 >",
                 tapTxt: need_50_water ? "去网页版河畔支付 >" : "重新刷新一次 >",
-                loadingWidget: Lottie.asset("lib/lottie/book.json"),
+                loadingWidget: Opacity(
+                  opacity: 0.8,
+                  child: Lottie.asset("lib/lottie/book.json"),
+                ),
                 tap: () {
                   if (need_50_water) {
                     launch(
