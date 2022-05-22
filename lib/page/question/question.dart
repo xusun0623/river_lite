@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
+import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/page/me/me.dart';
 import 'package:offer_show/page/question/answer.dart';
 import 'package:offer_show/util/interface.dart';
 
@@ -19,6 +22,7 @@ class _QuestionState extends State<Question> {
   bool isFinish = false;
   int status = 0; //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关 4-已领取奖励
   String match_answer = "";
+  String selected_option = "";
   Map q_a = {};
 
   List<Widget> _buildOption() {
@@ -29,13 +33,38 @@ class _QuestionState extends State<Question> {
         String option = q_a["a_list"][i];
         if (option == match_answer) {
           ret_value = q_a["v_list"][i];
+          selected_option = "${carry[i]}. " + option;
         }
-        tmp.add(Text(
-          "${carry[i]}. " + option,
-          style: TextStyle(
-            color: match_answer == option ? os_red : os_black,
+        tmp.add(
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 7.5),
+            child: Bounce(
+              onPressed: () {},
+              duration: Duration(milliseconds: 100),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: match_answer == option ? os_color : os_white,
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: match_answer == option ? os_color_opa : os_white,
+                ),
+                child: Text(
+                  "${carry[i]}. " + option,
+                  style: TextStyle(
+                    color: match_answer == option ? os_color : os_black,
+                    fontSize: 16,
+                    fontWeight: match_answer == option
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                  ),
+                ),
+              ),
+            ),
           ),
-        ));
+        );
       }
     }
     return tmp;
@@ -72,6 +101,8 @@ class _QuestionState extends State<Question> {
     if (match_answer != null && match_answer != "") {
       print("OKKKKKK");
       // _submit();
+    } else {
+      match_answer = "";
     }
   }
 
@@ -93,8 +124,16 @@ class _QuestionState extends State<Question> {
   }
 
   _submit() async {
-    await Api().submit_question(answer: ret_value);
-    _next();
+    if (match_answer == "") {
+      showToast(
+        context: context,
+        type: XSToast.none,
+        txt: "请选择一个选项",
+      );
+    } else {
+      await Api().submit_question(answer: ret_value);
+      _next();
+    }
   }
 
   @override
@@ -107,9 +146,63 @@ class _QuestionState extends State<Question> {
     return q_a == null || q_a["q"] == null
         ? []
         : [
-            Text(q_a["progress"].toString().replaceAll(" ", "")),
-            Text(q_a["q"]),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Text(
+                q_a["progress"].toString().replaceAll(" ", ""),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              child: Text(
+                q_a["q"],
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Container(height: 10),
             ..._buildOption(),
+            match_answer == ""
+                ? Container()
+                : Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 7.5,
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 15,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Color(0xFFE4EAF1),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "已匹配到答案，已自动勾选",
+                            style: TextStyle(color: Color(0xFF677D9B)),
+                          ),
+                          Container(height: 5),
+                          Text(
+                            selected_option,
+                            style: TextStyle(
+                              color: Color(0xFF677D9B),
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
             ElevatedButton(
               onPressed: () async {
                 _next();
@@ -181,17 +274,34 @@ class _QuestionState extends State<Question> {
         ),
       ),
       backgroundColor: os_back,
-      body: ListView(
-        //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关
-        children: status == 0
-            ? doing()
-            : status == 1
-                ? bouns()
-                : status == 2
-                    ? done()
-                    : status == 3
-                        ? haveNext()
-                        : gotBouns(),
+      body: Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height -
+                MediaQuery.of(context).padding.top -
+                250,
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关
+              children: status == 0
+                  ? doing()
+                  : status == 1
+                      ? bouns()
+                      : status == 2
+                          ? done()
+                          : status == 3
+                              ? haveNext()
+                              : gotBouns(),
+            ),
+          ),
+          Container(
+            height: 150,
+            color: os_back,
+            child: Row(
+              children: [],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -323,7 +323,6 @@ class _TopicColumnState extends State<TopicColumn> {
                 tapTxt: "重新刷新一次 >",
                 loadingWidget: Lottie.asset("lib/lottie/book.json"),
                 tap: () {
-                  Vibrate.feedback(FeedbackType.impact);
                   setState(() {
                     load_done = false;
                     loading = false;
@@ -331,9 +330,9 @@ class _TopicColumnState extends State<TopicColumn> {
                   });
                 },
                 tap1: () {
-                  Vibrate.feedback(FeedbackType.impact);
                   launch(
-                      "https://bbs.uestc.edu.cn/forum.php?mod=forumdisplay&fid=${widget.columnID}");
+                    "https://bbs.uestc.edu.cn/forum.php?mod=forumdisplay&fid=${widget.columnID}",
+                  );
                 },
               )
             : BackToTop(
