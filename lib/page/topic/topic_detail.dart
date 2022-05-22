@@ -194,11 +194,6 @@ class _TopicDetailState extends State<TopicDetail> {
   _buildTotal() {
     List<Widget> tmp = [];
     tmp = [
-      Provider.of<ColorProvider>(context).isDark
-          ? Container(
-              height: 20,
-            )
-          : Container(),
       TopicDetailTitle(data: data),
       data["topic"]["essence"] == 0
           ? Container()
