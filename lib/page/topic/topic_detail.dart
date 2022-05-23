@@ -1979,13 +1979,17 @@ class _CommentState extends State<Comment> {
                                                 .length <
                                             7
                                         ? Color(0xFFFE6F61)
-                                        : Color(0xFF0092FF),
+                                        : (widget.data["poststick"] == 1
+                                            ? os_white
+                                            : Color(0xFF0092FF)),
                                     color_opa: widget.data["userTitle"]
                                                 .toString()
                                                 .length <
                                             7
                                         ? Color(0x10FE6F61)
-                                        : Color(0x100092FF),
+                                        : (widget.data["poststick"] == 1
+                                            ? os_wonderful_color[3]
+                                            : Color(0x100092FF)),
                                   ),
                             Container(width: 5),
                             widget.data["reply_id"] == widget.host_id &&

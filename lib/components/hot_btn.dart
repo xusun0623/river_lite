@@ -4,6 +4,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
+import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class HomeBtn extends StatefulWidget {
@@ -123,11 +124,17 @@ class _BtnState extends State<Btn> {
   @override
   Widget build(BuildContext context) {
     return myInkWell(
-      tap: () {
-        if (widget.url != "" && widget.board_id != null) {
-          Navigator.pushNamed(context, widget.url, arguments: widget.board_id);
-        } else if (widget.url != "") {
-          Navigator.pushNamed(context, widget.url);
+      tap: () async {
+        String myinfo = await getStorage(key: "myinfo", initData: "");
+        if (myinfo == "") {
+          Navigator.pushNamed(context, "/login", arguments: 0);
+        } else {
+          if (widget.url != "" && widget.board_id != null) {
+            Navigator.pushNamed(context, widget.url,
+                arguments: widget.board_id);
+          } else if (widget.url != "") {
+            Navigator.pushNamed(context, widget.url);
+          }
         }
       },
       color: Provider.of<ColorProvider>(context).isDark
