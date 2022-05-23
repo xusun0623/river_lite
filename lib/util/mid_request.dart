@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/util/storage.dart';
 
 class ServerConfig {
@@ -9,6 +10,36 @@ class ServerConfig {
 bool isLog = true; //控制是否打印网络输出日志
 
 class XHttp {
+  pureHttpWithCookie({String url, Map param}) async {
+    var dio = Dio();
+    String cookie = await getWebCookie();
+    dio.options.contentType = Headers.formUrlEncodedContentType;
+    dio.options.responseType = ResponseType.plain;
+    dio.options.connectTimeout = 10000;
+    dio.options.receiveTimeout = 10000;
+    Response response = await dio
+        .request(url,
+            data: param,
+            options: Options(
+              method: "POST",
+              headers: {"Cookie": cookie},
+            ))
+        .catchError(
+          (err) {},
+        );
+    if (response != null) {
+      try {
+        Map<String, dynamic> data = jsonDecode(response.toString());
+        if (isLog) print("地址:$url入参:$param回参:$data");
+        return data;
+      } catch (e) {
+        return response;
+      }
+    } else {
+      return {};
+    }
+  }
+
   pureHttp({String url, Map param}) async {
     var dio = Dio();
     dio.options.contentType = Headers.formUrlEncodedContentType;
@@ -19,10 +50,8 @@ class XHttp {
     Response response = await dio
         .request(url, data: param, options: Options(method: "POST"))
         .catchError(
-      (err) {
-        // if (isLog) print("${err}");
-      },
-    );
+          (err) {},
+        );
     if (response != null) {
       try {
         Map<String, dynamic> data = jsonDecode(response.toString());

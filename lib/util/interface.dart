@@ -8,7 +8,6 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:heic_to_jpg/heic_to_jpg.dart';
 import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart';
 import 'package:offer_show/util/storage.dart';
 
 /// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API

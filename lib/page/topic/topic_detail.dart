@@ -7,10 +7,12 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/asset/topic_formhash.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
@@ -30,6 +32,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
@@ -301,6 +304,12 @@ class _TopicDetailState extends State<TopicDetail> {
         : Container());
     for (var i = 0; i < comment.length; i++) {
       tmp.add(Comment(
+        fid: data["boardId"],
+        fresh: () async {
+          await _getData();
+          vibrate = false;
+          return;
+        },
         add_1: () async {
           Map json = {
             "body": {
@@ -1718,18 +1727,22 @@ class Comment extends StatefulWidget {
   var is_last;
   var topic_id;
   var host_id;
+  var fid;
   Function add_1;
   int index;
   Function tap;
+  Function fresh;
 
   Comment(
       {Key key,
       this.data,
       this.is_last,
       this.topic_id,
+      this.fid,
       this.host_id,
       this.tap,
       this.add_1,
+      this.fresh,
       this.index})
       : super(key: key);
 
@@ -1739,6 +1752,8 @@ class Comment extends StatefulWidget {
 
 class _CommentState extends State<Comment> {
   var liked = 0;
+  bool is_me = false;
+
   _getLikedStatus() async {
     String tmp = await getStorage(
       key: "comment_like",
@@ -1770,24 +1785,6 @@ class _CommentState extends State<Comment> {
   }
 
   _buildContBody(data) {
-    // List<Widget> tmp = [];
-    // var imgLists = [];
-    // data.forEach((e) {
-    //   if (e["type"] == 1) {
-    //     imgLists.add(e["infor"]);
-    //   }
-    // });
-    // data.forEach((e) {
-    //   tmp.add(Container(
-    //     padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-    //     child: DetailCont(
-    //       data: e,
-    //       imgLists: imgLists,
-    //     ),
-    //   ));
-    // });
-    // return Column(children: tmp);
-
     List<Widget> tmp = [];
     var imgLists = [];
     data.forEach((e) {
@@ -1840,9 +1837,52 @@ class _CommentState extends State<Comment> {
     return Column(children: tmp);
   }
 
+  void stickyForm() async {
+    showToast(context: context, type: XSToast.loading, txt: "请稍后…");
+    String formhash = await getTopicFormHash(widget.topic_id);
+    String fid = widget.fid.toString();
+    String tid = widget.topic_id.toString();
+    String page = ((widget.index / 20) + 1).toString();
+    String handlekey = "mods";
+    String topiclist = widget.data["reply_posts_id"].toString(); //需要加一个[]
+    String stickreply = widget.data["poststick"] == 1 ? "0" : "1";
+    String modsubmit = "true";
+    var headers = {
+      'Cookie': (await getStorage(key: "cookie", initData: "")).toString()
+    };
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(
+        'https://bbs.uestc.edu.cn/forum.php?mod=topicadmin&action=stickreply&modsubmit=yes&infloat=yes&modclick=yes&inajax=1',
+      ),
+    );
+    request.fields.addAll({
+      'formhash': formhash,
+      'fid': fid,
+      'tid': tid,
+      'page': page,
+      'handlekey': handlekey,
+      'topiclist[]': topiclist,
+      'stickreply': stickreply,
+      'modsubmit': modsubmit
+    });
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      hideToast();
+      Navigator.pop(context);
+      showToast(context: context, type: XSToast.success, txt: "操作成功");
+      widget.fresh();
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
   void _showMore() async {
     Vibrate.feedback(FeedbackType.impact);
-    // print(widget.data["extraPanel"].toString());
     List<ActionItem> _buildAction() {
       List<ActionItem> tmp = [];
       String copy_txt = "";
@@ -1851,13 +1891,6 @@ class _CommentState extends State<Comment> {
           copy_txt += e["infor"].toString();
         }
       });
-      tmp.add(
-        ActionItem(
-            title: "+1",
-            onPressed: () {
-              if (widget.add_1 != null) widget.add_1();
-            }),
-      );
       tmp.add(
         ActionItem(
             title: "复制文本内容",
@@ -1869,6 +1902,20 @@ class _CommentState extends State<Comment> {
               showToast(context: context, type: XSToast.success, txt: "复制成功！");
             }),
       );
+      tmp.add(
+        ActionItem(
+            title: "回复+1",
+            onPressed: () {
+              if (widget.add_1 != null) widget.add_1();
+            }),
+      );
+      if (is_me)
+        tmp.add(ActionItem(
+          title: widget.data["poststick"] == 1 ? "取消置顶评论" : "置顶评论",
+          onPressed: () {
+            stickyForm();
+          },
+        ));
       widget.data["extraPanel"].forEach((ele) {
         tmp.add(
           ActionItem(
@@ -1888,9 +1935,18 @@ class _CommentState extends State<Comment> {
     );
   }
 
+  _getIsMeTopic() async {
+    //该帖子是不是这个用户的，用户方便用户置顶他人/自己评论
+    int uid = await getUid();
+    setState(() {
+      is_me = widget.host_id == uid;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    _getIsMeTopic();
     _getLikedStatus();
   }
 
