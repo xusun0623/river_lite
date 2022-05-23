@@ -20,6 +20,7 @@ class _QuestionState extends State<Question> {
   int count = 0; //第几道题
   int ret_value = 0; //勾选的答案value
   bool isFinish = false;
+  bool auto_machine = false; //是否机器自动接管
   bool no_answer = false; //没有匹配到答案
   bool load_done = false; //是否首次加载完成
   int status = 0; //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关 4-已领取奖励
@@ -45,7 +46,10 @@ class _QuestionState extends State<Question> {
                 setState(() {
                   no_answer = true;
                   match_answer = option;
+                  ret_value = q_a["v_list"][i];
                 });
+                print("更改勾选选项：${ret_value}");
+                print("更改答案：${match_answer}");
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -104,12 +108,11 @@ class _QuestionState extends State<Question> {
 
   _queryAns() async {
     match_answer = query_answer(q_a["q"]);
-    await Future.delayed(Duration(milliseconds: 50));
+    setState(() {});
     if (match_answer != null && match_answer != "") {
       setState(() {
         no_answer = false;
       });
-      // _submit();
     } else {
       setState(() {
         match_answer = "";
@@ -122,7 +125,11 @@ class _QuestionState extends State<Question> {
     print("当前已答题数：${count}");
     if (count < 7) {
       await Api().next_question();
-      _getQuestion();
+      await _getQuestion();
+      await Future.delayed(Duration(milliseconds: 50));
+      if (auto_machine && match_answer != "" && !no_answer) {
+        _submit();
+      }
     } else {
       _getQuestion();
     }
@@ -137,19 +144,29 @@ class _QuestionState extends State<Question> {
     );
     await Future.delayed(Duration(milliseconds: 500));
     hideToast();
-    Navigator.pop(context);
   }
 
   _submit() async {
-    if (match_answer == "") {
+    if (match_answer == "" && !auto_machine) {
       showToast(
         context: context,
         type: XSToast.none,
         txt: "请选择一个选项",
       );
+    } else if (match_answer == "" && auto_machine) {
+      //  机器没匹配到
+      showToast(
+        context: context,
+        type: XSToast.none,
+        txt: "未匹配到答案，请手动勾选",
+        duration: 300,
+      );
     } else {
       showToast(context: context, type: XSToast.loading, txt: "请稍后…");
-      await Api().submit_question(answer: ret_value);
+      await Api().submit_question(
+        answer: ret_value,
+        context: context,
+      );
       await _next();
       hideToast();
     }
@@ -417,6 +434,21 @@ class _QuestionState extends State<Question> {
   List<Widget> bottom() {
     return [
       myInkWell(
+        tap: () {
+          showModal(
+            context: context,
+            title: "请确认",
+            cont: "机器接管答题时请勿操作设备页面。答题不保证100%成功，如果未匹配到答案时需要你手动勾选",
+            confirmTxt: "确认",
+            cancelTxt: "取消",
+            confirm: () {
+              auto_machine = true;
+              if (match_answer != "") {
+                _submit();
+              }
+            },
+          );
+        },
         color: os_white,
         radius: 10,
         widget: Container(

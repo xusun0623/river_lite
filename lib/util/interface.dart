@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/cookie.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:heic_to_jpg/heic_to_jpg.dart';
 import 'package:http/http.dart' as http;
@@ -59,7 +61,7 @@ class Api {
     return;
   }
 
-  submit_question({int answer}) async {
+  submit_question({int answer, BuildContext context}) async {
     String cookie = await getStorage(key: "cookie", initData: "");
     var headers = {'Cookie': cookie};
     var request = http.MultipartRequest(
@@ -80,7 +82,10 @@ class Api {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      // print(await response.stream.bytesToString());
+      String html = await response.stream.bytesToString();
+      if (html.contains("错误")) {
+        showToast(context: context, type: XSToast.none, txt: "答题错误,扣除10水滴");
+      }
     } else {
       print(response.reasonPhrase);
     }
