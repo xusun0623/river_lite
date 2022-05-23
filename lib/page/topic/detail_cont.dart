@@ -19,10 +19,12 @@ import '../../outer/cached_network_image/cached_image_widget.dart';
 class DetailCont extends StatefulWidget {
   var data;
   var imgLists;
+  bool isComment;
   DetailCont({
     Key key,
     this.data,
     this.imgLists,
+    this.isComment,
   }) : super(key: key);
 
   @override
@@ -149,8 +151,14 @@ class _DetailContState extends State<DetailCont> {
                   child: widget.imgLists.length > 5
                       ? CachedNetworkImage(
                           imageUrl: widget.data["infor"],
-                          width: 100,
-                          height: 100,
+                          width: (MediaQuery.of(context).size.width -
+                                  (widget.isComment ?? false ? 50 : 0) -
+                                  42) /
+                              3,
+                          height: (MediaQuery.of(context).size.width -
+                                  (widget.isComment ?? false ? 50 : 0) -
+                                  42) /
+                              3,
                           maxHeightDiskCache: 200,
                           maxWidthDiskCache: 200,
                           memCacheWidth: 200,

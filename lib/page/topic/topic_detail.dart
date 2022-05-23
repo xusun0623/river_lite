@@ -164,13 +164,40 @@ class _TopicDetailState extends State<TopicDetail> {
         s_tmp += e["infor"] + "\n";
       }
     });
-    data["topic"]["content"].forEach((e) {
+    for (var i = 0; i < data["topic"]["content"].length; i++) {
+      var e = data["topic"]["content"][i];
       if (e["type"] == 5 &&
           e["originalInfo"] != null &&
           e["originalInfo"].toString().indexOf(".jpg") > -1) {
-        //图片附件,不提供跳转下载
-      } else {
         //图片附件不允许下载
+        data["topic"]["content"].removeAt(i);
+      }
+    }
+    for (var i = 0; i < data["topic"]["content"].length; i++) {
+      var e = data["topic"]["content"][i];
+      int img_count = 0;
+      if (imgLists.length > 5 &&
+          e["type"] == 1 &&
+          i < data["topic"]["content"].length - 1 &&
+          data["topic"]["content"][i + 1]["type"] == 1) {
+        List<Widget> renderImg = [];
+        while (e["type"] == 1 &&
+            i + img_count < data["topic"]["content"].length &&
+            true) {
+          renderImg.add(DetailCont(
+            data: data["topic"]["content"][i + img_count],
+            imgLists: imgLists,
+          ));
+          img_count++; //有多少张图片连续
+        }
+        tmp.add(Wrap(
+          children: renderImg,
+          spacing: 6,
+          runSpacing: 6,
+          alignment: WrapAlignment.start,
+        ));
+        i += img_count - 1; //跳过渲染
+      } else {
         tmp.add(GestureDetector(
           onLongPress: () {
             Clipboard.setData(ClipboardData(text: s_tmp));
@@ -187,7 +214,7 @@ class _TopicDetailState extends State<TopicDetail> {
           ),
         ));
       }
-    });
+    }
     return Column(children: tmp);
   }
 
@@ -1743,6 +1770,24 @@ class _CommentState extends State<Comment> {
   }
 
   _buildContBody(data) {
+    // List<Widget> tmp = [];
+    // var imgLists = [];
+    // data.forEach((e) {
+    //   if (e["type"] == 1) {
+    //     imgLists.add(e["infor"]);
+    //   }
+    // });
+    // data.forEach((e) {
+    //   tmp.add(Container(
+    //     padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+    //     child: DetailCont(
+    //       data: e,
+    //       imgLists: imgLists,
+    //     ),
+    //   ));
+    // });
+    // return Column(children: tmp);
+
     List<Widget> tmp = [];
     var imgLists = [];
     data.forEach((e) {
@@ -1750,15 +1795,48 @@ class _CommentState extends State<Comment> {
         imgLists.add(e["infor"]);
       }
     });
-    data.forEach((e) {
-      tmp.add(Container(
-        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-        child: DetailCont(
-          data: e,
-          imgLists: imgLists,
-        ),
-      ));
-    });
+    for (var i = 0; i < data.length; i++) {
+      var e = data[i];
+      if (e["type"] == 5 &&
+          e["originalInfo"] != null &&
+          e["originalInfo"].toString().indexOf(".jpg") > -1) {
+        //图片附件不允许下载
+        data.removeAt(i);
+      }
+    }
+    for (var i = 0; i < data.length; i++) {
+      var e = data[i];
+      int img_count = 0;
+      if (imgLists.length > 5 &&
+          e["type"] == 1 &&
+          i < data.length - 1 &&
+          data[i + 1]["type"] == 1) {
+        List<Widget> renderImg = [];
+        while (e["type"] == 1 && i + img_count < data.length && true) {
+          renderImg.add(DetailCont(
+            data: data[i + img_count],
+            imgLists: imgLists,
+            isComment: true,
+          ));
+          img_count++; //有多少张图片连续
+        }
+        tmp.add(Wrap(
+          children: renderImg,
+          spacing: 6,
+          runSpacing: 6,
+          alignment: WrapAlignment.start,
+        ));
+        i += img_count - 1; //跳过渲染
+      } else {
+        tmp.add(Container(
+          padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+          child: DetailCont(
+            data: e,
+            imgLists: imgLists,
+          ),
+        ));
+      }
+    }
     return Column(children: tmp);
   }
 
