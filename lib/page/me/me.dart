@@ -184,6 +184,7 @@ class _MeListGroupState extends State<MeListGroup> {
         Provider.of<ColorProvider>(context).isDark
             ? Container()
             : MeList(txt: "关于", index: 3),
+        MeList(txt: "调试测试", index: 5),
       ],
     );
   }
@@ -223,6 +224,9 @@ class _MeListState extends State<MeList> {
         }
         if (widget.index == 4) {
           Navigator.pushNamed(context, "/black_list");
+        }
+        if (widget.index == 5) {
+          Navigator.pushNamed(context, "/test");
         }
       },
       child: Container(

@@ -2434,7 +2434,7 @@ class TopicDetailTime extends StatefulWidget {
 }
 
 class _TopicDetailTimeState extends State<TopicDetailTime> {
-  int _value = 5;
+  String _value = "";
 
   _giveWater() async {
     showModalBottomSheet(
@@ -2493,12 +2493,9 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                 ),
                 child: Center(
                   child: TextField(
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly
-                    ], //只允许输入数字
                     cursorColor: os_deep_blue,
                     onChanged: (ele) {
-                      _value = int.parse(ele);
+                      _value = ele;
                     },
                     style: TextStyle(
                       color: Provider.of<ColorProvider>(context, listen: false)
@@ -2507,7 +2504,7 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                           : os_black,
                     ),
                     decoration: InputDecoration(
-                        hintText: "请输入水滴数，从0~30",
+                        hintText: "请输入水滴数，从-5~30",
                         border: InputBorder.none,
                         hintStyle: TextStyle(
                           color:
@@ -2552,17 +2549,35 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                   Container(
                     child: myInkWell(
                       tap: () async {
-                        await XHttp().pureHttp(
-                            url: widget.data["topic"]["extraPanel"][0]["action"]
-                                    .toString() +
-                                "&modsubmit=确定",
-                            param: {
-                              "score2": _value,
-                              "sendreasonpm": "on",
-                              "reason": "我在你的帖子下给你加水了哦",
-                            });
-                        if (widget.refresh != null) widget.refresh();
-                        Navigator.pop(context);
+                        try {
+                          int val_int = int.parse(_value);
+                          if (val_int < -5 || val_int > 30) {
+                            showToast(
+                              context: context,
+                              type: XSToast.none,
+                              txt: "请输入-5~30的整数",
+                            );
+                          } else {
+                            await XHttp().pureHttp(
+                                url: widget.data["topic"]["extraPanel"][0]
+                                            ["action"]
+                                        .toString() +
+                                    "&modsubmit=确定",
+                                param: {
+                                  "score2": "${val_int}",
+                                  "sendreasonpm": "on",
+                                  "reason": "我在你的帖子下给你加水了哦",
+                                });
+                            if (widget.refresh != null) widget.refresh();
+                            Navigator.pop(context);
+                          }
+                        } catch (e) {
+                          showToast(
+                            context: context,
+                            type: XSToast.none,
+                            txt: "请输入整数",
+                          );
+                        }
                       },
                       color: os_deep_blue,
                       widget: Container(
@@ -2619,8 +2634,10 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
           Row(children: [
             myInkWell(
                 color: Colors.transparent,
-                tap: () {
-                  _giveWater();
+                tap: () async {
+                  if (widget.data["topic"]["user_id"] != (await getUid())) {
+                    _giveWater();
+                  }
                 },
                 widget: Padding(
                   padding: const EdgeInsets.all(8.0),
