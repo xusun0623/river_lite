@@ -758,7 +758,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                           ),
                           //上传附件，暂时不支持
                           SendFunc(
-                            path: "lib/img/topic_attach.svg",
+                            path: Provider.of<ColorProvider>(context).isDark
+                                ? "lib/img/topic_attach_light.svg"
+                                : "lib/img/topic_attach.svg",
                             uploadProgress: uploadProgress,
                             tap: () async {
                               String aid = await getUploadAid(
@@ -1331,7 +1333,10 @@ class _SendFuncState extends State<SendFunc> {
                                 height: 24,
                                 child: Icon(
                                   Icons.cloud_done_rounded,
-                                  color: os_deep_blue,
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_dark_white
+                                          : os_deep_blue,
                                 ),
                               )
                             : Container(
