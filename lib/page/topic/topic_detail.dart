@@ -661,6 +661,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     List<Map> at_user = [];
+    bool upLoading = false;
     return Positioned(
       bottom: widget.bottom ?? 0,
       child: Column(
@@ -717,19 +718,26 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                           ),
                           SendFunc(
                             nums: image.length == 0 ? null : image.length,
+                            loading: upLoading,
                             path: Provider.of<ColorProvider>(context).isDark
                                 ? "lib/img/topic_dark_func/topic_picture.svg"
                                 : "lib/img/topic_picture.svg",
                             tap: () async {
                               final ImagePicker _picker = ImagePicker();
                               //选好了图片
+                              setState(() {
+                                upLoading = true;
+                              });
                               image = await _picker.pickMultiImage(
                                     imageQuality: 50,
                                   ) ??
                                   [];
                               var img_urls =
                                   await Api().uploadImage(imgs: image) ?? [];
-                              widget.uploadImg(img_urls);
+                              await widget.uploadImg(img_urls);
+                              setState(() {
+                                upLoading = false;
+                              });
                               setState(() {});
                             },
                           ),
@@ -1201,11 +1209,13 @@ class _AtSomeoneState extends State<AtSomeone> {
 class SendFunc extends StatefulWidget {
   String path;
   Function tap;
+  bool loading;
   int nums;
   SendFunc({
     Key key,
     @required this.path,
     @required this.tap,
+    this.loading,
     this.nums,
   }) : super(key: key);
 
@@ -1219,7 +1229,9 @@ class _SendFuncState extends State<SendFunc> {
     return myInkWell(
       color: Colors.transparent,
       tap: () {
-        widget.tap();
+        if (!widget.loading) {
+          widget.tap();
+        }
       },
       widget: Stack(
         children: [
@@ -1253,11 +1265,20 @@ class _SendFuncState extends State<SendFunc> {
                 ),
           Container(
             padding: EdgeInsets.all(15),
-            child: os_svg(
-              path: widget.path,
-              width: 24,
-              height: 24,
-            ),
+            child: widget.loading ?? false
+                ? Container(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color: os_deep_blue,
+                    ),
+                  )
+                : os_svg(
+                    path: widget.path,
+                    width: 24,
+                    height: 24,
+                  ),
           ),
         ],
       ),
