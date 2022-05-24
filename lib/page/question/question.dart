@@ -8,6 +8,8 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/question/answer.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class Question extends StatefulWidget {
   Question({Key key}) : super(key: key);
@@ -59,12 +61,20 @@ class _QuestionState extends State<Question> {
                     width: 2,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: match_answer == option ? os_color_opa : os_white,
+                  color: match_answer == option
+                      ? os_color_opa
+                      : (Provider.of<ColorProvider>(context).isDark
+                          ? os_light_dark_card
+                          : os_white),
                 ),
                 child: Text(
                   "${carry[i]}. " + option,
                   style: TextStyle(
-                    color: match_answer == option ? os_color : os_black,
+                    color: match_answer == option
+                        ? os_color
+                        : (Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_white
+                            : os_black),
                     fontSize: 16,
                     fontWeight: match_answer == option
                         ? FontWeight.bold
@@ -141,9 +151,10 @@ class _QuestionState extends State<Question> {
       context: context,
       type: XSToast.success,
       txt: "领取9水滴",
+      duration: 500,
     );
-    await Future.delayed(Duration(milliseconds: 500));
-    hideToast();
+    await Future.delayed(Duration(milliseconds: 600));
+    Navigator.pop(context);
   }
 
   _submit() async {
@@ -189,6 +200,9 @@ class _QuestionState extends State<Question> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
                 ),
               ),
             ),
@@ -199,6 +213,9 @@ class _QuestionState extends State<Question> {
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
                 ),
               ),
             ),
@@ -218,20 +235,28 @@ class _QuestionState extends State<Question> {
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: Color(0xFFE4EAF1),
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_light_dark_card
+                            : Color(0xFFE4EAF1),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "已匹配到答案，已自动勾选",
-                            style: TextStyle(color: Color(0xFF677D9B)),
+                            style: TextStyle(
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_dark_white
+                                        : Color(0xFF677D9B)),
                           ),
                           Container(height: 5),
                           Text(
                             selected_option,
                             style: TextStyle(
-                              color: Color(0xFF677D9B),
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_dark_white
+                                  : Color(0xFF677D9B),
                               fontSize: 18,
                             ),
                           ),
@@ -260,6 +285,9 @@ class _QuestionState extends State<Question> {
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
                 ),
               ),
               Container(height: 5),
@@ -270,6 +298,9 @@ class _QuestionState extends State<Question> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_black,
                   ),
                 ),
               ),
@@ -278,7 +309,9 @@ class _QuestionState extends State<Question> {
                 tap: () {
                   _finish();
                 },
-                color: Color(0x22004DFF),
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : Color(0x22004DFF),
                 radius: 10,
                 widget: Container(
                   width: 150,
@@ -290,7 +323,9 @@ class _QuestionState extends State<Question> {
                     child: Text(
                       "领取奖励",
                       style: TextStyle(
-                        color: os_deep_blue,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_card
+                            : os_deep_blue,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -323,6 +358,9 @@ class _QuestionState extends State<Question> {
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
                 ),
               ),
               Container(height: 5),
@@ -333,6 +371,9 @@ class _QuestionState extends State<Question> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_black,
                   ),
                 ),
               ),
@@ -440,16 +481,20 @@ class _QuestionState extends State<Question> {
             title: "请确认",
             cont: "机器接管答题时请勿操作设备页面。答题不保证100%成功，如果未匹配到答案时需要你手动勾选",
             confirmTxt: "确认",
-            cancelTxt: "取消",
+            cancelTxt: "不接管",
             confirm: () {
-              auto_machine = true;
-              if (match_answer != "") {
-                _submit();
+              if (!auto_machine) {
+                auto_machine = true;
+                if (match_answer != "") {
+                  _submit();
+                }
               }
             },
           );
         },
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_light_dark_card
+            : os_white,
         radius: 10,
         widget: Container(
           width: (MediaQuery.of(context).size.width - 60) * 0.4,
@@ -459,10 +504,13 @@ class _QuestionState extends State<Question> {
           ),
           child: Center(
               child: Text(
-            "机器接管",
+            auto_machine ? "接管中…" : "机器接管",
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
             ),
           )),
         ),
@@ -500,8 +548,11 @@ class _QuestionState extends State<Question> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: os_back,
-        foregroundColor: os_black,
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         leading: IconButton(
           icon: Icon(Icons.chevron_left_rounded),
           onPressed: () {
@@ -511,12 +562,15 @@ class _QuestionState extends State<Question> {
         title: Text(
           "水滴答题",
           style: TextStyle(
-            color: os_black,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
             fontSize: 16,
           ),
         ),
       ),
-      backgroundColor: os_back,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: Column(
         children: [
           load_done ? Container() : BottomLoading(color: Colors.transparent),
@@ -539,7 +593,9 @@ class _QuestionState extends State<Question> {
           status == 0 && load_done
               ? Container(
                   height: 150,
-                  color: os_back,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_back
+                      : os_back,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: bottom(),
