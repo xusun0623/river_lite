@@ -133,7 +133,7 @@ class _HomeNewReplyState extends State<HomeNewReply>
             )
           : BottomLoading(
               color: Colors.transparent,
-              txt: "首次加载中(下拉可刷新)…",
+              txt: "加载中…",
             ),
     );
     t.add(Padding(
