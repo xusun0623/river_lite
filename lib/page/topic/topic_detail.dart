@@ -13,6 +13,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/topic_formhash.dart';
+import 'package:offer_show/asset/uploadAttachment.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
@@ -29,6 +30,7 @@ import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -53,6 +55,7 @@ class _TopicDetailState extends State<TopicDetail> {
   var _sort = 0; //0-按时间正序 1-按时间倒序
   var showBackToTop = false;
   var uploadImgUrls = [];
+  String uploadFileAid = "";
   var replyId = 0;
   double bottom_safeArea = 10;
   bool editing = false; //是否处于编辑状态
@@ -487,7 +490,11 @@ class _TopicDetailState extends State<TopicDetail> {
                     ),
                     editing //编辑回复框
                         ? RichInput(
+                            fid: data["topic"]["boardId"],
                             tid: widget.topicID,
+                            uploadFile: (aid) {
+                              uploadFileAid = aid;
+                            },
                             uploadImg: (img_urls) {
                               if (img_urls != null && img_urls.length != 0) {
                                 uploadImgUrls = [];
@@ -506,6 +513,7 @@ class _TopicDetailState extends State<TopicDetail> {
                               _focusNode.unfocus();
                               _txtController.clear();
                               placeholder = "请在此编辑回复";
+                              uploadFileAid = "";
                               uploadImgUrls = [];
                               editing = false;
                               setState(() {});
@@ -529,15 +537,15 @@ class _TopicDetailState extends State<TopicDetail> {
                                     "isAnonymous": 0,
                                     "isOnlyAuthor": 0,
                                     "typeId": "",
-                                    "aid": "",
+                                    "aid": uploadFileAid == ""
+                                        ? ""
+                                        : uploadFileAid,
                                     "fid": "",
                                     "replyId": replyId,
                                     "tid": widget.topicID, // 回复时指定帖子
                                     "isQuote": placeholder == "请在此编辑回复"
                                         ? 0
                                         : 1, //"是否引用之前回复的内容
-                                    // "replyId": 123456, //回复 ID（pid）
-                                    // "aid": "1,2,3", // 附件 ID，逗号隔开
                                     "title": "",
                                     "content": jsonEncode(contents),
                                   }
@@ -596,15 +604,18 @@ class RichInput extends StatefulWidget {
   TextEditingController controller;
   FocusNode focusNode;
   int tid;
+  int fid;
   Function cancel;
   Function send;
   Function uploadImg;
+  Function uploadFile;
   String placeholder;
   Function atUser;
   RichInput({
     Key key,
     this.bottom,
     @required this.tid,
+    @required this.fid,
     @required this.controller,
     @required this.focusNode,
     @required this.cancel,
@@ -612,6 +623,7 @@ class RichInput extends StatefulWidget {
     @required this.uploadImg,
     @required this.atUser,
     @required this.placeholder,
+    @required this.uploadFile,
   }) : super(key: key);
 
   @override
@@ -621,8 +633,11 @@ class RichInput extends StatefulWidget {
 class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
   List<XFile> image = [];
   List<PlatformFile> files = [];
+  String uploadFile = "";
   bool popSection = false;
   int popSectionIndex = 0; //0-表情包 1-艾特某人
+
+  double uploadProgress = 0; //上传进度
 
   AnimationController controller; //动画控制器
   Animation<double> animation;
@@ -742,12 +757,32 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                             },
                           ),
                           //上传附件，暂时不支持
-                          // SendFunc(
-                          //   path: "lib/img/topic_attach.svg",
-                          //   tap: () async {
-                          //     await getUploadAid(widget.tid);
-                          //   },
-                          // ),
+                          SendFunc(
+                            path: "lib/img/topic_attach.svg",
+                            uploadProgress: uploadProgress,
+                            tap: () async {
+                              String aid = await getUploadAid(
+                                tid: widget.tid,
+                                fid: widget.fid,
+                                context: context,
+                                onUploadProgress: (rate) {
+                                  setState(() {
+                                    uploadProgress = rate;
+                                  });
+                                },
+                              );
+                              if (aid != "") {
+                                setState(() {
+                                  uploadFile = aid;
+                                });
+                                widget.uploadFile(aid); //上传附件
+                              } else {
+                                setState(() {
+                                  uploadFile = "";
+                                });
+                              }
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -1211,12 +1246,14 @@ class SendFunc extends StatefulWidget {
   Function tap;
   bool loading;
   int nums;
+  double uploadProgress;
   SendFunc({
     Key key,
     @required this.path,
     @required this.tap,
     this.loading,
     this.nums,
+    this.uploadProgress,
   }) : super(key: key);
 
   @override
@@ -1229,7 +1266,9 @@ class _SendFuncState extends State<SendFunc> {
     return myInkWell(
       color: Colors.transparent,
       tap: () {
-        if (!widget.loading) {
+        if (!(widget.loading ?? false) &&
+            widget.tap != null &&
+            widget.uploadProgress == 0) {
           widget.tap();
         }
       },
@@ -1274,11 +1313,37 @@ class _SendFuncState extends State<SendFunc> {
                       color: os_deep_blue,
                     ),
                   )
-                : os_svg(
-                    path: widget.path,
-                    width: 24,
-                    height: 24,
-                  ),
+                : (widget.uploadProgress == null
+                    ? os_svg(
+                        path: widget.path,
+                        width: 24,
+                        height: 24,
+                      )
+                    : (widget.uploadProgress == 0
+                        ? os_svg(
+                            path: widget.path,
+                            width: 24,
+                            height: 24,
+                          )
+                        : (widget.uploadProgress == 1
+                            ? Container(
+                                width: 24,
+                                height: 24,
+                                child: Icon(
+                                  Icons.cloud_done_rounded,
+                                  color: os_deep_blue,
+                                ),
+                              )
+                            : Container(
+                                width: 24,
+                                height: 24,
+                                child: CircularPercentIndicator(
+                                  radius: 12,
+                                  lineWidth: 3,
+                                  percent: widget.uploadProgress,
+                                  progressColor: os_deep_blue,
+                                ),
+                              )))),
           ),
         ],
       ),
