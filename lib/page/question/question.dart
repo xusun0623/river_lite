@@ -195,15 +195,32 @@ class _QuestionState extends State<Question> {
         : [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Text(
-                q_a["progress"].toString().replaceAll(" ", ""),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : os_black,
-                ),
+              child: Row(
+                children: [
+                  Text(
+                    q_a["progress"].toString().replaceAll(" ", ""),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_white
+                          : os_black,
+                    ),
+                  ),
+                  auto_machine
+                      ? Container(
+                          width: 16,
+                          height: 16,
+                          margin: EdgeInsets.only(left: 10),
+                          child: CircularProgressIndicator(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : os_black,
+                            strokeWidth: 3,
+                          ),
+                        )
+                      : Container(),
+                ],
               ),
             ),
             Padding(
@@ -503,16 +520,22 @@ class _QuestionState extends State<Question> {
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           child: Center(
-              child: Text(
-            auto_machine ? "接管中…" : "机器接管",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_white
-                  : os_black,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  auto_machine ? "接管中…" : "机器接管",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_black,
+                  ),
+                ),
+              ],
             ),
-          )),
+          ),
         ),
       ),
       Container(width: 10),

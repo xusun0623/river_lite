@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/components/loading.dart';
-import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
@@ -56,27 +58,26 @@ class _PersonDetailState extends State<PersonDetail> {
     setState(() {});
   }
 
-  List<Widget> _buildList(){
+  List<Widget> _buildList() {
     List<Widget> tmp = [];
-    List<String> txt = [
-      ["UID","${widget.uid}"],
-      ["用户状态",data["status"] == 2 ? "在线" : "离线"],
-      ["性别",data["gender"] == 1 ? "男" : (data["gender"] == 2 ? "女" : "未知")],
-      ["积分","${data["score"]}"],
-      ["用户头衔","${data["userTitle"]}"],
-      ["在线时间","${online_time}"],
-      ["上次访问","${last_come}"],
-      ["注册时间","${sign_time}"],
-      ["空间访问量","${come_count}"],
-      ["上次访问IP","${last_ip}"],
-      ["注册IP","${sign_ip}"],
+    List<List<String>> txt = [
+      ["UID", "${widget.uid}"],
+      ["用户状态", data["status"] == 2 ? "在线" : "离线"],
+      ["性别", data["gender"] == 1 ? "男" : (data["gender"] == 2 ? "女" : "未知")],
+      ["积分", "${data["score"]}"],
+      ["用户头衔", "${data["userTitle"]}"],
+      ["在线时间", "${online_time}"],
+      ["上次访问", "${last_come}"],
+      ["注册时间", "${sign_time}"],
+      ["空间访问量", "${come_count}"],
+      ["上次访问IP", "${last_ip}"],
+      ["注册IP", "${sign_ip}"],
     ];
-    for(int i=0;i<txt.length;i++){
-      tmp.add(
-        DetailListTitle(
-          left: txt[i][0],
-          right: txt[i][1],
-        ));
+    for (int i = 0; i < txt.length; i++) {
+      tmp.add(DetailListTitle(
+        left: txt[i][0],
+        right: txt[i][1],
+      ));
     }
     return tmp;
   }
@@ -117,7 +118,7 @@ class _PersonDetailState extends State<PersonDetail> {
             )
           : ListView(
               physics: BouncingScrollPhysics(),
-              children: _buildList(),,
+              children: _buildList(),
             ),
     );
   }
@@ -139,11 +140,53 @@ class DetailListTitle extends StatefulWidget {
 class _DetailListTitleState extends State<DetailListTitle> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      textColor:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_white : os_black,
-      title: Text("${widget.left}"),
-      trailing: Text("${widget.right}"),
-    );
+    return widget.right == ""
+        ? Container()
+        : ListTile(
+            onLongPress: () {
+              Vibrate.feedback(FeedbackType.impact);
+              Clipboard.setData(ClipboardData(text: widget.right));
+              showToast(context: context, type: XSToast.success, txt: "复制成功");
+            },
+            textColor: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
+            title: Text("${widget.left}"),
+            trailing: Container(
+              width: MediaQuery.of(context).size.width - 130,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  widget.left == "用户状态"
+                      ? Icon(
+                          Icons.circle,
+                          color: widget.right == "在线"
+                              ? Color(0xFF00DE00)
+                              : os_deep_grey,
+                          size: 10,
+                        )
+                      : Container(),
+                  widget.left == "在线时间"
+                      ? Icon(
+                          Icons.timeline,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_dark_back,
+                          size: 20,
+                        )
+                      : Container(),
+                  Container(width: 5),
+                  Text(
+                    "${widget.right}",
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_white
+                          : os_dark_back,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
   }
 }

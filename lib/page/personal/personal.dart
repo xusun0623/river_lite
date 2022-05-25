@@ -1097,6 +1097,7 @@ class PersonScoreState extends State<PersonScore> {
     15000,
     30000,
   ];
+  int now_score_total = 0;
 
   _getLevel() {
     var score = widget.score;
@@ -1112,6 +1113,9 @@ class PersonScoreState extends State<PersonScore> {
     var score = widget.score;
     for (int i = 0; i < map_tmp.length; i++) {
       if (map_tmp[i] > score) {
+        setState(() {
+          now_score_total = map_tmp[i];
+        });
         return score / map_tmp[i];
       }
     }
@@ -1151,6 +1155,14 @@ class PersonScoreState extends State<PersonScore> {
                     ),
                   ),
                 ],
+              ),
+              Container(width: 10),
+              Text(
+                "${widget.score}/${now_score_total}",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: os_deep_grey,
+                ),
               ),
             ],
           ),
