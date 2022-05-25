@@ -1268,10 +1268,12 @@ class _SendFuncState extends State<SendFunc> {
     return myInkWell(
       color: Colors.transparent,
       tap: () {
-        if (!(widget.loading ?? false) &&
-            widget.tap != null &&
-            widget.uploadProgress == 0) {
+        if (widget.uploadProgress == null) {
           widget.tap();
+        } else {
+          if (widget.uploadProgress != null && widget.uploadProgress == 0) {
+            widget.tap();
+          }
         }
       },
       widget: Stack(
@@ -2760,7 +2762,10 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                 color: Colors.transparent,
                 tap: () async {
                   showToast(
-                      context: context, type: XSToast.loading, txt: "请稍后");
+                    context: context,
+                    type: XSToast.loading,
+                    txt: "请稍后",
+                  );
                   await Api().user_userfavorite({
                     "idType": "tid",
                     "action": [
@@ -2775,11 +2780,12 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                   });
                   hideToast();
                   showToast(
-                      context: context,
-                      type: XSToast.success,
-                      txt: widget.data["topic"]["is_favor"] == 1
-                          ? "收藏成功"
-                          : "取消收藏成功");
+                    context: context,
+                    type: XSToast.success,
+                    txt: widget.data["topic"]["is_favor"] == 1
+                        ? "收藏成功"
+                        : "取消收藏成功",
+                  );
                 },
                 widget: Padding(
                   padding: const EdgeInsets.all(8.0),

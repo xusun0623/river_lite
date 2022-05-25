@@ -83,11 +83,11 @@ getUploadAid({
   showToast(context: context, type: XSToast.loading, txt: "请稍后…");
   await _post_parm(tid, context); //获取上传参数
   if (_uid != "" && _hash != "") {
-    hideToast();
     FilePickerResult result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: allowExtension,
     );
+    hideToast();
     if (result.files.single.size < 40 * 1024 * 1024) {
       if (result != null) {
         String fileName = result.files.single.name;

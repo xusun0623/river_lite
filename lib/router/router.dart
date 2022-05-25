@@ -17,6 +17,7 @@ import 'package:offer_show/page/me_func/me_func.dart';
 import 'package:offer_show/page/msg_detail/msg_detail.dart';
 import 'package:offer_show/page/msg_three/msg_three.dart';
 import 'package:offer_show/page/new/new.dart';
+import 'package:offer_show/page/person_detail/personDetail.dart';
 import 'package:offer_show/page/personal/personal.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/question/question.dart';
@@ -33,6 +34,7 @@ final routers = {
   "/login": (data) => Login(
         index: data ?? 0,
       ),
+  "/person_detail": (uid) => PersonDetail(uid: uid),
   "/about": () => About(),
   "/test": () => Test(),
   "/setting": () => Setting(),

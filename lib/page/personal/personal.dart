@@ -953,6 +953,7 @@ class _PersonRowState extends State<PersonRow> {
                 ? Color(0x11FFFFFF)
                 : Color(0xFFF1F1F1)),
         PersonColumn(
+          uid: widget.uid,
           index: 2,
           count: widget.score,
         ),
@@ -1005,6 +1006,9 @@ class _PersonColumnState extends State<PersonColumn> {
             "type": widget.index,
             "uid": widget.uid,
           });
+        }
+        if (widget.index == 2) {
+          Navigator.pushNamed(context, "/person_detail", arguments: widget.uid);
         }
       },
       child: Container(
