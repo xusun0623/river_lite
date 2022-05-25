@@ -679,33 +679,37 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                     setState(() {});
                   },
                 ),
-                ActionItem(
-                  title: "查看图片",
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    if (widget.img_urls.length != 0) {
-                      print("${widget.img_urls}");
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (_) => PhotoPreview(
-                            galleryItems: widget.img_urls
-                                .map((e) => e["urlName"])
-                                .toList(),
-                            defaultImage: 0,
-                          ),
+                ...(widget.img_urls.length == 0
+                    ? []
+                    : [
+                        ActionItem(
+                          title: "查看图片",
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            if (widget.img_urls.length != 0) {
+                              print("${widget.img_urls}");
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (_) => PhotoPreview(
+                                    galleryItems: widget.img_urls
+                                        .map((e) => e["urlName"])
+                                        .toList(),
+                                    defaultImage: 0,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
                         ),
-                      );
-                    }
-                  },
-                ),
-                ActionItem(
-                  title: "清空已上传图片",
-                  onPressed: () {
-                    widget.setImgUrls([]);
-                    Navigator.pop(context);
-                  },
-                ),
+                        ActionItem(
+                          title: "清空已上传图片",
+                          onPressed: () {
+                            widget.setImgUrls([]);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ]),
               ],
               bottomActionItem: BottomActionItem(title: "取消"),
             );
@@ -757,6 +761,36 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                       ),
                     )
             ],
+          ),
+          radius: 10,
+          width: 30,
+          height: 29,
+        ),
+        Container(width: 15),
+        myInkWell(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_card
+              : os_white,
+          tap: () {
+            widget.title_focus.unfocus();
+            widget.tip_focus.unfocus();
+            showModal(
+              context: context,
+              title: "提示",
+              cont: "由于河畔后台限制，请在发帖后于评论区上传附件",
+              confirmTxt: "我知道了",
+              cancelTxt: "",
+            );
+          },
+          widget: Container(
+            padding: EdgeInsets.all(2.5),
+            child: os_svg(
+              path: Provider.of<ColorProvider>(context).isDark
+                  ? "lib/img/topic_attach_light.svg"
+                  : "lib/img/topic_attach_black.svg",
+              width: 22,
+              height: 22,
+            ),
           ),
           radius: 10,
           width: 30,

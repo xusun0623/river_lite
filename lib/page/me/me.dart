@@ -73,24 +73,7 @@ class _MeState extends State<Me> {
             ? os_dark_white
             : os_black,
         elevation: 0,
-        actions: [
-          // IconButton(
-          //   onPressed: () {
-          //     Provider.of<ColorProvider>(context, listen: false).isDark =
-          //         !Provider.of<ColorProvider>(context, listen: false).isDark;
-          //     Provider.of<ColorProvider>(context, listen: false).switchMode();
-          //     Provider.of<ColorProvider>(context, listen: false).refresh();
-          //   },
-          //   icon: Icon(
-          //     Provider.of<ColorProvider>(context, listen: false).isDark
-          //         ? Icons.light_mode
-          //         : Icons.dark_mode,
-          //     color: Provider.of<ColorProvider>(context, listen: false).isDark
-          //         ? os_middle_grey
-          //         : os_middle_grey,
-          //   ),
-          // ),
-        ],
+        actions: [],
       ),
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
@@ -178,6 +161,7 @@ class _MeListGroupState extends State<MeListGroup> {
     return Column(
       children: [
         // MeList(txt: "应用设置", index: 0),
+        MeList(txt: "水滴任务", index: 6),
         MeList(txt: "账号管理", index: 1),
         MeList(txt: "意见&Bug反馈", index: 2),
         MeList(txt: "拉黑&黑名单", index: 4),
@@ -227,6 +211,9 @@ class _MeListState extends State<MeList> {
         }
         if (widget.index == 5) {
           Navigator.pushNamed(context, "/test");
+        }
+        if (widget.index == 6) {
+          Navigator.pushNamed(context, "/water_task");
         }
       },
       child: Container(
@@ -421,6 +408,7 @@ class MeInfoHead extends StatefulWidget {
 }
 
 class MeInfo_HeadState extends State<MeInfoHead> {
+  int score_total = 0;
   List map_tmp = [
     0,
     30,
@@ -441,6 +429,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
     var score = widget.score;
     for (int i = 0; i < map_tmp.length; i++) {
       if (map_tmp[i] > score) {
+        score_total = map_tmp[i];
         return i;
       }
     }
@@ -543,7 +532,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                     Stack(
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width - 200,
+                          width: MediaQuery.of(context).size.width - 250,
                           height: 7,
                           decoration: BoxDecoration(
                             color: Color(0xFFE3E3E3),
@@ -553,7 +542,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                         ),
                         Positioned(
                           child: Container(
-                            width: (MediaQuery.of(context).size.width - 200) *
+                            width: (MediaQuery.of(context).size.width - 250) *
                                 _getRate(),
                             height: 7,
                             decoration: BoxDecoration(
@@ -564,6 +553,14 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                           ),
                         ),
                       ],
+                    ),
+                    Container(width: 10),
+                    Text(
+                      "${widget.score}/${score_total}",
+                      style: TextStyle(
+                        color: os_deep_grey,
+                        fontSize: 11,
+                      ),
                     ),
                   ],
                 ),

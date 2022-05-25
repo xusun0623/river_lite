@@ -738,11 +738,10 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                 ? "lib/img/topic_dark_func/topic_picture.svg"
                                 : "lib/img/topic_picture.svg",
                             tap: () async {
-                              final ImagePicker _picker = ImagePicker();
-                              //选好了图片
                               setState(() {
                                 upLoading = true;
                               });
+                              final ImagePicker _picker = ImagePicker();
                               image = await _picker.pickMultiImage(
                                     imageQuality: 50,
                                   ) ??
@@ -753,7 +752,6 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                               setState(() {
                                 upLoading = false;
                               });
-                              setState(() {});
                             },
                           ),
                           //上传附件，暂时不支持

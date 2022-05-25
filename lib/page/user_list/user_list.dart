@@ -145,7 +145,7 @@ class _UserListCardState extends State<UserListCard> {
       margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
       child: myInkWell(
         color: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_card
+            ? os_light_dark_card
             : os_white,
         tap: () async {
           int uid = await getUid();

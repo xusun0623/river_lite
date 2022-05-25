@@ -27,13 +27,13 @@ import 'package:offer_show/page/square/square.dart';
 import 'package:offer_show/page/test/test.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/page/user_list/user_list.dart';
+import 'package:offer_show/page/waterTask/water_task.dart';
 
 final routers = {
   "/": () => Home(),
   "/question": () => Question(),
-  "/login": (data) => Login(
-        index: data ?? 0,
-      ),
+  "/login": (data) => Login(index: data ?? 0),
+  "/water_task": () => WaterTask(),
   "/person_detail": (uid) => PersonDetail(uid: uid),
   "/about": () => About(),
   "/test": () => Test(),

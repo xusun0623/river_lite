@@ -137,38 +137,42 @@ void showModal({
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            myInkWell(
-              color: Provider.of<ColorProvider>(context, listen: false).isDark
-                  ? os_dark_card
-                  : os_white,
-              widget: Container(
-                width: 130,
-                height: 50,
-                child: Center(
-                  child: Text(
-                    cancelTxt ?? "取消",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Provider.of<ColorProvider>(context, listen: false)
-                              .isDark
-                          ? os_dark_dark_white
-                          : os_black,
+            cancelTxt == ""
+                ? Container()
+                : myInkWell(
+                    color: Provider.of<ColorProvider>(context, listen: false)
+                            .isDark
+                        ? os_dark_card
+                        : os_white,
+                    widget: Container(
+                      width: 130,
+                      height: 50,
+                      child: Center(
+                        child: Text(
+                          cancelTxt ?? "取消",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Provider.of<ColorProvider>(context,
+                                        listen: false)
+                                    .isDark
+                                ? os_dark_dark_white
+                                : os_black,
+                          ),
+                        ),
+                      ),
                     ),
+                    radius: 10,
+                    tap: () {
+                      Navigator.pop(context);
+                      if (cancel != null) cancel();
+                    },
                   ),
-                ),
-              ),
-              radius: 10,
-              tap: () {
-                Navigator.pop(context);
-                if (cancel != null) cancel();
-              },
-            ),
             myInkWell(
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_light_dark_card
                   : os_color_opa,
               widget: Container(
-                width: 130,
+                width: cancelTxt == "" ? 260 : 130,
                 height: 50,
                 child: Center(
                   child: Text(

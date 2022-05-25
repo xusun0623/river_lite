@@ -780,7 +780,34 @@ class _PersonCardState extends State<PersonCard> {
             child: GestureDetector(
               onTap: () {
                 if (widget.isMe) {
-                  Navigator.pushNamed(context, "/crop");
+                  showActionSheet(
+                    context: context,
+                    bottomActionItem: BottomActionItem(title: "取消"),
+                    actions: [
+                      ActionItem(
+                        title: "查看头像",
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => PhotoPreview(
+                                galleryItems: [widget.data["icon"]],
+                                defaultImage: 0,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      ActionItem(
+                        title: "上传新头像",
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, "/crop");
+                        },
+                      ),
+                    ],
+                  );
                 } else {
                   Navigator.push(
                     context,
