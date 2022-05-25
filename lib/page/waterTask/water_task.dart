@@ -19,14 +19,7 @@ class WaterTask extends StatefulWidget {
 
 class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
   TabController tabController;
-  List<Map> newTask = [
-    {
-      "name": "中红包",
-      "desc": "通过发帖回帖完成任务，活跃论坛的氛围（24小时50贴）",
-      "bouns": "积分 水滴 30 滴",
-      "apply_link": "https://bbs.uestc.edu.cn/home.php?mod=task&do=apply&id=6",
-    }
-  ];
+  List<Map> newTask = [];
   List<Map> doingTask = [
     {
       "name": "中红包",
@@ -36,22 +29,8 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
       "apply_link": "https://bbs.uestc.edu.cn/home.php?mod=task&do=apply&id=6",
     }
   ];
-  List<Map> doneTask = [
-    {
-      "name": "新手导航回帖有礼",
-      "desc": "在 清水河畔论坛新手导航 V2.2 下回帖完成任务。",
-      "bouns": "积分 水滴 10 滴",
-      "done_time": "完成于 2021-5-28 08:02",
-    }
-  ];
-  List<Map> failTask = [
-    {
-      "name": "新手导航回帖有礼",
-      "desc": "在 清水河畔论坛新手导航 V2.2 下回帖完成任务。",
-      "bouns": "积分 水滴 10 滴",
-      "done_time": "失败于 2021-5-28 08:02",
-    }
-  ];
+  List<Map> doneTask = [];
+  List<Map> failTask = [];
 
   _getNew() async {
     //获取新任务
@@ -101,19 +80,110 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
     });
   }
 
-  // _getData() async {
-  //   var document = parse((await XHttp().pureHttpWithCookie(
-  //           url: "https://bbs.uestc.edu.cn/home.php?mod=task"))
-  //       .data
-  //       .toString());
-  //   document.getElementsByTagName("table").forEach((element) {
-  //     element.getElementsByTagName("tr").forEach((element1) {
-  //       element1.getElementsByTagName("td").forEach((element2) {
-  //         print(element2.innerHtml);
-  //       });
-  //     });
-  //   });
-  // }
+  _getDoing() async {
+    print("_getDoing");
+  }
+
+  _getDone() async {
+    print("_getDone");
+    //https://bbs.uestc.edu.cn/home.php?mod=task&item=done
+    //获取已失败任务
+    var document = parse((await XHttp().pureHttpWithCookie(
+      url: "https://bbs.uestc.edu.cn/home.php?mod=task&item=done",
+    ))
+        .data
+        .toString());
+    var element = document.getElementsByTagName("table").first;
+    List<Map> doneTaskTmp = [];
+    element.getElementsByTagName("tr").forEach((element1) {
+      //每个任务单独的在此
+      String name = "";
+      String desc = "";
+      String bouns = "";
+      String done_time = "";
+      element1.getElementsByClassName("pbm").forEach((element2) {
+        element2.getElementsByClassName("xi2").forEach((element3) {
+          element3.getElementsByTagName("a").forEach((element4) {
+            name += element4.innerHtml; //任务名称
+          });
+        });
+      });
+      desc = element1 //任务描述
+          .getElementsByClassName("pbm")
+          .first
+          .getElementsByClassName("xg2")
+          .last
+          .innerHtml;
+      bouns =
+          element1.getElementsByClassName("hm").first.innerHtml.trim(); //任务奖励
+      done_time = element1
+          .getElementsByTagName("td")
+          .last
+          .getElementsByTagName("p")
+          .first
+          .innerHtml;
+      doneTaskTmp.add({
+        "name": name,
+        "desc": desc,
+        "bouns": bouns,
+        "done_time": done_time,
+      });
+    });
+    setState(() {
+      doneTask = doneTaskTmp;
+    });
+  }
+
+  _getFail() async {
+    //https://bbs.uestc.edu.cn/home.php?mod=task&item=failed
+    print("_getFail");
+    //获取已失败任务
+    var document = parse((await XHttp().pureHttpWithCookie(
+      url: "https://bbs.uestc.edu.cn/home.php?mod=task&item=failed",
+    ))
+        .data
+        .toString());
+    var element = document.getElementsByTagName("table").first;
+    List<Map> failTaskTmp = [];
+    element.getElementsByTagName("tr").forEach((element1) {
+      //每个任务单独的在此
+      String name = "";
+      String desc = "";
+      String bouns = "";
+      String done_time = "";
+      element1.getElementsByClassName("pbm").forEach((element2) {
+        element2.getElementsByClassName("xi2").forEach((element3) {
+          element3.getElementsByTagName("a").forEach((element4) {
+            name += element4.innerHtml; //任务名称
+          });
+        });
+      });
+      desc = element1 //任务描述
+          .getElementsByClassName("pbm")
+          .first
+          .getElementsByClassName("xg2")
+          .last
+          .innerHtml;
+      bouns =
+          element1.getElementsByClassName("hm").first.innerHtml.trim(); //任务奖励
+      done_time = element1
+          .getElementsByTagName("td")
+          .last
+          .getElementsByTagName("p")
+          .first
+          .innerHtml
+          .split("<br>")[0];
+      failTaskTmp.add({
+        "name": name,
+        "desc": desc,
+        "bouns": bouns,
+        "done_time": done_time,
+      });
+    });
+    setState(() {
+      failTask = failTaskTmp;
+    });
+  }
 
   List<Widget> _buildCont(int index) {
     List<Widget> tmp = [];
@@ -131,6 +201,17 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
   @override
   void initState() {
     tabController = TabController(length: 4, vsync: this);
+    tabController.addListener(() {
+      if (tabController.index == 1) {
+        _getDoing();
+      }
+      if (tabController.index == 2) {
+        _getDone();
+      }
+      if (tabController.index == 3) {
+        _getFail();
+      }
+    });
     _getNew();
     super.initState();
   }
@@ -241,21 +322,7 @@ class _Card4State extends State<Card4> {
                   fontSize: 14,
                 ),
               ),
-              Container(height: 10),
-              GestureDetector(
-                onTap: () async {
-                  // 申请链接
-                  // await XHttp().pureHttpWithCookie(url: widget.data["apply_link"]);
-                },
-                child: Text(
-                  "立即申请",
-                  style: TextStyle(
-                    color: os_color,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              Container(height: 5),
             ],
           ),
         ),
