@@ -329,7 +329,7 @@ class _PostNewState extends State<PostNew> {
                             width: MediaQuery.of(context).size.width,
                             height: 250,
                             color: Provider.of<ColorProvider>(context).isDark
-                                ? os_dark_card
+                                ? os_light_dark_card
                                 : os_white,
                             child: [
                               YourEmoji(
@@ -360,7 +360,7 @@ class _PostNewState extends State<PostNew> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_card
+                            ? os_light_dark_card
                             : os_white,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(7),
@@ -547,7 +547,7 @@ class _ChildColumnTipState extends State<ChildColumnTip> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         color: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_card
+            ? os_light_dark_card
             : os_white,
         child: Text(
           widget.name,
@@ -597,7 +597,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
       children: [
         myInkWell(
           color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_card
+              ? os_light_dark_card
               : os_white,
           tap: () {
             widget.title_focus.unfocus();
@@ -625,7 +625,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
         Container(width: 15),
         myInkWell(
           color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_card
+              ? os_light_dark_card
               : os_white,
           tap: () {
             widget.title_focus.unfocus();
@@ -653,7 +653,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
         Container(width: 15),
         myInkWell(
           color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_card
+              ? os_light_dark_card
               : os_white,
           tap: () async {
             showActionSheet(
@@ -769,7 +769,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
         Container(width: 15),
         myInkWell(
           color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_card
+              ? os_light_dark_card
               : os_white,
           tap: () {
             widget.title_focus.unfocus();
@@ -785,9 +785,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
           widget: Container(
             padding: EdgeInsets.all(2.5),
             child: os_svg(
-              path: Provider.of<ColorProvider>(context).isDark
-                  ? "lib/img/topic_attach_light.svg"
-                  : "lib/img/topic_attach_black.svg",
+              path: "lib/img/topic_attach_black.svg",
               width: 22,
               height: 22,
             ),
@@ -1255,7 +1253,7 @@ class TitleInput extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         color: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_card
+            ? os_light_dark_card
             : os_white,
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
@@ -1285,7 +1283,7 @@ class TitleInput extends StatelessWidget {
             borderSide: BorderSide(
               width: 2,
               color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_card
+                  ? os_light_dark_card
                   : os_white,
               style: BorderStyle.solid,
             ),
@@ -1478,7 +1476,7 @@ class _SelectTagState extends State<SelectTag> {
                   ? Color.fromRGBO(0, 146, 255, 0.2)
                   : os_color_opa)
               : (Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_card
+                  ? os_light_dark_card
                   : Color(0xFFF6F6F6)),
           borderRadius: BorderRadius.all(
             Radius.circular(100),

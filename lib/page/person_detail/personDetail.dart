@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -143,11 +145,14 @@ class _DetailListTitleState extends State<DetailListTitle> {
     return widget.right == ""
         ? Container()
         : ListTile(
-            onLongPress: () {
-              Vibrate.feedback(FeedbackType.impact);
-              Clipboard.setData(ClipboardData(text: widget.right));
-              showToast(context: context, type: XSToast.success, txt: "复制成功");
-            },
+            onLongPress: widget.left != "UID"
+                ? null
+                : () {
+                    Vibrate.feedback(FeedbackType.impact);
+                    Clipboard.setData(ClipboardData(text: widget.right));
+                    showToast(
+                        context: context, type: XSToast.success, txt: "复制成功");
+                  },
             textColor: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_white
                 : os_black,
@@ -169,6 +174,15 @@ class _DetailListTitleState extends State<DetailListTitle> {
                   widget.left == "在线时间"
                       ? Icon(
                           Icons.timeline,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_dark_back,
+                          size: 20,
+                        )
+                      : Container(),
+                  widget.left == "注册时间"
+                      ? Icon(
+                          Icons.timer_rounded,
                           color: Provider.of<ColorProvider>(context).isDark
                               ? os_dark_white
                               : os_dark_back,

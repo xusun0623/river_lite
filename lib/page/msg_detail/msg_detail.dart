@@ -871,7 +871,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                 widget.index == 0 ? Color(0x44707070) : Color(0x44002873),
             highlightColor:
                 widget.index == 0 ? Color(0x88C8C8C8) : Color(0x88135CE2),
-            radius: 10,
+            radius: 5,
             widget: widget.isImage ?? false
                 ? Stack(
                     children: [
@@ -890,7 +890,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                             );
                           },
                           child: ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
                             child: CachedNetworkImage(
                               filterQuality: FilterQuality.low,
                               width: 125,
@@ -912,7 +912,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                                 ),
                                 decoration: BoxDecoration(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
+                                      BorderRadius.all(Radius.circular(5)),
                                   color: widget.index == 0
                                       ? os_grey
                                       : os_deep_blue,
@@ -949,7 +949,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                   )
                 : Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                     child: ConstrainedBox(
@@ -1003,7 +1003,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
       child: CachedNetworkImage(
         placeholder: (context, url) => Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(5)),
             color: os_grey,
           ),
         ),

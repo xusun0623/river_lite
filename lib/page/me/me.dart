@@ -165,10 +165,7 @@ class _MeListGroupState extends State<MeListGroup> {
         MeList(txt: "账号管理", index: 1),
         MeList(txt: "意见&Bug反馈", index: 2),
         MeList(txt: "拉黑&黑名单", index: 4),
-        Provider.of<ColorProvider>(context).isDark
-            ? Container()
-            : MeList(txt: "关于", index: 3),
-        MeList(txt: "调试测试", index: 5),
+        MeList(txt: "关于", index: 3),
       ],
     );
   }

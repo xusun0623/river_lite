@@ -63,6 +63,5 @@ flutter:
     - lib/collect_btn/
     - lib/page/msg_three/
     - lib/lottie/
-    - lib/img/about/1.png
     - lib/img/explore/
     - lib/img/topic_dark_func/

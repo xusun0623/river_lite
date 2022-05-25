@@ -100,7 +100,7 @@ void showModal({
 }) {
   AlertDialog alert = AlertDialog(
     backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
-        ? os_dark_card
+        ? os_light_dark_card
         : os_white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
@@ -142,7 +142,7 @@ void showModal({
                 : myInkWell(
                     color: Provider.of<ColorProvider>(context, listen: false)
                             .isDark
-                        ? os_dark_card
+                        ? os_light_dark_card
                         : os_white,
                     widget: Container(
                       width: 130,
@@ -169,7 +169,7 @@ void showModal({
                   ),
             myInkWell(
               color: Provider.of<ColorProvider>(context, listen: false).isDark
-                  ? os_light_dark_card
+                  ? Color(0x11FFFFFF)
                   : os_color_opa,
               widget: Container(
                 width: cancelTxt == "" ? 260 : 130,

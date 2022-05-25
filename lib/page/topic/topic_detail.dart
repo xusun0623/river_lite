@@ -2220,9 +2220,10 @@ class _CommentState extends State<Comment> {
                       width: MediaQuery.of(context).size.width - 75,
                       child: Text(
                         RelativeDateFormat.format(
-                          DateTime.fromMillisecondsSinceEpoch(
-                              int.parse(widget.data["posts_date"])),
-                        ),
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  int.parse(widget.data["posts_date"])),
+                            ) +
+                            " · #${widget.index + 1}楼",
                         style: TextStyle(
                           color: Color(0xFF9F9F9F),
                           fontSize: 12,

@@ -327,7 +327,7 @@ class _QuestionState extends State<Question> {
                   _finish();
                 },
                 color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_dark_white
+                    ? os_light_dark_card
                     : Color(0x22004DFF),
                 radius: 10,
                 widget: Container(
@@ -341,7 +341,7 @@ class _QuestionState extends State<Question> {
                       "领取奖励",
                       style: TextStyle(
                         color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_card
+                            ? os_dark_dark_white
                             : os_deep_blue,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -399,7 +399,9 @@ class _QuestionState extends State<Question> {
                 tap: () {
                   Navigator.pop(context);
                 },
-                color: os_white,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : os_white,
                 radius: 10,
                 widget: Container(
                   width: 150,
@@ -411,7 +413,9 @@ class _QuestionState extends State<Question> {
                     child: Text(
                       "返回",
                       style: TextStyle(
-                        color: os_deep_grey,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_dark_white
+                            : os_deep_grey,
                         fontSize: 16,
                         // fontWeight: FontWeight.bold,
                       ),

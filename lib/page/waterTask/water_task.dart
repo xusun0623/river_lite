@@ -1,12 +1,14 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/home/myhome.dart';
+import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:html/parser.dart' show parse;
 
@@ -20,68 +22,137 @@ class WaterTask extends StatefulWidget {
 class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
   TabController tabController;
   List<Map> newTask = [];
-  List<Map> doingTask = [
-    {
-      "name": "中红包",
-      "desc": "通过发帖回帖完成任务，活跃论坛的氛围（24小时50贴）",
-      "bouns": "积分 水滴 30 滴",
-      "progress": 0,
-      "apply_link": "https://bbs.uestc.edu.cn/home.php?mod=task&do=apply&id=6",
-    }
-  ];
+  List<Map> doingTask = [];
   List<Map> doneTask = [];
   List<Map> failTask = [];
 
+  bool load_done1 = false;
+  bool load_done2 = false;
+  bool load_done3 = false;
+  bool load_done4 = false;
+
   _getNew() async {
+    print("_getNew");
     //获取新任务
     var document = parse((await XHttp().pureHttpWithCookie(
       url: "https://bbs.uestc.edu.cn/home.php?mod=task&item=new",
     ))
         .data
         .toString());
-    var element = document.getElementsByTagName("table").first;
-    List<Map> newTaskTmp = [];
-    element.getElementsByTagName("tr").forEach((element1) {
-      //每个任务单独的在此
-      String name = "";
-      String desc = "";
-      String bouns = "";
-      String apply_link = "";
-      element1.getElementsByClassName("pbm").forEach((element2) {
-        element2.getElementsByClassName("xi2").forEach((element3) {
-          element3.getElementsByTagName("a").forEach((element4) {
-            name += element4.innerHtml; //任务名称
+    try {
+      var element = document.getElementsByTagName("table").first;
+      List<Map> newTaskTmp = [];
+      element.getElementsByTagName("tr").forEach((element1) {
+        //每个任务单独的在此
+        String name = "";
+        String desc = "";
+        String bouns = "";
+        String apply_link = "";
+        element1.getElementsByClassName("pbm").forEach((element2) {
+          element2.getElementsByClassName("xi2").forEach((element3) {
+            element3.getElementsByTagName("a").forEach((element4) {
+              name += element4.innerHtml; //任务名称
+            });
           });
         });
+        desc = element1 //任务描述
+            .getElementsByClassName("pbm")
+            .first
+            .getElementsByClassName("xg2")
+            .last
+            .innerHtml;
+        bouns =
+            element1.getElementsByClassName("hm").first.innerHtml.trim(); //任务奖励
+        apply_link = element1
+            .getElementsByTagName("td")
+            .last
+            .getElementsByTagName("a")
+            .first
+            .attributes["href"];
+        newTaskTmp.add({
+          "name": name,
+          "desc": desc,
+          "bouns": bouns,
+          "apply_link": apply_link,
+        });
       });
-      desc = element1 //任务描述
-          .getElementsByClassName("pbm")
-          .first
-          .getElementsByClassName("xg2")
-          .last
-          .innerHtml;
-      bouns =
-          element1.getElementsByClassName("hm").first.innerHtml.trim(); //任务奖励
-      apply_link = element1
-          .getElementsByTagName("td")
-          .last
-          .getElementsByTagName("a")
-          .first
-          .attributes["href"];
-      newTaskTmp.add({
-        "name": name,
-        "desc": desc,
-        "bouns": bouns,
-        "apply_link": apply_link,
+      setState(() {
+        newTask = newTaskTmp;
+        load_done1 = true;
       });
-    });
-    setState(() {
-      newTask = newTaskTmp;
-    });
+    } catch (e) {
+      setState(() {
+        newTask = [];
+        load_done1 = true;
+      });
+    }
   }
 
   _getDoing() async {
     print("_getDoing");
+    //获取正在进行中的任务
+    var document = parse((await XHttp().pureHttpWithCookie(
+      url: "https://bbs.uestc.edu.cn/home.php?mod=task&item=doing",
+    ))
+        .data
+        .toString());
+    try {
+      var element = document.getElementsByTagName("table").first;
+      List<Map> doingTaskTmp = [];
+      element.getElementsByTagName("tr").forEach((element1) {
+        //每个任务单独的在此
+        String name = "";
+        String desc = "";
+        String bouns = "";
+        String progress = "";
+        String apply_link = "";
+        element1.getElementsByClassName("pbm").forEach((element2) {
+          element2.getElementsByClassName("xi2").forEach((element3) {
+            element3.getElementsByTagName("a").forEach((element4) {
+              name += element4.innerHtml; //任务名称
+            });
+          });
+        });
+        desc = element1 //任务描述
+            .getElementsByClassName("pbm")
+            .first
+            .getElementsByClassName("xg2")
+            .last
+            .innerHtml;
+        bouns =
+            element1.getElementsByClassName("hm").first.innerHtml.trim(); //任务奖励
+        progress = (double.parse(element1
+                    .getElementsByClassName("xs0")
+                    .first
+                    .getElementsByTagName("span")
+                    .first
+                    .innerHtml) /
+                100)
+            .toString();
+        apply_link = element1
+            .getElementsByTagName("td")
+            .last
+            .getElementsByTagName("a")
+            .first
+            .attributes["href"];
+        doingTaskTmp.add({
+          "name": name,
+          "desc": desc,
+          "bouns": bouns,
+          "progress": progress,
+          "apply_link": apply_link,
+        });
+      });
+      setState(() {
+        doingTask = doingTaskTmp;
+        load_done2 = true;
+      });
+    } catch (e) {
+      setState(() {
+        doingTask = [];
+        load_done2 = true;
+      });
+    }
   }
 
   _getDone() async {
@@ -93,45 +164,53 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
     ))
         .data
         .toString());
-    var element = document.getElementsByTagName("table").first;
-    List<Map> doneTaskTmp = [];
-    element.getElementsByTagName("tr").forEach((element1) {
-      //每个任务单独的在此
-      String name = "";
-      String desc = "";
-      String bouns = "";
-      String done_time = "";
-      element1.getElementsByClassName("pbm").forEach((element2) {
-        element2.getElementsByClassName("xi2").forEach((element3) {
-          element3.getElementsByTagName("a").forEach((element4) {
-            name += element4.innerHtml; //任务名称
+    try {
+      var element = document.getElementsByTagName("table").first;
+      List<Map> doneTaskTmp = [];
+      element.getElementsByTagName("tr").forEach((element1) {
+        //每个任务单独的在此
+        String name = "";
+        String desc = "";
+        String bouns = "";
+        String done_time = "";
+        element1.getElementsByClassName("pbm").forEach((element2) {
+          element2.getElementsByClassName("xi2").forEach((element3) {
+            element3.getElementsByTagName("a").forEach((element4) {
+              name += element4.innerHtml; //任务名称
+            });
           });
         });
+        desc = element1 //任务描述
+            .getElementsByClassName("pbm")
+            .first
+            .getElementsByClassName("xg2")
+            .last
+            .innerHtml;
+        bouns =
+            element1.getElementsByClassName("hm").first.innerHtml.trim(); //任务奖励
+        done_time = element1
+            .getElementsByTagName("td")
+            .last
+            .getElementsByTagName("p")
+            .first
+            .innerHtml;
+        doneTaskTmp.add({
+          "name": name,
+          "desc": desc,
+          "bouns": bouns,
+          "done_time": done_time,
+        });
       });
-      desc = element1 //任务描述
-          .getElementsByClassName("pbm")
-          .first
-          .getElementsByClassName("xg2")
-          .last
-          .innerHtml;
-      bouns =
-          element1.getElementsByClassName("hm").first.innerHtml.trim(); //任务奖励
-      done_time = element1
-          .getElementsByTagName("td")
-          .last
-          .getElementsByTagName("p")
-          .first
-          .innerHtml;
-      doneTaskTmp.add({
-        "name": name,
-        "desc": desc,
-        "bouns": bouns,
-        "done_time": done_time,
+      setState(() {
+        doneTask = doneTaskTmp;
+        load_done3 = true;
       });
-    });
-    setState(() {
-      doneTask = doneTaskTmp;
-    });
+    } catch (e) {
+      setState(() {
+        doneTask = [];
+        load_done3 = true;
+      });
+    }
   }
 
   _getFail() async {
@@ -143,58 +222,95 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
     ))
         .data
         .toString());
-    var element = document.getElementsByTagName("table").first;
-    List<Map> failTaskTmp = [];
-    element.getElementsByTagName("tr").forEach((element1) {
-      //每个任务单独的在此
-      String name = "";
-      String desc = "";
-      String bouns = "";
-      String done_time = "";
-      element1.getElementsByClassName("pbm").forEach((element2) {
-        element2.getElementsByClassName("xi2").forEach((element3) {
-          element3.getElementsByTagName("a").forEach((element4) {
-            name += element4.innerHtml; //任务名称
+    try {
+      var element = document.getElementsByTagName("table").first;
+      List<Map> failTaskTmp = [];
+      element.getElementsByTagName("tr").forEach((element1) {
+        //每个任务单独的在此
+        String name = "";
+        String desc = "";
+        String bouns = "";
+        String done_time = "";
+        element1.getElementsByClassName("pbm").forEach((element2) {
+          element2.getElementsByClassName("xi2").forEach((element3) {
+            element3.getElementsByTagName("a").forEach((element4) {
+              name += element4.innerHtml; //任务名称
+            });
           });
         });
+        desc = element1 //任务描述
+            .getElementsByClassName("pbm")
+            .first
+            .getElementsByClassName("xg2")
+            .last
+            .innerHtml;
+        bouns =
+            element1.getElementsByClassName("hm").first.innerHtml.trim(); //任务奖励
+        done_time = element1
+            .getElementsByTagName("td")
+            .last
+            .getElementsByTagName("p")
+            .first
+            .innerHtml
+            .split("<br>")[0];
+        failTaskTmp.add({
+          "name": name,
+          "desc": desc,
+          "bouns": bouns,
+          "done_time": done_time,
+        });
       });
-      desc = element1 //任务描述
-          .getElementsByClassName("pbm")
-          .first
-          .getElementsByClassName("xg2")
-          .last
-          .innerHtml;
-      bouns =
-          element1.getElementsByClassName("hm").first.innerHtml.trim(); //任务奖励
-      done_time = element1
-          .getElementsByTagName("td")
-          .last
-          .getElementsByTagName("p")
-          .first
-          .innerHtml
-          .split("<br>")[0];
-      failTaskTmp.add({
-        "name": name,
-        "desc": desc,
-        "bouns": bouns,
-        "done_time": done_time,
+      setState(() {
+        failTask = failTaskTmp;
+        load_done4 = true;
       });
-    });
-    setState(() {
-      failTask = failTaskTmp;
-    });
+    } catch (e) {
+      setState(() {
+        failTask = [];
+        load_done4 = true;
+      });
+    }
   }
 
   List<Widget> _buildCont(int index) {
     List<Widget> tmp = [];
     [newTask, doingTask, doneTask, failTask][index].forEach((element) {
       tmp.add([
-        Card1(data: element),
-        Card2(data: element),
+        Card1(
+          data: element,
+          refresh: () {
+            showToast(context: context, type: XSToast.success, txt: "领取任务成功");
+            _getNew();
+            _getDoing();
+          },
+        ),
+        Card2(
+          data: element,
+          refresh: () {
+            showToast(context: context, type: XSToast.success, txt: "领取奖励成功");
+            _getDoing();
+            _getDone();
+          },
+        ),
         Card3(data: element),
         Card4(data: element),
       ][index]);
     });
+    tmp.add((!load_done1 && index == 0) ||
+            (!load_done2 && index == 1) ||
+            (!load_done3 && index == 2) ||
+            (!load_done4 && index == 3)
+        ? BottomLoading(color: Colors.transparent)
+        : Container());
+    tmp.add((load_done1 && index == 0 && newTask.length == 0) ||
+            (load_done2 && index == 1 && doingTask.length == 0) ||
+            (load_done3 && index == 2 && doneTask.length == 0) ||
+            (load_done4 && index == 3 && failTask.length == 0)
+        ? Empty(txt: "这里是一颗空的星球")
+        : Container());
+    tmp.add(Container(
+      height: MediaQuery.of(context).size.height,
+    ));
     return tmp;
   }
 
@@ -249,21 +365,45 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
         physics: CustomTabBarViewScrollPhysics(),
         controller: tabController,
         children: [
-          ListView(
-            children: _buildCont(0),
-            physics: BouncingScrollPhysics(),
+          RefreshIndicator(
+            onRefresh: () async {
+              await _getNew();
+              return;
+            },
+            child: ListView(
+              children: _buildCont(0),
+              physics: BouncingScrollPhysics(),
+            ),
           ),
-          ListView(
-            children: _buildCont(1),
-            physics: BouncingScrollPhysics(),
+          RefreshIndicator(
+            onRefresh: () async {
+              await _getDoing();
+              return;
+            },
+            child: ListView(
+              children: _buildCont(1),
+              physics: BouncingScrollPhysics(),
+            ),
           ),
-          ListView(
-            children: _buildCont(2),
-            physics: BouncingScrollPhysics(),
+          RefreshIndicator(
+            onRefresh: () async {
+              await _getDone();
+              return;
+            },
+            child: ListView(
+              children: _buildCont(2),
+              physics: BouncingScrollPhysics(),
+            ),
           ),
-          ListView(
-            children: _buildCont(3),
-            physics: BouncingScrollPhysics(),
+          RefreshIndicator(
+            onRefresh: () async {
+              await _getFail();
+              return;
+            },
+            child: ListView(
+              children: _buildCont(3),
+              physics: BouncingScrollPhysics(),
+            ),
           ),
         ],
       ),
@@ -291,6 +431,9 @@ class _Card4State extends State<Card4> {
       margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
       child: myInkWell(
         radius: 10,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_light_dark_card
+            : os_white,
         widget: Container(
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           decoration: BoxDecoration(
@@ -304,6 +447,9 @@ class _Card4State extends State<Card4> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
                 ),
               ),
               Container(height: 10),
@@ -351,6 +497,9 @@ class _Card3State extends State<Card3> {
       margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
       child: myInkWell(
         radius: 10,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_light_dark_card
+            : os_white,
         widget: Container(
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           decoration: BoxDecoration(
@@ -364,6 +513,9 @@ class _Card3State extends State<Card3> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
                 ),
               ),
               Container(height: 10),
@@ -382,21 +534,7 @@ class _Card3State extends State<Card3> {
                   fontSize: 14,
                 ),
               ),
-              Container(height: 10),
-              GestureDetector(
-                onTap: () async {
-                  // 申请链接
-                  // await XHttp().pureHttpWithCookie(url: widget.data["apply_link"]);
-                },
-                child: Text(
-                  "立即申请",
-                  style: TextStyle(
-                    color: os_color,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              Container(height: 5),
             ],
           ),
         ),
@@ -425,6 +563,24 @@ class _Card2State extends State<Card2> {
       margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
       child: myInkWell(
         radius: 10,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_light_dark_card
+            : os_white,
+        tap: () async {
+          // 申请链接
+          if (widget.data["progress"] == "1.0") {
+            // print("申请链接：${widget.data["apply_link"]}");
+            showToast(context: context, type: XSToast.loading, txt: "加载中…");
+            await XHttp().pureHttpWithCookie(url: widget.data["apply_link"]);
+            hideToast();
+            if (widget.refresh != null) {
+              widget.refresh();
+            }
+          } else {
+            print("未达完成条件");
+          }
+          // await XHttp().pureHttpWithCookie(url: widget.data["apply_link"]);
+        },
         widget: Container(
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           decoration: BoxDecoration(
@@ -438,6 +594,9 @@ class _Card2State extends State<Card2> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
                 ),
               ),
               Container(height: 10),
@@ -457,18 +616,35 @@ class _Card2State extends State<Card2> {
                 ),
               ),
               Container(height: 10),
-              GestureDetector(
-                onTap: () async {
-                  // 申请链接
-                  // await XHttp().pureHttpWithCookie(url: widget.data["apply_link"]);
-                },
-                child: Text(
-                  "立即申请",
-                  style: TextStyle(
-                    color: os_color,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+              LinearPercentIndicator(
+                padding: EdgeInsets.symmetric(horizontal: 0),
+                backgroundColor: os_grey,
+                progressColor: os_color,
+                percent: double.parse(
+                  double.parse(widget.data["progress"]).toStringAsFixed(2),
+                ),
+                barRadius: Radius.circular(10),
+                trailing: Container(
+                  margin: EdgeInsets.only(left: 10),
+                  child: Text(
+                    (double.parse(widget.data["progress"]) * 100)
+                            .toStringAsFixed(0) +
+                        "%",
+                    style: TextStyle(
+                      color: os_deep_grey,
+                    ),
                   ),
+                ),
+              ),
+              Container(height: 10),
+              Text(
+                "领取奖励",
+                style: TextStyle(
+                  color: widget.data["progress"] == "1.0"
+                      ? os_color
+                      : os_middle_grey,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
@@ -499,6 +675,22 @@ class _Card1State extends State<Card1> {
       margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
       child: myInkWell(
         radius: 10,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_light_dark_card
+            : os_white,
+        tap: () async {
+          showToast(context: context, type: XSToast.loading, txt: "加载中…");
+          String html =
+              (await XHttp().pureHttpWithCookie(url: widget.data["apply_link"]))
+                  .data
+                  .toString();
+          hideToast();
+          if (widget.refresh != null && !html.contains("另一个任务")) {
+            widget.refresh();
+          } else {
+            showToast(context: context, type: XSToast.none, txt: "领取失败");
+          }
+        },
         widget: Container(
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           decoration: BoxDecoration(
@@ -512,6 +704,9 @@ class _Card1State extends State<Card1> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
                 ),
               ),
               Container(height: 10),
@@ -531,11 +726,8 @@ class _Card1State extends State<Card1> {
                 ),
               ),
               Container(height: 10),
-              GestureDetector(
-                onTap: () async {
-                  // 申请链接
-                  // await XHttp().pureHttpWithCookie(url: widget.data["apply_link"]);
-                },
+              Container(
+                width: MediaQuery.of(context).size.width,
                 child: Text(
                   "立即申请",
                   style: TextStyle(
