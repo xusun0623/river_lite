@@ -160,8 +160,8 @@ class _TopicDetailState extends State<TopicDetail> {
 
   _buildContBody() {
     List<Widget> tmp = [];
-    var imgLists = [];
     String s_tmp = "";
+    var imgLists = [];
     data["topic"]["content"].forEach((e) {
       if (e["type"] == 1) {
         imgLists.add(e["infor"]);
@@ -192,6 +192,8 @@ class _TopicDetailState extends State<TopicDetail> {
             true) {
           renderImg.add(DetailCont(
             data: data["topic"]["content"][i + img_count],
+            title: data["topic"]["title"],
+            desc: s_tmp,
             imgLists: imgLists,
           ));
           img_count++; //有多少张图片连续
@@ -216,7 +218,12 @@ class _TopicDetailState extends State<TopicDetail> {
           },
           child: Container(
             padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-            child: DetailCont(data: e, imgLists: imgLists),
+            child: DetailCont(
+              data: e,
+              imgLists: imgLists,
+              title: data["topic"]["title"],
+              desc: s_tmp,
+            ),
           ),
         ));
       }
@@ -251,6 +258,35 @@ class _TopicDetailState extends State<TopicDetail> {
                       "您现在浏览的是本版块的精选内容",
                       style: TextStyle(
                         color: os_color,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+      data["boardId"] != 61 //二手专区
+          ? Container()
+          : Container(
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                color: os_wonderful_color_opa[2],
+              ),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.emoji_emotions,
+                      color: os_wonderful_color[2],
+                    ),
+                    Container(width: 5),
+                    Text(
+                      "愉快交易，坦诚相待",
+                      style: TextStyle(
+                        color: os_wonderful_color[2],
                       ),
                     ),
                   ],

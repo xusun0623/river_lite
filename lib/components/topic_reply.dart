@@ -407,6 +407,7 @@ class _TopicReplyState extends State<TopicReply> {
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(16, 18, 16, 15),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Row(
                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -491,18 +492,40 @@ class _TopicReplyState extends State<TopicReply> {
                       //   ],
                       // ),
                       // Padding(padding: EdgeInsets.all(3)),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Text(
-                          widget.data["title"],
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 17,
-                              letterSpacing: 0.5,
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_white
-                                  : os_black),
-                        ),
+                      Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: CachedNetworkImage(
+                              width: 27,
+                              height: 27,
+                              fit: BoxFit.cover,
+                              imageUrl: widget.data["userAvatar"],
+                              placeholder: (context, url) => Container(
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_white
+                                          : os_grey),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                            ),
+                          ),
+                          Container(width: 7.5),
+                          Container(
+                            width: MediaQuery.of(context).size.width - 100,
+                            child: Text(
+                              widget.data["title"],
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  letterSpacing: 0.5,
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_white
+                                          : os_black),
+                            ),
+                          ),
+                        ],
                       ),
                       Padding(padding: EdgeInsets.all(3)),
                       ((widget.data["summary"] ?? widget.data["subject"]) ??

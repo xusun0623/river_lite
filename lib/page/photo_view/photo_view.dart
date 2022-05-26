@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart'; // Import package
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/saveImg.dart';
+import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
+import 'package:offer_show/page/topic/detail_cont.dart';
+import 'package:offer_show/util/provider.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:provider/provider.dart';
 
 typedef PageChanged = void Function(int index);
 
@@ -11,12 +15,16 @@ class PhotoPreview extends StatefulWidget {
   final PageChanged pageChanged; //切换图片回调
   final Axis direction; //图片查看方向
   final Decoration decoration; //背景设计
+  final String desc; //图片描述
+  final String title; //图片描述标题
 
   PhotoPreview(
       {this.galleryItems,
       this.defaultImage = 1,
       this.pageChanged,
       this.direction = Axis.horizontal,
+      this.desc,
+      this.title,
       this.decoration})
       : assert(galleryItems != null);
   @override
@@ -28,6 +36,36 @@ class _PhotoPreviewState extends State<PhotoPreview> {
   @override
   void initState() {
     tempSelect = widget.defaultImage + 1;
+  }
+
+  List<InlineSpan> _getRichText(String t) {
+    List<InlineSpan> ret = [];
+    t = t.replaceAll("&nbsp;", " ");
+    List<String> tmp = t.split("[mobcent_phiz=");
+    ret.add(TextSpan(text: tmp[0]));
+    for (var i = 1; i < tmp.length; i++) {
+      var first_idx = tmp[i].indexOf(']');
+      ret.add(WidgetSpan(
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: Opacity(
+            opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
+            child: CachedNetworkImage(
+              placeholder: (context, url) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: os_grey,
+                ),
+              ),
+              imageUrl: tmp[i].substring(0, first_idx),
+            ),
+          ),
+        ),
+      ));
+      ret.add(TextSpan(text: tmp[i].substring(first_idx + 1)));
+    }
+    return ret;
   }
 
   @override
@@ -95,6 +133,49 @@ class _PhotoPreviewState extends State<PhotoPreview> {
               ),
             ),
           ),
+          widget.desc == null || widget.title == null
+              ? Container()
+              : Positioned(
+                  left: 0,
+                  bottom: 0,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                    width: MediaQuery.of(context).size.width,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: [0, 1],
+                        colors: [Colors.transparent, Colors.black87],
+                      ),
+                    ),
+                    child: ListView(
+                      physics: BouncingScrollPhysics(),
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: os_dark_white,
+                            ),
+                            children: _getRichText(widget.title),
+                          ),
+                        ),
+                        Container(height: 5),
+                        Text.rich(
+                          TextSpan(
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.white70,
+                            ),
+                            children: _getRichText(widget.desc),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
           Positioned(
             ///布局自己换
             left: 20,

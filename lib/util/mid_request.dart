@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/util/storage.dart';
@@ -106,7 +107,7 @@ class XHttp {
       param.addAll({
         "accessToken": myinfo["token"],
         "accessSecret": myinfo["secret"],
-        "platType": 5,
+        "platType": Platform.isAndroid ? "" : 5,
       });
     }
     return await netWorkRequest(

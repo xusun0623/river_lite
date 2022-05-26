@@ -19,12 +19,16 @@ import '../../outer/cached_network_image/cached_image_widget.dart';
 class DetailCont extends StatefulWidget {
   var data;
   var imgLists;
+  String desc; //在图片上的描述
+  String title; //在图片上的描述标题
   bool isComment;
   DetailCont({
     Key key,
     this.data,
     this.imgLists,
     this.isComment,
+    this.desc,
+    this.title,
   }) : super(key: key);
 
   @override
@@ -141,6 +145,8 @@ class _DetailContState extends State<DetailCont> {
                       context,
                       MaterialPageRoute(
                         builder: (_) => PhotoPreview(
+                          desc: widget.desc,
+                          title: widget.title,
                           galleryItems: widget.imgLists,
                           defaultImage:
                               widget.imgLists.indexOf(widget.data["infor"]),
