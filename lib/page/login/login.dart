@@ -32,6 +32,7 @@ class _LoginState extends State<Login> {
   String password;
 
   bool showSuccess = false;
+  SwiperController _swiperController = new SwiperController();
 
   _login() async {
     if (username == "" ||
@@ -77,7 +78,11 @@ class _LoginState extends State<Login> {
     }
   }
 
-  SwiperController _swiperController = new SwiperController();
+  @override
+  void initState() {
+    _swiperController.index = widget.index;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +171,7 @@ class _LoginState extends State<Login> {
               child: Swiper(
                 itemCount: 2,
                 loop: false,
-                index: widget.index,
+                // index: _swiperController.index,
                 controller: _swiperController,
                 itemBuilder: (BuildContext context, int index) {
                   return [
@@ -176,9 +181,11 @@ class _LoginState extends State<Login> {
                         LoginHead(),
                         Container(height: 200),
                         LoginSubmit(
-                          color: Color(0xFF222222),
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_light_dark_card
+                              : Color(0xFF222222),
                           tap: () {
-                            _swiperController.move(1);
+                            _swiperController.next();
                           },
                         ),
                         Container(height: 15),
@@ -353,7 +360,7 @@ class _LoginInputState extends State<LoginInput> {
               ),
               borderRadius: BorderRadius.all(Radius.circular(15)),
               color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_card
+                  ? os_light_dark_card
                   : Color.fromRGBO(0, 0, 0, 0.08),
             ),
             child: TextField(
@@ -397,7 +404,7 @@ class _LoginInputState extends State<LoginInput> {
               ),
               borderRadius: BorderRadius.all(Radius.circular(15)),
               color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_card
+                  ? os_light_dark_card
                   : Color.fromRGBO(0, 0, 0, 0.08),
             ),
             child: TextField(

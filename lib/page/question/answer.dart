@@ -6,6 +6,7 @@ query_answer(String q) {
       return tmp["a"];
     }
   }
+  return "";
 }
 
 List<Map> river_answer = [

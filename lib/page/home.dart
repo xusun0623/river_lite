@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +12,7 @@ import 'package:offer_show/page/explore/explore.dart';
 import 'package:offer_show/page/me/me.dart';
 import 'package:offer_show/page/msg/msg.dart';
 import 'package:offer_show/page/home/myhome.dart';
+import 'package:offer_show/page/new_reply/homeNewReply.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -31,7 +32,7 @@ class _HomeState extends State<Home> {
     loadIndex.forEach((element) {
       tmp.add([
         MyHome(),
-        Explore(),
+        HomeNewReply(),
         Msg(
           refresh: () {
             _getNewMsg();
@@ -68,15 +69,6 @@ class _HomeState extends State<Home> {
     }
   }
 
-  _setTab() async {
-    String txt = await getStorage(key: "showExplore", initData: "1");
-    List<int> getListInt = txt == "" ? [0, 2, 3] : [0, 1, 2, 3];
-    Provider.of<TabShowProvider>(context, listen: false).loadIndex = getListInt;
-    setState(() {
-      loadIndex = getListInt;
-    });
-  }
-
   _getBlackStatus() async {
     String black_info_txt = await getStorage(key: "black", initData: "[]");
     List black_info_map = jsonDecode(black_info_txt);
@@ -90,7 +82,8 @@ class _HomeState extends State<Home> {
     Provider.of<ColorProvider>(context, listen: false).refresh();
   }
 
-  _nowMode(BuildContext context) {
+  _nowMode(BuildContext context) async {
+    _getDarkMode();
     if (window.platformBrightness == Brightness.dark &&
         !Provider.of<ColorProvider>(context, listen: false).isDark) {
       Provider.of<ColorProvider>(context, listen: false).isDark = true;
@@ -107,8 +100,6 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    _setTab();
-    _getDarkMode();
     _getNewMsg();
     _getBlackStatus();
     super.initState();
@@ -117,7 +108,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     _nowMode(context);
-    HomeRefrshProvider provider = Provider.of<HomeRefrshProvider>(context);
     TabShowProvider tabShowProvider = Provider.of<TabShowProvider>(context);
     os_width = MediaQuery.of(context).size.width;
     os_height = MediaQuery.of(context).size.height;
@@ -232,7 +222,7 @@ class _HomeState extends State<Home> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           // children: _buildWidget(tabShowProvider.loadIndex),
-          children: _buildWidget([0, 2, 3]),
+          children: _buildWidget((Platform.isAndroid) ? [0, 1, 2, 3] : [0, 2, 3]),
         ),
       ),
     );

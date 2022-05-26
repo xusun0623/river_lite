@@ -125,6 +125,7 @@ class _QuestionState extends State<Question> {
       });
     } else {
       setState(() {
+        auto_machine = false;
         match_answer = "";
         no_answer = true;
       });
@@ -158,13 +159,15 @@ class _QuestionState extends State<Question> {
   }
 
   _submit() async {
-    if (match_answer == "" && !auto_machine) {
+    if ((match_answer == "" && !auto_machine) ||
+        (match_answer == null && !auto_machine)) {
       showToast(
         context: context,
         type: XSToast.none,
         txt: "请选择一个选项",
       );
-    } else if (match_answer == "" && auto_machine) {
+    } else if ((match_answer == "" && auto_machine) ||
+        (match_answer == null && auto_machine)) {
       //  机器没匹配到
       showToast(
         context: context,
@@ -174,11 +177,15 @@ class _QuestionState extends State<Question> {
       );
     } else {
       showToast(context: context, type: XSToast.loading, txt: "请稍后…");
-      await Api().submit_question(
-        answer: ret_value,
-        context: context,
-      );
-      await _next();
+      if (ret_value != 0 && auto_machine && match_answer != "") {
+        await Api().submit_question(
+          answer: ret_value,
+          context: context,
+        );
+        ret_value = 0;
+        match_answer = "";
+        await _next();
+      }
       hideToast();
     }
   }

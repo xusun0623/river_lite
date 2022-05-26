@@ -48,13 +48,18 @@ class _MsgThreeState extends State<MsgThree> {
         "pageSize": 10,
       });
       if (tmp != null &&
+          tmp["rs"] != null &&
           tmp["rs"] != 0 &&
           tmp["body"] != null &&
           tmp["body"]["data"] != null) {
         setState(() {
           datas = tmp["body"]["data"];
           if (tmp["list"] != null) lists = tmp["list"];
-          load_done = datas.length % 10 != 0 || datas.length == 0;
+          if (datas != null && datas.length != 0) {
+            load_done = datas.length % 10 != 0 || datas.length == 0;
+          } else {
+            load_done = true;
+          }
         });
       } else {
         datas = [];
@@ -221,8 +226,7 @@ class _MsgThreeState extends State<MsgThree> {
                 child: RefreshIndicator(
                   color: colors[widget.type],
                   onRefresh: () async {
-                    await _getData();
-                    return;
+                    return await _getData();
                   },
                   child: BackToTop(
                     color: colors[widget.type],
@@ -269,18 +273,6 @@ class _SysNotiState extends State<SysNoti> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: headImgSize,
-              height: headImgSize,
-              decoration: BoxDecoration(
-                color: os_grey,
-                borderRadius: BorderRadius.all(Radius.circular(100)),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(100)),
-                child: Container(),
-              ),
-            ),
             Container(width: 10),
             Container(
               width: MediaQuery.of(context).size.width - headImgSize - 64,
@@ -386,7 +378,8 @@ class _ForumCardState extends State<ForumCard> {
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
                 child: CachedNetworkImage(
-                  imageUrl: widget.data["authorAvatar"],
+                  imageUrl: widget.data["authorAvatar"] ??
+                      "https://t7.baidu.com/it/u=1595072465,3644073269&fm=193&f=GIF",
                   fit: BoxFit.cover,
                 ),
               ),
@@ -401,7 +394,7 @@ class _ForumCardState extends State<ForumCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        widget.data["author"],
+                        widget.data["author"] ?? "",
                         style: TextStyle(
                           fontSize: 16,
                           color: Provider.of<ColorProvider>(context).isDark
@@ -417,7 +410,7 @@ class _ForumCardState extends State<ForumCard> {
                     ],
                   ),
                   Container(height: 5),
-                  widget.forum["topic_subject"].toString().trim() == ""
+                  (widget.forum["topic_subject"] ?? "").toString().trim() == ""
                       ? Container()
                       : Container(
                           decoration: BoxDecoration(
@@ -448,8 +441,8 @@ class _ForumCardState extends State<ForumCard> {
                   Container(
                     width: MediaQuery.of(context).size.width - headImgSize - 90,
                     child: Text(
-                      widget.forum["reply_content"].toString().trim() +
-                          (widget.forum["reply_content"]
+                      (widget.forum["reply_content"] ?? "").toString().trim() +
+                          ((widget.forum["reply_content"] ?? "")
                                       .toString()
                                       .trim()
                                       .length ==

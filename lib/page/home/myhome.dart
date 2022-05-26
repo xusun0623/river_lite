@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:offer_show/asset/color.dart';
@@ -6,6 +8,7 @@ import 'package:offer_show/page/essence/essence.dart';
 import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/hot/homeHotNoScaffold.dart';
 import 'package:offer_show/page/new_reply/homeNewReply.dart';
+import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +21,13 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
   TabController tabController;
+
   @override
   void initState() {
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(
+      length: Platform.isAndroid ? 3 : 4,
+      vsync: this,
+    );
     super.initState();
   }
 
@@ -74,12 +81,18 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
             labelStyle: TextStyle(
               fontWeight: FontWeight.bold,
             ),
-            tabs: [
-              Tab(text: "新发表"),
-              Tab(text: "新回复"),
-              Tab(text: "热门"),
-              Tab(text: "精华"),
-            ],
+            tabs: Platform.isAndroid
+                ? [
+                    Tab(text: "新发表"),
+                    Tab(text: "热门"),
+                    Tab(text: "精华"),
+                  ]
+                : [
+                    Tab(text: "新发表"),
+                    Tab(text: "新回复"),
+                    Tab(text: "热门"),
+                    Tab(text: "精华"),
+                  ],
             onTap: (index) {
               setState(() {
                 Provider.of<HomeRefrshProvider>(
@@ -98,15 +111,26 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       ),
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      body: TabBarView(
-        physics: CustomTabBarViewScrollPhysics(),
-        controller: tabController,
-        children: [
-          HomeNew(),
-          HomeNewReply(),
-          HotNoScaffold(),
-          Essence(),
-        ],
+      body: Container(
+        child: Platform.isAndroid
+            ? IndexedStack(
+                index: tabController.index,
+                children: [
+                  HomeNew(),
+                  HotNoScaffold(),
+                  Essence(),
+                ],
+              )
+            : TabBarView(
+                physics: CustomTabBarViewScrollPhysics(),
+                controller: tabController,
+                children: [
+                  HomeNew(),
+                  HomeNewReply(),
+                  HotNoScaffold(),
+                  Essence(),
+                ],
+              ),
       ),
     );
   }
