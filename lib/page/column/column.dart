@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -548,7 +547,9 @@ class _DefineTabBarState extends State<DefineTabBar> {
                 height: 60,
                 child: Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  color: Color(0xFF004FFF),
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : Color(0xFF004FFF),
                 ),
               ),
             ],

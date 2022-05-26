@@ -419,7 +419,7 @@ class _TopicDetailState extends State<TopicDetail> {
       appBar: data == null || data["topic"] == null
           ? AppBar(
               backgroundColor: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_card
+                  ? os_light_dark_card
                   : os_white,
               foregroundColor: os_black,
               leading: IconButton(
@@ -911,7 +911,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
               ? Container(
                   width: MediaQuery.of(context).size.width,
                   color: Provider.of<ColorProvider>(context).isDark
-                      ? os_light_dark_card
+                      ? os_dark_back
                       : os_white,
                   height: popHeight,
                   child: popSectionIndex == 0
@@ -1526,7 +1526,7 @@ class _TopicVoteState extends State<TopicVote> {
           margin: EdgeInsets.symmetric(vertical: 4),
           decoration: BoxDecoration(
             color: Provider.of<ColorProvider>(context).isDark
-                ? os_light_dark_card
+                ? Color(0x11FFFFFF)
                 : os_white,
             borderRadius: BorderRadius.all(Radius.circular(7.5)),
             border: Border.all(
@@ -1534,7 +1534,9 @@ class _TopicVoteState extends State<TopicVote> {
                     ? (Provider.of<ColorProvider>(context).isDark
                         ? os_dark_dark_white
                         : os_color)
-                    : Color(0xFFCCCCCC)),
+                    : (Provider.of<ColorProvider>(context).isDark
+                        ? Color(0x00FFFFFF)
+                        : Color(0xFFCCCCCC))),
           ),
           child: Stack(
             alignment: AlignmentDirectional.center,
@@ -1557,7 +1559,7 @@ class _TopicVoteState extends State<TopicVote> {
                           ],
                           colors: [
                             Provider.of<ColorProvider>(context).isDark
-                                ? Color(0x22FFFFFF)
+                                ? Color(0x11FFFFFF)
                                 : os_color_opa,
                             Provider.of<ColorProvider>(context).isDark
                                 ? os_light_dark_card
@@ -1636,7 +1638,7 @@ class _TopicVoteState extends State<TopicVote> {
             padding: EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
               color: Provider.of<ColorProvider>(context).isDark
-                  ? Color(0x11FFFFFF)
+                  ? Color(0x08FFFFFF)
                   : Color(0xFFF6F6F6),
               borderRadius: BorderRadius.all(Radius.circular(7.5)),
             ),
@@ -2089,251 +2091,273 @@ class _CommentState extends State<Comment> {
       color: Colors.transparent,
       widget: Padding(
         padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
-        child: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  if (widget.data["reply_name"] != "匿名")
-                    toUserSpace(
-                      context,
-                      int.parse(widget.data["icon"]
-                          .toString()
-                          .split("uid=")[1]
-                          .split("&size=")[0]),
-                    );
-                },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
-                  child: Opacity(
-                    opacity:
-                        Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
-                    child: CachedNetworkImage(
-                      imageUrl: widget.data["icon"],
-                      placeholder: (context, url) => Container(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? Color(0x22FFFFFF)
-                            : os_grey,
-                        width: 35,
-                        height: 35,
+        child: Stack(
+          children: [
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      if (widget.data["reply_name"] != "匿名")
+                        toUserSpace(
+                          context,
+                          int.parse(widget.data["icon"]
+                              .toString()
+                              .split("uid=")[1]
+                              .split("&size=")[0]),
+                        );
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      child: Opacity(
+                        opacity: Provider.of<ColorProvider>(context).isDark
+                            ? 0.8
+                            : 1,
+                        child: CachedNetworkImage(
+                          imageUrl: widget.data["icon"],
+                          placeholder: (context, url) => Container(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? Color(0x22FFFFFF)
+                                : os_grey,
+                            width: 35,
+                            height: 35,
+                          ),
+                          width: 35,
+                          height: 35,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                      width: 35,
-                      height: 35,
-                      fit: BoxFit.cover,
                     ),
                   ),
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width - 75,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Container(
+                    width: MediaQuery.of(context).size.width - 75,
+                    child: Column(
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              widget.data["reply_name"],
-                              style: TextStyle(
-                                color:
-                                    Provider.of<ColorProvider>(context).isDark
+                            Row(
+                              children: [
+                                Text(
+                                  widget.data["reply_name"],
+                                  style: TextStyle(
+                                    color: Provider.of<ColorProvider>(context)
+                                            .isDark
                                         ? os_dark_white
                                         : Color(0xFF333333),
-                                fontWeight:
-                                    Provider.of<ColorProvider>(context).isDark
-                                        ? FontWeight.normal
-                                        : FontWeight.bold,
-                                fontSize: 14,
-                              ),
-                            ),
-                            Container(width: 8),
-                            widget.data["userTitle"] == null ||
-                                    widget.data["userTitle"].length == 0
-                                ? Container()
-                                : Tag(
-                                    txt: widget.data["poststick"] == 1
-                                        ? "置顶"
-                                        : "" + widget.data["userTitle"],
-                                    color: widget.data["userTitle"]
-                                                .toString()
-                                                .length <
-                                            7
-                                        ? Color(0xFFFE6F61)
-                                        : (widget.data["poststick"] == 1
-                                            ? os_white
-                                            : Color(0xFF0092FF)),
-                                    color_opa: widget.data["userTitle"]
-                                                .toString()
-                                                .length <
-                                            7
-                                        ? Color(0x10FE6F61)
-                                        : (widget.data["poststick"] == 1
-                                            ? os_wonderful_color[3]
-                                            : Color(0x100092FF)),
+                                    fontWeight:
+                                        Provider.of<ColorProvider>(context)
+                                                .isDark
+                                            ? FontWeight.normal
+                                            : FontWeight.bold,
+                                    fontSize: 14,
                                   ),
-                            Container(width: 5),
-                            widget.data["reply_id"] == widget.host_id &&
-                                    widget.data["reply_name"] != "匿名"
-                                ? Opacity(
-                                    opacity: Provider.of<ColorProvider>(context)
-                                            .isDark
-                                        ? 0.8
-                                        : 1,
-                                    child: Tag(
-                                      txt: "楼主",
-                                      color: os_white,
-                                      color_opa: Color(0xFF2EA6FF),
-                                    ),
-                                  )
-                                : Container(),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            myInkWell(
-                              tap: () {
-                                _tapLike();
-                              },
-                              color: Colors.transparent,
-                              widget: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 2,
-                                  horizontal: 5,
                                 ),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(top: 4),
-                                      child: Text(
-                                        widget.data["extraPanel"][0]
-                                                ["extParams"]["recommendAdd"]
-                                            .toString(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: liked == 1
-                                              ? os_color
-                                              : Color(0xFFB1B1B1),
-                                        ),
+                                Container(width: 8),
+                                widget.data["userTitle"] == null ||
+                                        widget.data["userTitle"].length == 0
+                                    ? Container()
+                                    : Tag(
+                                        txt: widget.data["poststick"] == 1
+                                            ? "置顶"
+                                            : "" + widget.data["userTitle"],
+                                        color: widget.data["userTitle"]
+                                                    .toString()
+                                                    .length <
+                                                7
+                                            ? Color(0xFFFE6F61)
+                                            : (widget.data["poststick"] == 1
+                                                ? os_white
+                                                : Color(0xFF0092FF)),
+                                        color_opa: widget.data["userTitle"]
+                                                    .toString()
+                                                    .length <
+                                                7
+                                            ? Color(0x10FE6F61)
+                                            : (widget.data["poststick"] == 1
+                                                ? os_wonderful_color[3]
+                                                : Color(0x100092FF)),
                                       ),
-                                    ),
-                                    Container(width: 3),
-                                    os_svg(
-                                      path: liked == 1
-                                          ? "lib/img/detail_like_blue.svg"
-                                          : "lib/img/detail_like.svg",
-                                      width: 24,
-                                      height: 24,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              radius: 7.5,
+                                Container(width: 5),
+                                widget.data["reply_id"] == widget.host_id &&
+                                        widget.data["reply_name"] != "匿名"
+                                    ? Opacity(
+                                        opacity:
+                                            Provider.of<ColorProvider>(context)
+                                                    .isDark
+                                                ? 0.8
+                                                : 1,
+                                        child: Tag(
+                                          txt: "楼主",
+                                          color: os_white,
+                                          color_opa: Color(0xFF2EA6FF),
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
                             ),
-                            myInkWell(
-                              tap: () {
-                                _showMore();
-                              },
-                              color: Colors.transparent,
-                              widget: Container(
-                                padding: EdgeInsets.all(5),
-                                child: os_svg(
-                                  path: "lib/img/detail_comment_more.svg",
-                                  width: 17,
-                                  height: 17,
+                            Row(
+                              children: [
+                                myInkWell(
+                                  tap: () {
+                                    _tapLike();
+                                  },
+                                  color: Colors.transparent,
+                                  widget: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 2,
+                                      horizontal: 5,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(top: 4),
+                                          child: Text(
+                                            widget.data["extraPanel"][0]
+                                                    ["extParams"]
+                                                    ["recommendAdd"]
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: liked == 1
+                                                  ? os_color
+                                                  : Color(0xFFB1B1B1),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(width: 3),
+                                        os_svg(
+                                          path: liked == 1
+                                              ? "lib/img/detail_like_blue.svg"
+                                              : "lib/img/detail_like.svg",
+                                          width: 24,
+                                          height: 24,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  radius: 7.5,
                                 ),
-                              ),
-                              radius: 7.5,
-                            )
+                                myInkWell(
+                                  tap: () {
+                                    _showMore();
+                                  },
+                                  color: Colors.transparent,
+                                  widget: Container(
+                                    padding: EdgeInsets.all(5),
+                                    child: os_svg(
+                                      path: "lib/img/detail_comment_more.svg",
+                                      width: 17,
+                                      height: 17,
+                                    ),
+                                  ),
+                                  radius: 7.5,
+                                )
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 3, 0, 10),
-                      width: MediaQuery.of(context).size.width - 75,
-                      child: Text(
-                        RelativeDateFormat.format(
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  int.parse(widget.data["posts_date"])),
-                            ) +
-                            " · " +
-                            (widget.data["mobileSign"] == ""
-                                ? "网页版"
-                                : (widget.data["mobileSign"]
-                                        .toString()
-                                        .contains("安卓")
-                                    ? "安卓客户端"
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 3, 0, 10),
+                          width: MediaQuery.of(context).size.width - 75,
+                          child: Text(
+                            RelativeDateFormat.format(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      int.parse(widget.data["posts_date"])),
+                                ) +
+                                " · " +
+                                (widget.data["mobileSign"] == ""
+                                    ? "网页版"
                                     : (widget.data["mobileSign"]
                                             .toString()
-                                            .contains("苹果")
-                                        ? "iPhone客户端"
-                                        : widget.data["mobileSign"]))) +
-                            " · #${widget.index + 1}楼",
-                        style: TextStyle(
-                          color: Color(0xFF9F9F9F),
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    _buildContBody(widget.data["reply_content"]),
-                    widget.data["quote_content"] != ""
-                        ? Container(
-                            width: MediaQuery.of(context).size.width - 75,
-                            padding: EdgeInsets.fromLTRB(16, 13, 16, 13),
-                            margin: EdgeInsets.only(top: 10),
-                            decoration: BoxDecoration(
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? Color(0x11FFFFFF)
-                                  : Color(0x09000000),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(13)),
+                                            .contains("安卓")
+                                        ? "安卓客户端"
+                                        : (widget.data["mobileSign"]
+                                                .toString()
+                                                .contains("苹果")
+                                            ? "iPhone客户端"
+                                            : widget.data["mobileSign"]))) +
+                                " · #${widget.index + 1}楼",
+                            style: TextStyle(
+                              color: Color(0xFF9F9F9F),
+                              fontSize: 12,
                             ),
-                            child: RichText(
-                              text: TextSpan(
-                                  style: TextStyle(fontSize: 14),
-                                  children: [
-                                    TextSpan(
-                                      text: "回复@" +
-                                          widget.data["quote_content"]
-                                              .split(" 发表于")[0] +
-                                          ": ",
-                                      style: TextStyle(
-                                        color: os_color,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: widget.data["quote_content"]
-                                          .split("发表于")[1]
-                                          .split("\n")[1],
-                                      style: TextStyle(
-                                          color: Provider.of<ColorProvider>(
-                                                      context)
-                                                  .isDark
-                                              ? os_dark_white
-                                              : Color(0xFF464646)),
-                                    ),
-                                  ]),
-                            ),
-                          )
-                        : Container(),
-                    widget.is_last
-                        ? Container(
-                            margin: EdgeInsets.only(top: 20),
-                          )
-                        : Container(
-                            width: MediaQuery.of(context).size.width - 75,
-                            height: 1,
-                            margin: EdgeInsets.only(top: 20),
-                            color: Color(0x00000000),
                           ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                        ),
+                        _buildContBody(widget.data["reply_content"]),
+                        widget.data["quote_content"] != ""
+                            ? Container(
+                                width: MediaQuery.of(context).size.width - 75,
+                                padding: EdgeInsets.fromLTRB(16, 13, 16, 13),
+                                margin: EdgeInsets.only(top: 10),
+                                decoration: BoxDecoration(
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? Color(0x11FFFFFF)
+                                          : Color(0x09000000),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(13)),
+                                ),
+                                child: RichText(
+                                  text: TextSpan(
+                                      style: TextStyle(fontSize: 14),
+                                      children: [
+                                        TextSpan(
+                                          text: "回复@" +
+                                              widget.data["quote_content"]
+                                                  .split(" 发表于")[0] +
+                                              ": ",
+                                          style: TextStyle(
+                                            color: os_color,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: widget.data["quote_content"]
+                                              .split("发表于")[1]
+                                              .split("\n")[1],
+                                          style: TextStyle(
+                                              color: Provider.of<ColorProvider>(
+                                                          context)
+                                                      .isDark
+                                                  ? os_dark_white
+                                                  : Color(0xFF464646)),
+                                        ),
+                                      ]),
+                                ),
+                              )
+                            : Container(),
+                        widget.is_last
+                            ? Container(
+                                margin: EdgeInsets.only(top: 20),
+                              )
+                            : Container(
+                                width: MediaQuery.of(context).size.width - 75,
+                                height: 1,
+                                margin: EdgeInsets.only(top: 20),
+                                color: Color(0x00000000),
+                              ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            widget.data["extraPanel"][0]["extParams"]["recommendAdd"] < 5
+                ? Container()
+                : Positioned(
+                    right: 4,
+                    top: 40,
+                    child: Icon(
+                      Icons.thumb_up,
+                      size: 50,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? Color(0x22FFFFFF)
+                          : Color(0x11FF0000),
+                    ),
+                  ),
+          ],
         ),
       ),
       radius: 0,

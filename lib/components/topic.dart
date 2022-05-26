@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -521,6 +522,56 @@ class _TopicState extends State<Topic> {
                                   height: 1.5,
                                   color: Color(0xFF999999),
                                 ),
+                              ),
+                            ),
+                      Padding(padding: EdgeInsets.all(3)),
+                      (widget.data["vote"] ?? 0) == 0
+                          ? Container()
+                          : Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Provider.of<ColorProvider>(context)
+                                              .isDark
+                                          ? Color(0x11FFFFFF)
+                                          : os_color_opa,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(5),
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.only(
+                                      left: 7.5,
+                                      right: 10,
+                                      top: 3.5,
+                                      bottom: 3.5,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.download_done,
+                                          color: Provider.of<ColorProvider>(
+                                                      context)
+                                                  .isDark
+                                              ? os_dark_dark_white
+                                              : os_color,
+                                          size: 18,
+                                        ),
+                                        Text(
+                                          "投票帖",
+                                          style: TextStyle(
+                                            color: Provider.of<ColorProvider>(
+                                                        context)
+                                                    .isDark
+                                                ? os_dark_dark_white
+                                                : os_color,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                       Padding(padding: EdgeInsets.all(8)),

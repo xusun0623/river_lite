@@ -44,19 +44,21 @@ class _PersonDetailState extends State<PersonDetail> {
     ))
         .data
         .toString();
-    online_time = html.split("在线时间</em>")[1].split("</li><li><em>")[0];
-    last_come = html.split("上次活动时间</em>")[1].split("</li><li><em>")[0];
-    sign_time = html.split("注册时间</em>")[1].split("</li>")[0];
-    last_ip = html.split("上次访问 IP</em>").length == 1
-        ? ""
-        : html.split("上次访问 IP</em>")[1].split("</li>")[0];
-    sign_ip = html.split("注册 IP</em>").length == 1
-        ? ""
-        : html.split("注册 IP</em>")[1].split("</li>")[0];
-    come_count = html
-        .split("空间访问量</em><strong class=")[1]
-        .split("</strong></li>")[0]
-        .split(">")[1];
+    try {
+      online_time = html.split("在线时间</em>")[1].split("</li><li><em>")[0];
+      last_come = html.split("上次活动时间</em>")[1].split("</li><li><em>")[0];
+      sign_time = html.split("注册时间</em>")[1].split("</li>")[0];
+      last_ip = html.split("上次访问 IP</em>").length == 1
+          ? ""
+          : html.split("上次访问 IP</em>")[1].split("</li>")[0];
+      sign_ip = html.split("注册 IP</em>").length == 1
+          ? ""
+          : html.split("注册 IP</em>")[1].split("</li>")[0];
+      come_count = html
+          .split("空间访问量</em><strong class=")[1]
+          .split("</strong></li>")[0]
+          .split(">")[1];
+    } catch (e) {}
     setState(() {});
   }
 

@@ -57,7 +57,11 @@ class _QuestionState extends State<Question> {
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: match_answer == option ? os_color : os_white,
+                    color: match_answer == option
+                        ? os_color
+                        : (Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_dark_white
+                            : os_white),
                     width: 2,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -159,6 +163,11 @@ class _QuestionState extends State<Question> {
   }
 
   _submit() async {
+    print("提交");
+    print("match_answer:${match_answer}");
+    print("auto_machine:${auto_machine}");
+    print("ret_value:${ret_value}");
+    // return;
     if ((match_answer == "" && !auto_machine) ||
         (match_answer == null && !auto_machine)) {
       showToast(
@@ -175,9 +184,14 @@ class _QuestionState extends State<Question> {
         txt: "未匹配到答案，请手动勾选",
         duration: 300,
       );
+      setState(() {
+        auto_machine = false;
+        ret_value = 0;
+        match_answer = "";
+      });
     } else {
       showToast(context: context, type: XSToast.loading, txt: "请稍后…");
-      if (ret_value != 0 && auto_machine && match_answer != "") {
+      if (ret_value != 0 && match_answer != "") {
         await Api().submit_question(
           answer: ret_value,
           context: context,
@@ -513,9 +527,7 @@ class _QuestionState extends State<Question> {
             confirm: () {
               if (!auto_machine) {
                 auto_machine = true;
-                if (match_answer != "") {
-                  _submit();
-                }
+                _submit();
               }
             },
           );
