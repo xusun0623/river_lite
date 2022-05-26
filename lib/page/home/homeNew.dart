@@ -149,7 +149,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
             )
           : BottomLoading(
               color: Colors.transparent,
-              txt: "加载中…",
+              txt: "努力加载中…",
             ),
     );
     t.add(Padding(

@@ -2223,6 +2223,18 @@ class _CommentState extends State<Comment> {
                               DateTime.fromMillisecondsSinceEpoch(
                                   int.parse(widget.data["posts_date"])),
                             ) +
+                            " · " +
+                            (widget.data["mobileSign"] == ""
+                                ? "网页版"
+                                : (widget.data["mobileSign"]
+                                        .toString()
+                                        .contains("安卓")
+                                    ? "安卓客户端"
+                                    : (widget.data["mobileSign"]
+                                            .toString()
+                                            .contains("苹果")
+                                        ? "iPhone客户端"
+                                        : widget.data["mobileSign"]))) +
                             " · #${widget.index + 1}楼",
                         style: TextStyle(
                           color: Color(0xFF9F9F9F),

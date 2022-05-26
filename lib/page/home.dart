@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
   }
 
   _nowMode(BuildContext context) async {
-    _getDarkMode();
+    // _getDarkMode();
     if (window.platformBrightness == Brightness.dark &&
         !Provider.of<ColorProvider>(context, listen: false).isDark) {
       Provider.of<ColorProvider>(context, listen: false).isDark = true;
@@ -101,6 +101,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     _getNewMsg();
+    _getDarkMode();
     _getBlackStatus();
     super.initState();
   }
@@ -170,7 +171,7 @@ class _HomeState extends State<Home> {
                 end: 35,
                 top: 20,
               ),
-              showBadge: (i == 1 && _isNewMsg),
+              showBadge: ((Platform.isAndroid ? i == 2 : i == 1) && _isNewMsg),
               child: Icon(
                 tabShowProvider.index == i ? select_icons[i] : icons[i],
                 size: 26,
@@ -222,7 +223,8 @@ class _HomeState extends State<Home> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           // children: _buildWidget(tabShowProvider.loadIndex),
-          children: _buildWidget((Platform.isAndroid) ? [0, 1, 2, 3] : [0, 2, 3]),
+          children:
+              _buildWidget((Platform.isAndroid) ? [0, 1, 2, 3] : [0, 2, 3]),
         ),
       ),
     );
