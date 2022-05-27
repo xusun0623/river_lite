@@ -37,7 +37,7 @@ class _QuestionState extends State<Question> {
       bool hasAns = false; //是否有答案匹配
       for (var i = 0; i < q_a["a_list"].length; i++) {
         String option = q_a["a_list"][i];
-        if (option == match_answer) {
+        if ("${option}" == "${match_answer}") {
           hasAns = true;
         }
       }
@@ -50,7 +50,8 @@ class _QuestionState extends State<Question> {
       }
       for (var i = 0; i < q_a["a_list"].length; i++) {
         String option = q_a["a_list"][i];
-        if (option == match_answer) {
+        if ("${option}" == "${match_answer}") {
+          print("${option}");
           ret_value = q_a["v_list"][i];
           selected_option = "${carry[i]}. " + option;
         }
