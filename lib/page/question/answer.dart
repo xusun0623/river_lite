@@ -15,11 +15,11 @@ List<Map> river_answer = [
     "a": "事物的发展变化以时间地点和条件为转移",
   },
   {
-    "q": "_____ some old tables, his house was almost empty.",
+    "q": "_____ some old tables, his house was almost empty",
     "a": "Apart from",
   },
   {
-    "q": "“成电”是哪所学校的简称？",
+    "q": "“成电”是哪所学校的简称",
     "a": "成都电讯工程学院",
   },
   {
@@ -309,8 +309,6 @@ List<Map> river_answer = [
     "a": "6",
   },
   {
-    //How do you like the film? ---There was nothing special--- it was only ____
-    //How do you like the film? ---There was nothing special--- it was only ____
     "q": "匈奴未灭，何以家为”是谁的豪言",
     "a": "霍去病",
   },
@@ -352,7 +350,7 @@ List<Map> river_answer = [
   },
   {
     "q":
-        "有人从一手纸牌中选定一张牌,他把这张牌的花色告诉X先生,而把点数告诉了Y先生.两位先生都知道这手纸牌是：黑桃J、8、4、2;红心A、Q、4;方块A、5;草花K、Q、5、4.X先生和Y先生都很精通逻辑,很善于推理.他们之间有对话如下：Y先生：我不知道这张牌.X先生：我知道你不知道这张牌.Y先生：现在我知道这张牌了.X先生：现在我也知道了.",
+        "有人从一手纸牌中选定一张牌,他把这张牌的花色告诉X先生,而把点数告诉了Y先生.两位先生都知道这手纸牌是：黑桃J、8、4、2;红心A、Q、4;方块A、5;草花K、Q、5、4.X先生和Y先生都很精通逻辑,很善于推理.他们之间有对话如下：Y先生：我不知道这张牌.X先生：我知道你不知道这张牌.Y先生：现在我知道这张牌了.X先生：现在我也知道了",
     "a": "方块5",
   },
   {
@@ -365,7 +363,7 @@ List<Map> river_answer = [
   },
   {
     "q": "与桑梓意思一样的是",
-    "a": "故乡/家乡",
+    "a": "家乡",
   },
   {
     "q": "与我国接壤的金砖国家有（）个",

@@ -34,6 +34,20 @@ class _QuestionState extends State<Question> {
     List<String> carry = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
     List<Widget> tmp = [Container()];
     if (q_a != null && q_a["a_list"] != null) {
+      bool hasAns = false; //是否有答案匹配
+      for (var i = 0; i < q_a["a_list"].length; i++) {
+        String option = q_a["a_list"][i];
+        if (option == match_answer) {
+          hasAns = true;
+        }
+      }
+      if (!hasAns) {
+        //没有答案匹配
+        setState(() {
+          match_answer = "";
+          auto_machine = false;
+        });
+      }
       for (var i = 0; i < q_a["a_list"].length; i++) {
         String option = q_a["a_list"][i];
         if (option == match_answer) {
@@ -142,9 +156,7 @@ class _QuestionState extends State<Question> {
       await Api().next_question();
       await _getQuestion();
       await Future.delayed(Duration(milliseconds: 50));
-      if (auto_machine && match_answer != "" && !no_answer) {
-        _submit();
-      }
+      _submit();
     } else {
       _getQuestion();
     }
