@@ -55,7 +55,7 @@ flutter:
     - lib/img/banner/
     - lib/img/setting/
     - lib/img/square/
-    - lib/img/square/column
+    - lib/img/square/column/
     - lib/img/person/
     - lib/img/home/
     - lib/img/msg/

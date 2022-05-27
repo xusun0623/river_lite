@@ -344,7 +344,7 @@ class _DoubleColumnState extends State<DoubleColumn> {
           ),
           Bounce(
             onPressed: () {
-              Navigator.pushNamed(context, "/column", arguments: 45);
+              Navigator.pushNamed(context, "/column", arguments: 371);
             },
             duration: Duration(milliseconds: 100),
             child: Container(
