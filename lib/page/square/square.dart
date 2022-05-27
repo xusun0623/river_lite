@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
@@ -34,8 +36,7 @@ class _SquareState extends State<Square> {
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
-    // tmp.add(_getInput());
-    // tmp.add(Container(height: 15));
+    tmp.add(DoubleColumn());
     if (data != null && data.length != 0) {
       for (var i = 0; i < data.length; i++) {
         tmp.add(SquareCard(data: data[i], index: i));
@@ -208,6 +209,14 @@ class _SquareCardState extends State<SquareCard> {
     return tmp;
   }
 
+  Widget _getIcon(IconData iconData) {
+    return Icon(
+      iconData,
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_white : os_black,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -226,20 +235,18 @@ class _SquareCardState extends State<SquareCard> {
             children: [
               Container(
                 padding: EdgeInsets.all(5),
-                child: Opacity(
-                  opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: os_white,
-                      borderRadius: BorderRadius.all(Radius.circular(7)),
-                    ),
-                    child: os_svg(
-                      path: "lib/img/square/${widget.index + 1}.svg",
-                      width: 22,
-                      height: 22,
-                    ),
-                  ),
-                ),
+                child: widget.data["board_category_name"] == "站务管理"
+                    ? _getIcon(Icons.sms_outlined)
+                    : Container(
+                        child: [
+                          _getIcon(Icons.trending_up_outlined),
+                          _getIcon(Icons.map_outlined),
+                          _getIcon(Icons.school_outlined),
+                          _getIcon(Icons.local_cafe_outlined),
+                          _getIcon(Icons.directions_bike_outlined),
+                          _getIcon(Icons.sms_outlined),
+                        ][widget.index],
+                      ),
               ),
               Container(width: 3),
               Text(
@@ -260,6 +267,128 @@ class _SquareCardState extends State<SquareCard> {
             child: Wrap(
               alignment: WrapAlignment.start,
               children: _buildWrapWidget(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DoubleColumn extends StatefulWidget {
+  DoubleColumn({Key key}) : super(key: key);
+
+  @override
+  State<DoubleColumn> createState() => _DoubleColumnState();
+}
+
+class _DoubleColumnState extends State<DoubleColumn> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(
+        left: 15,
+        right: 15,
+        bottom: 10,
+      ),
+      child: Row(
+        children: [
+          Bounce(
+            onPressed: () {
+              Navigator.pushNamed(context, "/column", arguments: 45);
+            },
+            duration: Duration(milliseconds: 100),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  stops: [0, 1],
+                  colors: [
+                    Color(0xFFFA5F52),
+                    Color(0xFFFD8872),
+                  ],
+                ),
+              ),
+              width: (MediaQuery.of(context).size.width - 30 - 10) / 2,
+              height: 90,
+              child: Stack(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 20, left: 15),
+                    child: Text(
+                      "情感专区",
+                      style: TextStyle(
+                        color: os_white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 20,
+                    bottom: 10,
+                    child: os_svg(
+                      path: "lib/img/square/column/1.svg",
+                      width: 60,
+                      height: 60,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Container(
+            width: 10,
+          ),
+          Bounce(
+            onPressed: () {
+              Navigator.pushNamed(context, "/column", arguments: 45);
+            },
+            duration: Duration(milliseconds: 100),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  stops: [0, 1],
+                  colors: [
+                    Color(0xFF252B36),
+                    Color(0xFF47505B),
+                  ],
+                ),
+              ),
+              width: (MediaQuery.of(context).size.width - 30 - 10) / 2,
+              height: 90,
+              child: Stack(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 20, left: 15),
+                    child: Text(
+                      "密语",
+                      style: TextStyle(
+                        color: os_white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 20,
+                    bottom: 15,
+                    child: Opacity(
+                      opacity: 0.8,
+                      child: os_svg(
+                        path: "lib/img/square/column/2.svg",
+                        width: 40,
+                        height: 40,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ],

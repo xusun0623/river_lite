@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -9,7 +8,6 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
-import 'package:offer_show/components/topic_reply.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
@@ -195,7 +193,6 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
 
