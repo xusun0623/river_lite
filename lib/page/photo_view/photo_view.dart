@@ -2,7 +2,7 @@ import 'package:flutter/material.dart'; // Import package
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
-import 'package:offer_show/page/topic/detail_cont.dart';
+import 'package:offer_show/outer/cached_network_image/image_provider/cached_network_image_provider.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:provider/provider.dart';
@@ -113,7 +113,9 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                 scrollPhysics: const BouncingScrollPhysics(),
                 builder: (BuildContext context, int index) {
                   return PhotoViewGalleryPageOptions(
-                    imageProvider: NetworkImage(widget.galleryItems[index]),
+                    imageProvider: CachedNetworkImageProvider(
+                      widget.galleryItems[index],
+                    ),
                   );
                 },
                 scrollDirection: widget.direction,

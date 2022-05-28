@@ -18,29 +18,32 @@ class _OccuLoadingState extends State<OccuLoading> {
         Container(
           height: MediaQuery.of(context).size.height - 100,
           child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_dark_white
-                        : Colors.black26,
+            child: Container(
+              margin: EdgeInsets.only(bottom: 150),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : Colors.black26,
+                    ),
                   ),
-                ),
-                Container(width: 10),
-                Text(
-                  "加载中…",
-                  style: TextStyle(
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_dark_white
-                        : Colors.black38,
+                  Container(width: 10),
+                  Text(
+                    "加载中…",
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : Colors.black38,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

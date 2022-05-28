@@ -133,11 +133,11 @@ class _DetailContState extends State<DetailCont> {
           child: Opacity(
             opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
             child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(7.5)),
+              borderRadius: BorderRadius.all(Radius.circular(5)),
               child: Container(
                 decoration: BoxDecoration(
                   color: os_grey,
-                  borderRadius: BorderRadius.all(Radius.circular(7.5)),
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
                 child: GestureDetector(
                   onTap: () {

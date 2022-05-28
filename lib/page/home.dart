@@ -189,9 +189,14 @@ class _HomeState extends State<Home> {
     }
 
     return Scaffold(
-      body: IndexedStack(
-        children: homePages(),
-        index: tabShowProvider.index,
+      body: WillPopScope(
+        onWillPop: () {
+          return;
+        },
+        child: IndexedStack(
+          children: homePages(),
+          index: tabShowProvider.index,
+        ),
       ),
       bottomNavigationBar: Container(
         width: MediaQuery.of(context).size.width,
