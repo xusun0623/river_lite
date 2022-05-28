@@ -333,6 +333,9 @@ class _DraftCardState extends State<DraftCard> {
       ),
       child: myInkWell(
         radius: 10,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_light_dark_card
+            : os_white,
         longPress: () {
           Clipboard.setData(ClipboardData(text: widget.data));
           showToast(context: context, type: XSToast.success, txt: "复制成功！");
@@ -348,7 +351,14 @@ class _DraftCardState extends State<DraftCard> {
             children: [
               Container(
                 width: MediaQuery.of(context).size.width - 100,
-                child: Text(widget.data),
+                child: Text(
+                  widget.data,
+                  style: TextStyle(
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_black,
+                  ),
+                ),
               ),
               Text(
                 "复制",
