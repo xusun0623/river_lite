@@ -113,7 +113,7 @@ class _HomeNewReplyState extends State<HomeNewReply>
     List<Widget> t = [];
     if (data != null && data.length != 0) {
       for (var i in data) {
-        t.add(Platform.isAndroid ? TopicReply(data: i) : Topic(data: i));
+        t.add(Topic(data: i));
       }
     }
     if (data.length == 0) {
@@ -159,21 +159,10 @@ class _HomeNewReplyState extends State<HomeNewReply>
     return Scaffold(
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      appBar: Platform.isAndroid
-          ? AppBar(
-              backgroundColor: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_back
-                  : os_back,
-              elevation: 0,
-              foregroundColor: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_white
-                  : os_black,
-              title: Text("最近回复"),
-            )
-          : AppBar(
-              toolbarHeight: 0,
-              elevation: 0,
-            ),
+      appBar: AppBar(
+        toolbarHeight: 0,
+        elevation: 0,
+      ),
       body: RefreshIndicator(
         color: os_color,
         onRefresh: () async {

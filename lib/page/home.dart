@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:badges/badges.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
-import 'package:offer_show/page/explore/explore.dart';
 import 'package:offer_show/page/me/me.dart';
 import 'package:offer_show/page/msg/msg.dart';
 import 'package:offer_show/page/home/myhome.dart';
@@ -171,7 +169,7 @@ class _HomeState extends State<Home> {
                 end: 35,
                 top: 20,
               ),
-              showBadge: ((Platform.isAndroid ? i == 2 : i == 1) && _isNewMsg),
+              showBadge: (i == 1 && _isNewMsg),
               child: Icon(
                 tabShowProvider.index == i ? select_icons[i] : icons[i],
                 size: 26,
@@ -223,8 +221,7 @@ class _HomeState extends State<Home> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           // children: _buildWidget(tabShowProvider.loadIndex),
-          children:
-              _buildWidget((Platform.isAndroid) ? [0, 1, 2, 3] : [0, 2, 3]),
+          children: _buildWidget([0, 2, 3]),
         ),
       ),
     );

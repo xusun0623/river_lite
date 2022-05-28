@@ -25,112 +25,104 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
   @override
   void initState() {
     tabController = TabController(
-      length: Platform.isAndroid ? 3 : 4,
+      length: 4,
       vsync: this,
     );
     super.initState();
   }
 
+  TabBar _getMyTabBar() {
+    return TabBar(
+      labelPadding: EdgeInsets.symmetric(horizontal: 12),
+      isScrollable: true,
+      splashBorderRadius: BorderRadius.all(Radius.circular(5)),
+      labelColor: Provider.of<ColorProvider>(context).isDark
+          ? os_dark_white
+          : Colors.black87,
+      unselectedLabelColor: Color(0xFF7A7A7A),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 16,
+      ),
+      indicator: TabSizeIndicator(
+        wantWidth: 20,
+        borderSide: BorderSide(
+            width: 3.0,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : Colors.black87),
+      ),
+      labelStyle: TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+      tabs: [
+        Tab(text: "新发表"),
+        Tab(text: "新回复"),
+        Tab(text: "热门"),
+        Tab(text: "精华"),
+      ],
+      onTap: (index) {
+        setState(() {
+          Provider.of<HomeRefrshProvider>(
+            context,
+            listen: false,
+          ).index = index;
+          Provider.of<HomeRefrshProvider>(
+            context,
+            listen: false,
+          ).refresh();
+        });
+      },
+      controller: tabController,
+    );
+  }
+
+  AppBar _getAppBar() {
+    return AppBar(
+      elevation: 0,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+      foregroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_white : os_black,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, "/search");
+          },
+          icon: os_svg(
+            path: Provider.of<ColorProvider>(context).isDark
+                ? "lib/img/search_white.svg"
+                : "lib/img/search.svg",
+            width: 24,
+            height: 24,
+          ),
+        ),
+        Container(width: 5),
+      ],
+      title: Container(
+        width: 300,
+        height: 60,
+        child: _getMyTabBar(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor:
-            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/search");
-            },
-            icon: os_svg(
-              path: Provider.of<ColorProvider>(context).isDark
-                  ? "lib/img/search_white.svg"
-                  : "lib/img/search.svg",
-              width: 24,
-              height: 24,
-            ),
-          ),
-          Container(width: 5),
-        ],
-        title: Container(
-          width: 300,
-          height: 60,
-          child: TabBar(
-            labelPadding: EdgeInsets.symmetric(horizontal: 12),
-            isScrollable: true,
-            splashBorderRadius: BorderRadius.all(Radius.circular(5)),
-            labelColor: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_white
-                : Colors.black87,
-            unselectedLabelColor: Color(0xFF7A7A7A),
-            unselectedLabelStyle: TextStyle(
-              fontSize: 16,
-            ),
-            indicator: TabSizeIndicator(
-              wantWidth: 20,
-              borderSide: BorderSide(
-                  width: 3.0,
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : Colors.black87),
-            ),
-            labelStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-            tabs: Platform.isAndroid
-                ? [
-                    Tab(text: "新发表"),
-                    Tab(text: "热门"),
-                    Tab(text: "精华"),
-                  ]
-                : [
-                    Tab(text: "新发表"),
-                    Tab(text: "新回复"),
-                    Tab(text: "热门"),
-                    Tab(text: "精华"),
-                  ],
-            onTap: (index) {
-              setState(() {
-                Provider.of<HomeRefrshProvider>(
-                  context,
-                  listen: false,
-                ).index = index;
-                Provider.of<HomeRefrshProvider>(
-                  context,
-                  listen: false,
-                ).refresh();
-              });
-            },
-            controller: tabController,
-          ),
-        ),
-      ),
+      appBar: _getAppBar(),
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: Container(
-        child: Platform.isAndroid
-            ? IndexedStack(
-                index: tabController.index,
-                children: [
-                  HomeNew(),
-                  HotNoScaffold(),
-                  Essence(),
-                ],
-              )
-            : TabBarView(
-                physics: CustomTabBarViewScrollPhysics(),
-                controller: tabController,
-                children: [
-                  HomeNew(),
-                  HomeNewReply(),
-                  HotNoScaffold(),
-                  Essence(),
-                ],
-              ),
+        child: TabBarView(
+          physics: CustomTabBarViewScrollPhysics(),
+          controller: tabController,
+          children: [
+            HomeNew(),
+            HomeNewReply(),
+            HotNoScaffold(),
+            Essence(),
+          ],
+        ),
       ),
     );
   }

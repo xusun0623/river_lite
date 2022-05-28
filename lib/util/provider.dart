@@ -7,6 +7,7 @@ class ColorProvider extends ChangeNotifier {
 
   switchMode() async {
     await setStorage(key: "dark", value: isDark ? "1" : "");
+    notifyListeners();
   }
 
   refresh() {
