@@ -86,6 +86,8 @@ class _MsgState extends State<Msg> {
     MsgProvider _msgProvider = Provider.of<MsgProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        leading: Container(),
+        leadingWidth: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back

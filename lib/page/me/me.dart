@@ -65,6 +65,8 @@ class _MeState extends State<Me> {
     UserInfoProvider provider = Provider.of<UserInfoProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        leading: Container(),
+        leadingWidth: 0,
         toolbarHeight: 40,
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back

@@ -24,13 +24,15 @@ import 'package:offer_show/page/question/question.dart';
 import 'package:offer_show/page/search/search.dart';
 import 'package:offer_show/page/setting/setting.dart';
 import 'package:offer_show/page/square/square.dart';
+import 'package:offer_show/page/start/start.dart';
 import 'package:offer_show/page/test/test.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/page/user_list/user_list.dart';
 import 'package:offer_show/page/waterTask/water_task.dart';
 
 final routers = {
-  "/": () => Home(),
+  "/": () => Start(),
+  "/body": () => Home(),
   "/question": () => Question(),
   "/login": (data) => Login(index: data ?? 0),
   "/water_task": () => WaterTask(),

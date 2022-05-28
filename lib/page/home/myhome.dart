@@ -83,6 +83,8 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       foregroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_white : os_black,
+      leading: Container(),
+      leadingWidth: 0,
       actions: [
         IconButton(
           onPressed: () {
