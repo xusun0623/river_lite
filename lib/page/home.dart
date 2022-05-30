@@ -5,8 +5,11 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/components/leftNavi.dart';
+import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/me/me.dart';
 import 'package:offer_show/page/msg/msg.dart';
 import 'package:offer_show/page/home/myhome.dart';
@@ -188,47 +191,67 @@ class _HomeState extends State<Home> {
       return tmp;
     }
 
-    return Scaffold(
-      body: WillPopScope(
-        onWillPop: () {
-          return;
-        },
-        child: IndexedStack(
-          children: homePages(),
-          index: tabShowProvider.index,
-        ),
-      ),
-      bottomNavigationBar: Container(
-        width: MediaQuery.of(context).size.width,
-        height: barHeight + barPadding,
-        padding: EdgeInsets.only(bottom: barPadding),
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_back
-                  : Color(0xFFEEEEEE),
+    return isDesktop(context)
+        ? Scaffold(
+            body: Row(
+              children: [
+                LeftNavi(),
+                Expanded(
+                  flex: 1,
+                  child: WillPopScope(
+                    onWillPop: () {
+                      return;
+                    },
+                    child: IndexedStack(
+                      children: homePages(),
+                      index: tabShowProvider.index,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_back
-              : os_white,
-          boxShadow: [
-            BoxShadow(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? Color(0x55000000)
-                  : Color(0x22000000),
-              blurRadius: 10,
-              offset: Offset(3, 3),
+          )
+        : Scaffold(
+            body: WillPopScope(
+              onWillPop: () {
+                return;
+              },
+              child: IndexedStack(
+                children: homePages(),
+                index: tabShowProvider.index,
+              ),
             ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          // children: _buildWidget(tabShowProvider.loadIndex),
-          children: _buildWidget([0, 2, 3]),
-        ),
-      ),
-    );
+            bottomNavigationBar: Container(
+              width: MediaQuery.of(context).size.width,
+              height: barHeight + barPadding,
+              padding: EdgeInsets.only(bottom: barPadding),
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_back
+                        : Color(0xFFEEEEEE),
+                  ),
+                ),
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_back
+                    : os_white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? Color(0x55000000)
+                        : Color(0x22000000),
+                    blurRadius: 10,
+                    offset: Offset(3, 3),
+                  ),
+                ],
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                // children: _buildWidget(tabShowProvider.loadIndex),
+                children: _buildWidget([0, 2, 3]),
+              ),
+            ),
+          );
   }
 }

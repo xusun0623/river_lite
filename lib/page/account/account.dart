@@ -92,8 +92,6 @@ class _AccountState extends State<Account> {
 
   void setExplore(bool isShow) {
     setStorage(key: "showExplore", value: isShow ? "1" : "");
-    Provider.of<TabShowProvider>(context, listen: false).loadIndex =
-        isShow ? [0, 1, 2, 3] : [0, 2, 3];
     Provider.of<TabShowProvider>(context, listen: false).index = 0;
     Provider.of<TabShowProvider>(context, listen: false).refresh();
     setState(() {

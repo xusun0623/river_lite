@@ -108,9 +108,7 @@ class MsgProvider extends ChangeNotifier {
 }
 
 class TabShowProvider extends ChangeNotifier {
-  bool isShowExplore;
   int index = 0;
-  List<int> loadIndex = [0, 2, 3];
 
   refresh() {
     notifyListeners();
