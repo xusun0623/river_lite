@@ -337,7 +337,13 @@ class _TopicColumnState extends State<TopicColumn> {
                 tapTxt: need_50_water ? "去网页版河畔支付 >" : "重新刷新一次 >",
                 loadingWidget: Opacity(
                   opacity: 0.8,
-                  child: Lottie.asset("lib/lottie/book.json"),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: 500,
+                      maxHeight: 500,
+                    ),
+                    child: Lottie.asset("lib/lottie/book.json"),
+                  ),
                 ),
                 tap: () {
                   if (need_50_water) {

@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
+import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
@@ -27,14 +29,9 @@ class _LeftNaviState extends State<LeftNavi> {
     setState(() {});
   }
 
-  _setIndex() {
-    // Provider.of<TabShowProvider>(context).index = 0;
-  }
-
   @override
   void initState() {
     _getHeadUrl();
-    _setIndex();
     super.initState();
   }
 
@@ -99,7 +96,7 @@ class _LeftNaviState extends State<LeftNavi> {
                 Container(height: 40),
                 NaviBtn(index: 0),
                 Container(height: 20),
-                NaviBtn(index: 1),
+                Container(child: NaviBtn(index: 1)),
                 Container(height: 20),
               ],
             ),
@@ -128,6 +125,40 @@ class NaviBtn extends StatefulWidget {
 }
 
 class _NaviBtnState extends State<NaviBtn> {
+  bool _isNewMsg = false;
+
+  _getNewMsg() async {
+    var data = await Api().message_heart({});
+    var count = 0;
+    if (data != null && data["rs"] != 0 && data["body"] != null) {
+      count += data["body"]["replyInfo"]["count"];
+      count += data["body"]["atMeInfo"]["count"];
+      count += data["body"]["systemInfo"]["count"];
+      count += data["body"]["pmInfos"].length;
+      data = data["body"];
+      if (count != 0) {
+        setState(() {
+          _isNewMsg = true;
+        });
+      } else {
+        setState(() {
+          _isNewMsg = false;
+        });
+      }
+    } else {
+      setState(() {
+        _isNewMsg = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _getNewMsg();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     TabShowProvider provider = Provider.of<TabShowProvider>(context);
@@ -135,6 +166,7 @@ class _NaviBtnState extends State<NaviBtn> {
       child: myInkWell(
         tap: () {
           provider.index = widget.index;
+          _getNewMsg();
           provider.refresh();
         },
         color: provider.index == widget.index
@@ -143,15 +175,18 @@ class _NaviBtnState extends State<NaviBtn> {
         radius: 10,
         widget: Container(
           padding: EdgeInsets.all(10),
-          child: Icon(
-            [
-              Icons.home_rounded,
-              Icons.notifications_rounded,
-              Icons.settings
-            ][widget.index],
-            size: 30,
-            color:
-                provider.index == widget.index ? os_white : Color(0xFF919191),
+          child: Badge(
+            showBadge: _isNewMsg,
+            child: Icon(
+              [
+                Icons.home_rounded,
+                Icons.notifications_rounded,
+                Icons.settings
+              ][widget.index],
+              size: 30,
+              color:
+                  provider.index == widget.index ? os_white : Color(0xFF919191),
+            ),
           ),
         ),
       ),

@@ -8,6 +8,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  sizer: ^2.0.15
   flutter_picker: ^2.0.3
   badges: ^2.0.2
   characters: ^1.2.0
@@ -47,12 +48,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  fonts:
-    - family: MiSans
-      fonts:
-        - asset: lib/font/MiSans-Regular.ttf
+  # fonts:
+  #   - family: MiSans
+  #     fonts:
+  #       - asset: lib/font/MiSans-Regular.ttf
   assets:
-    - lib/font/
+    # - lib/font/
     - lib/emoji/1/
     - lib/emoji/2/
     - lib/img/

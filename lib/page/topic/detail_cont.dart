@@ -158,19 +158,23 @@ class _DetailContState extends State<DetailCont> {
                   child: widget.imgLists.length > 5 || isDesktop(context)
                       ? CachedNetworkImage(
                           imageUrl: widget.data["infor"],
-                          width: (MediaQuery.of(context).size.width -
-                                  (widget.isComment ?? false ? 50 : 0) -
-                                  42) /
-                              3,
-                          height: (MediaQuery.of(context).size.width -
-                                  (widget.isComment ?? false ? 50 : 0) -
-                                  42) /
-                              3,
+                          width: isDesktop(context)
+                              ? 200
+                              : (MediaQuery.of(context).size.width -
+                                      (widget.isComment ?? false ? 50 : 0) -
+                                      42) /
+                                  3,
+                          height: isDesktop(context)
+                              ? 200
+                              : (MediaQuery.of(context).size.width -
+                                      (widget.isComment ?? false ? 50 : 0) -
+                                      42) /
+                                  3,
                           maxHeightDiskCache: 200,
                           maxWidthDiskCache: 200,
                           memCacheWidth: 200,
                           memCacheHeight: 200,
-                          filterQuality: FilterQuality.low,
+                          filterQuality: FilterQuality.high,
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Padding(
                             padding: const EdgeInsets.all(30.0),

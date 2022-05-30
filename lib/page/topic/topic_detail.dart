@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -184,7 +185,7 @@ class _TopicDetailState extends State<TopicDetail> {
     for (var i = 0; i < data["topic"]["content"].length; i++) {
       var e = data["topic"]["content"][i];
       int img_count = 0;
-      if (imgLists.length > 5 &&
+      if (imgLists.length > (isDesktop(context) ? 0 : 5) &&
           e["type"] == 1 &&
           i < data["topic"]["content"].length - 1 &&
           data["topic"]["content"][i + 1]["type"] == 1) {

@@ -8,6 +8,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/router/router.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 void main() {
   if (Platform.isAndroid) {
@@ -42,37 +43,39 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => MsgProvider()),
           ChangeNotifierProvider(create: (context) => BlackProvider()),
         ],
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          initialRoute: "/",
-          theme: ThemeData(
-            primaryColor: os_color,
-            fontFamily: "MiSans",
+        child: Sizer(
+          builder: (context, orientation, deviceType) =>  MaterialApp(
+            debugShowCheckedModeBanner: false,
+            initialRoute: "/",
+            theme: ThemeData(
+              primaryColor: os_color,
+              // fontFamily: "MiSans",
+            ),
+            onGenerateRoute: (settings) {
+              final String routersname = settings.name;
+              final Function cotrollerFn = routers[routersname];
+              //判断访问不存在的路由地址
+              if (cotrollerFn == null) {
+                return CupertinoPageRoute(
+                  builder: (context) => routers['/404'](),
+                );
+              }
+              if (settings.arguments == null) {
+                return CupertinoPageRoute(
+                  builder: (context) => cotrollerFn(),
+                );
+              } else {
+                return CupertinoPageRoute(
+                  builder: (context) => cotrollerFn(settings.arguments),
+                );
+              }
+            },
+            onUnknownRoute: (setting) {
+              return CupertinoPageRoute(
+                builder: (context) => routers["/404"](),
+              );
+            },
           ),
-          onGenerateRoute: (settings) {
-            final String routersname = settings.name;
-            final Function cotrollerFn = routers[routersname];
-            //判断访问不存在的路由地址
-            if (cotrollerFn == null) {
-              return CupertinoPageRoute(
-                builder: (context) => routers['/404'](),
-              );
-            }
-            if (settings.arguments == null) {
-              return CupertinoPageRoute(
-                builder: (context) => cotrollerFn(),
-              );
-            } else {
-              return CupertinoPageRoute(
-                builder: (context) => cotrollerFn(settings.arguments),
-              );
-            }
-          },
-          onUnknownRoute: (setting) {
-            return CupertinoPageRoute(
-              builder: (context) => routers["/404"](),
-            );
-          },
         ),
       ),
       light: ThemeData(),
