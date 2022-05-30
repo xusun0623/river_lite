@@ -58,8 +58,9 @@
 ```
 
 ## 设计文件
-figma在线：https://www.figma.com/file/McSp35qqjsUuWAbucxXdXn/%E6%B2%B3%E7%95%94Max%E7%89%88-XS-Designed  
+figma在线设计工具：[点我访问](https://www.figma.com/file/McSp35qqjsUuWAbucxXdXn/%E6%B2%B3%E7%95%94Max%E7%89%88-XS-Designed)  
 宣传图：
+![设计宣传图](%E5%AE%A3%E4%BC%A0%E5%9B%BE.png)
 
 ## Flutter框架信息
 本项目使用Google开源的跨端页面构建框架Flutter，使用Skia调用GPU直接渲染，渲染速度和表现力十分优秀，并可以移植到macOS、Windows、Linux、Android、IOS等诸多平台。现已在app Store上架Release版本「河畔Lite」，对应的安卓版本也在站内个人主页帖子发布，感兴趣的同学欢迎体验！！  
@@ -67,4 +68,4 @@ figma在线：https://www.figma.com/file/McSp35qqjsUuWAbucxXdXn/%E6%B2%B3%E7%95%
 ## 联系作者
 mail：xusun000@foxmail.com  
 QQ：2235861811（加好友时请注明来意）  
-Gitee主页：https://gitee.com/xusun000  
+Gitee主页：[点我访问](https://gitee.com/xusun000)  
