@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
           initialRoute: "/",
           theme: ThemeData(
             primaryColor: os_color,
+            fontFamily: "MiSans",
           ),
           onGenerateRoute: (settings) {
             final String routersname = settings.name;

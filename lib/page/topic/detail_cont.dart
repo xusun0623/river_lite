@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/saveImg.dart';
@@ -154,7 +155,7 @@ class _DetailContState extends State<DetailCont> {
                       ),
                     );
                   },
-                  child: widget.imgLists.length > 5
+                  child: widget.imgLists.length > 5 || isDesktop(context)
                       ? CachedNetworkImage(
                           imageUrl: widget.data["infor"],
                           width: (MediaQuery.of(context).size.width -

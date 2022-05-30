@@ -47,8 +47,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
+  fonts:
+    - family: MiSans
+      fonts:
+        - asset: lib/font/MiSans-Regular.ttf
   assets:
+    - lib/font/
     - lib/emoji/1/
     - lib/emoji/2/
     - lib/img/
@@ -66,3 +70,4 @@ flutter:
     - lib/lottie/
     - lib/img/explore/
     - lib/img/topic_dark_func/
+  
