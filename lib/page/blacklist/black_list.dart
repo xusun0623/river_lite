@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
@@ -260,20 +261,22 @@ class _BlackListState extends State<BlackList> {
           style: TextStyle(fontSize: 16),
         ),
         actions: [
-          IconButton(
-            icon: Text(select.length == data.length ? "取消" : "全选"),
-            onPressed: () {
-              if (select.length != data.length) {
-                select = [];
-                for (var i = 0; i < data.length; i++) {
-                  select.add(i);
-                }
-              } else {
-                select = [];
-              }
-              setState(() {});
-            },
-          ),
+          isDesktop(context)
+              ? Container()
+              : IconButton(
+                  icon: Text(select.length == data.length ? "取消" : "全选"),
+                  onPressed: () {
+                    if (select.length != data.length) {
+                      select = [];
+                      for (var i = 0; i < data.length; i++) {
+                        select.add(i);
+                      }
+                    } else {
+                      select = [];
+                    }
+                    setState(() {});
+                  },
+                ),
           IconButton(
             icon: Icon(Icons.delete_outline_rounded),
             onPressed: () {

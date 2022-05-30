@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,13 @@ class About extends StatefulWidget {
 }
 
 class _AboutState extends State<About> {
+  ScrollController _scrollController = new ScrollController();
+  @override
+  void initState() {
+    speedUp(_scrollController);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +47,7 @@ class _AboutState extends State<About> {
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: ListView(
+        controller: _scrollController,
         physics: BouncingScrollPhysics(),
         children: [
           AboutCard(

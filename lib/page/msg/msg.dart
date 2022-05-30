@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
@@ -347,7 +348,10 @@ class _MsgCardState extends State<MsgCard> {
             ),
             Container(width: 10),
             Container(
-              width: MediaQuery.of(context).size.width - headImgSize - 42,
+              width: MediaQuery.of(context).size.width -
+                  headImgSize -
+                  (isDesktop(context) ? 80 : 0) -
+                  42,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

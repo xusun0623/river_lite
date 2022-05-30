@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -63,7 +65,7 @@ class MsgDetailState extends State<MsgDetail> {
               "cacheCount": space,
               "stopTime": 0,
               "fromUid": widget.usrInfo["uid"],
-              "pmLimit": space
+              "pmLimit": isDesktop(context) ? 1000000 : space
             }
           ]
         }
@@ -170,7 +172,7 @@ class MsgDetailState extends State<MsgDetail> {
         ),
       ));
     }
-    if (tmp.length > 52) {
+    if (tmp.length > 52 && !isDesktop(context)) {
       tmp.add(Container(
         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -216,6 +218,7 @@ class MsgDetailState extends State<MsgDetail> {
       }
       setState(() {});
     });
+    speedUp(_controller);
     super.initState();
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -177,6 +178,7 @@ class _SearchState extends State<Search> {
         _getMore();
       }
     });
+    speedUp(_scrollController);
     super.initState();
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -26,7 +27,9 @@ class _HomeBtnState extends State<HomeBtn> {
       ),
       margin: EdgeInsets.only(left: os_edge, right: os_edge),
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-      width: MediaQuery.of(context).size.width - os_edge * 2,
+      width: MediaQuery.of(context).size.width -
+          os_edge * 2 -
+          (isDesktop(context) ? 80 : 0),
       child: Column(
         children: [
           Row(
@@ -141,7 +144,11 @@ class _BtnState extends State<Btn> {
           ? os_light_dark_card
           : os_white,
       widget: Container(
-        width: (MediaQuery.of(context).size.width - os_edge * 2 - 10) / 5,
+        width: (MediaQuery.of(context).size.width -
+                os_edge * 2 -
+                (isDesktop(context) ? 80 : 0) -
+                10) /
+            5,
         padding: EdgeInsets.only(top: 10, bottom: 15),
         child: Column(
           children: [

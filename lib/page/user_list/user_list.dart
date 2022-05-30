@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/time.dart';
@@ -85,6 +86,7 @@ class _UserListState extends State<UserList> {
         _getMore();
       }
     });
+    speedUp(_controller);
     super.initState();
   }
 

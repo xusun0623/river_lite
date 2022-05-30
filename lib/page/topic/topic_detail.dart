@@ -7,6 +7,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -156,6 +157,7 @@ class _TopicDetailState extends State<TopicDetail> {
         });
       }
     });
+    speedUp(_scrollController);
   }
 
   _buildContBody() {

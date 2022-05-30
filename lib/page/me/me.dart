@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
@@ -531,7 +532,9 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                     Stack(
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width - 250,
+                          width: MediaQuery.of(context).size.width -
+                              (isDesktop(context) ? 80 : 0) -
+                              250,
                           height: 7,
                           decoration: BoxDecoration(
                             color: Color(0xFFE3E3E3),
@@ -541,7 +544,9 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                         ),
                         Positioned(
                           child: Container(
-                            width: (MediaQuery.of(context).size.width - 250) *
+                            width: (MediaQuery.of(context).size.width -
+                                    (isDesktop(context) ? 80 : 0) -
+                                    250) *
                                 _getRate(),
                             height: 7,
                             decoration: BoxDecoration(
