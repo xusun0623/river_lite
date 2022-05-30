@@ -8,7 +8,6 @@ import 'package:offer_show/page/essence/essence.dart';
 import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/hot/homeHotNoScaffold.dart';
 import 'package:offer_show/page/new_reply/homeNewReply.dart';
-import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 

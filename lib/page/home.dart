@@ -29,20 +29,15 @@ class _HomeState extends State<Home> {
   List<int> loadIndex = [];
 
   List<Widget> homePages() {
-    List<Widget> tmp = [];
-    loadIndex.forEach((element) {
-      tmp.add([
-        MyHome(),
-        HomeNewReply(),
-        Msg(
-          refresh: () {
-            _getNewMsg();
-          },
-        ),
-        Me(),
-      ][element]);
-    });
-    return tmp;
+    return [
+      MyHome(),
+      Msg(
+        refresh: () {
+          _getNewMsg();
+        },
+      ),
+      Me(),
+    ];
   }
 
   _getNewMsg() async {
@@ -198,15 +193,8 @@ class _HomeState extends State<Home> {
                 LeftNavi(),
                 Expanded(
                   flex: 1,
-                  child: WillPopScope(
-                    onWillPop: () {
-                      return;
-                    },
-                    child: IndexedStack(
-                      children: homePages(),
-                      index: tabShowProvider.index,
-                    ),
-                  ),
+                  child:
+                      homePages()[Provider.of<TabShowProvider>(context).index],
                 ),
               ],
             ),

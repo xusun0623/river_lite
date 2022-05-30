@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/util/interface.dart';
@@ -43,6 +44,7 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
         // print("滑动到底部");
       }
     });
+    speedUp(_scrollController);
   }
 
   _getTmpData() async {
