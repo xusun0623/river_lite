@@ -5,6 +5,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:lottie/lottie.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/nowMode.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
@@ -288,6 +289,7 @@ class _TopicColumnState extends State<TopicColumn> {
 
   @override
   Widget build(BuildContext context) {
+    nowMode(context);
     return Scaffold(
         backgroundColor:
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,

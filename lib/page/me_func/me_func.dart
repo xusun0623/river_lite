@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/nowMode.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
@@ -155,6 +156,7 @@ class _MeFuncState extends State<MeFunc> {
 
   @override
   Widget build(BuildContext context) {
+    nowMode(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Provider.of<ColorProvider>(context).isDark

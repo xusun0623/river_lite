@@ -50,7 +50,7 @@ class _LeftNaviState extends State<LeftNavi> {
               children: [
                 Container(
                   height: MediaQuery.of(context).padding.top,
-                  color: os_white,
+                  color: Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
                 ),
                 Container(height: 20),
                 GestureDetector(

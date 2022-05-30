@@ -3,6 +3,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/nowMode.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/empty.dart';
@@ -186,6 +187,7 @@ class _PersonCenterState extends State<PersonCenter> {
 
   @override
   Widget build(BuildContext context) {
+    nowMode(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

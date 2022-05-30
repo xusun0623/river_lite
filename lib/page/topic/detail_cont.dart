@@ -149,8 +149,9 @@ class _DetailContState extends State<DetailCont> {
                           desc: widget.desc,
                           title: widget.title,
                           galleryItems: widget.imgLists,
-                          defaultImage:
-                              widget.imgLists.indexOf(widget.data["infor"]),
+                          defaultImage: widget.imgLists.indexOf(
+                            widget.data["infor"],
+                          ),
                         ),
                       ),
                     );
@@ -170,10 +171,10 @@ class _DetailContState extends State<DetailCont> {
                                       (widget.isComment ?? false ? 50 : 0) -
                                       42) /
                                   3,
-                          maxHeightDiskCache: 200,
-                          maxWidthDiskCache: 200,
-                          memCacheWidth: 200,
-                          memCacheHeight: 200,
+                          maxHeightDiskCache: 800,
+                          maxWidthDiskCache: 800,
+                          memCacheWidth: 800,
+                          memCacheHeight: 800,
                           filterQuality: FilterQuality.high,
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Padding(
