@@ -134,63 +134,67 @@ class _DetailContState extends State<DetailCont> {
           child: Opacity(
             opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
             child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: os_grey,
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => PhotoPreview(
-                          desc: widget.desc,
-                          title: widget.title,
-                          galleryItems: widget.imgLists,
-                          defaultImage: widget.imgLists.indexOf(
-                            widget.data["infor"],
+              borderRadius: BorderRadius.all(Radius.circular(
+                  widget.imgLists.length > 2 || isDesktop(context) ? 2.5 : 5)),
+              child: Hero(
+                tag: widget.data["infor"],
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: os_grey,
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PhotoPreview(
+                            desc: widget.desc,
+                            title: widget.title,
+                            galleryItems: widget.imgLists,
+                            defaultImage: widget.imgLists.indexOf(
+                              widget.data["infor"],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  child: widget.imgLists.length > 5 || isDesktop(context)
-                      ? CachedNetworkImage(
-                          imageUrl: widget.data["infor"],
-                          width: isDesktop(context)
-                              ? 200
-                              : (MediaQuery.of(context).size.width -
-                                      (widget.isComment ?? false ? 50 : 0) -
-                                      42) /
-                                  3,
-                          height: isDesktop(context)
-                              ? 200
-                              : (MediaQuery.of(context).size.width -
-                                      (widget.isComment ?? false ? 50 : 0) -
-                                      42) /
-                                  3,
-                          maxHeightDiskCache: 800,
-                          maxWidthDiskCache: 800,
-                          memCacheWidth: 800,
-                          memCacheHeight: 800,
-                          filterQuality: FilterQuality.high,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Padding(
-                            padding: const EdgeInsets.all(30.0),
-                            child:
-                                CircularProgressIndicator(color: os_deep_grey),
+                      );
+                    },
+                    child: widget.imgLists.length > 2 || isDesktop(context)
+                        ? CachedNetworkImage(
+                            imageUrl: widget.data["infor"],
+                            width: isDesktop(context)
+                                ? 200
+                                : (MediaQuery.of(context).size.width -
+                                        (widget.isComment ?? false ? 50 : 0) -
+                                        42) /
+                                    3,
+                            height: isDesktop(context)
+                                ? 200
+                                : (MediaQuery.of(context).size.width -
+                                        (widget.isComment ?? false ? 50 : 0) -
+                                        42) /
+                                    3,
+                            maxHeightDiskCache: 800,
+                            maxWidthDiskCache: 800,
+                            memCacheWidth: 800,
+                            memCacheHeight: 800,
+                            filterQuality: FilterQuality.high,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Padding(
+                              padding: const EdgeInsets.all(30.0),
+                              child: CircularProgressIndicator(
+                                  color: os_deep_grey),
+                            ),
+                          )
+                        : CachedNetworkImage(
+                            imageUrl: widget.data["infor"],
+                            placeholder: (context, url) => Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: CircularProgressIndicator(
+                                  color: os_deep_grey),
+                            ),
                           ),
-                        )
-                      : CachedNetworkImage(
-                          imageUrl: widget.data["infor"],
-                          placeholder: (context, url) => Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child:
-                                CircularProgressIndicator(color: os_deep_grey),
-                          ),
-                        ),
+                  ),
                 ),
               ),
             ),

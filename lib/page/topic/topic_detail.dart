@@ -3,8 +3,8 @@ import 'dart:ffi';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:html/parser.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
@@ -72,6 +72,22 @@ class _TopicDetailState extends State<TopicDetail> {
   TextEditingController _txtController = new TextEditingController();
   FocusNode _focusNode = new FocusNode();
 
+  var dislike_count = 0;
+
+  void _getLikeCount() async {
+    var document = parse((await XHttp().pureHttpWithCookie(
+      url:
+          "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${widget.topicID}",
+    ))
+        .data
+        .toString());
+    try {
+      var dislike_txt = document.getElementById("recommendv_sub_digg");
+      dislike_count = int.parse(dislike_txt.innerHtml);
+      setState(() {});
+    } catch (e) {}
+  }
+
   bool _isBlack() {
     bool flag = false;
     Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
@@ -133,9 +149,9 @@ class _TopicDetailState extends State<TopicDetail> {
   @override
   void initState() {
     _getData();
+    _getLikeCount();
     super.initState();
     _scrollController.addListener(() {
-      // print("${_scrollController.position.pixels}");
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
@@ -187,7 +203,7 @@ class _TopicDetailState extends State<TopicDetail> {
     for (var i = 0; i < data["topic"]["content"].length; i++) {
       var e = data["topic"]["content"][i];
       int img_count = 0;
-      if (imgLists.length > (isDesktop(context) ? 0 : 5) &&
+      if (imgLists.length > (isDesktop(context) ? 0 : 2) &&
           e["type"] == 1 &&
           i < data["topic"]["content"].length - 1 &&
           data["topic"]["content"][i + 1]["type"] == 1) {
@@ -564,7 +580,11 @@ class _TopicDetailState extends State<TopicDetail> {
                               var contents = [
                                 {
                                   "type": 0, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
-                                  "infor": _txtController.text,
+                                  "infor": uploadFileAid == ""
+                                      ? _txtController.text
+                                      : (_txtController.text == ""
+                                          ? "上传附件"
+                                          : _txtController.text),
                                 },
                               ];
                               for (var i = 0; i < uploadImgUrls.length; i++) {
@@ -579,9 +599,7 @@ class _TopicDetailState extends State<TopicDetail> {
                                     "isAnonymous": 0,
                                     "isOnlyAuthor": 0,
                                     "typeId": "",
-                                    "aid": uploadFileAid == ""
-                                        ? ""
-                                        : uploadFileAid,
+                                    "aid": uploadFileAid,
                                     "fid": "",
                                     "replyId": replyId,
                                     "tid": widget.topicID, // 回复时指定帖子
@@ -613,7 +631,9 @@ class _TopicDetailState extends State<TopicDetail> {
                               placeholder = "请在此编辑回复";
                               uploadImgUrls = [];
                               editing = false;
-                              setState(() {});
+                              setState(() {
+                                uploadFileAid = "";
+                              });
                               await Future.delayed(Duration(milliseconds: 30));
                               await _getData();
                               showToast(
@@ -625,6 +645,7 @@ class _TopicDetailState extends State<TopicDetail> {
                             },
                           )
                         : DetailFixBottom(
+                            dislike_count: dislike_count,
                             bottom: bottom_safeArea,
                             tapEdit: () {
                               _focusNode.requestFocus();
@@ -796,7 +817,6 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                               });
                             },
                           ),
-                          //上传附件，暂时不支持
                           SendFunc(
                             path: Provider.of<ColorProvider>(context).isDark
                                 ? "lib/img/topic_attach_light.svg"
@@ -813,6 +833,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                   });
                                 },
                               );
+                              print("上传的附件${aid}");
                               if (aid != "") {
                                 setState(() {
                                   uploadFile = aid;
@@ -1939,7 +1960,7 @@ class _CommentState extends State<Comment> {
     for (var i = 0; i < data.length; i++) {
       var e = data[i];
       int img_count = 0;
-      if (imgLists.length > 5 &&
+      if (imgLists.length > 2 &&
           e["type"] == 1 &&
           i < data.length - 1 &&
           data[i + 1]["type"] == 1) {
@@ -2407,12 +2428,14 @@ class _TagState extends State<Tag> {
 class DetailFixBottom extends StatefulWidget {
   var topic_id;
   var count;
+  var dislike_count;
   double bottom;
   Function tapEdit;
   DetailFixBottom({
     Key key,
     this.topic_id,
     this.count,
+    this.dislike_count,
     this.tapEdit,
     this.bottom,
   }) : super(key: key);
@@ -2423,6 +2446,7 @@ class DetailFixBottom extends StatefulWidget {
 
 class _DetailFixBottomState extends State<DetailFixBottom> {
   var liked = 0;
+  var disliked = 0;
 
   void _getLikeStatus() async {
     String tmp = await getStorage(
@@ -2432,6 +2456,15 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
     if (ids.indexOf(widget.topic_id.toString()) > -1) {
       setState(() {
         liked = 1;
+      });
+    }
+    String tmp1 = await getStorage(
+      key: "topic_dis_like",
+    );
+    List<String> ids1 = tmp1.split(",");
+    if (ids1.indexOf(widget.topic_id.toString()) > -1) {
+      setState(() {
+        disliked = 1;
       });
     }
   }
@@ -2452,6 +2485,22 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
     );
     tmp += ",${widget.topic_id}";
     setStorage(key: "topic_like", value: tmp);
+  }
+
+  void _tapDisLike() async {
+    if (disliked == 1) return;
+    disliked = 1;
+    setState(() {
+      widget.dislike_count++;
+    });
+    await Api().forum_support({
+      "tid": widget.topic_id,
+      "type": "thread",
+      "action": "against",
+    });
+    String tmp = await getStorage(key: "topic_dis_like", initData: "");
+    tmp += ",${widget.topic_id}";
+    setStorage(key: "topic_dis_like", value: tmp);
   }
 
   @override
@@ -2480,6 +2529,7 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
         padding: EdgeInsets.fromLTRB(7, 7, 7, 7 + widget.bottom ?? 0),
         width: MediaQuery.of(context).size.width,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             myInkWell(
               tap: () {
@@ -2488,11 +2538,11 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
               radius: 10,
               color: Colors.transparent,
               widget: Container(
-                width: MediaQuery.of(context).size.width - 76,
+                width: MediaQuery.of(context).size.width - 156,
                 height: 47,
                 child: Center(
                   child: Container(
-                    width: MediaQuery.of(context).size.width - 120,
+                    width: MediaQuery.of(context).size.width - 200,
                     child: Row(
                       children: [
                         Icon(
@@ -2511,38 +2561,88 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
                 ),
               ),
             ),
-            Container(
-              width: 62,
-              height: 47,
-              child: Center(
-                child: myInkWell(
-                    tap: () {
-                      _tapLike();
-                    },
-                    color: Colors.transparent,
-                    widget: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          os_svg(
-                            path: liked == 1
-                                ? "lib/img/detail_like_blue.svg"
-                                : "lib/img/detail_like.svg",
-                            width: 25,
-                            height: 25,
+            Row(
+              children: [
+                Container(
+                  height: 47,
+                  child: Center(
+                    child: myInkWell(
+                        tap: () {
+                          if (liked == 1 || disliked == 1) return;
+                          _tapDisLike();
+                        },
+                        color: Colors.transparent,
+                        widget: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(width: 5),
+                              Transform.rotate(
+                                angle: 3.14,
+                                child: os_svg(
+                                  path: disliked == 1
+                                      ? "lib/img/detail_like_blue.svg"
+                                      : "lib/img/detail_like.svg",
+                                  width: 25,
+                                  height: 25,
+                                ),
+                              ),
+                              Padding(padding: EdgeInsets.all(1)),
+                              Text(
+                                widget.dislike_count.toString() == "0"
+                                    ? ""
+                                    : widget.dislike_count.toString(),
+                                style: TextStyle(
+                                  color: disliked == 1
+                                      ? os_color
+                                      : Color(0xFFB1B1B1),
+                                ),
+                              ),
+                              Container(width: 5),
+                            ],
                           ),
-                          Padding(padding: EdgeInsets.all(1)),
-                          Text(
-                            (widget.count ?? 0).toString(),
-                            style: TextStyle(
-                              color: liked == 1 ? os_color : Color(0xFFB1B1B1),
-                            ),
+                        ),
+                        radius: 10),
+                  ),
+                ),
+                Container(
+                  height: 47,
+                  child: Center(
+                    child: myInkWell(
+                        tap: () {
+                          if (liked == 1 || disliked == 1) return;
+                          _tapLike();
+                        },
+                        color: Colors.transparent,
+                        widget: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(width: 5),
+                              os_svg(
+                                path: liked == 1
+                                    ? "lib/img/detail_like_blue.svg"
+                                    : "lib/img/detail_like.svg",
+                                width: 25,
+                                height: 25,
+                              ),
+                              Padding(padding: EdgeInsets.all(1)),
+                              Text(
+                                (widget.count ?? 0).toString(),
+                                style: TextStyle(
+                                  color:
+                                      liked == 1 ? os_color : Color(0xFFB1B1B1),
+                                ),
+                              ),
+                              Container(width: 5),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    radius: 10),
-              ),
+                        ),
+                        radius: 10),
+                  ),
+                ),
+                Container(width: 5),
+              ],
             ),
           ],
         ),
@@ -2575,7 +2675,11 @@ class _TopicBottomState extends State<TopicBottom> {
                   arguments: widget.data['boardId']);
             },
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 2),
+              padding: EdgeInsets.symmetric(horizontal: 7.5, vertical: 3),
+              decoration: BoxDecoration(
+                color: os_color_opa,
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+              ),
               child: Text(
                 "收录自专栏: " + widget.data["forumName"] + " >",
                 style: TextStyle(color: os_color),

@@ -86,6 +86,9 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    FocusNode u_focus = new FocusNode();
+    FocusNode p_focus = new FocusNode();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Provider.of<ColorProvider>(context).isDark
@@ -207,9 +210,8 @@ class _LoginState extends State<Login> {
                       physics: BouncingScrollPhysics(),
                       children: [
                         LoginInput(
-                          submit: () {
-                            _login();
-                          },
+                          u_focus: u_focus,
+                          p_focus: p_focus,
                           change: (uname, pword) {
                             username = uname;
                             password = pword;
@@ -219,6 +221,8 @@ class _LoginState extends State<Login> {
                         LoginSubmit(
                           txt: "提交",
                           tap: () {
+                            u_focus.unfocus();
+                            p_focus.unfocus();
                             _login();
                           },
                         ),
@@ -326,11 +330,13 @@ class _LoginHelpState extends State<LoginHelp> {
 
 class LoginInput extends StatefulWidget {
   Function change;
-  Function submit;
+  FocusNode u_focus;
+  FocusNode p_focus;
   LoginInput({
     Key key,
     this.change,
-    this.submit,
+    this.p_focus,
+    this.u_focus,
   }) : super(key: key);
 
   @override
@@ -341,8 +347,8 @@ class _LoginInputState extends State<LoginInput> {
   bool isHide = true;
   TextEditingController u_controller = new TextEditingController();
   TextEditingController p_controller = new TextEditingController();
-  FocusNode u_focus = new FocusNode();
-  FocusNode p_focus = new FocusNode();
+  // FocusNode u_focus = new FocusNode();
+  // FocusNode p_focus = new FocusNode();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -365,7 +371,7 @@ class _LoginInputState extends State<LoginInput> {
             ),
             child: TextField(
               controller: u_controller,
-              focusNode: u_focus,
+              focusNode: widget.u_focus,
               style: TextStyle(
                 letterSpacing: 0.5,
                 color: Provider.of<ColorProvider>(context).isDark
@@ -409,7 +415,7 @@ class _LoginInputState extends State<LoginInput> {
             ),
             child: TextField(
               controller: p_controller,
-              focusNode: p_focus,
+              focusNode: widget.p_focus,
               obscureText: isHide,
               style: TextStyle(
                 letterSpacing: 0.5,

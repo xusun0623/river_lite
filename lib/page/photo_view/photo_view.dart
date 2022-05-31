@@ -4,6 +4,7 @@ import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/outer/cached_network_image/image_provider/cached_network_image_provider.dart';
 import 'package:offer_show/util/provider.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:provider/provider.dart';
 
@@ -113,6 +114,9 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                 scrollPhysics: const BouncingScrollPhysics(),
                 builder: (BuildContext context, int index) {
                   return PhotoViewGalleryPageOptions(
+                    heroAttributes: PhotoViewHeroAttributes(
+                      tag: widget.galleryItems[index],
+                    ),
                     imageProvider: CachedNetworkImageProvider(
                       widget.galleryItems[index],
                     ),

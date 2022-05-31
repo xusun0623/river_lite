@@ -61,9 +61,8 @@ class _TopicState extends State<Topic> {
   }
 
   void _getLikeStatus() async {
-    String tmp = await getStorage(
-      key: "topic_like",
-    );
+    String tmp = await getStorage(key: "topic_like", initData: "");
+    String tmp1 = await getStorage(key: "topic_dis_like", initData: "");
     List<String> ids = tmp.split(",");
     if (ids.indexOf(
             (widget.data["source_id"] ?? widget.data["topic_id"]).toString()) >

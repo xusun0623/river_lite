@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => BlackProvider()),
         ],
         child: Sizer(
-          builder: (context, orientation, deviceType) =>  MaterialApp(
+          builder: (context, orientation, deviceType) => MaterialApp(
             debugShowCheckedModeBanner: false,
             initialRoute: "/",
             theme: ThemeData(

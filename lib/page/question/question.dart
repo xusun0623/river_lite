@@ -157,7 +157,7 @@ class _QuestionState extends State<Question> {
       await Api().next_question();
       await _getQuestion();
       await Future.delayed(Duration(milliseconds: 50));
-      _submit();
+      if (auto_machine) _submit();
     } else {
       _getQuestion();
     }
@@ -636,7 +636,7 @@ class _QuestionState extends State<Question> {
           Container(
             height: MediaQuery.of(context).size.height -
                 MediaQuery.of(context).padding.top -
-                250,
+                (status == 1 || status == 2 ? 56 : 250),
             child: ListView(
               physics: BouncingScrollPhysics(),
               //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关

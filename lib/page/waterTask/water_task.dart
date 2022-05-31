@@ -347,6 +347,18 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
           labelColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_white
               : os_black,
+          indicatorColor: Colors.transparent,
+          unselectedLabelStyle: TextStyle(
+            fontWeight: FontWeight.normal,
+            fontSize: 14,
+            color: os_deep_grey,
+          ),
+          isScrollable: true,
+          labelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: os_black,
+          ),
           tabs: [
             Tab(text: "新任务"),
             Tab(text: "进行中"),
