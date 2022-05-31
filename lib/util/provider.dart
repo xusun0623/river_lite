@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 
@@ -47,15 +48,16 @@ class MsgProvider extends ChangeNotifier {
   }
 
   getMsg() async {
+    int once_num = isDesktop() ? 20 : 10;
     var tmp = await Api().message_pmsessionlist({
       "json": {
         "page": 1,
-        "pageSize": 10,
+        "pageSize": once_num,
       }.toString()
     });
     if (tmp != null && tmp["rs"] != 0 && tmp["body"] != null) {
       pmMsgArr = tmp["body"]["list"];
-      load_done = tmp["body"]["list"].length < 10;
+      load_done = tmp["body"]["list"].length < once_num;
     } else {
       pmMsgArr = [];
       load_done = true;

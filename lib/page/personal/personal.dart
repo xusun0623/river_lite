@@ -1052,7 +1052,7 @@ class _PersonColumnState extends State<PersonColumn> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              ["粉丝", "关注", "威望"][widget.index],
+              ["粉丝", "关注", "积分"][widget.index],
               style: TextStyle(
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
@@ -1064,7 +1064,7 @@ class _PersonColumnState extends State<PersonColumn> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                widget.index == 2
+                widget.index == 2 && !Provider.of<ColorProvider>(context).isDark
                     ? Icon(
                         Icons.gpp_good_rounded,
                         size: 16,

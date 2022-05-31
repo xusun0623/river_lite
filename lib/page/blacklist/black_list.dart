@@ -261,7 +261,7 @@ class _BlackListState extends State<BlackList> {
           style: TextStyle(fontSize: 16),
         ),
         actions: [
-          isDesktop(context)
+          isDesktop()
               ? Container()
               : IconButton(
                   icon: Text(select.length == data.length ? "取消" : "全选"),

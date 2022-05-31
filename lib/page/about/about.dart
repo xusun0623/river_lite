@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class About extends StatefulWidget {
   About({Key key}) : super(key: key);
@@ -59,6 +63,27 @@ class _AboutState extends State<About> {
             title: "清水河畔？",
             cont:
                 "清水河畔是电子科技大学官方论坛，由电子科技大学网络文化建设工作办公室指导，星辰工作室开发并提供技术支持。\n2007年11月13日正式开放注册。欢迎你加入到清水河畔大家庭。",
+          ),
+          AboutCard(
+            head: Icon(
+              Icons.cloud_queue,
+              color: os_wonderful_color[5],
+              size: 66,
+            ),
+            title: "开源地址",
+            cont: "https://gitee.com/xusun000/offershow.git",
+            withUrl: true,
+          ),
+          AboutCard(
+            head: Icon(
+              Icons.burst_mode_rounded,
+              color: os_wonderful_color[4],
+              size: 66,
+            ),
+            title: "设计文件",
+            cont:
+                "https://www.figma.com/file/McSp35qqjsUuWAbucxXdXn/河畔Max版-XS-Designed",
+            withUrl: true,
           ),
           AboutCard(
             head: Icon(
@@ -118,7 +143,7 @@ html: ^0.15.0''',
               color: os_wonderful_color[3],
               size: 66,
             ),
-            title: "开发者",
+            title: "开发&设计者",
             cont: '''xusun000''',
           ),
           Padding(
@@ -143,11 +168,13 @@ class AboutCard extends StatefulWidget {
   Widget head;
   String title;
   String cont;
+  bool withUrl;
   AboutCard({
     Key key,
     @required this.head,
     @required this.title,
     @required this.cont,
+    this.withUrl,
   }) : super(key: key);
 
   @override
@@ -157,43 +184,69 @@ class AboutCard extends StatefulWidget {
 class _AboutCardState extends State<AboutCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 7.5),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-        color: Provider.of<ColorProvider>(context).isDark
-            ? os_light_dark_card
-            : os_white,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          widget.head,
-          Container(height: 10),
-          Text(
-            widget.title,
-            style: TextStyle(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_white
-                  : os_black,
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
+    return Bounce(
+      onPressed: () {
+        if (widget.withUrl != null) {
+          launchUrlString(Uri.encodeFull(widget.cont));
+        }
+      },
+      duration: Duration(milliseconds: 100),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 7.5),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_light_dark_card
+              : os_white,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            widget.head,
+            Container(height: 10),
+            Text(
+              widget.title,
+              style: TextStyle(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
             ),
-          ),
-          Container(height: 5),
-          Text(
-            widget.cont,
-            style: TextStyle(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_dark_white
-                  : os_black,
-              fontWeight: FontWeight.normal,
-              fontSize: 16,
-              height: 1.6,
+            Container(height: 5),
+            Row(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width -
+                      ((widget.withUrl ?? false) ? 104 : 80),
+                  child: Text(
+                    widget.cont,
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : os_black,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 16,
+                      height: 1.6,
+                    ),
+                  ),
+                ),
+                (widget.withUrl ?? false)
+                    ? Container(
+                        padding: EdgeInsets.only(top: 5),
+                        child: Icon(
+                          Icons.chevron_right,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_dark_white
+                              : os_black,
+                        ))
+                    : Container()
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -65,7 +65,7 @@ class MsgDetailState extends State<MsgDetail> {
               "cacheCount": space,
               "stopTime": 0,
               "fromUid": widget.usrInfo["uid"],
-              "pmLimit": isDesktop(context) ? 1000000 : space
+              "pmLimit": isDesktop() ? 1000000 : space
             }
           ]
         }
@@ -172,7 +172,7 @@ class MsgDetailState extends State<MsgDetail> {
         ),
       ));
     }
-    if (tmp.length > 52 && !isDesktop(context)) {
+    if (tmp.length > 52 && !isDesktop()) {
       tmp.add(Container(
         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),

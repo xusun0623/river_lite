@@ -332,7 +332,7 @@ class _TopicColumnState extends State<TopicColumn> {
             ? Loading(
                 showError: load_done,
                 msg: need_50_water
-                    ? "您需要支付50滴水滴才能进入此版块，支付一次，永久有效。客户端可能有延时，需要等候后才能查看"
+                    ? "您需要支付50滴水滴且升级至2级才能进入此版块，支付一次，永久有效。客户端可能有延时，需要等候后才能查看"
                     : "帖子专栏走丢了，或许网页端可以连接该星球",
                 backgroundColor: os_back,
                 tapTxt1: need_50_water ? "重新刷新一次 >" : "前往网页版 >",

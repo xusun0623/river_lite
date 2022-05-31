@@ -533,7 +533,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width -
-                              (isDesktop(context) ? 80 : 0) -
+                              (isDesktop() ? 80 : 0) -
                               250,
                           height: 7,
                           decoration: BoxDecoration(
@@ -545,7 +545,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                         Positioned(
                           child: Container(
                             width: (MediaQuery.of(context).size.width -
-                                    (isDesktop(context) ? 80 : 0) -
+                                    (isDesktop() ? 80 : 0) -
                                     250) *
                                 _getRate(),
                             height: 7,

@@ -14,6 +14,7 @@ import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
@@ -135,7 +136,7 @@ class _DetailContState extends State<DetailCont> {
             opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(
-                  widget.imgLists.length > 2 || isDesktop(context) ? 2.5 : 5)),
+                  widget.imgLists.length > 2 || isDesktop() ? 2.5 : 5)),
               child: Hero(
                 tag: widget.data["infor"],
                 child: Container(
@@ -159,16 +160,16 @@ class _DetailContState extends State<DetailCont> {
                         ),
                       );
                     },
-                    child: widget.imgLists.length > 2 || isDesktop(context)
+                    child: widget.imgLists.length > 2 || isDesktop()
                         ? CachedNetworkImage(
                             imageUrl: widget.data["infor"],
-                            width: isDesktop(context)
+                            width: isDesktop()
                                 ? 200
                                 : (MediaQuery.of(context).size.width -
                                         (widget.isComment ?? false ? 50 : 0) -
                                         42) /
                                     3,
-                            height: isDesktop(context)
+                            height: isDesktop()
                                 ? 200
                                 : (MediaQuery.of(context).size.width -
                                         (widget.isComment ?? false ? 50 : 0) -
@@ -245,7 +246,7 @@ class _DetailContState extends State<DetailCont> {
                   confirmTxt: "立即前往",
                   cancelTxt: "取消",
                   confirm: () {
-                    launch(Uri.encodeFull(widget.data['url'].toString()));
+                    launchUrlString(Uri.encodeFull(widget.data['url'].toString()));
                   },
                 );
             } catch (e) {

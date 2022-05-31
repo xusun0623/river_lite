@@ -27,12 +27,8 @@ class Msg extends StatefulWidget {
 }
 
 class _MsgState extends State<Msg> {
-  // Map msg;
-  // List pmMsgArr = [];
   bool vibrate = false;
   ScrollController _scrollController = new ScrollController();
-  // bool load_done = false;
-  // bool loading = false;
   bool showBackToTop = false;
 
   List<Widget> _buildPMMsg(List pmMsgArr) {
@@ -89,7 +85,6 @@ class _MsgState extends State<Msg> {
       appBar: AppBar(
         leading: Container(),
         leadingWidth: 0,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : os_white,
@@ -350,7 +345,7 @@ class _MsgCardState extends State<MsgCard> {
             Container(
               width: MediaQuery.of(context).size.width -
                   headImgSize -
-                  (isDesktop(context) ? 80 : 0) -
+                  (isDesktop() ? 80 : 0) -
                   42,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -14,6 +14,8 @@ import 'package:offer_show/page/me/me.dart';
 import 'package:offer_show/page/msg/msg.dart';
 import 'package:offer_show/page/home/myhome.dart';
 import 'package:offer_show/page/new_reply/homeNewReply.dart';
+import 'package:offer_show/page/square/square.dart';
+import 'package:offer_show/page/square/squareHome.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -29,15 +31,26 @@ class _HomeState extends State<Home> {
   List<int> loadIndex = [];
 
   List<Widget> homePages() {
-    return [
-      MyHome(),
-      Msg(
-        refresh: () {
-          _getNewMsg();
-        },
-      ),
-      Me(),
-    ];
+    return isDesktop()
+        ? [
+            MyHome(),
+            SquareHome(),
+            Msg(
+              refresh: () {
+                _getNewMsg();
+              },
+            ),
+            Me(),
+          ]
+        : [
+            MyHome(),
+            Msg(
+              refresh: () {
+                _getNewMsg();
+              },
+            ),
+            Me(),
+          ];
   }
 
   _getNewMsg() async {
@@ -186,7 +199,7 @@ class _HomeState extends State<Home> {
       return tmp;
     }
 
-    return isDesktop(context)
+    return isDesktop()
         ? Scaffold(
             body: Row(
               children: [
