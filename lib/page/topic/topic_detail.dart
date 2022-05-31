@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
@@ -984,7 +985,7 @@ class _YourEmojiState extends State<YourEmoji> {
               width: widget.size ?? 37,
               height: widget.size ?? 37,
               child: Image.asset(
-                "lib/emoji/1/[a_${element}].gif",
+                "lib/emoji/1/a_${element}.gif",
                 width: widget.size ?? 37,
                 height: widget.size ?? 37,
               ),
@@ -1014,7 +1015,7 @@ class _YourEmojiState extends State<YourEmoji> {
               width: widget.size ?? 37,
               height: widget.size ?? 37,
               child: Image.asset(
-                "lib/emoji/2/[s_${element}].gif",
+                "lib/emoji/2/s_${element}.gif",
               ),
             ),
           ),
