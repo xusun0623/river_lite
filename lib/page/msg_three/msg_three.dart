@@ -134,7 +134,7 @@ class _MsgThreeState extends State<MsgThree> {
     tmp.add(Container(height: 10));
     if (widget.type == 0 || widget.type == 1) {
       //@我 回复
-      for (int i = 0; i < datas.length; i++) {
+      for (int i = 0; i < datas.length && lists.length ; i++) {
         tmp.add(ForumCard(data: datas[i], forum: lists[i]));
       }
     } else {
