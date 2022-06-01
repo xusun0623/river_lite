@@ -73,21 +73,6 @@ class _TopicState extends State<Topic> {
     }
   }
 
-  void _tapLike() async {
-    if (_isRated == true) return;
-    _isRated = true;
-    await Api().forum_support({
-      "tid": (widget.data["source_id"] ?? widget.data["topic_id"]),
-      "type": "thread",
-      "action": "support",
-    });
-    String tmp = await getStorage(
-      key: "topic_like",
-    );
-    tmp += ",${widget.data['source_id'] ?? widget.data['topic_id']}";
-    setStorage(key: "topic_like", value: tmp);
-  }
-
   @override
   void initState() {
     _getLikeStatus();
