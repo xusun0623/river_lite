@@ -42,6 +42,7 @@ dependencies:
   percent_indicator: ^4.2.2
   html: ^0.15.0
   flutter_gifimage: ^1.0.1
+  bubble_tab_indicator: ^0.1.6
 
 dev_dependencies:
   flutter_test:

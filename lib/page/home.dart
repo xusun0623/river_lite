@@ -9,6 +9,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/leftNavi.dart';
+import 'package:offer_show/page/PicSquare/pic_square.dart';
 import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/me/me.dart';
 import 'package:offer_show/page/msg/msg.dart';
@@ -44,6 +45,7 @@ class _HomeState extends State<Home> {
           ]
         : [
             MyHome(),
+            PicSquare(),
             Msg(
               refresh: () {
                 _getNewMsg();
@@ -134,13 +136,13 @@ class _HomeState extends State<Home> {
       loadIndex.forEach((element) {
         icons.add([
           Icons.home_outlined,
-          Icons.explore_outlined,
+          Icons.burst_mode_rounded,
           Icons.notifications_outlined,
           Icons.person_outlined
         ][element]);
         select_icons.add([
           Icons.home,
-          Icons.explore,
+          Icons.burst_mode_rounded,
           Icons.notifications,
           Icons.person
         ][element]);
@@ -172,7 +174,8 @@ class _HomeState extends State<Home> {
           child: Container(
             width: MediaQuery.of(context).size.width / icons.length,
             height: barHeight,
-            color: Provider.of<ColorProvider>(context).isDark
+            color: Provider.of<ColorProvider>(context).isDark ||
+                    tabShowProvider.index == 1
                 ? os_dark_back
                 : Color(0xFFFFFFFF),
             child: Badge(
@@ -180,15 +183,17 @@ class _HomeState extends State<Home> {
                 end: 35,
                 top: 20,
               ),
-              showBadge: (i == 1 && _isNewMsg),
+              showBadge: (i == 2 && _isNewMsg),
               child: Icon(
                 tabShowProvider.index == i ? select_icons[i] : icons[i],
                 size: 26,
                 color: tabShowProvider.index == i
-                    ? (Provider.of<ColorProvider>(context).isDark
+                    ? (Provider.of<ColorProvider>(context).isDark ||
+                            tabShowProvider.index == 1
                         ? os_dark_white
                         : Color(0xFF222222))
-                    : (Provider.of<ColorProvider>(context).isDark
+                    : (Provider.of<ColorProvider>(context).isDark ||
+                            tabShowProvider.index == 1
                         ? os_deep_grey
                         : Color(0xFFa4a4a6)),
               ),
@@ -229,17 +234,20 @@ class _HomeState extends State<Home> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: Provider.of<ColorProvider>(context).isDark
+                    color: Provider.of<ColorProvider>(context).isDark ||
+                            tabShowProvider.index == 1
                         ? os_dark_back
                         : Color(0xFFEEEEEE),
                   ),
                 ),
-                color: Provider.of<ColorProvider>(context).isDark
+                color: Provider.of<ColorProvider>(context).isDark ||
+                        tabShowProvider.index == 1
                     ? os_dark_back
                     : os_white,
                 boxShadow: [
                   BoxShadow(
-                    color: Provider.of<ColorProvider>(context).isDark
+                    color: Provider.of<ColorProvider>(context).isDark ||
+                            tabShowProvider.index == 1
                         ? Color(0x55000000)
                         : Color(0x22000000),
                     blurRadius: 10,
@@ -250,7 +258,7 @@ class _HomeState extends State<Home> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // children: _buildWidget(tabShowProvider.loadIndex),
-                children: _buildWidget([0, 2, 3]),
+                children: _buildWidget([0, 1, 2, 3]),
               ),
             ),
           );

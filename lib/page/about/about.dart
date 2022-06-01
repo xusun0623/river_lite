@@ -132,7 +132,8 @@ html: ^0.15.0''',
               size: 66,
             ),
             title: "鸣谢",
-            cont: '''测试者：北冥小鱼、weijifen、TYTSSN、Star🌟、hola、fix
+            cont: '''测试者：Star🌟、北冥小鱼、weijifen、TYTSSN、hola、fix
+代码贡献者：Dnieper
 河畔水滴答题题库：Zhenger666
 代码仓库：https://gitee.com
 设计工具：https://figma.com''',
