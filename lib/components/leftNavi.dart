@@ -22,6 +22,24 @@ class _LeftNaviState extends State<LeftNavi> {
   String name = "";
   bool _isNewMsg = false;
 
+  _getData() async {
+    var tmp = await Api().user_userinfo({});
+    if (tmp != null && tmp["rs"] != 0 && tmp["body"] != null) {
+      UserInfoProvider provider =
+          Provider.of<UserInfoProvider>(context, listen: false);
+      provider.data = tmp;
+      provider.refresh();
+    } else {
+      UserInfoProvider provider =
+          Provider.of<UserInfoProvider>(context, listen: false);
+      var arr_txt = await getStorage(key: "myinfo", initData: "");
+      if (arr_txt != "") {
+        provider.data = jsonDecode(arr_txt);
+        provider.refresh();
+      }
+    }
+  }
+
   _getHeadUrl() async {
     String myinfo_txt = await getStorage(key: "myinfo", initData: "");
     Map myinfo_map = jsonDecode(myinfo_txt);
@@ -58,12 +76,14 @@ class _LeftNaviState extends State<LeftNavi> {
   @override
   void initState() {
     _getHeadUrl();
+    _getData();
     _getNewMsg();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    UserInfoProvider provider = Provider.of<UserInfoProvider>(context);
     return Material(
       child: Container(
         width: 80,
@@ -72,7 +92,7 @@ class _LeftNaviState extends State<LeftNavi> {
             right: BorderSide(
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_light_dark_card
-                  : Colors.transparent,
+                  : os_grey,
             ),
           ),
           color: Provider.of<ColorProvider>(context).isDark
@@ -115,7 +135,11 @@ class _LeftNaviState extends State<LeftNavi> {
                                   : os_grey,
                               child: Center(
                                 child: Text(
-                                  name[0].toString(),
+                                  (provider.data == null
+                                          ? "X"
+                                          : provider.data["name"] ??
+                                              provider.data["userName"])[0]
+                                      .toString(),
                                   style: TextStyle(
                                     color: Provider.of<ColorProvider>(context)
                                             .isDark
@@ -127,7 +151,10 @@ class _LeftNaviState extends State<LeftNavi> {
                               ),
                             )
                           : CachedNetworkImage(
-                              imageUrl: head_url,
+                              imageUrl: provider.data == null
+                                  ? ""
+                                  : (provider.data["icon"] ??
+                                      provider.data["avatar"]),
                               placeholder: (BuildContext, String) {
                                 return Container(
                                   color:
