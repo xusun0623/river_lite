@@ -1,12 +1,15 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/outer/card_swiper/flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:offer_show/outer/card_swiper/swiper.dart';
 import 'package:offer_show/outer/card_swiper/swiper_pagination.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
+import 'package:offer_show/util/storage.dart';
 
 class PicSquare extends StatefulWidget {
   PicSquare({Key key}) : super(key: key);
@@ -19,35 +22,52 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
   TabController _tabController;
   List<Map> photo = [
     {
-      "topic_id": 13333, //帖子ID
+      "topic_id": 1938816, //帖子ID
+      "uid": 128897, //帖子ID
       "photo": [
         //每个帖子的图片链接
-        "https://image.meiye.art/pic_1628435115136",
-        "https://image.meiye.art/pic_1628435029305",
-        "https://image.meiye.art/pic_1628435199840",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.huabanimg.com%2F4b62b20bfd0031d4696629a393e65d876188014313a20e-j1tOnz_fw658&refer=http%3A%2F%2Fhbimg.huabanimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1656670990&t=7295b3b9363eb50ad0b7703e794d2b04",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F190324%2F1-1Z324233415.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1656670990&t=3a58e06fa884aecf151b519da1b52ad4",
+        "https://bbs.uestc.edu.cn/data/attachment/forum/202205/26/082733etwfnyhy3tl709n9.jpg",
+        "https://bbs.uestc.edu.cn/data/attachment/forum/202205/26/082723j4lylxwmpt0t747n.jpg",
+        "https://bbs.uestc.edu.cn/data/attachment/forum/202205/26/105037fqswxo0ii0o4lbgg.jpg",
       ],
       "head_img":
-          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F190324%2F1-1Z324233415.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1656670990&t=3a58e06fa884aecf151b519da1b52ad4",
-      "name": "xusun000",
-      "like": 13,
-      "title": "标题",
-      "cont": "文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本"
+          "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=128897&size=middle",
+      "name": "labor_labour",
+      "like": 20,
+      "title": "[原创-微距]小荷才露尖尖角,早有蜻蜓立上头",
+      "cont": "其实是一只豆娘，当时我与小猛禽的距离只有200公分"
     },
     {
-      "topic_id": 13333, //帖子ID
+      "topic_id": 1938816, //帖子ID
+      "uid": 128897, //帖子ID
       "photo": [
         //每个帖子的图片链接
-        "https://image.meiye.art/pic_1628435115136",
-        "https://image.meiye.art/pic_1628435029305",
-        "https://image.meiye.art/pic_1628435199840",
+        "https://bbs.uestc.edu.cn/data/attachment/forum/202205/26/082733etwfnyhy3tl709n9.jpg",
+        "https://bbs.uestc.edu.cn/data/attachment/forum/202205/26/082723j4lylxwmpt0t747n.jpg",
+        "https://bbs.uestc.edu.cn/data/attachment/forum/202205/26/105037fqswxo0ii0o4lbgg.jpg",
       ],
-      "head_img": "https://image.meiye.art/pic_1628435199840",
-      "name": "xusun000",
-      "like": 13,
-      "title": "标题",
-      "cont": "文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本"
+      "head_img":
+          "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=128897&size=middle",
+      "name": "labor_labour",
+      "like": 20,
+      "title": "[原创-微距]小荷才露尖尖角,早有蜻蜓立上头",
+      "cont": "其实是一只豆娘，当时我与小猛禽的距离只有200公分"
+    },
+    {
+      "topic_id": 1938816, //帖子ID
+      "uid": 128897, //帖子ID
+      "photo": [
+        //每个帖子的图片链接
+        "https://bbs.uestc.edu.cn/data/attachment/forum/202205/26/082733etwfnyhy3tl709n9.jpg",
+        "https://bbs.uestc.edu.cn/data/attachment/forum/202205/26/082723j4lylxwmpt0t747n.jpg",
+        "https://bbs.uestc.edu.cn/data/attachment/forum/202205/26/105037fqswxo0ii0o4lbgg.jpg",
+      ],
+      "head_img":
+          "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=128897&size=middle",
+      "name": "labor_labour",
+      "like": 20,
+      "title": "[原创-微距]小荷才露尖尖角,早有蜻蜓立上头",
+      "cont": "其实是一只豆娘，当时我与小猛禽的距离只有200公分"
     },
   ];
   @override
@@ -96,18 +116,26 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
           maxWidth: MediaQuery.of(context).size.width,
           maxHeight: MediaQuery.of(context).size.height,
         ),
-        child: Swiper(
-          fade: 0.1,
-          scrollDirection: Axis.vertical,
-          loop: false,
-          itemCount: photo.length,
-          scale: 0.8,
-          physics: DefineSwiperPhySics(),
-          itemBuilder: (context, index) {
-            return PhotoCard(
-              data: photo[index],
-            );
+        child: RefreshIndicator(
+          backgroundColor: Color.fromRGBO(255, 255, 255, 0.2),
+          color: os_white,
+          onRefresh: () async {
+            print("下拉刷新");
+            return await Future.delayed(Duration(milliseconds: 300));
           },
+          child: Swiper(
+            fade: 0.1,
+            scrollDirection: Axis.vertical,
+            loop: false,
+            itemCount: photo.length,
+            scale: 0.8,
+            physics: DefineSwiperPhySics(),
+            itemBuilder: (context, index) {
+              return PhotoCard(
+                data: photo[index],
+              );
+            },
+          ),
         ),
       ),
     );
@@ -126,6 +154,39 @@ class PhotoCard extends StatefulWidget {
 }
 
 class _PhotoCardState extends State<PhotoCard> {
+  bool isLiked = false;
+
+  void _getLikeStatus() async {
+    //获取点赞状态
+    String tmp = await getStorage(key: "topic_like", initData: "");
+    List<String> ids = tmp.split(",");
+    if (ids.indexOf(widget.data["topic_id"].toString()) > -1) {
+      setState(() {
+        isLiked = true;
+      });
+    }
+  }
+
+  _tapLike() async {
+    Vibrate.feedback(FeedbackType.impact);
+    if (!isLiked) {
+      print("在此点赞");
+    } else {
+      print("在此点赞但是点过赞了");
+    }
+  }
+
+  _tapMore() async {
+    Vibrate.feedback(FeedbackType.impact);
+    print("更多更多");
+  }
+
+  @override
+  void initState() {
+    _getLikeStatus();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -153,44 +214,107 @@ class _PhotoCardState extends State<PhotoCard> {
             indicatorLayout: PageIndicatorLayout.WARM,
             itemBuilder: (context, index) {
               return Center(
-                child: Container(
-                  child: CachedNetworkImage(
-                    placeholder: (context, url) => Center(
-                      child: Opacity(
-                        opacity: 0.3,
-                        child: BottomLoading(
-                          color: Colors.transparent,
-                          txt: "",
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      "/topic_detail",
+                      arguments: widget.data["topic_id"],
+                    );
+                  },
+                  onDoubleTap: () {
+                    _tapLike();
+                  },
+                  onLongPress: () {
+                    _tapMore();
+                  },
+                  child: Container(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => Center(
+                          child: Opacity(
+                            opacity: 0.3,
+                            child: BottomLoading(
+                              color: Colors.transparent,
+                              txt: "",
+                            ),
+                          ),
                         ),
+                        imageUrl: widget.data["photo"][index],
                       ),
                     ),
-                    imageUrl: widget.data["photo"][index],
                   ),
                 ),
               );
             },
           ),
-          Positioned(
-            bottom: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0, 1],
-                  colors: [Colors.transparent, Colors.black54],
-                ),
-              ),
-              child: Column(
-                children: [
-                  Container(height: 15),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 30),
-                    width: MediaQuery.of(context).size.width - 60,
-                    child: Row(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
+          PicBottom(
+            isLiked: isLiked,
+            tapLike: () {
+              _tapLike();
+            },
+            tapMore: () {
+              _tapMore();
+            },
+            data: widget.data,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PicBottom extends StatefulWidget {
+  var data;
+  bool isLiked;
+  Function tapLike;
+  Function tapMore;
+  PicBottom({
+    Key key,
+    this.data,
+    this.isLiked,
+    this.tapLike,
+    this.tapMore,
+  }) : super(key: key);
+
+  @override
+  State<PicBottom> createState() => _PicBottomState();
+}
+
+class _PicBottomState extends State<PicBottom> {
+  //底部按钮
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 0,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0, 1],
+            colors: [Colors.transparent, Colors.black54],
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(height: 50),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  width: MediaQuery.of(context).size.width - 140,
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                        child: GestureDetector(
+                          onTap: () {
+                            toUserSpace(context, widget.data["uid"]);
+                          },
                           child: CachedNetworkImage(
                             width: 25,
                             height: 25,
@@ -198,38 +322,114 @@ class _PhotoCardState extends State<PhotoCard> {
                             imageUrl: widget.data["head_img"],
                           ),
                         ),
-                        Container(width: 7.5),
-                        Container(
-                          width: MediaQuery.of(context).size.width - 100,
-                          child: Text(
-                            widget.data["title"],
-                            style: TextStyle(
-                              color: os_white,
-                              fontSize: 16,
+                      ),
+                      Container(width: 7.5),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 180,
+                        // color: os_grey,
+                        child: Text(
+                          widget.data["title"],
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: os_white,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 90,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          if (widget.tapLike != null) {
+                            widget.tapLike();
+                          }
+                        },
+                        child: Container(
+                          color: Color.fromRGBO(0, 0, 0, 0.001),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 5,
+                              vertical: 10,
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  (widget.data["like"] +
+                                          (widget.isLiked ?? false ? 1 : 0))
+                                      .toString(),
+                                  style: TextStyle(
+                                    color: widget.isLiked ?? false
+                                        ? os_color
+                                        : os_white,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Container(width: 5),
+                                Icon(
+                                  Icons.thumb_up_alt_sharp,
+                                  color: widget.isLiked ?? false
+                                      ? os_color
+                                      : os_white,
+                                  size: 18,
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  Container(height: 5),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 30),
-                    width: MediaQuery.of(context).size.width - 60,
-                    child: Text(
-                      widget.data["cont"],
-                      style: TextStyle(
-                        color: Color(0xDDFFFFFF),
-                        fontSize: 14,
                       ),
-                    ),
+                      GestureDetector(
+                        onTap: () {
+                          if (widget.tapMore != null) {
+                            widget.tapMore();
+                          }
+                        },
+                        child: Container(
+                          color: Color.fromRGBO(0, 0, 0, 0.001),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 5,
+                              vertical: 10,
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.more_horiz,
+                                  color: os_white,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  Container(height: 20),
-                ],
+                ),
+              ],
+            ),
+            Container(height: 5),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 15),
+              width: MediaQuery.of(context).size.width - 30,
+              child: Text(
+                widget.data["cont"],
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Color(0xDDFFFFFF),
+                  fontSize: 14,
+                ),
               ),
             ),
-          ),
-        ],
+            Container(height: 27.5),
+          ],
+        ),
       ),
     );
   }

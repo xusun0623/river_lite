@@ -136,7 +136,7 @@ class _DetailContState extends State<DetailCont> {
             opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(
-                  widget.imgLists.length > 2 || isDesktop() ? 2.5 : 5)),
+                  widget.imgLists.length > 3 || isDesktop() ? 2.5 : 5)),
               child: Hero(
                 tag: widget.data["infor"],
                 child: Container(
@@ -160,7 +160,7 @@ class _DetailContState extends State<DetailCont> {
                         ),
                       );
                     },
-                    child: widget.imgLists.length > 2 || isDesktop()
+                    child: widget.imgLists.length > 3 || isDesktop()
                         ? CachedNetworkImage(
                             imageUrl: widget.data["infor"],
                             width: isDesktop()

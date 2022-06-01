@@ -203,7 +203,7 @@ class _TopicDetailState extends State<TopicDetail> {
     for (var i = 0; i < data["topic"]["content"].length; i++) {
       var e = data["topic"]["content"][i];
       int img_count = 0;
-      if (imgLists.length > (isDesktop() ? 0 : 2) &&
+      if (imgLists.length > (isDesktop() ? 0 : 3) &&
           e["type"] == 1 &&
           i < data["topic"]["content"].length - 1 &&
           data["topic"]["content"][i + 1]["type"] == 1) {
