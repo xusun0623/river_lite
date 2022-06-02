@@ -8,7 +8,7 @@ class ServerConfig {
   String url = "https://bbs.uestc.edu.cn/mobcent/app/web/index.php";
 }
 
-bool isLog = true; //控制是否打印网络输出日志
+bool isLog = false; //控制是否打印网络输出日志
 
 class XHttp {
   pureHttpWithCookie({String url, Map param}) async {

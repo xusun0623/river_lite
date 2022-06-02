@@ -62,7 +62,30 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
     });
     if (tmp != null && tmp["list"] != null) {
       data["list"].addAll(tmp["list"]);
-      setState(() {});
+      List<Map> tmp_list = [];
+      if (!(data == null || data["list"] == null)) {
+        for (var i = 0; i < data["list"].length; i++) {
+          var ele = data["list"][i];
+          tmp_list.add({
+            "topic_id": ele["topic_id"], //帖子ID
+            "uid": ele["user_id"], //用户ID
+            "photo": [],
+            "head_img": ele["userAvatar"],
+            "name": ele["user_nick_name"],
+            "like": ele["recommendAdd"],
+            "title": ele["title"],
+            "cont": ele["subject"],
+          });
+        }
+        int tmp_length = photo.length;
+        var tmp_change = photo.last;
+        setState(() {
+          photo = tmp_list;
+        });
+        setState(() {
+          photo[tmp_length - 1] = tmp_change;
+        });
+      }
     }
   }
 
@@ -79,9 +102,7 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
       "topOrder": 1,
     });
     if (tmp["rs"] != 0 && tmp["list"] != null) {
-      setState(() {
-        data = tmp;
-      });
+      data = tmp;
     }
     _getPhoto();
   }
@@ -111,7 +132,6 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
         swiper_index = 0;
       });
       _swiperController.move(0);
-      setState(() {});
     }
   }
 
@@ -122,8 +142,6 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
       vsync: this,
     );
     _swiperController = new SwiperController();
-    // _tabController.addListener((() {
-    // }));
     _getData();
     super.initState();
   }
@@ -155,7 +173,7 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
           isScrollable: true,
           overlayColor: MaterialStateProperty.all(Colors.transparent),
           tabs: [
-            Tab(text: "成电镜头"),
+            Tab(text: "成电"),
             Tab(text: "全部"),
             Tab(text: "风光"),
             Tab(text: "人像"),
@@ -202,10 +220,14 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
               setState(() {
                 swiper_index = idx;
               });
+              if (idx == photo.length - 1) {
+                _getMore();
+              }
             },
             itemBuilder: (context, index) {
               return PhotoCard(
                 data: photo[index],
+                index: index + 1,
               );
             },
           ),
@@ -217,9 +239,11 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
 
 class PhotoCard extends StatefulWidget {
   Map data;
+  int index;
   PhotoCard({
     Key key,
     this.data,
+    this.index,
   }) : super(key: key);
 
   @override
@@ -229,6 +253,7 @@ class PhotoCard extends StatefulWidget {
 class _PhotoCardState extends State<PhotoCard> {
   bool isLiked = false;
   bool isBlack = false;
+  bool load_done = false;
   String blackKeyWord = ""; //拉黑关键字
   int index = 0;
 
@@ -562,7 +587,9 @@ class _PhotoCardState extends State<PhotoCard> {
         );
       }
     }
-    setState(() {});
+    setState(() {
+      load_done = true;
+    });
   }
 
   _toBigThrough() {
@@ -621,7 +648,7 @@ class _PhotoCardState extends State<PhotoCard> {
                         child: Container(
                           margin: EdgeInsets.only(bottom: 100),
                           child: Text(
-                            "请求中…",
+                            load_done ? "此贴未包含图片,看看别的吧~" : "请求中…",
                             style: TextStyle(color: os_dark_dark_white),
                           ),
                         ),
@@ -638,15 +665,17 @@ class _PhotoCardState extends State<PhotoCard> {
                             index = idx;
                           });
                         },
-                        pagination: new SwiperPagination(
-                          builder: DotSwiperPaginationBuilder(
-                            color: Colors.white54,
-                            activeColor: Colors.white,
-                            size: 7.5,
-                            activeSize: 10,
-                            space: 10,
-                          ),
-                        ),
+                        pagination: widget.data["photo"].length == 1
+                            ? null
+                            : new SwiperPagination(
+                                builder: DotSwiperPaginationBuilder(
+                                  color: Colors.white54,
+                                  activeColor: Colors.white,
+                                  size: 7.5,
+                                  activeSize: 10,
+                                  space: 10,
+                                ),
+                              ),
                         indicatorLayout: PageIndicatorLayout.WARM,
                         itemBuilder: (context, index) {
                           return Center(
@@ -689,6 +718,7 @@ class _PhotoCardState extends State<PhotoCard> {
                         },
                       ),
                 PicBottom(
+                  index: widget.index,
                   isLiked: isLiked,
                   tapLike: () {
                     _tapLike();
@@ -709,12 +739,14 @@ class PicBottom extends StatefulWidget {
   bool isLiked;
   Function tapLike;
   Function tapMore;
+  int index;
   PicBottom({
     Key key,
     this.data,
     this.isLiked,
     this.tapLike,
     this.tapMore,
+    this.index,
   }) : super(key: key);
 
   @override
@@ -924,6 +956,14 @@ class _PicBottomState extends State<PicBottom> {
                             size: 16,
                           ),
                         ],
+                      ),
+                    ),
+                    Text(
+                      "第${widget.index.toString()}镜 / 摄影者 ${widget.data["name"]}",
+                      style: TextStyle(
+                        letterSpacing: 1,
+                        color: Color(0x88FFFFFF),
+                        fontSize: 12,
                       ),
                     ),
                   ],

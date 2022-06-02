@@ -185,7 +185,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                 ),
           Positioned(
             ///布局自己换
-            left: 20,
+            left: MediaQuery.of(context).size.width / 2 - 52,
             top: 50,
             child: Container(
               decoration: BoxDecoration(
@@ -196,11 +196,48 @@ class _PhotoPreviewState extends State<PhotoPreview> {
               ),
               padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
               child: Text(
-                '$tempSelect/${widget.galleryItems.length}',
+                "图片预览 $tempSelect / ${widget.galleryItems.length}",
                 style: TextStyle(color: Colors.white),
               ),
             ),
           ),
+          (widget.title ?? "").length != 0
+              ? Container()
+              : Positioned(
+                  ///布局自己换
+                  left: MediaQuery.of(context).size.width / 2 - 45,
+                  bottom: 70,
+                  child: GestureDetector(
+                    onTap: () {
+                      saveImge(context, widget.galleryItems, tempSelect - 1);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black45,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.download,
+                            color: Colors.white70,
+                            size: 18,
+                          ),
+                          Container(width: 5),
+                          Text(
+                            "保存图片",
+                            style: TextStyle(
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
         ],
       ),
     );
