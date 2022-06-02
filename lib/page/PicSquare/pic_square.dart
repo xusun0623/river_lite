@@ -13,7 +13,6 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/outer/card_swiper/flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:offer_show/outer/card_swiper/swiper.dart';
-import 'package:offer_show/outer/card_swiper/swiper_control.dart';
 import 'package:offer_show/outer/card_swiper/swiper_controller.dart';
 import 'package:offer_show/outer/card_swiper/swiper_pagination.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
@@ -37,54 +36,62 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
   TabController _tabController;
   SwiperController _swiperController;
   List<Map> photo = [];
+  var data;
 
-  int column_id = 307;
-  int classify_id = 0;
+  int column_index = 0; //Tab的index 0/1 专栏 2~10 分栏
+  int column_id = 307; //成电镜头
+  int column_id_all = 55; //全部
+  //风光 人像 人文 小品 技术 杂片 天文 微距 纪实
+  List<int> class_id = [348, 349, 350, 351, 352, 353, 357, 358, 359];
   bool loading_more = false;
   bool load_done = false;
   int pageSize = 10;
   int swiper_index = 0;
 
   _getMore() async {
-    if (loading_more || load_done) return;
-    loading_more = true;
     var tmp = await Api().certain_forum_topiclist({
-      "page": (photo.length / pageSize + 1).toInt(),
+      "page": (data["list"].length / pageSize) + 1,
       "pageSize": pageSize,
-      "boardId": column_id,
+      "boardId": column_index == 0 ? column_id : column_id_all,
       "filterType": "typeid",
-      "filterId": classify_id == 0 ? "" : classify_id,
+      "filterId": (column_index == 0 || column_index == 1)
+          ? ""
+          : class_id[column_index - 2],
       "sortby": "all",
+      "topOrder": 1,
     });
-    Api().certain_forum_topiclist({
-      "page": (photo.length / pageSize + 1).toInt() + 1,
-      "pageSize": pageSize,
-      "boardId": column_id,
-      "filterType": "typeid",
-      "filterId": classify_id == 0 ? "" : classify_id,
-      "sortby": "all",
-    });
-    if (tmp != null && tmp["list"] != null) photo.addAll(tmp["list"]);
-    load_done = tmp.length < pageSize;
-    loading_more = false;
-    setState(() {});
+    if (tmp != null && tmp["list"] != null) {
+      data["list"].addAll(tmp["list"]);
+      setState(() {});
+    }
   }
 
   _getData() async {
     var tmp = await Api().certain_forum_topiclist({
       "page": 1,
       "pageSize": pageSize,
-      "boardId": column_id,
+      "boardId": column_index == 0 ? column_id : column_id_all,
       "filterType": "typeid",
-      "filterId": classify_id == 0 ? "" : classify_id,
+      "filterId": (column_index == 0 || column_index == 1)
+          ? ""
+          : class_id[column_index - 2],
       "sortby": "all",
       "topOrder": 1,
     });
-    if (tmp["rs"] != 0) {
-      List<Map> tmp_photo = [];
-      for (var i = 0; i < tmp["list"].length; i++) {
-        var ele = tmp["list"][i];
-        tmp_photo.add({
+    if (tmp["rs"] != 0 && tmp["list"] != null) {
+      setState(() {
+        data = tmp;
+      });
+    }
+    _getPhoto();
+  }
+
+  _getPhoto() async {
+    List<Map> tmp_list = [];
+    if (!(data == null || data["list"] == null)) {
+      for (var i = 0; i < data["list"].length; i++) {
+        var ele = data["list"][i];
+        tmp_list.add({
           "topic_id": ele["topic_id"], //帖子ID
           "uid": ele["user_id"], //用户ID
           "photo": [],
@@ -100,20 +107,23 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
       });
       await Future.delayed(Duration(milliseconds: 5));
       setState(() {
-        photo = tmp_photo;
+        photo = tmp_list;
         swiper_index = 0;
       });
       _swiperController.move(0);
+      setState(() {});
     }
   }
 
   @override
   void initState() {
     _tabController = TabController(
-      length: 7,
+      length: 11,
       vsync: this,
     );
     _swiperController = new SwiperController();
+    // _tabController.addListener((() {
+    // }));
     _getData();
     super.initState();
   }
@@ -131,6 +141,12 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
           controller: _tabController,
           indicatorSize: TabBarIndicatorSize.tab,
           labelColor: os_white,
+          onTap: ((value) {
+            setState(() {
+              column_index = value;
+            });
+            _getData();
+          }),
           indicator: BubbleTabIndicator(
             indicatorHeight: 25.0,
             indicatorColor: Color.fromRGBO(255, 255, 255, 0.2),
@@ -139,13 +155,17 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
           isScrollable: true,
           overlayColor: MaterialStateProperty.all(Colors.transparent),
           tabs: [
-            Tab(text: "镜头下的成电"),
+            Tab(text: "成电镜头"),
+            Tab(text: "全部"),
             Tab(text: "风光"),
             Tab(text: "人像"),
             Tab(text: "人文"),
             Tab(text: "小品"),
             Tab(text: "技术"),
             Tab(text: "杂片"),
+            Tab(text: "天文"),
+            Tab(text: "微距"),
+            Tab(text: "纪实"),
           ],
         ),
       ),
@@ -210,6 +230,7 @@ class _PhotoCardState extends State<PhotoCard> {
   bool isLiked = false;
   bool isBlack = false;
   String blackKeyWord = ""; //拉黑关键字
+  int index = 0;
 
   void _getLikeStatus() async {
     //获取点赞状态
@@ -544,6 +565,18 @@ class _PhotoCardState extends State<PhotoCard> {
     setState(() {});
   }
 
+  _toBigThrough() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PhotoPreview(
+          galleryItems: widget.data["photo"],
+          defaultImage: index,
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     _getLikeStatus();
@@ -596,7 +629,15 @@ class _PhotoCardState extends State<PhotoCard> {
                     : Swiper(
                         itemCount: widget.data["photo"].length,
                         loop: false,
+                        onTap: (idx) {
+                          _toBigThrough();
+                        },
                         duration: 100,
+                        onIndexChanged: (idx) {
+                          setState(() {
+                            index = idx;
+                          });
+                        },
                         pagination: new SwiperPagination(
                           builder: DotSwiperPaginationBuilder(
                             color: Colors.white54,
@@ -613,19 +654,11 @@ class _PhotoCardState extends State<PhotoCard> {
                               margin: EdgeInsets.only(bottom: 100),
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => PhotoPreview(
-                                        galleryItems: widget.data["photo"],
-                                        defaultImage: index,
-                                      ),
-                                    ),
-                                  );
+                                  _toBigThrough();
                                 },
-                                onDoubleTap: () {
-                                  _tapLike();
-                                },
+                                // onDoubleTap: () {
+                                //   _tapLike();
+                                // },
                                 onLongPress: () {
                                   _tapMore();
                                 },

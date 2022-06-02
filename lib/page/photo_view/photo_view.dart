@@ -114,6 +114,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                 scrollPhysics: const BouncingScrollPhysics(),
                 builder: (BuildContext context, int index) {
                   return PhotoViewGalleryPageOptions(
+                    minScale: PhotoViewComputedScale.contained * 1,
                     heroAttributes: PhotoViewHeroAttributes(
                       tag: widget.galleryItems[index],
                     ),
