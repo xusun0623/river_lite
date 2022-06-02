@@ -59,6 +59,7 @@ class _TopicDetailState extends State<TopicDetail> {
   var _sort = 0; //0-按时间正序 1-按时间倒序
   var showBackToTop = false;
   var uploadImgUrls = [];
+  var total_num = 0; //评论总数
   String uploadFileAid = "";
   var replyId = 0;
   double bottom_safeArea = 10;
@@ -112,6 +113,11 @@ class _TopicDetailState extends State<TopicDetail> {
       comment = tmp["list"];
       data = tmp;
       load_done = ((tmp["list"] ?? []).length < 20);
+      if (total_num == 0) {
+        setState(() {
+          total_num = data["total_num"];
+        });
+      }
     } else {
       load_done = true;
       data = null;
@@ -356,6 +362,7 @@ class _TopicDetailState extends State<TopicDetail> {
         },
         host_id: data["topic"]["user_id"],
         data: [],
+        total_num: total_num,
         topic_id: data["topic"]["topic_id"],
       ),
     ];
@@ -1682,6 +1689,7 @@ class CommentsTab extends StatefulWidget {
   var host_id;
   var select;
   var sort;
+  var total_num;
   Function bindSelect;
   Function bindSort;
   CommentsTab(
@@ -1689,6 +1697,7 @@ class CommentsTab extends StatefulWidget {
       this.data,
       this.topic_id,
       this.host_id,
+      this.total_num,
       this.bindSelect,
       this.bindSort,
       this.select,
@@ -1703,6 +1712,7 @@ class _CommentsTabState extends State<CommentsTab> {
   @override
   Widget build(BuildContext context) {
     return CommentTab(
+      total_num: widget.total_num,
       TapSelect: (idx) {
         setState(() {
           widget.bindSelect(idx);
@@ -1724,8 +1734,16 @@ class CommentTab extends StatefulWidget {
   Function TapSort;
   var select;
   var sort;
-  CommentTab({Key key, this.TapSelect, this.TapSort, this.select, this.sort})
-      : super(key: key);
+  var total_num;
+
+  CommentTab({
+    Key key,
+    this.TapSelect,
+    this.TapSort,
+    this.select,
+    this.sort,
+    this.total_num,
+  }) : super(key: key);
 
   @override
   _CommentTabState createState() => _CommentTabState();
@@ -1752,7 +1770,9 @@ class _CommentTabState extends State<CommentTab> {
                   padding: const EdgeInsets.all(10),
                   child: Column(children: [
                     Text(
-                      "评论区",
+                      widget.total_num == 0
+                          ? "评论区"
+                          : "评论区(${widget.total_num})",
                       style: TextStyle(
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_dark_white
@@ -2337,7 +2357,11 @@ class _CommentState extends State<Comment> {
                                                   .split(" 发表于")[0] +
                                               ": ",
                                           style: TextStyle(
-                                            color: os_color,
+                                            color: Provider.of<ColorProvider>(
+                                                        context)
+                                                    .isDark
+                                                ? Color(0xFF64BDFF)
+                                                : os_color,
                                           ),
                                         ),
                                         TextSpan(

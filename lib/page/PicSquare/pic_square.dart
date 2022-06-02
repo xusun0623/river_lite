@@ -8,9 +8,10 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
-import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/emoji/emoji.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/outer/card_swiper/flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:offer_show/outer/card_swiper/swiper.dart';
@@ -49,7 +50,11 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
   int pageSize = 10;
   int swiper_index = 0;
 
+  bool loading = false;
+
   _getMore() async {
+    if (loading) return;
+    loading = true;
     var tmp = await Api().certain_forum_topiclist({
       "page": (data["list"].length / pageSize) + 1,
       "pageSize": pageSize,
@@ -88,9 +93,11 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
         });
       }
     }
+    loading = false;
   }
 
   _getData() async {
+    loading = true;
     var tmp = await Api().certain_forum_topiclist({
       "page": 1,
       "pageSize": pageSize,
@@ -134,6 +141,7 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
       });
       _swiperController.move(0);
     }
+    loading = true;
   }
 
   bool hasToken = false;
@@ -323,14 +331,6 @@ class _PhotoCardState extends State<PhotoCard> {
     }
   }
 
-  _feedbackSuccess() async {
-    showToast(
-      context: context,
-      type: XSToast.success,
-      txt: "已举报",
-    );
-  }
-
   bool _isBlack() {
     bool flag = false;
     Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
@@ -344,148 +344,16 @@ class _PhotoCardState extends State<PhotoCard> {
     return flag;
   }
 
-  _feedback() async {
-    String txt = "";
+  _look_comment() async {
     showModalBottomSheet(
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
-      backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
-          ? os_light_dark_card
-          : os_white,
+      backgroundColor: Color(0xFF2D2D2D),
       context: context,
       builder: (context) {
-        return Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: 30,
-          ),
-          height: MediaQuery.of(context).size.height - 100,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(height: 30),
-              Text(
-                "请输入举报内容",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : os_black,
-                ),
-              ),
-              Container(height: 10),
-              Container(
-                height: 60,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  color:
-                      Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_white_opa
-                          : os_grey,
-                ),
-                child: Center(
-                  child: TextField(
-                    onChanged: (e) {
-                      txt = e;
-                    },
-                    style: TextStyle(
-                      color: Provider.of<ColorProvider>(context, listen: false)
-                              .isDark
-                          ? os_dark_white
-                          : os_black,
-                    ),
-                    cursorColor: os_deep_blue,
-                    decoration: InputDecoration(
-                        hintText: "请输入",
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                          color:
-                              Provider.of<ColorProvider>(context, listen: false)
-                                      .isDark
-                                  ? os_dark_dark_white
-                                  : os_deep_grey,
-                        )),
-                  ),
-                ),
-              ),
-              Container(height: 10),
-              Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: myInkWell(
-                      tap: () {
-                        Navigator.pop(context);
-                      },
-                      color: Provider.of<ColorProvider>(context, listen: false)
-                              .isDark
-                          ? os_white_opa
-                          : Color(0x16004DFF),
-                      widget: Container(
-                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                        height: 40,
-                        child: Center(
-                          child: Text(
-                            "取消",
-                            style: TextStyle(
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_dark_white
-                                  : os_deep_blue,
-                            ),
-                          ),
-                        ),
-                      ),
-                      radius: 12.5,
-                    ),
-                  ),
-                  Container(
-                    child: myInkWell(
-                      tap: () async {
-                        await Api().user_report({
-                          "idType": "thread",
-                          "message": txt,
-                          "id": widget.data["topic_id"]
-                        });
-                        Navigator.pop(context);
-                        _feedbackSuccess();
-                      },
-                      color: os_deep_blue,
-                      widget: Container(
-                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                        height: 40,
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.done, color: os_white, size: 18),
-                              Container(width: 5),
-                              Text(
-                                "完成",
-                                style: TextStyle(
-                                  color: os_white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      radius: 12.5,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
+        return PopComment(topic_id: widget.data["topic_id"]);
       },
     );
   }
@@ -540,12 +408,6 @@ class _PhotoCardState extends State<PhotoCard> {
               Navigator.pop(context);
               showToast(context: context, type: XSToast.success, txt: "复制成功");
             }),
-        ActionItem(
-            title: "举报反馈",
-            onPressed: () async {
-              Navigator.pop(context);
-              _feedback();
-            }),
       ],
       bottomActionItem: BottomActionItem(title: "取消"),
     );
@@ -578,6 +440,9 @@ class _PhotoCardState extends State<PhotoCard> {
     if (photo_txt != "") {
       //从缓存中拿数据
       widget.data["photo"] = jsonDecode(photo_txt);
+      if (widget.data["photo"].length == 0) {
+        _getForceData();
+      }
       widget.data["cont"] = photo_desc_txt;
     } else {
       var tmp = await Api().forum_postlist({
@@ -722,7 +587,6 @@ class _PhotoCardState extends State<PhotoCard> {
                 widget.data["photo"].length == 0
                     ? GestureDetector(
                         onTap: () {
-                          Vibrate.feedback(FeedbackType.impact);
                           _getForceData();
                         },
                         child: Container(
@@ -730,9 +594,22 @@ class _PhotoCardState extends State<PhotoCard> {
                           child: Center(
                             child: Container(
                               margin: EdgeInsets.only(bottom: 100),
-                              child: Text(
-                                load_done ? "此贴可能未包含图片,你可以点此刷新" : "请求中…",
-                                style: TextStyle(color: os_dark_dark_white),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  load_done
+                                      ? Icon(
+                                          Icons.crop_original,
+                                          color: os_dark_dark_white,
+                                          size: 30,
+                                        )
+                                      : Container(),
+                                  Container(height: 10),
+                                  Text(
+                                    load_done ? "此贴未包含图片" : "请求中…",
+                                    style: TextStyle(color: os_dark_dark_white),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -805,6 +682,9 @@ class _PhotoCardState extends State<PhotoCard> {
                 PicBottom(
                   index: widget.index,
                   isLiked: isLiked,
+                  tapDetail: () {
+                    _look_comment();
+                  },
                   tapLike: () {
                     _tapLike();
                   },
@@ -819,11 +699,291 @@ class _PhotoCardState extends State<PhotoCard> {
   }
 }
 
+class PopComment extends StatefulWidget {
+  int topic_id;
+  PopComment({
+    Key key,
+    this.topic_id,
+  }) : super(key: key);
+
+  @override
+  State<PopComment> createState() => _PopCommentState();
+}
+
+class _PopCommentState extends State<PopComment> {
+  bool flag = false;
+  ScrollController _scrollController = new ScrollController();
+  var comment = [];
+  var load_done = false;
+  var total_num = 0;
+  var data;
+  int pageSize = 20;
+
+  _getData() async {
+    var tmp = await Api().forum_postlist({
+      "topicId": widget.topic_id,
+      "authorId": 0,
+      "order": 0,
+      "page": 1,
+      "pageSize": pageSize,
+    });
+    if (tmp["rs"] != 0) {
+      data = tmp;
+      comment = tmp["list"];
+      load_done = ((tmp["list"] ?? []).length < 20);
+      if (total_num == 0) {
+        setState(() {
+          total_num = data["total_num"];
+        });
+      }
+    } else {
+      load_done = true;
+      data = null;
+    }
+    setState(() {});
+  }
+
+  _getMore() async {
+    if (load_done) return;
+    var tmp = await Api().forum_postlist({
+      "topicId": widget.topic_id,
+      "authorId": 0,
+      "order": 0,
+      "page": (comment.length / pageSize + 1).floor(),
+      "pageSize": pageSize,
+    });
+    if (tmp["rs"] != 0) {
+      comment.addAll(tmp["list"]);
+      load_done = ((tmp["list"] ?? []).length < 20);
+    } else {
+      load_done = true;
+    }
+    setState(() {});
+  }
+
+  List<Widget> _buildCont() {
+    List<Widget> tmp = [];
+    tmp.add(Container(height: 15));
+    tmp.add(
+      Padding(
+        padding: EdgeInsets.only(left: 20, right: 0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              total_num == 0 ? "评论" : "评论(${total_num})",
+              style: TextStyle(
+                color: Color.fromRGBO(255, 255, 255, 1),
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Vibrate.feedback(FeedbackType.impact);
+                Navigator.pushNamed(
+                  context,
+                  "/topic_detail",
+                  arguments: widget.topic_id,
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                color: Color.fromRGBO(255, 255, 255, 0.001),
+                child: Row(
+                  children: [
+                    Text(
+                      "前往详情页",
+                      style: TextStyle(
+                        color: Color.fromRGBO(255, 255, 255, 0.7),
+                        fontSize: 15,
+                      ),
+                    ),
+                    Icon(
+                      Icons.keyboard_arrow_right,
+                      color: Color.fromRGBO(255, 255, 255, 0.7),
+                      size: 18,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    // tmp.add(Container(height: 5));
+    if (comment.length != 0) {
+      comment.forEach((element) {
+        tmp.add(PopCommentCont(data: element));
+      });
+    }
+    if (!load_done)
+      tmp.add(BottomLoading(
+        color: Colors.transparent,
+      ));
+    if (load_done && comment.length == 0) {
+      tmp.add(Container(
+        child: Column(
+          children: [
+            Container(height: 100),
+            Icon(
+              Icons.filter_drama,
+              color: os_dark_dark_white,
+              size: 50,
+            ),
+            Container(height: 10),
+            Text(
+              "这里是一颗空的星球",
+              style: TextStyle(
+                color: os_dark_dark_white,
+              ),
+            ),
+          ],
+        ),
+      ));
+    }
+    return tmp;
+  }
+
+  @override
+  void initState() {
+    _getData();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _getMore();
+      }
+    });
+    super.initState();
+  }
+
+  //弹出的窗口
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height - 250,
+      width: MediaQuery.of(context).size.width,
+      child: ListView(
+        physics: BouncingScrollPhysics(),
+        controller: _scrollController,
+        children: _buildCont(),
+      ),
+    );
+  }
+}
+
+class PopCommentCont extends StatefulWidget {
+  var data;
+  PopCommentCont({
+    Key key,
+    this.data,
+  }) : super(key: key);
+
+  @override
+  State<PopCommentCont> createState() => _PopCommentContState();
+}
+
+class _PopCommentContState extends State<PopCommentCont> {
+  List<Widget> _buildComment() {
+    List<Widget> tmp = [];
+    for (var i = 0; i < widget.data["reply_content"].length; i++) {
+      var tmp_cont = widget.data["reply_content"][i];
+      if (tmp_cont["type"] == 0) {
+        tmp.add(DetailCont(
+          data: tmp_cont,
+          imgLists: [],
+        ));
+      }
+    }
+    return tmp;
+  }
+
+  Widget _buildReply() {
+    if (widget.data["quote_content"] == "") return Container();
+    return Container(
+      child: Container(
+        width: MediaQuery.of(context).size.width - 30,
+        padding: EdgeInsets.fromLTRB(16, 13, 16, 13),
+        margin: EdgeInsets.only(top: 10),
+        decoration: BoxDecoration(
+          color: Color(0x11FFFFFF),
+          borderRadius: BorderRadius.all(Radius.circular(13)),
+        ),
+        child: RichText(
+          text: TextSpan(style: TextStyle(fontSize: 14), children: [
+            TextSpan(
+              text:
+                  "回复@" + widget.data["quote_content"].split(" 发表于")[0] + ": ",
+              style: TextStyle(
+                color: Color(0xFF64BDFF),
+              ),
+            ),
+            TextSpan(
+              text: widget.data["quote_content"].split("发表于")[1].split("\n")[1],
+              style: TextStyle(color: os_dark_white),
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: 25),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: os_white_opa,
+          ),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(100)),
+                child: CachedNetworkImage(
+                  placeholder: ((context, url) => Container(
+                        color: os_white_opa,
+                      )),
+                  imageUrl: widget.data["icon"],
+                  width: 35,
+                  height: 35,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Container(width: 10),
+              Text(
+                widget.data["reply_name"],
+                style: TextStyle(
+                  color: os_white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          Container(height: 7.5),
+          ..._buildComment(),
+          _buildReply(),
+        ],
+      ),
+    );
+  }
+}
+
 class PicBottom extends StatefulWidget {
   var data;
   bool isLiked;
   Function tapLike;
   Function tapMore;
+  Function tapDetail;
   int index;
   PicBottom({
     Key key,
@@ -831,6 +991,7 @@ class PicBottom extends StatefulWidget {
     this.isLiked,
     this.tapLike,
     this.tapMore,
+    this.tapDetail,
     this.index,
   }) : super(key: key);
 
@@ -840,11 +1001,9 @@ class PicBottom extends StatefulWidget {
 
 class _PicBottomState extends State<PicBottom> {
   _toDetail() {
-    Navigator.pushNamed(
-      context,
-      "/topic_detail",
-      arguments: widget.data["topic_id"],
-    );
+    if (widget.tapDetail != null) {
+      widget.tapDetail();
+    }
   }
 
   //底部按钮
@@ -1077,4 +1236,109 @@ class DefineSwiperPhySics extends ScrollPhysics {
         stiffness: 100, //硬度
         damping: 0.8, //阻尼系数
       );
+}
+
+class DetailCont extends StatefulWidget {
+  var data;
+  var imgLists;
+  String desc; //在图片上的描述
+  String title; //在图片上的描述标题
+  bool isComment;
+  DetailCont({
+    Key key,
+    this.data,
+    this.imgLists,
+    this.isComment,
+    this.desc,
+    this.title,
+  }) : super(key: key);
+
+  @override
+  _DetailContState createState() => _DetailContState();
+}
+
+class _DetailContState extends State<DetailCont> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  List<InlineSpan> _getRichText(String t) {
+    List<InlineSpan> ret = [];
+    t = t.replaceAll("&nbsp;", " ");
+    List<String> tmp = t.split("[mobcent_phiz=");
+    ret.add(TextSpan(text: tmp[0]));
+    for (var i = 1; i < tmp.length; i++) {
+      var first_idx = tmp[i].indexOf(']');
+      ret.add(WidgetSpan(
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: Opacity(
+            opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
+            child: CachedNetworkImage(
+              placeholder: (context, url) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: os_grey,
+                ),
+              ),
+              imageUrl: tmp[i].substring(0, first_idx),
+            ),
+          ),
+        ),
+      ));
+      ret.add(TextSpan(text: tmp[i].substring(first_idx + 1)));
+    }
+    return ret;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    switch (widget.data["type"]) {
+      case 0: //纯文字
+        return widget.data["infor"].toString().trim() == ""
+            ? Container()
+            : (widget.data["infor"].toString().characters.length == 1 &&
+                    emoji
+                        .toString()
+                        .characters
+                        .contains(widget.data["infor"].toString().trim())
+                ? Container(
+                    width: MediaQuery.of(context).size.width - 30,
+                    child: Text.rich(
+                      TextSpan(
+                        style: TextStyle(
+                          fontSize: 60,
+                          height: 1.6,
+                          color: os_dark_white,
+                        ),
+                        text: widget.data["infor"].toString().trim(),
+                      ),
+                    ),
+                  )
+                : Container(
+                    width: MediaQuery.of(context).size.width - 30,
+                    child: Text.rich(
+                      TextSpan(
+                        style: TextStyle(
+                          fontSize: 16,
+                          height: 1.6,
+                          color: os_dark_white,
+                        ),
+                        children: _getRichText(
+                          widget.data["infor"].indexOf("本帖最后由") > -1
+                              ? widget.data["infor"].substring(
+                                  (widget.data["infor"].indexOf("编辑") + 7) >=
+                                          widget.data["infor"].length
+                                      ? widget.data["infor"].length - 1
+                                      : widget.data["infor"].indexOf("编辑") + 7)
+                              : widget.data["infor"],
+                        ),
+                      ),
+                    ),
+                  ));
+        break;
+    }
+  }
 }
