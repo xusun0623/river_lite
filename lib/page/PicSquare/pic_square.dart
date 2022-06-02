@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -1026,7 +1027,9 @@ class _PicBottomState extends State<PicBottom> {
               children: [
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 15),
-                  width: MediaQuery.of(context).size.width - 140,
+                  width: MediaQuery.of(context).size.width -
+                      (isDesktop() ? 80 : 0) -
+                      140,
                   child: Row(
                     children: [
                       ClipRRect(
@@ -1049,7 +1052,9 @@ class _PicBottomState extends State<PicBottom> {
                           _toDetail();
                         },
                         child: Container(
-                          width: MediaQuery.of(context).size.width - 180,
+                          width: MediaQuery.of(context).size.width -
+                              (isDesktop() ? 80 : 0) -
+                              180,
                           // color: os_grey,
                           child: Text(
                             widget.data["title"],
@@ -1145,7 +1150,9 @@ class _PicBottomState extends State<PicBottom> {
               },
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 15),
-                width: MediaQuery.of(context).size.width - 30,
+                width: MediaQuery.of(context).size.width -
+                    (isDesktop() ? 80 : 0) -
+                    30,
                 child: Text(
                   widget.data["cont"].toString().trim() == ""
                       ? widget.data["title"]
@@ -1165,7 +1172,8 @@ class _PicBottomState extends State<PicBottom> {
                 _toDetail();
               },
               child: Container(
-                width: MediaQuery.of(context).size.width,
+                width:
+                    MediaQuery.of(context).size.width - (isDesktop() ? 80 : 0),
                 color: Color.fromRGBO(255, 255, 255, 0.001),
                 child: Row(
                   children: [
