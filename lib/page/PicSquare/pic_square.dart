@@ -8,6 +8,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
@@ -135,8 +136,21 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
     }
   }
 
+  bool hasToken = false;
+  _getValid() async {
+    String tmp_txt = await getStorage(key: "myinfo", initData: "");
+    print("${tmp_txt}");
+    if (tmp_txt == "") {
+      hasToken = false;
+    } else {
+      hasToken = true;
+    }
+    setState(() {});
+  }
+
   @override
   void initState() {
+    _getValid();
     _tabController = TabController(
       length: 11,
       vsync: this,
@@ -148,92 +162,112 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Container(),
-        leadingWidth: 0,
-        elevation: 0,
-        backgroundColor: os_dark_back,
-        foregroundColor: os_white,
-        title: TabBar(
-          controller: _tabController,
-          indicatorSize: TabBarIndicatorSize.tab,
-          labelColor: os_white,
-          onTap: ((value) {
-            setState(() {
-              column_index = value;
-            });
-            _getData();
-          }),
-          indicator: BubbleTabIndicator(
-            indicatorHeight: 25.0,
-            indicatorColor: Color.fromRGBO(255, 255, 255, 0.2),
-            tabBarIndicatorSize: TabBarIndicatorSize.tab,
-          ),
-          isScrollable: true,
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
-          tabs: [
-            Tab(text: "成电"),
-            Tab(text: "全部"),
-            Tab(text: "风光"),
-            Tab(text: "人像"),
-            Tab(text: "人文"),
-            Tab(text: "小品"),
-            Tab(text: "技术"),
-            Tab(text: "杂片"),
-            Tab(text: "天文"),
-            Tab(text: "微距"),
-            Tab(text: "纪实"),
-          ],
-        ),
-      ),
-      backgroundColor: os_dark_back,
-      floatingActionButton: swiper_index == 0
-          ? null
-          : FloatingActionButton(
-              backgroundColor: Color(0x22FFFFFF),
-              child: Icon(Icons.refresh),
-              onPressed: () {
-                _getData();
+    return !hasToken
+        ? Scaffold(
+            body: GestureDetector(
+              onTap: () {
+                Vibrate.feedback(FeedbackType.impact);
+                _getValid();
               },
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: os_dark_back,
+                child: Center(
+                  child: Text(
+                    "登录后请点此刷新",
+                    style: TextStyle(color: os_dark_dark_white),
+                  ),
+                ),
+              ),
             ),
-      body: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width,
-          maxHeight: MediaQuery.of(context).size.height,
-        ),
-        child: RefreshIndicator(
-          backgroundColor: Color.fromRGBO(255, 255, 255, 0.2),
-          color: os_white,
-          onRefresh: () async {
-            return await _getData();
-          },
-          child: Swiper(
-            fade: 0.1,
-            scrollDirection: Axis.vertical,
-            loop: false,
-            itemCount: photo.length,
-            scale: 0.8,
-            physics: DefineSwiperPhySics(),
-            controller: _swiperController,
-            onIndexChanged: (idx) {
-              setState(() {
-                swiper_index = idx;
-              });
-              if (idx == photo.length - 1) {
-                _getMore();
-              }
-            },
-            itemBuilder: (context, index) {
-              return PhotoCard(
-                data: photo[index],
-                index: index + 1,
-              );
-            },
-          ),
-        ),
-      ),
-    );
+          )
+        : Scaffold(
+            appBar: AppBar(
+              leading: Container(),
+              leadingWidth: 0,
+              elevation: 0,
+              backgroundColor: os_dark_back,
+              foregroundColor: os_white,
+              title: TabBar(
+                controller: _tabController,
+                indicatorSize: TabBarIndicatorSize.tab,
+                labelColor: os_white,
+                onTap: ((value) {
+                  setState(() {
+                    column_index = value;
+                  });
+                  _getData();
+                }),
+                indicator: BubbleTabIndicator(
+                  indicatorHeight: 25.0,
+                  indicatorColor: Color.fromRGBO(255, 255, 255, 0.2),
+                  tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                ),
+                isScrollable: true,
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                tabs: [
+                  Tab(text: "成电"),
+                  Tab(text: "全部"),
+                  Tab(text: "风光"),
+                  Tab(text: "人像"),
+                  Tab(text: "人文"),
+                  Tab(text: "小品"),
+                  Tab(text: "技术"),
+                  Tab(text: "杂片"),
+                  Tab(text: "天文"),
+                  Tab(text: "微距"),
+                  Tab(text: "纪实"),
+                ],
+              ),
+            ),
+            backgroundColor: os_dark_back,
+            floatingActionButton: swiper_index == 0
+                ? null
+                : FloatingActionButton(
+                    backgroundColor: Color(0x22FFFFFF),
+                    child: Icon(Icons.refresh),
+                    onPressed: () {
+                      _getData();
+                    },
+                  ),
+            body: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width,
+                maxHeight: MediaQuery.of(context).size.height,
+              ),
+              child: RefreshIndicator(
+                backgroundColor: Color.fromRGBO(255, 255, 255, 0.2),
+                color: os_white,
+                onRefresh: () async {
+                  return await _getData();
+                },
+                child: Swiper(
+                  fade: 0.1,
+                  scrollDirection: Axis.vertical,
+                  loop: false,
+                  itemCount: photo.length,
+                  scale: 0.8,
+                  physics: DefineSwiperPhySics(),
+                  controller: _swiperController,
+                  onIndexChanged: (idx) {
+                    setState(() {
+                      swiper_index = idx;
+                    });
+                    if (idx == photo.length - 1) {
+                      _getMore();
+                    }
+                  },
+                  itemBuilder: (context, index) {
+                    return PhotoCard(
+                      data: photo[index],
+                      index: index + 1,
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
   }
 }
 
@@ -573,7 +607,6 @@ class _PhotoCardState extends State<PhotoCard> {
               photo_desc_tmp += " " + _removeGif(cont_tmp["infor"].toString());
             }
           }
-          print("描述数据 ${photo_desc_tmp}");
         }
         widget.data["photo"] = photo_tmp;
         widget.data["cont"] = photo_desc_tmp;
@@ -590,6 +623,49 @@ class _PhotoCardState extends State<PhotoCard> {
     setState(() {
       load_done = true;
     });
+  }
+
+  _getForceData() async {
+    var tmp = await Api().forum_postlist({
+      "topicId": widget.data["topic_id"],
+      "authorId": 0,
+      "order": 0,
+      "page": 1,
+      "pageSize": 0,
+    });
+    if (tmp["rs"] != 0) {
+      var content_tmp = tmp["topic"]["content"];
+      String photo_desc_tmp = "";
+      List<String> photo_tmp = [];
+      for (var i = 0; i < content_tmp.length; i++) {
+        var cont_tmp = content_tmp[i];
+        if (cont_tmp["type"] == 1) {
+          photo_tmp.add(cont_tmp["originalInfo"]);
+        }
+        if (cont_tmp["type"] == 0) {
+          print("${cont_tmp}");
+          if (cont_tmp["infor"].toString().contains("编辑 \r\n\r\n")) {
+            photo_desc_tmp += " " +
+                _removeGif(
+                  cont_tmp["infor"].toString().split("编辑 \r\n\r\n")[1],
+                );
+          } else {
+            photo_desc_tmp += " " + _removeGif(cont_tmp["infor"].toString());
+          }
+        }
+      }
+      widget.data["photo"] = photo_tmp;
+      widget.data["cont"] = photo_desc_tmp;
+      setStorage(
+        key: "photo_desc_" + widget.data["topic_id"].toString(),
+        value: photo_desc_tmp,
+      );
+      setStorage(
+        key: "photo_" + widget.data["topic_id"].toString(),
+        value: jsonEncode(photo_tmp),
+      );
+    }
+    setState(() {});
   }
 
   _toBigThrough() {
@@ -644,12 +720,21 @@ class _PhotoCardState extends State<PhotoCard> {
             child: Stack(
               children: [
                 widget.data["photo"].length == 0
-                    ? Center(
+                    ? GestureDetector(
+                        onTap: () {
+                          Vibrate.feedback(FeedbackType.impact);
+                          _getForceData();
+                        },
                         child: Container(
-                          margin: EdgeInsets.only(bottom: 100),
-                          child: Text(
-                            load_done ? "此贴未包含图片,看看别的吧~" : "请求中…",
-                            style: TextStyle(color: os_dark_dark_white),
+                          color: Color(0x01010101),
+                          child: Center(
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 100),
+                              child: Text(
+                                load_done ? "此贴可能未包含图片,你可以点此刷新" : "请求中…",
+                                style: TextStyle(color: os_dark_dark_white),
+                              ),
+                            ),
                           ),
                         ),
                       )
