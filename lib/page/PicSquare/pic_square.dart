@@ -9,8 +9,6 @@ import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/to_user.dart';
-import 'package:offer_show/components/empty.dart';
-import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/emoji/emoji.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/outer/card_swiper/flutter_page_indicator/flutter_page_indicator.dart';
@@ -112,6 +110,7 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
     if (tmp["rs"] != 0 && tmp["list"] != null) {
       data = tmp;
     }
+    loading = false;
     _getPhoto();
   }
 
@@ -141,7 +140,6 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
       });
       _swiperController.move(0);
     }
-    loading = true;
   }
 
   bool hasToken = false;

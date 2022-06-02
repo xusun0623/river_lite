@@ -84,18 +84,21 @@ class _LeftNaviState extends State<LeftNavi> {
   @override
   Widget build(BuildContext context) {
     UserInfoProvider provider = Provider.of<UserInfoProvider>(context);
+    TabShowProvider tabShowProvider = Provider.of<TabShowProvider>(context);
     return Material(
       child: Container(
         width: 80,
         decoration: BoxDecoration(
           border: Border(
             right: BorderSide(
-              color: Provider.of<ColorProvider>(context).isDark
+              color: Provider.of<ColorProvider>(context).isDark ||
+                      tabShowProvider.index == 2
                   ? os_light_dark_card
                   : os_grey,
             ),
           ),
-          color: Provider.of<ColorProvider>(context).isDark
+          color: Provider.of<ColorProvider>(context).isDark ||
+                  tabShowProvider.index == 2
               ? Color(0xFF323232)
               : os_white,
         ),
@@ -106,7 +109,8 @@ class _LeftNaviState extends State<LeftNavi> {
               children: [
                 Container(
                   height: MediaQuery.of(context).padding.top,
-                  color: Provider.of<ColorProvider>(context).isDark
+                  color: Provider.of<ColorProvider>(context).isDark ||
+                          tabShowProvider.index == 2
                       ? os_dark_back
                       : os_white,
                 ),
@@ -128,11 +132,13 @@ class _LeftNaviState extends State<LeftNavi> {
                     height: 50,
                     child: ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(100)),
-                      child: Provider.of<TabShowProvider>(context).index == 3
+                      child: Provider.of<TabShowProvider>(context).index == 4
                           ? Container(
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? Color(0x33FFFFFF)
-                                  : os_grey,
+                              color:
+                                  Provider.of<ColorProvider>(context).isDark ||
+                                          tabShowProvider.index == 2
+                                      ? Color(0x33FFFFFF)
+                                      : os_grey,
                               child: Center(
                                 child: Text(
                                   (provider.data == null
@@ -157,10 +163,11 @@ class _LeftNaviState extends State<LeftNavi> {
                                       provider.data["avatar"]),
                               placeholder: (BuildContext, String) {
                                 return Container(
-                                  color:
-                                      Provider.of<ColorProvider>(context).isDark
-                                          ? Color(0x33FFFFFF)
-                                          : os_grey,
+                                  color: Provider.of<ColorProvider>(context)
+                                              .isDark ||
+                                          tabShowProvider.index == 2
+                                      ? Color(0x33FFFFFF)
+                                      : os_grey,
                                 );
                               },
                             ),
@@ -195,12 +202,22 @@ class _LeftNaviState extends State<LeftNavi> {
                   ),
                 ),
                 Container(height: 20),
+                Container(
+                  child: NaviBtn(
+                    isNewMsg: _isNewMsg,
+                    index: 3,
+                    tap: () {
+                      _getNewMsg();
+                    },
+                  ),
+                ),
+                Container(height: 20),
               ],
             ),
             Column(
               children: [
                 NaviBtn(
-                  index: 3,
+                  index: 4,
                   tap: () {
                     _getNewMsg();
                   },
@@ -247,30 +264,33 @@ class _NaviBtnState extends State<NaviBtn> {
           widget.tap();
         },
         color: provider.index == widget.index
-            ? (Provider.of<ColorProvider>(context).isDark
+            ? (Provider.of<ColorProvider>(context).isDark || provider.index == 2
                 ? Color(0xFF464646)
                 : Colors.transparent)
-            : (Provider.of<ColorProvider>(context).isDark
+            : (Provider.of<ColorProvider>(context).isDark || provider.index == 2
                 ? Color(0xFF323232)
                 : Colors.transparent),
         radius: 7.5,
         widget: Container(
           padding: EdgeInsets.all(10),
           child: Badge(
-            showBadge: (widget.isNewMsg ?? false) && widget.index == 2,
+            showBadge: (widget.isNewMsg ?? false) && widget.index == 3,
             child: Icon(
               [
                 Icons.home_rounded,
                 Icons.explore,
+                Icons.burst_mode_rounded,
                 Icons.notifications_rounded,
-                Icons.settings
+                Icons.settings,
               ][widget.index],
               size: 30,
               color: provider.index == widget.index
-                  ? (Provider.of<ColorProvider>(context).isDark
+                  ? (Provider.of<ColorProvider>(context).isDark ||
+                          provider.index == 2
                       ? os_white
                       : os_deep_blue)
-                  : (Provider.of<ColorProvider>(context).isDark
+                  : (Provider.of<ColorProvider>(context).isDark ||
+                          provider.index == 2
                       ? Color(0xFF919191)
                       : Color(0x55002266)),
             ),

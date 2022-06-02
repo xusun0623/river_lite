@@ -36,6 +36,7 @@ class _HomeState extends State<Home> {
         ? [
             MyHome(),
             SquareHome(),
+            PicSquare(),
             Msg(
               refresh: () {
                 _getNewMsg();
@@ -224,7 +225,7 @@ class _HomeState extends State<Home> {
               },
               child: IndexedStack(
                 children: homePages(),
-                index: tabShowProvider.index,
+                index: tabShowProvider.index == 4 ? 3 : tabShowProvider.index,
               ),
             ),
             bottomNavigationBar: Container(
