@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => HomeRefrshProvider()),
           ChangeNotifierProvider(create: (context) => MsgProvider()),
           ChangeNotifierProvider(create: (context) => BlackProvider()),
+          ChangeNotifierProvider(create: (context) => ShowPicProvider()),
         ],
         child: Sizer(
           builder: (context, orientation, deviceType) => MaterialApp(

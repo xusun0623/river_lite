@@ -4,6 +4,7 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
@@ -39,7 +40,7 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
   List<Map> photo = [];
   var data;
 
-  int column_index = 0; //Tab的index 0/1 专栏 2~10 分栏
+  int column_index = 1; //Tab的index 0/1 专栏 2~10 分栏
   int column_id = 307; //成电镜头
   int column_id_all = 55; //全部
   //风光 人像 人文 小品 技术 杂片 天文 微距 纪实
@@ -162,6 +163,7 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
       length: 11,
       vsync: this,
     );
+    _tabController.index = 1;
     _swiperController = new SwiperController();
     _getData();
     super.initState();
@@ -484,6 +486,10 @@ class _PhotoCardState extends State<PhotoCard> {
         );
       }
     }
+    if (widget.data["photo"].length > 1) {
+      //缓存第二张图片
+      DefaultCacheManager().downloadFile(widget.data["photo"][1]);
+    }
     setState(() {
       load_done = true;
     });
@@ -625,6 +631,17 @@ class _PhotoCardState extends State<PhotoCard> {
                           setState(() {
                             index = idx;
                           });
+                          //缓存右边两张图片
+                          DefaultCacheManager().downloadFile(
+                              widget.data["photo"][
+                                  idx + 1 < widget.data["photo"].length
+                                      ? idx + 1
+                                      : 0]);
+                          DefaultCacheManager().downloadFile(
+                              widget.data["photo"][
+                                  idx + 2 < widget.data["photo"].length
+                                      ? idx + 2
+                                      : 0]);
                         },
                         pagination: widget.data["photo"].length == 1
                             ? null
@@ -1146,7 +1163,12 @@ class _PicBottomState extends State<PicBottom> {
             Container(height: 5),
             GestureDetector(
               onTap: () {
-                _toDetail();
+                Vibrate.feedback(FeedbackType.impact);
+                Navigator.pushNamed(
+                  context,
+                  "/topic_detail",
+                  arguments: widget.data["topic_id"],
+                );
               },
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 15),

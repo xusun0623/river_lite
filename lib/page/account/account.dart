@@ -8,6 +8,7 @@ import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Account extends StatefulWidget {
   Account({Key key}) : super(key: key);
@@ -102,7 +103,7 @@ class _AccountState extends State<Account> {
   List<Widget> _buildWidget() {
     List<Widget> tmp = [];
     tmp.addAll([
-      Container(height: 25),
+      Container(height: 10),
       ListTile(
         onTap: () {
           showModal(
@@ -148,7 +149,7 @@ class _AccountState extends State<Account> {
           ),
         ),
       ),
-      Container(height: 20),
+      Container(height: 5),
       ListTile(
         subtitle: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

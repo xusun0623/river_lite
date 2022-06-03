@@ -10,12 +10,9 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/page/PicSquare/pic_square.dart';
-import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/me/me.dart';
 import 'package:offer_show/page/msg/msg.dart';
 import 'package:offer_show/page/home/myhome.dart';
-import 'package:offer_show/page/new_reply/homeNewReply.dart';
-import 'package:offer_show/page/square/square.dart';
 import 'package:offer_show/page/square/squareHome.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -44,16 +41,27 @@ class _HomeState extends State<Home> {
             ),
             Me(),
           ]
-        : [
-            MyHome(),
-            PicSquare(),
-            Msg(
-              refresh: () {
-                _getNewMsg();
-              },
-            ),
-            Me(),
-          ];
+        : Provider.of<ShowPicProvider>(context).isShow
+            ? [
+                //展示图区
+                MyHome(),
+                PicSquare(),
+                Msg(
+                  refresh: () {
+                    _getNewMsg();
+                  },
+                ),
+                Me(),
+              ]
+            : [
+                MyHome(),
+                Msg(
+                  refresh: () {
+                    _getNewMsg();
+                  },
+                ),
+                Me(),
+              ];
   }
 
   _getNewMsg() async {
@@ -176,7 +184,8 @@ class _HomeState extends State<Home> {
             width: MediaQuery.of(context).size.width / icons.length,
             height: barHeight,
             color: Provider.of<ColorProvider>(context).isDark ||
-                    tabShowProvider.index == 1
+                    (Provider.of<ShowPicProvider>(context).isShow &&
+                        tabShowProvider.index == 1)
                 ? os_dark_back
                 : Color(0xFFFFFFFF),
             child: Badge(
@@ -190,11 +199,13 @@ class _HomeState extends State<Home> {
                 size: 26,
                 color: tabShowProvider.index == i
                     ? (Provider.of<ColorProvider>(context).isDark ||
-                            tabShowProvider.index == 1
+                            (Provider.of<ShowPicProvider>(context).isShow &&
+                                tabShowProvider.index == 1)
                         ? os_dark_white
                         : Color(0xFF222222))
                     : (Provider.of<ColorProvider>(context).isDark ||
-                            tabShowProvider.index == 1
+                            (Provider.of<ShowPicProvider>(context).isShow &&
+                                tabShowProvider.index == 1)
                         ? os_deep_grey
                         : Color(0xFFa4a4a6)),
               ),
@@ -203,6 +214,13 @@ class _HomeState extends State<Home> {
         ));
       }
       return tmp;
+    }
+
+    int getConvertIndex() {
+      int idx = Provider.of<ShowPicProvider>(context).isShow
+          ? ([0, 1, 2, 3, 0][tabShowProvider.index])
+          : ([0, 1, 2, 0, 0][tabShowProvider.index]);
+      return idx;
     }
 
     return isDesktop()
@@ -225,7 +243,7 @@ class _HomeState extends State<Home> {
               },
               child: IndexedStack(
                 children: homePages(),
-                index: tabShowProvider.index == 4 ? 3 : tabShowProvider.index,
+                index: getConvertIndex(),
               ),
             ),
             bottomNavigationBar: Container(
@@ -236,19 +254,22 @@ class _HomeState extends State<Home> {
                 border: Border(
                   top: BorderSide(
                     color: Provider.of<ColorProvider>(context).isDark ||
-                            tabShowProvider.index == 1
+                            (Provider.of<ShowPicProvider>(context).isShow &&
+                                tabShowProvider.index == 1)
                         ? os_dark_back
                         : Color(0xFFEEEEEE),
                   ),
                 ),
                 color: Provider.of<ColorProvider>(context).isDark ||
-                        tabShowProvider.index == 1
+                        (Provider.of<ShowPicProvider>(context).isShow &&
+                            tabShowProvider.index == 1)
                     ? os_dark_back
                     : os_white,
                 boxShadow: [
                   BoxShadow(
                     color: Provider.of<ColorProvider>(context).isDark ||
-                            tabShowProvider.index == 1
+                            (Provider.of<ShowPicProvider>(context).isShow &&
+                                tabShowProvider.index == 1)
                         ? Color(0x55000000)
                         : Color(0x22000000),
                     blurRadius: 10,
@@ -259,7 +280,10 @@ class _HomeState extends State<Home> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // children: _buildWidget(tabShowProvider.loadIndex),
-                children: _buildWidget([0, 1, 2, 3]),
+                children: _buildWidget(
+                    !Provider.of<ShowPicProvider>(context).isShow
+                        ? [0, 2, 3]
+                        : [0, 1, 2, 3]),
               ),
             ),
           );

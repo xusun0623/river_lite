@@ -43,10 +43,20 @@ class _StartState extends State<Start> {
     Provider.of<ColorProvider>(context, listen: false).refresh();
   }
 
+  _pic() async {
+    //获取首页是否展示图区
+    String tmp = await getStorage(key: "pic", initData: "1");
+    if (tmp != "") {
+      Provider.of<ShowPicProvider>(context, listen: false).isShow = true;
+      Provider.of<ShowPicProvider>(context, listen: false).refresh();
+    }
+  }
+
   @override
   void initState() {
     _navi();
     _dark();
+    _pic();
     super.initState();
   }
 

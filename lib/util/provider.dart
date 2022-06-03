@@ -3,6 +3,20 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 
+class ShowPicProvider extends ChangeNotifier {
+  bool isShow = false;
+
+  switchMode() async {
+    isShow = !isShow;
+    notifyListeners();
+  }
+
+  refresh() {
+    setStorage(key: "pic", value: isShow ? "1" : "");
+    notifyListeners();
+  }
+}
+
 class ColorProvider extends ChangeNotifier {
   bool isDark = false;
 

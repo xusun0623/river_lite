@@ -182,9 +182,11 @@ class _DetailContState extends State<DetailCont> {
                             filterQuality: FilterQuality.high,
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Padding(
-                              padding: const EdgeInsets.all(30.0),
+                              padding: const EdgeInsets.all(45.0),
                               child: CircularProgressIndicator(
-                                  color: os_deep_grey),
+                                strokeWidth: 2,
+                                color: os_middle_grey,
+                              ),
                             ),
                           )
                         : CachedNetworkImage(
@@ -192,7 +194,9 @@ class _DetailContState extends State<DetailCont> {
                             placeholder: (context, url) => Padding(
                               padding: const EdgeInsets.all(20.0),
                               child: CircularProgressIndicator(
-                                  color: os_deep_grey),
+                                strokeWidth: 2,
+                                color: os_middle_grey,
+                              ),
                             ),
                           ),
                   ),
@@ -246,7 +250,8 @@ class _DetailContState extends State<DetailCont> {
                   confirmTxt: "立即前往",
                   cancelTxt: "取消",
                   confirm: () {
-                    launchUrlString(Uri.encodeFull(widget.data['url'].toString()));
+                    launchUrlString(
+                        Uri.encodeFull(widget.data['url'].toString()));
                   },
                 );
             } catch (e) {
@@ -257,7 +262,7 @@ class _DetailContState extends State<DetailCont> {
                 confirmTxt: "立即前往",
                 cancelTxt: "取消",
                 confirm: () {
-                  launch(Uri.encodeFull(widget.data['url']));
+                  launchUrlString(Uri.encodeFull(widget.data['url']));
                 },
               );
             }
