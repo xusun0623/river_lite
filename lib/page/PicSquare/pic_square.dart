@@ -216,7 +216,7 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
                 isScrollable: true,
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
                 tabs: [
-                  Tab(text: "成电"),
+                  Tab(text: "镜头下的成电"),
                   Tab(text: "全部"),
                   Tab(text: "风光"),
                   Tab(text: "人像"),
@@ -268,6 +268,9 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
                   },
                   itemBuilder: (context, index) {
                     return PhotoCard(
+                      refresh: () {
+                        _getData();
+                      },
                       data: photo[index],
                       index: index + 1,
                     );
@@ -282,10 +285,12 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
 class PhotoCard extends StatefulWidget {
   Map data;
   int index;
+  Function refresh;
   PhotoCard({
     Key key,
     this.data,
     this.index,
+    this.refresh,
   }) : super(key: key);
 
   @override
@@ -625,12 +630,14 @@ class _PhotoCardState extends State<PhotoCard> {
                         ),
                       )
                     : Swiper(
+                        viewportFraction: 0.9,
+                        scale: 0.9,
+                        // indicatorLayout: PageIndicatorLayout.WARM,
                         itemCount: widget.data["photo"].length,
-                        loop: false,
+                        loop: true,
                         onTap: (idx) {
                           _toBigThrough();
                         },
-                        duration: 100,
                         onIndexChanged: (idx) async {
                           setState(() {
                             index = idx;
@@ -658,16 +665,16 @@ class _PhotoCardState extends State<PhotoCard> {
                         },
                         pagination: widget.data["photo"].length == 1
                             ? null
-                            : new SwiperPagination(
+                            : SwiperPagination(
+                                // alignment: Alignment.center,
                                 builder: DotSwiperPaginationBuilder(
                                   color: Colors.white54,
                                   activeColor: Colors.white,
                                   size: 7.5,
-                                  activeSize: 10,
-                                  space: 10,
+                                  activeSize: 7.5,
+                                  space: 2.5,
                                 ),
                               ),
-                        indicatorLayout: PageIndicatorLayout.WARM,
                         itemBuilder: (context, index) {
                           return Center(
                             child: Container(
@@ -711,6 +718,11 @@ class _PhotoCardState extends State<PhotoCard> {
                 PicBottom(
                   index: widget.index,
                   isLiked: isLiked,
+                  refresh: () {
+                    if (widget.refresh != null) {
+                      widget.refresh();
+                    }
+                  },
                   tapDetail: () {
                     _look_comment();
                   },
@@ -724,7 +736,7 @@ class _PhotoCardState extends State<PhotoCard> {
                 ),
                 Positioned(
                   right: 10,
-                  bottom: 10,
+                  bottom: 180,
                   child: FloatingActionButton(
                     backgroundColor: Color(0x33FFFFFF),
                     onPressed: () {
@@ -803,90 +815,6 @@ class _PopCommentState extends State<PopComment> {
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
-    tmp.add(Container(height: 15));
-    tmp.add(
-      Padding(
-        padding: EdgeInsets.only(left: 20, right: 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              total_num == 0 ? "评论" : "评论(${total_num})",
-              style: TextStyle(
-                color: Color.fromRGBO(255, 255, 255, 1),
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Vibrate.feedback(FeedbackType.impact);
-                    Navigator.pushNamed(
-                      context,
-                      "/topic_detail",
-                      arguments: widget.topic_id,
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                    color: Color.fromRGBO(255, 255, 255, 0.001),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 255, 255, 0.15),
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Text(
-                        "前往详情页",
-                        style: TextStyle(
-                          color: Color.fromRGBO(255, 255, 255, 0.7),
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      left: 5,
-                      right: 20,
-                      top: 10,
-                      bottom: 10,
-                    ),
-                    color: Color.fromRGBO(255, 255, 255, 0.001),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 255, 255, 0.15),
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Icon(
-                        Icons.close,
-                        size: 22,
-                        color: Color.fromRGBO(255, 255, 255, 0.7),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
     // tmp.add(Container(height: 5));
     if (comment.length != 0) {
       comment.forEach((element) {
@@ -939,10 +867,103 @@ class _PopCommentState extends State<PopComment> {
     return Container(
       height: MediaQuery.of(context).size.height - 250,
       width: MediaQuery.of(context).size.width,
-      child: ListView(
-        physics: BouncingScrollPhysics(),
-        controller: _scrollController,
-        children: _buildCont(),
+      child: Column(
+        children: [
+          Container(height: 15),
+          Padding(
+            padding: EdgeInsets.only(left: 20, right: 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  total_num == 0 ? "评论" : "评论(${total_num})",
+                  style: TextStyle(
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        Vibrate.feedback(FeedbackType.impact);
+                        Navigator.pushNamed(
+                          context,
+                          "/topic_detail",
+                          arguments: widget.topic_id,
+                        );
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                        color: Color.fromRGBO(255, 255, 255, 0.001),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(255, 255, 255, 0.15),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100)),
+                          ),
+                          child: Text(
+                            "前往详情页",
+                            style: TextStyle(
+                              color: Color.fromRGBO(255, 255, 255, 0.7),
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(
+                          left: 5,
+                          right: 20,
+                          top: 10,
+                          bottom: 10,
+                        ),
+                        color: Color.fromRGBO(255, 255, 255, 0.001),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 5,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(255, 255, 255, 0.15),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100)),
+                          ),
+                          child: Icon(
+                            Icons.close,
+                            size: 22,
+                            color: Color.fromRGBO(255, 255, 255, 0.7),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 317,
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              controller: _scrollController,
+              children: _buildCont(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1059,6 +1080,7 @@ class PicBottom extends StatefulWidget {
   Function tapLike;
   Function tapMore;
   Function tapDetail;
+  Function refresh;
   int index;
   PicBottom({
     Key key,
@@ -1067,6 +1089,7 @@ class PicBottom extends StatefulWidget {
     this.tapLike,
     this.tapMore,
     this.tapDetail,
+    this.refresh,
     this.index,
   }) : super(key: key);
 
@@ -1248,27 +1271,55 @@ class _PicBottomState extends State<PicBottom> {
               ),
             ),
             Container(height: 10),
-            GestureDetector(
-              onTap: () {
-                _toDetail();
-              },
-              child: Container(
-                width:
-                    MediaQuery.of(context).size.width - (isDesktop() ? 80 : 0),
-                color: Color.fromRGBO(255, 255, 255, 0.001),
-                child: Row(
-                  children: [
-                    Container(width: 15),
-                    Text(
-                      "第${widget.index.toString()}镜 / 摄影者 ${widget.data["name"]}",
-                      style: TextStyle(
-                        letterSpacing: 1,
-                        color: Color(0x88FFFFFF),
-                        fontSize: 12,
+            Container(
+              width: MediaQuery.of(context).size.width -
+                  (isDesktop() ? 80 : 0) -
+                  15,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    color: Color.fromRGBO(255, 255, 255, 0.001),
+                    child: Row(
+                      children: [
+                        Container(width: 15),
+                        Text(
+                          "第${widget.index.toString()}镜 / 摄影者 ${widget.data["name"]}",
+                          style: TextStyle(
+                            letterSpacing: 1,
+                            color: Color(0x88FFFFFF),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Vibrate.feedback(FeedbackType.impact);
+                      if (widget.refresh != null) {
+                        widget.refresh();
+                      }
+                    },
+                    child: Container(
+                      color: Color.fromRGBO(255, 255, 255, 0.001),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(width: 15),
+                          Text(
+                            "返回顶部",
+                            style: TextStyle(
+                              letterSpacing: 1,
+                              color: Color(0x88FFFFFF),
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             Container(height: 27.5),

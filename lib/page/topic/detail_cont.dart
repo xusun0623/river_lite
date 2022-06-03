@@ -137,31 +137,31 @@ class _DetailContState extends State<DetailCont> {
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(
                   widget.imgLists.length > 3 || isDesktop() ? 2.5 : 5)),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: os_grey,
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => PhotoPreview(
-                          desc: widget.desc,
-                          title: widget.title,
-                          galleryItems: widget.imgLists,
-                          defaultImage: widget.imgLists.indexOf(
-                            widget.data["infor"],
+              child: Hero(
+                tag: widget.data["infor"],
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: os_grey,
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PhotoPreview(
+                            desc: widget.desc,
+                            title: widget.title,
+                            galleryItems: widget.imgLists,
+                            defaultImage: widget.imgLists.indexOf(
+                              widget.data["infor"],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  child: widget.imgLists.length > 3 || isDesktop()
-                      ? Hero(
-                          tag: widget.data["infor"],
-                          child: CachedNetworkImage(
+                      );
+                    },
+                    child: widget.imgLists.length > 3 || isDesktop()
+                        ? CachedNetworkImage(
                             imageUrl: widget.data["infor"],
                             width: isDesktop()
                                 ? 200
@@ -177,8 +177,9 @@ class _DetailContState extends State<DetailCont> {
                                     3,
                             maxHeightDiskCache: 800,
                             maxWidthDiskCache: 800,
-                            // memCacheWidth: 800,
-                            // memCacheHeight: 800,
+                            useOldImageOnUrlChange: true,
+                            memCacheWidth: 800,
+                            memCacheHeight: 800,
                             filterQuality: FilterQuality.low,
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Padding(
@@ -188,11 +189,8 @@ class _DetailContState extends State<DetailCont> {
                                 color: os_middle_grey,
                               ),
                             ),
-                          ),
-                        )
-                      : Hero(
-                          tag: widget.data["infor"],
-                          child: CachedNetworkImage(
+                          )
+                        : CachedNetworkImage(
                             imageUrl: widget.data["infor"],
                             placeholder: (context, url) => Padding(
                               padding: const EdgeInsets.all(20.0),
@@ -202,7 +200,7 @@ class _DetailContState extends State<DetailCont> {
                               ),
                             ),
                           ),
-                        ),
+                  ),
                 ),
               ),
             ),
