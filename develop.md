@@ -21,6 +21,8 @@ https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 #### 1.打包
 > flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform android-arm,android-arm64,android-x64 --split-per-abi
 
+flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform android-arm,android-arm64,android-x64 --split-per-abi && adb install build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+
 #### 2.命令行安装
 > adb -s 192.168.28.39:42163 install app-armeabi-v7a-release.apk
 > adb install build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
