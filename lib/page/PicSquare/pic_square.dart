@@ -231,15 +231,14 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
               ),
             ),
             backgroundColor: os_dark_back,
-            floatingActionButton: swiper_index == 0
-                ? null
-                : FloatingActionButton(
-                    backgroundColor: Color(0x22FFFFFF),
-                    child: Icon(Icons.refresh),
-                    onPressed: () {
-                      _getData();
-                    },
-                  ),
+            // floatingActionButton: FloatingActionButton(
+            //   backgroundColor: Color(0x22FFFFFF),
+            //   child: Icon(Icons.chat_bubble_outline),
+            //   onPressed: () {
+
+            //     // _getData();
+            //   },
+            // ),
             body: ConstrainedBox(
               constraints: BoxConstraints(
                 maxWidth: MediaQuery.of(context).size.width,
@@ -708,6 +707,17 @@ class _PhotoCardState extends State<PhotoCard> {
                     _tapMore();
                   },
                   data: widget.data,
+                ),
+                Positioned(
+                  right: 10,
+                  bottom: 10,
+                  child: FloatingActionButton(
+                    backgroundColor: Color(0x33FFFFFF),
+                    onPressed: () {
+                      _look_comment();
+                    },
+                    child: Icon(Icons.chat_bubble_outline),
+                  ),
                 ),
               ],
             ),
@@ -1199,37 +1209,7 @@ class _PicBottomState extends State<PicBottom> {
                 color: Color.fromRGBO(255, 255, 255, 0.001),
                 child: Row(
                   children: [
-                    Container(
-                      width: 80,
-                      margin: EdgeInsets.symmetric(horizontal: 15),
-                      padding: EdgeInsets.only(
-                        left: 8.5,
-                        right: 3.5,
-                        top: 2.5,
-                        bottom: 3.5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 255, 255, 0.1),
-                        borderRadius: BorderRadius.all(Radius.circular(2.5)),
-                      ),
-                      // width: MediaQuery.of(context).size.width - 30,
-                      child: Row(
-                        children: [
-                          Text(
-                            "查看评论",
-                            style: TextStyle(
-                              color: Color(0xDDFFFFFF),
-                              fontSize: 13,
-                            ),
-                          ),
-                          Icon(
-                            Icons.chevron_right_rounded,
-                            color: Color(0xDDFFFFFF),
-                            size: 16,
-                          ),
-                        ],
-                      ),
-                    ),
+                    Container(width: 15),
                     Text(
                       "第${widget.index.toString()}镜 / 摄影者 ${widget.data["name"]}",
                       style: TextStyle(

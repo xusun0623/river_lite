@@ -779,6 +779,7 @@ class MsgContBodyWidget extends StatefulWidget {
   String cont;
   String avatar;
   int time;
+  int mid;
   bool isImage;
   MsgContBodyWidget({
     Key key,
@@ -786,6 +787,7 @@ class MsgContBodyWidget extends StatefulWidget {
     this.cont,
     this.avatar,
     this.time,
+    this.mid,
     this.isImage,
   }) : super(key: key);
 
@@ -858,7 +860,16 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                               type: XSToast.success,
                               txt: widget.isImage ? "复制链接成功" : "复制文本成功",
                             );
-                          })
+                          }),
+                      // ActionItem(
+                      //     title: "删除此条消息",
+                      //     onPressed: () {
+                      //       Navigator.pop(context);
+                      //       Api().message_pmadmin({
+                      //         "json":
+                      //             '{"action": "delpmid","pmid": ${widget.mid}}'
+                      //       });
+                      //     }),
                     ],
                     bottomActionItem: BottomActionItem(title: "取消"));
               }

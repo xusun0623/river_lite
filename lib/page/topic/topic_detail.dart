@@ -129,7 +129,7 @@ class _TopicDetailState extends State<TopicDetail> {
   void _getComment() async {
     if (loading || load_done) return; //控制因为网络过慢反复请求问题
     loading = true;
-    const nums = 10;
+    const nums = 20;
     var tmp = await Api().forum_postlist({
       "topicId": widget.topicID,
       "authorId": _select == 0 ? 0 : data["topic"]["user_id"],
@@ -430,6 +430,7 @@ class _TopicDetailState extends State<TopicDetail> {
           ? NoMore()
           : BottomLoading(
               color: Colors.transparent,
+              txt: "加载剩余${total_num - comment.length}条评论…",
             ),
       load_done
           ? Container()
@@ -2770,7 +2771,7 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
               ),
               Container(height: 10),
               Text(
-                "注意：会扣除你等量的水",
+                "注意：会扣除你等量的水（扣水额外收税10%）",
                 style: TextStyle(
                   fontSize: 14,
                   color: os_deep_grey,

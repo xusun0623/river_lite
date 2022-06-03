@@ -8,7 +8,6 @@ import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class Account extends StatefulWidget {
   Account({Key key}) : super(key: key);
@@ -104,6 +103,30 @@ class _AccountState extends State<Account> {
     List<Widget> tmp = [];
     tmp.addAll([
       Container(height: 10),
+      ListTile(
+        title: Text(
+          "登录修复",
+          style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black),
+        ),
+        subtitle: Text(
+          "当获取水滴任务、自动答题、更换头像、上传附件、获取专辑等需要手动抓取网页的操作失效时，你可以点此尝试手动获取网页Cookie",
+          style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_deep_grey),
+        ),
+        onTap: () async {
+          showToast(context: context, type: XSToast.loading, txt: "加载中");
+          await getWebCookie();
+          hideToast();
+          await Future.delayed(Duration(milliseconds: 50));
+          showToast(context: context, type: XSToast.success, txt: "获取成功！");
+        },
+      ),
+      Container(height: 15),
       ListTile(
         onTap: () {
           showModal(

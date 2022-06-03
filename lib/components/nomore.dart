@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class NoMore extends StatefulWidget {
   const NoMore({Key key}) : super(key: key);

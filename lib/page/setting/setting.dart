@@ -85,7 +85,9 @@ class _SettingState extends State<Setting> {
         ),
       ),
       Container(height: 15),
-      SelectCard(),
+      Opacity(
+          opacity: Provider.of<ColorProvider>(context).isDark ? 0.6 : 1,
+          child: SelectCard()),
       Container(height: 15),
     ]);
     tmp.add(Container(height: 10));
