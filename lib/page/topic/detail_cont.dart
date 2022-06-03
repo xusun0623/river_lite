@@ -175,12 +175,8 @@ class _DetailContState extends State<DetailCont> {
                                         (widget.isComment ?? false ? 50 : 0) -
                                         42) /
                                     3,
-                            maxHeightDiskCache: 800,
-                            maxWidthDiskCache: 800,
-                            memCacheWidth: 800,
-                            memCacheHeight: 800,
-                            filterQuality: FilterQuality.high,
                             fit: BoxFit.cover,
+                            filterQuality: FilterQuality.low,
                             placeholder: (context, url) => Padding(
                               padding: const EdgeInsets.all(45.0),
                               child: CircularProgressIndicator(
