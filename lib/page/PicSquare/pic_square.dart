@@ -147,7 +147,7 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
   bool hasToken = false;
   _getValid() async {
     String tmp_txt = await getStorage(key: "myinfo", initData: "");
-    print("${tmp_txt}");
+    // print("${tmp_txt}");
     if (tmp_txt == "") {
       hasToken = false;
     } else {
@@ -462,7 +462,7 @@ class _PhotoCardState extends State<PhotoCard> {
             photo_tmp.add(cont_tmp["originalInfo"]);
           }
           if (cont_tmp["type"] == 0) {
-            print("${cont_tmp}");
+            // print("${cont_tmp}");
             if (cont_tmp["infor"].toString().contains("编辑 \r\n\r\n")) {
               photo_desc_tmp += " " +
                   _removeGif(
@@ -487,7 +487,12 @@ class _PhotoCardState extends State<PhotoCard> {
     }
     if (widget.data["photo"].length > 1) {
       //缓存第二张图片
-      DefaultCacheManager().downloadFile(widget.data["photo"][1]);
+      var data =
+          await DefaultCacheManager().getSingleFile(widget.data["photo"][1]);
+      if (data.path == "") {
+        print("${data}");
+        DefaultCacheManager().downloadFile(widget.data["photo"][1]);
+      }
     }
     setState(() {
       load_done = true;
@@ -512,7 +517,7 @@ class _PhotoCardState extends State<PhotoCard> {
           photo_tmp.add(cont_tmp["originalInfo"]);
         }
         if (cont_tmp["type"] == 0) {
-          print("${cont_tmp}");
+          // print("${cont_tmp}");
           if (cont_tmp["infor"].toString().contains("编辑 \r\n\r\n")) {
             photo_desc_tmp += " " +
                 _removeGif(
@@ -626,21 +631,30 @@ class _PhotoCardState extends State<PhotoCard> {
                           _toBigThrough();
                         },
                         duration: 100,
-                        onIndexChanged: (idx) {
+                        onIndexChanged: (idx) async {
                           setState(() {
                             index = idx;
                           });
                           //缓存右边两张图片
-                          DefaultCacheManager().downloadFile(
-                              widget.data["photo"][
-                                  idx + 1 < widget.data["photo"].length
-                                      ? idx + 1
-                                      : 0]);
-                          DefaultCacheManager().downloadFile(
-                              widget.data["photo"][
-                                  idx + 2 < widget.data["photo"].length
-                                      ? idx + 2
-                                      : 0]);
+                          var idx1 = widget.data["photo"][
+                              idx + 1 < widget.data["photo"].length
+                                  ? idx + 1
+                                  : 0];
+                          var idx2 = widget.data["photo"][
+                              idx + 2 < widget.data["photo"].length
+                                  ? idx + 2
+                                  : 0];
+                          var data1 =
+                              await DefaultCacheManager().getSingleFile(idx1);
+                          var data2 =
+                              await DefaultCacheManager().getSingleFile(idx2);
+                          print("${data1}-${data2}");
+                          if (data1.path == "") {
+                            DefaultCacheManager().downloadFile(idx1);
+                          }
+                          if (data2.path == "") {
+                            DefaultCacheManager().downloadFile(idx2);
+                          }
                         },
                         pagination: widget.data["photo"].length == 1
                             ? null
@@ -804,36 +818,71 @@ class _PopCommentState extends State<PopComment> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Vibrate.feedback(FeedbackType.impact);
-                Navigator.pushNamed(
-                  context,
-                  "/topic_detail",
-                  arguments: widget.topic_id,
-                );
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                color: Color.fromRGBO(255, 255, 255, 0.001),
-                child: Row(
-                  children: [
-                    Text(
-                      "前往详情页",
-                      style: TextStyle(
-                        color: Color.fromRGBO(255, 255, 255, 0.7),
-                        fontSize: 15,
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Vibrate.feedback(FeedbackType.impact);
+                    Navigator.pushNamed(
+                      context,
+                      "/topic_detail",
+                      arguments: widget.topic_id,
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                    color: Color.fromRGBO(255, 255, 255, 0.001),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 255, 255, 0.15),
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Text(
+                        "前往详情页",
+                        style: TextStyle(
+                          color: Color.fromRGBO(255, 255, 255, 0.7),
+                          fontSize: 15,
+                        ),
                       ),
                     ),
-                    Icon(
-                      Icons.keyboard_arrow_right,
-                      color: Color.fromRGBO(255, 255, 255, 0.7),
-                      size: 18,
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      left: 5,
+                      right: 20,
+                      top: 10,
+                      bottom: 10,
+                    ),
+                    color: Color.fromRGBO(255, 255, 255, 0.001),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 255, 255, 0.15),
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Icon(
+                        Icons.close,
+                        size: 22,
+                        color: Color.fromRGBO(255, 255, 255, 0.7),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
