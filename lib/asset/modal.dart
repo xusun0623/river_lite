@@ -232,7 +232,7 @@ void showToast({
   if (isShown) return;
   isShown = true;
   if (type == XSToast.none) {
-    popDialog(
+    popDialogNoWill(
       delay: duration ?? 1500,
       context: context,
       widget: Container(
@@ -280,7 +280,7 @@ void showToast({
     );
   }
   if (type == XSToast.success) {
-    popDialog(
+    popDialogNoWill(
       delay: duration ?? 700,
       context: context,
       widget: Container(
@@ -306,6 +306,37 @@ void showToast({
       ),
     );
   }
+}
+
+void popDialogNoWill({
+  @required BuildContext context,
+  @required Widget widget,
+  int delay = 600,
+  Color back = Colors.black38,
+}) {
+  context_tmp = context;
+  showDialog(
+    context: context,
+    barrierColor: back,
+    barrierDismissible: false,
+    builder: (ctx) {
+      return Material(
+        color: Colors.transparent,
+        child: Container(
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? Colors.transparent
+              : Colors.transparent,
+          margin: EdgeInsets.only(bottom: 150),
+          child: Container(child: Center(child: widget)),
+        ),
+      );
+    },
+  );
+  Future.delayed(Duration(milliseconds: delay)).then((value) {
+    if (!isShown) return; //已经取消弹窗了
+    isShown = false;
+    Navigator.pop(context);
+  });
 }
 
 void popDialog({
