@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
@@ -630,7 +631,7 @@ class _PhotoCardState extends State<PhotoCard> {
                         ),
                       )
                     : Swiper(
-                        // viewportFraction: 0.9,
+                        viewportFraction: Platform.isIOS ? 1 : 0.9,
                         scale: 0.9,
                         // indicatorLayout: PageIndicatorLayout.WARM,
                         itemCount: widget.data["photo"].length,
