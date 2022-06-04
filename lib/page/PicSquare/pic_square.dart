@@ -630,11 +630,11 @@ class _PhotoCardState extends State<PhotoCard> {
                         ),
                       )
                     : Swiper(
-                        viewportFraction: 0.9,
-                        scale: 0.9,
+                        // viewportFraction: 0.9,
+                        // scale: 0.9,
                         // indicatorLayout: PageIndicatorLayout.WARM,
                         itemCount: widget.data["photo"].length,
-                        loop: true,
+                        // loop: true,
                         onTap: (idx) {
                           _toBigThrough();
                         },
