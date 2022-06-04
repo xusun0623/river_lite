@@ -28,6 +28,7 @@ import 'package:offer_show/page/start/start.dart';
 import 'package:offer_show/page/test/test.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/page/user_list/user_list.dart';
+import 'package:offer_show/page/waterTask/task_list.dart';
 import 'package:offer_show/page/waterTask/water_task.dart';
 
 final routers = {
@@ -45,6 +46,7 @@ final routers = {
   "/explore_detail": (data) => ExploreDetail(index: data),
   "/login_helper": () => LoginHelper(),
   "/broke": () => Broke(),
+  "/task_list": () => TaskList(),
   "/me": () => Me(),
   "/myhome": () => MyHome(),
   "/square": () => Square(),

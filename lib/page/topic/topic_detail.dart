@@ -1468,7 +1468,7 @@ class _BottomLoadingState extends State<BottomLoading> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: widget.color ?? Color(0xFFF6F6F6),
+      color: widget.color ?? Colors.transparent,
       padding: const EdgeInsets.all(20),
       child: Center(
         child: Row(

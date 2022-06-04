@@ -12,6 +12,7 @@ class BackToTop extends StatefulWidget {
   bool animation;
   bool attachBtn;
   Function tap;
+  Widget widget;
   Color color;
   BackToTop({
     Key key,
@@ -22,6 +23,7 @@ class BackToTop extends StatefulWidget {
     this.bottom,
     this.animation,
     this.attachBtn,
+    this.widget,
     this.tap,
   }) : super(key: key);
 
@@ -133,11 +135,12 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                   width: 55,
                   height: 55,
                   // padding: EdgeInsets.all(20),
-                  child: Icon(
-                    Icons.arrow_drop_up,
-                    size: 25,
-                    color: os_white,
-                  ),
+                  child: widget.widget ??
+                      Icon(
+                        Icons.arrow_drop_up,
+                        size: 25,
+                        color: os_white,
+                      ),
                 ),
                 radius: 100,
               ),

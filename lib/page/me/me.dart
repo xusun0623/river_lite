@@ -163,12 +163,12 @@ class _MeListGroupState extends State<MeListGroup> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MeList(txt: "应用设置", index: 0),
-        MeList(txt: "水滴任务", index: 6),
-        MeList(txt: "账号管理", index: 1),
+        MeList(txt: "应用设置", index: 0, icon: Icons.settings_outlined),
+        MeList(txt: "水滴任务&积分记录", index: 6, icon: Icons.opacity),
+        MeList(txt: "账号管理", index: 1, icon: Icons.person_outline),
         // MeList(txt: "意见&Bug反馈", index: 2),
         // MeList(txt: "拉黑&黑名单", index: 4),
-        MeList(txt: "关于", index: 3),
+        MeList(txt: "关于", index: 3, icon: Icons.info_outline),
       ],
     );
   }
@@ -177,10 +177,12 @@ class _MeListGroupState extends State<MeListGroup> {
 class MeList extends StatefulWidget {
   String txt;
   int index;
+  IconData icon;
   MeList({
     Key key,
     this.txt,
     this.index,
+    this.icon,
   }) : super(key: key);
 
   @override
@@ -224,14 +226,26 @@ class _MeListState extends State<MeList> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              widget.txt ?? "水滴相关",
-              style: TextStyle(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_dark_white
-                    : Color(0xFF5C5C5C),
-                fontSize: 16,
-              ),
+            Row(
+              children: [
+                Icon(
+                  widget.icon,
+                  size: 22,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : Color(0xFF838383),
+                ),
+                Container(width: 10),
+                Text(
+                  widget.txt ?? "水滴相关",
+                  style: TextStyle(
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : Color(0xFF5C5C5C),
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
             Icon(
               Icons.chevron_right_rounded,

@@ -6,6 +6,7 @@ import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/home/myhome.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
+import 'package:offer_show/page/waterTask/task_list.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -21,11 +22,13 @@ class WaterTask extends StatefulWidget {
 
 class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
   TabController tabController;
+  List<Map> scoreList = [];
   List<Map> newTask = [];
   List<Map> doingTask = [];
   List<Map> doneTask = [];
   List<Map> failTask = [];
 
+  bool load_done0 = false;
   bool load_done1 = false;
   bool load_done2 = false;
   bool load_done3 = false;
@@ -316,7 +319,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(length: 5, vsync: this);
     tabController.addListener(() {
       if (tabController.index == 1) {
         _getDoing();
@@ -360,6 +363,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
             color: os_black,
           ),
           tabs: [
+            Tab(text: "积分记录"),
             Tab(text: "新任务"),
             Tab(text: "进行中"),
             Tab(text: "已完成"),
@@ -377,6 +381,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
         physics: CustomTabBarViewScrollPhysics(),
         controller: tabController,
         children: [
+          TaskList(),
           RefreshIndicator(
             onRefresh: () async {
               await _getNew();
@@ -457,7 +462,7 @@ class _Card4State extends State<Card4> {
               Text(
                 widget.data["name"],
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_white
@@ -523,7 +528,7 @@ class _Card3State extends State<Card3> {
               Text(
                 widget.data["name"],
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_white
@@ -604,7 +609,7 @@ class _Card2State extends State<Card2> {
               Text(
                 widget.data["name"],
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_white
@@ -714,7 +719,7 @@ class _Card1State extends State<Card1> {
               Text(
                 widget.data["name"],
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_white
