@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:html/parser.dart';
@@ -6,6 +8,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/mid_request.dart';
+import 'package:offer_show/util/storage.dart';
 
 class TaskList extends StatefulWidget {
   TaskList({Key key}) : super(key: key);
@@ -15,7 +18,7 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-  List<Map> data = [];
+  var data = [];
   bool loading = false;
   bool load_done = false;
   bool showBackToTop = false;
@@ -32,17 +35,23 @@ class _TaskListState extends State<TaskList> {
     return tmp;
   }
 
-  _getData() async {
+  _getData(bool isInit) async {
     if (loading) return;
     loading = true;
-    if (data.length % 20 != 0) return;
+    if (isInit) {
+      String score_txt = await getStorage(key: "score", initData: "");
+      if (score_txt != "") {
+        setState(() {
+          data = jsonDecode(score_txt);
+        });
+      }
+    }
+    if (data.length % 20 != 0 && !isInit) return;
     List<Map> tmp_ret = [];
-    print(
-        "请求${"https://bbs.uestc.edu.cn/home.php?mod=spacecp&op=log&ac=credit&page=" + (data.length / 20 + 1).floor().toString()}");
     var document = parse((await XHttp().pureHttpWithCookie(
       url:
           "https://bbs.uestc.edu.cn/home.php?mod=spacecp&op=log&ac=credit&page=" +
-              (data.length / 20 + 1).floor().toString(),
+              (isInit ? 1 : (data.length / 20 + 1).floor()).toString(),
     ))
         .data
         .toString());
@@ -67,7 +76,12 @@ class _TaskListState extends State<TaskList> {
         });
       }
     } catch (e) {}
-    data.addAll(tmp_ret);
+    if (!isInit) {
+      data.addAll(tmp_ret);
+    } else {
+      setStorage(key: "score", value: jsonEncode(tmp_ret));
+      data = tmp_ret;
+    }
     if (tmp_ret.length < 20) load_done = true;
     loading = false;
     setState(() {});
@@ -79,7 +93,7 @@ class _TaskListState extends State<TaskList> {
       _scrollController.addListener(() {
         if (_scrollController.position.pixels ==
             _scrollController.position.maxScrollExtent) {
-          _getData();
+          _getData(false);
         }
         if (_scrollController.position.pixels > 200 && !showBackToTop) {
           setState(() {
@@ -93,7 +107,7 @@ class _TaskListState extends State<TaskList> {
         }
       });
     });
-    _getData();
+    _getData(true);
     super.initState();
   }
 
@@ -102,7 +116,7 @@ class _TaskListState extends State<TaskList> {
     return RefreshIndicator(
       onRefresh: () async {
         data = [];
-        return await _getData();
+        return await _getData(true);
       },
       child: BackToTop(
         show: showBackToTop,
