@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/page/collection_tab/collection_tab.dart';
 import 'package:offer_show/page/essence/essence.dart';
 import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/hot/homeHotNoScaffold.dart';
@@ -24,7 +23,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
   @override
   void initState() {
     tabController = TabController(
-      length: 4,
+      length: 5,
       vsync: this,
     );
     super.initState();
@@ -58,6 +57,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
         Tab(text: "新回复"),
         Tab(text: "热门"),
         Tab(text: "精华"),
+        Tab(text: "专辑"),
       ],
       onTap: (index) {
         setState(() {
@@ -122,6 +122,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
             HomeNewReply(),
             HotNoScaffold(),
             Essence(),
+            CollectionTab(),
           ],
         ),
       ),

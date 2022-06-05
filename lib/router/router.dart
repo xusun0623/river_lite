@@ -3,6 +3,7 @@ import 'package:offer_show/page/about/about.dart';
 import 'package:offer_show/page/account/account.dart';
 import 'package:offer_show/page/blacklist/black_list.dart';
 import 'package:offer_show/page/broke.dart';
+import 'package:offer_show/page/collection_detail/collection_detail.dart';
 import 'package:offer_show/page/column/column.dart';
 import 'package:offer_show/page/crop/crop.dart';
 import 'package:offer_show/page/explore/explore.dart';
@@ -33,6 +34,7 @@ import 'package:offer_show/page/waterTask/water_task.dart';
 
 final routers = {
   "/": () => Start(),
+  "/list": (data) => CollectionDetail(data: data),
   "/body": () => Home(),
   "/question": () => Question(),
   "/login": (data) => Login(index: data ?? 0),

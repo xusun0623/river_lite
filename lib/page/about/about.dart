@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
-import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
-import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class About extends StatefulWidget {
@@ -58,7 +55,7 @@ class _AboutState extends State<About> {
             head: Icon(
               Icons.chat_bubble_outline,
               color: os_wonderful_color[0],
-              size: 66,
+              size: 40,
             ),
             title: "清水河畔？",
             cont:
@@ -68,7 +65,7 @@ class _AboutState extends State<About> {
             head: Icon(
               Icons.cloud_queue,
               color: os_wonderful_color[5],
-              size: 66,
+              size: 40,
             ),
             title: "开源地址",
             cont: "https://gitee.com/xusun000/offershow.git",
@@ -78,7 +75,7 @@ class _AboutState extends State<About> {
             head: Icon(
               Icons.burst_mode_rounded,
               color: os_wonderful_color[4],
-              size: 66,
+              size: 40,
             ),
             title: "设计文件",
             cont:
@@ -89,7 +86,7 @@ class _AboutState extends State<About> {
             head: Icon(
               Icons.code,
               color: os_wonderful_color[1],
-              size: 66,
+              size: 40,
             ),
             title: "开发相关",
             cont: '''河畔Lite由开源跨端框架Flutter开发完成，所有代码和设计文件均开源，任何人可以查看、修改、商用、重新分发。
@@ -129,7 +126,7 @@ html: ^0.15.0''',
             head: Icon(
               Icons.verified_user_outlined,
               color: os_wonderful_color[2],
-              size: 66,
+              size: 40,
             ),
             title: "鸣谢",
             cont: '''测试者：Star🌟、北冥小鱼、weijifen、TYTSSN、hola、fix
@@ -142,7 +139,7 @@ html: ^0.15.0''',
             head: Icon(
               Icons.perm_identity_outlined,
               color: os_wonderful_color[3],
-              size: 66,
+              size: 40,
             ),
             title: "开发&设计者",
             cont: '''xusun000''',
@@ -213,7 +210,7 @@ class _AboutCardState extends State<AboutCard> {
                     ? os_dark_white
                     : os_black,
                 fontWeight: FontWeight.bold,
-                fontSize: 24,
+                fontSize: 20,
               ),
             ),
             Container(height: 5),
@@ -229,7 +226,7 @@ class _AboutCardState extends State<AboutCard> {
                           ? os_dark_dark_white
                           : os_black,
                       fontWeight: FontWeight.normal,
-                      fontSize: 16,
+                      fontSize: 15,
                       height: 1.6,
                     ),
                   ),
