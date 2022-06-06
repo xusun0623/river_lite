@@ -1,6 +1,8 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/collection.dart';
@@ -9,6 +11,8 @@ import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/mid_request.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class CollectionDetail extends StatefulWidget {
   Map data;
@@ -25,11 +29,12 @@ class _CollectionDetailState extends State<CollectionDetail> {
   List data = [];
   ScrollController _scrollController = new ScrollController();
   bool showBackToTop = false;
+  bool showTopTitle = false;
   bool loading = false;
   bool load_done = false;
   bool load_card = false;
   bool is_subscribed = false;
-  String action_url = "";
+  String formhash = "";
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
@@ -70,9 +75,13 @@ class _CollectionDetailState extends State<CollectionDetail> {
           .first
           .innerHtml
           .contains("取消订阅");
-      setState(() {
-        load_card = true;
-      });
+      formhash = document
+          .getElementsByTagName("form")
+          .first
+          .getElementsByTagName("input")[1]
+          .attributes["value"];
+      load_card = true;
+      setState(() {});
     } catch (e) {
       print("${e}");
     }
@@ -199,8 +208,16 @@ class _CollectionDetailState extends State<CollectionDetail> {
     loading = false;
   }
 
+  _initOp() async {
+    await Future.delayed(Duration(milliseconds: 300));
+    _setShadow();
+    _getData(isInit: true);
+    _getCardData();
+  }
+
   @override
   void initState() {
+    _initOp();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -216,10 +233,17 @@ class _CollectionDetailState extends State<CollectionDetail> {
           showBackToTop = false;
         });
       }
+      if (_scrollController.position.pixels > 50 && !showTopTitle) {
+        setState(() {
+          showTopTitle = true;
+        });
+      }
+      if (_scrollController.position.pixels < 50 && showTopTitle) {
+        setState(() {
+          showTopTitle = false;
+        });
+      }
     });
-    _setShadow();
-    _getData(isInit: true);
-    _getCardData();
     super.initState();
   }
 
@@ -227,18 +251,61 @@ class _CollectionDetailState extends State<CollectionDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFF1F4F8),
-        foregroundColor: os_black,
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : Color(0xFFF1F4F8),
+        foregroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_black,
         elevation: 0,
+        title: showTopTitle
+            ? FadeInUp(
+                duration: Duration(milliseconds: 100),
+                child: Text(
+                  widget.data["name"],
+                  style: TextStyle(fontSize: 16),
+                ),
+              )
+            : Container(),
         actions: load_card
             ? [
-                TextButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(os_dark_back),
-                    overlayColor: MaterialStateProperty.all(os_black_opa),
+                FadeInRight(
+                  duration: Duration(milliseconds: 300),
+                  child: TextButton(
+                    onPressed: () async {
+                      var url = base_url +
+                          "forum.php?mod=collection&op=${is_subscribed ? "unfo" : "follow"}&action=follow&ctid=${widget.data["list_id"]}&formhash=${formhash}&inajax=1&ajaxtarget=undefined";
+                      // print(url);
+                      showToast(
+                        context: context,
+                        type: XSToast.loading,
+                        txt: "请稍后…",
+                      );
+                      await XHttp().pureHttpWithCookie(
+                        hadCookie: true,
+                        url: url,
+                      );
+                      hideToast();
+                      setState(() {
+                        is_subscribed = !is_subscribed;
+                      });
+                    },
+                    style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all(os_dark_back),
+                      overlayColor: MaterialStateProperty.all(os_black_opa),
+                    ),
+                    child: Text(
+                      is_subscribed ? "取消订阅" : "订阅",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: is_subscribed
+                            ? (Provider.of<ColorProvider>(context).isDark
+                                ? os_deep_grey
+                                : os_dark_card)
+                            : os_color,
+                      ),
+                    ),
                   ),
-                  child: Text(is_subscribed ? "取消订阅" : "订阅"),
                 )
               ]
             : [],
@@ -249,7 +316,9 @@ class _CollectionDetailState extends State<CollectionDetail> {
           },
         ),
       ),
-      backgroundColor: Color(0xFFF1F4F8),
+      backgroundColor: Provider.of<ColorProvider>(context).isDark
+          ? os_dark_back
+          : Color(0xFFF1F4F8),
       body: RefreshIndicator(
         color: [
           Color(0xFF282d38),
@@ -260,11 +329,13 @@ class _CollectionDetailState extends State<CollectionDetail> {
           return await Future.delayed(Duration(milliseconds: 500));
         },
         child: BackToTop(
-          color: [
-            Color(0xFF282d38),
-            Color(0xFFe9775d),
-            Color(0xFF282d38),
-          ][widget.data["type"]],
+          color: Provider.of<ColorProvider>(context).isDark
+              ? Color(0x33FFFFFF)
+              : [
+                  Color(0xFF282d38),
+                  Color(0xFFe9775d),
+                  Color(0xFF282d38),
+                ][widget.data["type"]],
           controller: _scrollController,
           show: showBackToTop,
           bottom: 100,
@@ -272,7 +343,7 @@ class _CollectionDetailState extends State<CollectionDetail> {
             controller: _scrollController,
             children: [
               Collection(data: widget.data),
-              Container(height: 40),
+              Container(height: 20),
               data.length == 0 && !load_done
                   ? Container()
                   : Center(
@@ -329,7 +400,9 @@ class _ListCardState extends State<ListCard> {
             arguments: widget.data["topic_id"],
           );
         },
-        color: os_white,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_light_dark_card
+            : os_white,
         radius: 10,
         widget: Container(
           padding: EdgeInsets.only(top: 15, bottom: 16, left: 19, right: 5),
@@ -368,7 +441,9 @@ class _ListCardState extends State<ListCard> {
                         Text(
                           "${widget.data["user_name"]}",
                           style: TextStyle(
-                            color: Color(0xFF444444),
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_dark_white
+                                : Color(0xFF444444),
                           ),
                         ),
                         myInkWell(
@@ -395,6 +470,9 @@ class _ListCardState extends State<ListCard> {
                           widget.data["name"] ?? "淘贴名称",
                           style: TextStyle(
                             fontSize: 16,
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : os_black,
                           ),
                         ),
                       ),
@@ -440,7 +518,9 @@ class _ListCardState extends State<ListCard> {
                       Text(
                         "/",
                         style: TextStyle(
-                          color: Color(0xFFDCDCDC),
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? Color(0x44FFFFFF)
+                              : Color(0xFFDCDCDC),
                         ),
                       ),
                       Container(width: 5),

@@ -3,6 +3,8 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
 
 class Collection extends StatefulWidget {
   Map data = {
@@ -12,7 +14,8 @@ class Collection extends StatefulWidget {
     // "head": "", //专辑的创建者头像
     // "user_id": 240329, //专辑的创建者ID
     // "list_id": 240329, //专辑ID
-    // "subs_num": 56, //专辑ID
+    // "subs_num": 56, //专辑相关数
+    // "subs_txt": "主题", //专辑相关标签
     // "tags": ["社会", "人物", "故事", "人性", "爱与和平"], //专辑的标签
     // "type": 2, //0-黑 1-红 2-白
     // "isShadow": false, //true-阴影 false-无阴影
@@ -38,7 +41,9 @@ class _CollectionState extends State<Collection> {
             end: Alignment.centerRight,
             stops: [0, 1],
             colors: widget.data["type"] == 2
-                ? [Color(0xFFF6F6F6), Color(0xFFF6F6F6)]
+                ? (Provider.of<ColorProvider>(context).isDark
+                    ? [Color(0x11F6F6F6), Color(0x18F6F6F6)]
+                    : [Color(0xFFF6F6F6), Color(0xFFF6F6F6)])
                 : [
                     Color.fromRGBO(255, 255, 255, 0.08),
                     Color.fromRGBO(255, 255, 255, 0.1)
@@ -50,7 +55,9 @@ class _CollectionState extends State<Collection> {
           element,
           style: TextStyle(
             color: widget.data["type"] == 2
-                ? Color(0xFF313131)
+                ? (Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : Color(0xFF313131))
                 : Color.fromRGBO(255, 255, 255, 0.8),
             fontSize: 14,
           ),
@@ -78,9 +85,25 @@ class _CollectionState extends State<Collection> {
                 end: Alignment.centerRight,
                 stops: [0, 1],
                 colors: [
-                  [Color(0xFF262B37), Color(0xFF536174)],
-                  [Color(0xFFE83C2D), Color(0xFFFA6E54)],
-                  [Color(0xFFFFFFFF), Color(0xFFFFFFFF)],
+                  [
+                    Provider.of<ColorProvider>(context).isDark
+                        ? Color(0xFF262B37)
+                        : Color(0xFF262B37),
+                    (Provider.of<ColorProvider>(context).isDark
+                        ? Color(0xFF262B37)
+                        : Color(0xFF536174))
+                  ],
+                  [
+                    (Provider.of<ColorProvider>(context).isDark
+                        ? Color(0xFFEF3615)
+                        : Color(0xFFE83C2D)),
+                    (Provider.of<ColorProvider>(context).isDark
+                        ? Color(0xFFFF5D41)
+                        : Color(0xFFFA6E54))
+                  ],
+                  Provider.of<ColorProvider>(context).isDark
+                      ? [Color(0xFF313131), Color(0xFF373737)]
+                      : [Color(0xFFFFFFFF), Color(0xFFFFFFFF)],
                 ][widget.data["type"]]),
           ),
           child: Stack(
@@ -95,7 +118,9 @@ class _CollectionState extends State<Collection> {
                     size: 80,
                     color: Color.fromRGBO(255, 255, 255, 0.15),
                   ),
-                  os_svg(path: "lib/img/quote_dark.svg"),
+                  (Provider.of<ColorProvider>(context).isDark
+                      ? os_svg(path: "lib/img/quote.svg")
+                      : os_svg(path: "lib/img/quote_dark.svg")),
                 ][widget.data["type"]],
               ),
               Column(
@@ -107,7 +132,9 @@ class _CollectionState extends State<Collection> {
                           widget.data["name"].toString(),
                           style: TextStyle(
                             color: widget.data["type"] == 2
-                                ? Color(0xFF272C38)
+                                ? (Provider.of<ColorProvider>(context).isDark
+                                    ? os_dark_white
+                                    : Color(0xFF272C38))
                                 : os_white,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -120,15 +147,19 @@ class _CollectionState extends State<Collection> {
                             EdgeInsets.symmetric(horizontal: 7.5, vertical: 3),
                         decoration: BoxDecoration(
                           color: widget.data["type"] == 2
-                              ? Color.fromRGBO(0, 0, 0, 0.07)
+                              ? (Provider.of<ColorProvider>(context).isDark
+                                  ? Color(0x33FFFFFF)
+                                  : Color.fromRGBO(0, 0, 0, 0.07))
                               : Color.fromRGBO(255, 255, 255, 0.15),
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
                         child: Text(
-                          "${widget.data["subs_num"]}人已订阅",
+                          "${widget.data["subs_txt"] ?? "主题数"}: ${widget.data["subs_num"]}",
                           style: TextStyle(
                             color: widget.data["type"] == 2
-                                ? os_dark_back
+                                ? (Provider.of<ColorProvider>(context).isDark
+                                    ? os_dark_white
+                                    : os_dark_back)
                                 : os_white,
                             fontSize: 12,
                           ),
@@ -147,7 +178,10 @@ class _CollectionState extends State<Collection> {
                               widget.data["desc"],
                               style: TextStyle(
                                 color: widget.data["type"] == 2
-                                    ? Color(0xFF526073)
+                                    ? (Provider.of<ColorProvider>(context)
+                                            .isDark
+                                        ? os_dark_dark_white
+                                        : Color(0xFF526073))
                                     : Color.fromRGBO(255, 255, 255, 0.8),
                                 fontSize: 15,
                               ),
@@ -199,7 +233,10 @@ class _CollectionState extends State<Collection> {
                               widget.data["user"],
                               style: TextStyle(
                                 color: widget.data["type"] == 2
-                                    ? Color(0xFF767676)
+                                    ? (Provider.of<ColorProvider>(context)
+                                            .isDark
+                                        ? os_dark_dark_white
+                                        : Color(0xFF767676))
                                     : Color.fromRGBO(255, 255, 255, 0.8),
                                 fontSize: 14,
                               ),
