@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +18,28 @@ class _SettingState extends State<Setting> {
   List<Widget> _buildWidget() {
     List<Widget> tmp = [];
     tmp.addAll([
+      ListTile(
+        title: Text(
+          "清除缓存",
+          style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black),
+        ),
+        trailing: Icon(
+          Icons.chevron_right_rounded,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_dark_white
+              : os_deep_grey,
+        ),
+        onTap: () async {
+          showToast(context: context, type: XSToast.loading, txt: "请稍后…");
+          // await DefaultCacheManager().emptyCache();
+          // DefaultCacheManager().removeFile();
+          hideToast();
+          showToast(context: context, type: XSToast.success, txt: "清除成功！");
+        },
+      ),
       ListTile(
         title: Text(
           "意见反馈",

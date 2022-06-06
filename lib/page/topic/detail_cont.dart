@@ -11,6 +11,7 @@ import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/emoji/emoji.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
+import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -162,6 +163,7 @@ class _DetailContState extends State<DetailCont> {
                     },
                     child: widget.imgLists.length > 3 || isDesktop()
                         ? CachedNetworkImage(
+                            cacheManager: RiverListCacheManager.instance,
                             imageUrl: widget.data["infor"],
                             width: isDesktop()
                                 ? 200
@@ -175,30 +177,36 @@ class _DetailContState extends State<DetailCont> {
                                         (widget.isComment ?? false ? 50 : 0) -
                                         42) /
                                     3,
-                            maxHeightDiskCache: 800,
-                            maxWidthDiskCache: 800,
-                            useOldImageOnUrlChange: true,
-                            memCacheWidth: 800,
-                            memCacheHeight: 800,
+                            // maxHeightDiskCache: 800,
+                            // maxWidthDiskCache: 800,
+                            // memCacheWidth: 800,
+                            // memCacheHeight: 800,
                             filterQuality: FilterQuality.low,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => Padding(
-                              padding: const EdgeInsets.all(45.0),
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: os_middle_grey,
-                              ),
-                            ),
+                            progressIndicatorBuilder: (context, url, progress) {
+                              return Padding(
+                                padding: const EdgeInsets.all(45.0),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: os_middle_grey,
+                                  value: progress.progress,
+                                ),
+                              );
+                            },
                           )
                         : CachedNetworkImage(
+                            cacheManager: RiverListCacheManager.instance,
                             imageUrl: widget.data["infor"],
-                            placeholder: (context, url) => Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: os_middle_grey,
-                              ),
-                            ),
+                            progressIndicatorBuilder: (context, url, progress) {
+                              return Padding(
+                                padding: const EdgeInsets.all(45.0),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: os_middle_grey,
+                                  value: progress.progress,
+                                ),
+                              );
+                            },
                           ),
                   ),
                 ),

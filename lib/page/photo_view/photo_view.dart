@@ -3,6 +3,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/outer/cached_network_image/image_provider/cached_network_image_provider.dart';
+import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -53,6 +54,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
           child: Opacity(
             opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
             child: CachedNetworkImage(
+              //表情包
               placeholder: (context, url) => Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -120,6 +122,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                     ),
                     imageProvider: CachedNetworkImageProvider(
                       widget.galleryItems[index],
+                      cacheManager: RiverListCacheManager.instance,
                     ),
                   );
                 },

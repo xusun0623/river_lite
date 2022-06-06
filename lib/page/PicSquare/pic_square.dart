@@ -1,11 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
@@ -14,7 +12,6 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/emoji/emoji.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
-import 'package:offer_show/outer/card_swiper/flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:offer_show/outer/card_swiper/swiper.dart';
 import 'package:offer_show/outer/card_swiper/swiper_controller.dart';
 import 'package:offer_show/outer/card_swiper/swiper_pagination.dart';
@@ -23,6 +20,7 @@ import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
+import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -491,15 +489,6 @@ class _PhotoCardState extends State<PhotoCard> {
         );
       }
     }
-    if (widget.data["photo"].length > 1) {
-      //缓存第二张图片
-      var data =
-          await DefaultCacheManager().getSingleFile(widget.data["photo"][1]);
-      if (data.path == "") {
-        print("${data}");
-        DefaultCacheManager().downloadFile(widget.data["photo"][1]);
-      }
-    }
     setState(() {
       load_done = true;
     });
@@ -643,26 +632,6 @@ class _PhotoCardState extends State<PhotoCard> {
                           setState(() {
                             index = idx;
                           });
-                          //缓存右边两张图片
-                          var idx1 = widget.data["photo"][
-                              idx + 1 < widget.data["photo"].length
-                                  ? idx + 1
-                                  : 0];
-                          var idx2 = widget.data["photo"][
-                              idx + 2 < widget.data["photo"].length
-                                  ? idx + 2
-                                  : 0];
-                          var data1 =
-                              await DefaultCacheManager().getSingleFile(idx1);
-                          var data2 =
-                              await DefaultCacheManager().getSingleFile(idx2);
-                          print("${data1}-${data2}");
-                          if (data1.path == "") {
-                            DefaultCacheManager().downloadFile(idx1);
-                          }
-                          if (data2.path == "") {
-                            DefaultCacheManager().downloadFile(idx2);
-                          }
                         },
                         pagination: widget.data["photo"].length == 1
                             ? null
@@ -697,15 +666,19 @@ class _PhotoCardState extends State<PhotoCard> {
                                     child: Hero(
                                       tag: widget.data["photo"][index],
                                       child: CachedNetworkImage(
-                                        placeholder: (context, url) => Center(
+                                        progressIndicatorBuilder:
+                                            (context, url, progress) => Center(
                                           child: Opacity(
                                             opacity: 0.3,
-                                            child: BottomLoading(
-                                              color: Colors.transparent,
-                                              txt: "",
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2.5,
+                                              color: os_middle_grey,
+                                              value: progress.progress,
                                             ),
                                           ),
                                         ),
+                                        cacheManager:
+                                            RiverListCacheManager.instance,
                                         imageUrl: widget.data["photo"][index],
                                       ),
                                     ),
