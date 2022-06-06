@@ -179,8 +179,8 @@ class _DetailContState extends State<DetailCont> {
                                     3,
                             // maxHeightDiskCache: 800,
                             // maxWidthDiskCache: 800,
-                            // memCacheWidth: 800,
-                            // memCacheHeight: 800,
+                            memCacheWidth: 800,
+                            memCacheHeight: 800,
                             filterQuality: FilterQuality.low,
                             fit: BoxFit.cover,
                             progressIndicatorBuilder: (context, url, progress) {
