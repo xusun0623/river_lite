@@ -7,7 +7,6 @@ import 'package:offer_show/page/collection_detail/collection_detail.dart';
 import 'package:offer_show/page/column/column.dart';
 import 'package:offer_show/page/crop/crop.dart';
 import 'package:offer_show/page/explore/explore.dart';
-import 'package:offer_show/page/explore_detail/explore_detail.dart';
 import 'package:offer_show/page/home.dart';
 import 'package:offer_show/page/hot/homeHot.dart';
 import 'package:offer_show/page/home/myhome.dart';
@@ -45,7 +44,6 @@ final routers = {
   "/setting": () => Setting(),
   "/account": () => Account(),
   "/explore": () => Explore(),
-  "/explore_detail": (data) => ExploreDetail(index: data),
   "/login_helper": () => LoginHelper(),
   "/broke": () => Broke(),
   "/task_list": () => TaskList(),

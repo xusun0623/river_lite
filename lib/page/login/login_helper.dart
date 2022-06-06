@@ -3,6 +3,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -44,8 +45,7 @@ class _LoginHelperState extends State<LoginHelper> {
             Title(txt: "密码找回"),
             Tip(txt: "若不慎忘记密码，请使用密码重置功能通过注册时关联的学号以及对应的信息门户密码重置密码。"),
             Link(
-              txt:
-                  "https://bbs.uestc.edu.cn/plugin.php?id=rnreg:resetpassword&mobile=no",
+              txt: base_url + "plugin.php?id=rnreg:resetpassword&mobile=no",
             ),
             Title(txt: "账号注册"),
             Tip(

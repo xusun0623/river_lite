@@ -10,8 +10,7 @@ getWebCookie({
   String pwd = await getStorage(key: "pwd", initData: "");
 
   Response response = await XHttp().pureHttp(
-      url:
-          "https://bbs.uestc.edu.cn/member.php?mod=logging&action=login&loginsubmit=yes",
+      url: base_url + "member.php?mod=logging&action=login&loginsubmit=yes",
       param: {
         "username": name,
         "password": pwd,

@@ -16,6 +16,7 @@ import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
@@ -275,9 +276,9 @@ class _TopicState extends State<Topic> {
             onPressed: () async {
               Clipboard.setData(
                 ClipboardData(
-                    text:
-                        "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
-                            widget.data["topic_id"].toString()),
+                    text: base_url +
+                        "forum.php?mod=viewthread&tid=" +
+                        widget.data["topic_id"].toString()),
               );
               Navigator.pop(context);
               showToast(context: context, type: XSToast.success, txt: "复制成功");

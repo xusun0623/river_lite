@@ -14,7 +14,7 @@ class Test extends StatefulWidget {
 class _TestState extends State<Test> {
   void _post_parm() async {
     Response response = await XHttp().pureHttpWithCookie(
-      url: "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1937853",
+      url: base_url + "forum.php?mod=viewthread&tid=1937853",
     );
     String html = response.data.toString();
     String post_param = html

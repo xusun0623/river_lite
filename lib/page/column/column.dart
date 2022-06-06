@@ -19,9 +19,11 @@ import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class TopicColumn extends StatefulWidget {
   int columnID;
@@ -349,8 +351,8 @@ class _TopicColumnState extends State<TopicColumn> {
                 ),
                 tap: () {
                   if (need_50_water) {
-                    launch(
-                      "https://bbs.uestc.edu.cn/forum.php?mod=forumdisplay&fid=371&mobile=no",
+                    launchUrlString(
+                      base_url + "forum.php?mod=forumdisplay&fid=371&mobile=no",
                     );
                   } else {
                     setState(() {
@@ -369,8 +371,9 @@ class _TopicColumnState extends State<TopicColumn> {
                         });
                       }
                     : () {
-                        launch(
-                          "https://bbs.uestc.edu.cn/forum.php?mod=forumdisplay&fid=${widget.columnID}",
+                        launchUrlString(
+                          base_url +
+                              "forum.php?mod=forumdisplay&fid=${widget.columnID}",
                         );
                       },
               )

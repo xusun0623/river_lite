@@ -39,8 +39,7 @@ class _PersonDetailState extends State<PersonDetail> {
 
   _getUltraData() async {
     String html = (await XHttp().pureHttpWithCookie(
-      url:
-          "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.uid}&do=profile",
+      url: base_url + "home.php?mod=space&uid=${widget.uid}&do=profile",
     ))
         .data
         .toString();

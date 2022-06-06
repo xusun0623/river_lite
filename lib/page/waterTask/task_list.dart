@@ -49,9 +49,9 @@ class _TaskListState extends State<TaskList> {
     if (data.length % 20 != 0 && !isInit) return;
     List<Map> tmp_ret = [];
     var document = parse((await XHttp().pureHttpWithCookie(
-      url:
-          "https://bbs.uestc.edu.cn/home.php?mod=spacecp&op=log&ac=credit&page=" +
-              (isInit ? 1 : (data.length / 20 + 1).floor()).toString(),
+      url: base_url +
+          "home.php?mod=spacecp&op=log&ac=credit&page=" +
+          (isInit ? 1 : (data.length / 20 + 1).floor()).toString(),
     ))
         .data
         .toString());

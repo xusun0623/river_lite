@@ -4,16 +4,23 @@ import 'package:dio/dio.dart';
 import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/util/storage.dart';
 
+String base_url = "https://bbs.uestc.edu.cn/";
+
 class ServerConfig {
-  String url = "https://bbs.uestc.edu.cn/mobcent/app/web/index.php";
+  String url = base_url + "mobcent/app/web/index.php";
 }
 
 bool isLog = true; //控制是否打印网络输出日志
 
 class XHttp {
-  pureHttpWithCookie({String url, Map param}) async {
+  pureHttpWithCookie({String url, Map param, bool hadCookie = false}) async {
     var dio = Dio();
-    String cookie = await getWebCookie();
+    String cookie = "";
+    if (hadCookie) {
+      cookie = await getStorage(key: "cookie", initData: "");
+    } else {
+      cookie = await getWebCookie();
+    }
     dio.options.contentType = Headers.formUrlEncodedContentType;
     dio.options.responseType = ResponseType.plain;
     dio.options.connectTimeout = 10000;

@@ -77,8 +77,7 @@ class _TopicDetailState extends State<TopicDetail> {
 
   void _getLikeCount() async {
     var document = parse((await XHttp().pureHttpWithCookie(
-      url:
-          "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${widget.topicID}",
+      url: base_url + "forum.php?mod=viewthread&tid=${widget.topicID}",
     ))
         .data
         .toString());
@@ -501,10 +500,10 @@ class _TopicDetailState extends State<TopicDetail> {
               msg: "河畔Lite客户端没有权限访问或者帖子被删除，可以尝试网页端是否能访问",
               tapTxt: "访问网页版>",
               tap: () async {
-                launch(
-                    "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
-                        widget.topicID.toString() +
-                        "&mobile=2");
+                launch(base_url +
+                    "forum.php?mod=viewthread&tid=" +
+                    widget.topicID.toString() +
+                    "&mobile=2");
               },
             )
           : _isBlack() || isBlack
@@ -2030,7 +2029,8 @@ class _CommentState extends State<Comment> {
     var request = http.MultipartRequest(
       'POST',
       Uri.parse(
-        'https://bbs.uestc.edu.cn/forum.php?mod=topicadmin&action=stickreply&modsubmit=yes&infloat=yes&modclick=yes&inajax=1',
+        base_url +
+            'forum.php?mod=topicadmin&action=stickreply&modsubmit=yes&infloat=yes&modclick=yes&inajax=1',
       ),
     );
     request.fields.addAll({
@@ -3222,7 +3222,8 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
               onPressed: () {
                 Navigator.pop(context);
                 Share.share("【河畔Lite客户端】分享给你一个帖子" +
-                    "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
+                    base_url +
+                    "forum.php?mod=viewthread&tid=" +
                     widget.data["topic"]["topic_id"].toString());
               },
             ),
@@ -3238,9 +3239,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
               onPressed: () {
                 Clipboard.setData(
                   ClipboardData(
-                    text:
-                        "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
-                            widget.data["topic"]["topic_id"].toString(),
+                    text: base_url +
+                        "forum.php?mod=viewthread&tid=" +
+                        widget.data["topic"]["topic_id"].toString(),
                   ),
                 );
                 Navigator.pop(context);

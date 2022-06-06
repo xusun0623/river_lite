@@ -6,16 +6,16 @@ import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 
 class Collection extends StatefulWidget {
   Map data = {
-    "name": "甜甜的狗粮铺", //专辑的名称
-    "desc": "愿每日的心酸在青春与岁月证明的爱情中融化，愿你憧憬爱情相信爱情并拥有爱情。", //专辑的描述
-    "user": "xusun000", //专辑的创建者姓名
-    "head":
-        "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=240329&size=middle", //专辑的创建者头像
-    "user_id": 240329, //专辑的创建者ID
-    "list_id": 240329, //专辑ID
-    "tags": ["社会", "人物", "故事", "人性", "爱与和平"], //专辑的标签
-    "type": 2, //0-黑 1-红 2-白
-    "isShadow": false, //true-阴影 false-无阴影
+    // "name": "甜甜的狗粮铺", //专辑的名称
+    // "desc": "愿每日的心酸在青春与岁月证明的爱情中融化，愿你憧憬爱情相信爱情并拥有爱情。", //专辑的描述
+    // "user": "xusun000", //专辑的创建者姓名
+    // "head": "", //专辑的创建者头像
+    // "user_id": 240329, //专辑的创建者ID
+    // "list_id": 240329, //专辑ID
+    // "subs_num": 56, //专辑ID
+    // "tags": ["社会", "人物", "故事", "人性", "爱与和平"], //专辑的标签
+    // "type": 2, //0-黑 1-红 2-白
+    // "isShadow": false, //true-阴影 false-无阴影
   };
   Collection({
     Key key,
@@ -63,7 +63,8 @@ class _CollectionState extends State<Collection> {
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: widget.data["name"] + widget.data["list_id"].toString(), //Hero标志
+      tag: widget.data["list_id"].toString() +
+          widget.data["type"].toString(), //Hero标志
       child: Material(
         color: Colors.transparent,
         child: Container(
@@ -71,25 +72,6 @@ class _CollectionState extends State<Collection> {
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            boxShadow: widget.data["isShadow"]
-                ? [
-                    widget.data["type"] == 2
-                        ? BoxShadow(
-                            //白卡片阴影
-                            color: Color.fromRGBO(0, 0, 0, 0.1),
-                            blurRadius: 23,
-                            spreadRadius: -2,
-                            offset: Offset(10, 18),
-                          )
-                        : BoxShadow(
-                            //黑卡片阴影
-                            color: Color.fromRGBO(0, 0, 0, 0.3),
-                            blurRadius: 23,
-                            spreadRadius: -2,
-                            offset: Offset(10, 18),
-                          ),
-                  ]
-                : [],
             borderRadius: BorderRadius.all(Radius.circular(20)),
             gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -127,7 +109,7 @@ class _CollectionState extends State<Collection> {
                             color: widget.data["type"] == 2
                                 ? Color(0xFF272C38)
                                 : os_white,
-                            fontSize: 20,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -138,14 +120,16 @@ class _CollectionState extends State<Collection> {
                             EdgeInsets.symmetric(horizontal: 7.5, vertical: 3),
                         decoration: BoxDecoration(
                           color: widget.data["type"] == 2
-                              ? Color(0xFF646464)
+                              ? Color.fromRGBO(0, 0, 0, 0.07)
                               : Color.fromRGBO(255, 255, 255, 0.15),
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
                         child: Text(
-                          "订阅",
+                          "${widget.data["subs_num"]}人已订阅",
                           style: TextStyle(
-                            color: os_white,
+                            color: widget.data["type"] == 2
+                                ? os_dark_back
+                                : os_white,
                             fontSize: 12,
                           ),
                         ),
@@ -153,67 +137,80 @@ class _CollectionState extends State<Collection> {
                     ],
                   ),
                   Container(height: 5),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Text(
-                      widget.data["desc"],
-                      style: TextStyle(
-                        color: widget.data["type"] == 2
-                            ? Color(0xFF526073)
-                            : Color.fromRGBO(255, 255, 255, 0.8),
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                  Container(height: 7.5),
-                  Transform.translate(
-                    offset: const Offset(-3, 0),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: Wrap(
-                        spacing: 5,
-                        runAlignment: WrapAlignment.start,
-                        children: _buildTag(),
-                      ),
-                    ),
-                  ),
-                  Container(height: 12.5),
-                  GestureDetector(
-                    onTap: () {
-                      toUserSpace(context, widget.data["user_id"]);
-                    },
-                    child: Container(
-                      color: Color.fromRGBO(0, 0, 0, 0.001),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100)),
-                                child: CachedNetworkImage(
-                                  imageUrl: widget.data["head"],
-                                  width: 20,
-                                  height: 20,
-                                  placeholder: (context, url) => Container(
-                                    color: Color.fromRGBO(255, 255, 255, 0.6),
-                                  ),
-                                ),
+                  ...(widget.data["desc"].toString().trim() == ""
+                      ? []
+                      : [
+                          Container(height: 2.5),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Text(
+                              widget.data["desc"],
+                              style: TextStyle(
+                                color: widget.data["type"] == 2
+                                    ? Color(0xFF526073)
+                                    : Color.fromRGBO(255, 255, 255, 0.8),
+                                fontSize: 15,
                               ),
-                              Container(width: 7.5),
-                              Text(
-                                widget.data["name"],
-                                style: TextStyle(
-                                  color: widget.data["type"] == 2
-                                      ? Color(0xFF767676)
-                                      : Color.fromRGBO(255, 255, 255, 0.8),
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
+                        ]),
+                  Container(height: 7.5),
+                  ...(_buildTag().length == 0
+                      ? []
+                      : [
+                          Container(height: 2.5),
                           Transform.translate(
+                            offset: const Offset(-3, 0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Wrap(
+                                spacing: 5,
+                                runAlignment: WrapAlignment.start,
+                                children: _buildTag(),
+                              ),
+                            ),
+                          ),
+                          Container(height: 12.5),
+                        ]),
+                  Container(
+                    color: Color.fromRGBO(0, 0, 0, 0.001),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            ClipRRect(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(100)),
+                              child: CachedNetworkImage(
+                                imageUrl: widget.data["head"],
+                                width: 20,
+                                height: 20,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => Container(
+                                  color: widget.data["type"] == 2
+                                      ? Color.fromRGBO(0, 0, 0, 0.1)
+                                      : Color.fromRGBO(255, 255, 255, 0.6),
+                                ),
+                              ),
+                            ),
+                            Container(width: 7.5),
+                            Text(
+                              widget.data["user"],
+                              style: TextStyle(
+                                color: widget.data["type"] == 2
+                                    ? Color(0xFF767676)
+                                    : Color.fromRGBO(255, 255, 255, 0.8),
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            toUserSpace(context, widget.data["user_id"]);
+                          },
+                          child: Transform.translate(
                             offset: Offset(7.5, 0),
                             child: Row(
                               children: [
@@ -235,8 +232,8 @@ class _CollectionState extends State<Collection> {
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

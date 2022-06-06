@@ -13,6 +13,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
@@ -140,13 +141,16 @@ class _CropImgState extends State<CropImg> {
                                 int uid = await getUid();
                                 CachedNetworkImage.evictFromCache(
                                   //清除原有缓存
-                                  "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=big",
+                                  base_url +
+                                      "uc_server/avatar.php?uid=${uid}&size=big",
                                 );
                                 CachedNetworkImage.evictFromCache(
-                                  "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=middle",
+                                  base_url +
+                                      "uc_server/avatar.php?uid=${uid}&size=middle",
                                 );
                                 CachedNetworkImage.evictFromCache(
-                                  "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=small",
+                                  base_url +
+                                      "uc_server/avatar.php?uid=${uid}&size=small",
                                 );
                                 setState(() {
                                   edit_done = true;

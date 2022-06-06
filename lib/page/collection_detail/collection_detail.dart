@@ -7,7 +7,6 @@ import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
-import 'package:offer_show/page/collection_tab/collection_test_data.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/mid_request.dart';
 
@@ -28,6 +27,9 @@ class _CollectionDetailState extends State<CollectionDetail> {
   bool showBackToTop = false;
   bool loading = false;
   bool load_done = false;
+  bool load_card = false;
+  bool is_subscribed = false;
+  String action_url = "";
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
@@ -48,8 +50,8 @@ class _CollectionDetailState extends State<CollectionDetail> {
 
   _getCardData() async {
     String d_tmp = (await XHttp().pureHttpWithCookie(
-      url:
-          "https://bbs.uestc.edu.cn/forum.php?mod=collection&action=view&ctid=${widget.data["list_id"]}",
+      url: base_url +
+          "forum.php?mod=collection&action=view&ctid=${widget.data["list_id"]}",
     ))
         .data
         .toString();
@@ -63,7 +65,14 @@ class _CollectionDetailState extends State<CollectionDetail> {
           .getElementsByTagName("div")
           .last
           .innerHtml;
-      setState(() {});
+      is_subscribed = document
+          .getElementsByClassName("clct_flw")
+          .first
+          .innerHtml
+          .contains("取消订阅");
+      setState(() {
+        load_card = true;
+      });
     } catch (e) {
       print("${e}");
     }
@@ -76,8 +85,9 @@ class _CollectionDetailState extends State<CollectionDetail> {
     if (loading) return;
     loading = true;
     String d_tmp = (await XHttp().pureHttpWithCookie(
-      url:
-          "https://bbs.uestc.edu.cn/forum.php?mod=collection&action=view&ctid=${widget.data["list_id"]}&page=${isInit ? 1 : ((data.length / 120).ceil() + 1)}",
+      url: base_url +
+          "forum.php?mod=collection&action=view&ctid=${widget.data["list_id"]}&page=${isInit ? 1 : ((data.length / 120).ceil() + 1)}",
+      hadCookie: true,
     ))
         .data
         .toString();
@@ -220,6 +230,18 @@ class _CollectionDetailState extends State<CollectionDetail> {
         backgroundColor: Color(0xFFF1F4F8),
         foregroundColor: os_black,
         elevation: 0,
+        actions: load_card
+            ? [
+                TextButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all(os_dark_back),
+                    overlayColor: MaterialStateProperty.all(os_black_opa),
+                  ),
+                  child: Text(is_subscribed ? "取消订阅" : "订阅"),
+                )
+              ]
+            : [],
         leading: IconButton(
           icon: Icon(Icons.chevron_left_rounded),
           onPressed: () {
@@ -249,7 +271,7 @@ class _CollectionDetailState extends State<CollectionDetail> {
           child: ListView(
             controller: _scrollController,
             children: [
-              Collection(data: cdata),
+              Collection(data: widget.data),
               Container(height: 40),
               data.length == 0 && !load_done
                   ? Container()
@@ -317,7 +339,8 @@ class _ListCardState extends State<ListCard> {
             children: [
               GestureDetector(
                 onTap: () {
-                  toUserSpace(context, widget.data["uid"]);
+                  if (widget.data["uid"] != "" && widget.data["uid"] != 0)
+                    toUserSpace(context, widget.data["uid"]);
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(100)),
@@ -328,8 +351,8 @@ class _ListCardState extends State<ListCard> {
                       color: os_grey,
                     ),
                     fit: BoxFit.cover,
-                    imageUrl:
-                        "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${widget.data["uid"]}&size=middle",
+                    imageUrl: base_url +
+                        "uc_server/avatar.php?uid=${widget.data["uid"]}&size=middle",
                   ),
                 ),
               ),

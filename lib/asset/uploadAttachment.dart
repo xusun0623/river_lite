@@ -43,7 +43,7 @@ List<String> allowExtension = [
 
 void _post_parm(int tid, BuildContext context) async {
   Response response = await XHttp().pureHttpWithCookie(
-    url: "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${tid}",
+    url: base_url + "forum.php?mod=viewthread&tid=${tid}",
   );
   String html = response.data.toString();
   if (html.contains("post_params")) {
@@ -101,7 +101,8 @@ getUploadAid({
               filename: fileName),
         });
         var response = await Dio().post(
-          'https://bbs.uestc.edu.cn/misc.php?mod=swfupload&action=swfupload&operation=upload&html5=attach&fid=${fid}',
+          base_url +
+              'misc.php?mod=swfupload&action=swfupload&operation=upload&html5=attach&fid=${fid}',
           options: Options(headers: {
             'Cookie': (await getStorage(key: "cookie", initData: "")).toString()
           }),

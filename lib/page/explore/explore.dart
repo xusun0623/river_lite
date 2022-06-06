@@ -4,7 +4,9 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/util/mid_request.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Explore extends StatefulWidget {
   Explore({Key key}) : super(key: key);
@@ -79,10 +81,10 @@ class _BottomBtnsState extends State<BottomBtns> {
               "https://gis.uestc.edu.cn/",
               "https://vpn.uestc.edu.cn/",
               "https://www.uestc.edu.cn/",
-              "https://bbs.uestc.edu.cn/merge_qshp/",
-              "https://bbs.uestc.edu.cn/",
+              base_url + "merge_qshp/",
+              base_url + "",
             ];
-            launch(urls[i - 1]);
+            launchUrlString(urls[i - 1]);
           },
         ),
       ));

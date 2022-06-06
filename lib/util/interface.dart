@@ -20,7 +20,7 @@ class Api {
     var headers = {'Cookie': cookie};
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('https://bbs.uestc.edu.cn/plugin.php?id=ahome_dayquestion:pop'),
+      Uri.parse(base_url + 'plugin.php?id=ahome_dayquestion:pop'),
     );
     request.fields.addAll({'formhash': formhash, 'finish': 'true'});
 
@@ -43,7 +43,7 @@ class Api {
     var headers = {'Cookie': cookie};
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('https://bbs.uestc.edu.cn/plugin.php?id=ahome_dayquestion:pop'),
+      Uri.parse(base_url + 'plugin.php?id=ahome_dayquestion:pop'),
     );
     request.fields.addAll({'formhash': formhash, 'next': 'true'});
 
@@ -65,7 +65,7 @@ class Api {
     var headers = {'Cookie': cookie};
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('https://bbs.uestc.edu.cn/plugin.php?id=ahome_dayquestion:pop'),
+      Uri.parse(base_url + 'plugin.php?id=ahome_dayquestion:pop'),
     );
     request.fields.addAll(
       {
@@ -96,7 +96,7 @@ class Api {
     var headers = {'Cookie': cookie};
     var request = http.Request(
       'GET',
-      Uri.parse('https://bbs.uestc.edu.cn/plugin.php?id=ahome_dayquestion:pop'),
+      Uri.parse(base_url + 'plugin.php?id=ahome_dayquestion:pop'),
     );
     request.headers.addAll(headers);
 
@@ -162,7 +162,7 @@ class Api {
       //换取网页的agent和input值
       var request1 = http.Request(
         'POST',
-        Uri.parse('https://bbs.uestc.edu.cn/home.php?mod=spacecp&ac=avatar'),
+        Uri.parse(base_url + 'home.php?mod=spacecp&ac=avatar'),
       );
       request1.headers.addAll({'Cookie': cookie});
       http.StreamedResponse response1 = await request1.send();
@@ -173,7 +173,8 @@ class Api {
         var request2 = http.MultipartRequest(
           'POST',
           Uri.parse(
-            'https://bbs.uestc.edu.cn/uc_server/index.php?m=user&a=rectavatar&base64=yes&appid=1&ucapi=bbs.uestc.edu.cn%2Fuc_server&avatartype=virtual&uploadSize=2048&input=${input}&agent=${agent}',
+            base_url +
+                'uc_server/index.php?m=user&a=rectavatar&base64=yes&appid=1&ucapi=bbs.uestc.edu.cn%2Fuc_server&avatartype=virtual&uploadSize=2048&input=${input}&agent=${agent}',
           ),
         );
         request2.fields.addAll({
@@ -370,7 +371,8 @@ class Api {
     var request = http.MultipartRequest(
       'POST',
       Uri.parse(
-        'https://bbs.uestc.edu.cn/mobcent/app/web/index.php?r=forum/sendattachmentex&type=image&module=forum&accessToken=e9f49ac6acace2b9f6582800f32ff&accessSecret=8aef222107fcd2cedcc5f60b4edd1',
+        base_url +
+            'mobcent/app/web/index.php?r=forum/sendattachmentex&type=image&module=forum&accessToken=e9f49ac6acace2b9f6582800f32ff&accessSecret=8aef222107fcd2cedcc5f60b4edd1',
       ),
     );
     for (var i = 0; i < imgs.length; i++) {
@@ -424,7 +426,7 @@ class Api {
       ]);
     }
     var response = await dio.post(
-      'https://bbs.uestc.edu.cn/mobcent/app/web/index.php?r=forum/sendattachmentex&type=image&module=forum&accessToken=e9f49ac6acace2b9f6582800f32ff&accessSecret=8aef222107fcd2cedcc5f60b4edd1',
+      base_url + 'mobcent/app/web/index.php?r=forum/sendattachmentex&type=image&module=forum&accessToken=e9f49ac6acace2b9f6582800f32ff&accessSecret=8aef222107fcd2cedcc5f60b4edd1',
       options: Options(headers: {
         "Content-Type": "multipart/form-data;",
       }),

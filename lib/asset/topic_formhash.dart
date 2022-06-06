@@ -3,7 +3,7 @@ import 'package:offer_show/util/mid_request.dart';
 
 getTopicFormHash(int tid) async {
   Response response = await XHttp().pureHttpWithCookie(
-    url: "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${tid}",
+    url: base_url + "forum.php?mod=viewthread&tid=${tid}",
   );
   String html = response.data.toString();
   String formhash = html

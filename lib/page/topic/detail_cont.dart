@@ -12,6 +12,7 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/emoji/emoji.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/util/cache_manager.dart';
+import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -235,8 +236,9 @@ class _DetailContState extends State<DetailCont> {
           },
           tap: () {
             try {
-              if (widget.data['url'].toString().indexOf(
-                      "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=") >
+              if (widget.data['url']
+                      .toString()
+                      .indexOf(base_url + "forum.php?mod=viewthread&tid=") >
                   -1) {
                 Navigator.pushNamed(
                   context,
@@ -244,8 +246,9 @@ class _DetailContState extends State<DetailCont> {
                   arguments:
                       int.parse(widget.data["url"].toString().split("tid=")[1]),
                 );
-              } else if (widget.data['url'].toString().indexOf(
-                      "https://bbs.uestc.edu.cn/home.php?mod=space&uid=") >
+              } else if (widget.data['url']
+                      .toString()
+                      .indexOf(base_url + "home.php?mod=space&uid=") >
                   -1) {
                 toUserSpace(
                   context,

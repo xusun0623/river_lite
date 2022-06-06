@@ -19,63 +19,6 @@ class _SettingState extends State<Setting> {
   List<Widget> _buildWidget() {
     List<Widget> tmp = [];
     tmp.addAll([
-      ListTile(
-        title: Text(
-          "清除缓存",
-          style: TextStyle(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_white
-                  : os_black),
-        ),
-        trailing: Icon(
-          Icons.chevron_right_rounded,
-          color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_dark_white
-              : os_deep_grey,
-        ),
-        onTap: () async {
-          showToast(context: context, type: XSToast.loading, txt: "请稍后…");
-          await RiverListCacheManager.instance.emptyCache();
-          hideToast();
-          showToast(context: context, type: XSToast.success, txt: "清除成功！");
-        },
-      ),
-      ListTile(
-        title: Text(
-          "意见反馈",
-          style: TextStyle(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_white
-                  : os_black),
-        ),
-        trailing: Icon(
-          Icons.chevron_right_rounded,
-          color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_dark_white
-              : os_deep_grey,
-        ),
-        onTap: () {
-          launchUrlString("https://www.wjx.cn/vj/mzgzO5S.aspx");
-        },
-      ),
-      ListTile(
-        title: Text(
-          "拉黑/黑名单",
-          style: TextStyle(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_white
-                  : os_black),
-        ),
-        trailing: Icon(
-          Icons.chevron_right_rounded,
-          color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_dark_white
-              : os_deep_grey,
-        ),
-        onTap: () {
-          Navigator.pushNamed(context, "/black_list");
-        },
-      ),
       SwitchListTile(
         inactiveTrackColor: Provider.of<ColorProvider>(context).isDark
             ? Color(0x33FFFFFF)
@@ -113,6 +56,78 @@ class _SettingState extends State<Setting> {
           opacity: Provider.of<ColorProvider>(context).isDark ? 0.6 : 1,
           child: SelectCard()),
       Container(height: 15),
+      ListTile(
+        title: Text(
+          "拉黑/黑名单",
+          style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black),
+        ),
+        trailing: Icon(
+          Icons.chevron_right_rounded,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_dark_white
+              : os_deep_grey,
+        ),
+        onTap: () {
+          Navigator.pushNamed(context, "/black_list");
+        },
+      ),
+      ListTile(
+        title: Text(
+          "意见反馈",
+          style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black),
+        ),
+        trailing: Icon(
+          Icons.chevron_right_rounded,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_dark_white
+              : os_deep_grey,
+        ),
+        onTap: () {
+          launchUrlString("https://www.wjx.cn/vj/mzgzO5S.aspx");
+        },
+      ),
+      ListTile(
+        title: Text(
+          "清除图片缓存",
+          style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black),
+        ),
+        subtitle: Text(
+          "清除缓存可以释放占用空间，但在需要对应图片时，须重新请求",
+          style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_deep_grey),
+        ),
+        trailing: Icon(
+          Icons.chevron_right_rounded,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_dark_white
+              : os_deep_grey,
+        ),
+        onTap: () async {
+          showModal(
+              context: context,
+              title: "请确认",
+              cont: "将会清除所有已缓存的图片和头像以释放存储资源，但可能需要花较长时间重新请求",
+              confirm: () async {
+                showToast(context: context, type: XSToast.loading, txt: "请稍后…");
+                await RiverListCacheManager.instance.emptyCache();
+                await Future.delayed(Duration(milliseconds: 500));
+                hideToast();
+                showToast(
+                    context: context, type: XSToast.success, txt: "清除成功！");
+              });
+        },
+      ),
     ]);
     tmp.add(Container(height: 10));
     return tmp;

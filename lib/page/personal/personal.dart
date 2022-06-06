@@ -19,6 +19,7 @@ import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -836,13 +837,13 @@ class _PersonCardState extends State<PersonCard> {
                         .split("&size")[0]);
                     CachedNetworkImage.evictFromCache(
                       //清除原有头像缓存
-                      "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=big",
+                      base_url + "uc_server/avatar.php?uid=${uid}&size=big",
                     );
                     CachedNetworkImage.evictFromCache(
-                      "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=middle",
+                      base_url + "uc_server/avatar.php?uid=${uid}&size=middle",
                     );
                     CachedNetworkImage.evictFromCache(
-                      "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=${uid}&size=small",
+                      base_url + "uc_server/avatar.php?uid=${uid}&size=small",
                     );
                     showToast(
                         context: context, type: XSToast.success, txt: "清除缓存成功");

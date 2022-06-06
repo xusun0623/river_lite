@@ -38,7 +38,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
     print("_getNew");
     //获取新任务
     var document = parse((await XHttp().pureHttpWithCookie(
-      url: "https://bbs.uestc.edu.cn/home.php?mod=task&item=new",
+      url: base_url + "home.php?mod=task&item=new",
     ))
         .data
         .toString());
@@ -95,7 +95,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
     print("_getDoing");
     //获取正在进行中的任务
     var document = parse((await XHttp().pureHttpWithCookie(
-      url: "https://bbs.uestc.edu.cn/home.php?mod=task&item=doing",
+      url: base_url + "home.php?mod=task&item=doing",
     ))
         .data
         .toString());
@@ -163,7 +163,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
     //https://bbs.uestc.edu.cn/home.php?mod=task&item=done
     //获取已失败任务
     var document = parse((await XHttp().pureHttpWithCookie(
-      url: "https://bbs.uestc.edu.cn/home.php?mod=task&item=done",
+      url: base_url + "home.php?mod=task&item=done",
     ))
         .data
         .toString());
@@ -221,7 +221,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
     print("_getFail");
     //获取已失败任务
     var document = parse((await XHttp().pureHttpWithCookie(
-      url: "https://bbs.uestc.edu.cn/home.php?mod=task&item=failed",
+      url: base_url + "home.php?mod=task&item=failed",
     ))
         .data
         .toString());
