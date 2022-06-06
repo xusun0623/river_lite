@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -35,6 +36,7 @@ class _CollectionDetailState extends State<CollectionDetail> {
   bool load_card = false;
   bool is_subscribed = false;
   String formhash = "";
+  bool vibrate = false;
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
@@ -223,6 +225,16 @@ class _CollectionDetailState extends State<CollectionDetail> {
           _scrollController.position.maxScrollExtent) {
         _getData();
       }
+      if (_scrollController.position.pixels < -120) {
+        if (!vibrate) {
+          vibrate = true; //不允许再震动
+          Vibrate.feedback(FeedbackType.impact);
+          Navigator.pop(context);
+        }
+      }
+      if (_scrollController.position.pixels >= 0) {
+        vibrate = false; //允许震动
+      }
       if (_scrollController.position.pixels > 1000 && !showBackToTop) {
         setState(() {
           showBackToTop = true;
@@ -319,47 +331,38 @@ class _CollectionDetailState extends State<CollectionDetail> {
       backgroundColor: Provider.of<ColorProvider>(context).isDark
           ? os_dark_back
           : Color(0xFFF1F4F8),
-      body: RefreshIndicator(
-        color: [
-          Color(0xFF282d38),
-          Color(0xFFd64b39),
-          Color(0xFF282d38),
-        ][widget.data["type"]],
-        onRefresh: () async {
-          return await Future.delayed(Duration(milliseconds: 500));
-        },
-        child: BackToTop(
-          color: Provider.of<ColorProvider>(context).isDark
-              ? Color(0x33FFFFFF)
-              : [
-                  Color(0xFF282d38),
-                  Color(0xFFe9775d),
-                  Color(0xFF282d38),
-                ][widget.data["type"]],
+      body: BackToTop(
+        color: Provider.of<ColorProvider>(context).isDark
+            ? Color(0x33FFFFFF)
+            : [
+                Color(0xFF282d38),
+                Color(0xFFe9775d),
+                Color(0xFF282d38),
+              ][widget.data["type"]],
+        controller: _scrollController,
+        show: showBackToTop,
+        bottom: 100,
+        child: ListView(
+          physics: BouncingScrollPhysics(),
           controller: _scrollController,
-          show: showBackToTop,
-          bottom: 100,
-          child: ListView(
-            controller: _scrollController,
-            children: [
-              Collection(data: widget.data),
-              Container(height: 20),
-              data.length == 0 && !load_done
-                  ? Container()
-                  : Center(
-                      child: Text(
-                        "- 本专辑收录的帖子 -",
-                        style: TextStyle(
-                          color: Color(0xFFA3A3A3),
-                        ),
+          children: [
+            Collection(data: widget.data),
+            Container(height: 20),
+            data.length == 0 && !load_done
+                ? Container()
+                : Center(
+                    child: Text(
+                      "- 本专辑收录的帖子 -",
+                      style: TextStyle(
+                        color: Color(0xFFA3A3A3),
                       ),
                     ),
-              data.length == 0 && !load_done
-                  ? Container()
-                  : Container(height: 15),
-              ..._buildCont(),
-            ],
-          ),
+                  ),
+            data.length == 0 && !load_done
+                ? Container()
+                : Container(height: 15),
+            ..._buildCont(),
+          ],
         ),
       ),
     );
