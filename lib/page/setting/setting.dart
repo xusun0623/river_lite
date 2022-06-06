@@ -3,6 +3,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -34,8 +35,7 @@ class _SettingState extends State<Setting> {
         ),
         onTap: () async {
           showToast(context: context, type: XSToast.loading, txt: "请稍后…");
-          // await DefaultCacheManager().emptyCache();
-          // DefaultCacheManager().removeFile();
+          await RiverListCacheManager.instance.emptyCache();
           hideToast();
           showToast(context: context, type: XSToast.success, txt: "清除成功！");
         },
