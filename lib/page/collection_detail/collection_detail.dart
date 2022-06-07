@@ -281,10 +281,11 @@ class _CollectionDetailState extends State<CollectionDetail> {
             : Container(),
         actions: load_card
             ? [
-                FadeInRight(
+                FadeInUp(
                   duration: Duration(milliseconds: 300),
-                  child: TextButton(
-                    onPressed: () async {
+                  child: myInkWell(
+                    color: Colors.transparent,
+                    tap: () async {
                       var url = base_url +
                           "forum.php?mod=collection&op=${is_subscribed ? "unfo" : "follow"}&action=follow&ctid=${widget.data["list_id"]}&formhash=${formhash}&inajax=1&ajaxtarget=undefined";
                       // print(url);
@@ -302,23 +303,38 @@ class _CollectionDetailState extends State<CollectionDetail> {
                         is_subscribed = !is_subscribed;
                       });
                     },
-                    style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all(os_dark_back),
-                      overlayColor: MaterialStateProperty.all(os_black_opa),
+                    widget: Row(
+                      children: [
+                        Text(
+                          is_subscribed ? "取消订阅" : "订阅",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: is_subscribed
+                                ? (Provider.of<ColorProvider>(context).isDark
+                                    ? os_color
+                                    : os_deep_blue)
+                                : (Provider.of<ColorProvider>(context).isDark
+                                    ? os_dark_dark_white
+                                    : os_dark_card),
+                          ),
+                        ),
+                        Container(width: 5),
+                        Icon(
+                          is_subscribed ? Icons.star : Icons.star_border,
+                          color: is_subscribed
+                              ? (Provider.of<ColorProvider>(context).isDark
+                                  ? os_color
+                                  : os_deep_blue)
+                              : (Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_dark_white
+                                  : os_dark_card),
+                        ),
+                        Container(width: 10),
+                      ],
                     ),
-                    child: Text(
-                      is_subscribed ? "取消订阅" : "订阅",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: is_subscribed
-                            ? (Provider.of<ColorProvider>(context).isDark
-                                ? os_deep_grey
-                                : os_dark_card)
-                            : os_color,
-                      ),
-                    ),
+                    radius: 100,
                   ),
-                )
+                ),
               ]
             : [],
         leading: IconButton(

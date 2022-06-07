@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:html/parser.dart';
@@ -8,6 +10,7 @@ import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
+import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class CollectionTab extends StatefulWidget {
@@ -59,8 +62,23 @@ class _CollectionTabState extends State<CollectionTab>
   }
 
   _getMydata() async {
+    String mylist = await getStorage(key: "mylist", initData: "");
+    String list = await getStorage(key: "list", initData: "");
+    //缓存模块
+    if (mylist != "") {
+      setState(() {
+        mydata = jsonDecode(mylist);
+      });
+    }
+    if (list != "") {
+      setState(() {
+        data = jsonDecode(list);
+      });
+    }
     await _getData(isInit: true, isMine: true);
+    await setStorage(key: "mylist", value: jsonEncode(mydata));
     await _getData(isInit: true);
+    await setStorage(key: "list", value: jsonEncode(data));
   }
 
   _getData({bool isInit = false, bool isMine = false}) async {
@@ -138,7 +156,8 @@ class _CollectionTabState extends State<CollectionTab>
             "tags": _getTag(dl), //专辑的标签
             "type": isMine
                 ? 1
-                : (int.parse(dl.getElementsByClassName("xi2")[0].innerHtml) > 30
+                : (int.parse(dl.getElementsByClassName("xi2")[0].innerHtml) >
+                        ([70, 10, 50][filter_type])
                     ? 0
                     : 2), //0-黑 1-红 2-白
             "isShadow": false, //true-阴影 false-无阴影
