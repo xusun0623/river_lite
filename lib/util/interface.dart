@@ -368,35 +368,40 @@ class Api {
   uploadImage({
     List<XFile> imgs,
   }) async {
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse(
-        base_url +
-            'mobcent/app/web/index.php?r=forum/sendattachmentex&type=image&module=forum&accessToken=e9f49ac6acace2b9f6582800f32ff&accessSecret=8aef222107fcd2cedcc5f60b4edd1',
-      ),
-    );
-    for (var i = 0; i < imgs.length; i++) {
-      var tmp_jpg_path = imgs[i].path;
-      if (imgs[i].path.split(".")[1] == "heic") {
-        //支持苹果拍照格式
-        tmp_jpg_path = await HeicToJpg.convert(imgs[i].path);
-      }
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'uploadFile[]',
-          tmp_jpg_path,
-          filename: "hello.png",
-          contentType: MediaType("image", "jpeg"),
+    print("上传图片 ${imgs}");
+    String myinfo_txt = await getStorage(key: "myinfo", initData: "");
+    if (myinfo_txt != "") {
+      Map myinfo = jsonDecode(myinfo_txt);
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+          base_url +
+              'mobcent/app/web/index.php?r=forum/sendattachmentex&type=image&module=forum&accessToken=${myinfo["token"]}&accessSecret=${myinfo["secret"]}',
         ),
       );
-    }
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      String data = await response.stream.bytesToString();
-      return jsonDecode(data)["body"]["attachment"];
-    } else {
-      print(response.reasonPhrase);
-      return [];
+      for (var i = 0; i < imgs.length; i++) {
+        var tmp_jpg_path = imgs[i].path;
+        if (imgs[i].path.split(".")[1] == "heic") {
+          //支持苹果拍照格式
+          tmp_jpg_path = await HeicToJpg.convert(imgs[i].path);
+        }
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'uploadFile[]',
+            tmp_jpg_path,
+            filename: "hello.png",
+            contentType: MediaType("image", "jpeg"),
+          ),
+        );
+      }
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        String data = await response.stream.bytesToString();
+        return jsonDecode(data)["body"]["attachment"];
+      } else {
+        print(response.reasonPhrase);
+        return [];
+      }
     }
     /** 
     var dio = new Dio();

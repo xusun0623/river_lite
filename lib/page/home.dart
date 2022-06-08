@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/page/PicSquare/pic_square.dart';
@@ -241,6 +242,15 @@ class _HomeState extends State<Home> {
         : Scaffold(
             body: WillPopScope(
               onWillPop: () {
+                showModal(
+                  context: context,
+                  title: "返回",
+                  cont: "是否要返回退出河畔Lite?",
+                  confirm: () async {
+                    await SystemChannels.platform
+                        .invokeMethod('SystemNavigator.pop');
+                  },
+                );
                 return;
               },
               child: IndexedStack(

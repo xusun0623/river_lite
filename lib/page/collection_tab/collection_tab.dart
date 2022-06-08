@@ -265,6 +265,9 @@ class _CollectionTabState extends State<CollectionTab>
         t.add(Container(height: MediaQuery.of(context).size.height));
     }
     t.add(Container(height: 15));
+    if (load_done && data.length == 0 && mydata.length == 0) {
+      t.add(Container(height: MediaQuery.of(context).size.height));
+    }
     return t;
   }
 
