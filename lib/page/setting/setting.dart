@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/util/cache_manager.dart';
@@ -146,6 +147,19 @@ class _SettingState extends State<Setting> {
               });
         },
       ),
+      ListTile(
+        title: Text(
+          "删除清水河畔账号",
+          style: TextStyle(
+              color:
+                  Provider.of<ColorProvider>(context).isDark ? os_red : os_red),
+        ),
+        onTap: () async {
+          launchUrlString(
+            "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1822104&extra=page%3D1",
+          );
+        },
+      )
     ]);
     tmp.add(Container(height: 10));
     return tmp;
