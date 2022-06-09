@@ -172,6 +172,7 @@ class _SearchState extends State<Search> {
 
   @override
   void initState() {
+    _commentFocus.requestFocus();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -712,7 +713,7 @@ class _SearchLeftState extends State<SearchLeft> {
                       ? os_deep_grey
                       : os_middle_grey,
                 ),
-                hintText: "搜一搜",
+                hintText: "搜索帖子/用户",
                 border: InputBorder.none,
               ),
             ),

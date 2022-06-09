@@ -201,15 +201,6 @@ class _CollectionTabState extends State<CollectionTab>
   List<Widget> _buildComponents() {
     List<Widget> t = [];
     if (mydata.length != 0) {
-      t.add(Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Text(
-            "- 我订阅的专辑 -",
-            style: TextStyle(color: os_deep_grey),
-          ),
-        ),
-      ));
       mydata.forEach((element) {
         t.add(GestureDetector(
           onTap: () {
@@ -223,15 +214,6 @@ class _CollectionTabState extends State<CollectionTab>
         ));
       });
       t.add(Container(height: 10));
-      t.add(Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Text(
-            "- 热门专辑 -",
-            style: TextStyle(color: os_deep_grey),
-          ),
-        ),
-      ));
     }
     if (data.length != 0 || loading) {
       t.add(Container(height: 5));
