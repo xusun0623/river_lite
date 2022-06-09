@@ -129,7 +129,6 @@ class _TopicColumnState extends State<TopicColumn> {
     } else {
       String tmp_txt = jsonEncode(tmp);
       if (tmp_txt.contains("您需要支付 50 滴水滴才能进入此版块")) {
-        print("您需要支付 50 滴水滴才能进入此版块");
         setState(() {
           need_50_water = true;
         });
@@ -334,11 +333,10 @@ class _TopicColumnState extends State<TopicColumn> {
             ? Loading(
                 showError: load_done,
                 msg: need_50_water
-                    ? "您需要支付50滴水滴且升级至2级才能进入此版块，支付一次，永久有效。客户端可能有延时，需要等候后才能查看"
+                    ? '''水滴可以通过做任务、发帖回帖等方式积累。您需要扣除50滴水滴且升级至2级才能进入。
+扣除水滴后可能有延时，请尝试刷新试试。'''
                     : "帖子专栏走丢了，或许网页端可以连接该星球",
                 backgroundColor: os_back,
-                tapTxt1: need_50_water ? "重新刷新一次 >" : "前往网页版 >",
-                tapTxt: need_50_water ? "去网页版河畔支付 >" : "重新刷新一次 >",
                 loadingWidget: Opacity(
                   opacity: 0.8,
                   child: ConstrainedBox(
@@ -349,19 +347,7 @@ class _TopicColumnState extends State<TopicColumn> {
                     child: Lottie.asset("lib/lottie/book.json"),
                   ),
                 ),
-                tap: () {
-                  if (need_50_water) {
-                    launchUrlString(
-                      base_url + "forum.php?mod=forumdisplay&fid=371&mobile=no",
-                    );
-                  } else {
-                    setState(() {
-                      load_done = false;
-                      loading = false;
-                      _getData();
-                    });
-                  }
-                },
+                tapTxt1: "重新刷新一次 >",
                 tap1: need_50_water
                     ? () {
                         setState(() {
