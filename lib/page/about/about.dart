@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -185,7 +188,7 @@ class _AboutCardState extends State<AboutCard> {
     return Bounce(
       onPressed: () {
         if (widget.withUrl != null) {
-          launchUrlString(Uri.encodeFull(widget.cont));
+          xsLanuch(url: widget.cont);
         }
       },
       duration: Duration(milliseconds: 100),

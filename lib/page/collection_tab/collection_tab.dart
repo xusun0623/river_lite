@@ -29,6 +29,7 @@ class _CollectionTabState extends State<CollectionTab>
   bool vibrate = false;
   int pageSize = 25;
   int filter_type = 0; //0-按主题数排序 1-按评论数排序 2-按订阅数排序
+  bool switchLoading = false;
 
   @override
   void initState() {
@@ -79,6 +80,9 @@ class _CollectionTabState extends State<CollectionTab>
     await setStorage(key: "mylist", value: jsonEncode(mydata));
     await _getData(isInit: true);
     await setStorage(key: "list", value: jsonEncode(data));
+    setState(() {
+      switchLoading = false;
+    });
   }
 
   _getData({bool isInit = false, bool isMine = false}) async {
@@ -154,12 +158,7 @@ class _CollectionTabState extends State<CollectionTab>
                 int.parse(dl.getElementsByClassName("xi2").first.innerHtml),
             "subs_txt": isMine ? "主题数" : ["主题数", "评论数", "订阅数"][filter_type],
             "tags": _getTag(dl), //专辑的标签
-            "type": isMine
-                ? 1
-                : (int.parse(dl.getElementsByClassName("xi2")[0].innerHtml) >
-                        ([70, 10, 50][filter_type])
-                    ? 0
-                    : 2), //0-黑 1-红 2-白
+            "type": isMine ? 0 : 2, //0-黑 1-红 2-白
             "isShadow": false, //true-阴影 false-无阴影
           });
         }
@@ -237,9 +236,11 @@ class _CollectionTabState extends State<CollectionTab>
     if (data.length != 0 || loading) {
       t.add(Container(height: 5));
       t.add(ListTab(
+          loading: switchLoading,
           index: filter_type,
           tap: (idx) {
             setState(() {
+              switchLoading = true;
               filter_type = idx;
               data = [];
             });
@@ -307,10 +308,12 @@ class _CollectionTabState extends State<CollectionTab>
 class ListTab extends StatefulWidget {
   int index;
   Function tap;
+  bool loading;
   ListTab({
     Key key,
     this.index,
     this.tap,
+    this.loading,
   }) : super(key: key);
 
   @override
@@ -362,19 +365,30 @@ class _ListTabState extends State<ListTab> {
       child: Row(
         children: [
           Container(width: 20),
-          Container(
-            child: Text(
-              "排序",
-              style: TextStyle(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_white
-                    : os_black,
-                fontWeight: FontWeight.bold,
-              ),
+          Text(
+            "排序",
+            style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
+              fontWeight: FontWeight.bold,
             ),
           ),
           Container(width: 15),
           ..._buildCont(),
+          Container(width: (widget.loading ?? false) ? 5 : 0),
+          (widget.loading ?? false)
+              ? Container(
+                  width: 12,
+                  height: 12,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_black,
+                  ),
+                )
+              : Container(),
         ],
       ),
     );

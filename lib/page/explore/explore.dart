@@ -4,6 +4,7 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -84,7 +85,7 @@ class _BottomBtnsState extends State<BottomBtns> {
               base_url + "merge_qshp/",
               base_url + "",
             ];
-            launchUrlString(urls[i - 1]);
+            xsLanuch(url: urls[i - 1]);
           },
         ),
       ));

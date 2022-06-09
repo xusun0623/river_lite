@@ -7,6 +7,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/saveImg.dart';
+import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/emoji/emoji.dart';
@@ -262,8 +263,10 @@ class _DetailContState extends State<DetailCont> {
                   confirmTxt: "立即前往",
                   cancelTxt: "取消",
                   confirm: () {
-                    launchUrlString(
-                        Uri.encodeFull(widget.data['url'].toString()));
+                    xsLanuch(
+                      url: widget.data['url'],
+                      isExtern: false,
+                    );
                   },
                 );
             } catch (e) {
@@ -274,7 +277,10 @@ class _DetailContState extends State<DetailCont> {
                 confirmTxt: "立即前往",
                 cancelTxt: "取消",
                 confirm: () {
-                  launchUrlString(Uri.encodeFull(widget.data['url']));
+                  xsLanuch(
+                    url: widget.data['url'],
+                    isExtern: false,
+                  );
                 },
               );
             }

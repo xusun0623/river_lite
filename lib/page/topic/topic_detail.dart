@@ -15,6 +15,7 @@ import 'package:offer_show/asset/nowMode.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/topic_formhash.dart';
 import 'package:offer_show/asset/uploadAttachment.dart';
@@ -39,7 +40,6 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
@@ -63,6 +63,7 @@ class _TopicDetailState extends State<TopicDetail> {
   var total_num = 0; //评论总数
   String uploadFileAid = "";
   var replyId = 0;
+  int stick_num = 0;
   double bottom_safeArea = 10;
   bool editing = false; //是否处于编辑状态
   bool isBlack = false;
@@ -116,11 +117,19 @@ class _TopicDetailState extends State<TopicDetail> {
       if (total_num == 0) {
         setState(() {
           total_num = data["total_num"];
+          stick_num = comment.length - 20; //置顶的评论数量
         });
       }
     } else {
       load_done = true;
       data = null;
+    }
+    if (data == null || data["topic"] == null) {
+      xsLanuch(
+        url:
+            "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${widget.topicID}",
+        isExtern: false,
+      );
     }
     setState(() {});
     return;
@@ -134,7 +143,7 @@ class _TopicDetailState extends State<TopicDetail> {
       "topicId": widget.topicID,
       "authorId": _select == 0 ? 0 : data["topic"]["user_id"],
       "order": _sort,
-      "page": (comment.length / nums + 1).floor(),
+      "page": ((comment.length - stick_num) / nums + 1).floor(),
       "pageSize": nums,
     });
     if (tmp["list"] != null && tmp["list"].length != 0) {
@@ -501,10 +510,12 @@ class _TopicDetailState extends State<TopicDetail> {
               msg: "河畔Lite客户端没有权限访问或者帖子被删除，可以尝试网页端是否能访问",
               tapTxt: "访问网页版>",
               tap: () async {
-                launchUrlString(base_url +
-                    "forum.php?mod=viewthread&tid=" +
-                    widget.topicID.toString() +
-                    (isDesktop() ? "" : "&mobile=2"));
+                xsLanuch(
+                    url: base_url +
+                        "forum.php?mod=viewthread&tid=" +
+                        widget.topicID.toString() +
+                        (isDesktop() ? "" : "&mobile=2"),
+                    isExtern: false);
               },
             )
           : _isBlack() || isBlack
@@ -810,6 +821,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                 : "lib/img/topic_picture.svg",
                             tap: () async {
                               setState(() {
+                                widget.focusNode.unfocus();
                                 upLoading = true;
                               });
                               final ImagePicker _picker = ImagePicker();
@@ -817,12 +829,18 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                     imageQuality: 50,
                                   ) ??
                                   [];
+                              showToast(
+                                context: context,
+                                type: XSToast.loading,
+                                txt: "上传中…",
+                              );
                               var img_urls =
                                   await Api().uploadImage(imgs: image) ?? [];
                               await widget.uploadImg(img_urls);
                               setState(() {
                                 upLoading = false;
                               });
+                              hideToast();
                             },
                           ),
                           SendFunc(

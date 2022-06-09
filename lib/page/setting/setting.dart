@@ -4,6 +4,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -90,7 +91,7 @@ class _SettingState extends State<Setting> {
               : os_deep_grey,
         ),
         onTap: () {
-          launchUrlString("https://www.wjx.cn/vj/mzgzO5S.aspx");
+          xsLanuch(url: "https://www.wjx.cn/vj/mzgzO5S.aspx", isExtern: false);
         },
       ),
       ListTile(
@@ -155,8 +156,10 @@ class _SettingState extends State<Setting> {
                   Provider.of<ColorProvider>(context).isDark ? os_red : os_red),
         ),
         onTap: () async {
-          launchUrlString(
-            "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1822104&extra=page%3D1",
+          xsLanuch(
+            url:
+                "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1822104&extra=page%3D1",
+            isExtern: false,
           );
         },
       )

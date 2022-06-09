@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -7,6 +8,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/nowMode.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
@@ -357,8 +359,8 @@ class _TopicColumnState extends State<TopicColumn> {
                         });
                       }
                     : () {
-                        launchUrlString(
-                          base_url +
+                        xsLanuch(
+                          url: base_url +
                               "forum.php?mod=forumdisplay&fid=${widget.columnID}",
                         );
                       },
