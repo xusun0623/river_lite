@@ -718,6 +718,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
   String uploadFile = "";
   bool popSection = false;
   int popSectionIndex = 0; //0-表情包 1-艾特某人
+  int inserting_num = 0; //插入的位置
 
   double uploadProgress = 0; //上传进度
 
@@ -735,6 +736,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    widget.controller.addListener(() {
+      inserting_num = widget.controller.selection.base.offset;
+    });
     widget.focusNode.addListener(() {
       if (widget.focusNode.hasFocus) {
         _foldPop();
@@ -970,8 +974,15 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                   child: popSectionIndex == 0
                       ? YourEmoji(
                           tap: (emoji) {
-                            widget.controller.text =
-                                widget.controller.text + emoji;
+                            //inserting_num
+                            int inserting_tmp = inserting_num;
+                            widget.controller.text = widget.controller.text
+                                    .substring(0, inserting_tmp) +
+                                emoji +
+                                widget.controller.text.substring(inserting_tmp,
+                                    widget.controller.text.length);
+                            inserting_num =
+                                inserting_tmp + emoji.toString().length;
                             setState(() {});
                           },
                         )
@@ -1072,6 +1083,62 @@ class _YourEmojiState extends State<YourEmoji> {
     return tmp;
   }
 
+  List<Widget> _buildRiver3() {
+    List<Widget> tmp = [];
+    emoji3.forEach((element) {
+      tmp.add(myInkWell(
+        radius: 5,
+        color: Colors.transparent,
+        tap: () {
+          widget.tap("[s:${element}]");
+        },
+        widget: Padding(
+          padding: EdgeInsets.all(5),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(12.5)),
+            child: Container(
+              color: os_white,
+              width: widget.size ?? 37,
+              height: widget.size ?? 37,
+              child: Image.asset(
+                "lib/emoji/3/s_${element}.gif",
+              ),
+            ),
+          ),
+        ),
+      ));
+    });
+    return tmp;
+  }
+
+  List<Widget> _buildRiver4() {
+    List<Widget> tmp = [];
+    emoji4.forEach((element) {
+      tmp.add(myInkWell(
+        radius: 5,
+        color: Colors.transparent,
+        tap: () {
+          widget.tap("[s:${element}]");
+        },
+        widget: Padding(
+          padding: EdgeInsets.all(5),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(12.5)),
+            child: Container(
+              color: os_white,
+              width: widget.size ?? 37,
+              height: widget.size ?? 37,
+              child: Image.asset(
+                "lib/emoji/4/s_${element}.gif",
+              ),
+            ),
+          ),
+        ),
+      ));
+    });
+    return tmp;
+  }
+
   List<Widget> _buildEmoji(int index) {
     List<Widget> tmp = [];
     for (var i = 0; i < emoji[index].characters.length; i++) {
@@ -1145,6 +1212,44 @@ class _YourEmojiState extends State<YourEmoji> {
             padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
             child: Wrap(
               children: _buildRiver2(),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+            child: Text(
+              "黄豆",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+            child: Wrap(
+              children: _buildRiver3(),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+            child: Text(
+              "贱驴",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+            child: Wrap(
+              children: _buildRiver4(),
             ),
           ),
           Container(

@@ -44,6 +44,8 @@ dependencies:
   flutter_gifimage: ^1.0.1
   bubble_tab_indicator: ^0.1.6
   pull_to_refresh: ^2.0.0
+  flutter_image_compress: ^1.1.0
+  path_provider: ^2.0.11
 
 dev_dependencies:
   flutter_test:
@@ -59,6 +61,8 @@ flutter:
     # - lib/font/
     - lib/emoji/1/
     - lib/emoji/2/
+    - lib/emoji/3/
+    - lib/emoji/4/
     - lib/img/
     - lib/img/banner/
     - lib/img/setting/

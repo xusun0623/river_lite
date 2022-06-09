@@ -44,6 +44,7 @@ class _PostNewState extends State<PostNew> {
   bool show_vote = false;
   bool uploading = false;
   int pop_section_index = -1;
+  int tip_controller_offset = 0;
   List<String> vote_options = [];
   ScrollController listview_controller = new ScrollController();
   int secret_see = 0;
@@ -175,6 +176,11 @@ class _PostNewState extends State<PostNew> {
     select_section_id = widget.board_id;
     _getTotalColumn();
     _getChildColumnTip();
+    tip_controller.addListener(() {
+      setState(() {
+        tip_controller_offset = tip_controller.selection.base.offset;
+      });
+    });
     tip_focus.addListener(() {
       if (tip_focus.hasFocus) {
         pop_section = false;
@@ -338,7 +344,15 @@ class _PostNewState extends State<PostNew> {
                                         ? os_dark_back
                                         : os_grey,
                                 tap: (emoji) {
-                                  tip_controller.text += emoji;
+                                  int tmp_offset = tip_controller_offset;
+                                  tip_controller.text = tip_controller.text
+                                          .substring(0, tip_controller_offset) +
+                                      emoji +
+                                      tip_controller.text.substring(
+                                          tip_controller_offset,
+                                          tip_controller.text.length);
+                                  tip_controller_offset =
+                                      tmp_offset + emoji.toString().length;
                                 },
                               ),
                               AtSomeone(
@@ -1195,23 +1209,27 @@ class SaveDraft extends StatelessWidget {
   }
 }
 
-class ContInput extends StatelessWidget {
-  const ContInput({
+class ContInput extends StatefulWidget {
+  final TextEditingController tip_controller;
+  final FocusNode tip_focus;
+  ContInput({
     Key key,
     @required this.tip_controller,
     @required this.tip_focus,
   }) : super(key: key);
 
-  final TextEditingController tip_controller;
-  final FocusNode tip_focus;
+  @override
+  State<ContInput> createState() => _ContInputState();
+}
 
+class _ContInputState extends State<ContInput> {
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20, top: 0),
       child: TextField(
-        controller: tip_controller,
-        focusNode: tip_focus,
+        controller: widget.tip_controller,
+        focusNode: widget.tip_focus,
         keyboardType: TextInputType.multiline,
         maxLines: null,
         cursorColor: os_color,
