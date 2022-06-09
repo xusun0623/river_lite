@@ -39,6 +39,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
@@ -500,10 +501,10 @@ class _TopicDetailState extends State<TopicDetail> {
               msg: "河畔Lite客户端没有权限访问或者帖子被删除，可以尝试网页端是否能访问",
               tapTxt: "访问网页版>",
               tap: () async {
-                launch(base_url +
+                launchUrlString(base_url +
                     "forum.php?mod=viewthread&tid=" +
                     widget.topicID.toString() +
-                    "&mobile=2");
+                    (isDesktop() ? "" : "&mobile=2"));
               },
             )
           : _isBlack() || isBlack

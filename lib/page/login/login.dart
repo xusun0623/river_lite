@@ -40,8 +40,6 @@ class _LoginState extends State<Login> {
         username == null ||
         password == null) return;
     showToast(context: context, type: XSToast.loading, txt: "加载中…");
-    await getWebCookie(username: username, password: password);
-    await Future.delayed(Duration(milliseconds: 400));
     var data = await Api().user_login({
       "type": "login",
       "username": username,
@@ -53,6 +51,7 @@ class _LoginState extends State<Login> {
         showToast(context: context, type: XSToast.none, txt: data["errcode"]);
       }
       if (data["rs"] == 1) {
+        await getWebCookie(username: username, password: password);
         setStorage(key: "myinfo", value: jsonEncode(data));
         UserInfoProvider provider =
             Provider.of<UserInfoProvider>(context, listen: false);
