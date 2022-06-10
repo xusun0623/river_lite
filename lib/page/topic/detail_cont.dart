@@ -53,25 +53,27 @@ class _DetailContState extends State<DetailCont> {
     ret.add(TextSpan(text: tmp[0]));
     for (var i = 1; i < tmp.length; i++) {
       var first_idx = tmp[i].indexOf(']');
-      ret.add(WidgetSpan(
-        child: SizedBox(
-          width: 30,
-          height: 30,
-          child: Opacity(
-            opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
-            child: CachedNetworkImage(
-              placeholder: (context, url) => Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: os_grey,
+      if (first_idx != -1) {
+        ret.add(WidgetSpan(
+          child: SizedBox(
+            width: 30,
+            height: 30,
+            child: Opacity(
+              opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
+              child: CachedNetworkImage(
+                placeholder: (context, url) => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: os_grey,
+                  ),
                 ),
+                imageUrl: tmp[i].substring(0, first_idx),
               ),
-              imageUrl: tmp[i].substring(0, first_idx),
             ),
           ),
-        ),
-      ));
-      ret.add(TextSpan(text: tmp[i].substring(first_idx + 1)));
+        ));
+        ret.add(TextSpan(text: tmp[i].substring(first_idx + 1)));
+      }
     }
     return ret;
   }
