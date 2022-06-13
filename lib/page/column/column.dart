@@ -234,6 +234,7 @@ class _TopicColumnState extends State<TopicColumn> {
     tmp.add(TopSection(data: topData));
     data["list"].forEach((e) {
       tmp.add(Topic(
+        hideColumn: true,
         data: e,
       ));
     });
@@ -366,7 +367,7 @@ class _TopicColumnState extends State<TopicColumn> {
                       },
               )
             : BackToTop(
-                animation: false,
+                // animation: false,
                 show: showBackToTop,
                 bottom: 100,
                 controller: _controller,

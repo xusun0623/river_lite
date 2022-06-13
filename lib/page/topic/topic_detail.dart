@@ -1955,7 +1955,7 @@ class _CommentTabState extends State<CommentTab> {
             decoration: BoxDecoration(
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_light_dark_card
-                  : Color(0xFFF3F3F3),
+                  : Color(0xFFEEEEEE),
               borderRadius: BorderRadius.all(Radius.circular(100)),
             ),
             child: Row(
@@ -1982,7 +1982,7 @@ class _CommentTabState extends State<CommentTab> {
                             ? (Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
                                 : os_black)
-                            : os_deep_grey,
+                            : os_dark_card,
                       ),
                     ),
                   ),
@@ -2008,7 +2008,7 @@ class _CommentTabState extends State<CommentTab> {
                             ? (Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
                                 : os_black)
-                            : os_deep_grey,
+                            : os_dark_card,
                       ),
                     ),
                   ),

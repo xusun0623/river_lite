@@ -143,7 +143,9 @@ class _DetailContState extends State<DetailCont> {
               borderRadius: BorderRadius.all(Radius.circular(
                   widget.imgLists.length > 3 || isDesktop() ? 2.5 : 5)),
               child: Hero(
-                tag: widget.data["infor"],
+                tag: widget.imgLists.length > 10
+                    ? "不显示Hero动画"
+                    : widget.data["infor"],
                 child: Container(
                   decoration: BoxDecoration(
                     color: os_grey,
@@ -166,38 +168,83 @@ class _DetailContState extends State<DetailCont> {
                       );
                     },
                     child: widget.imgLists.length > 3 || isDesktop()
-                        ? CachedNetworkImage(
-                            cacheManager: RiverListCacheManager.instance,
-                            imageUrl: widget.data["infor"],
-                            width: isDesktop()
-                                ? 200
-                                : (MediaQuery.of(context).size.width -
-                                        (widget.isComment ?? false ? 50 : 0) -
-                                        42) /
-                                    3,
-                            height: isDesktop()
-                                ? 200
-                                : (MediaQuery.of(context).size.width -
-                                        (widget.isComment ?? false ? 50 : 0) -
-                                        42) /
-                                    3,
-                            // maxHeightDiskCache: 800,
-                            // maxWidthDiskCache: 800,
-                            memCacheWidth: 800,
-                            memCacheHeight: 800,
-                            filterQuality: FilterQuality.low,
-                            fit: BoxFit.cover,
-                            progressIndicatorBuilder: (context, url, progress) {
-                              return Padding(
-                                padding: const EdgeInsets.all(45.0),
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: os_middle_grey,
-                                  value: progress.progress,
+                        ? (widget.imgLists.length > 10
+                            ? Container(
+                                color: os_grey,
+                                width: isDesktop()
+                                    ? 200
+                                    : (MediaQuery.of(context).size.width -
+                                            (widget.isComment ?? false
+                                                ? 50
+                                                : 0) -
+                                            42) /
+                                        3,
+                                height: isDesktop()
+                                    ? 200
+                                    : (MediaQuery.of(context).size.width -
+                                            (widget.isComment ?? false
+                                                ? 50
+                                                : 0) -
+                                            42) /
+                                        3,
+                                child: Image.network(
+                                  widget.data["infor"],
+                                  fit: BoxFit.cover,
+                                  width: isDesktop()
+                                      ? 200
+                                      : (MediaQuery.of(context).size.width -
+                                              (widget.isComment ?? false
+                                                  ? 50
+                                                  : 0) -
+                                              42) /
+                                          3,
+                                  height: isDesktop()
+                                      ? 200
+                                      : (MediaQuery.of(context).size.width -
+                                              (widget.isComment ?? false
+                                                  ? 50
+                                                  : 0) -
+                                              42) /
+                                          3,
                                 ),
-                              );
-                            },
-                          )
+                              )
+                            : CachedNetworkImage(
+                                cacheManager: RiverListCacheManager.instance,
+                                imageUrl: widget.data["infor"],
+                                width: isDesktop()
+                                    ? 200
+                                    : (MediaQuery.of(context).size.width -
+                                            (widget.isComment ?? false
+                                                ? 50
+                                                : 0) -
+                                            42) /
+                                        3,
+                                height: isDesktop()
+                                    ? 200
+                                    : (MediaQuery.of(context).size.width -
+                                            (widget.isComment ?? false
+                                                ? 50
+                                                : 0) -
+                                            42) /
+                                        3,
+                                maxHeightDiskCache: 800,
+                                maxWidthDiskCache: 800,
+                                memCacheWidth: 800,
+                                memCacheHeight: 800,
+                                filterQuality: FilterQuality.low,
+                                fit: BoxFit.cover,
+                                progressIndicatorBuilder:
+                                    (context, url, progress) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(45.0),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.5,
+                                      color: os_middle_grey,
+                                      value: progress.progress,
+                                    ),
+                                  );
+                                },
+                              ))
                         : CachedNetworkImage(
                             cacheManager: RiverListCacheManager.instance,
                             imageUrl: widget.data["infor"],

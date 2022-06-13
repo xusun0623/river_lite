@@ -28,6 +28,7 @@ class Topic extends StatefulWidget {
   double top;
   double bottom;
   bool blackOccu;
+  bool hideColumn;
   Color backgroundColor;
 
   Topic({
@@ -36,6 +37,7 @@ class Topic extends StatefulWidget {
     this.top,
     this.bottom,
     this.blackOccu,
+    this.hideColumn,
     this.backgroundColor,
   }) : super(key: key);
 
@@ -367,7 +369,6 @@ class _TopicState extends State<Topic> {
               },
               tap: () async {
                 String info_txt = await getStorage(key: "myinfo", initData: "");
-                print("${info_txt}");
                 _setHistory();
                 if (info_txt == "") {
                   Navigator.pushNamed(context, "/login", arguments: 0);
@@ -377,7 +378,6 @@ class _TopicState extends State<Topic> {
                     "/topic_detail",
                     arguments:
                         (widget.data["source_id"] ?? widget.data["topic_id"]),
-                    // arguments: 1903247,
                   );
                 }
               },
@@ -391,7 +391,8 @@ class _TopicState extends State<Topic> {
                   ),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(16, 18, 16, 18),
+                  // padding: EdgeInsets.fromLTRB(16, 18, 16, 18),
+                  padding: EdgeInsets.fromLTRB(16, 18, 0, 10),
                   child: Column(
                     children: [
                       Row(
@@ -408,8 +409,8 @@ class _TopicState extends State<Topic> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(20),
                                   child: CachedNetworkImage(
-                                    width: 27,
-                                    height: 27,
+                                    width: 30,
+                                    height: 30,
                                     fit: BoxFit.cover,
                                     imageUrl: widget.data["userAvatar"],
                                     placeholder: (context, url) => Container(
@@ -423,7 +424,7 @@ class _TopicState extends State<Topic> {
                                   ),
                                 ),
                               ),
-                              Padding(padding: EdgeInsets.all(5)),
+                              Padding(padding: EdgeInsets.all(4)),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -436,6 +437,16 @@ class _TopicState extends State<Topic> {
                                           : os_black,
                                       fontSize: 14,
                                       // fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Container(height: 1),
+                                  Text(
+                                    RelativeDateFormat.format(DateTime
+                                        .fromMillisecondsSinceEpoch(int.parse(
+                                            widget.data["last_reply_date"]))),
+                                    style: TextStyle(
+                                      color: Color(0xFFAAAAAA),
+                                      fontSize: 12.5,
                                     ),
                                   ),
                                 ],
@@ -472,42 +483,59 @@ class _TopicState extends State<Topic> {
                                 ),
                                 radius: 100,
                               ),
+                              Container(width: 16),
                             ],
-                          )
+                          ),
                         ],
                       ),
-                      Padding(padding: EdgeInsets.all(3)),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Text(
-                          widget.data["title"],
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 17,
-                              letterSpacing: 0.5,
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_white
-                                  : os_black),
-                        ),
+                      Padding(padding: EdgeInsets.all(4)),
+                      Row(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width - 54,
+                            child: Text(
+                              widget.data["title"],
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  letterSpacing: 0.5,
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_white
+                                          : os_black),
+                            ),
+                          ),
+                          Container(width: 16),
+                        ],
                       ),
-                      Padding(padding: EdgeInsets.all(3)),
+                      (widget.data["summary"] ?? widget.data["subject"])
+                                  .toString()
+                                  .trim() ==
+                              ""
+                          ? Container()
+                          : Padding(padding: EdgeInsets.all(3)),
                       ((widget.data["summary"] ?? widget.data["subject"]) ??
                                   "") ==
                               ""
                           ? Container()
-                          : Container(
-                              width: MediaQuery.of(context).size.width,
-                              child: Text(
-                                (widget.data["summary"] ??
-                                        widget.data["subject"]) ??
-                                    "",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  height: 1.5,
-                                  color: Color(0xFF999999),
+                          : Row(
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width - 54,
+                                  child: Text(
+                                    (widget.data["summary"] ??
+                                            widget.data["subject"]) ??
+                                        "",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      height: 1.5,
+                                      color: Color(0xFF999999),
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Container(width: 16),
+                              ],
                             ),
                       Padding(padding: EdgeInsets.all(3)),
                       (widget.data["vote"] ?? 0) == 0
@@ -559,7 +587,7 @@ class _TopicState extends State<Topic> {
                                 ],
                               ),
                             ),
-                      Padding(padding: EdgeInsets.all(8)),
+                      // Padding(padding: EdgeInsets.all(4)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -608,13 +636,33 @@ class _TopicState extends State<Topic> {
                               ),
                             ],
                           ),
-                          Text(
-                            RelativeDateFormat.format(
-                                DateTime.fromMillisecondsSinceEpoch(
-                                    int.parse(widget.data["last_reply_date"]))),
-                            style: TextStyle(
-                              color: Color(0xFF9C9C9C),
-                              fontSize: 12.5,
+                          myInkWell(
+                            color: Colors.transparent,
+                            tap: () {
+                              Navigator.pushNamed(
+                                context,
+                                "/column",
+                                arguments: widget.data["board_id"],
+                              );
+                            },
+                            radius: 10,
+                            widget: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              child: Text(
+                                (widget.hideColumn ?? false)
+                                    ? " "
+                                    : widget.data["board_name"],
+                                style: TextStyle(
+                                  color: os_color,
+                                  fontSize: 14,
+                                ),
+                              ),
                             ),
                           ),
                         ],

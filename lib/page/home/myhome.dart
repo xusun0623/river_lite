@@ -31,7 +31,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
 
   TabBar _getMyTabBar() {
     return TabBar(
-      labelPadding: EdgeInsets.symmetric(horizontal: 12),
+      labelPadding: EdgeInsets.symmetric(horizontal: 11),
       isScrollable: true,
       splashBorderRadius: BorderRadius.all(Radius.circular(5)),
       labelColor: Provider.of<ColorProvider>(context).isDark
@@ -39,10 +39,10 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           : Colors.black87,
       unselectedLabelColor: Color(0xFF7A7A7A),
       unselectedLabelStyle: TextStyle(
-        fontSize: 16,
+        fontSize: 17,
       ),
       indicator: TabSizeIndicator(
-        wantWidth: 20,
+        wantWidth: 18,
         borderSide: BorderSide(
             width: 3.0,
             color: Provider.of<ColorProvider>(context).isDark
@@ -51,6 +51,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       ),
       labelStyle: TextStyle(
         fontWeight: FontWeight.bold,
+        fontSize: 17,
       ),
       tabs: [
         Tab(text: "新发表"),
