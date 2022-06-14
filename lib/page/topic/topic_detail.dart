@@ -20,6 +20,7 @@ import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/topic_formhash.dart';
 import 'package:offer_show/asset/uploadAttachment.dart';
+import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
@@ -68,16 +69,108 @@ class _TopicDetailState extends State<TopicDetail> {
   double bottom_safeArea = 10;
   bool editing = false; //是否处于编辑状态
   bool isBlack = false;
-  bool isInvalid = false;//帖子是否失效
+  bool isInvalid = false; //帖子是否失效
+  bool isNoAccess = false; //帖子是否没有访问权限
   String placeholder = "请在此编辑回复";
   List<Map> atUser = [];
-  String blackKeyWord = "";
+  List<int> listID = []; //淘贴ID
+  List listData = []; //淘贴数据
 
+  String blackKeyWord = "";
   ScrollController _scrollController = new ScrollController();
   TextEditingController _txtController = new TextEditingController();
   FocusNode _focusNode = new FocusNode();
 
   var dislike_count = 0;
+
+  Future<Map> _getCardData(int ctid) async {
+    //根据ctid获取专辑数据
+    Map tmp = {
+      "name": "甜甜的狗粮铺", //专辑的名称
+      "desc": "愿每日的心酸在青春与岁月证明的爱情中融化，愿你憧憬爱情相信爱情并拥有爱情。", //专辑的描述
+      "user": "xusun000", //专辑的创建者姓名
+      "head": "", //专辑的创建者头像
+      "user_id": 240329, //专辑的创建者ID
+      "list_id": 240329, //专辑ID
+      "subs_num": 56, //专辑订阅数
+      "subs_txt": "主题", //专辑相关备注
+      "tags": ["社会", "人物", "故事", "人性", "爱与和平"], //专辑的标签
+      "type": 2, //0-黑 1-红 2-白
+      "isShadow": false, //true-阴影 false-无阴影
+    };
+    String d_tmp = (await XHttp().pureHttpWithCookie(
+      url: base_url + "forum.php?mod=collection&action=view&ctid=${ctid}",
+    ))
+        .data
+        .toString();
+    var document = parse(d_tmp);
+    try {
+      tmp["name"] = document
+          .getElementsByClassName("mn")
+          .first
+          .getElementsByTagName("a")
+          .first
+          .innerHtml;
+      tmp["desc"] = document
+          .getElementsByClassName("mn")
+          .first
+          .getElementsByClassName("bm_c")
+          .first
+          .getElementsByTagName("div")
+          .last
+          .innerHtml;
+      document.getElementsByTagName("p").forEach((p) {
+        if (p.innerHtml.contains("专辑创建人")) {
+          tmp["user"] = p.getElementsByTagName("a").first.innerHtml;
+          tmp["head"] = "https://bbs.uestc.edu.cn/uc_server/avatar.php?uid=" +
+              p
+                  .getElementsByTagName("a")
+                  .first
+                  .attributes["href"]
+                  .split("&uid=")[1];
+          tmp["user_id"] = int.parse(p
+              .getElementsByTagName("a")
+              .first
+              .attributes["href"]
+              .split("&uid=")[1]);
+        }
+      });
+      tmp["list_id"] = ctid;
+      tmp["subs_num"] = int.parse(document
+          .getElementsByClassName("clct_flw")
+          .first
+          .getElementsByTagName("strong")
+          .first
+          .innerHtml);
+      tmp["subs_txt"] = "订阅数";
+      document.getElementsByClassName("mbn").forEach((mbn) {
+        if (mbn.innerHtml.contains("淘帖标签")) {
+          List tmp_tag = [];
+          mbn.getElementsByTagName("a").forEach((a) {
+            tmp_tag.add(a.innerHtml);
+          });
+          tmp["tags"] = tmp_tag;
+        }
+      });
+      tmp["type"] = 0; //0-黑 1-红 2-白
+      tmp["isShadow"] = false;
+      return tmp;
+    } catch (e) {
+      print("${e}");
+      return tmp;
+    }
+  }
+
+  getListArr() async {
+    List tmp = [];
+    listID.forEach((element) async {
+      Map tmp_data = await _getCardData(element);
+      tmp.add(tmp_data);
+    });
+    setState(() {
+      listData = tmp;
+    });
+  }
 
   void _getLikeCount() async {
     var document = parse((await XHttp().pureHttpWithCookie(
@@ -88,6 +181,20 @@ class _TopicDetailState extends State<TopicDetail> {
     try {
       var dislike_txt = document.getElementById("recommendv_sub_digg");
       dislike_count = int.parse(dislike_txt.innerHtml);
+      var listArray = document.getElementsByClassName("cm");
+      listArray.forEach((cm) {
+        if (cm.innerHtml.contains("本帖被以下淘专辑推荐")) {
+          listID = [];
+          cm.getElementsByTagName("li").forEach((li) {
+            listID.add(int.parse(li
+                .getElementsByTagName("a")
+                .first
+                .attributes["href"]
+                .split("ctid=")[1]));
+          });
+        }
+      });
+      getListArr();
       setState(() {});
     } catch (e) {}
   }
@@ -112,20 +219,34 @@ class _TopicDetailState extends State<TopicDetail> {
       "page": 1,
       "pageSize": 20,
     });
-    if (tmp["rs"] != 0) {
-      comment = tmp["list"];
-      data = tmp;
-      load_done = ((tmp["list"] ?? []).length < 20);
-      if (total_num == 0) {
-        setState(() {
-          total_num = data["total_num"];
-          stick_num = comment.length - 20; //置顶的评论数量
-        });
-      }
-    } else {
-      load_done = true;
-      data = null;
+    if (tmp.toString().contains("您没有权限访问该版块")) {
+      setState(() {
+        isNoAccess = true;
+      });
+      return;
     }
+    if (tmp.toString().contains("指定的主题不存在或已被删除或正在被审核")) {
+      setState(() {
+        isInvalid = true;
+      });
+      return;
+    }
+    try {
+      if (tmp["rs"] != 0) {
+        comment = tmp["list"];
+        data = tmp;
+        load_done = ((tmp["list"] ?? []).length < 20);
+        if (total_num == 0) {
+          setState(() {
+            total_num = data["total_num"];
+            stick_num = comment.length - 20; //置顶的评论数量
+          });
+        }
+      } else {
+        load_done = true;
+        data = null;
+      }
+    } catch (e) {}
     if (data == null || data["topic"] == null) {
       xsLanuch(
         url:
@@ -269,6 +390,33 @@ class _TopicDetailState extends State<TopicDetail> {
     return Column(children: tmp);
   }
 
+  List<Widget> _buildListCard() {
+    List<Widget> tmp = [];
+    listData.forEach((element) {
+      tmp.add(
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, "/list", arguments: element);
+          },
+          child: Container(
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? Color(0x22000000)
+                    : Colors.transparent,
+                blurRadius: 10,
+                offset: Offset(3, 3),
+              ),
+            ]),
+            child: Collection(data: element),
+          ),
+        ),
+      );
+    });
+    tmp.add(Padding(padding: EdgeInsets.all(5)));
+    return tmp;
+  }
+
   _buildTotal() {
     List<Widget> tmp = [];
     tmp = [
@@ -346,6 +494,18 @@ class _TopicDetailState extends State<TopicDetail> {
               poll_info: data["topic"]["poll_info"],
             )
           : Container(),
+      listData.length == 0
+          ? Container()
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  "- 本帖被以下淘专辑推荐 -",
+                  style: TextStyle(color: os_deep_grey),
+                ),
+              ),
+            ),
+      ..._buildListCard(),
       TopicBottom(
         data: data,
       ),
@@ -507,19 +667,33 @@ class _TopicDetailState extends State<TopicDetail> {
           ? os_detail_back
           : os_white,
       body: data == null || data["topic"] == null
-          ? Loading(
-              showError: load_done,
-              msg: "河畔Lite客户端没有权限访问或者帖子被删除，可以尝试网页端是否能访问",
-              tapTxt: "访问网页版>",
-              tap: () async {
-                xsLanuch(
-                    url: base_url +
-                        "forum.php?mod=viewthread&tid=" +
-                        widget.topicID.toString() +
-                        (isDesktop() ? "" : "&mobile=2"),
-                    isExtern: false);
-              },
-            )
+          ? ((isInvalid || isNoAccess)
+              ? Center(
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 150),
+                    child: Text(
+                      isInvalid ? "抱歉，指定的主题不存在或已被删除或正在被审核" : "抱歉，您没有权限访问该版块",
+                      style: TextStyle(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_white
+                            : os_black,
+                      ),
+                    ),
+                  ),
+                )
+              : Loading(
+                  showError: load_done,
+                  msg: "河畔Lite客户端没有权限访问或者帖子被删除，可以尝试网页端是否能访问",
+                  tapTxt: "访问网页版>",
+                  tap: () async {
+                    xsLanuch(
+                        url: base_url +
+                            "forum.php?mod=viewthread&tid=" +
+                            widget.topicID.toString() +
+                            (isDesktop() ? "" : "&mobile=2"),
+                        isExtern: false);
+                  },
+                ))
           : _isBlack() || isBlack
               ? Container(
                   color: Provider.of<ColorProvider>(context).isDark

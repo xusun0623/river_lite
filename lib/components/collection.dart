@@ -14,8 +14,8 @@ class Collection extends StatefulWidget {
     // "head": "", //专辑的创建者头像
     // "user_id": 240329, //专辑的创建者ID
     // "list_id": 240329, //专辑ID
-    // "subs_num": 56, //专辑相关数
-    // "subs_txt": "主题", //专辑相关标签
+    // "subs_num": 56, //专辑订阅数
+    // "subs_txt": "主题", //专辑相关备注
     // "tags": ["社会", "人物", "故事", "人性", "爱与和平"], //专辑的标签
     // "type": 2, //0-黑 1-红 2-白
     // "isShadow": false, //true-阴影 false-无阴影

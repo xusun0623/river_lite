@@ -60,6 +60,13 @@ class _SearchState extends State<Search> {
             txt: "指定的主题不存在或已被删除或正在被审核",
             duration: 300,
           );
+        } else if (pre_search.toString().contains("您没有权限访问该版块")) {
+          showToast(
+            context: context,
+            type: XSToast.none,
+            txt: "您没有权限访问该版块",
+            duration: 300,
+          );
         } else {
           Navigator.pushNamed(context, "/topic_detail", arguments: tid);
         }
@@ -67,7 +74,21 @@ class _SearchState extends State<Search> {
       }
       if (_controller.text.startsWith("u")) {
         uid = int.parse(_controller.text.split("u")[1]);
-        toUserSpace(context, uid);
+        showToast(context: context, type: XSToast.loading);
+        var pre_search = await Api().user_userinfo({
+          "userId": uid,
+        });
+        hideToast();
+        if (pre_search.toString().contains("您指定的用户空间不存在")) {
+          showToast(
+            context: context,
+            type: XSToast.none,
+            txt: "您指定的用户空间不存在",
+            duration: 300,
+          );
+        } else {
+          toUserSpace(context, uid);
+        }
         return;
       }
     } catch (e) {}
