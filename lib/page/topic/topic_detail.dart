@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/bigScreen.dart';
@@ -67,6 +68,7 @@ class _TopicDetailState extends State<TopicDetail> {
   double bottom_safeArea = 10;
   bool editing = false; //是否处于编辑状态
   bool isBlack = false;
+  bool isInvalid = false;//帖子是否失效
   String placeholder = "请在此编辑回复";
   List<Map> atUser = [];
   String blackKeyWord = "";
@@ -1970,7 +1972,7 @@ class _CommentTabState extends State<CommentTab> {
                     decoration: BoxDecoration(
                       color: widget.sort == 0
                           ? (Provider.of<ColorProvider>(context).isDark
-                              ? os_light_light_dark_card
+                              ? Color(0x22FFFFFF)
                               : os_white)
                           : Colors.transparent,
                       borderRadius: BorderRadius.all(Radius.circular(100)),
@@ -1982,7 +1984,7 @@ class _CommentTabState extends State<CommentTab> {
                             ? (Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
                                 : os_black)
-                            : os_dark_card,
+                            : os_deep_grey,
                       ),
                     ),
                   ),
@@ -1996,7 +1998,7 @@ class _CommentTabState extends State<CommentTab> {
                     decoration: BoxDecoration(
                       color: widget.sort == 1
                           ? (Provider.of<ColorProvider>(context).isDark
-                              ? os_light_light_dark_card
+                              ? Color(0x22FFFFFF)
                               : os_white)
                           : Colors.transparent,
                       borderRadius: BorderRadius.all(Radius.circular(100)),
@@ -2008,7 +2010,7 @@ class _CommentTabState extends State<CommentTab> {
                             ? (Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
                                 : os_black)
-                            : os_dark_card,
+                            : os_deep_grey,
                       ),
                     ),
                   ),
@@ -2818,8 +2820,9 @@ class _TopicBottomState extends State<TopicBottom> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          GestureDetector(
-            onTap: () {
+          Bounce(
+            duration: Duration(milliseconds: 100),
+            onPressed: () {
               Navigator.pushNamed(context, "/column",
                   arguments: widget.data['boardId']);
             },
@@ -3044,11 +3047,20 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
           Row(
             children: [
               Text(
-                RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                        int.parse(widget.data["topic"]["create_date"]))) +
-                    " · 浏览量${widget.data['topic']['hits'].toString()}",
+                (RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                                int.parse(widget.data["topic"]["create_date"])))
+                            .contains(" ")
+                        ? RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                                int.parse(widget.data["topic"]["create_date"])))
+                            .split(" ")[0]
+                        : RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                            int.parse(widget.data["topic"]["create_date"])))) +
+                    " · 浏览量${widget.data['topic']['hits'].toString()} · " +
+                    (widget.data["topic"]["mobileSign"].toString().contains("苹果")
+                        ? "iPhone客户端"
+                        : (widget.data["topic"]["mobileSign"].toString().contains("安卓") ? "安卓客户端" : "网页版")),
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 13.5,
                   color: Color(0xFFAAAAAA),
                 ),
               ),

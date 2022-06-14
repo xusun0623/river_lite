@@ -262,7 +262,7 @@ class _AccountState extends State<Account> {
       children: [
         ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, "/login", arguments: 1);
+            Navigator.pushNamed(context, "/login", arguments: 0);
           },
           style: ButtonStyle(
             padding: MaterialStateProperty.all(

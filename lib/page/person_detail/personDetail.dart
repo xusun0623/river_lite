@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
@@ -119,9 +120,33 @@ class _PersonDetailState extends State<PersonDetail> {
                   ? os_dark_back
                   : os_back,
             )
-          : ListView(
-              physics: BouncingScrollPhysics(),
-              children: _buildList(),
+          : Container(
+              margin: EdgeInsets.only(
+                left: 12.5,
+                right: 12.5,
+                top: 10,
+                bottom: 10,
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : os_white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.05),
+                    offset: Offset(2, 2),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  )
+                ],
+              ),
+              child: ListView(
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                children: _buildList(),
+              ),
             ),
     );
   }
@@ -157,49 +182,24 @@ class _DetailListTitleState extends State<DetailListTitle> {
             textColor: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_white
                 : os_black,
-            title: Text("${widget.left}"),
+            title: Text(
+              "${widget.left}",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
             trailing: Container(
-              width: MediaQuery.of(context).size.width - 130,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  widget.left == "用户状态"
-                      ? Icon(
-                          Icons.circle,
-                          color: widget.right == "在线"
-                              ? Color(0xFF00DE00)
-                              : os_deep_grey,
-                          size: 10,
-                        )
-                      : Container(),
-                  widget.left == "在线时间"
-                      ? Icon(
-                          Icons.timeline,
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
-                              : os_dark_back,
-                          size: 20,
-                        )
-                      : Container(),
-                  widget.left == "注册时间"
-                      ? Icon(
-                          Icons.timer_rounded,
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
-                              : os_dark_back,
-                          size: 20,
-                        )
-                      : Container(),
-                  Container(width: 5),
-                  Text(
-                    "${widget.right}",
-                    style: TextStyle(
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_dark_white
-                          : os_dark_back,
-                    ),
-                  ),
-                ],
+              width: MediaQuery.of(context).size.width - 170,
+              child: Text(
+                "${widget.right}",
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_dark_back,
+                  // fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           );

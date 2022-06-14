@@ -247,7 +247,11 @@ void showToast({
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              child: Text(txt ?? "加载中…", style: TextStyle(color: os_white)),
+              child: Text(
+                txt ?? "加载中…",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: os_white),
+              ),
             ),
           ],
         ),

@@ -95,30 +95,12 @@ class _SettingState extends State<Setting> {
         },
       ),
       ListTile(
-        title: Row(
-          children: [
-            Text(
-              "清除图片",
-              style: TextStyle(
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : os_black),
-            ),
-            Container(width: 3),
-            Icon(
-              Icons.image,
-              size: 20,
-              color: os_color,
-            ),
-            Container(width: 3),
-            Text(
-              "缓存",
-              style: TextStyle(
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : os_black),
-            ),
-          ],
+        title: Text(
+          "清除图片缓存",
+          style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black),
         ),
         subtitle: Text(
           "清除缓存可以释放占用空间，但在需要对应图片时，须重新请求",
@@ -150,10 +132,12 @@ class _SettingState extends State<Setting> {
       ),
       ListTile(
         title: Text(
-          "删除清水河畔账号",
+          "删除河畔账号",
           style: TextStyle(
-              color:
-                  Provider.of<ColorProvider>(context).isDark ? os_red : os_red),
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
+          ),
         ),
         onTap: () async {
           xsLanuch(

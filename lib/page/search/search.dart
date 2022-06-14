@@ -11,6 +11,7 @@ import 'package:offer_show/asset/nowMode.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
@@ -38,6 +39,39 @@ class _SearchState extends State<Search> {
   TextEditingController _controller = new TextEditingController();
   _getData() async {
     if (_controller.text == "") return;
+    int tid = 0;
+    int uid = 0;
+    try {
+      if (_controller.text.startsWith("t")) {
+        tid = int.parse(_controller.text.split("t")[1]);
+        showToast(context: context, type: XSToast.loading);
+        var pre_search = await Api().forum_postlist({
+          "topicId": tid,
+          "authorId": 0,
+          "order": 0,
+          "page": 1,
+          "pageSize": 0,
+        });
+        hideToast();
+        if (pre_search.toString().contains("指定的主题不存在或已被删除或正在被审核")) {
+          showToast(
+            context: context,
+            type: XSToast.none,
+            txt: "指定的主题不存在或已被删除或正在被审核",
+            duration: 300,
+          );
+        } else {
+          Navigator.pushNamed(context, "/topic_detail", arguments: tid);
+        }
+        return;
+      }
+      if (_controller.text.startsWith("u")) {
+        uid = int.parse(_controller.text.split("u")[1]);
+        toUserSpace(context, uid);
+        return;
+      }
+    } catch (e) {}
+
     setState(() {
       loading = true;
     });
@@ -176,7 +210,6 @@ class _SearchState extends State<Search> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        // print("触底");
         _getMore();
       }
     });
@@ -573,12 +606,9 @@ class _SearchBtnState extends State<SearchBtn> {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         widget: Center(
-          child: Text(
-            "搜索",
-            style: TextStyle(
-              fontSize: 16,
-              color: Color(0xFFA3A3A3),
-            ),
+          child: Icon(
+            Icons.search,
+            color: Color(0xFFA3A3A3),
           ),
         ),
         radius: 100,

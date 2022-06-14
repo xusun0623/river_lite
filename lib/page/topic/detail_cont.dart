@@ -227,8 +227,8 @@ class _DetailContState extends State<DetailCont> {
                                                 : 0) -
                                             42) /
                                         3,
-                                maxHeightDiskCache: 800,
-                                maxWidthDiskCache: 800,
+                                // maxHeightDiskCache: 800,
+                                // maxWidthDiskCache: 800,
                                 memCacheWidth: 800,
                                 memCacheHeight: 800,
                                 filterQuality: FilterQuality.low,

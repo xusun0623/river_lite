@@ -49,6 +49,7 @@ class _PersonCenterState extends State<PersonCenter> {
   bool load_done = false;
   bool showBackToTop = false;
   bool showTopTitle = false;
+  bool isNotAvail = false; //用户是否存在
 
   ScrollController _controller = new ScrollController();
 
@@ -66,6 +67,11 @@ class _PersonCenterState extends State<PersonCenter> {
     var data = await Api().user_userinfo({
       "userId": widget.param["uid"],
     });
+    if (data.toString().contains("您指定的用户空间不存在")) {
+      setState(() {
+        isNotAvail = true;
+      });
+    }
     if (data != null && data["body"] != null) {
       setState(() {
         userInfo = data;
@@ -209,7 +215,7 @@ class _PersonCenterState extends State<PersonCenter> {
           },
           icon: Icon(Icons.chevron_left_rounded),
         ),
-        actions: userInfo == null
+        actions: userInfo == null || isNotAvail
             ? []
             : _isBlack()
                 ? []
@@ -274,22 +280,35 @@ class _PersonCenterState extends State<PersonCenter> {
                     ),
                   ),
                 )
-              : BackToTop(
-                  show: showBackToTop,
-                  controller: _controller,
-                  bottom: 100,
-                  child: RefreshIndicator(
-                    color: os_deep_blue,
-                    onRefresh: () async {
-                      return await _getInfo();
-                    },
-                    child: ListView(
-                      physics: BouncingScrollPhysics(),
+              : (isNotAvail
+                  ? Center(
+                      child: Container(
+                      margin: EdgeInsets.only(bottom: 100),
+                      child: Text(
+                        "抱歉，您指定的用户空间不存在",
+                        style: TextStyle(
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
+                        ),
+                      ),
+                    ))
+                  : BackToTop(
+                      show: showBackToTop,
                       controller: _controller,
-                      children: _buildCont(),
-                    ),
-                  ),
-                ),
+                      bottom: 100,
+                      child: RefreshIndicator(
+                        color: os_deep_blue,
+                        onRefresh: () async {
+                          return await _getInfo();
+                        },
+                        child: ListView(
+                          physics: BouncingScrollPhysics(),
+                          controller: _controller,
+                          children: _buildCont(),
+                        ),
+                      ),
+                    )),
     );
   }
 }
