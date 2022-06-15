@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
@@ -83,6 +84,74 @@ class _TopicDetailState extends State<TopicDetail> {
 
   var dislike_count = 0;
 
+  //一键转发
+  _alterSend() async {
+    var contents = data["topic"]["content"];
+    for (var i = 0; i < contents.length; i++) {
+      var cont_i = contents[i];
+      if (cont_i["type"] == 4) {
+        contents[i]["infor"] = cont_i["url"];
+      }
+    }
+    List cont_head_tmp = [
+      {
+        "infor": "由河畔Lite App一键转发\n",
+        "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
+      },
+      {
+        "infor": "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1942769",
+        "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
+      },
+      {
+        "infor": "点此访问原帖\n",
+        "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
+      },
+      {
+        "infor": "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=" +
+            widget.topicID.toString(),
+        "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
+      }
+    ];
+    cont_head_tmp.addAll(contents);
+    Map poll = {
+      "expiration": 3,
+      "options": data["topic"]["poll_info"] == null
+          ? []
+          : (data["topic"]["poll_info"]["poll_item_list"]
+              .map((e) => e["name"])),
+      "maxChoices": 1,
+      "visibleAfterVote": false,
+      "showVoters": false,
+    };
+    Map json = {
+      "body": {
+        "json": {
+          "isAnonymous": 0,
+          "isOnlyAuthor": 0,
+          "typeId": "",
+          "aid": "",
+          "fid": 25,
+          "isQuote": 0, //"是否引用之前回复的内容
+          "title": "【转帖】" + data["topic"]["title"],
+          "content": jsonEncode(cont_head_tmp),
+          "poll": data["topic"]["poll_info"] == null ? "" : poll,
+        }
+      }
+    };
+    showToast(
+      context: context,
+      type: XSToast.loading,
+      txt: "转发中…",
+    );
+    var ret_tip = await Api().forum_topicadmin(
+      {
+        "act": "new",
+        "json": jsonEncode(json),
+      },
+    );
+    hideToast();
+  }
+
   Future<Map> _getCardData(int ctid) async {
     //根据ctid获取专辑数据
     Map tmp = {
@@ -152,7 +221,7 @@ class _TopicDetailState extends State<TopicDetail> {
           tmp["tags"] = tmp_tag;
         }
       });
-      tmp["type"] = 0; //0-黑 1-红 2-白
+      tmp["type"] = 2; //0-黑 1-红 2-白
       tmp["isShadow"] = false;
       return tmp;
     } catch (e) {
@@ -162,11 +231,13 @@ class _TopicDetailState extends State<TopicDetail> {
   }
 
   getListArr() async {
+    print("请求吧！！！${listID}");
     List tmp = [];
-    listID.forEach((element) async {
+    for (var i = 0; i < listID.length; i++) {
+      var element = listID[i];
       Map tmp_data = await _getCardData(element);
       tmp.add(tmp_data);
-    });
+    }
     setState(() {
       listData = tmp;
     });
@@ -194,9 +265,9 @@ class _TopicDetailState extends State<TopicDetail> {
           });
         }
       });
-      getListArr();
       setState(() {});
     } catch (e) {}
+    getListArr();
   }
 
   bool _isBlack() {
@@ -399,17 +470,14 @@ class _TopicDetailState extends State<TopicDetail> {
             Navigator.pushNamed(context, "/list", arguments: element);
           },
           child: Container(
-            decoration: BoxDecoration(boxShadow: [
-              BoxShadow(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? Color(0x22000000)
-                    : Colors.transparent,
-                blurRadius: 10,
-                offset: Offset(3, 3),
-              ),
-            ]),
-            child: Collection(data: element),
-          ),
+              decoration: BoxDecoration(boxShadow: [
+                BoxShadow(
+                  color: Color(0x0a000000),
+                  blurRadius: 10,
+                  offset: Offset(3, 3),
+                ),
+              ]),
+              child: Collection(data: element)),
         ),
       );
     });
@@ -656,6 +724,9 @@ class _TopicDetailState extends State<TopicDetail> {
                       TopicDetailHead(data: data),
                       TopicDetailMore(
                           data: data,
+                          alterSend: () {
+                            _alterSend();
+                          },
                           block: () {
                             setState(() {
                               isBlack = true;
@@ -3354,10 +3425,12 @@ class TopicDetailTitle extends StatelessWidget {
 class TopicDetailMore extends StatefulWidget {
   Map data;
   Function block;
+  Function alterSend;
   TopicDetailMore({
     Key key,
     this.data,
     this.block,
+    this.alterSend,
   }) : super(key: key);
 
   @override
@@ -3535,6 +3608,13 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                     base_url +
                     "forum.php?mod=viewthread&tid=" +
                     widget.data["topic"]["topic_id"].toString());
+              },
+            ),
+            ActionItem(
+              title: "一键转帖",
+              onPressed: () {
+                Navigator.pop(context);
+                widget.alterSend();
               },
             ),
             ActionItem(

@@ -168,7 +168,7 @@ class _DetailContState extends State<DetailCont> {
                       );
                     },
                     child: widget.imgLists.length > 3 || isDesktop()
-                        ? (widget.imgLists.length > 10
+                        ? (widget.imgLists.length > 20
                             ? Container(
                                 color: os_grey,
                                 width: isDesktop()
