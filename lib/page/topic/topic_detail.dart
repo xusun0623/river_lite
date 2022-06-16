@@ -99,7 +99,8 @@ class _TopicDetailState extends State<TopicDetail> {
         "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
       },
       {
-        "infor": "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1942769",
+        "infor":
+            "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1942769",
         "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
       },
       {
@@ -389,10 +390,13 @@ class _TopicDetailState extends State<TopicDetail> {
   }
 
   _buildContBody() {
+    //返回帖子的正文内容
     List<Widget> tmp = [];
+    bool isAlter = false; //是否转发的标志
     String s_tmp = "";
     var imgLists = [];
     data["topic"]["content"].forEach((e) {
+      //构建图片List和全文内容
       if (e["type"] == 1) {
         imgLists.add(e["infor"]);
       }
@@ -436,26 +440,80 @@ class _TopicDetailState extends State<TopicDetail> {
         ));
         i += img_count - 1; //跳过渲染
       } else {
-        tmp.add(GestureDetector(
-          onLongPress: () {
-            Clipboard.setData(ClipboardData(text: s_tmp));
-            Vibrate.feedback(FeedbackType.impact);
-            showToast(
-              context: context,
-              type: XSToast.success,
-              txt: "复制文本成功",
-            );
-          },
-          child: Container(
-            padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-            child: DetailCont(
-              data: e,
-              imgLists: imgLists,
-              title: data["topic"]["title"],
-              desc: s_tmp,
+        if (e["type"] == 0 && e["infor"] == "由河畔Lite App一键转发") {
+          isAlter = true;
+          tmp.add(Bounce(
+            duration: Duration(milliseconds: 100),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                "/topic_detail",
+                arguments: Platform.isIOS ? 1943353 : 1939629,
+              );
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              padding: EdgeInsets.symmetric(vertical: 25),
+              decoration: BoxDecoration(
+                color: os_color_opa,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                border: Border.all(
+                  color: os_color,
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.near_me_outlined,
+                    color: os_color,
+                    size: 27,
+                  ),
+                  Text(
+                    "由河畔Lite App一键转发",
+                    style: TextStyle(
+                      color: os_color,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Icon(
+                    Icons.keyboard_arrow_right,
+                    color: os_color,
+                    size: 19,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ));
+          ));
+        } else if (e["type"] == 4 &&
+            e["infor"] ==
+                "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1939629" &&
+            isAlter) {
+          tmp.add(Container());
+        } else {
+          tmp.add(GestureDetector(
+            onLongPress: () {
+              Clipboard.setData(ClipboardData(text: s_tmp));
+              Vibrate.feedback(FeedbackType.impact);
+              showToast(
+                context: context,
+                type: XSToast.success,
+                txt: "复制文本成功",
+              );
+            },
+            child: Container(
+              padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+              child: DetailCont(
+                data: e,
+                imgLists: imgLists,
+                title: data["topic"]["title"],
+                desc: s_tmp,
+              ),
+            ),
+          ));
+        }
       }
     }
     return Column(children: tmp);
@@ -472,9 +530,9 @@ class _TopicDetailState extends State<TopicDetail> {
           child: Container(
               decoration: BoxDecoration(boxShadow: [
                 BoxShadow(
-                  color: Color(0x0a000000),
-                  blurRadius: 10,
-                  offset: Offset(3, 3),
+                  color: Color(0x16000000),
+                  blurRadius: 15,
+                  offset: Offset(6, 6),
                 ),
               ]),
               child: Collection(data: element)),
