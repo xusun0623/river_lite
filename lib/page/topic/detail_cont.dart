@@ -11,6 +11,7 @@ import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/emoji/emoji.dart';
+import 'package:offer_show/outer/cached_network_image/image_provider/cached_network_image_provider.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/mid_request.dart';
@@ -208,42 +209,66 @@ class _DetailContState extends State<DetailCont> {
                                           3,
                                 ),
                               )
-                            : CachedNetworkImage(
-                                cacheManager: RiverListCacheManager.instance,
-                                imageUrl: widget.data["infor"],
-                                width: isDesktop()
-                                    ? 200
-                                    : (MediaQuery.of(context).size.width -
-                                            (widget.isComment ?? false
-                                                ? 50
-                                                : 0) -
-                                            42) /
-                                        3,
-                                height: isDesktop()
-                                    ? 200
-                                    : (MediaQuery.of(context).size.width -
-                                            (widget.isComment ?? false
-                                                ? 50
-                                                : 0) -
-                                            42) /
-                                        3,
-                                // maxHeightDiskCache: 800,
-                                // maxWidthDiskCache: 800,
-                                memCacheWidth: 800,
-                                memCacheHeight: 800,
-                                filterQuality: FilterQuality.low,
-                                fit: BoxFit.cover,
-                                progressIndicatorBuilder:
-                                    (context, url, progress) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(45.0),
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.5,
-                                      color: os_middle_grey,
-                                      value: progress.progress,
-                                    ),
-                                  );
-                                },
+                            : Container(
+                                // image: CachedNetworkImageProvider(
+                                //   widget.data["infor"],
+                                //   cacheManager: RiverListCacheManager.instance,
+                                // ),
+                                // fit: BoxFit.cover,
+                                // filterQuality: FilterQuality.low,
+                                // width: isDesktop()
+                                //     ? 200
+                                //     : (MediaQuery.of(context).size.width -
+                                //             (widget.isComment ?? false
+                                //                 ? 50
+                                //                 : 0) -
+                                //             42) /
+                                //         3,
+                                // height: isDesktop()
+                                //     ? 200
+                                //     : (MediaQuery.of(context).size.width -
+                                //             (widget.isComment ?? false
+                                //                 ? 50
+                                //                 : 0) -
+                                //             42) /
+                                //         3,
+                                child: CachedNetworkImage(
+                                  // cacheManager: RiverListCacheManager.instance,
+                                  imageUrl: widget.data["infor"],
+                                  width: isDesktop()
+                                      ? 200
+                                      : (MediaQuery.of(context).size.width -
+                                              (widget.isComment ?? false
+                                                  ? 50
+                                                  : 0) -
+                                              42) /
+                                          3,
+                                  height: isDesktop()
+                                      ? 200
+                                      : (MediaQuery.of(context).size.width -
+                                              (widget.isComment ?? false
+                                                  ? 50
+                                                  : 0) -
+                                              42) /
+                                          3,
+                                  maxHeightDiskCache: 800,
+                                  maxWidthDiskCache: 800,
+                                  memCacheWidth: 800,
+                                  memCacheHeight: 800,
+                                  filterQuality: FilterQuality.low,
+                                  fit: BoxFit.cover,
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(45.0),
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        color: os_middle_grey,
+                                        value: progress.progress,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ))
                         : CachedNetworkImage(
                             cacheManager: RiverListCacheManager.instance,

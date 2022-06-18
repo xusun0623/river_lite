@@ -37,7 +37,7 @@ class _QuestionState extends State<Question> {
       bool hasAns = false; //是否有答案匹配
       for (var i = 0; i < q_a["a_list"].length; i++) {
         String option = q_a["a_list"][i];
-        if ("${option}" == "${match_answer}") {
+        if ("${option}" == "${match_answer}" || option.contains("屋大维")) {
           hasAns = true;
         }
       }
@@ -50,7 +50,7 @@ class _QuestionState extends State<Question> {
       }
       for (var i = 0; i < q_a["a_list"].length; i++) {
         String option = q_a["a_list"][i];
-        if ("${option}" == "${match_answer}") {
+        if ("${option}" == "${match_answer}" || option.contains("屋大维")) {
           print("${option}");
           ret_value = q_a["v_list"][i];
           selected_option = "${carry[i]}. " + option;
@@ -72,7 +72,7 @@ class _QuestionState extends State<Question> {
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: match_answer == option
+                    color: match_answer == option || option.contains("屋大维")
                         ? os_color
                         : (Provider.of<ColorProvider>(context).isDark
                             ? os_dark_dark_white
@@ -80,7 +80,7 @@ class _QuestionState extends State<Question> {
                     width: 2,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: match_answer == option
+                  color: match_answer == option || option.contains("屋大维")
                       ? os_color_opa
                       : (Provider.of<ColorProvider>(context).isDark
                           ? os_light_dark_card
@@ -89,13 +89,13 @@ class _QuestionState extends State<Question> {
                 child: Text(
                   "${carry[i]}. " + option,
                   style: TextStyle(
-                    color: match_answer == option
+                    color: match_answer == option || option.contains("屋大维")
                         ? os_color
                         : (Provider.of<ColorProvider>(context).isDark
                             ? os_dark_white
                             : os_black),
                     fontSize: 16,
-                    fontWeight: match_answer == option
+                    fontWeight: match_answer == option || option.contains("屋大维")
                         ? FontWeight.bold
                         : FontWeight.normal,
                   ),

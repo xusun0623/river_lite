@@ -56,17 +56,17 @@ class _AboutState extends State<About> {
         children: [
           AboutCard(
             head: Icon(
-              Icons.chat_bubble_outline,
+              Icons.chat_bubble,
               color: os_wonderful_color[0],
               size: 40,
             ),
-            title: "清水河畔？",
+            title: "UESTC官方论坛",
             cont:
                 "清水河畔是电子科技大学官方论坛（bbs.uestc.edu.cn），由电子科技大学网络文化建设工作办公室指导，星辰工作室开发并提供技术支持。\n2007年11月13日正式开放注册。欢迎你加入到清水河畔大家庭。",
           ),
           AboutCard(
             head: Icon(
-              Icons.cloud_queue,
+              Icons.cloud,
               color: os_wonderful_color[5],
               size: 40,
             ),
@@ -76,7 +76,7 @@ class _AboutState extends State<About> {
           ),
           AboutCard(
             head: Icon(
-              Icons.burst_mode_rounded,
+              Icons.burst_mode,
               color: os_wonderful_color[4],
               size: 40,
             ),
@@ -87,7 +87,7 @@ class _AboutState extends State<About> {
           ),
           AboutCard(
             head: Icon(
-              Icons.code,
+              Icons.qr_code,
               color: os_wonderful_color[1],
               size: 40,
             ),
@@ -127,7 +127,7 @@ html: ^0.15.0''',
           ),
           AboutCard(
             head: Icon(
-              Icons.verified_user_outlined,
+              Icons.verified_user,
               color: os_wonderful_color[2],
               size: 40,
             ),
@@ -140,9 +140,9 @@ html: ^0.15.0''',
           ),
           AboutCard(
             head: Icon(
-              Icons.perm_identity_outlined,
+              Icons.person,
               color: os_wonderful_color[3],
-              size: 40,
+              size: 50,
             ),
             title: "开发&设计者",
             cont: '''xusun000''',
@@ -194,9 +194,9 @@ class _AboutCardState extends State<AboutCard> {
       duration: Duration(milliseconds: 100),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 7.5),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
           color: Provider.of<ColorProvider>(context).isDark
               ? os_light_dark_card
               : os_white,
@@ -204,32 +204,37 @@ class _AboutCardState extends State<AboutCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            widget.head,
+            Center(child: widget.head),
             Container(height: 10),
-            Text(
-              widget.title,
-              style: TextStyle(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_white
-                    : os_black,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+            Center(
+              child: Text(
+                widget.title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 22,
+                ),
               ),
             ),
             Container(height: 5),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width -
-                      ((widget.withUrl ?? false) ? 104 : 80),
+                      ((widget.withUrl ?? false) ? 124 : 100),
                   child: Text(
                     widget.cont,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_dark_dark_white
-                          : os_black,
+                          : os_light_dark_card,
                       fontWeight: FontWeight.normal,
-                      fontSize: 15,
+                      fontSize: 16,
                       height: 1.6,
                     ),
                   ),
