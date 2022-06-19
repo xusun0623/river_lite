@@ -221,7 +221,7 @@ class _SquareCardState extends State<SquareCard> {
     return Container(
       width: MediaQuery.of(context).size.width - 30,
       margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       decoration: BoxDecoration(
         color: Provider.of<ColorProvider>(context).isDark
             ? os_light_dark_card
@@ -262,7 +262,7 @@ class _SquareCardState extends State<SquareCard> {
           ),
           Container(height: 7.5),
           Container(
-            width: MediaQuery.of(context).size.width - 60,
+            width: MediaQuery.of(context).size.width - 40,
             child: Wrap(
               alignment: WrapAlignment.start,
               children: _buildWrapWidget(),

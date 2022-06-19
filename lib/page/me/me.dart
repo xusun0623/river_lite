@@ -272,7 +272,7 @@ class _MeFiveBtnsState extends State<MeFiveBtns> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: EdgeInsets.symmetric(horizontal: 5),
       child: Wrap(
         children: [
           MeBtnHero(
@@ -282,17 +282,17 @@ class _MeFiveBtnsState extends State<MeFiveBtns> {
           ),
           MeBtnHero(
             img: "lib/img/me/btn2.svg",
-            txt: "发表",
+            txt: "我的发表",
             type: 2,
           ),
           MeBtnHero(
             img: "lib/img/me/btn3.svg",
-            txt: "回复",
+            txt: "我的回复",
             type: 3,
           ),
           MeBtnHero(
             img: "lib/img/me/btn4.svg",
-            txt: "足迹",
+            txt: "浏览历史",
             type: 4,
           ),
           MeBtnHero(
