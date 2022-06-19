@@ -133,6 +133,7 @@ html: ^0.15.0''',
             ),
             title: "鸣谢",
             cont: '''测试者：Star🌟、北冥小鱼、weijifen、TYTSSN、hola、fix
+Bug贡献者：司空临风
 代码贡献者：Dnieper
 河畔水滴答题题库：Zhenger666
 代码仓库：https://gitee.com
