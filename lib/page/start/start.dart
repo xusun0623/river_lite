@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/page/home.dart';
@@ -52,11 +54,16 @@ class _StartState extends State<Start> {
     }
   }
 
+  Future<void> fetchAll() async {
+    await FlutterDisplayMode.setHighRefreshRate();
+  }
+
   @override
   void initState() {
     _navi();
     _dark();
     _pic();
+    fetchAll();
     super.initState();
   }
 

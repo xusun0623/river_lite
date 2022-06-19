@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
@@ -190,7 +189,7 @@ class _SquareCardState extends State<SquareCard> {
                       : os_white,
                 ),
               ),
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 17),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12.5),
               child: Text(
                 e["board_name"],
                 style: TextStyle(
@@ -214,6 +213,7 @@ class _SquareCardState extends State<SquareCard> {
       iconData,
       color:
           Provider.of<ColorProvider>(context).isDark ? os_dark_white : os_black,
+      size: 20,
     );
   }
 
@@ -232,6 +232,7 @@ class _SquareCardState extends State<SquareCard> {
       child: Column(
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 padding: EdgeInsets.all(5),
@@ -252,8 +253,8 @@ class _SquareCardState extends State<SquareCard> {
               Text(
                 widget.data["board_category_name"],
                 style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  // fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_white
                       : os_black,
@@ -300,7 +301,7 @@ class _DoubleColumnState extends State<DoubleColumn> {
             duration: Duration(milliseconds: 100),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(15)),
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -322,7 +323,7 @@ class _DoubleColumnState extends State<DoubleColumn> {
                       style: TextStyle(
                         color: os_white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 17,
+                        fontSize: 14,
                       ),
                     ),
                   ),
@@ -349,7 +350,7 @@ class _DoubleColumnState extends State<DoubleColumn> {
             duration: Duration(milliseconds: 100),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(15)),
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -371,7 +372,7 @@ class _DoubleColumnState extends State<DoubleColumn> {
                       style: TextStyle(
                         color: os_white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 17,
+                        fontSize: 14,
                       ),
                     ),
                   ),

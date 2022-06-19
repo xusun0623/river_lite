@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
@@ -122,8 +123,13 @@ class _MeFuncState extends State<MeFunc> {
     return tmp;
   }
 
+  setHighFrame() async {
+    // await FlutterDisplayMode.setHighRefreshRate();
+  }
+
   @override
   void initState() {
+    setHighFrame();
     _getData();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >= 100) {

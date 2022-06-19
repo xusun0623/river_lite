@@ -356,8 +356,8 @@ class _MeBtnHeroState extends State<MeBtnHero> {
             ? os_light_dark_card
             : os_white,
         widget: Container(
-          width: 60 + (widget.txt ?? "收藏").length * 14.0,
-          padding: EdgeInsets.symmetric(vertical: 12.5),
+          width: 55 + (widget.txt ?? "收藏").length * 14.0,
+          padding: EdgeInsets.symmetric(horizontal: 7.5, vertical: 12.5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             border: Border.all(
@@ -377,8 +377,8 @@ class _MeBtnHeroState extends State<MeBtnHero> {
                   child: os_svg(
                     path:
                         "lib/img/${Provider.of<ColorProvider>(context).isDark ? "me_dark" : "me"}/btn${widget.type}.svg",
-                    width: 32,
-                    height: 32,
+                    width: 30,
+                    height: 30,
                   ),
                 ),
               ),
@@ -389,7 +389,7 @@ class _MeBtnHeroState extends State<MeBtnHero> {
                   child: Text(
                     widget.txt,
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 14,
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_dark_white
                           : Color(0xFF505050),
