@@ -5,6 +5,7 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
+import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -191,6 +192,9 @@ class _AboutCardState extends State<AboutCard> {
         if (widget.withUrl != null) {
           xsLanuch(url: widget.cont);
         }
+        if (widget.title == "开发&设计者") {
+          toUserSpace(context, 221788);
+        }
       },
       duration: Duration(milliseconds: 100),
       child: Container(
@@ -226,9 +230,11 @@ class _AboutCardState extends State<AboutCard> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width -
-                      ((widget.withUrl ?? false) ? 124 : 100),
+                      ((widget.withUrl ?? false) || widget.title == "开发&设计者"
+                          ? 124
+                          : 100),
                   child: Text(
-                    widget.cont,
+                    (widget.title == "开发&设计者" ? "      " : "") + widget.cont,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Provider.of<ColorProvider>(context).isDark
@@ -240,7 +246,7 @@ class _AboutCardState extends State<AboutCard> {
                     ),
                   ),
                 ),
-                (widget.withUrl ?? false)
+                (widget.withUrl ?? false) || widget.title == "开发&设计者"
                     ? Container(
                         padding: EdgeInsets.only(top: 5),
                         child: Icon(

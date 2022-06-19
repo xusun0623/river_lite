@@ -448,7 +448,7 @@ class _TopicDetailState extends State<TopicDetail> {
               Navigator.pushNamed(
                 context,
                 "/topic_detail",
-                arguments: Platform.isIOS ? 1943353 : 1939629,
+                arguments: Platform.isIOS ? 1943353 : 1942769,
               );
             },
             child: Container(
@@ -488,8 +488,10 @@ class _TopicDetailState extends State<TopicDetail> {
             ),
           ));
         } else if (e["type"] == 4 &&
-            e["infor"] ==
-                "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1939629" &&
+            (e["infor"] ==
+                    "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1939629" ||
+                e["infor"] ==
+                    "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1942769") &&
             isAlter) {
           tmp.add(Container());
         } else {
@@ -2522,15 +2524,15 @@ class _CommentState extends State<Comment> {
             stickyForm();
           },
         ));
-      widget.data["extraPanel"].forEach((ele) {
-        tmp.add(
-          ActionItem(
-              title: ele["title"] + "（需跳转到网页）",
-              onPressed: () {
-                launch(Uri.encodeFull(ele["action"]));
-              }),
-        );
-      });
+      // widget.data["extraPanel"].forEach((ele) {
+      //   tmp.add(
+      //     ActionItem(
+      //         title: ele["title"] + "（需跳转到网页）",
+      //         onPressed: () {
+      //           launch(Uri.encodeFull(ele["action"]));
+      //         }),
+      //   );
+      // });
       return tmp;
     }
 
@@ -3669,7 +3671,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
               },
             ),
             ActionItem(
-              title: "一键转帖",
+              title: "转帖到水区",
               onPressed: () {
                 Navigator.pop(context);
                 widget.alterSend();
@@ -3701,15 +3703,15 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
               },
             ),
           ]);
-          widget.data["topic"]["extraPanel"].forEach((ele) {
-            tmp.add(
-              ActionItem(
-                  title: ele["title"] + "（需跳转到网页）",
-                  onPressed: () {
-                    launch(ele["action"]);
-                  }),
-            );
-          });
+          // widget.data["topic"]["extraPanel"].forEach((ele) {
+          //   tmp.add(
+          //     ActionItem(
+          //         title: ele["title"] + "（需跳转到网页）",
+          //         onPressed: () {
+          //           launch(ele["action"]);
+          //         }),
+          //   );
+          // });
           tmp.addAll([
             ActionItem(
               title: "【不感兴趣】屏蔽此贴",

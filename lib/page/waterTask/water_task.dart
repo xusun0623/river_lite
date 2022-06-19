@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/home/myhome.dart';
@@ -593,6 +594,11 @@ class _Card2State extends State<Card2> {
             if (widget.refresh != null) {
               widget.refresh();
             }
+          } else if (widget.data["desc"].toString().contains("新手导航")) {
+            showToast(
+                context: context,
+                type: XSToast.none,
+                txt: "请在网页端-论坛服务-水滴小任务完成此任务");
           } else {
             print("未达完成条件");
           }
