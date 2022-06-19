@@ -274,6 +274,9 @@ class _MeFiveBtnsState extends State<MeFiveBtns> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5),
       child: Wrap(
+        // alignment: WrapAlignment.center,
+        // runAlignment: WrapAlignment.center,
+        alignment: WrapAlignment.spaceBetween,
         children: [
           MeBtnHero(
             img: "lib/img/me/btn1.svg",
@@ -300,6 +303,7 @@ class _MeFiveBtnsState extends State<MeFiveBtns> {
             txt: "草稿箱",
             type: 5,
           ),
+          Container(width: 110),
         ],
       ),
     );
