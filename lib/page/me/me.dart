@@ -219,7 +219,7 @@ class _MeListState extends State<MeList> {
         }
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 27.5, vertical: 18.5),
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 18.5),
         color: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : os_white,
@@ -274,7 +274,7 @@ class _MeFiveBtnsState extends State<MeFiveBtns> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5),
       child: Wrap(
-        alignment: WrapAlignment.center,
+        alignment: WrapAlignment.spaceEvenly,
         // runAlignment: WrapAlignment.center,
         // alignment: WrapAlignment.spaceAround,
         children: [
