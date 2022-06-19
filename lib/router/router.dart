@@ -26,6 +26,7 @@ import 'package:offer_show/page/setting/setting.dart';
 import 'package:offer_show/page/square/square.dart';
 import 'package:offer_show/page/start/start.dart';
 import 'package:offer_show/page/test/test.dart';
+import 'package:offer_show/page/topic/alter_sended.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/page/user_list/user_list.dart';
 import 'package:offer_show/page/waterTask/task_list.dart';
@@ -53,6 +54,7 @@ final routers = {
   "/404": () => Page404(),
   "/me_func": (data) => MeFunc(type: data["type"], uid: data["uid"]),
   "/person_center": (data) => PersonCenter(param: data),
+  "/alter_sended": () => AlterSended(),
   "/topic_detail": (data) => TopicDetail(topicID: data),
   "/search": () => Search(),
   "/crop": () => CropImg(),

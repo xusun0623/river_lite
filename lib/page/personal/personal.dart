@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -220,8 +221,47 @@ class _PersonCenterState extends State<PersonCenter> {
             : _isBlack()
                 ? []
                 : widget.param["isMe"]
-                    ? []
+                    ? [
+                        // IconButton(
+                        //   onPressed: () async {
+                        //     Clipboard.setData(
+                        //       ClipboardData(
+                        //         text:
+                        //             "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
+                        //       ),
+                        //     );
+                        //     showToast(
+                        //       context: context,
+                        //       type: XSToast.success,
+                        //       txt: "复制链接成功",
+                        //     );
+                        //   },
+                        //   icon: Icon(
+                        //     Icons.copy,
+                        //     color: Color(0xFFAAAAAA),
+                        //   ),
+                        // ),
+                      ]
                     : [
+                        // IconButton(
+                        //   onPressed: () async {
+                        //     Clipboard.setData(
+                        //       ClipboardData(
+                        //         text:
+                        //             "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
+                        //       ),
+                        //     );
+                        //     showToast(
+                        //       context: context,
+                        //       type: XSToast.success,
+                        //       txt: "复制链接成功",
+                        //     );
+                        //   },
+                        //   icon: Icon(
+                        //     Icons.copy,
+                        //     color: Color(0xFFAAAAAA),
+                        //   ),
+                        // ),
                         IconButton(
                           onPressed: () async {
                             await Api().user_useradmin({

@@ -38,99 +38,116 @@ class _SearchState extends State<Search> {
   ScrollController _scrollController = new ScrollController();
   TextEditingController _controller = new TextEditingController();
   _getData() async {
-    if (_controller.text == "") return;
-    int tid = 0;
-    int uid = 0;
-    try {
-      if (_controller.text.startsWith("t")) {
-        tid = int.parse(_controller.text.split("t")[1]);
-        showToast(context: context, type: XSToast.loading);
-        var pre_search = await Api().forum_postlist({
-          "topicId": tid,
-          "authorId": 0,
-          "order": 0,
-          "page": 1,
-          "pageSize": 0,
-        });
-        hideToast();
-        if (pre_search.toString().contains("指定的主题不存在或已被删除或正在被审核")) {
-          showToast(
-            context: context,
-            type: XSToast.none,
-            txt: "指定的主题不存在或已被删除或正在被审核",
-            duration: 300,
-          );
-        } else if (pre_search.toString().contains("您没有权限访问该版块")) {
-          showToast(
-            context: context,
-            type: XSToast.none,
-            txt: "您没有权限访问该版块",
-            duration: 300,
-          );
-        } else {
-          Navigator.pushNamed(context, "/topic_detail", arguments: tid);
+    if (_controller.text == "")
+      return;
+    else if (_controller.text
+        .contains("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")) {
+      int tid_tmp = int.parse(
+        _controller.text.split("mod=viewthread&tid=")[1].split("&")[0],
+      );
+      Navigator.pushNamed(context, "/topic_detail", arguments: tid_tmp);
+      return;
+    } else if (_controller.text
+        .contains("https://bbs.uestc.edu.cn/home.php?mod=space&uid=")) {
+      int uid_tmp = int.parse(
+        _controller.text.split("mod=space&uid=")[1].split("&")[0],
+      );
+      toUserSpace(context, uid_tmp);
+      return;
+    } else {
+      int tid = 0;
+      int uid = 0;
+      try {
+        if (_controller.text.startsWith("t")) {
+          tid = int.parse(_controller.text.split("t")[1]);
+          showToast(context: context, type: XSToast.loading);
+          var pre_search = await Api().forum_postlist({
+            "topicId": tid,
+            "authorId": 0,
+            "order": 0,
+            "page": 1,
+            "pageSize": 0,
+          });
+          hideToast();
+          if (pre_search.toString().contains("指定的主题不存在或已被删除或正在被审核")) {
+            showToast(
+              context: context,
+              type: XSToast.none,
+              txt: "指定的主题不存在或已被删除或正在被审核",
+              duration: 300,
+            );
+          } else if (pre_search.toString().contains("您没有权限访问该版块")) {
+            showToast(
+              context: context,
+              type: XSToast.none,
+              txt: "您没有权限访问该版块",
+              duration: 300,
+            );
+          } else {
+            Navigator.pushNamed(context, "/topic_detail", arguments: tid);
+          }
+          return;
         }
-        return;
-      }
-      if (_controller.text.startsWith("u")) {
-        uid = int.parse(_controller.text.split("u")[1]);
-        showToast(context: context, type: XSToast.loading);
-        var pre_search = await Api().user_userinfo({
-          "userId": uid,
-        });
-        hideToast();
-        if (pre_search.toString().contains("您指定的用户空间不存在")) {
-          showToast(
-            context: context,
-            type: XSToast.none,
-            txt: "您指定的用户空间不存在",
-            duration: 300,
-          );
-        } else {
-          toUserSpace(context, uid);
+        if (_controller.text.startsWith("u")) {
+          uid = int.parse(_controller.text.split("u")[1]);
+          showToast(context: context, type: XSToast.loading);
+          var pre_search = await Api().user_userinfo({
+            "userId": uid,
+          });
+          hideToast();
+          if (pre_search.toString().contains("您指定的用户空间不存在")) {
+            showToast(
+              context: context,
+              type: XSToast.none,
+              txt: "您指定的用户空间不存在",
+              duration: 300,
+            );
+          } else {
+            toUserSpace(context, uid);
+          }
+          return;
         }
-        return;
-      }
-    } catch (e) {}
+      } catch (e) {}
 
-    setState(() {
-      loading = true;
-    });
-    _scrollController.animateTo(
-      0,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.ease,
-    );
-    var tmp = await Api().forum_search(select, {
-      "keyword": _controller.text ?? "",
-      "page": 1,
-      "pageSize": 20,
-    });
-    if (select == 0 && tmp["rs"] != 0 && tmp != null && tmp["list"] != null) {
-      data = tmp["list"] ?? [];
+      setState(() {
+        loading = true;
+      });
+      _scrollController.animateTo(
+        0,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.ease,
+      );
+      var tmp = await Api().forum_search(select, {
+        "keyword": _controller.text ?? "",
+        "page": 1,
+        "pageSize": 20,
+      });
+      if (select == 0 && tmp["rs"] != 0 && tmp != null && tmp["list"] != null) {
+        data = tmp["list"] ?? [];
+      }
+      if (select == 1 &&
+          tmp["rs"] != 0 &&
+          tmp != null &&
+          tmp["body"] != null &&
+          tmp["body"]["list"] != null) {
+        data = tmp["body"]["list"] ?? [];
+      }
+      load_done = data.length < 20;
+      loading = false;
+      String tmp_history = await getStorage(
+        key: "search-history",
+        initData: "[]",
+      );
+      List tmp_arr_history = jsonDecode(tmp_history);
+      if (tmp_arr_history.indexOf(_controller.text) > -1) {
+        tmp_arr_history.remove(_controller.text);
+      }
+      List tmp_tmp = [_controller.text];
+      tmp_tmp.addAll(tmp_arr_history);
+      setStorage(key: "search-history", value: jsonEncode(tmp_tmp));
+      _commentFocus.unfocus();
+      setState(() {});
     }
-    if (select == 1 &&
-        tmp["rs"] != 0 &&
-        tmp != null &&
-        tmp["body"] != null &&
-        tmp["body"]["list"] != null) {
-      data = tmp["body"]["list"] ?? [];
-    }
-    load_done = data.length < 20;
-    loading = false;
-    String tmp_history = await getStorage(
-      key: "search-history",
-      initData: "[]",
-    );
-    List tmp_arr_history = jsonDecode(tmp_history);
-    if (tmp_arr_history.indexOf(_controller.text) > -1) {
-      tmp_arr_history.remove(_controller.text);
-    }
-    List tmp_tmp = [_controller.text];
-    tmp_tmp.addAll(tmp_arr_history);
-    setStorage(key: "search-history", value: jsonEncode(tmp_tmp));
-    _commentFocus.unfocus();
-    setState(() {});
   }
 
   _getMore() async {
