@@ -189,7 +189,7 @@ class _SquareCardState extends State<SquareCard> {
                       : os_white,
                 ),
               ),
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12.5),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 17),
               child: Text(
                 e["board_name"],
                 style: TextStyle(
@@ -213,7 +213,6 @@ class _SquareCardState extends State<SquareCard> {
       iconData,
       color:
           Provider.of<ColorProvider>(context).isDark ? os_dark_white : os_black,
-      size: 20,
     );
   }
 
@@ -232,7 +231,6 @@ class _SquareCardState extends State<SquareCard> {
       child: Column(
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 padding: EdgeInsets.all(5),
@@ -253,8 +251,8 @@ class _SquareCardState extends State<SquareCard> {
               Text(
                 widget.data["board_category_name"],
                 style: TextStyle(
-                  fontSize: 14,
-                  // fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_white
                       : os_black,
@@ -301,7 +299,7 @@ class _DoubleColumnState extends State<DoubleColumn> {
             duration: Duration(milliseconds: 100),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -323,7 +321,7 @@ class _DoubleColumnState extends State<DoubleColumn> {
                       style: TextStyle(
                         color: os_white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        fontSize: 17,
                       ),
                     ),
                   ),
@@ -350,7 +348,7 @@ class _DoubleColumnState extends State<DoubleColumn> {
             duration: Duration(milliseconds: 100),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -372,7 +370,7 @@ class _DoubleColumnState extends State<DoubleColumn> {
                       style: TextStyle(
                         color: os_white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        fontSize: 17,
                       ),
                     ),
                   ),

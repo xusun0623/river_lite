@@ -273,13 +273,13 @@ class _MeFuncHeadState extends State<MeFuncHead> {
           ),
           Container(width: 10),
           Hero(
-            tag: ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type],
+            tag: ["", "收藏", "发表", "回复", "浏览历史", "草稿箱"][widget.type],
             child: Material(
               color: Colors.transparent,
               child: Container(
                 width: 200,
                 child: Text(
-                  ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type],
+                  ["", "收藏", "发表", "回复", "浏览历史", "草稿箱"][widget.type],
                   style: TextStyle(
                     fontSize: 22,
                     color: Provider.of<ColorProvider>(context).isDark

@@ -157,7 +157,7 @@ class _BtnState extends State<Btn> {
             Text(
               widget.txt,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 13,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
                     : Color.fromARGB(255, 52, 52, 52),
