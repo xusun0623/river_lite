@@ -344,7 +344,7 @@ class _DetailContState extends State<DetailCont> {
                   confirm: () {
                     xsLanuch(
                       url: widget.data['url'],
-                      isExtern: false,
+                      isExtern: true,
                     );
                   },
                 );
