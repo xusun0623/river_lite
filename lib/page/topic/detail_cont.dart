@@ -318,8 +318,10 @@ class _DetailContState extends State<DetailCont> {
                 Navigator.pushNamed(
                   context,
                   "/topic_detail",
-                  arguments:
-                      int.parse(widget.data["url"].toString().split("tid=")[1]),
+                  arguments: int.parse(widget.data["url"]
+                      .toString()
+                      .split("tid=")[1]
+                      .split("&")[0]),
                 );
               } else if (widget.data['url']
                       .toString()
@@ -327,7 +329,10 @@ class _DetailContState extends State<DetailCont> {
                   -1) {
                 toUserSpace(
                   context,
-                  int.parse(widget.data["url"].toString().split("uid=")[1]),
+                  int.parse(widget.data["url"]
+                      .toString()
+                      .split("uid=")[1]
+                      .split("&")[1]),
                 );
               } else
                 showModal(
@@ -353,7 +358,7 @@ class _DetailContState extends State<DetailCont> {
                 confirm: () {
                   xsLanuch(
                     url: widget.data['url'],
-                    isExtern: false,
+                    isExtern: true,
                   );
                 },
               );
@@ -388,7 +393,7 @@ class _DetailContState extends State<DetailCont> {
                 confirmTxt: "立即前往",
                 cancelTxt: "取消",
                 confirm: () {
-                  launch(Uri.encodeFull(widget.data['url']));
+                  xsLanuch(url: widget.data['url'], isExtern: true);
                 },
                 cancel: () {});
           },
