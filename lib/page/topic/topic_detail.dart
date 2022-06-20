@@ -86,14 +86,27 @@ class _TopicDetailState extends State<TopicDetail> {
 
   //一键转发
   _alterSend() async {
-    showToast(context: context, type: XSToast.loading, txt: "转发中…");
+    // showToast(context: context, type: XSToast.loading, txt: "转发中…");
     var contents = data["topic"]["content"];
     for (var i = 0; i < contents.length; i++) {
       var cont_i = contents[i];
       if (cont_i["type"] == 4) {
         contents[i]["infor"] = cont_i["url"];
       }
+      if (cont_i["type"] == 0) {
+        var original_tmp = "";
+        if (cont_i["infor"].toString().contains("[mobcent_phiz=")) {
+          //去掉表情包
+          var tmp_str = cont_i["infor"].toString().split("[mobcent_phiz=");
+          original_tmp = tmp_str[0];
+          for (int j = 1; j < tmp_str.length; j++) {
+            original_tmp += tmp_str[j].split("]")[1];
+          }
+          contents[i]["infor"] = original_tmp;
+        }
+      }
     }
+    print("${contents}");
     List cont_head_tmp = [
       {
         "infor": "由河畔Lite App一键转发\n",
@@ -140,6 +153,8 @@ class _TopicDetailState extends State<TopicDetail> {
         }
       }
     };
+    print("${cont_head_tmp}");
+    // return;
     var ret_tip = await Api().forum_topicadmin(
       {
         "act": "new",
