@@ -247,7 +247,6 @@ class _TopicDetailState extends State<TopicDetail> {
   }
 
   getListArr() async {
-    print("请求吧！！！${listID}");
     List tmp = [];
     for (var i = 0; i < listID.length; i++) {
       var element = listID[i];
@@ -3695,8 +3694,8 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
   Widget build(BuildContext context) {
     return myInkWell(
       color: Colors.transparent,
-      tap: () {
-        List<ActionItem> _buildAction() {
+      tap: () async {
+        Future<List<ActionItem>> _buildAction() async {
           List<ActionItem> tmp = [];
           tmp.addAll([
             ActionItem(
@@ -3709,6 +3708,24 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                     widget.data["topic"]["topic_id"].toString());
               },
             ),
+            ...(widget.data["topic"]["user_id"] == await getUid()
+                ? [
+                    ActionItem(
+                      title: "编辑帖子",
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, "/topic_edit", arguments: {
+                          "tid": widget.data["topic"]["topic_id"],
+                          "pid": int.parse(widget.data["topic"]["extraPanel"][0]
+                                  ["action"]
+                              .toString()
+                              .split("&pid=")[1]
+                              .split("&")[0]),
+                        });
+                      },
+                    ),
+                  ]
+                : []),
             ...(widget.data["forumName"] == "水手之家"
                 ? []
                 : [
@@ -3770,7 +3787,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         showActionSheet(
           context: context,
           bottomActionItem: BottomActionItem(title: "取消"),
-          actions: _buildAction(),
+          actions: await _buildAction(),
         );
       },
       widget: Padding(

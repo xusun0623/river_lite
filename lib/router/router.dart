@@ -28,6 +28,7 @@ import 'package:offer_show/page/start/start.dart';
 import 'package:offer_show/page/test/test.dart';
 import 'package:offer_show/page/topic/alter_sended.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
+import 'package:offer_show/page/topic/topic_edit.dart';
 import 'package:offer_show/page/user_list/user_list.dart';
 import 'package:offer_show/page/waterTask/task_list.dart';
 import 'package:offer_show/page/waterTask/water_task.dart';
@@ -56,6 +57,7 @@ final routers = {
   "/person_center": (data) => PersonCenter(param: data),
   "/alter_sended": () => AlterSended(),
   "/topic_detail": (data) => TopicDetail(topicID: data),
+  "/topic_edit": (data) => TopicEdit(tid: data["tid"], pid: data["pid"]),
   "/search": () => Search(),
   "/crop": () => CropImg(),
   "/column": (data) => TopicColumn(columnID: data),
