@@ -4,6 +4,7 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -34,16 +35,16 @@ class _TopicEditState extends State<TopicEdit> {
   /// "subject": "", //就是标题
   /// "typeid": 755,
   /// "message": "", //就是内容
-  Map ret_param = {
+  Map<String, String> ret_param = {
     "formhash": "",
     "posttime": "",
-    "fid": 0,
-    "tid": 0,
-    "pid": 0,
+    "fid": "0",
+    "tid": "0",
+    "pid": "0",
     "page": "",
     "editsubmit": "yes",
     "subject": "", //就是标题
-    "typeid": 0,
+    "typeid": "0",
     "message": "", //就是内容
   };
 
@@ -84,20 +85,20 @@ class _TopicEditState extends State<TopicEdit> {
         .forEach((element) {
       if (element.attributes["selected"] != null &&
           element.attributes["selected"] == "selected") {
-        ret_param["typeid"] = int.parse(element.attributes["value"]);
+        ret_param["typeid"] = element.attributes["value"];
       }
     });
     var ct2_a_r = document.getElementsByClassName("ct2_a_r").first;
     ret_param["formhash"] =
         ct2_a_r.getElementsByTagName("input")[0].attributes["value"];
     ret_param["posttime"] =
-        int.parse(ct2_a_r.getElementsByTagName("input")[1].attributes["value"]);
+        ct2_a_r.getElementsByTagName("input")[1].attributes["value"];
     ret_param["fid"] =
-        int.parse(ct2_a_r.getElementsByTagName("input")[4].attributes["value"]);
+        ct2_a_r.getElementsByTagName("input")[4].attributes["value"];
     ret_param["tid"] =
-        int.parse(ct2_a_r.getElementsByTagName("input")[5].attributes["value"]);
+        ct2_a_r.getElementsByTagName("input")[5].attributes["value"];
     ret_param["pid"] =
-        int.parse(ct2_a_r.getElementsByTagName("input")[6].attributes["value"]);
+        ct2_a_r.getElementsByTagName("input")[6].attributes["value"];
 
     //获取帖子的标题和内容
     var postbox = document.getElementById("postbox");
@@ -109,8 +110,17 @@ class _TopicEditState extends State<TopicEdit> {
   }
 
   _submit() async {
-    print("${ret_param}");
-    return;
+    // print("${ret_param}");
+    if (ret_param["subject"] == "" || ret_param["message"] == "") {
+      showToast(context: context, type: XSToast.none, txt: "请输入内容");
+      return;
+    }
+    if (ret_param["message"].length < 6) {
+      showToast(context: context, type: XSToast.none, txt: "主题内容至少6个字符");
+      return;
+    }
+    // return;
+    showToast(context: context, type: XSToast.loading, txt: "请稍后…");
     var request = http.MultipartRequest(
       'POST',
       Uri.parse(
@@ -123,6 +133,17 @@ class _TopicEditState extends State<TopicEdit> {
 
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
+      hideToast();
+      showModal(
+          context: context,
+          title: "提示",
+          cont: "你的更改已经提交，由于缓存原因可能需要几分钟才能生效",
+          confirmTxt: "确认",
+          cancelTxt: "",
+          confirm: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          });
       print(await response.stream.bytesToString());
     } else {
       print(response.reasonPhrase);
