@@ -62,7 +62,7 @@ class _TopicDetailState extends State<TopicDetail> {
   var _select = 0; //0-全部回复 1-只看楼主
   var _sort = 0; //0-按时间正序 1-按时间倒序
   var showBackToTop = false;
-  var uploadImgUrls = [];
+  var uploadImgList = [];
   var total_num = 0; //评论总数
   String uploadFileAid = "";
   var replyId = 0;
@@ -895,9 +895,9 @@ class _TopicDetailState extends State<TopicDetail> {
                             },
                             uploadImg: (img_urls) {
                               if (img_urls != null && img_urls.length != 0) {
-                                uploadImgUrls = [];
+                                uploadImgList = [];
                                 for (var i = 0; i < img_urls.length; i++) {
-                                  uploadImgUrls.add(img_urls[i]["urlName"]);
+                                  uploadImgList.add(img_urls[i]);
                                 }
                               }
                             },
@@ -912,7 +912,7 @@ class _TopicDetailState extends State<TopicDetail> {
                               _txtController.clear();
                               placeholder = "请在此编辑回复";
                               uploadFileAid = "";
-                              uploadImgUrls = [];
+                              uploadImgList = [];
                               editing = false;
                               setState(() {});
                             },
@@ -927,11 +927,15 @@ class _TopicDetailState extends State<TopicDetail> {
                                           : _txtController.text),
                                 },
                               ];
-                              for (var i = 0; i < uploadImgUrls.length; i++) {
+                              for (var i = 0; i < uploadImgList.length; i++) {
                                 contents.add({
                                   "type": 1, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
-                                  "infor": uploadImgUrls[i],
+                                  "infor": uploadImgList[i]["urlName"],
                                 });
+                              }
+                              var aids = uploadImgList.map((attachment) => attachment["id"]);
+                              if (uploadFileAid != "") {
+                                aids = aids.followedBy([uploadFileAid]);
                               }
                               Map json = {
                                 "body": {
@@ -939,7 +943,7 @@ class _TopicDetailState extends State<TopicDetail> {
                                     "isAnonymous": 0,
                                     "isOnlyAuthor": 0,
                                     "typeId": "",
-                                    "aid": uploadFileAid,
+                                    "aid": aids.join(","),
                                     "fid": "",
                                     "replyId": replyId,
                                     "tid": widget.topicID, // 回复时指定帖子
@@ -969,7 +973,7 @@ class _TopicDetailState extends State<TopicDetail> {
                               _focusNode.unfocus();
                               _txtController.clear();
                               placeholder = "请在此编辑回复";
-                              uploadImgUrls = [];
+                              uploadImgList = [];
                               editing = false;
                               setState(() {
                                 uploadFileAid = "";

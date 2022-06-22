@@ -141,7 +141,7 @@ class _PostNewState extends State<PostNew> {
           "isAnonymous": 0,
           "isOnlyAuthor": 0,
           "typeId": select_section_child_id == 0 ? "" : select_section_child_id,
-          "aid": "",
+          "aid": img_urls.map((attachment) => attachment["id"]).join(","),
           "fid": select_section_id,
           "isQuote": 0, //"是否引用之前回复的内容
           "title": title_controller.text,
