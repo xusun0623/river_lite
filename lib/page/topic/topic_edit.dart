@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -57,6 +57,7 @@ class _TopicEditState extends State<TopicEdit> {
   FocusNode _tipFocusNode = new FocusNode();
   bool showDone = false; //是否展示顶部右上角的完成按钮
   bool denyEdit = false; //是否拒绝编辑
+  bool requesting = true; //是否正在请求
 
   _getData() async {
     Map param = {
@@ -73,6 +74,7 @@ class _TopicEditState extends State<TopicEdit> {
     if (html_txt.contains("管理员设置了本版块最后回复于") || html_txt.contains("抱歉")) {
       setState(() {
         denyEdit = true;
+        requesting = false;
       });
       return;
     }
@@ -106,7 +108,9 @@ class _TopicEditState extends State<TopicEdit> {
         postbox.getElementsByTagName("input").first.attributes["value"];
     _tipTextEditingController.text =
         postbox.getElementsByTagName("textarea").first.innerHtml;
-    setState(() {});
+    setState(() {
+      requesting = false;
+    });
   }
 
   _submit() async {
@@ -116,10 +120,8 @@ class _TopicEditState extends State<TopicEdit> {
       return;
     }
     if (ret_param["message"].length < 6) {
-      showToast(context: context, type: XSToast.none, txt: "主题内容至少6个字符");
-      return;
+      ret_param["message"] += (" " * (6 - ret_param["message"].length));
     }
-    // return;
     showToast(context: context, type: XSToast.loading, txt: "请稍后…");
     var request = http.MultipartRequest(
       'POST',
@@ -177,7 +179,7 @@ class _TopicEditState extends State<TopicEdit> {
         foregroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_white
             : os_black,
-        actions: denyEdit
+        actions: denyEdit || requesting
             ? []
             : [
                 !showDone
@@ -202,70 +204,110 @@ class _TopicEditState extends State<TopicEdit> {
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: ListView(
         physics: BouncingScrollPhysics(),
-        children: denyEdit
-            ? [
-                Center(child: Text("1.水区的帖子不允许编辑")),
-                Center(child: Text("2.15天前的帖子不允许编辑")),
-              ]
-            : [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  decoration: BoxDecoration(
-                    color: os_white,
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  child: TextField(
-                    controller: _titleTextEditingController,
-                    focusNode: _titleFocusNode,
-                    decoration: InputDecoration(
-                      fillColor: os_white,
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(
-                          width: 2,
+        children: requesting
+            ? [BottomLoading()]
+            : (denyEdit
+                ? [
+                    Center(
+                        child: Text(
+                      "1.水区的帖子不允许编辑",
+                      style: TextStyle(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_white
+                            : os_black,
+                      ),
+                    )),
+                    Container(height: 5),
+                    Center(
+                      child: Text(
+                        "2.15天前的帖子不允许编辑",
+                        style: TextStyle(
                           color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_dark_white
-                              : os_color,
-                          style: BorderStyle.solid,
+                              ? os_dark_white
+                              : os_black,
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                    ),
+                  ]
+                : [
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? Color(0x22FFFFFF)
+                            : os_white,
                         borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(
-                          width: 2,
-                          color: Colors.transparent,
-                          style: BorderStyle.solid,
+                      ),
+                      child: TextField(
+                        controller: _titleTextEditingController,
+                        focusNode: _titleFocusNode,
+                        style: TextStyle(
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
+                        ),
+                        decoration: InputDecoration(
+                          fillColor: os_white,
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_dark_white
+                                  : os_color,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: Colors.transparent,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          hintText: "请输入帖子的标题",
+                          hintStyle: TextStyle(
+                            color: os_deep_grey,
+                          ),
                         ),
                       ),
-                      hintText: "请输入帖子的标题",
                     ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  height: 300,
-                  decoration: BoxDecoration(
-                    color: os_white,
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  child: TextField(
-                    controller: _tipTextEditingController,
-                    focusNode: _tipFocusNode,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12.5,
-                        vertical: 15,
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      height: 300,
+                      decoration: BoxDecoration(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? Color(0x22FFFFFF)
+                            : os_white,
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
                       ),
-                      fillColor: os_white,
-                      border: InputBorder.none,
-                      hintText: "请输入帖子的内容",
+                      child: TextField(
+                        controller: _tipTextEditingController,
+                        focusNode: _tipFocusNode,
+                        maxLines: null,
+                        style: TextStyle(
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
+                        ),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 12.5,
+                            vertical: 15,
+                          ),
+                          fillColor: os_white,
+                          border: InputBorder.none,
+                          hintText: "请输入帖子的内容",
+                          hintStyle: TextStyle(
+                            color: os_deep_grey,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Container(child: Text(title)),
-                Container(child: Text(tip)),
-              ],
+                    Container(child: Text(title)),
+                    Container(child: Text(tip)),
+                  ]),
       ),
     );
   }
@@ -283,13 +325,13 @@ class EditDoneBtn extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
-          color: Color.fromRGBO(0, 146, 255, 0.15),
-          borderRadius: BorderRadius.all(Radius.circular(100)),
-        ),
+            color: Color.fromRGBO(0, 146, 255, 0.1),
+            borderRadius: BorderRadius.all(Radius.circular(100)),
+            border: Border.all(color: os_color)),
         child: Center(
           child: Container(
             child: Text(
-              "完成",
+              "编辑完成",
               style: TextStyle(
                 color: os_color,
                 fontWeight: FontWeight.bold,
@@ -322,7 +364,7 @@ class EditSendBtn extends StatelessWidget {
         child: Center(
           child: Container(
             child: Text(
-              "发送",
+              "提交",
               style: TextStyle(
                 color: os_white,
                 fontWeight: FontWeight.bold,

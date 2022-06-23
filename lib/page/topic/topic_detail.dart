@@ -933,7 +933,8 @@ class _TopicDetailState extends State<TopicDetail> {
                                   "infor": uploadImgList[i]["urlName"],
                                 });
                               }
-                              var aids = uploadImgList.map((attachment) => attachment["id"]);
+                              var aids = uploadImgList
+                                  .map((attachment) => attachment["id"]);
                               if (uploadFileAid != "") {
                                 aids = aids.followedBy([uploadFileAid]);
                               }
@@ -966,9 +967,8 @@ class _TopicDetailState extends State<TopicDetail> {
                                   "json": jsonEncode(json),
                                 },
                               );
-                              hideToast();
                               _scrollController.animateTo(0,
-                                  duration: Duration(milliseconds: 1),
+                                  duration: Duration(milliseconds: 300),
                                   curve: Curves.ease);
                               _focusNode.unfocus();
                               _txtController.clear();
@@ -980,6 +980,7 @@ class _TopicDetailState extends State<TopicDetail> {
                               });
                               await Future.delayed(Duration(milliseconds: 30));
                               await _getData();
+                              hideToast();
                               showToast(
                                 context: context,
                                 type: XSToast.success,
@@ -3769,21 +3770,13 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
           ]);
           tmp.addAll([
             ActionItem(
-              title: "【不感兴趣】屏蔽此贴",
+              title: "屏蔽此贴",
               onPressed: () async {
                 Navigator.pop(context);
                 setBlackWord(widget.data["topic"]["title"], context);
                 widget.block();
               },
             ),
-            ActionItem(
-              title: "【不感兴趣】屏蔽此人",
-              onPressed: () async {
-                Navigator.pop(context);
-                setBlackWord(widget.data["topic"]["user_nick_name"], context);
-                widget.block();
-              },
-            )
           ]);
           return tmp;
         }

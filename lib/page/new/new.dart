@@ -31,15 +31,16 @@ class PostNew extends StatefulWidget {
 }
 
 class _PostNewState extends State<PostNew> {
-  bool sendSuccess = false;
+  bool sendSuccess = false; //是否发布成功
 
-  String select_section = "水手之家";
-  int select_section_id = 25;
-  int select_section_child_id = 0;
-  TextEditingController title_controller = new TextEditingController();
-  FocusNode title_focus = new FocusNode();
-  TextEditingController tip_controller = new TextEditingController();
-  FocusNode tip_focus = new FocusNode();
+  String select_section = "水手之家"; //选择的专栏的名称
+  int select_section_id = 25; //选择的专栏的ID
+  int select_section_child_id = 0; //选择的专栏的子专栏ID
+  TextEditingController title_controller =
+      new TextEditingController(); //输入的标题控制器
+  FocusNode title_focus = new FocusNode(); //标题输入框的focus控制器
+  TextEditingController tip_controller = new TextEditingController(); //输入的正文控制器
+  FocusNode tip_focus = new FocusNode(); //正文输入框的focus控制器
   bool pop_section = false;
   bool show_vote = false;
   bool uploading = false;

@@ -231,14 +231,6 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
               ),
             ),
             backgroundColor: os_dark_back,
-            // floatingActionButton: FloatingActionButton(
-            //   backgroundColor: Color(0x22FFFFFF),
-            //   child: Icon(Icons.chat_bubble_outline),
-            //   onPressed: () {
-
-            //     // _getData();
-            //   },
-            // ),
             body: ConstrainedBox(
               constraints: BoxConstraints(
                 maxWidth: MediaQuery.of(context).size.width,
@@ -445,9 +437,9 @@ class _PhotoCardState extends State<PhotoCard> {
     if (photo_txt != "") {
       //从缓存中拿数据
       widget.data["photo"] = jsonDecode(photo_txt);
-      if (widget.data["photo"].length == 0) {
-        _getForceData();
-      }
+      // if (widget.data["photo"].length == 0) {
+      _getForceData();
+      // }
       widget.data["cont"] = photo_desc_txt;
     } else {
       var tmp = await Api().forum_postlist({
