@@ -164,7 +164,7 @@ class _TopicDetailState extends State<TopicDetail> {
     hideToast();
     if (ret_tip != null && ret_tip["rs"] == 1) {
       var tid = ret_tip["body"]["tid"];
-      Navigator.pushNamed(context, "/alter_sended");
+      Navigator.pushNamed(context, "/alter_sent");
     }
   }
 

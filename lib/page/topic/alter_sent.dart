@@ -4,14 +4,14 @@ import 'package:offer_show/page/new/new.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
-class AlterSended extends StatefulWidget {
-  AlterSended({Key key}) : super(key: key);
+class AlterSent extends StatefulWidget {
+  AlterSent({Key key}) : super(key: key);
 
   @override
-  State<AlterSended> createState() => _AlterSendedState();
+  State<AlterSent> createState() => _AlterSentState();
 }
 
-class _AlterSendedState extends State<AlterSended> {
+class _AlterSentState extends State<AlterSent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
