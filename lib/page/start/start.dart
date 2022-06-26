@@ -69,34 +69,39 @@ class _StartState extends State<Start> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      body: Center(
-        child: Opacity(
-          opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
-          child: Container(
-            margin: EdgeInsets.only(bottom: 100),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                os_svg(
-                  path: "lib/img/start.svg",
-                  width: 100,
-                  height: 100,
-                ),
-                Container(height: 20),
-                Text(
-                  "河畔Lite",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_white
-                        : os_black,
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, "/body");
+      },
+      child: Scaffold(
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        body: Center(
+          child: Opacity(
+            opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
+            child: Container(
+              margin: EdgeInsets.only(bottom: 100),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  os_svg(
+                    path: "lib/img/start.svg",
+                    width: 100,
+                    height: 100,
                   ),
-                ),
-              ],
+                  Container(height: 20),
+                  Text(
+                    "河畔Lite",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_white
+                          : os_black,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
