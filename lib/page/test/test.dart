@@ -12,6 +12,8 @@ class Test extends StatefulWidget {
 }
 
 class _TestState extends State<Test> {
+  _test() {}
+
   void _post_parm() async {
     Response response = await XHttp().pureHttpWithCookie(
       url: base_url + "forum.php?mod=viewthread&tid=1937853",

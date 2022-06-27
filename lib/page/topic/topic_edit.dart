@@ -1,10 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
+import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -48,8 +53,6 @@ class _TopicEditState extends State<TopicEdit> {
     "message": "", //就是内容
   };
 
-  String title = "";
-  String tip = "";
   TextEditingController _titleTextEditingController =
       new TextEditingController();
   TextEditingController _tipTextEditingController = new TextEditingController();
@@ -58,6 +61,7 @@ class _TopicEditState extends State<TopicEdit> {
   bool showDone = false; //是否展示顶部右上角的完成按钮
   bool denyEdit = false; //是否拒绝编辑
   bool requesting = true; //是否正在请求
+  var img_list = []; //上传的图片列表
 
   _getData() async {
     Map param = {
@@ -169,6 +173,14 @@ class _TopicEditState extends State<TopicEdit> {
     super.initState();
   }
 
+  List<Widget> _buildUploadImg() {
+    List<Widget> tmp = [];
+    img_list.forEach((element) {
+      tmp.add(UploadImg(data: element));
+    });
+    return tmp;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,10 +205,11 @@ class _TopicEditState extends State<TopicEdit> {
                       ),
                 Container(width: 7.5),
                 GestureDetector(
-                    onTap: () {
-                      _submit();
-                    },
-                    child: EditSendBtn()),
+                  onTap: () {
+                    _submit();
+                  },
+                  child: EditSendBtn(),
+                ),
                 Container(width: 10),
               ],
       ),
@@ -207,108 +220,302 @@ class _TopicEditState extends State<TopicEdit> {
         children: requesting
             ? [BottomLoading()]
             : (denyEdit
-                ? [
-                    Center(
-                        child: Text(
-                      "1.水区的帖子不允许编辑",
-                      style: TextStyle(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_white
-                            : os_black,
-                      ),
-                    )),
-                    Container(height: 5),
-                    Center(
-                      child: Text(
-                        "2.15天前的帖子不允许编辑",
-                        style: TextStyle(
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
-                              : os_black,
-                        ),
-                      ),
-                    ),
-                  ]
+                ? [InfoTip()]
                 : [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? Color(0x22FFFFFF)
-                            : os_white,
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                      ),
-                      child: TextField(
-                        controller: _titleTextEditingController,
-                        focusNode: _titleFocusNode,
-                        style: TextStyle(
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
-                              : os_black,
-                        ),
-                        decoration: InputDecoration(
-                          fillColor: os_white,
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            borderSide: BorderSide(
-                              width: 2,
+                    EditTitleInput(
+                      titleTextEditingController: _titleTextEditingController,
+                      titleFocusNode: _titleFocusNode,
+                    ),
+                    EditTipInput(
+                      tipTextEditingController: _tipTextEditingController,
+                      tipFocusNode: _tipFocusNode,
+                    ),
+                    Wrap(
+                      children: [
+                        ..._buildUploadImg(),
+                        Bounce(
+                          onPressed: () async {
+                            showModal(
+                              title: "请注意",
+                              cont:
+                                  "此功能所上传的图片并未与帖子相关联，因此会在网页端显示「未使用」，如果你需要它们，请勿在网页端手动删除图片",
+                              confirmTxt: "我知道了",
+                              confirm: () async {
+                                //新增图片
+                                final ImagePicker _picker = ImagePicker();
+                                var image = await _picker.pickMultiImage(
+                                  imageQuality: 50,
+                                );
+                                print("${image}");
+                                showToast(
+                                  context: context,
+                                  type: XSToast.loading,
+                                  txt: "上传中…",
+                                );
+                                if (image != null && image.length != 0) {
+                                  var img_urls = await Api().uploadImage(
+                                    imgs: image,
+                                  );
+                                  img_list.addAll(img_urls);
+                                  img_urls.forEach((ele) {
+                                    _tipTextEditingController.text +=
+                                        "\n[img]${ele["urlName"]}[/img]";
+                                  });
+                                  setState(() {});
+                                  print("${img_urls}");
+                                }
+                                hideToast();
+                              },
+                              context: context,
+                            );
+                          },
+                          duration: Duration(milliseconds: 100),
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 10,
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 20,
+                            ),
+                            decoration: BoxDecoration(
                               color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_dark_white
-                                  : os_color,
-                              style: BorderStyle.solid,
+                                  ? os_light_dark_card
+                                  : os_white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: Icon(
+                              Icons.add,
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_white
+                                  : os_black,
                             ),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            borderSide: BorderSide(
-                              width: 2,
-                              color: Colors.transparent,
-                              style: BorderStyle.solid,
+                        ),
+                      ],
+                    ),
+                    img_list.length == 0
+                        ? Container()
+                        : Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.info,
+                                  color: os_deep_grey,
+                                  size: 18,
+                                ),
+                                Container(width: 5),
+                                Container(
+                                  width: MediaQuery.of(context).size.width - 55,
+                                  child: Text(
+                                    "请点击图片以获取富文本链接（注意：此图片链接是临时的，请勿在网页端删除此图片的附件）",
+                                    style: TextStyle(color: os_deep_grey),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          hintText: "请输入帖子的标题",
-                          hintStyle: TextStyle(
-                            color: os_deep_grey,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      height: 300,
-                      decoration: BoxDecoration(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? Color(0x22FFFFFF)
-                            : os_white,
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                      ),
-                      child: TextField(
-                        controller: _tipTextEditingController,
-                        focusNode: _tipFocusNode,
-                        maxLines: null,
-                        style: TextStyle(
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
-                              : os_black,
-                        ),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 12.5,
-                            vertical: 15,
-                          ),
-                          fillColor: os_white,
-                          border: InputBorder.none,
-                          hintText: "请输入帖子的内容",
-                          hintStyle: TextStyle(
-                            color: os_deep_grey,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(child: Text(title)),
-                    Container(child: Text(tip)),
                   ]),
       ),
+    );
+  }
+}
+
+class UploadImg extends StatefulWidget {
+  var data;
+  // "id": 2146949,
+  // "urlName":
+  //     "https://bbs.uestc.edu.cn/data/attachment//forum/202206/27/102235yqcb1bkcbbor6bbo.png"
+  UploadImg({
+    Key key,
+    this.data,
+  }) : super(key: key);
+
+  @override
+  State<UploadImg> createState() => _UploadImgState();
+}
+
+class _UploadImgState extends State<UploadImg> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Vibrate.feedback(FeedbackType.impact);
+        Clipboard.setData(
+            ClipboardData(text: "[img]${widget.data["urlName"]}[/img]"));
+        showToast(
+          context: context,
+          type: XSToast.none,
+          duration: 700,
+          txt: "已复制图片链接，请粘贴使用",
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(
+          left: 10,
+          top: 10,
+          bottom: 10,
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          child: Container(
+            color: os_white,
+            child: Image.network(
+              widget.data["urlName"],
+              width: 65,
+              height: 65,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class EditTipInput extends StatelessWidget {
+  const EditTipInput({
+    Key key,
+    @required TextEditingController tipTextEditingController,
+    @required FocusNode tipFocusNode,
+  })  : _tipTextEditingController = tipTextEditingController,
+        _tipFocusNode = tipFocusNode,
+        super(key: key);
+
+  final TextEditingController _tipTextEditingController;
+  final FocusNode _tipFocusNode;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      height: 300,
+      decoration: BoxDecoration(
+        color: Provider.of<ColorProvider>(context).isDark
+            ? Color(0x22FFFFFF)
+            : os_white,
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
+      child: TextField(
+        controller: _tipTextEditingController,
+        focusNode: _tipFocusNode,
+        maxLines: null,
+        style: TextStyle(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+        ),
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 12.5,
+            vertical: 15,
+          ),
+          fillColor: os_white,
+          border: InputBorder.none,
+          hintText: "请输入帖子的内容",
+          hintStyle: TextStyle(
+            color: os_deep_grey,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class EditTitleInput extends StatelessWidget {
+  const EditTitleInput({
+    Key key,
+    @required TextEditingController titleTextEditingController,
+    @required FocusNode titleFocusNode,
+  })  : _titleTextEditingController = titleTextEditingController,
+        _titleFocusNode = titleFocusNode,
+        super(key: key);
+
+  final TextEditingController _titleTextEditingController;
+  final FocusNode _titleFocusNode;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      decoration: BoxDecoration(
+        color: Provider.of<ColorProvider>(context).isDark
+            ? Color(0x22FFFFFF)
+            : os_white,
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
+      child: TextField(
+        controller: _titleTextEditingController,
+        focusNode: _titleFocusNode,
+        style: TextStyle(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+        ),
+        decoration: InputDecoration(
+          fillColor: os_white,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            borderSide: BorderSide(
+              width: 2,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_color,
+              style: BorderStyle.solid,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            borderSide: BorderSide(
+              width: 2,
+              color: Colors.transparent,
+              style: BorderStyle.solid,
+            ),
+          ),
+          hintText: "请输入帖子的标题",
+          hintStyle: TextStyle(
+            color: os_deep_grey,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class InfoTip extends StatelessWidget {
+  const InfoTip({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Center(
+            child: Text(
+          "1.水区的帖子不允许编辑",
+          style: TextStyle(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
+          ),
+        )),
+        Container(height: 5),
+        Center(
+          child: Text(
+            "2.15天前的帖子不允许编辑",
+            style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

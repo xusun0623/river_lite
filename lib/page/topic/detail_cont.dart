@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -11,14 +9,11 @@ import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/emoji/emoji.dart';
-import 'package:offer_show/outer/cached_network_image/image_provider/cached_network_image_provider.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
