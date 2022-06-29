@@ -123,7 +123,7 @@ class _SquareHomeState extends State<SquareHome> {
       child: myInkWell(
         radius: 10,
         tap: () {
-          Navigator.pushNamed(context, "/search");
+          Navigator.pushNamed(context, "/search", arguments: 0);
         },
         widget: Container(
           padding: EdgeInsets.only(left: 15),

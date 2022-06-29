@@ -88,7 +88,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       actions: [
         IconButton(
           onPressed: () {
-            Navigator.pushNamed(context, "/search");
+            Navigator.pushNamed(context, "/search", arguments: 0);
           },
           icon: os_svg(
             path: Provider.of<ColorProvider>(context).isDark

@@ -1313,6 +1313,11 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                           },
                         )
                       : AtSomeone(
+                        hide: (){
+                          setState(() {
+                            popSection = false;
+                          });
+                        },
                           tap: (uid, name) {
                             at_user.add({uid: uid, name: name});
                             widget.atUser(at_user);
@@ -1605,10 +1610,12 @@ class _YourEmojiState extends State<YourEmoji> {
 
 class AtSomeone extends StatefulWidget {
   Function tap;
+  Function hide;
   Color backgroundColor;
   AtSomeone({
     Key key,
     @required this.tap,
+    @required this.hide,
     this.backgroundColor,
   }) : super(key: key);
 
@@ -1660,15 +1667,35 @@ class _AtSomeoneState extends State<AtSomeone> {
         margin: EdgeInsets.only(left: 5, top: 10, right: 5),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Text(
-            "可以@的人",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_white
-                  : os_black,
-            ),
+          child: Row(
+            children: [
+              Text(
+                "可以@的人",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
+                ),
+              ),
+              Container(width: 5),
+              myInkWell(
+                color: Colors.transparent,
+                radius: 100,
+                tap: () {
+                  widget.hide();
+                  Navigator.pushNamed(context, "/search", arguments: 1);
+                },
+                widget: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Icon(
+                    Icons.search,
+                    color: os_color,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ));
@@ -1711,14 +1738,20 @@ class _AtSomeoneState extends State<AtSomeone> {
       ));
     }
     if (list.length == 0 && load_done) {
-      tmp.add(Container(
-        height: 249,
-        child: Center(
-          child: Text(
-            "暂无可以@的人,你可以通过关注/好友增加人数",
-            style: TextStyle(
-              fontSize: 14,
-              color: os_deep_grey,
+      tmp.add(GestureDetector(
+        onTap: () {
+          widget.hide();
+          Navigator.pushNamed(context, "/search", arguments: 1);
+        },
+        child: Container(
+          height: 249,
+          child: Center(
+            child: Text(
+              "暂无可以@的人,你可以关注ta,点击搜索>",
+              style: TextStyle(
+                fontSize: 14,
+                color: os_deep_grey,
+              ),
             ),
           ),
         ),

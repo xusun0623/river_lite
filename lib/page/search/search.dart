@@ -23,14 +23,18 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
-  const Search({Key key}) : super(key: key);
+  int type; //0:帖子 1:用户
+  Search({
+    Key key,
+    this.type,
+  }) : super(key: key);
 
   @override
   _SearchState createState() => _SearchState();
 }
 
 class _SearchState extends State<Search> {
-  int select = 0;
+  int select = 0; //选择的类型 0:帖子 1:用户
   var data = [];
   bool loading = false;
   bool load_done = false;
@@ -252,6 +256,12 @@ class _SearchState extends State<Search> {
       }
     });
     speedUp(_scrollController);
+    setState(() {
+      if (widget.type != null) {
+        select = widget.type;
+      }
+      print("搜索的类型为${select}");
+    });
     super.initState();
   }
 
@@ -316,6 +326,7 @@ class _SearchState extends State<Search> {
               select = idx;
             });
           },
+          select_idx: select,
         ),
       ),
       body: Center(
@@ -559,8 +570,8 @@ class _UserListCardState extends State<UserListCard> {
                 borderRadius: BorderRadius.all(Radius.circular(100)),
                 child: CachedNetworkImage(
                   placeholder: (context, url) => Container(
-                    width: 50,
-                    height: 50,
+                    width: 35,
+                    height: 35,
                     decoration: BoxDecoration(
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_deep_grey
@@ -568,15 +579,15 @@ class _UserListCardState extends State<UserListCard> {
                       borderRadius: BorderRadius.all(Radius.circular(100)),
                     ),
                   ),
-                  width: 50,
-                  height: 50,
+                  width: 35,
+                  height: 35,
                   fit: BoxFit.cover,
                   imageUrl: widget.data["icon"],
                 ),
               ),
               Container(width: 15),
               Container(
-                width: MediaQuery.of(context).size.width - 120,
+                width: MediaQuery.of(context).size.width - 160,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -607,11 +618,34 @@ class _UserListCardState extends State<UserListCard> {
                           ? "这位畔友很懒，什么也没写"
                           : widget.data["signture"],
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         color: Color(0xFF9F9F9F),
                       ),
                     ),
                   ],
+                ),
+              ),
+              Container(
+                width: 40,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.person_add_rounded,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : os_deep_grey,
+                  ),
+                  onPressed: () async {
+                    var tmp = await Api().user_useradmin({
+                      "type": "follow",
+                      "uid": widget.data["uid"],
+                    });
+                    showToast(
+                      context: context,
+                      txt: tmp["errcode"],
+                      duration: 500,
+                      type: XSToast.none,
+                    );
+                  },
                 ),
               ),
             ],
@@ -661,11 +695,13 @@ class SearchLeft extends StatefulWidget {
   TextEditingController controller;
   FocusNode commentFocus;
   Function focus;
+  int select_idx;
   SearchLeft({
     Key key,
     @required this.select,
     this.controller,
     this.focus,
+    @required this.select_idx,
     @required this.commentFocus,
     @required this.confirm,
   }) : super(key: key);
@@ -675,7 +711,6 @@ class SearchLeft extends StatefulWidget {
 }
 
 class _SearchLeftState extends State<SearchLeft> {
-  int select_idx = 0;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -701,9 +736,6 @@ class _SearchLeftState extends State<SearchLeft> {
                 context: context,
                 list: ["帖子", "用户"],
                 select: (idx) {
-                  setState(() {
-                    select_idx = idx;
-                  });
                   widget.select(idx);
                 },
               );
@@ -716,7 +748,7 @@ class _SearchLeftState extends State<SearchLeft> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    select_idx == 0 ? "帖子" : "用户",
+                    widget.select_idx == 0 ? "帖子" : "用户",
                     style: TextStyle(
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_dark_dark_white

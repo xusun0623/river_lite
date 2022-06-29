@@ -310,7 +310,7 @@ class _TopicColumnState extends State<TopicColumn> {
           actions: [
             IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, "/search");
+                  Navigator.pushNamed(context, "/search", arguments: 0);
                 },
                 icon: Icon(
                   Icons.search,

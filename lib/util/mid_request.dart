@@ -74,7 +74,7 @@ class XHttp {
   }
 
   netWorkRequest({
-    bool noTimeOut,
+    bool noTimeOut, //是否有超时
     String url = "",
     Map header,
     Map param, //参数

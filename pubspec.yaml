@@ -72,6 +72,7 @@ flutter:
     - lib/img/msg/
     - lib/img/me/
     - lib/img/me_dark/
+    - lib/page/hot/img/
     - lib/collect_btn/
     - lib/page/msg_three/
     - lib/lottie/

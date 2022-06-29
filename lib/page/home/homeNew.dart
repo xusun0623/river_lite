@@ -277,7 +277,7 @@ class _ToSearchState extends State<ToSearch> {
       child: myInkWell(
         radius: 10,
         tap: () {
-          Navigator.pushNamed(context, "/search");
+          Navigator.pushNamed(context, "/search", arguments: 0);
         },
         widget: Container(
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),

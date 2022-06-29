@@ -357,6 +357,11 @@ class _PostNewState extends State<PostNew> {
                                 },
                               ),
                               AtSomeone(
+                                  hide: () {
+                                    setState(() {
+                                      pop_section = false;
+                                    });
+                                  },
                                   backgroundColor:
                                       Provider.of<ColorProvider>(context).isDark
                                           ? os_dark_back

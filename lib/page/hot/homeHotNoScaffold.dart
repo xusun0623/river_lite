@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/util/interface.dart';
@@ -67,8 +69,23 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
 
   List<Widget> _buildComponents() {
     List<Widget> t = [];
-    for (var i in list) {
-      t.add(Topic(data: i));
+    for (var i = 0; i < list.length; i++) {
+      t.add(
+        Stack(
+          children: [
+            Topic(data: list[i]),
+            Positioned(
+              right: os_edge + 80,
+              top: 10,
+              child: os_svg(
+                width: 25,
+                height: 25 * 1.1,
+                path: "lib/page/hot/img/${i + 1}.svg",
+              ),
+            ),
+          ],
+        ),
+      );
     }
     if (list.length == 0) {
       t.add(Container(
