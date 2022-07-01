@@ -45,6 +45,10 @@ class _CollectionDetailState extends State<CollectionDetail> {
     });
     if (!load_done) {
       tmp.add(BottomLoading());
+      tmp.add(Container(height: MediaQuery.of(context).size.height));
+    }
+    if (load_done && data.length <= 6) {
+      tmp.add(Container(height: (6.0 - data.length) * 120));
     }
     return tmp;
   }

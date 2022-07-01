@@ -76,11 +76,14 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
             Topic(data: list[i]),
             Positioned(
               right: os_edge + 80,
-              top: 10,
-              child: os_svg(
-                width: 25,
-                height: 25 * 1.1,
-                path: "lib/page/hot/img/${i + 1}.svg",
+              top: 5,
+              child: Opacity(
+                opacity: 0.7,
+                child: os_svg(
+                  width: 25,
+                  height: 25 * 1.1,
+                  path: "lib/page/hot/img/${i + 1}.svg",
+                ),
               ),
             ),
           ],

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
@@ -243,11 +244,11 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
                   return await _getData();
                 },
                 child: Swiper(
-                  fade: 0.1,
+                  fade: 0.5,
                   scrollDirection: Axis.vertical,
                   loop: false,
                   itemCount: photo.length,
-                  scale: 0.8,
+                  // scale: 0.8,
                   physics: DefineSwiperPhySics(),
                   controller: _swiperController,
                   onIndexChanged: (idx) {
@@ -613,7 +614,7 @@ class _PhotoCardState extends State<PhotoCard> {
                         ),
                       )
                     : Swiper(
-                        // viewportFraction: Platform.isIOS ? 0.9 : 1,
+                        viewportFraction: 0.9,
                         // scale: 0.9,
                         // indicatorLayout: PageIndicatorLayout.WARM,
                         itemCount: widget.data["photo"].length,

@@ -35,10 +35,10 @@ class _SquareState extends State<Square> {
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
-    tmp.add(DoubleColumn());
+    tmp.add(SpecialSquareCard());
     if (data != null && data.length != 0) {
       for (var i = 0; i < data.length; i++) {
-        tmp.add(SquareCard(data: data[i], index: i));
+        tmp.add(SquareCard(data: data[i], index: i + 1));
       }
     }
     return tmp;
@@ -102,52 +102,34 @@ class _SquareState extends State<Square> {
     _focusNode.unfocus();
     super.dispose();
   }
+}
 
-  Widget _getInput() {
-    return Container(
-      width: MediaQuery.of(context).size.width - 30,
-      margin: EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 10),
-      height: 50,
-      decoration: BoxDecoration(
-        color: os_white,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: myInkWell(
-        radius: 10,
-        tap: () {
-          Navigator.pushNamed(context, "/search", arguments: 0);
-        },
-        widget: Container(
-          padding: EdgeInsets.only(left: 15),
-          child: Center(
-            child: Row(
-              children: [
-                Container(width: 5),
-                Container(
-                  width: MediaQuery.of(context).size.width - 105,
-                  child: Text(
-                    "搜一搜",
-                    style: TextStyle(
-                      color: os_deep_grey,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 50,
-                  height: 50,
-                  padding: EdgeInsets.all(15),
-                  child: os_svg(
-                    path: "lib/img/search_blue.svg",
-                    width: 30,
-                    height: 30,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+class SpecialSquareCard extends StatefulWidget {
+  const SpecialSquareCard({Key key}) : super(key: key);
+
+  @override
+  State<SpecialSquareCard> createState() => _SpecialSquareCardState();
+}
+
+class _SpecialSquareCardState extends State<SpecialSquareCard> {
+  @override
+  Widget build(BuildContext context) {
+    return SquareCard(
+      data: {
+        "board_category_id": 203,
+        "board_category_name": "特别版块",
+        "board_list": [
+          {
+            "board_id": 45,
+            "board_name": "情感专区",
+          },
+          {
+            "board_id": 371,
+            "board_name": "密语",
+          },
+        ]
+      },
+      index: 0,
     );
   }
 }
@@ -238,6 +220,7 @@ class _SquareCardState extends State<SquareCard> {
                     ? _getIcon(Icons.sms_outlined)
                     : Container(
                         child: [
+                          _getIcon(Icons.fiber_smart_record_outlined),
                           _getIcon(Icons.trending_up_outlined),
                           _getIcon(Icons.map_outlined),
                           _getIcon(Icons.school_outlined),
@@ -266,128 +249,6 @@ class _SquareCardState extends State<SquareCard> {
             child: Wrap(
               alignment: WrapAlignment.start,
               children: _buildWrapWidget(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class DoubleColumn extends StatefulWidget {
-  DoubleColumn({Key key}) : super(key: key);
-
-  @override
-  State<DoubleColumn> createState() => _DoubleColumnState();
-}
-
-class _DoubleColumnState extends State<DoubleColumn> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-        left: 15,
-        right: 15,
-        bottom: 10,
-      ),
-      child: Row(
-        children: [
-          Bounce(
-            onPressed: () {
-              Navigator.pushNamed(context, "/column", arguments: 45);
-            },
-            duration: Duration(milliseconds: 100),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: [0, 1],
-                  colors: [
-                    Color(0xFFFA5F52),
-                    Color(0xFFFD8872),
-                  ],
-                ),
-              ),
-              width: (MediaQuery.of(context).size.width - 30 - 10) / 2,
-              height: 90,
-              child: Stack(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 20, left: 15),
-                    child: Text(
-                      "情感专区",
-                      style: TextStyle(
-                        color: os_white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 20,
-                    bottom: 10,
-                    child: os_svg(
-                      path: "lib/img/square/column/1.svg",
-                      width: 60,
-                      height: 60,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Container(
-            width: 10,
-          ),
-          Bounce(
-            onPressed: () {
-              Navigator.pushNamed(context, "/column", arguments: 371);
-            },
-            duration: Duration(milliseconds: 100),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: [0, 1],
-                  colors: [
-                    Color(0xFF252B36),
-                    Color(0xFF47505B),
-                  ],
-                ),
-              ),
-              width: (MediaQuery.of(context).size.width - 30 - 10) / 2,
-              height: 90,
-              child: Stack(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 20, left: 15),
-                    child: Text(
-                      "密语",
-                      style: TextStyle(
-                        color: os_white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 20,
-                    bottom: 15,
-                    child: Opacity(
-                      opacity: 0.8,
-                      child: os_svg(
-                        path: "lib/img/square/column/2.svg",
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                  )
-                ],
-              ),
             ),
           ),
         ],

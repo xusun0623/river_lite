@@ -6,8 +6,8 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
-import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/page/square/square.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -47,7 +47,7 @@ class _SquareHomeState extends State<SquareHome> {
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
-    tmp.add(DoubleColumn());
+    tmp.add(SpecialSquareCard());
     if (data != null && data.length != 0) {
       for (var i = 0; i < data.length; i++) {
         tmp.add(SquareCard(data: data[i], index: i));
@@ -274,136 +274,6 @@ class _SquareCardState extends State<SquareCard> {
             child: Wrap(
               alignment: WrapAlignment.start,
               children: _buildWrapWidget(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class DoubleColumn extends StatefulWidget {
-  DoubleColumn({Key key}) : super(key: key);
-
-  @override
-  State<DoubleColumn> createState() => _DoubleColumnState();
-}
-
-class _DoubleColumnState extends State<DoubleColumn> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-        left: 15,
-        right: 15,
-        bottom: 10,
-      ),
-      child: Row(
-        children: [
-          Bounce(
-            onPressed: () {
-              Navigator.pushNamed(context, "/column", arguments: 45);
-            },
-            duration: Duration(milliseconds: 100),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: [0, 1],
-                  colors: [
-                    Color(0xFFFA5F52),
-                    Color(0xFFFD8872),
-                  ],
-                ),
-              ),
-              width: (MediaQuery.of(context).size.width -
-                      (isDesktop() ? 80 : 0) -
-                      30 -
-                      10) /
-                  2,
-              height: 90,
-              child: Stack(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 20, left: 15),
-                    child: Text(
-                      "情感专区",
-                      style: TextStyle(
-                        color: os_white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 20,
-                    bottom: 10,
-                    child: os_svg(
-                      path: "lib/img/square/column/1.svg",
-                      width: 60,
-                      height: 60,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Container(
-            width: 10,
-          ),
-          Bounce(
-            onPressed: () {
-              Navigator.pushNamed(context, "/column", arguments: 371);
-            },
-            duration: Duration(milliseconds: 100),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: [0, 1],
-                  colors: [
-                    Color(0xFF252B36),
-                    Color(0xFF47505B),
-                  ],
-                ),
-              ),
-              width: (MediaQuery.of(context).size.width -
-                      (isDesktop() ? 80 : 0) -
-                      30 -
-                      10) /
-                  2,
-              height: 90,
-              child: Stack(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 20, left: 15),
-                    child: Text(
-                      "密语",
-                      style: TextStyle(
-                        color: os_white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 20,
-                    bottom: 15,
-                    child: Opacity(
-                      opacity: 0.8,
-                      child: os_svg(
-                        path: "lib/img/square/column/2.svg",
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                  )
-                ],
-              ),
             ),
           ),
         ],
