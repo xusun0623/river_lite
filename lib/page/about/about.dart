@@ -72,7 +72,7 @@ class _AboutState extends State<About> {
               size: 40,
             ),
             title: "开源地址",
-            cont: "https://gitee.com/xusun000/offershow.git",
+            cont: "https://gitee.com/xusun000/offershow",
             withUrl: true,
           ),
           AboutCard(

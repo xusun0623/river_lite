@@ -3,19 +3,6 @@
 ## API文档  
 https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 
-## 项目集成介绍
-[cached_network_image (网络缓存图片)](https://pub.dev/packages/cached_network_image)  
-[dio (非常好用的网络请求库)](https://pub.dev/packages/dio)  
-[flutter_easyrefresh (刷新组件)](https://pub.dev/packages/flutter_easyrefresh)  
-[flutter_webview_plugin (网页加载)](https://pub.dev/packages/flutter_webview_plugin)  
-[flutter_spinkit (loading加载动画)](https://pub.dev/packages/flutter_spinkit)  
-[flutter_swiper (轮播图组件)](https://pub.dev/packages/flutter_swiper)  
-[oktoast (弹窗)](https://pub.dev/packages/oktoast)  
-[path_provider (路径)](https://pub.dev/packages/path_provider)  
-[permission_handler 权限申请](https://pub.dev/packages/permission_handler)  
-[provider (非常好用的数据共享工具)](https://pub.dev/packages/provider)  
-[shared_preferences (本地存储)](https://pub.dev/packages/shared_preferences)  
-
 ## 编译相关
 
 #### 1.打包
@@ -32,6 +19,10 @@ https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 > adb install build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk  
 
 #### 3.IOS打包
+> flutter build ios --release  
+> flutter run --no-null-safety
+
+#### 4.MacOS打包
 > flutter build ios --release  
 > flutter run --no-null-safety
 
