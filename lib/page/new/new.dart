@@ -13,6 +13,8 @@ import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
+import 'package:offer_show/page/topic/At_someone.dart';
+import 'package:offer_show/page/topic/Your_emoji.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
