@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:badges/badges.dart';
@@ -18,6 +19,7 @@ import 'package:offer_show/page/square/squareHome.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -119,8 +121,15 @@ class _HomeState extends State<Home> {
     }
   }
 
+  _getPath() async {
+    // Directory tempDir = await getTemporaryDirectory();
+    // String tempPath = tempDir.path;
+    // print("\n\n\n\n\n\n\n\\n当前的工作目录${tempPath}\n\n\n\n\n\n\n\n");
+  }
+
   @override
   void initState() {
+    // _getPath();
     _getNewMsg();
     _getDarkMode();
     _getBlackStatus();

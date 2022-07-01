@@ -23,8 +23,8 @@ https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 > flutter run --no-null-safety
 
 #### 4.MacOS打包
-> flutter build ios --release  
-> flutter run --no-null-safety
+> flutter build macOS --release  
+> https://zhuanlan.zhihu.com/p/56864296  
 
 ## 开发代码片段
 #### 1.Provider
