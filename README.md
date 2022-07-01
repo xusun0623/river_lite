@@ -1,8 +1,26 @@
-<center style="font-size:30px;">河畔Lite客户端</center>
+![输入图片说明](icon-512@2x.png)
+# 河畔Lite App
+本Repo是电子科技大学官方校园论坛【清水河畔】的第三方客户端的开源代码仓库。此App轻量、简洁、设计优雅，拥有诸多特性和功能。  
 
-## Hi,你好
-👋本项目是电子科技大学官方校园论坛【清水河畔】的第三方客户端，它轻量、简洁、设计优雅，是一款纯粹由兴趣爱好驱动的产品，因此我为它取了河畔Lite这个名字，所有的源代码和设计文件均是开放的、任何人可以无拘束地修改并分发（甚至不用注明来源）。其拥有诸多特性和功能如下：  
+## 客户端下载（【提取码均为1234】）
+安卓客户端：[点击前往跳转下载安卓客户端](https://wwb.lanzouj.com/b027a448b)  
+IOS客户端：[点击访问AppStore下载客户端](https://apps.apple.com/cn/app/河畔lite/id1620829749)  
+MacOS客户端：[点击前往跳转下载MacOS客户端](https://wwb.lanzouj.com/b027gge2d)  
 
+## Flutter框架信息
+本项目使用Google开源的跨端页面构建框架Flutter，使用Skia调用GPU直接渲染，渲染速度和表现力十分优秀，并可以移植到macOS、Windows、Linux、Android、IOS等诸多平台。现已在app Store上架Release版本「河畔Lite」，对应的安卓版本也在站内个人主页帖子发布，感兴趣的同学欢迎体验！！  
+
+## 联系作者
+mail：xusun000@foxmail.com  
+QQ：2235861811（加好友时请注明来意）  
+Gitee主页：[点我访问](https://gitee.com/xusun000)  
+
+## 设计文件
+figma在线设计工具：[点我访问](https://www.figma.com/file/McSp35qqjsUuWAbucxXdXn/%E6%B2%B3%E7%95%94Max%E7%89%88-XS-Designed)  
+宣传图：
+![设计宣传图](%E5%AE%A3%E4%BC%A0%E5%9B%BE.png)
+
+## 功能一览  
 #### 帖子相关
 ```
 - 发帖（附加文字、图片、链接、表情包和附件等等）  
@@ -56,16 +74,3 @@
 - 长按用户头像可以手动清除头像图片缓存  
 - 首页请求时会缓存接口数据，对请求进行加速  
 ```
-
-## 设计文件
-figma在线设计工具：[点我访问](https://www.figma.com/file/McSp35qqjsUuWAbucxXdXn/%E6%B2%B3%E7%95%94Max%E7%89%88-XS-Designed)  
-宣传图：
-![设计宣传图](%E5%AE%A3%E4%BC%A0%E5%9B%BE.png)
-
-## Flutter框架信息
-本项目使用Google开源的跨端页面构建框架Flutter，使用Skia调用GPU直接渲染，渲染速度和表现力十分优秀，并可以移植到macOS、Windows、Linux、Android、IOS等诸多平台。现已在app Store上架Release版本「河畔Lite」，对应的安卓版本也在站内个人主页帖子发布，感兴趣的同学欢迎体验！！  
-
-## 联系作者
-mail：xusun000@foxmail.com  
-QQ：2235861811（加好友时请注明来意）  
-Gitee主页：[点我访问](https://gitee.com/xusun000)  
