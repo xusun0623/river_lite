@@ -1,4 +1,4 @@
-![输入图片说明](macos/Runner/Assets.xcassets/AppIcon.appiconset/icon-128.png)
+![输入图片说明](App%20Icon.png)
 
 # 河畔Lite App
 本Repo是电子科技大学官方校园论坛【清水河畔】的第三方客户端的开源代码仓库。此App轻量、简洁、设计优雅，拥有诸多特性和功能。  
