@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart'; // Import package
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
@@ -201,6 +202,24 @@ class _PhotoPreviewState extends State<PhotoPreview> {
               child: Text(
                 "图片预览 $tempSelect / ${widget.galleryItems.length}",
                 style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+          Positioned(
+            ///布局自己换
+            left: 50,
+            top: 50,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0x33000000),
+                borderRadius: BorderRadius.all(Radius.circular(100)),
+              ),
+              child: IconButton(
+                color: os_white,
+                icon: Icon(Icons.chevron_left_rounded),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
             ),
           ),

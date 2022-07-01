@@ -228,18 +228,24 @@ class _HomeState extends State<Home> {
 
     return isDesktop()
         ? Scaffold(
+            //桌面端的UI布局
             body: Row(
               children: [
                 LeftNavi(),
                 Expanded(
-                  flex: 1,
-                  child:
-                      homePages()[Provider.of<TabShowProvider>(context).index],
-                ),
+                    flex: 1,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(),
+                      child: IndexedStack(
+                        children: homePages(),
+                        index: Provider.of<TabShowProvider>(context).index,
+                      ),
+                    )),
               ],
             ),
           )
         : Scaffold(
+            //移动端的UI布局
             body: WillPopScope(
               onWillPop: () {
                 showModal(

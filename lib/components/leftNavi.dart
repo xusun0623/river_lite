@@ -248,6 +248,22 @@ class NaviBtn extends StatefulWidget {
 }
 
 class _NaviBtnState extends State<NaviBtn> {
+  List<String> icon_desc = [
+    "主页",
+    "板块",
+    "图区",
+    "消息",
+    "我",
+  ]; //主页、探索、图区特别版块、消息、我的;
+  List<IconData> icons = [
+    //首页左侧导航栏存放的图片，依次为主页、探索、图区特别版块、消息、我的
+    Icons.home_rounded,
+    Icons.explore,
+    Icons.burst_mode_rounded,
+    Icons.notifications_rounded,
+    Icons.settings,
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -275,24 +291,39 @@ class _NaviBtnState extends State<NaviBtn> {
           padding: EdgeInsets.all(10),
           child: Badge(
             showBadge: (widget.isNewMsg ?? false) && widget.index == 3,
-            child: Icon(
-              [
-                Icons.home_rounded,
-                Icons.explore,
-                Icons.burst_mode_rounded,
-                Icons.notifications_rounded,
-                Icons.settings,
-              ][widget.index],
-              size: 30,
-              color: provider.index == widget.index
-                  ? (Provider.of<ColorProvider>(context).isDark ||
-                          provider.index == 2
-                      ? os_white
-                      : os_deep_blue)
-                  : (Provider.of<ColorProvider>(context).isDark ||
-                          provider.index == 2
-                      ? Color(0xFF919191)
-                      : Color(0x55002266)),
+            child: Column(
+              children: [
+                Icon(
+                  icons[widget.index],
+                  size: 30,
+                  color: provider.index == widget.index
+                      ? (Provider.of<ColorProvider>(context).isDark ||
+                              provider.index == 2
+                          ? os_white
+                          : os_deep_blue)
+                      : (Provider.of<ColorProvider>(context).isDark ||
+                              provider.index == 2
+                          ? Color(0xFF919191)
+                          : Color(0x55002266)),
+                ),
+                Container(height: 5),
+                Text(
+                  icon_desc[widget.index],
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: provider.index == widget.index
+                        ? (Provider.of<ColorProvider>(context).isDark ||
+                                provider.index == 2
+                            ? os_white
+                            : os_deep_blue)
+                        : (Provider.of<ColorProvider>(context).isDark ||
+                                provider.index == 2
+                            ? Color(0xFF919191)
+                            : Color(0x55002266)),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

@@ -72,7 +72,8 @@ class _TopicDetailState extends State<TopicDetail> {
   bool isBlack = false;
   bool isInvalid = false; //帖子是否失效
   bool isNoAccess = false; //帖子是否没有访问权限
-  String placeholder = "请在此编辑回复";
+  String placeholder =
+      (isDesktop() ? "请在此编辑回复，按住control键+空格键以切换中英文输入法" : "请在此编辑回复");
   List<Map> atUser = [];
   List<int> listID = []; //淘贴ID
   List listData = []; //淘贴数据
@@ -878,10 +879,13 @@ class _TopicDetailState extends State<TopicDetail> {
                           show: showBackToTop,
                           animation: true,
                           controller: _scrollController,
-                          child: ListView(
-                            physics: BouncingScrollPhysics(),
-                            controller: _scrollController,
-                            children: _buildTotal(),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(),
+                            child: ListView(
+                              physics: BouncingScrollPhysics(),
+                              controller: _scrollController,
+                              children: _buildTotal(),
+                            ),
                           ),
                         ),
                       ),
@@ -910,7 +914,9 @@ class _TopicDetailState extends State<TopicDetail> {
                             cancel: () {
                               _focusNode.unfocus();
                               _txtController.clear();
-                              placeholder = "请在此编辑回复";
+                              placeholder = (isDesktop()
+                                  ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
+                                  : "请在此编辑回复");
                               uploadFileAid = "";
                               uploadImgList = [];
                               editing = false;
@@ -948,7 +954,10 @@ class _TopicDetailState extends State<TopicDetail> {
                                     "fid": "",
                                     "replyId": replyId,
                                     "tid": widget.topicID, // 回复时指定帖子
-                                    "isQuote": placeholder == "请在此编辑回复"
+                                    "isQuote": placeholder ==
+                                            (isDesktop()
+                                                ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
+                                                : "请在此编辑回复")
                                         ? 0
                                         : 1, //"是否引用之前回复的内容
                                     "title": "",
@@ -972,7 +981,9 @@ class _TopicDetailState extends State<TopicDetail> {
                                   curve: Curves.ease);
                               _focusNode.unfocus();
                               _txtController.clear();
-                              placeholder = "请在此编辑回复";
+                              placeholder = (isDesktop()
+                                  ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
+                                  : "请在此编辑回复");
                               uploadImgList = [];
                               editing = false;
                               setState(() {
@@ -1224,7 +1235,10 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                           cursorColor: Color(0xFF004DFF),
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: widget.placeholder ?? "请在此编辑回复",
+                            hintText: widget.placeholder ??
+                                (isDesktop()
+                                    ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
+                                    : "请在此编辑回复"),
                             hintStyle: TextStyle(
                               height: 1.8,
                               color: Provider.of<ColorProvider>(context).isDark
@@ -1313,11 +1327,11 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                           },
                         )
                       : AtSomeone(
-                        hide: (){
-                          setState(() {
-                            popSection = false;
-                          });
-                        },
+                          hide: () {
+                            setState(() {
+                              popSection = false;
+                            });
+                          },
                           tap: (uid, name) {
                             at_user.add({uid: uid, name: name});
                             widget.atUser(at_user);

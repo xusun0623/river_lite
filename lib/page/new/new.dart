@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -185,12 +186,14 @@ class _PostNewState extends State<PostNew> {
     tip_focus.addListener(() {
       if (tip_focus.hasFocus) {
         pop_section = false;
+        title_focus.unfocus();
         setState(() {});
       }
     });
     title_focus.addListener(() {
       if (title_focus.hasFocus) {
         pop_section = false;
+        tip_focus.unfocus();
         setState(() {});
       }
     });
@@ -1290,7 +1293,9 @@ class TitleInput extends StatelessWidget {
               ? os_dark_white
               : os_black,
         ),
-        cursorColor: os_color,
+        cursorColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -1316,7 +1321,8 @@ class TitleInput extends StatelessWidget {
             fontSize: 17,
             color: Color(0xFFA3A3A3),
           ),
-          hintText: "请输入帖子的标题",
+          hintText:
+              isDesktop() ? "请输入帖子的标题，按住control键+空格键以切换中英文输入法" : "请输入帖子的标题",
         ),
       ),
     );

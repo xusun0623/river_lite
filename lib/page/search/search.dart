@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
@@ -813,7 +814,8 @@ class _SearchLeftState extends State<SearchLeft> {
                       ? os_deep_grey
                       : os_middle_grey,
                 ),
-                hintText: "搜索帖子/用户",
+                hintText:
+                    isDesktop() ? "搜索帖子/用户，按住control键+空格键以切换中英文输入法" : "搜索帖子/用户",
                 border: InputBorder.none,
               ),
             ),

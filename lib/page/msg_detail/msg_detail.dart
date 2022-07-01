@@ -522,7 +522,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                       ),
                                       hintText: dont_send_flag
                                           ? "由于河畔后台限制，请稍等 ${dont_send_clock} 秒…"
-                                          : "说点什么吧…",
+                                          : "说点什么吧…（按住control键+空格键以切换中英文输入法）",
                                     ),
                                   ),
                                 ),

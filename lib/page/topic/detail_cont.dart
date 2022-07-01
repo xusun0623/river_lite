@@ -87,7 +87,7 @@ class _DetailContState extends State<DetailCont> {
                         .contains(widget.data["infor"].toString().trim())
                 ? Container(
                     width: MediaQuery.of(context).size.width - 30,
-                    child: Text.rich(
+                    child: SelectableText.rich(
                       TextSpan(
                         style: TextStyle(
                           fontSize: 60,
@@ -102,7 +102,7 @@ class _DetailContState extends State<DetailCont> {
                   )
                 : Container(
                     width: MediaQuery.of(context).size.width - 30,
-                    child: Text.rich(
+                    child: SelectableText.rich(
                       TextSpan(
                         style: TextStyle(
                           fontSize: 16,

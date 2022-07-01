@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -322,36 +323,349 @@ class _TopicState extends State<Topic> {
     setStorage(key: "history", value: jsonEncode(tmp_list_history));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return _isBlack() || isBlack
-        ? Container(
-            child: (widget.blackOccu ?? false)
-                ? Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      os_edge,
-                      widget.top ?? 10,
-                      os_edge,
-                      widget.bottom ?? 0,
+  Widget _blackCont() {
+    //拉黑的状态
+    return Container(
+      child: (widget.blackOccu ?? false)
+          ? Padding(
+              padding: EdgeInsets.fromLTRB(
+                os_edge,
+                widget.top ?? 10,
+                os_edge,
+                widget.bottom ?? 0,
+              ),
+              child: myInkWell(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : os_white,
+                radius: 10,
+                widget: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Text(
+                    "此贴已被你屏蔽，屏蔽关键词为:" + blackKeyWord,
+                    style: TextStyle(
+                      color: os_deep_grey,
                     ),
-                    child: myInkWell(
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_light_dark_card
-                          : os_white,
-                      radius: 10,
-                      widget: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Text(
-                          "此贴已被你屏蔽，屏蔽关键词为:" + blackKeyWord,
-                          style: TextStyle(
-                            color: os_deep_grey,
-                          ),
+                  ),
+                ),
+              ),
+            )
+          : Container(),
+    );
+  }
+
+  Widget _topicCont() {
+    //帖子卡片正文内容
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        border: Border.all(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? Color(0x08FFFFFF)
+              : Colors.transparent,
+        ),
+      ),
+      child: Padding(
+        // padding: EdgeInsets.fromLTRB(16, 18, 16, 18),
+        padding: EdgeInsets.fromLTRB(16, 18, 0, 10),
+        child: Column(
+          children: [
+            //顶部区域：左边：头像、昵称、时间 右边：更多按钮
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        if (widget.data["user_nick_name"] != "匿名")
+                          toUserSpace(context, widget.data["user_id"]);
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: CachedNetworkImage(
+                          width: 30,
+                          height: 30,
+                          fit: BoxFit.cover,
+                          imageUrl: widget.data["userAvatar"],
+                          placeholder: (context, url) => Container(
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_white
+                                  : os_grey),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
                         ),
                       ),
                     ),
-                  )
-                : Container(),
-          )
+                    Padding(padding: EdgeInsets.all(4)),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.data["user_nick_name"],
+                          style: TextStyle(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? Color(0xffF1f1f1)
+                                : os_black,
+                            fontSize: 14,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Container(height: 1),
+                        Text(
+                          RelativeDateFormat.format(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  int.parse(widget.data["last_reply_date"]))),
+                          style: TextStyle(
+                            color: Color(0xFFAAAAAA),
+                            fontSize: 12.5,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    myInkWell(
+                      tap: () {
+                        Vibrate.feedback(FeedbackType.impact);
+                        _moreAction();
+                      },
+                      color: Colors.transparent,
+                      widget: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 5,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.more_horiz_sharp,
+                              size: 18,
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_deep_grey
+                                  : Color(0xFF585858),
+                            ),
+                          ],
+                        ),
+                      ),
+                      radius: 100,
+                    ),
+                    Container(width: 16),
+                  ],
+                ),
+              ],
+            ),
+            Padding(padding: EdgeInsets.all(4)),
+            //中部区域：标题
+            Row(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width -
+                      (isDesktop() ? 80 : 0) -
+                      54,
+                  child: Text(
+                    widget.data["title"],
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: 17,
+                        letterSpacing: 0.5,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_white
+                            : os_black),
+                  ),
+                ),
+                Container(width: 16),
+              ],
+            ),
+            //中部区域：正文
+            (widget.data["summary"] ?? widget.data["subject"])
+                        .toString()
+                        .trim() ==
+                    ""
+                ? Container()
+                : Padding(padding: EdgeInsets.all(3)),
+            ((widget.data["summary"] ?? widget.data["subject"]) ?? "") == ""
+                ? Container()
+                : Row(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width -
+                            (isDesktop() ? 80 : 0) -
+                            54,
+                        child: Text(
+                          (widget.data["summary"] ?? widget.data["subject"]) ??
+                              "",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 16,
+                            height: 1.5,
+                            color: Color(0xFF999999),
+                          ),
+                        ),
+                      ),
+                      Container(width: 16),
+                    ],
+                  ),
+            Padding(padding: EdgeInsets.all(3)),
+            // 投票贴的Tag
+            (widget.data["vote"] ?? 0) == 0
+                ? Container()
+                : Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? Color(0x11FFFFFF)
+                                : os_color_opa,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                          ),
+                          padding: EdgeInsets.only(
+                            left: 7.5,
+                            right: 10,
+                            top: 3.5,
+                            bottom: 3.5,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.download_done,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_dark_white
+                                        : os_color,
+                                size: 18,
+                              ),
+                              Text(
+                                "投票帖",
+                                style: TextStyle(
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_dark_white
+                                          : os_color,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+            //浏览量 评论数 点赞数 - 专栏按钮
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    os_svg(
+                      path: "lib/img/topic_component_view.svg",
+                      width: 20,
+                      height: 20,
+                    ),
+                    Container(width: 5),
+                    Text(
+                      "${widget.data['hits']}",
+                      style: TextStyle(
+                        color: Color(0xFF6B6B6B),
+                        fontSize: 12,
+                      ),
+                    ),
+                    Container(width: 20),
+                    os_svg(
+                      path: "lib/img/topic_component_comment.svg",
+                      width: 20,
+                      height: 20,
+                    ),
+                    Container(width: 5),
+                    Text(
+                      "${widget.data['replies']}",
+                      style: TextStyle(
+                        color: Color(0xFF6B6B6B),
+                        fontSize: 12,
+                      ),
+                    ),
+                    Container(width: 20),
+                    os_svg(
+                      path: "lib/img/topic_component_like.svg",
+                      width: 20,
+                      height: 20,
+                    ),
+                    Container(width: 5),
+                    Text(
+                      (widget.data["recommendAdd"] ?? 0).toString(),
+                      style: TextStyle(
+                        color: Color(0xFF6B6B6B),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+                myInkWell(
+                  color: Colors.transparent,
+                  tap: () {
+                    Navigator.pushNamed(
+                      context,
+                      "/column",
+                      arguments: widget.data["board_id"],
+                    );
+                  },
+                  radius: 10,
+                  widget: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child: Text(
+                      (widget.hideColumn ?? false)
+                          ? " "
+                          : widget.data["board_name"],
+                      style: TextStyle(
+                        color: os_color,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _tapWidget() async {
+    String info_txt = await getStorage(key: "myinfo", initData: "");
+    _setHistory();
+    if (info_txt == "") {
+      Navigator.pushNamed(context, "/login", arguments: 0);
+    } else {
+      Navigator.pushNamed(
+        context,
+        "/topic_detail",
+        arguments: (widget.data["source_id"] ?? widget.data["topic_id"]),
+      );
+    }
+  }
+
+  _widgetBackgroundColor() {
+    return Provider.of<ColorProvider>(context).isDark
+        ? os_light_dark_card
+        : (widget.backgroundColor ?? os_white);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _isBlack() || isBlack
+        ? _blackCont()
         : Padding(
             padding: EdgeInsets.fromLTRB(
               os_edge,
@@ -359,322 +673,27 @@ class _TopicState extends State<Topic> {
               os_edge,
               widget.bottom ?? 0,
             ),
-            child: myInkWell(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_light_dark_card
-                  : (widget.backgroundColor ?? os_white),
-              longPress: () {
-                Vibrate.feedback(FeedbackType.impact);
-                _moreAction();
-              },
-              tap: () async {
-                String info_txt = await getStorage(key: "myinfo", initData: "");
-                _setHistory();
-                if (info_txt == "") {
-                  Navigator.pushNamed(context, "/login", arguments: 0);
-                } else {
-                  Navigator.pushNamed(
-                    context,
-                    "/topic_detail",
-                    arguments:
-                        (widget.data["source_id"] ?? widget.data["topic_id"]),
-                  );
-                }
-              },
-              widget: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  border: Border.all(
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? Color(0x08FFFFFF)
-                        : Colors.transparent,
+            child: isDesktop()
+                ? GestureDetector(
+                    onTap: () => _tapWidget(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: _widgetBackgroundColor(),
+                      ),
+                      child: _topicCont(),
+                    ),
+                  )
+                : myInkWell(
+                    color: _widgetBackgroundColor(),
+                    longPress: () {
+                      Vibrate.feedback(FeedbackType.impact);
+                      _moreAction();
+                    },
+                    tap: () => _tapWidget(),
+                    widget: _topicCont(),
+                    radius: 10,
                   ),
-                ),
-                child: Padding(
-                  // padding: EdgeInsets.fromLTRB(16, 18, 16, 18),
-                  padding: EdgeInsets.fromLTRB(16, 18, 0, 10),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  if (widget.data["user_nick_name"] != "匿名")
-                                    toUserSpace(
-                                        context, widget.data["user_id"]);
-                                },
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: CachedNetworkImage(
-                                    width: 30,
-                                    height: 30,
-                                    fit: BoxFit.cover,
-                                    imageUrl: widget.data["userAvatar"],
-                                    placeholder: (context, url) => Container(
-                                        color:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? os_dark_white
-                                                : os_grey),
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
-                                  ),
-                                ),
-                              ),
-                              Padding(padding: EdgeInsets.all(4)),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.data["user_nick_name"],
-                                    style: TextStyle(
-                                      color: Provider.of<ColorProvider>(context)
-                                              .isDark
-                                          ? Color(0xffF1f1f1)
-                                          : os_black,
-                                      fontSize: 14,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Container(height: 1),
-                                  Text(
-                                    RelativeDateFormat.format(DateTime
-                                        .fromMillisecondsSinceEpoch(int.parse(
-                                            widget.data["last_reply_date"]))),
-                                    style: TextStyle(
-                                      color: Color(0xFFAAAAAA),
-                                      fontSize: 12.5,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              myInkWell(
-                                tap: () {
-                                  Vibrate.feedback(FeedbackType.impact);
-                                  _moreAction();
-                                },
-                                color: Colors.transparent,
-                                widget: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 5,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.more_horiz_sharp,
-                                        size: 18,
-                                        color:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? os_deep_grey
-                                                : Color(0xFF585858),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                radius: 100,
-                              ),
-                              Container(width: 16),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Padding(padding: EdgeInsets.all(4)),
-                      Row(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width - 54,
-                            child: Text(
-                              widget.data["title"],
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontSize: 17,
-                                  letterSpacing: 0.5,
-                                  color:
-                                      Provider.of<ColorProvider>(context).isDark
-                                          ? os_dark_white
-                                          : os_black),
-                            ),
-                          ),
-                          Container(width: 16),
-                        ],
-                      ),
-                      (widget.data["summary"] ?? widget.data["subject"])
-                                  .toString()
-                                  .trim() ==
-                              ""
-                          ? Container()
-                          : Padding(padding: EdgeInsets.all(3)),
-                      ((widget.data["summary"] ?? widget.data["subject"]) ??
-                                  "") ==
-                              ""
-                          ? Container()
-                          : Row(
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width - 54,
-                                  child: Text(
-                                    (widget.data["summary"] ??
-                                            widget.data["subject"]) ??
-                                        "",
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      height: 1.5,
-                                      color: Color(0xFF999999),
-                                    ),
-                                  ),
-                                ),
-                                Container(width: 16),
-                              ],
-                            ),
-                      Padding(padding: EdgeInsets.all(3)),
-                      (widget.data["vote"] ?? 0) == 0
-                          ? Container()
-                          : Container(
-                              width: MediaQuery.of(context).size.width,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Provider.of<ColorProvider>(context)
-                                              .isDark
-                                          ? Color(0x11FFFFFF)
-                                          : os_color_opa,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(5),
-                                      ),
-                                    ),
-                                    padding: EdgeInsets.only(
-                                      left: 7.5,
-                                      right: 10,
-                                      top: 3.5,
-                                      bottom: 3.5,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.download_done,
-                                          color: Provider.of<ColorProvider>(
-                                                      context)
-                                                  .isDark
-                                              ? os_dark_dark_white
-                                              : os_color,
-                                          size: 18,
-                                        ),
-                                        Text(
-                                          "投票帖",
-                                          style: TextStyle(
-                                            color: Provider.of<ColorProvider>(
-                                                        context)
-                                                    .isDark
-                                                ? os_dark_dark_white
-                                                : os_color,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                      // Padding(padding: EdgeInsets.all(4)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              os_svg(
-                                path: "lib/img/topic_component_view.svg",
-                                width: 20,
-                                height: 20,
-                              ),
-                              Container(width: 5),
-                              Text(
-                                "${widget.data['hits']}",
-                                style: TextStyle(
-                                  color: Color(0xFF6B6B6B),
-                                  fontSize: 12,
-                                ),
-                              ),
-                              Container(width: 20),
-                              os_svg(
-                                path: "lib/img/topic_component_comment.svg",
-                                width: 20,
-                                height: 20,
-                              ),
-                              Container(width: 5),
-                              Text(
-                                "${widget.data['replies']}",
-                                style: TextStyle(
-                                  color: Color(0xFF6B6B6B),
-                                  fontSize: 12,
-                                ),
-                              ),
-                              Container(width: 20),
-                              os_svg(
-                                path: "lib/img/topic_component_like.svg",
-                                width: 20,
-                                height: 20,
-                              ),
-                              Container(width: 5),
-                              Text(
-                                (widget.data["recommendAdd"] ?? 0).toString(),
-                                style: TextStyle(
-                                  color: Color(0xFF6B6B6B),
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                          myInkWell(
-                            color: Colors.transparent,
-                            tap: () {
-                              Navigator.pushNamed(
-                                context,
-                                "/column",
-                                arguments: widget.data["board_id"],
-                              );
-                            },
-                            radius: 10,
-                            widget: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
-                              child: Text(
-                                (widget.hideColumn ?? false)
-                                    ? " "
-                                    : widget.data["board_name"],
-                                style: TextStyle(
-                                  color: os_color,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              // width: width,
-              // height: height,
-              radius: 10,
-            ),
           );
   }
 }
