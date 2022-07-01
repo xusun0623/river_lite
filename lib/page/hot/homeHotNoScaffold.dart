@@ -73,7 +73,7 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
       t.add(
         Stack(
           children: [
-            Topic(data: list[i]),
+            Topic(isLeftNaviUI: true, data: list[i]),
             Positioned(
               right: os_edge + 80,
               top: 5,

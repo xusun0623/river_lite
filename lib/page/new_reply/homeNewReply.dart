@@ -113,7 +113,7 @@ class _HomeNewReplyState extends State<HomeNewReply>
     List<Widget> t = [];
     if (data != null && data.length != 0) {
       for (var i in data) {
-        t.add(Topic(data: i));
+        t.add(Topic(isLeftNaviUI: true, data: i));
       }
     }
     if (data.length == 0) {

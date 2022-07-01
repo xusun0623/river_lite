@@ -10,6 +10,9 @@ import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
+///左侧导航栏宽度
+final double LeftNaviWidth = 80;
+
 class LeftNavi extends StatefulWidget {
   LeftNavi({Key key}) : super(key: key);
 
@@ -87,7 +90,7 @@ class _LeftNaviState extends State<LeftNavi> {
     TabShowProvider tabShowProvider = Provider.of<TabShowProvider>(context);
     return Material(
       child: Container(
-        width: 80,
+        width: LeftNaviWidth,
         decoration: BoxDecoration(
           border: Border(
             right: BorderSide(

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -128,7 +129,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     }
     if (data != null && data.length != 0) {
       for (var i in data) {
-        t.add(Topic(data: i));
+        t.add(Topic(isLeftNaviUI: true, data: i));
       }
     }
     if (data.length == 0) {

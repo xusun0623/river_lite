@@ -7,11 +7,13 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
@@ -30,6 +32,7 @@ class Topic extends StatefulWidget {
   double bottom;
   bool blackOccu;
   bool hideColumn;
+  bool isLeftNaviUI;
   Color backgroundColor;
 
   Topic({
@@ -39,6 +42,7 @@ class Topic extends StatefulWidget {
     this.bottom,
     this.blackOccu,
     this.hideColumn,
+    this.isLeftNaviUI,
     this.backgroundColor,
   }) : super(key: key);
 
@@ -464,7 +468,8 @@ class _TopicState extends State<Topic> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width -
-                      (isDesktop() ? 80 : 0) -
+                      (widget.isLeftNaviUI ?? false ? LeftNaviWidth : 0) -
+                      (widget.hideColumn ?? false ? MinusSpace(context) : 0) -
                       54,
                   child: Text(
                     widget.data["title"],
@@ -493,7 +498,10 @@ class _TopicState extends State<Topic> {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width -
-                            (isDesktop() ? 80 : 0) -
+                            (widget.isLeftNaviUI ?? false ? LeftNaviWidth : 0) -
+                            (widget.hideColumn ?? false
+                                ? MinusSpace(context)
+                                : 0) -
                             54,
                         child: Text(
                           (widget.data["summary"] ?? widget.data["subject"]) ??

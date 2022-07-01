@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -8,30 +7,22 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/bigScreen.dart';
-import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
-import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/nowMode.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
-import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
-import 'package:offer_show/asset/topic_formhash.dart';
-import 'package:offer_show/asset/uploadAttachment.dart';
 import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/totop.dart';
-import 'package:offer_show/outer/showActionSheet/action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
-import 'package:offer_show/page/topic/emoji.dart';
 import 'package:offer_show/page/topic/topic_RichInput.dart';
 import 'package:offer_show/page/topic/topic_comment.dart';
 import 'package:offer_show/page/topic/topic_comment_tab.dart';
@@ -42,14 +33,7 @@ import 'package:offer_show/page/topic/topic_vote.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
-import 'package:offer_show/util/storage.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
@@ -664,6 +648,7 @@ class _TopicDetailState extends State<TopicDetail> {
   }
 
   _buildTotal() {
+    //对整个页面的组件流进行整合
     List<Widget> tmp = [];
     tmp = [
       TopicDetailTitle(data: data),
@@ -772,6 +757,10 @@ class _TopicDetailState extends State<TopicDetail> {
             ),
       Container(height: editing ? 250 : 60 + bottom_safeArea)
     ]);
+    //针对大屏进行适配
+    for (var i = 0; i < tmp.length; i++) {
+      tmp[i] = ResponsiveWidget(child: tmp[i]);
+    }
     return tmp;
   }
 
@@ -879,159 +868,162 @@ class _TopicDetailState extends State<TopicDetail> {
                       ),
                     ),
                   ))
-              : Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_detail_back
-                            : os_white,
-                      ),
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          await _getData();
-                          vibrate = false;
-                          return;
-                        },
-                        child: BackToTop(
-                          bottom: 115,
-                          show: showBackToTop,
-                          animation: true,
-                          controller: _scrollController,
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(),
-                            child: ListView(
-                              physics: BouncingScrollPhysics(),
-                              controller: _scrollController,
-                              children: _buildTotal(),
+              : Container(
+                  child: Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_detail_back
+                              : os_white,
+                        ),
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            await _getData();
+                            vibrate = false;
+                            return;
+                          },
+                          child: BackToTop(
+                            bottom: 115,
+                            show: showBackToTop,
+                            animation: true,
+                            controller: _scrollController,
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(),
+                              child: ListView(
+                                physics: BouncingScrollPhysics(),
+                                controller: _scrollController,
+                                children: _buildTotal(),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    editing //编辑回复框
-                        ? RichInput(
-                            fid: data["topic"]["boardId"],
-                            tid: widget.topicID,
-                            uploadFile: (aid) {
-                              uploadFileAid = aid;
-                            },
-                            uploadImg: (img_urls) {
-                              if (img_urls != null && img_urls.length != 0) {
-                                uploadImgList = [];
-                                for (var i = 0; i < img_urls.length; i++) {
-                                  uploadImgList.add(img_urls[i]);
-                                }
-                              }
-                            },
-                            atUser: (List<Map> map) {
-                              atUser = map;
-                            },
-                            placeholder: placeholder,
-                            controller: _txtController,
-                            focusNode: _focusNode,
-                            cancel: () {
-                              _focusNode.unfocus();
-                              _txtController.clear();
-                              placeholder = (isDesktop()
-                                  ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
-                                  : "请在此编辑回复");
-                              uploadFileAid = "";
-                              uploadImgList = [];
-                              editing = false;
-                              setState(() {});
-                            },
-                            send: () async {
-                              var contents = [
-                                {
-                                  "type": 0, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
-                                  "infor": uploadFileAid == ""
-                                      ? _txtController.text
-                                      : (_txtController.text == ""
-                                          ? "上传附件"
-                                          : _txtController.text),
-                                },
-                              ];
-                              for (var i = 0; i < uploadImgList.length; i++) {
-                                contents.add({
-                                  "type": 1, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
-                                  "infor": uploadImgList[i]["urlName"],
-                                });
-                              }
-                              var aids = uploadImgList
-                                  .map((attachment) => attachment["id"]);
-                              if (uploadFileAid != "") {
-                                aids = aids.followedBy([uploadFileAid]);
-                              }
-                              Map json = {
-                                "body": {
-                                  "json": {
-                                    "isAnonymous": 0,
-                                    "isOnlyAuthor": 0,
-                                    "typeId": "",
-                                    "aid": aids.join(","),
-                                    "fid": "",
-                                    "replyId": replyId,
-                                    "tid": widget.topicID, // 回复时指定帖子
-                                    "isQuote": placeholder ==
-                                            (isDesktop()
-                                                ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
-                                                : "请在此编辑回复")
-                                        ? 0
-                                        : 1, //"是否引用之前回复的内容
-                                    "title": "",
-                                    "content": jsonEncode(contents),
+                      editing //编辑回复框
+                          ? RichInput(
+                              fid: data["topic"]["boardId"],
+                              tid: widget.topicID,
+                              uploadFile: (aid) {
+                                uploadFileAid = aid;
+                              },
+                              uploadImg: (img_urls) {
+                                if (img_urls != null && img_urls.length != 0) {
+                                  uploadImgList = [];
+                                  for (var i = 0; i < img_urls.length; i++) {
+                                    uploadImgList.add(img_urls[i]);
                                   }
                                 }
-                              };
-                              showToast(
-                                context: context,
-                                type: XSToast.loading,
-                                txt: "发表中…",
-                              );
-                              await Api().forum_topicadmin(
-                                {
-                                  "act": "reply",
-                                  "json": jsonEncode(json),
-                                },
-                              );
-                              _scrollController.animateTo(0,
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.ease);
-                              _focusNode.unfocus();
-                              _txtController.clear();
-                              placeholder = (isDesktop()
-                                  ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
-                                  : "请在此编辑回复");
-                              uploadImgList = [];
-                              editing = false;
-                              setState(() {
+                              },
+                              atUser: (List<Map> map) {
+                                atUser = map;
+                              },
+                              placeholder: placeholder,
+                              controller: _txtController,
+                              focusNode: _focusNode,
+                              cancel: () {
+                                _focusNode.unfocus();
+                                _txtController.clear();
+                                placeholder = (isDesktop()
+                                    ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
+                                    : "请在此编辑回复");
                                 uploadFileAid = "";
-                              });
-                              await Future.delayed(Duration(milliseconds: 30));
-                              await _getData();
-                              hideToast();
-                              showToast(
-                                context: context,
-                                type: XSToast.success,
-                                duration: 200,
-                                txt: "发表成功!",
-                              );
-                            },
-                          )
-                        : DetailFixBottom(
-                            dislike_count: dislike_count,
-                            bottom: bottom_safeArea,
-                            tapEdit: () {
-                              _focusNode.requestFocus();
-                              editing = true;
-                              setState(() {});
-                            },
-                            topic_id: data["topic"]["topic_id"],
-                            count: data["topic"]["extraPanel"][1]["extParams"]
-                                ["recommendAdd"],
-                          )
-                  ],
+                                uploadImgList = [];
+                                editing = false;
+                                setState(() {});
+                              },
+                              send: () async {
+                                var contents = [
+                                  {
+                                    "type": 0, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
+                                    "infor": uploadFileAid == ""
+                                        ? _txtController.text
+                                        : (_txtController.text == ""
+                                            ? "上传附件"
+                                            : _txtController.text),
+                                  },
+                                ];
+                                for (var i = 0; i < uploadImgList.length; i++) {
+                                  contents.add({
+                                    "type": 1, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
+                                    "infor": uploadImgList[i]["urlName"],
+                                  });
+                                }
+                                var aids = uploadImgList
+                                    .map((attachment) => attachment["id"]);
+                                if (uploadFileAid != "") {
+                                  aids = aids.followedBy([uploadFileAid]);
+                                }
+                                Map json = {
+                                  "body": {
+                                    "json": {
+                                      "isAnonymous": 0,
+                                      "isOnlyAuthor": 0,
+                                      "typeId": "",
+                                      "aid": aids.join(","),
+                                      "fid": "",
+                                      "replyId": replyId,
+                                      "tid": widget.topicID, // 回复时指定帖子
+                                      "isQuote": placeholder ==
+                                              (isDesktop()
+                                                  ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
+                                                  : "请在此编辑回复")
+                                          ? 0
+                                          : 1, //"是否引用之前回复的内容
+                                      "title": "",
+                                      "content": jsonEncode(contents),
+                                    }
+                                  }
+                                };
+                                showToast(
+                                  context: context,
+                                  type: XSToast.loading,
+                                  txt: "发表中…",
+                                );
+                                await Api().forum_topicadmin(
+                                  {
+                                    "act": "reply",
+                                    "json": jsonEncode(json),
+                                  },
+                                );
+                                _scrollController.animateTo(0,
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.ease);
+                                _focusNode.unfocus();
+                                _txtController.clear();
+                                placeholder = (isDesktop()
+                                    ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
+                                    : "请在此编辑回复");
+                                uploadImgList = [];
+                                editing = false;
+                                setState(() {
+                                  uploadFileAid = "";
+                                });
+                                await Future.delayed(
+                                    Duration(milliseconds: 30));
+                                await _getData();
+                                hideToast();
+                                showToast(
+                                  context: context,
+                                  type: XSToast.success,
+                                  duration: 200,
+                                  txt: "发表成功!",
+                                );
+                              },
+                            )
+                          : DetailFixBottom(
+                              dislike_count: dislike_count,
+                              bottom: bottom_safeArea,
+                              tapEdit: () {
+                                _focusNode.requestFocus();
+                                editing = true;
+                                setState(() {});
+                              },
+                              topic_id: data["topic"]["topic_id"],
+                              count: data["topic"]["extraPanel"][1]["extParams"]
+                                  ["recommendAdd"],
+                            )
+                    ],
+                  ),
                 ),
     );
   }

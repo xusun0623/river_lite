@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:lottie/lottie.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/nowMode.dart';
 import 'package:offer_show/asset/size.dart';
@@ -24,8 +24,6 @@ import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class TopicColumn extends StatefulWidget {
   int columnID;
@@ -241,6 +239,9 @@ class _TopicColumnState extends State<TopicColumn> {
     tmp.add(
       load_done ? NoMore() : BottomLoading(color: Colors.transparent),
     );
+    for (var i = 0; i < tmp.length; i++) {
+      tmp[i] = ResponsiveWidget(child: tmp[i]);
+    }
     return tmp;
   }
 
@@ -448,7 +449,9 @@ class _TopSectionState extends State<TopSection> {
                     ),
                     Container(width: 7.5),
                     Container(
-                      width: MediaQuery.of(context).size.width - 80,
+                      width: MediaQuery.of(context).size.width -
+                          MinusSpace(context) -
+                          80,
                       child: Text(
                         widget.data[widget.data.length - 1 - index]["title"]
                             .toString()
@@ -533,7 +536,9 @@ class _DefineTabBarState extends State<DefineTabBar> {
             children: [
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                width: MediaQuery.of(context).size.width - 95,
+                width: MediaQuery.of(context).size.width -
+                    MinusSpace(context) -
+                    95,
                 child: Text(
                   widget.themes[widget.select],
                   style: TextStyle(
