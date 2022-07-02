@@ -506,6 +506,27 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.0"
+  qr:
+    dependency: transitive
+    description:
+      name: qr
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.0"
+  qr_code_scanner:
+    dependency: "direct main"
+    description:
+      name: qr_code_scanner
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
+  qr_flutter:
+    dependency: "direct main"
+    description:
+      name: qr_flutter
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.0.0"
   rxdart:
     dependency: transitive
     description:

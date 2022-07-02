@@ -232,7 +232,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: widget.placeholder ??
-                                (isDesktop()
+                                (isMacOS()
                                     ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
                                     : "请在此编辑回复"),
                             hintStyle: TextStyle(

@@ -64,7 +64,7 @@ class _TopicDetailState extends State<TopicDetail> {
   bool isInvalid = false; //帖子是否失效
   bool isNoAccess = false; //帖子是否没有访问权限
   String placeholder =
-      (isDesktop() ? "请在此编辑回复，按住control键+空格键以切换中英文输入法" : "请在此编辑回复");
+      (isMacOS() ? "请在此编辑回复，按住control键+空格键以切换中英文输入法" : "请在此编辑回复");
   List<Map> atUser = [];
   List<int> listID = []; //淘贴ID
   List listData = []; //淘贴数据
@@ -923,7 +923,7 @@ class _TopicDetailState extends State<TopicDetail> {
                               cancel: () {
                                 _focusNode.unfocus();
                                 _txtController.clear();
-                                placeholder = (isDesktop()
+                                placeholder = (isMacOS()
                                     ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
                                     : "请在此编辑回复");
                                 uploadFileAid = "";
@@ -964,7 +964,7 @@ class _TopicDetailState extends State<TopicDetail> {
                                       "replyId": replyId,
                                       "tid": widget.topicID, // 回复时指定帖子
                                       "isQuote": placeholder ==
-                                              (isDesktop()
+                                              (isMacOS()
                                                   ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
                                                   : "请在此编辑回复")
                                           ? 0
@@ -990,7 +990,7 @@ class _TopicDetailState extends State<TopicDetail> {
                                     curve: Curves.ease);
                                 _focusNode.unfocus();
                                 _txtController.clear();
-                                placeholder = (isDesktop()
+                                placeholder = (isMacOS()
                                     ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
                                     : "请在此编辑回复");
                                 uploadImgList = [];

@@ -1,5 +1,7 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -15,6 +17,7 @@ import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 class TopicDetailMore extends StatefulWidget {
@@ -211,6 +214,28 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
     );
   }
 
+  _showQrCode() async {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
+          ? os_light_dark_card
+          : os_white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      context: context,
+      builder: (context) {
+        return QrCode(
+          url:
+              "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${widget.data["topic"]["topic_id"]}",
+        );
+      },
+    );
+  }
+
   _tapMore() async {
     Future<List<ActionItem>> _buildAction() async {
       List<ActionItem> tmp = [];
@@ -315,18 +340,29 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        IconButton(
-          onPressed: () {
-            xsLanuch(
-              url: base_url +
-                  "forum.php?mod=viewthread&tid=" +
-                  widget.data["topic"]["topic_id"].toString(),
-              isExtern: true,
-            );
-          },
-          tooltip: "在浏览器中打开",
-          icon: _buildIcon(Icons.explore_outlined),
-        ),
+        isMacOS()
+            ? IconButton(
+                onPressed: () {
+                  _showQrCode();
+                },
+                tooltip: "分享到手机",
+                icon: _buildIcon(Icons.qr_code),
+              )
+            : Container(),
+        isMacOS()
+            ? IconButton(
+                onPressed: () {
+                  xsLanuch(
+                    url: base_url +
+                        "forum.php?mod=viewthread&tid=" +
+                        widget.data["topic"]["topic_id"].toString(),
+                    isExtern: true,
+                  );
+                },
+                tooltip: "在浏览器中打开",
+                icon: _buildIcon(Icons.explore_outlined),
+              )
+            : Container(),
         IconButton(
           onPressed: () {
             _tapMore();
@@ -335,6 +371,61 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         ),
         Container(width: 5),
       ],
+    );
+  }
+}
+
+class QrCode extends StatefulWidget {
+  String url;
+  QrCode({
+    Key key,
+    this.url,
+  }) : super(key: key);
+
+  @override
+  State<QrCode> createState() => _QrCodeState();
+}
+
+class _QrCodeState extends State<QrCode> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height - 100,
+      child: Column(
+        children: [
+          Container(height: 30),
+          //https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1951303
+          SelectableText(
+            "请扫码或在河畔Lite App搜索框输入t${widget.url.split("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")[1]}在手机上查看",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Container(height: 20),
+          Container(
+            width: 100,
+            height: 100,
+            child: QrImage(
+              data: widget.url ?? "https://bbs.uestc.edu.cn",
+              version: QrVersions.auto,
+              size: 200.0,
+            ),
+          ),
+          Container(height: 30),
+          Bounce(
+            infinite: true,
+            from: 30,
+            child: Container(
+              child: Icon(
+                Icons.arrow_upward,
+                size: 30,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

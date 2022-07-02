@@ -76,7 +76,22 @@ class _MeState extends State<Me> {
             ? os_dark_white
             : os_black,
         elevation: 0,
-        actions: [],
+        actions: [
+          isMacOS()
+              ? Container()
+              : IconButton(
+                  icon: Icon(
+                    Icons.crop_free,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_black,
+                    size: 20,
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/scan_qrcode");
+                  },
+                ),
+        ],
       ),
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,

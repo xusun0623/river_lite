@@ -8,6 +8,8 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  qr_code_scanner: ^1.0.0
+  qr_flutter: ^4.0.0
   sizer: ^2.0.15
   flutter_picker: ^2.0.3
   badges: ^2.0.2

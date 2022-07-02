@@ -1323,8 +1323,7 @@ class TitleInput extends StatelessWidget {
             fontSize: 17,
             color: Color(0xFFA3A3A3),
           ),
-          hintText:
-              isDesktop() ? "请输入帖子的标题，按住control键+空格键以切换中英文输入法" : "请输入帖子的标题",
+          hintText: isMacOS() ? "请输入帖子的标题，按住control键+空格键以切换中英文输入法" : "请输入帖子的标题",
         ),
       ),
     );

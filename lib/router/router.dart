@@ -21,6 +21,7 @@ import 'package:offer_show/page/person_detail/personDetail.dart';
 import 'package:offer_show/page/personal/personal.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/question/question.dart';
+import 'package:offer_show/page/scan_qrcode/scan_qrcode.dart';
 import 'package:offer_show/page/search/search.dart';
 import 'package:offer_show/page/setting/setting.dart';
 import 'package:offer_show/page/square/square.dart';
@@ -36,6 +37,7 @@ import 'package:offer_show/page/waterTask/water_task.dart';
 final routers = {
   "/": () => Start(),
   "/list": (data) => CollectionDetail(data: data),
+  "/scan_qrcode": () => ScanQRCode(),
   "/body": () => Home(),
   "/question": () => Question(),
   "/login": (data) => Login(index: data ?? 0),

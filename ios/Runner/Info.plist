@@ -26,6 +26,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>App会在您使用发帖、回帖、修改头像等相关功能时，访问您的相机权限</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

@@ -815,7 +815,7 @@ class _SearchLeftState extends State<SearchLeft> {
                       : os_middle_grey,
                 ),
                 hintText:
-                    isDesktop() ? "搜索帖子/用户，按住control键+空格键以切换中英文输入法" : "搜索帖子/用户",
+                    isMacOS() ? "搜索帖子/用户，按住control键+空格键以切换中英文输入法" : "搜索帖子/用户",
                 border: InputBorder.none,
               ),
             ),
