@@ -1002,6 +1002,9 @@ class _TopicDetailState extends State<TopicDetail> {
                                     Duration(milliseconds: 30));
                                 await _getData();
                                 hideToast();
+                                await Future.delayed(
+                                  Duration(milliseconds: 50),
+                                );
                                 showToast(
                                   context: context,
                                   type: XSToast.success,
