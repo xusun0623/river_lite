@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/components/occu_loading.dart';
@@ -119,7 +120,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
     List<Widget> t = [];
     if (data != null && data.length != 0) {
       for (var i in data) {
-        t.add(Topic(isLeftNaviUI: true, data: i));
+        t.add(Topic(isLeftNaviUI: isDesktop() && true, data: i));
       }
     }
     if (data.length == 0) {

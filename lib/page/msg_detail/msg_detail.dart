@@ -15,6 +15,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/asset/uploadAttachment.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
@@ -594,20 +595,26 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                               : myInkWell(
                                   tap: () async {
                                     _focusNode.unfocus();
+                                    XFile image;
                                     setState(() {
                                       selecting_emoji = false;
                                       widget
                                           .i_am_selectimg_img(selecting_emoji);
                                     });
                                     if (dont_send_flag) return;
-                                    final ImagePicker _picker = ImagePicker();
-                                    var image = await _picker.pickImage(
-                                      source: ImageSource.gallery,
-                                      imageQuality: 50,
-                                    );
-                                    setState(() {
-                                      uploadingImgs = true;
-                                    });
+                                    if (isMacOS()) {
+                                      ///针对MacOS做适配
+                                      image = await pickeSingleImgFile(context);
+                                    } else {
+                                      final ImagePicker _picker = ImagePicker();
+                                      image = await _picker.pickImage(
+                                        source: ImageSource.gallery,
+                                        imageQuality: 50,
+                                      );
+                                      setState(() {
+                                        uploadingImgs = true;
+                                      });
+                                    }
                                     if (image != null) {
                                       img_urls = await Api().uploadImage(
                                         imgs: [image],

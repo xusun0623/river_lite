@@ -80,12 +80,12 @@ class _MeState extends State<Me> {
           isMacOS()
               ? Container()
               : IconButton(
-                  icon: Icon(
-                    Icons.crop_free,
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_white
-                        : os_black,
-                    size: 20,
+                  icon: os_svg(
+                    path: Provider.of<ColorProvider>(context).isDark
+                        ? "lib/img/qrcode_light.svg"
+                        : "lib/img/qrcode_dark.svg",
+                    width: 20,
+                    height: 20,
                   ),
                   onPressed: () {
                     Navigator.pushNamed(context, "/scan_qrcode");

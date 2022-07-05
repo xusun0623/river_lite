@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/size.dart';
@@ -73,7 +74,7 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
       t.add(
         Stack(
           children: [
-            Topic(isLeftNaviUI: true, data: list[i]),
+            Topic(isLeftNaviUI: isDesktop() && true, data: list[i]),
             Positioned(
               right: os_edge + 80,
               top: 5,

@@ -5,9 +5,12 @@ final BigWidthScreen = 800;
 
 ///用于计算由于转为大屏幕模式损失了多少横向空间
 double MinusSpace(BuildContext context) {
-  return MediaQuery.of(context).size.width < BigWidthScreen
-      ? 0
-      : MediaQuery.of(context).size.width - BigWidthScreen;
+  if (isDesktop())
+    return MediaQuery.of(context).size.width < BigWidthScreen
+        ? 0
+        : MediaQuery.of(context).size.width - BigWidthScreen;
+  else
+    return 0;
 }
 
 ///主页适配大屏幕，主要是针对帖子专栏进行适配

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
@@ -129,7 +130,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     }
     if (data != null && data.length != 0) {
       for (var i in data) {
-        t.add(Topic(isLeftNaviUI: true, data: i));
+        t.add(Topic(isLeftNaviUI: isDesktop() && true, data: i));
       }
     }
     if (data.length == 0) {

@@ -401,12 +401,20 @@ class _QrCodeState extends State<QrCode> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_black,
             ),
           ),
           Container(height: 20),
           Container(
             width: 100,
             height: 100,
+            decoration: BoxDecoration(
+              color: os_white,
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+            ),
+            // padding: EdgeInsets.all(5),
             child: QrImage(
               data: widget.url ?? "https://bbs.uestc.edu.cn",
               version: QrVersions.auto,
@@ -421,6 +429,9 @@ class _QrCodeState extends State<QrCode> {
               child: Icon(
                 Icons.arrow_upward,
                 size: 30,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : os_black,
               ),
             ),
           ),

@@ -161,16 +161,21 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                 widget.focusNode.unfocus();
                                 upLoading = true;
                               });
-                              final ImagePicker _picker = ImagePicker();
-                              image = await _picker.pickMultiImage(
-                                    imageQuality: 50,
-                                  ) ??
-                                  [];
-                              showToast(
-                                context: context,
-                                type: XSToast.loading,
-                                txt: "上传中…",
-                              );
+                              if (isMacOS()) {
+                                ///单独对MacOS进行处理
+                                image = await pickeImgFile(context);
+                              } else {
+                                final ImagePicker _picker = ImagePicker();
+                                image = await _picker.pickMultiImage(
+                                      imageQuality: 50,
+                                    ) ??
+                                    [];
+                                showToast(
+                                  context: context,
+                                  type: XSToast.loading,
+                                  txt: "上传中…",
+                                );
+                              }
                               var img_urls =
                                   await Api().uploadImage(imgs: image) ?? [];
                               await widget.uploadImg(img_urls);

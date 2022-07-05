@@ -7,6 +7,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/uploadAttachment.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
@@ -687,14 +688,20 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                 ActionItem(
                   title: "选择图片（建议5张以内）",
                   onPressed: () async {
+                    var image = [];
                     widget.setImgUrls([]);
                     Navigator.pop(context);
                     widget.title_focus.unfocus();
                     widget.tip_focus.unfocus();
-                    final ImagePicker _picker = ImagePicker();
-                    var image = await _picker.pickMultiImage(
-                      imageQuality: 50,
-                    );
+                    if (isMacOS()) {
+                      ///针对MacOS进行适配
+                      image = await pickeImgFile(context);
+                    } else {
+                      final ImagePicker _picker = ImagePicker();
+                      image = await _picker.pickMultiImage(
+                        imageQuality: 50,
+                      );
+                    }
                     if (image == null || image.length == 0) {
                       return;
                     }

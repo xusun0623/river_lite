@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -468,8 +467,8 @@ class _TopicState extends State<Topic> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width -
-                      (widget.isLeftNaviUI ?? false ? LeftNaviWidth : 0) -
-                      (widget.hideColumn ?? false ? MinusSpace(context) : 0) -
+                      ((widget.isLeftNaviUI ?? false) ? LeftNaviWidth : 0) -
+                      ((widget.hideColumn ?? false) ? MinusSpace(context) : 0) -
                       54,
                   child: Text(
                     widget.data["title"],
@@ -498,8 +497,10 @@ class _TopicState extends State<Topic> {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width -
-                            (widget.isLeftNaviUI ?? false ? LeftNaviWidth : 0) -
-                            (widget.hideColumn ?? false
+                            ((widget.isLeftNaviUI ?? false)
+                                ? LeftNaviWidth
+                                : 0) -
+                            ((widget.hideColumn ?? false)
                                 ? MinusSpace(context)
                                 : 0) -
                             54,

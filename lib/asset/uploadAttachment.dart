@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/storage.dart';
@@ -72,6 +73,33 @@ void _post_parm(int tid, BuildContext context) async {
       duration: 500,
     );
   }
+}
+
+///从文件系统中取出图片文件
+///此Api仅供MacOS选取图像调用
+Future<List<XFile>> pickeImgFile(BuildContext context) async {
+  showToast(context: context, type: XSToast.loading);
+  List<XFile> files = [];
+  FilePickerResult result = await FilePicker.platform.pickFiles(
+    allowMultiple: true,
+    type: FileType.image,
+  );
+  for (var file in result.files) {
+    files.add(XFile(file.path));
+  }
+  hideToast();
+  return files;
+}
+
+///从文件系统中取出【单个】图片文件
+///此Api仅供MacOS选取图像调用
+Future<XFile> pickeSingleImgFile(BuildContext context) async {
+  showToast(context: context, type: XSToast.loading);
+  FilePickerResult result = await FilePicker.platform.pickFiles(
+    type: FileType.image,
+  );
+  hideToast();
+  return XFile(result.files.first.path);
 }
 
 getUploadAid({

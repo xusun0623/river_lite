@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:lottie/lottie.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
@@ -309,6 +310,36 @@ class _TopicColumnState extends State<TopicColumn> {
             },
           ),
           actions: [
+            ...(isDesktop()
+                ? [
+                    TextButton(
+                      onPressed: () {
+                        xsLanuch(
+                          url:
+                              "https://bbs.uestc.edu.cn/forum.php?mod=post&action=newthread&fid=" +
+                                  widget.columnID.toString(),
+                        );
+                      },
+                      style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.all(Colors.black12),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.near_me_outlined,
+                            color: os_deep_grey,
+                          ),
+                          Text(
+                            "前往网页端发帖",
+                            style: TextStyle(
+                              color: os_deep_grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ]
+                : []),
             IconButton(
                 onPressed: () {
                   Navigator.pushNamed(context, "/search", arguments: 0);
