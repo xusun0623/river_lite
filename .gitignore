@@ -47,3 +47,4 @@ app.*.map.json
 android/gradle/wrapper/gradle-6.7-all.zip
 lib/font/MiSans-Regular.ttf
 lib/main.dart
+android/gradle/wrapper/gradle-7.4-all.zip

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +78,7 @@ class _MeState extends State<Me> {
             : os_black,
         elevation: 0,
         actions: [
-          isMacOS()
+          !Platform.isIOS
               ? Container()
               : IconButton(
                   icon: os_svg(
