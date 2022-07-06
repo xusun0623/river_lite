@@ -205,24 +205,26 @@ class _PhotoPreviewState extends State<PhotoPreview> {
               ),
             ),
           ),
-          Positioned(
-            ///布局自己换
-            left: 50,
-            top: 50,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Color(0x33000000),
-                borderRadius: BorderRadius.all(Radius.circular(100)),
-              ),
-              child: IconButton(
-                color: os_white,
-                icon: Icon(Icons.chevron_left_rounded),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-          ),
+          isDesktop()
+              ? Positioned(
+                  ///布局自己换
+                  left: 50,
+                  top: 50,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color(0x33000000),
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                    ),
+                    child: IconButton(
+                      color: os_white,
+                      icon: Icon(Icons.chevron_left_rounded),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                )
+              : Container(),
           (widget.title ?? "").length != 0
               ? Container()
               : Positioned(

@@ -734,7 +734,7 @@ class _TopicDetailState extends State<TopicDetail> {
           editing = true;
           _focusNode.requestFocus();
           placeholder = "回复@${reply_name}：";
-          print("回复信息${placeholder}${replyId}");
+          // print("回复信息${placeholder}${replyId}");
           setState(() {});
         },
         host_id: data["topic"]["user_id"],
@@ -974,10 +974,12 @@ class _TopicDetailState extends State<TopicDetail> {
                                     }
                                   }
                                 };
+                                //发表评论
                                 showToast(
                                   context: context,
                                   type: XSToast.loading,
                                   txt: "发表中…",
+                                  duration: 100000,
                                 );
                                 await Api().forum_topicadmin(
                                   {
@@ -985,32 +987,27 @@ class _TopicDetailState extends State<TopicDetail> {
                                     "json": jsonEncode(json),
                                   },
                                 );
-                                _scrollController.animateTo(0,
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.ease);
-                                _focusNode.unfocus();
-                                _txtController.clear();
-                                placeholder = (isMacOS()
-                                    ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
-                                    : "请在此编辑回复");
-                                uploadImgList = [];
-                                editing = false;
-                                setState(() {
-                                  uploadFileAid = "";
-                                });
-                                await Future.delayed(
-                                    Duration(milliseconds: 30));
-                                await _getData();
                                 hideToast();
-                                await Future.delayed(
-                                  Duration(milliseconds: 50),
-                                );
                                 showToast(
                                   context: context,
                                   type: XSToast.success,
                                   duration: 200,
                                   txt: "发表成功!",
                                 );
+                                //完成发表评论
+                                setState(() {
+                                  uploadImgList = [];
+                                  uploadFileAid = "";
+                                  editing = false;
+                                  _focusNode.unfocus();
+                                  _txtController.clear();
+                                  placeholder = (isMacOS()
+                                      ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
+                                      : "请在此编辑回复");
+                                });
+                                await Future.delayed(
+                                    Duration(milliseconds: 30));
+                                await _getData();
                               },
                             )
                           : DetailFixBottom(
