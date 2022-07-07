@@ -4,7 +4,7 @@ class RiverListCacheManager {
   static CacheManager instance = CacheManager(
     Config(
       'riverListCacheKey',
-      stalePeriod: Duration(days: 5), //缓存7天
+      stalePeriod: Duration(days: 5), //缓存5天
       maxNrOfCacheObjects: 100,
     ),
   );
