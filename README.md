@@ -54,7 +54,7 @@ Gitee主页：[点我访问](https://gitee.com/xusun000)
 ## 设计文件
 figma在线设计工具：[点我访问](https://www.figma.com/file/McSp35qqjsUuWAbucxXdXn/%E6%B2%B3%E7%95%94Max%E7%89%88-XS-Designed)  
 宣传图：
-![设计宣传图](%E5%AE%A3%E4%BC%A0%E5%9B%BE.png)
+![设计宣传图](hola.png)
 
 ## 功能一览  
 #### 帖子相关
