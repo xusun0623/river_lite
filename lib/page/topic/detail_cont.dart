@@ -23,6 +23,7 @@ class DetailCont extends StatefulWidget {
   String desc; //在图片上的描述
   String title; //在图片上的描述标题
   bool isComment;
+  bool removeSelectable; //  是否可以长按复制文字
   DetailCont({
     Key key,
     this.data,
@@ -30,6 +31,7 @@ class DetailCont extends StatefulWidget {
     this.isComment,
     this.desc,
     this.title,
+    this.removeSelectable,
   }) : super(key: key);
 
   @override
@@ -87,41 +89,85 @@ class _DetailContState extends State<DetailCont> {
                         .contains(widget.data["infor"].toString().trim())
                 ? Container(
                     width: MediaQuery.of(context).size.width - 30,
-                    child: SelectableText.rich(
-                      TextSpan(
-                        style: TextStyle(
-                          fontSize: 60,
-                          height: 1.6,
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
-                              : os_black,
-                        ),
-                        text: widget.data["infor"].toString().trim(),
-                      ),
-                    ),
+                    child: widget.removeSelectable ?? false
+                        ? Text.rich(
+                            TextSpan(
+                              style: TextStyle(
+                                fontSize: 60,
+                                height: 1.6,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_white
+                                        : os_black,
+                              ),
+                              text: widget.data["infor"].toString().trim(),
+                            ),
+                          )
+                        : SelectableText.rich(
+                            TextSpan(
+                              style: TextStyle(
+                                fontSize: 60,
+                                height: 1.6,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_white
+                                        : os_black,
+                              ),
+                              text: widget.data["infor"].toString().trim(),
+                            ),
+                          ),
                   )
                 : Container(
                     width: MediaQuery.of(context).size.width - 30,
-                    child: SelectableText.rich(
-                      TextSpan(
-                        style: TextStyle(
-                          fontSize: 16,
-                          height: 1.6,
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
-                              : os_black,
-                        ),
-                        children: _getRichText(
-                          widget.data["infor"].indexOf("本帖最后由") > -1
-                              ? widget.data["infor"].substring(
-                                  (widget.data["infor"].indexOf("编辑") + 7) >=
-                                          widget.data["infor"].length
-                                      ? widget.data["infor"].length - 1
-                                      : widget.data["infor"].indexOf("编辑") + 7)
-                              : widget.data["infor"],
-                        ),
-                      ),
-                    ),
+                    child: widget.removeSelectable ?? false
+                        ? Text.rich(
+                            TextSpan(
+                              style: TextStyle(
+                                fontSize: 16,
+                                height: 1.6,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_white
+                                        : os_black,
+                              ),
+                              children: _getRichText(
+                                widget.data["infor"].indexOf("本帖最后由") > -1
+                                    ? widget.data["infor"].substring((widget
+                                                    .data["infor"]
+                                                    .indexOf("编辑") +
+                                                7) >=
+                                            widget.data["infor"].length
+                                        ? widget.data["infor"].length - 1
+                                        : widget.data["infor"].indexOf("编辑") +
+                                            7)
+                                    : widget.data["infor"],
+                              ),
+                            ),
+                          )
+                        : SelectableText.rich(
+                            TextSpan(
+                              style: TextStyle(
+                                fontSize: 16,
+                                height: 1.6,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_white
+                                        : os_black,
+                              ),
+                              children: _getRichText(
+                                widget.data["infor"].indexOf("本帖最后由") > -1
+                                    ? widget.data["infor"].substring((widget
+                                                    .data["infor"]
+                                                    .indexOf("编辑") +
+                                                7) >=
+                                            widget.data["infor"].length
+                                        ? widget.data["infor"].length - 1
+                                        : widget.data["infor"].indexOf("编辑") +
+                                            7)
+                                    : widget.data["infor"],
+                              ),
+                            ),
+                          ),
                   ));
         break;
       case 1: //图片

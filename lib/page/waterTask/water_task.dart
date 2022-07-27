@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
-import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/home/myhome.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
-import 'package:offer_show/page/waterTask/task_list.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -23,13 +21,11 @@ class WaterTask extends StatefulWidget {
 
 class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
   TabController tabController;
-  List<Map> scoreList = [];
   List<Map> newTask = [];
   List<Map> doingTask = [];
   List<Map> doneTask = [];
   List<Map> failTask = [];
 
-  bool load_done0 = false;
   bool load_done1 = false;
   bool load_done2 = false;
   bool load_done3 = false;
@@ -364,7 +360,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
             color: os_black,
           ),
           tabs: [
-            Tab(text: "积分记录"),
+            // Tab(text: "积分记录"),
             Tab(text: "新任务"),
             Tab(text: "进行中"),
             Tab(text: "已完成"),
@@ -382,7 +378,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
         physics: CustomTabBarViewScrollPhysics(),
         controller: tabController,
         children: [
-          TaskList(),
+          // TaskList(),
           RefreshIndicator(
             onRefresh: () async {
               await _getNew();

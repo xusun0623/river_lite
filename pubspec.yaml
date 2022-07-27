@@ -66,6 +66,7 @@ flutter:
     - lib/emoji/3/
     - lib/emoji/4/
     - lib/img/
+    - lib/img/water_total/
     - lib/img/banner/
     - lib/img/setting/
     - lib/img/square/

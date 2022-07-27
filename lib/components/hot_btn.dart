@@ -89,9 +89,9 @@ class _HomeBtnState extends State<HomeBtn> {
                 board_id: 66,
               ),
               Btn(
-                txt: "水滴答题",
+                txt: "水滴",
                 img: "lib/img/home/9.svg",
-                url: "/question",
+                url: "/water_total",
               ),
               Btn(
                 txt: "全部板块",

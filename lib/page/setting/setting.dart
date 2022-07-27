@@ -76,24 +76,24 @@ class _SettingState extends State<Setting> {
           Navigator.pushNamed(context, "/black_list");
         },
       ),
-      ListTile(
-        title: Text(
-          "意见反馈",
-          style: TextStyle(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_white
-                  : os_black),
-        ),
-        trailing: Icon(
-          Icons.chevron_right_rounded,
-          color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_dark_white
-              : os_deep_grey,
-        ),
-        onTap: () {
-          xsLanuch(url: "https://www.wjx.cn/vj/mzgzO5S.aspx", isExtern: false);
-        },
-      ),
+      // ListTile(
+      //   title: Text(
+      //     "意见反馈",
+      //     style: TextStyle(
+      //         color: Provider.of<ColorProvider>(context).isDark
+      //             ? os_dark_white
+      //             : os_black),
+      //   ),
+      //   trailing: Icon(
+      //     Icons.chevron_right_rounded,
+      //     color: Provider.of<ColorProvider>(context).isDark
+      //         ? os_dark_dark_white
+      //         : os_deep_grey,
+      //   ),
+      //   onTap: () {
+      //     xsLanuch(url: "https://www.wjx.cn/vj/mzgzO5S.aspx", isExtern: false);
+      //   },
+      // ),
       ListTile(
         title: Text(
           "清除图片缓存",
