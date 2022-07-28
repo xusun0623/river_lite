@@ -132,6 +132,8 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
           icon: Icon(Icons.chevron_left_rounded),
         ),
       ),
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: RefreshIndicator(
         onRefresh: () async {
           data = [];
