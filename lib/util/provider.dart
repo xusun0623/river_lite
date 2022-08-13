@@ -1,3 +1,9 @@
+/*
+ * @Author: xusun000「xusun000@foxmail.com」 
+ * @Date: 2022-08-03 10:38:43 
+ * @Last Modified by:   xusun000 
+ * @Last Modified time: 2022-08-03 10:38:43 
+ */
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/util/interface.dart';

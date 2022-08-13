@@ -30,6 +30,7 @@ import 'package:offer_show/page/topic/topic_detailBottom.dart';
 import 'package:offer_show/page/topic/topic_detail_time.dart';
 import 'package:offer_show/page/topic/topic_more.dart';
 import 'package:offer_show/page/topic/topic_vote.dart';
+import 'package:offer_show/page/topic/video_player.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
@@ -651,7 +652,7 @@ class _TopicDetailState extends State<TopicDetail> {
     //对整个页面的组件流进行整合
     List<Widget> tmp = [];
     tmp = [
-      TopicDetailTitle(data: data),
+      TopicDetailTitle(data: data), //渲染顶部标题
       data["topic"]["essence"] == 0 ? Container() : _getEssenceCont(),
       data["boardId"] != 61 ? Container() : _getSecondBuy(), //二手专区
       TopicDetailTime(
@@ -663,7 +664,7 @@ class _TopicDetailState extends State<TopicDetail> {
           showToast(context: context, type: XSToast.success, txt: "操作成功！");
         },
       ),
-      _buildContBody(),
+      _buildContBody(), //渲染帖子正文内容
       data["topic"]["poll_info"] != null
           ? TopicVote(
               topic_id: data["topic"]["topic_id"],
@@ -681,13 +682,14 @@ class _TopicDetailState extends State<TopicDetail> {
                 ),
               ),
             ),
-      ..._buildListCard(),
+      ..._buildListCard(), //渲染专辑列表
       TopicBottom(
         data: data,
       ),
       Container(height: 10),
       Divider(context: context),
       CommentsTab(
+        //渲染切换Tab
         select: _select,
         sort: _sort,
         bindSelect: (select) async {

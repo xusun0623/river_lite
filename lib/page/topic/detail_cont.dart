@@ -10,6 +10,7 @@ import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/emoji/emoji.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
+import 'package:offer_show/page/topic/video_player.dart';
 import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
@@ -251,30 +252,7 @@ class _DetailContState extends State<DetailCont> {
                                 ),
                               )
                             : Container(
-                                // image: CachedNetworkImageProvider(
-                                //   widget.data["infor"],
-                                //   cacheManager: RiverListCacheManager.instance,
-                                // ),
-                                // fit: BoxFit.cover,
-                                // filterQuality: FilterQuality.low,
-                                // width: isDesktop()
-                                //     ? 200
-                                //     : (MediaQuery.of(context).size.width -
-                                //             (widget.isComment ?? false
-                                //                 ? 50
-                                //                 : 0) -
-                                //             42) /
-                                //         3,
-                                // height: isDesktop()
-                                //     ? 200
-                                //     : (MediaQuery.of(context).size.width -
-                                //             (widget.isComment ?? false
-                                //                 ? 50
-                                //                 : 0) -
-                                //             42) /
-                                //         3,
                                 child: CachedNetworkImage(
-                                  // cacheManager: RiverListCacheManager.instance,
                                   imageUrl: widget.data["infor"],
                                   width: isDesktop()
                                       ? 200
@@ -416,55 +394,68 @@ class _DetailContState extends State<DetailCont> {
         );
         break;
       case 5: //附件下载
-        return //图片链接就不用下载了
-            myInkWell(
-          color: Provider.of<ColorProvider>(context, listen: false).isDark
-              ? Color(0x0AFFFFFF)
-              : Color(0xFFF6F6F6),
-          longPress: () {
-            Vibrate.feedback(FeedbackType.impact);
-            Clipboard.setData(ClipboardData(text: widget.data['url']));
-            showToast(context: context, type: XSToast.success, txt: "复制链接成功");
-          },
-          tap: () {
-            showModal(
-                context: context,
-                title: "请确认",
-                cont: "即将调用外部浏览器下载此附件，河畔App不保证此链接的安全性",
-                confirmTxt: "立即前往",
-                cancelTxt: "取消",
-                confirm: () {
-                  xsLanuch(url: widget.data['url'], isExtern: true);
-                },
-                cancel: () {});
-          },
-          radius: 10,
-          widget: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            width: MediaQuery.of(context).size.width - 30,
-            padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "附件" + widget.data["desc"],
-                  style: TextStyle(color: os_deep_grey),
-                ),
-                Text(
-                  "点击下载",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: os_color,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+        return WidgetLinkUrl(); //图片链接就不用下载了
         break;
       default:
     }
+  }
+
+  Widget WidgetLinkUrl() {
+    print("return");
+    if (widget.data["infor"].toString().contains(".mp4") ||
+        widget.data["infor"].toString().contains(".m4a") ||
+        widget.data["infor"].toString().contains(".flv")) {
+      print("${Uri.encodeFull(widget.data["infor"])}");
+      return VideoPlayContainer(
+        video_url: widget.data["url"],
+        video_name: Uri.encodeFull(widget.data["infor"]),
+      );
+    }
+    return myInkWell(
+      color: Provider.of<ColorProvider>(context, listen: false).isDark
+          ? Color(0x0AFFFFFF)
+          : Color(0xFFF6F6F6),
+      longPress: () {
+        Vibrate.feedback(FeedbackType.impact);
+        Clipboard.setData(ClipboardData(text: widget.data['url']));
+        showToast(context: context, type: XSToast.success, txt: "复制链接成功");
+      },
+      tap: () {
+        showModal(
+            context: context,
+            title: "请确认",
+            cont: "即将调用外部浏览器下载此附件，河畔App不保证此链接的安全性",
+            confirmTxt: "立即前往",
+            cancelTxt: "取消",
+            confirm: () {
+              xsLanuch(url: widget.data['url'], isExtern: true);
+            },
+            cancel: () {});
+      },
+      radius: 10,
+      widget: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        width: MediaQuery.of(context).size.width - 30,
+        padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "附件" + widget.data["desc"],
+              style: TextStyle(color: os_deep_grey),
+            ),
+            Text(
+              "点击下载",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: os_color,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

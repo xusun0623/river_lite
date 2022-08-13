@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:offer_show/asset/color.dart';
@@ -7,6 +10,8 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/provider.dart';
+import 'package:offer_show/util/storage.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -96,7 +101,7 @@ class _SettingState extends State<Setting> {
       // ),
       ListTile(
         title: Text(
-          "清除图片缓存",
+          "清除所有图片缓存",
           style: TextStyle(
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_dark_white
@@ -123,6 +128,54 @@ class _SettingState extends State<Setting> {
               confirm: () async {
                 showToast(context: context, type: XSToast.loading, txt: "请稍后…");
                 await RiverListCacheManager.instance.emptyCache();
+                await Future.delayed(Duration(milliseconds: 500));
+                hideToast();
+                showToast(
+                    context: context, type: XSToast.success, txt: "清除成功！");
+              });
+        },
+      ),
+      ListTile(
+        title: Text(
+          "清除所有视频缓存",
+          style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black),
+        ),
+        subtitle: Text(
+          "清除缓存可以释放占用空间，但在需要对应视频时，须重新请求",
+          style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_deep_grey),
+        ),
+        trailing: Icon(
+          Icons.chevron_right_rounded,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_dark_white
+              : os_deep_grey,
+        ),
+        onTap: () async {
+          showModal(
+              context: context,
+              title: "请确认",
+              cont: "将会清除所有已缓存的视频以释放存储资源，但可能需要花较长时间重新请求",
+              confirm: () async {
+                showToast(context: context, type: XSToast.loading, txt: "请稍后…");
+                String video_arr_txt =
+                    await getStorage(key: "video", initData: "[]");
+                List video_arr = jsonDecode(video_arr_txt);
+                for (var path in video_arr) {
+                  if (path.toString().contains("mp4") ||
+                      path.toString().contains("m4a") ||
+                      path.toString().contains("flv")) {
+                    var tmp = File(path);
+                    if (tmp.existsSync()) {
+                      tmp.deleteSync();
+                    }
+                  }
+                }
                 await Future.delayed(Duration(milliseconds: 500));
                 hideToast();
                 showToast(
