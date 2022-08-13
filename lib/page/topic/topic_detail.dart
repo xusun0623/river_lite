@@ -30,7 +30,6 @@ import 'package:offer_show/page/topic/topic_detailBottom.dart';
 import 'package:offer_show/page/topic/topic_detail_time.dart';
 import 'package:offer_show/page/topic/topic_more.dart';
 import 'package:offer_show/page/topic/topic_vote.dart';
-import 'package:offer_show/page/topic/video_player.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';

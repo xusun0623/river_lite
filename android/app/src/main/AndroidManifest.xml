@@ -2,6 +2,7 @@
     package="com.example.river_lite_2022">
    <application
         android:requestLegacyExternalStorage="true"
+        android:extractNativeLibs="true"
         android:label="河畔Lite"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

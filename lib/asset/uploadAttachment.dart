@@ -102,6 +102,58 @@ Future<XFile> pickeSingleImgFile(BuildContext context) async {
   return XFile(result.files.first.path);
 }
 
+//上传视频
+getVideoUploadAid({
+  int tid,
+  int fid,
+  BuildContext context,
+  Function onUploadProgress,
+}) async {
+  showToast(context: context, type: XSToast.loading, txt: "请稍后…");
+  await _post_parm(tid, context); //获取上传参数
+  if (_uid != "" && _hash != "") {
+    final ImagePicker _picker = ImagePicker();
+    final XFile video_file =
+        await _picker.pickVideo(source: ImageSource.gallery);
+    hideToast();
+    if ((await video_file.readAsBytes()).lengthInBytes < 40 * 1024 * 1024) {
+      if (video_file != null) {
+        String fileName = video_file.name;
+        String fileType = fileName.split(".")[fileName.split(".").length - 1];
+        var formData = FormData.fromMap({
+          'uid': _uid.toString(),
+          'hash': _hash.toString(),
+          'filetype': fileType == "MOV" || fileType == "mov" ? "mp4" : fileType,
+          'Filename': fileName,
+          'Filedata': await MultipartFile.fromFile(video_file.path,
+              filename: fileName +
+                  (fileType == "MOV" || fileType == "mov" ? ".mp4" : "")),
+        });
+        var response = await Dio().post(
+          base_url +
+              'misc.php?mod=swfupload&action=swfupload&operation=upload&html5=attach&fid=${fid}',
+          options: Options(headers: {
+            'Cookie': (await getStorage(key: "cookie", initData: "")).toString()
+          }),
+          onSendProgress: (count, total) {
+            onUploadProgress(count / total);
+          },
+          data: formData,
+        );
+        return "${response.data}";
+      } else {
+        return "";
+      }
+    } else {
+      showToast(context: context, type: XSToast.none, txt: "所选文件不能超过40MB");
+      return "";
+    }
+  } else {
+    return "";
+  }
+}
+
+//上传附件
 getUploadAid({
   int tid,
   int fid,
