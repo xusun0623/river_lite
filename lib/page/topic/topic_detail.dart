@@ -16,6 +16,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/components/bilibili_player.dart';
 import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/loading.dart';
@@ -682,6 +683,7 @@ class _TopicDetailState extends State<TopicDetail> {
               ),
             ),
       ..._buildListCard(), //渲染专辑列表
+      // BilibiliPlayer(),
       TopicBottom(
         data: data,
       ),

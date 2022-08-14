@@ -8,6 +8,7 @@ import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/components/bilibili_player.dart';
 import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
@@ -115,6 +116,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   Widget _buildComponents() {
     List<Widget> t = [];
     t.add(HomeBtn());
+    // t.add(BilibiliPlayer());
     if (data.length == 0 && !load_done) {
       t.add(Container(
         padding: EdgeInsets.symmetric(vertical: 50),

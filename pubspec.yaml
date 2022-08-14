@@ -2,12 +2,13 @@ name: offer_show
 description: A new Flutter project.
 
 publish_to: "none"
-version: 1.0.3+2
+version: 1.0.4+2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  webview_flutter: ^3.0.4
   images_picker: ^1.2.11
   flick_video_player: ^0.5.0
   video_player: ^2.4.6
