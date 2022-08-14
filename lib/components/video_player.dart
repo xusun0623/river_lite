@@ -95,6 +95,11 @@ class _VideoPlayContainerState extends State<VideoPlayContainer> {
   }
 
   void pushFullScreenVideo() {
+    if (_chewieController == null ||
+        _controller == null ||
+        _videoFile == null) {
+      return;
+    }
     SystemChrome.setPreferredOrientations(
       [
         DeviceOrientation.portraitUp,
