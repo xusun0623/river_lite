@@ -22,6 +22,7 @@ import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
+import 'package:device_info/device_info.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
@@ -77,9 +78,13 @@ class _DetailContState extends State<DetailCont> {
     }
   }
 
+  bool isIpad() {
+    return MediaQuery.of(context).size.shortestSide > 550;
+  }
+
   Widget WidgetBilibiliPlayer() {
     String short_url = widget.data['url'].toString();
-    if (!isDesktop() &&
+    if (!isIpad() &&
         short_url.startsWith("https://b23.tv/") &&
         short_url.length < 25) {
       return BilibiliPlayer(short_url: short_url);
@@ -159,10 +164,9 @@ class _DetailContState extends State<DetailCont> {
 
   Widget WidgetLinkUrl() {
     // print("return");
-    if (!isDesktop() &&
-        (widget.data["infor"].toString().contains(".mp4") ||
-            widget.data["infor"].toString().contains(".m4a") ||
-            widget.data["infor"].toString().contains(".flv"))) {
+    if ((widget.data["infor"].toString().contains(".mp4") ||
+        widget.data["infor"].toString().contains(".m4a") ||
+        widget.data["infor"].toString().contains(".flv"))) {
       print("${Uri.encodeFull(widget.data["infor"])}");
       return VideoPlayContainer(
         video_url: widget.data["url"],

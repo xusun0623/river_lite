@@ -193,12 +193,17 @@ class _VideoPlayContainerState extends State<VideoPlayContainer> {
               children: [
                 Stack(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      child: AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: Chewie(
-                          controller: _chewieController,
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: 500,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        child: AspectRatio(
+                          aspectRatio: _controller.value.aspectRatio,
+                          child: Chewie(
+                            controller: _chewieController,
+                          ),
                         ),
                       ),
                     ),
