@@ -13,6 +13,7 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/bilibili_player.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/video_player.dart';
@@ -178,7 +179,7 @@ class _DetailContState extends State<DetailCont> {
           ? Color(0x0AFFFFFF)
           : Color(0xFFF6F6F6),
       longPress: () {
-        Vibrate.feedback(FeedbackType.impact);
+        XSVibrate();
         Clipboard.setData(ClipboardData(text: widget.data['url']));
         showToast(context: context, type: XSToast.success, txt: "复制链接成功");
       },

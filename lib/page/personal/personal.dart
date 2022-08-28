@@ -7,6 +7,7 @@ import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/nowMode.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
@@ -888,7 +889,7 @@ class _PersonCardState extends State<PersonCard> {
                 borderRadius: BorderRadius.all(Radius.circular(100)),
                 child: GestureDetector(
                   onLongPress: () {
-                    Vibrate.feedback(FeedbackType.impact);
+                    XSVibrate();
                     CachedNetworkImage.evictFromCache("url");
                     int uid = int.parse(widget.data["icon"]
                         .toString()

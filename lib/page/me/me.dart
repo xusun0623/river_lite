@@ -7,6 +7,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/util/interface.dart';
@@ -52,7 +53,7 @@ class _MeState extends State<Me> {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          Vibrate.feedback(FeedbackType.impact);
+          XSVibrate();
         }
       }
       if (_scrollController.position.pixels >= 0) {

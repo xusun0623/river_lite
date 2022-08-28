@@ -6,6 +6,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
@@ -72,8 +73,7 @@ saveImge(
       },
     ));
   }
-
-  Vibrate.feedback(FeedbackType.impact);
+  XSVibrate();
   showActionSheet(
     isScrollControlled: true,
     actionSheetColor: os_white,

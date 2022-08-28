@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/util/interface.dart';
@@ -30,7 +31,7 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          Vibrate.feedback(FeedbackType.impact);
+          XSVibrate();
         }
       }
       if (_scrollController.position.pixels >= 0) {

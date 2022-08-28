@@ -6,6 +6,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
@@ -174,7 +175,7 @@ class _DetailListTitleState extends State<DetailListTitle> {
             onLongPress: widget.left != "UID"
                 ? null
                 : () {
-                    Vibrate.feedback(FeedbackType.impact);
+                    XSVibrate();
                     Clipboard.setData(ClipboardData(text: widget.right));
                     showToast(
                         context: context, type: XSToast.success, txt: "复制成功");

@@ -5,6 +5,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/BottomTip.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
@@ -63,7 +64,7 @@ class _MsgState extends State<Msg> {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          Vibrate.feedback(FeedbackType.impact);
+          XSVibrate();
         }
       }
       if (_scrollController.position.pixels >= 0) {

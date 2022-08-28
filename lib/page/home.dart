@@ -10,6 +10,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/page/PicSquare/pic_square.dart';
 import 'package:offer_show/page/me/me.dart';
@@ -177,7 +178,7 @@ class _HomeState extends State<Home> {
                   if (_isNewMsg) {
                     Provider.of<MsgProvider>(context, listen: false).getMsg();
                   }
-                  Vibrate.feedback(FeedbackType.impact);
+                  XSVibrate();
                   setState(() {
                     tabShowProvider.index = i;
                   });
@@ -187,7 +188,7 @@ class _HomeState extends State<Home> {
                   _getNewMsg();
                   Provider.of<HomeRefrshProvider>(context, listen: false)
                       .totop();
-                  Vibrate.feedback(FeedbackType.impact);
+                  XSVibrate();
                 }
               : null,
           child: Container(

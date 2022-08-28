@@ -12,6 +12,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
@@ -432,7 +433,7 @@ class _TopicState extends State<Topic> {
                   children: [
                     myInkWell(
                       tap: () {
-                        Vibrate.feedback(FeedbackType.impact);
+                        XSVibrate();
                         _moreAction();
                       },
                       color: Colors.transparent,
@@ -696,7 +697,7 @@ class _TopicState extends State<Topic> {
                 : myInkWell(
                     color: _widgetBackgroundColor(),
                     longPress: () {
-                      Vibrate.feedback(FeedbackType.impact);
+                      XSVibrate();
                       _moreAction();
                     },
                     tap: () => _tapWidget(),

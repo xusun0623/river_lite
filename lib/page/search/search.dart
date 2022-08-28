@@ -13,6 +13,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
@@ -489,7 +490,7 @@ class _HistoryTagState extends State<HistoryTag> {
       child: myInkWell(
         radius: 15,
         longPress: () {
-          Vibrate.feedback(FeedbackType.impact);
+          XSVibrate();
           showModal(
               context: context,
               title: "请确认",

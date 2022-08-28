@@ -10,6 +10,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/topic_formhash.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
@@ -186,7 +187,7 @@ class _CommentState extends State<Comment> {
   }
 
   void _showMore() async {
-    Vibrate.feedback(FeedbackType.impact);
+    XSVibrate();
     List<ActionItem> _buildAction() {
       List<ActionItem> tmp = [];
       String copy_txt = "";

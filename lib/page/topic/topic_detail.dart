@@ -16,6 +16,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/bilibili_player.dart';
 import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/empty.dart';
@@ -372,7 +373,7 @@ class _TopicDetailState extends State<TopicDetail> {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          Vibrate.feedback(FeedbackType.impact);
+          XSVibrate();
         }
       }
       if (_scrollController.position.pixels >= 0) {
@@ -505,7 +506,7 @@ class _TopicDetailState extends State<TopicDetail> {
           tmp.add(GestureDetector(
             onLongPress: () {
               Clipboard.setData(ClipboardData(text: s_tmp));
-              Vibrate.feedback(FeedbackType.impact);
+              XSVibrate();
               showToast(
                 context: context,
                 type: XSToast.success,

@@ -9,6 +9,24 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 
+Map settingConfig = {
+  "isVibrate": true,
+};
+
+class SettingConfigProvider extends ChangeNotifier {
+  bool isShow = false;
+
+  switchMode() async {
+    isShow = !isShow;
+    notifyListeners();
+  }
+
+  refresh() {
+    setStorage(key: "pic", value: isShow ? "1" : "");
+    notifyListeners();
+  }
+}
+
 class ShowPicProvider extends ChangeNotifier {
   bool isShow = false;
 

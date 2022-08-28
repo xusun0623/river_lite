@@ -5,6 +5,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/totop.dart';
@@ -183,7 +184,7 @@ class _MsgThreeState extends State<MsgThree> {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          Vibrate.feedback(FeedbackType.impact);
+          XSVibrate();
         }
       }
       if (_scrollController.position.pixels >= 0) {

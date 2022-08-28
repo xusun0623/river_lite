@@ -8,6 +8,7 @@ import 'package:html/parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
@@ -344,7 +345,7 @@ class _UploadImgState extends State<UploadImg> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Vibrate.feedback(FeedbackType.impact);
+        XSVibrate();
         Clipboard.setData(
             ClipboardData(text: "[img]${widget.data["urlName"]}[/img]"));
         showToast(

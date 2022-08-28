@@ -8,6 +8,7 @@ import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/bilibili_player.dart';
 import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/niw.dart';
@@ -44,7 +45,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          Vibrate.feedback(FeedbackType.impact);
+          XSVibrate();
         }
       }
       if (_scrollController.position.pixels >= 0) {
@@ -144,7 +145,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       load_done || data.length == 0
           ? TapMore(
               tap: () {
-                Vibrate.feedback(FeedbackType.impact);
+                XSVibrate();
                 setState(() {
                   loading = false;
                   load_done = false;

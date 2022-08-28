@@ -21,13 +21,9 @@ void main() {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: Color.fromRGBO(0, 0, 0, 0)),
     );
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
   runApp(MyApp());
-  if (Platform.isAndroid) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent),
-    );
-  }
 }
 
 class MyApp extends StatelessWidget {
