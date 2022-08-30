@@ -8,6 +8,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/util/interface.dart';
@@ -572,7 +573,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width -
-                              (isDesktop() ? 80 : 0) -
+                              (isDesktop() ? LeftNaviWidth : 0) -
                               250,
                           height: 7,
                           decoration: BoxDecoration(
@@ -584,7 +585,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                         Positioned(
                           child: Container(
                             width: (MediaQuery.of(context).size.width -
-                                    (isDesktop() ? 80 : 0) -
+                                    (isDesktop() ? LeftNaviWidth : 0) -
                                     250) *
                                 _getRate(),
                             height: 7,

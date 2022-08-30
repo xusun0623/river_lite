@@ -12,6 +12,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/emoji/emoji.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/outer/card_swiper/swiper.dart';
@@ -1096,7 +1097,7 @@ class _PicBottomState extends State<PicBottom> {
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 15),
                   width: MediaQuery.of(context).size.width -
-                      (isDesktop() ? 80 : 0) -
+                      (isDesktop() ? LeftNaviWidth : 0) -
                       140,
                   child: Row(
                     children: [
@@ -1121,7 +1122,7 @@ class _PicBottomState extends State<PicBottom> {
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width -
-                              (isDesktop() ? 80 : 0) -
+                              (isDesktop() ? LeftNaviWidth : 0) -
                               180,
                           // color: os_grey,
                           child: Text(
@@ -1224,7 +1225,7 @@ class _PicBottomState extends State<PicBottom> {
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 15),
                 width: MediaQuery.of(context).size.width -
-                    (isDesktop() ? 80 : 0) -
+                    (isDesktop() ? LeftNaviWidth : 0) -
                     30,
                 child: Text(
                   widget.data["cont"].toString().trim() == ""
@@ -1242,7 +1243,7 @@ class _PicBottomState extends State<PicBottom> {
             Container(height: 10),
             Container(
               width: MediaQuery.of(context).size.width -
-                  (isDesktop() ? 80 : 0) -
+                  (isDesktop() ? LeftNaviWidth : 0) -
                   15,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

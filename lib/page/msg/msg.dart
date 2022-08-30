@@ -8,6 +8,7 @@ import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/BottomTip.dart';
 import 'package:offer_show/components/empty.dart';
+import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/provider.dart';
@@ -345,7 +346,7 @@ class _MsgCardState extends State<MsgCard> {
             Container(
               width: MediaQuery.of(context).size.width -
                   headImgSize -
-                  (isDesktop() ? 80 : 0) -
+                  (isDesktop() ? LeftNaviWidth : 0) -
                   42,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

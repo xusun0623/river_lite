@@ -3,6 +3,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -29,7 +30,7 @@ class _HomeBtnState extends State<HomeBtn> {
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       width: MediaQuery.of(context).size.width -
           os_edge * 2 -
-          (isDesktop() ? 80 : 0),
+          (isDesktop() ? LeftNaviWidth : 0),
       child: Column(
         children: [
           Row(
@@ -146,7 +147,7 @@ class _BtnState extends State<Btn> {
       widget: Container(
         width: (MediaQuery.of(context).size.width -
                 os_edge * 2 -
-                (isDesktop() ? 80 : 0) -
+                (isDesktop() ? LeftNaviWidth : 0) -
                 10) /
             5,
         padding: EdgeInsets.only(top: 10, bottom: 15),

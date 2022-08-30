@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/page/collection_tab/collection_tab.dart';
@@ -86,18 +87,20 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       leading: Container(),
       leadingWidth: 0,
       actions: [
-        IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, "/search", arguments: 0);
-          },
-          icon: os_svg(
-            path: Provider.of<ColorProvider>(context).isDark
-                ? "lib/img/search_white.svg"
-                : "lib/img/search.svg",
-            width: 24,
-            height: 24,
-          ),
-        ),
+        isDesktop()
+            ? Container()
+            : IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/search", arguments: 0);
+                },
+                icon: os_svg(
+                  path: Provider.of<ColorProvider>(context).isDark
+                      ? "lib/img/search_white.svg"
+                      : "lib/img/search.svg",
+                  width: 24,
+                  height: 24,
+                ),
+              ),
         Container(width: 5),
       ],
       title: Container(

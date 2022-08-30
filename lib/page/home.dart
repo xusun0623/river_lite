@@ -30,6 +30,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool _isNewMsg = false;
+  bool _firstBack = false;
   List<int> loadIndex = [];
 
   List<Widget> homePages() {
@@ -131,6 +132,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     // _getPath();
+    _firstBack = true;
     _getNewMsg();
     _getDarkMode();
     _getBlackStatus();
@@ -145,7 +147,7 @@ class _HomeState extends State<Home> {
     os_height = MediaQuery.of(context).size.height;
     os_padding = os_width * 0.025;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-    double barHeight = 65;
+    double barHeight = 55;
     double barPadding = 10;
 
     List<Widget> _buildWidget(List<int> _loadIndex) {
@@ -178,7 +180,7 @@ class _HomeState extends State<Home> {
                   if (_isNewMsg) {
                     Provider.of<MsgProvider>(context, listen: false).getMsg();
                   }
-                  XSVibrate();
+                  if (Platform.isIOS) XSVibrate();
                   setState(() {
                     tabShowProvider.index = i;
                   });
@@ -188,7 +190,7 @@ class _HomeState extends State<Home> {
                   _getNewMsg();
                   Provider.of<HomeRefrshProvider>(context, listen: false)
                       .totop();
-                  XSVibrate();
+                  // XSVibrate();
                 }
               : null,
           child: Container(
@@ -258,15 +260,15 @@ class _HomeState extends State<Home> {
             //移动端的UI布局
             body: WillPopScope(
               onWillPop: () {
-                showModal(
-                  context: context,
-                  title: "返回",
-                  cont: "是否要返回退出河畔Lite?",
-                  confirm: () async {
-                    await SystemChannels.platform
-                        .invokeMethod('SystemNavigator.pop');
-                  },
-                );
+                if (_firstBack) {
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                } else {
+                  showToast(
+                    context: context,
+                    type: XSToast.none,
+                    txt: "再次返回",
+                  );
+                }
                 return;
               },
               child: IndexedStack(
