@@ -87,20 +87,18 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       leading: Container(),
       leadingWidth: 0,
       actions: [
-        isDesktop()
-            ? Container()
-            : IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, "/search", arguments: 0);
-                },
-                icon: os_svg(
-                  path: Provider.of<ColorProvider>(context).isDark
-                      ? "lib/img/search_white.svg"
-                      : "lib/img/search.svg",
-                  width: 24,
-                  height: 24,
-                ),
-              ),
+        IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, "/search", arguments: 0);
+          },
+          icon: os_svg(
+            path: Provider.of<ColorProvider>(context).isDark
+                ? "lib/img/search_white.svg"
+                : "lib/img/search.svg",
+            width: 24,
+            height: 24,
+          ),
+        ),
         Container(width: 5),
       ],
       title: Container(

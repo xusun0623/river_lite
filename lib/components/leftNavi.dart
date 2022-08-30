@@ -11,7 +11,7 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 ///左侧导航栏宽度
-final double LeftNaviWidth = 200;
+final double LeftNaviWidth = 80;
 
 class LeftNavi extends StatefulWidget {
   LeftNavi({Key key}) : super(key: key);
@@ -117,83 +117,74 @@ class _LeftNaviState extends State<LeftNavi> {
                       ? os_dark_back
                       : os_white,
                 ),
-                Container(height: 25),
-                Row(
-                  children: [
-                    Container(width: 25),
-                    GestureDetector(
-                      onTap: () async {
-                        _getNewMsg();
-                        String myinfo_txt =
-                            await getStorage(key: "myinfo", initData: "");
-                        Map myinfo = jsonDecode(myinfo_txt);
-                        Navigator.pushNamed(
-                          context,
-                          "/person_center",
-                          arguments: {"uid": myinfo["uid"], "isMe": true},
-                        );
-                      },
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
-                          child: Provider.of<TabShowProvider>(context).index ==
-                                  4
-                              ? Container(
+                Container(height: 20),
+                GestureDetector(
+                  onTap: () async {
+                    _getNewMsg();
+                    String myinfo_txt =
+                        await getStorage(key: "myinfo", initData: "");
+                    Map myinfo = jsonDecode(myinfo_txt);
+                    Navigator.pushNamed(
+                      context,
+                      "/person_center",
+                      arguments: {"uid": myinfo["uid"], "isMe": true},
+                    );
+                  },
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      child: Provider.of<TabShowProvider>(context).index == 4
+                          ? Container(
+                              color:
+                                  Provider.of<ColorProvider>(context).isDark ||
+                                          tabShowProvider.index == 2
+                                      ? Color(0x33FFFFFF)
+                                      : os_grey,
+                              child: Center(
+                                child: Text(
+                                  (provider.data == null
+                                          ? "X"
+                                          : provider.data["name"] ??
+                                              provider.data["userName"])[0]
+                                      .toString(),
+                                  style: TextStyle(
+                                    color: Provider.of<ColorProvider>(context)
+                                            .isDark
+                                        ? os_white
+                                        : os_dark_back,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: provider.data == null
+                                  ? ""
+                                  : (provider.data["icon"] ??
+                                      provider.data["avatar"]),
+                              placeholder: (BuildContext, String) {
+                                return Container(
                                   color: Provider.of<ColorProvider>(context)
                                               .isDark ||
                                           tabShowProvider.index == 2
                                       ? Color(0x33FFFFFF)
                                       : os_grey,
-                                  child: Center(
-                                    child: Text(
-                                      (provider.data == null
-                                              ? "X"
-                                              : provider.data["name"] ??
-                                                  provider.data["userName"])[0]
-                                          .toString(),
-                                      style: TextStyle(
-                                        color:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? os_white
-                                                : os_dark_back,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : CachedNetworkImage(
-                                  imageUrl: provider.data == null
-                                      ? ""
-                                      : (provider.data["icon"] ??
-                                          provider.data["avatar"]),
-                                  placeholder: (BuildContext, String) {
-                                    return Container(
-                                      color: Provider.of<ColorProvider>(context)
-                                                  .isDark ||
-                                              tabShowProvider.index == 2
-                                          ? Color(0x33FFFFFF)
-                                          : os_grey,
-                                    );
-                                  },
-                                ),
-                        ),
-                      ),
+                                );
+                              },
+                            ),
                     ),
-                  ],
+                  ),
                 ),
-                Container(height: 30),
-                NaviBtnSearch(),
-                Container(height: 10),
+                Container(height: 40),
                 NaviBtn(
                   index: 0,
                   tap: () {
                     _getNewMsg();
                   },
                 ),
-                Container(height: 10),
+                Container(height: 20),
                 Container(
                   child: NaviBtn(
                     isNewMsg: _isNewMsg,
@@ -203,7 +194,7 @@ class _LeftNaviState extends State<LeftNavi> {
                     },
                   ),
                 ),
-                Container(height: 10),
+                Container(height: 20),
                 Container(
                   child: NaviBtn(
                     isNewMsg: _isNewMsg,
@@ -213,15 +204,17 @@ class _LeftNaviState extends State<LeftNavi> {
                     },
                   ),
                 ),
-                Container(height: 10),
-                NaviBtn(
-                  isNewMsg: _isNewMsg,
-                  index: 3,
-                  tap: () {
-                    _getNewMsg();
-                  },
+                Container(height: 20),
+                Container(
+                  child: NaviBtn(
+                    isNewMsg: _isNewMsg,
+                    index: 3,
+                    tap: () {
+                      _getNewMsg();
+                    },
+                  ),
                 ),
-                Container(height: 10),
+                Container(height: 20),
               ],
             ),
             Column(
@@ -236,58 +229,6 @@ class _LeftNaviState extends State<LeftNavi> {
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class NaviBtnSearch extends StatefulWidget {
-  const NaviBtnSearch({Key key}) : super(key: key);
-
-  @override
-  State<NaviBtnSearch> createState() => _NaviBtnSearchState();
-}
-
-class _NaviBtnSearchState extends State<NaviBtnSearch> {
-  @override
-  Widget build(BuildContext context) {
-    TabShowProvider provider = Provider.of<TabShowProvider>(context);
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: myInkWell(
-        tap: () {
-          Navigator.pushNamed(context, "/search", arguments: 0);
-        },
-        color: Color(0x11323232),
-        radius: 7.5,
-        widget: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.search,
-                size: 30,
-                color: (Provider.of<ColorProvider>(context).isDark ||
-                        provider.index == 2
-                    ? Color(0xFF919191)
-                    : Color(0x55002266)),
-              ),
-              Container(width: 10),
-              Text(
-                "搜索帖子",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: (Provider.of<ColorProvider>(context).isDark ||
-                          provider.index == 2
-                      ? Color(0xFF919191)
-                      : Color(0x55002266)),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
@@ -312,8 +253,8 @@ class NaviBtn extends StatefulWidget {
 class _NaviBtnState extends State<NaviBtn> {
   List<String> icon_desc = [
     "主页",
-    "全部板块",
-    "图片展",
+    "板块",
+    "图区",
     "消息",
     "我",
   ]; //主页、探索、图区特别版块、消息、我的;
@@ -350,11 +291,10 @@ class _NaviBtnState extends State<NaviBtn> {
                 : Colors.transparent),
         radius: 7.5,
         widget: Container(
-          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+          padding: EdgeInsets.all(10),
           child: Badge(
             showBadge: (widget.isNewMsg ?? false) && widget.index == 3,
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
               children: [
                 Icon(
                   icons[widget.index],
@@ -369,11 +309,11 @@ class _NaviBtnState extends State<NaviBtn> {
                           ? Color(0xFF919191)
                           : Color(0x55002266)),
                 ),
-                Container(width: 10),
+                Container(height: 5),
                 Text(
                   icon_desc[widget.index],
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: FontWeight.bold,
                     color: provider.index == widget.index
                         ? (Provider.of<ColorProvider>(context).isDark ||

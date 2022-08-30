@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/nowMode.dart';
@@ -125,34 +127,40 @@ class _PersonCenterState extends State<PersonCenter> {
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [
-      PersonCard(
-        isMe: widget.param["isMe"],
-        data: userInfo,
+      ResponsiveWidget(
+        child: PersonCard(
+          isMe: widget.param["isMe"],
+          data: userInfo,
+        ),
       ),
-      PersonIndex(
-        index: index,
-        sendNum: userInfo["topic_num"],
-        replyNum: userInfo["reply_posts_num"],
-        isMe: widget.param["isMe"],
-        tapIndex: (idx) {
-          if (idx == index) return;
-          setState(() {
-            index = idx;
-            data = [];
-            load_done = false;
-          });
-          _getData();
-        },
+      ResponsiveWidget(
+        child: PersonIndex(
+          index: index,
+          sendNum: userInfo["topic_num"],
+          replyNum: userInfo["reply_posts_num"],
+          isMe: widget.param["isMe"],
+          tapIndex: (idx) {
+            if (idx == index) return;
+            setState(() {
+              index = idx;
+              data = [];
+              load_done = false;
+            });
+            _getData();
+          },
+        ),
       ),
     ];
     if (data.length == 0 && load_done) {
       tmp.add(Empty());
     }
     data.forEach((element) {
-      tmp.add(Topic(
-        data: element,
-        top: 0,
-        bottom: 10,
+      tmp.add(ResponsiveWidget(
+        child: Topic(
+          data: element,
+          top: 0,
+          bottom: 10,
+        ),
       ));
     });
     if (!load_done) {
@@ -421,6 +429,8 @@ class _PersonIndexState extends State<PersonIndex> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width -
+          (isDesktop() ? MinusSpace(context) : 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -490,7 +500,10 @@ class _PersonIndexTabState extends State<PersonIndexTab> {
         radius: 25,
         widget: Container(
           padding: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
-          width: (MediaQuery.of(context).size.width - 90) / 3,
+          width: (MediaQuery.of(context).size.width -
+                  (isDesktop() ? MinusSpace(context) : 0) -
+                  90) /
+              3,
           child: Column(
             children: [
               Text(
@@ -978,7 +991,9 @@ class _SignState extends State<Sign> {
               ),
               Container(width: 5),
               Container(
-                width: MediaQuery.of(context).size.width - 120,
+                width: MediaQuery.of(context).size.width -
+                    (isDesktop() ? MinusSpace(context) : 0) -
+                    120,
                 child: Text(
                   widget.data["sign"].toString().trim() == ""
                       ? "点我编辑签名"
@@ -1104,7 +1119,10 @@ class _PersonColumnState extends State<PersonColumn> {
         }
       },
       child: Container(
-        width: (MediaQuery.of(context).size.width - 100) / 3,
+        width: (MediaQuery.of(context).size.width -
+                (isDesktop() ? MinusSpace(context) : 0) -
+                100) /
+            3,
         height: 90,
         color: Provider.of<ColorProvider>(context).isDark
             ? os_light_dark_card
@@ -1228,7 +1246,9 @@ class PersonScoreState extends State<PersonScore> {
               Stack(
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width - 220,
+                    width: MediaQuery.of(context).size.width -
+                        (isDesktop() ? MinusSpace(context) : 0) -
+                        220,
                     height: 7,
                     decoration: BoxDecoration(
                       color: Color(0xFFE3E3E3),
@@ -1237,7 +1257,9 @@ class PersonScoreState extends State<PersonScore> {
                   ),
                   Positioned(
                     child: Container(
-                      width: (MediaQuery.of(context).size.width - 220) *
+                      width: (MediaQuery.of(context).size.width -
+                              (isDesktop() ? MinusSpace(context) : 0) -
+                              220) *
                           _getRate(),
                       height: 7,
                       decoration: BoxDecoration(

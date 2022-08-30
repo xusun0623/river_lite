@@ -464,26 +464,21 @@ class _TopicState extends State<Topic> {
             ),
             Padding(padding: EdgeInsets.all(4)),
             //中部区域：标题
-            Row(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width -
-                      ((widget.isLeftNaviUI ?? false) ? LeftNaviWidth : 0) -
-                      ((widget.hideColumn ?? false) ? MinusSpace(context) : 0) -
-                      54,
-                  child: Text(
-                    widget.data["title"],
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 17,
-                        letterSpacing: 0.5,
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_white
-                            : os_black),
-                  ),
-                ),
-                Container(width: 16),
-              ],
+            Container(
+              width: MediaQuery.of(context).size.width -
+                  ((widget.isLeftNaviUI ?? false) ? LeftNaviWidth : 0) -
+                  ((widget.hideColumn ?? false) ? MinusSpace(context) : 0) -
+                  54,
+              child: Text(
+                widget.data["title"],
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    fontSize: 17,
+                    letterSpacing: 0.5,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_black),
+              ),
             ),
             //中部区域：正文
             (widget.data["summary"] ?? widget.data["subject"])
@@ -494,31 +489,24 @@ class _TopicState extends State<Topic> {
                 : Padding(padding: EdgeInsets.all(3)),
             ((widget.data["summary"] ?? widget.data["subject"]) ?? "") == ""
                 ? Container()
-                : Row(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width -
-                            ((widget.isLeftNaviUI ?? false)
-                                ? LeftNaviWidth
-                                : 0) -
-                            ((widget.hideColumn ?? false)
-                                ? MinusSpace(context)
-                                : 0) -
-                            54,
-                        child: Text(
-                          (widget.data["summary"] ?? widget.data["subject"]) ??
-                              "",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 16,
-                            height: 1.5,
-                            color: Color(0xFF999999),
-                          ),
-                        ),
+                : Container(
+                    width: MediaQuery.of(context).size.width -
+                        ((widget.isLeftNaviUI ?? false) ? LeftNaviWidth : 0) -
+                        ((widget.hideColumn ?? false)
+                            ? MinusSpace(context)
+                            : 0) -
+                        54,
+                    child: Text(
+                      (widget.data["summary"] ?? widget.data["subject"]) ?? "",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 16,
+                        height: 1.5,
+                        color: Color(0xFF999999),
                       ),
-                      Container(width: 16),
-                    ],
+                    ),
                   ),
+            Container(width: 16),
             Padding(padding: EdgeInsets.all(3)),
             // 投票贴的Tag
             (widget.data["vote"] ?? 0) == 0
