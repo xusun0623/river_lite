@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -50,14 +51,15 @@ class _LoadingState extends State<Loading> {
                   )
                 : widget.loadingWidget ??
                     Container(
-                      width: 40,
-                      height: 40,
-                      child: CircularProgressIndicator(
-                        color: Color(0xFFCCCCCC),
-                        strokeWidth: 3,
-                      ),
+                      width: 200,
+                      height: 150,
+                      child: Lottie.asset("lib/lottie/loading.json"),
+                      // CircularProgressIndicator(
+                      //   color: Color(0xFFCCCCCC),
+                      //   strokeWidth: 3,
+                      // ),
                     ),
-            widget.showError ?? false ? Container() : Container(height: 20),
+            // widget.showError ?? false ? Container() : Container(height: 20),
             Center(
               child: Container(
                 width: 280,

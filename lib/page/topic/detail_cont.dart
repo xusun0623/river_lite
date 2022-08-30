@@ -4,9 +4,10 @@
  * @Last Modified by: xusun000
  * @Last Modified time: 2022-08-14 15:28:56
  */
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -23,7 +24,6 @@ import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
-import 'package:device_info/device_info.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
@@ -164,11 +164,10 @@ class _DetailContState extends State<DetailCont> {
   }
 
   Widget WidgetLinkUrl() {
-    // print("return");
-    if ((widget.data["infor"].toString().contains(".mp4") ||
-        widget.data["infor"].toString().contains(".m4a") ||
-        widget.data["infor"].toString().contains(".flv"))) {
-      print("${Uri.encodeFull(widget.data["infor"])}");
+    if (!Platform.isMacOS &&
+        (widget.data["infor"].toString().contains(".mp4") ||
+            widget.data["infor"].toString().contains(".m4a") ||
+            widget.data["infor"].toString().contains(".flv"))) {
       return VideoPlayContainer(
         video_url: widget.data["url"],
         video_name: Uri.encodeFull(widget.data["infor"]),

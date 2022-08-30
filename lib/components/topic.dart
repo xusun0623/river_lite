@@ -373,6 +373,7 @@ class _TopicState extends State<Topic> {
         // padding: EdgeInsets.fromLTRB(16, 18, 16, 18),
         padding: EdgeInsets.fromLTRB(16, 18, 0, 10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //顶部区域：左边：头像、昵称、时间 右边：更多按钮
             Row(
