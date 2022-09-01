@@ -16,6 +16,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/uploadAttachment.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
@@ -211,7 +212,7 @@ class MsgDetailState extends State<MsgDetail> {
           100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          Vibrate.feedback(FeedbackType.impact);
+          XSVibrate();
         }
       }
       if (_controller.position.pixels - _controller.position.maxScrollExtent <=
@@ -856,7 +857,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
               if (widget.isImage) {
                 saveImge(context, [widget.cont], 0);
               } else {
-                Vibrate.feedback(FeedbackType.impact);
+                XSVibrate();
                 showActionSheet(
                     context: context,
                     actions: [

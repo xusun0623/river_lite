@@ -1,5 +1,7 @@
 ![输入图片说明](App%20Icon.png)
 
+河畔Lite 1.1.2
+
 # 河畔Lite App
 本Repo是电子科技大学官方校园论坛【清水河畔】的第三方客户端的开源代码仓库。此App轻量、简洁、设计优雅，拥有诸多特性和功能。  
 
@@ -54,7 +56,7 @@ Gitee主页：[点我访问](https://gitee.com/xusun000)
 ## 设计文件
 figma在线设计工具：[点我访问](https://www.figma.com/file/McSp35qqjsUuWAbucxXdXn/%E6%B2%B3%E7%95%94Max%E7%89%88-XS-Designed)  
 宣传图：
-![设计宣传图](%E5%AE%A3%E4%BC%A0%E5%9B%BE.png)
+![设计宣传图](hola.png)
 
 ## 功能一览  
 #### 帖子相关

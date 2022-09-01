@@ -5,6 +5,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
@@ -39,7 +40,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          Vibrate.feedback(FeedbackType.impact);
+          XSVibrate();
         }
       }
       if (_scrollController.position.pixels >= 0) {
@@ -132,7 +133,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
       load_done || data.length == 0
           ? TapMore(
               tap: () {
-                Vibrate.feedback(FeedbackType.impact);
+                XSVibrate();
                 setState(() {
                   loading = false;
                   load_done = false;

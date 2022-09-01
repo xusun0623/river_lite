@@ -7,6 +7,8 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/util/interface.dart';
@@ -52,7 +54,7 @@ class _MeState extends State<Me> {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          Vibrate.feedback(FeedbackType.impact);
+          XSVibrate();
         }
       }
       if (_scrollController.position.pixels >= 0) {
@@ -180,9 +182,13 @@ class _MeListGroupState extends State<MeListGroup> {
     return Column(
       children: [
         MeList(txt: "应用设置", index: 0, icon: Icons.settings_outlined),
-        MeList(txt: "水滴相关", index: 6, icon: Icons.opacity),
+        // MeList(txt: "水滴相关", index: 6, icon: Icons.opacity),
         MeList(txt: "账号管理", index: 1, icon: Icons.person_outline),
-        // MeList(txt: "意见&Bug反馈", index: 2),
+        MeList(
+          txt: "意见&Bug反馈",
+          index: 2,
+          icon: Icons.feedback_outlined,
+        ),
         // MeList(txt: "拉黑&黑名单", index: 4),
         MeList(txt: "关于", index: 3, icon: Icons.info_outline),
       ],
@@ -567,7 +573,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width -
-                              (isDesktop() ? 80 : 0) -
+                              (isDesktop() ? LeftNaviWidth : 0) -
                               250,
                           height: 7,
                           decoration: BoxDecoration(
@@ -579,7 +585,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                         Positioned(
                           child: Container(
                             width: (MediaQuery.of(context).size.width -
-                                    (isDesktop() ? 80 : 0) -
+                                    (isDesktop() ? LeftNaviWidth : 0) -
                                     250) *
                                 _getRate(),
                             height: 7,

@@ -12,6 +12,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
@@ -372,6 +373,7 @@ class _TopicState extends State<Topic> {
         // padding: EdgeInsets.fromLTRB(16, 18, 16, 18),
         padding: EdgeInsets.fromLTRB(16, 18, 0, 10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //顶部区域：左边：头像、昵称、时间 右边：更多按钮
             Row(
@@ -432,7 +434,7 @@ class _TopicState extends State<Topic> {
                   children: [
                     myInkWell(
                       tap: () {
-                        Vibrate.feedback(FeedbackType.impact);
+                        XSVibrate();
                         _moreAction();
                       },
                       color: Colors.transparent,
@@ -463,26 +465,21 @@ class _TopicState extends State<Topic> {
             ),
             Padding(padding: EdgeInsets.all(4)),
             //中部区域：标题
-            Row(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width -
-                      ((widget.isLeftNaviUI ?? false) ? LeftNaviWidth : 0) -
-                      ((widget.hideColumn ?? false) ? MinusSpace(context) : 0) -
-                      54,
-                  child: Text(
-                    widget.data["title"],
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 17,
-                        letterSpacing: 0.5,
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_white
-                            : os_black),
-                  ),
-                ),
-                Container(width: 16),
-              ],
+            Container(
+              width: MediaQuery.of(context).size.width -
+                  ((widget.isLeftNaviUI ?? false) ? LeftNaviWidth : 0) -
+                  ((widget.hideColumn ?? false) ? MinusSpace(context) : 0) -
+                  54,
+              child: Text(
+                widget.data["title"],
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    fontSize: 17,
+                    letterSpacing: 0.5,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_black),
+              ),
             ),
             //中部区域：正文
             (widget.data["summary"] ?? widget.data["subject"])
@@ -493,31 +490,24 @@ class _TopicState extends State<Topic> {
                 : Padding(padding: EdgeInsets.all(3)),
             ((widget.data["summary"] ?? widget.data["subject"]) ?? "") == ""
                 ? Container()
-                : Row(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width -
-                            ((widget.isLeftNaviUI ?? false)
-                                ? LeftNaviWidth
-                                : 0) -
-                            ((widget.hideColumn ?? false)
-                                ? MinusSpace(context)
-                                : 0) -
-                            54,
-                        child: Text(
-                          (widget.data["summary"] ?? widget.data["subject"]) ??
-                              "",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 16,
-                            height: 1.5,
-                            color: Color(0xFF999999),
-                          ),
-                        ),
+                : Container(
+                    width: MediaQuery.of(context).size.width -
+                        ((widget.isLeftNaviUI ?? false) ? LeftNaviWidth : 0) -
+                        ((widget.hideColumn ?? false)
+                            ? MinusSpace(context)
+                            : 0) -
+                        54,
+                    child: Text(
+                      (widget.data["summary"] ?? widget.data["subject"]) ?? "",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 16,
+                        height: 1.5,
+                        color: Color(0xFF999999),
                       ),
-                      Container(width: 16),
-                    ],
+                    ),
                   ),
+            Container(width: 16),
             Padding(padding: EdgeInsets.all(3)),
             // 投票贴的Tag
             (widget.data["vote"] ?? 0) == 0
@@ -696,7 +686,7 @@ class _TopicState extends State<Topic> {
                 : myInkWell(
                     color: _widgetBackgroundColor(),
                     longPress: () {
-                      Vibrate.feedback(FeedbackType.impact);
+                      XSVibrate();
                       _moreAction();
                     },
                     tap: () => _tapWidget(),

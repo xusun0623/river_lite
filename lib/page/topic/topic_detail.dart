@@ -16,6 +16,8 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/components/bilibili_player.dart';
 import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/loading.dart';
@@ -371,7 +373,7 @@ class _TopicDetailState extends State<TopicDetail> {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          Vibrate.feedback(FeedbackType.impact);
+          XSVibrate();
         }
       }
       if (_scrollController.position.pixels >= 0) {
@@ -504,7 +506,7 @@ class _TopicDetailState extends State<TopicDetail> {
           tmp.add(GestureDetector(
             onLongPress: () {
               Clipboard.setData(ClipboardData(text: s_tmp));
-              Vibrate.feedback(FeedbackType.impact);
+              XSVibrate();
               showToast(
                 context: context,
                 type: XSToast.success,
@@ -651,7 +653,7 @@ class _TopicDetailState extends State<TopicDetail> {
     //对整个页面的组件流进行整合
     List<Widget> tmp = [];
     tmp = [
-      TopicDetailTitle(data: data),
+      TopicDetailTitle(data: data), //渲染顶部标题
       data["topic"]["essence"] == 0 ? Container() : _getEssenceCont(),
       data["boardId"] != 61 ? Container() : _getSecondBuy(), //二手专区
       TopicDetailTime(
@@ -663,7 +665,7 @@ class _TopicDetailState extends State<TopicDetail> {
           showToast(context: context, type: XSToast.success, txt: "操作成功！");
         },
       ),
-      _buildContBody(),
+      _buildContBody(), //渲染帖子正文内容
       data["topic"]["poll_info"] != null
           ? TopicVote(
               topic_id: data["topic"]["topic_id"],
@@ -681,13 +683,15 @@ class _TopicDetailState extends State<TopicDetail> {
                 ),
               ),
             ),
-      ..._buildListCard(),
+      ..._buildListCard(), //渲染专辑列表
+      // BilibiliPlayer(),
       TopicBottom(
         data: data,
       ),
       Container(height: 10),
       Divider(context: context),
       CommentsTab(
+        //渲染切换Tab
         select: _select,
         sort: _sort,
         bindSelect: (select) async {

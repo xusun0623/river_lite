@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/totop.dart';
@@ -137,14 +140,19 @@ class _MsgThreeState extends State<MsgThree> {
       if (lists.length != 0) {
         for (int i = 0; i < datas.length; i++) {
           if (i < datas.length && i < lists.length) {
-            tmp.add(ForumCard(data: datas[i], forum: lists[i]));
+            tmp.add(Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ResponsiveWidget(
+                child: ForumCard(data: datas[i], forum: lists[i]),
+              ),
+            ));
           }
         }
       }
     } else {
       //系统通知
       for (int i = 0; i < datas.length; i++) {
-        tmp.add(SysNoti(data: datas[i]));
+        tmp.add(ResponsiveWidget(child: SysNoti(data: datas[i])));
       }
     }
     if (datas.length == 0 && load_done) {
@@ -183,7 +191,7 @@ class _MsgThreeState extends State<MsgThree> {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          Vibrate.feedback(FeedbackType.impact);
+          XSVibrate();
         }
       }
       if (_scrollController.position.pixels >= 0) {
@@ -279,7 +287,10 @@ class _SysNotiState extends State<SysNoti> {
           children: [
             Container(width: 10),
             Container(
-              width: MediaQuery.of(context).size.width - headImgSize - 64,
+              width: MediaQuery.of(context).size.width -
+                  (isDesktop() ? (MinusSpace(context)) : 0) -
+                  headImgSize -
+                  64,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -390,7 +401,10 @@ class _ForumCardState extends State<ForumCard> {
             ),
             Container(width: 10),
             Container(
-              width: MediaQuery.of(context).size.width - headImgSize - 64,
+              width: MediaQuery.of(context).size.width -
+                  (isDesktop() ? (MinusSpace(context)) + 12 : 0) -
+                  headImgSize -
+                  64,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -430,6 +444,7 @@ class _ForumCardState extends State<ForumCard> {
                             Container(
                               width: MediaQuery.of(context).size.width -
                                   headImgSize -
+                                  (isDesktop() ? (MinusSpace(context)) : 0) -
                                   90,
                               child: Text(
                                 widget.forum["topic_subject"].toString().trim(),
@@ -443,7 +458,10 @@ class _ForumCardState extends State<ForumCard> {
                         ),
                   Container(height: 5),
                   Container(
-                    width: MediaQuery.of(context).size.width - headImgSize - 90,
+                    width: MediaQuery.of(context).size.width -
+                        headImgSize -
+                        (isDesktop() ? (MinusSpace(context)) : 0) -
+                        90,
                     child: Text(
                       (widget.forum["reply_content"] ?? "").toString().trim() +
                           ((widget.forum["reply_content"] ?? "")

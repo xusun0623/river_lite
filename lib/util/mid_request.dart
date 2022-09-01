@@ -1,3 +1,9 @@
+/*
+ * @Author: xusun000「xusun000@foxmail.com」 
+ * @Date: 2022-08-03 10:38:39 
+ * @Last Modified by:   xusun000 
+ * @Last Modified time: 2022-08-03 10:38:39 
+ */
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
@@ -10,7 +16,7 @@ class ServerConfig {
   String url = base_url + "mobcent/app/web/index.php";
 }
 
-bool isLog = true; //控制是否打印网络输出日志
+bool isLog = false; //控制是否打印网络输出日志
 
 class XHttp {
   pureHttpWithCookie({String url, Map param, bool hadCookie = false}) async {

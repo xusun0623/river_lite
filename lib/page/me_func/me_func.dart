@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/nowMode.dart';
@@ -101,14 +102,16 @@ class _MeFuncState extends State<MeFunc> {
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
-    tmp.add(MeFuncHead(type: widget.type));
+    tmp.add(ResponsiveWidget(child: MeFuncHead(type: widget.type)));
     if (widget.type == 5) {
       data.forEach((element) {
-        tmp.add(DraftCard(data: element));
+        tmp.add(ResponsiveWidget(child: DraftCard(data: element)));
       });
     } else {
       data.forEach((element) {
-        tmp.add(FuncWidget(data: element, type: widget.type));
+        tmp.add(ResponsiveWidget(
+          child: FuncWidget(data: element, type: widget.type),
+        ));
       });
     }
     if (data.length == 0 && load_done) {
@@ -354,7 +357,6 @@ class _DraftCardState extends State<DraftCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: MediaQuery.of(context).size.width - 100,
                 child: Text(
                   widget.data,
                   style: TextStyle(
@@ -449,7 +451,6 @@ class _HistoryCardState extends State<HistoryCard> {
               ),
               Container(width: 15),
               Container(
-                width: MediaQuery.of(context).size.width - 120,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

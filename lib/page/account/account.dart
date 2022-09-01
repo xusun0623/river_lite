@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -102,156 +103,164 @@ class _AccountState extends State<Account> {
     List<Widget> tmp = [];
     tmp.addAll([
       Container(height: 10),
-      ListTile(
-        title: Text(
-          "登录修复",
-          style: TextStyle(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_white
-                  : os_black),
-        ),
-        subtitle: Text(
-          "当获取水滴任务、自动答题、更换头像、上传附件、获取专辑等需要手动抓取网页的操作失效时，你可以点此尝试手动获取网页Cookie",
-          style: TextStyle(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_dark_white
-                  : os_deep_grey),
-        ),
-        onTap: () async {
-          showToast(context: context, type: XSToast.loading, txt: "加载中");
-          await getWebCookie();
-          hideToast();
-          await Future.delayed(Duration(milliseconds: 50));
-          showToast(context: context, type: XSToast.success, txt: "获取成功！");
-        },
-      ),
-      Container(height: 15),
-      ListTile(
-        onTap: () {
-          showModal(
-              context: context,
-              title: "请确认",
-              cont: "即将退出登录，并删除你在本地的所有个人信息和收藏，请确认",
-              confirm: () {
-                UserInfoProvider provider =
-                    Provider.of<UserInfoProvider>(context, listen: false);
-                Provider.of<MsgProvider>(context, listen: false).clearMsg();
-                provider.data = null;
-                provider.refresh();
-                setStorage(key: "myinfo", value: "");
-                setStorage(key: "topic_like", value: "");
-                setStorage(key: "history", value: "[]");
-                setStorage(key: "draft", value: "[]");
-                setStorage(key: "search-history", value: "[]");
-                setState(() {});
-                Navigator.pop(context);
-              });
-        },
-        title: Row(
-          children: [
-            Icon(Icons.logout,
+      ResponsiveWidget(
+        child: ListTile(
+          title: Text(
+            "登录修复",
+            style: TextStyle(
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
                     : os_black),
-            Container(width: 5),
-            Text(
-              "退出登录",
-              style: TextStyle(
+          ),
+          subtitle: Text(
+            "当获取水滴任务、自动答题、更换头像、上传附件、获取专辑等需要手动抓取网页的操作失效时，你可以点此尝试手动获取网页Cookie",
+            style: TextStyle(
                 color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_white
-                    : os_black,
-              ),
-            ),
-          ],
+                    ? os_dark_dark_white
+                    : os_deep_grey),
+          ),
+          onTap: () async {
+            showToast(context: context, type: XSToast.loading, txt: "加载中");
+            await getWebCookie();
+            hideToast();
+            await Future.delayed(Duration(milliseconds: 50));
+            showToast(context: context, type: XSToast.success, txt: "获取成功！");
+          },
         ),
-        subtitle: Text(
-          "即将退出登录，并删除你在本地的所有个人信息和收藏，请确认",
-          style: TextStyle(
-            color: os_deep_grey,
+      ),
+      Container(height: 15),
+      ResponsiveWidget(
+        child: ListTile(
+          onTap: () {
+            showModal(
+                context: context,
+                title: "请确认",
+                cont: "即将退出登录，并删除你在本地的所有个人信息和收藏，请确认",
+                confirm: () {
+                  UserInfoProvider provider =
+                      Provider.of<UserInfoProvider>(context, listen: false);
+                  Provider.of<MsgProvider>(context, listen: false).clearMsg();
+                  provider.data = null;
+                  provider.refresh();
+                  setStorage(key: "myinfo", value: "");
+                  setStorage(key: "topic_like", value: "");
+                  setStorage(key: "history", value: "[]");
+                  setStorage(key: "draft", value: "[]");
+                  setStorage(key: "search-history", value: "[]");
+                  setState(() {});
+                  Navigator.pop(context);
+                });
+          },
+          title: Row(
+            children: [
+              Icon(Icons.logout,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black),
+              Container(width: 5),
+              Text(
+                "退出登录",
+                style: TextStyle(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
+                ),
+              ),
+            ],
+          ),
+          subtitle: Text(
+            "即将退出登录，并删除你在本地的所有个人信息和收藏，请确认",
+            style: TextStyle(
+              color: os_deep_grey,
+            ),
           ),
         ),
       ),
       Container(height: 5),
-      ListTile(
-        subtitle: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "快速切换账号",
-              style: TextStyle(
-                color: os_deep_grey,
+      ResponsiveWidget(
+        child: ListTile(
+          subtitle: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "快速切换账号",
+                style: TextStyle(
+                  color: os_deep_grey,
+                ),
               ),
-            ),
-            IconButton(
-              onPressed: () {
-                _setManage();
-              },
-              icon: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.refresh,
-                    size: 20,
-                    color: os_color,
-                  ),
-                ],
-              ),
-            )
-          ],
+              IconButton(
+                onPressed: () {
+                  _setManage();
+                },
+                icon: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.refresh,
+                      size: 20,
+                      color: os_color,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
       Container(height: 10),
     ]);
     for (int i = 0; i < accountData.length; i++) {
-      tmp.add(ListTile(
-        title: Text(
-          accountData[i]["name"],
-          style: TextStyle(
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_white
-                : os_black,
+      tmp.add(ResponsiveWidget(
+        child: ListTile(
+          title: Text(
+            accountData[i]["name"],
+            style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
           ),
-        ),
-        onTap: () {
-          if (i == logined) return;
-          _switchLogin(accountData[i]["name"], accountData[i]["password"], i);
-        },
-        trailing: Container(
-          width: 100,
-          height: 50,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              IconButton(
-                onPressed: () {
-                  if (i == logined) return;
-                  _switchLogin(
-                      accountData[i]["name"], accountData[i]["password"], i);
-                },
-                icon: Icon(
-                  logined == i
-                      ? Icons.radio_button_checked_outlined
-                      : Icons.radio_button_off_outlined,
-                  color: logined == i ? os_color : os_deep_grey,
+          onTap: () {
+            if (i == logined) return;
+            _switchLogin(accountData[i]["name"], accountData[i]["password"], i);
+          },
+          trailing: Container(
+            width: 100,
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    if (i == logined) return;
+                    _switchLogin(
+                        accountData[i]["name"], accountData[i]["password"], i);
+                  },
+                  icon: Icon(
+                    logined == i
+                        ? Icons.radio_button_checked_outlined
+                        : Icons.radio_button_off_outlined,
+                    color: logined == i ? os_color : os_deep_grey,
+                  ),
                 ),
-              ),
-              IconButton(
-                onPressed: () {
-                  showModal(
-                    context: context,
-                    title: "请确认",
-                    cont: "是否要删除该账号信息，此操作不可逆",
-                    confirm: () {
-                      _deleteAccount(accountData[i]["name"]);
-                    },
-                  );
-                },
-                icon: Icon(
-                  Icons.delete_outline_rounded,
-                  color: os_deep_grey,
+                IconButton(
+                  onPressed: () {
+                    showModal(
+                      context: context,
+                      title: "请确认",
+                      cont: "是否要删除该账号信息，此操作不可逆",
+                      confirm: () {
+                        _deleteAccount(accountData[i]["name"]);
+                      },
+                    );
+                  },
+                  icon: Icon(
+                    Icons.delete_outline_rounded,
+                    color: os_deep_grey,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ));

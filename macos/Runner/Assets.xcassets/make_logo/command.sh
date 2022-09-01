@@ -1,0 +1,10 @@
+sips -z 16 16 ICON.png --out tmp.iconset/icon-16.png
+sips -z 32 32 ICON.png --out tmp.iconset/icon-16@2x.png
+sips -z 32 32 ICON.png --out tmp.iconset/icon-32.png
+sips -z 64 64 ICON.png --out tmp.iconset/icon-32@2x.png
+sips -z 128 128 ICON.png --out tmp.iconset/icon-128.png
+sips -z 256 256 ICON.png --out tmp.iconset/icon-128@2x.png
+sips -z 256 256 ICON.png --out tmp.iconset/icon-256.png
+sips -z 512 512 ICON.png --out tmp.iconset/icon-256@2x.png
+sips -z 512 512 ICON.png --out tmp.iconset/icon-512.png
+sips -z 1024 1024 ICON.png --out tmp.iconset/icon-512@2x.png

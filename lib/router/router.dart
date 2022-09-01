@@ -32,10 +32,14 @@ import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/page/topic/topic_edit.dart';
 import 'package:offer_show/page/user_list/user_list.dart';
 import 'package:offer_show/page/waterTask/task_list.dart';
+import 'package:offer_show/page/waterTask/water_inout_detail.dart';
 import 'package:offer_show/page/waterTask/water_task.dart';
+import 'package:offer_show/page/water_total/water_total.dart';
 
 final routers = {
   "/": () => Start(),
+  "/water_inout_detail": () => WaterInoutDetail(),
+  "/water_total": () => WaterTotal(),
   "/list": (data) => CollectionDetail(data: data),
   "/scan_qrcode": () => ScanQRCode(),
   "/body": () => Home(),

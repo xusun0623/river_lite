@@ -10,6 +10,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/topic_formhash.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
@@ -131,6 +132,7 @@ class _CommentState extends State<Comment> {
           padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
           child: DetailCont(
             data: e,
+            removeSelectable: true,
             imgLists: imgLists,
           ),
         ));
@@ -185,7 +187,7 @@ class _CommentState extends State<Comment> {
   }
 
   void _showMore() async {
-    Vibrate.feedback(FeedbackType.impact);
+    XSVibrate();
     List<ActionItem> _buildAction() {
       List<ActionItem> tmp = [];
       String copy_txt = "";
@@ -205,13 +207,13 @@ class _CommentState extends State<Comment> {
               showToast(context: context, type: XSToast.success, txt: "复制成功！");
             }),
       );
-      tmp.add(
-        ActionItem(
-            title: "回复+1",
-            onPressed: () {
-              if (widget.add_1 != null) widget.add_1();
-            }),
-      );
+      // tmp.add(
+      //   ActionItem(
+      //       title: "回复+1",
+      //       onPressed: () {
+      //         if (widget.add_1 != null) widget.add_1();
+      //       }),
+      // );
       if (is_me)
         tmp.add(ActionItem(
           title: widget.data["poststick"] == 1 ? "取消置顶评论" : "置顶评论",
@@ -448,58 +450,61 @@ class _CommentState extends State<Comment> {
                           ),
                         ),
                       ),
-                      _buildContBody(widget.data["reply_content"]),
                       widget.data["quote_content"] != ""
-                          ? Container(
-                              width: MediaQuery.of(context).size.width -
-                                  (MediaQuery.of(context).size.width >
-                                          BigWidthScreen
-                                      ? (MediaQuery.of(context).size.width -
-                                          BigWidthScreen)
-                                      : 0) -
-                                  75,
-                              padding: EdgeInsets.fromLTRB(16, 13, 16, 13),
-                              margin: EdgeInsets.only(top: 10),
-                              decoration: BoxDecoration(
-                                color:
-                                    Provider.of<ColorProvider>(context).isDark
-                                        ? Color(0x11FFFFFF)
-                                        : Color(0x09000000),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(13)),
-                              ),
-                              child: RichText(
-                                text: TextSpan(
-                                    style: TextStyle(fontSize: 14),
-                                    children: [
-                                      TextSpan(
-                                        text: "回复@" +
-                                            widget.data["quote_content"]
-                                                .split(" 发表于")[0] +
-                                            ": ",
-                                        style: TextStyle(
-                                          color: Provider.of<ColorProvider>(
-                                                      context)
-                                                  .isDark
-                                              ? Color(0xFF64BDFF)
-                                              : os_color,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: widget.data["quote_content"]
-                                            .split("发表于")[1]
-                                            .split("\n")[1],
-                                        style: TextStyle(
+                          ? Transform.translate(
+                              offset: Offset(-7, 0),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width -
+                                    (MediaQuery.of(context).size.width >
+                                            BigWidthScreen
+                                        ? (MediaQuery.of(context).size.width -
+                                            BigWidthScreen)
+                                        : 0) -
+                                    75,
+                                padding: EdgeInsets.fromLTRB(15, 13, 15, 13),
+                                margin: EdgeInsets.only(top: 10),
+                                decoration: BoxDecoration(
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? Color(0x11FFFFFF)
+                                          : Color(0x09000000),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(13)),
+                                ),
+                                child: RichText(
+                                  text: TextSpan(
+                                      style: TextStyle(fontSize: 14),
+                                      children: [
+                                        TextSpan(
+                                          text: "回复@" +
+                                              widget.data["quote_content"]
+                                                  .split(" 发表于")[0] +
+                                              ": ",
+                                          style: TextStyle(
                                             color: Provider.of<ColorProvider>(
                                                         context)
                                                     .isDark
-                                                ? os_dark_white
-                                                : Color(0xFF464646)),
-                                      ),
-                                    ]),
+                                                ? Color(0xFF64BDFF)
+                                                : os_color,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: widget.data["quote_content"]
+                                              .split("发表于")[1]
+                                              .split("\n")[1],
+                                          style: TextStyle(
+                                              color: Provider.of<ColorProvider>(
+                                                          context)
+                                                      .isDark
+                                                  ? os_dark_white
+                                                  : Color(0xFF464646)),
+                                        ),
+                                      ]),
+                                ),
                               ),
                             )
                           : Container(),
+                      _buildContBody(widget.data["reply_content"]),
                       widget.is_last
                           ? Container(
                               margin: EdgeInsets.only(top: 20),

@@ -10,6 +10,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
@@ -377,7 +378,7 @@ class _TopicReplyState extends State<TopicReply> {
                   ? os_light_dark_card
                   : (widget.backgroundColor ?? os_white),
               longPress: () {
-                Vibrate.feedback(FeedbackType.impact);
+                XSVibrate();
                 _moreAction();
               },
               tap: () async {

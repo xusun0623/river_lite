@@ -10,6 +10,7 @@ import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/nowMode.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
+import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
@@ -267,7 +268,7 @@ class _TopicColumnState extends State<TopicColumn> {
       if (_controller.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          Vibrate.feedback(FeedbackType.impact);
+          XSVibrate();
         }
       }
       if (_controller.position.pixels >= 0) {

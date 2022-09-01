@@ -1,3 +1,9 @@
+/*
+ * @Author: xusun000「xusun000@foxmail.com」 
+ * @Date: 2022-08-03 10:38:17 
+ * @Last Modified by:   xusun000 
+ * @Last Modified time: 2022-08-03 10:38:17 
+ */
 import 'dart:io';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
@@ -15,13 +21,9 @@ void main() {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: Color.fromRGBO(0, 0, 0, 0)),
     );
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
   runApp(MyApp());
-  if (Platform.isAndroid) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent),
-    );
-  }
 }
 
 class MyApp extends StatelessWidget {
