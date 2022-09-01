@@ -1,13 +1,12 @@
-![输入图片说明](App%20Icon.png)
+[点击访问Github同源仓库](https://github.com/xusun0623/river_lite)   
+   
+   
+   
 
-河畔Lite 1.1.2
+![输入图片说明](App%20Icon.png)
 
 # 河畔Lite App
 本Repo是电子科技大学官方校园论坛【清水河畔】的第三方客户端的开源代码仓库。此App轻量、简洁、设计优雅，拥有诸多特性和功能。  
-
-<div style="background-color: #1e4cf5;width: 100%;height: 40px;border-radius: 100px;margin: 20px 0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;" >
-    <a style="color: white;" href="https://github.com/xusun0623/river_lite">点击访问Github同源仓库</a>
-</div>
 
 ## 客户端下载（【提取码均为1234】）
 安卓客户端：[点击前往跳转下载安卓客户端](https://wwb.lanzouj.com/b027a448b)  
