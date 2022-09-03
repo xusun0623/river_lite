@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -91,60 +92,62 @@ class NavigatorCard extends StatefulWidget {
 class _NavigatorCardState extends State<NavigatorCard> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, widget.url);
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        decoration: BoxDecoration(
-            color: Provider.of<ColorProvider>(context).isDark
-                ? Color(0x33ffffff)
-                : os_white,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x07000000),
-                blurRadius: 10,
-                offset: Offset(3, 3),
+    return ResponsiveWidget(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, widget.url);
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          decoration: BoxDecoration(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? Color(0x33ffffff)
+                  : os_white,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0x07000000),
+                  blurRadius: 10,
+                  offset: Offset(3, 3),
+                ),
+              ]),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_white
+                          : Color(0xFF333344),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Container(height: 3),
+                  Text(
+                    widget.tip,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : os_deep_grey,
+                      // fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-            ]),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_white
-                        : Color(0xFF333344),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Container(height: 3),
-                Text(
-                  widget.tip,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_dark_white
-                        : os_deep_grey,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            os_svg(
-              path: widget.img,
-              // width: 80,
-              height: 80,
-            )
-          ],
+              os_svg(
+                path: widget.img,
+                // width: 80,
+                height: 80,
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
+import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -56,6 +57,7 @@ class Comment extends StatefulWidget {
 class _CommentState extends State<Comment> {
   var liked = 0;
   bool is_me = false;
+  String blackKeyWord;
 
   _getLikedStatus() async {
     String tmp = await getStorage(
@@ -69,7 +71,7 @@ class _CommentState extends State<Comment> {
     }
   }
 
-  void _tapLike() async {
+  _tapLike() async {
     if (liked == 1) return;
     liked = 1;
     widget.data["extraPanel"][0]["extParams"]["recommendAdd"]++;
@@ -141,7 +143,7 @@ class _CommentState extends State<Comment> {
     return Column(children: tmp);
   }
 
-  void stickyForm() async {
+  stickyForm() async {
     showToast(context: context, type: XSToast.loading, txt: "请稍后…");
     String formhash = await getTopicFormHash(widget.topic_id);
     String fid = widget.fid.toString();
@@ -186,7 +188,170 @@ class _CommentState extends State<Comment> {
     }
   }
 
-  void _showMore() async {
+  _feedbackSuccess() async {
+    showToast(
+      context: context,
+      type: XSToast.success,
+      txt: "已举报",
+    );
+  }
+
+  _feedback() async {
+    String txt = "";
+    showModalBottomSheet(
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
+          ? os_light_dark_card
+          : os_white,
+      context: context,
+      builder: (context) {
+        return Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: 30,
+          ),
+          height: MediaQuery.of(context).size.height - 100,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(height: 30),
+              Text(
+                "请输入举报内容",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
+                ),
+              ),
+              Container(height: 10),
+              Container(
+                height: 60,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 15,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  color:
+                      Provider.of<ColorProvider>(context, listen: false).isDark
+                          ? os_white_opa
+                          : os_grey,
+                ),
+                child: Center(
+                  child: TextField(
+                    onChanged: (e) {
+                      txt = e;
+                    },
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? os_dark_white
+                          : os_black,
+                    ),
+                    cursorColor: os_deep_blue,
+                    decoration: InputDecoration(
+                        hintText: "请输入",
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color:
+                              Provider.of<ColorProvider>(context, listen: false)
+                                      .isDark
+                                  ? os_dark_dark_white
+                                  : os_deep_grey,
+                        )),
+                  ),
+                ),
+              ),
+              Container(height: 10),
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: myInkWell(
+                      tap: () {
+                        Navigator.pop(context);
+                      },
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? os_white_opa
+                          : Color(0x16004DFF),
+                      widget: Container(
+                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                        height: 40,
+                        child: Center(
+                          child: Text(
+                            "取消",
+                            style: TextStyle(
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_dark_white
+                                  : os_deep_blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      radius: 12.5,
+                    ),
+                  ),
+                  Container(
+                    child: myInkWell(
+                      tap: () async {
+                        await Api().user_report({
+                          "idType": "post",
+                          "message": txt,
+                          "id": widget.data["reply_id"]
+                        });
+                        Navigator.pop(context);
+                        _feedbackSuccess();
+                      },
+                      color: os_deep_blue,
+                      widget: Container(
+                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                        height: 40,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.done, color: os_white, size: 18),
+                              Container(width: 5),
+                              Text(
+                                "完成",
+                                style: TextStyle(
+                                  color: os_white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      radius: 12.5,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  _blackID() async {
+    if (_getBlack()) {
+      await removeBlackWord(widget.data["reply_id"].toString(), context);
+    } else {
+      await setBlackWord(widget.data["reply_id"].toString(), context);
+    }
+    setState(() {});
+  }
+
+  _showMore() async {
     XSVibrate();
     List<ActionItem> _buildAction() {
       List<ActionItem> tmp = [];
@@ -207,13 +372,18 @@ class _CommentState extends State<Comment> {
               showToast(context: context, type: XSToast.success, txt: "复制成功！");
             }),
       );
-      // tmp.add(
-      //   ActionItem(
-      //       title: "回复+1",
-      //       onPressed: () {
-      //         if (widget.add_1 != null) widget.add_1();
-      //       }),
-      // );
+      tmp.add(ActionItem(
+          title: "举报反馈",
+          onPressed: () {
+            Navigator.pop(context);
+            _feedback();
+          }));
+      tmp.add(ActionItem(
+          title: _getBlack() ? "取消屏蔽此帖子" : "屏蔽此贴的ID",
+          onPressed: () {
+            Navigator.pop(context);
+            _blackID();
+          }));
       if (is_me)
         tmp.add(ActionItem(
           title: widget.data["poststick"] == 1 ? "取消置顶评论" : "置顶评论",
@@ -239,9 +409,21 @@ class _CommentState extends State<Comment> {
     });
   }
 
+  bool _getBlack() {
+    bool flag = false;
+    Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
+      if (widget.data["reply_id"].toString().contains(element)) {
+        flag = true;
+        blackKeyWord = element;
+      }
+    });
+    return flag;
+  }
+
   @override
   void initState() {
     super.initState();
+    _getBlack();
     _getIsMeTopic();
     _getLikedStatus();
   }
@@ -504,7 +686,11 @@ class _CommentState extends State<Comment> {
                               ),
                             )
                           : Container(),
-                      _buildContBody(widget.data["reply_content"]),
+                      _getBlack()
+                          ? _buildContBody([
+                              {"infor": "此回复已被你屏蔽", "type": 0}
+                            ])
+                          : _buildContBody(widget.data["reply_content"]),
                       widget.is_last
                           ? Container(
                               margin: EdgeInsets.only(top: 20),
@@ -557,7 +743,6 @@ class _CommentState extends State<Comment> {
   Widget build(BuildContext context) {
     return isDesktop()
         ? myInkWell(
-            //适配大屏模式
             longPress: () => _longPress(),
             tap: () => _tap(),
             color: Colors.transparent,

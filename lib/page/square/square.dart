@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
@@ -35,10 +36,11 @@ class _SquareState extends State<Square> {
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
-    tmp.add(SpecialSquareCard());
+    tmp.add(ResponsiveWidget(child: SpecialSquareCard()));
     if (data != null && data.length != 0) {
       for (var i = 0; i < data.length; i++) {
-        tmp.add(SquareCard(data: data[i], index: i + 1));
+        tmp.add(
+            ResponsiveWidget(child: SquareCard(data: data[i], index: i + 1)));
       }
     }
     return tmp;
