@@ -685,10 +685,6 @@ class _TopicState extends State<Topic> {
                   )
                 : myInkWell(
                     color: _widgetBackgroundColor(),
-                    longPress: () {
-                      XSVibrate();
-                      _moreAction();
-                    },
                     tap: () => _tapWidget(),
                     widget: _topicCont(),
                     radius: 10,

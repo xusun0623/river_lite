@@ -1565,7 +1565,12 @@ class _RightTopSendState extends State<RightTopSend> {
           ),
           child: Center(
             child: Container(
-              child: Text("发布"),
+              child: Text(
+                "发布",
+                style: TextStyle(
+                  color: os_white,
+                ),
+              ),
             ),
           ),
         ),

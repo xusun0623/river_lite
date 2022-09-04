@@ -51,7 +51,13 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             initialRoute: "/",
             theme: ThemeData(
+              appBarTheme: AppBarTheme(
+                surfaceTintColor: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_back
+                    : os_back,
+              ),
               primaryColor: os_color,
+              useMaterial3: true,
               // fontFamily: "MiSans",
             ),
             onGenerateRoute: (settings) {

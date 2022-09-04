@@ -170,7 +170,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
         Navigator.pushNamed(context, "/new", arguments: 25);
       },
       child: ListView(
-        physics: BouncingScrollPhysics(),
+        // physics: BouncingScrollPhysics(),
         controller: _scrollController,
         children: t,
       ),

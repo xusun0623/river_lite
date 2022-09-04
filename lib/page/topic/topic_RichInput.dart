@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
@@ -15,6 +18,7 @@ import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/page/topic/topic_sendFunc.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
+import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class RichInput extends StatefulWidget {
@@ -255,6 +259,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                               );
                             },
                           ),
+                          SwitchHead(),
                         ],
                       ),
                     ),
@@ -386,6 +391,57 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
               : Container(),
         ],
       ),
+    );
+  }
+}
+
+class SwitchHead extends StatefulWidget {
+  const SwitchHead({Key key}) : super(key: key);
+
+  @override
+  State<SwitchHead> createState() => _SwitchHeadState();
+}
+
+class _SwitchHeadState extends State<SwitchHead> {
+  String head_url = "";
+
+  getHead() async {
+    String myinfo_txt = await getStorage(key: "myinfo", initData: "");
+    Map myinfo_map = jsonDecode(myinfo_txt);
+    head_url = myinfo_map["avatar"];
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getHead();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: head_url == ""
+          ? Container()
+          : myInkWell(
+              radius: 100,
+              widget: Padding(
+                padding: const EdgeInsets.all(12.5),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.network(
+                    head_url,
+                    width: 26.5,
+                    height: 26.5,
+                  ),
+                ),
+              ),
+              color: Colors.transparent,
+              tap: () {
+                Navigator.pushNamed(context, "/account")
+                    .then((value) => getHead());
+              },
+            ),
     );
   }
 }
