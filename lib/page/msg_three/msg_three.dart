@@ -205,6 +205,9 @@ class _MsgThreeState extends State<MsgThree> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : colors[widget.type],
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : colors[widget.type],
@@ -404,7 +407,8 @@ class _ForumCardState extends State<ForumCard> {
               width: MediaQuery.of(context).size.width -
                   (isDesktop() ? (MinusSpace(context)) + 12 : 0) -
                   headImgSize -
-                  64,
+                  64 -
+                  15,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -509,6 +513,7 @@ class BackIcon extends StatelessWidget {
       icon: Icon(
         Icons.arrow_back_ios_new_rounded,
         size: 16,
+        color: os_white,
       ),
     );
   }
