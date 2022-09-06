@@ -396,7 +396,6 @@ class _HistoryCardState extends State<HistoryCard> {
   _setHistory() async {
     var history_data = await getStorage(key: "history", initData: "[]");
     List history_arr = jsonDecode(history_data);
-    bool flag = false;
     for (int i = 0; i < history_arr.length; i++) {
       var ele = history_arr[i];
       if (ele["userAvatar"] == widget.data["userAvatar"] &&

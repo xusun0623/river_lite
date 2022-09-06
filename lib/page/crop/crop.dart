@@ -15,7 +15,6 @@ import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
-import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class CropImg extends StatefulWidget {

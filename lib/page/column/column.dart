@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:lottie/lottie.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
@@ -526,20 +525,6 @@ class DefineTabBar extends StatefulWidget {
 }
 
 class _DefineTabBarState extends State<DefineTabBar> {
-  List<Widget> _buildList() {
-    List<Widget> tmp = [];
-    for (var i = 0; i < widget.themes.length; i++) {
-      tmp.add(DefineTabBarTip(
-        tap: () {
-          widget.tap(i);
-        },
-        selected: widget.select == i,
-        txt: widget.themes[i],
-      ));
-    }
-    return tmp;
-  }
-
   @override
   void initState() {
     super.initState();

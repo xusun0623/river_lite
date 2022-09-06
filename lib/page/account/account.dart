@@ -313,7 +313,6 @@ class _AccountState extends State<Account> {
 
   @override
   Widget build(BuildContext context) {
-    TabShowProvider provider = Provider.of<TabShowProvider>(context);
     return Scaffold(
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,

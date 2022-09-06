@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -182,14 +181,12 @@ class _MeListGroupState extends State<MeListGroup> {
     return Column(
       children: [
         MeList(txt: "应用设置", index: 0, icon: Icons.settings_outlined),
-        // MeList(txt: "水滴相关", index: 6, icon: Icons.opacity),
         MeList(txt: "账号管理", index: 1, icon: Icons.person_outline),
         MeList(
           txt: "意见&Bug反馈",
           index: 2,
           icon: Icons.feedback_outlined,
         ),
-        // MeList(txt: "拉黑&黑名单", index: 4),
         MeList(txt: "关于", index: 3, icon: Icons.info_outline),
       ],
     );

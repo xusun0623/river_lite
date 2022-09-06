@@ -346,8 +346,6 @@ class _LoginInputState extends State<LoginInput> {
   bool isHide = true;
   TextEditingController u_controller = new TextEditingController();
   TextEditingController p_controller = new TextEditingController();
-  // FocusNode u_focus = new FocusNode();
-  // FocusNode p_focus = new FocusNode();
   @override
   Widget build(BuildContext context) {
     return Container(
