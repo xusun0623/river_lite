@@ -6,6 +6,7 @@ import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/maxwidth.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -26,107 +27,110 @@ class _AboutState extends State<About> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return Baaaar(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          elevation: 0,
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          centerTitle: true,
+          title: Text(
+            "关于",
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.chevron_left_rounded),
+          ),
+        ),
         backgroundColor:
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        elevation: 0,
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        centerTitle: true,
-        title: Text(
-          "关于",
-          style: TextStyle(
-            fontSize: 16,
-          ),
-        ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.chevron_left_rounded),
-        ),
-      ),
-      backgroundColor:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      body: ListView(
-        controller: _scrollController,
-        physics: BouncingScrollPhysics(),
-        children: [
-          AboutCard(
-            head: Icon(
-              Icons.chat_bubble,
-              color: os_wonderful_color[0],
-              size: 40,
+        body: ListView(
+          controller: _scrollController,
+          physics: BouncingScrollPhysics(),
+          children: [
+            AboutCard(
+              head: Icon(
+                Icons.chat_bubble,
+                color: os_wonderful_color[0],
+                size: 40,
+              ),
+              title: "UESTC官方论坛",
+              cont:
+                  "清水河畔是电子科技大学官方论坛（bbs.uestc.edu.cn），由电子科技大学网络文化建设工作办公室指导，星辰工作室开发并提供技术支持。\n2007年11月13日正式开放注册。欢迎你加入到清水河畔大家庭。",
             ),
-            title: "UESTC官方论坛",
-            cont:
-                "清水河畔是电子科技大学官方论坛（bbs.uestc.edu.cn），由电子科技大学网络文化建设工作办公室指导，星辰工作室开发并提供技术支持。\n2007年11月13日正式开放注册。欢迎你加入到清水河畔大家庭。",
-          ),
-          AboutCard(
-            head: Icon(
-              Icons.cloud,
-              color: os_wonderful_color[5],
-              size: 40,
+            AboutCard(
+              head: Icon(
+                Icons.cloud,
+                color: os_wonderful_color[5],
+                size: 40,
+              ),
+              title: "开源地址",
+              cont: "https://gitee.com/xusun000/offershow",
+              withUrl: true,
             ),
-            title: "开源地址",
-            cont: "https://gitee.com/xusun000/offershow",
-            withUrl: true,
-          ),
-          AboutCard(
-            head: Icon(
-              Icons.burst_mode,
-              color: os_wonderful_color[4],
-              size: 40,
+            AboutCard(
+              head: Icon(
+                Icons.burst_mode,
+                color: os_wonderful_color[4],
+                size: 40,
+              ),
+              title: "设计文件",
+              cont:
+                  "https://www.figma.com/file/McSp35qqjsUuWAbucxXdXn/河畔Max版-XS-Designed",
+              withUrl: true,
             ),
-            title: "设计文件",
-            cont:
-                "https://www.figma.com/file/McSp35qqjsUuWAbucxXdXn/河畔Max版-XS-Designed",
-            withUrl: true,
-          ),
-          AboutCard(
-            head: Icon(
-              Icons.qr_code,
-              color: os_wonderful_color[1],
-              size: 40,
+            AboutCard(
+              head: Icon(
+                Icons.qr_code,
+                color: os_wonderful_color[1],
+                size: 40,
+              ),
+              title: "开发相关",
+              cont:
+                  '''河畔Lite由开源跨端框架Flutter开发完成。Flutter框架使用Skia调用GPU直接渲染，渲染速度和表现力十分优秀，并可以移植到诸多平台。所有代码和设计文件均开源，任何人可以查看、修改、商用、重新分发。''',
             ),
-            title: "开发相关",
-            cont:
-                '''河畔Lite由开源跨端框架Flutter开发完成。Flutter框架使用Skia调用GPU直接渲染，渲染速度和表现力十分优秀，并可以移植到诸多平台。所有代码和设计文件均开源，任何人可以查看、修改、商用、重新分发。''',
-          ),
-          AboutCard(
-            head: Icon(
-              Icons.verified_user,
-              color: os_wonderful_color[2],
-              size: 40,
+            AboutCard(
+              head: Icon(
+                Icons.verified_user,
+                color: os_wonderful_color[2],
+                size: 40,
+              ),
+              title: "鸣谢",
+              cont:
+                  '''测试者：Star🌟、北冥小鱼、weijifen、TYTSSN、hola、fix\n功能&Bug贡献者：司空临风、炎舞、月夜的飘零\n代码贡献者：Dnieper、方觉\n河畔水滴答题题库：Zhenger666\n代码仓库：https://gitee.com\n设计工具：https://figma.com''',
             ),
-            title: "鸣谢",
-            cont:
-                '''测试者：Star🌟、北冥小鱼、weijifen、TYTSSN、hola、fix\n功能&Bug贡献者：司空临风、炎舞、月夜的飘零\n代码贡献者：Dnieper、方觉\n河畔水滴答题题库：Zhenger666\n代码仓库：https://gitee.com\n设计工具：https://figma.com''',
-          ),
-          AboutCard(
-            head: Icon(
-              Icons.person,
-              color: os_wonderful_color[3],
-              size: 50,
+            AboutCard(
+              head: Icon(
+                Icons.person,
+                color: os_wonderful_color[3],
+                size: 50,
+              ),
+              title: "开发&设计者",
+              cont: '''xusun000''',
             ),
-            title: "开发&设计者",
-            cont: '''xusun000''',
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 30),
-            child: Center(
-              child: Text(
-                "@UESTC 河畔Lite",
-                style: TextStyle(
-                  color: os_deep_grey,
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 30),
+              child: Center(
+                child: Text(
+                  "@UESTC 河畔Lite",
+                  style: TextStyle(
+                    color: os_deep_grey,
+                  ),
                 ),
               ),
             ),
-          ),
-          Container(height: 10),
-        ],
+            Container(height: 10),
+          ],
+        ),
       ),
     );
   }

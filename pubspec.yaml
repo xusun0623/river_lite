@@ -9,6 +9,8 @@ environment:
 
 dependencies:
   webview_flutter: ^3.0.4
+  bitsdojo_window: 
+  # window_manager: ^0.2.7
   images_picker: ^1.2.11
   flick_video_player: ^0.5.0
   video_player: ^2.4.6

@@ -9,6 +9,7 @@ import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -226,39 +227,42 @@ class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     TabShowProvider provider = Provider.of<TabShowProvider>(context);
-    return Scaffold(
-      backgroundColor:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
-      appBar: AppBar(
+    return Baaaar(
+      child: Scaffold(
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : os_white,
-        elevation: 0,
-        title: Text(
-          "应用设置",
-          style: TextStyle(
-            fontSize: 16,
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_white
-                : os_black,
+        appBar: AppBar(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_white,
+          elevation: 0,
+          title: Text(
+            "应用设置",
+            style: TextStyle(
+              fontSize: 16,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
+          ),
+          foregroundColor: os_black,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.chevron_left_rounded,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
           ),
         ),
-        foregroundColor: os_black,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.chevron_left_rounded,
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_white
-                : os_black,
-          ),
+        body: ListView(
+          physics: BouncingScrollPhysics(),
+          children: _buildWidget(),
         ),
-      ),
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        children: _buildWidget(),
       ),
     );
   }

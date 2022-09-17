@@ -5,6 +5,7 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/mid_request.dart';
@@ -113,28 +114,32 @@ class _TaskListState extends State<TaskList> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        data = [];
-        return await _getData(true);
-      },
-      child: BackToTop(
-        show: showBackToTop,
-        bottom: 100,
-        color: Color(0x88FFFFFF),
-        widget: Icon(
-          Icons.arrow_drop_up,
-          size: 25,
-          color: os_white,
-        ),
-        controller: _scrollController,
-        child: ListView(
-          controller: _scrollController,
-          children: [
-            ..._buildCont(),
-            load_done ? Container() : BottomLoading(),
-          ],
-          physics: BouncingScrollPhysics(),
+    return Baaaar(
+      child: Scaffold(
+        body: RefreshIndicator(
+          onRefresh: () async {
+            data = [];
+            return await _getData(true);
+          },
+          child: BackToTop(
+            show: showBackToTop,
+            bottom: 100,
+            color: Color(0x88FFFFFF),
+            widget: Icon(
+              Icons.arrow_drop_up,
+              size: 25,
+              color: os_white,
+            ),
+            controller: _scrollController,
+            child: ListView(
+              controller: _scrollController,
+              children: [
+                ..._buildCont(),
+                load_done ? Container() : BottomLoading(),
+              ],
+              physics: BouncingScrollPhysics(),
+            ),
+          ),
         ),
       ),
     );

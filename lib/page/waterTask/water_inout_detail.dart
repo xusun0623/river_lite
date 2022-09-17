@@ -5,6 +5,7 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/mid_request.dart';
@@ -115,47 +116,49 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_back
-            : os_white,
-        elevation: 0,
-        title: Text("积分记录", style: TextStyle(fontSize: 16)),
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.chevron_left_rounded),
-        ),
-      ),
-      backgroundColor:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      body: RefreshIndicator(
-        onRefresh: () async {
-          data = [];
-          return await _getData(true);
-        },
-        child: BackToTop(
-          show: showBackToTop,
-          bottom: 100,
-          color: Color(0x88FFFFFF),
-          widget: Icon(
-            Icons.arrow_drop_up,
-            size: 25,
-            color: os_white,
+    return Baaaar(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_white,
+          elevation: 0,
+          title: Text("积分记录", style: TextStyle(fontSize: 16)),
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.chevron_left_rounded),
           ),
-          controller: _scrollController,
-          child: ListView(
+        ),
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            data = [];
+            return await _getData(true);
+          },
+          child: BackToTop(
+            show: showBackToTop,
+            bottom: 100,
+            color: Color(0x88FFFFFF),
+            widget: Icon(
+              Icons.arrow_drop_up,
+              size: 25,
+              color: os_white,
+            ),
             controller: _scrollController,
-            children: [
-              ..._buildCont(),
-              load_done ? Container() : BottomLoading(),
-            ],
-            physics: BouncingScrollPhysics(),
+            child: ListView(
+              controller: _scrollController,
+              children: [
+                ..._buildCont(),
+                load_done ? Container() : BottomLoading(),
+              ],
+              physics: BouncingScrollPhysics(),
+            ),
           ),
         ),
       ),

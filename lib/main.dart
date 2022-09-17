@@ -7,6 +7,7 @@
 import 'dart:io';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +17,7 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-void main() {
+void main() async {
   if (Platform.isAndroid) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: Color.fromRGBO(0, 0, 0, 0)),
@@ -24,6 +25,17 @@ void main() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
   runApp(MyApp());
+  if (Platform.isWindows) {
+    doWhenWindowReady(() {
+      final win = appWindow;
+      const initialSize = Size(1080, 720);
+      win.minSize = initialSize;
+      win.size = initialSize;
+      win.alignment = Alignment.center;
+      win.title = 'Hello World';
+      win.show();
+    });
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -51,6 +63,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             initialRoute: "/",
             theme: ThemeData(
+              fontFamily: '微软雅黑',
               appBarTheme: AppBarTheme(
                 surfaceTintColor: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_back
@@ -89,7 +102,7 @@ class MyApp extends StatelessWidget {
       ),
       light: ThemeData(),
       dark: ThemeData(),
-      initial: AdaptiveThemeMode.light,
+      // initial: AdaptiveThemeMode.dark,
     );
   }
 }

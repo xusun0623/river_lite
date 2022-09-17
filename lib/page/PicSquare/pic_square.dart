@@ -205,11 +205,13 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
                 controller: _tabController,
                 indicatorSize: TabBarIndicatorSize.tab,
                 labelColor: os_white,
-                onTap: ((value) {
+                onTap: ((value) async {
+                  showToast(context: context, type: XSToast.loading);
                   setState(() {
                     column_index = value;
                   });
-                  _getData();
+                  await _getData();
+                  hideToast();
                 }),
                 indicator: BubbleTabIndicator(
                   indicatorHeight: 25.0,
@@ -266,6 +268,17 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
                       refresh: () {
                         _getData();
                       },
+                      top: () {
+                        print("上一个");
+                        if (swiper_index != 0) {
+                          _swiperController.previous();
+                        }
+                      },
+                      down: () {
+                        if (swiper_index != photo.length) {
+                          _swiperController.next();
+                        }
+                      },
                       data: photo[index],
                       index: index + 1,
                     );
@@ -281,11 +294,15 @@ class PhotoCard extends StatefulWidget {
   Map data;
   int index;
   Function refresh;
+  Function top;
+  Function down;
   PhotoCard({
     Key key,
     this.data,
     this.index,
     this.refresh,
+    this.top,
+    this.down,
   }) : super(key: key);
 
   @override
@@ -298,6 +315,27 @@ class _PhotoCardState extends State<PhotoCard> {
   bool load_done = false;
   String blackKeyWord = ""; //拉黑关键字
   int index = 0;
+  SwiperController _swiperController = new SwiperController();
+
+  _last() {
+    _swiperController.previous();
+  }
+
+  _next() {
+    _swiperController.next();
+  }
+
+  _top() {
+    if (widget.top != null) {
+      widget.top();
+    }
+  }
+
+  _down() {
+    if (widget.down != null) {
+      widget.down();
+    }
+  }
 
   void _getLikeStatus() async {
     //获取点赞状态
@@ -624,6 +662,7 @@ class _PhotoCardState extends State<PhotoCard> {
                         onTap: (idx) {
                           _toBigThrough();
                         },
+                        controller: _swiperController,
                         onIndexChanged: (idx) async {
                           setState(() {
                             index = idx;
@@ -688,6 +727,18 @@ class _PhotoCardState extends State<PhotoCard> {
                 PicBottom(
                   index: widget.index,
                   isLiked: isLiked,
+                  last: () {
+                    this._last();
+                  },
+                  next: () {
+                    this._next();
+                  },
+                  top: () {
+                    this._top();
+                  },
+                  down: () {
+                    this._down();
+                  },
                   refresh: () {
                     if (widget.refresh != null) {
                       widget.refresh();
@@ -1051,6 +1102,10 @@ class PicBottom extends StatefulWidget {
   Function tapMore;
   Function tapDetail;
   Function refresh;
+  Function last;
+  Function next;
+  Function top;
+  Function down;
   int index;
   PicBottom({
     Key key,
@@ -1061,6 +1116,10 @@ class PicBottom extends StatefulWidget {
     this.tapDetail,
     this.refresh,
     this.index,
+    this.last,
+    this.next,
+    this.top,
+    this.down,
   }) : super(key: key);
 
   @override
@@ -1097,7 +1156,7 @@ class _PicBottomState extends State<PicBottom> {
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 15),
                   width: MediaQuery.of(context).size.width -
-                      (isDesktop() ? LeftNaviWidth : 0) -
+                      (isDesktop() ? LeftNaviWidth + 210 : 0) -
                       140,
                   child: Row(
                     children: [
@@ -1122,7 +1181,7 @@ class _PicBottomState extends State<PicBottom> {
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width -
-                              (isDesktop() ? LeftNaviWidth : 0) -
+                              (isDesktop() ? LeftNaviWidth + 210 : 0) -
                               180,
                           // color: os_grey,
                           child: Text(
@@ -1139,10 +1198,126 @@ class _PicBottomState extends State<PicBottom> {
                   ),
                 ),
                 Container(
-                  width: 90,
+                  width: isDesktop() ? 300 : 90,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      !isDesktop()
+                          ? Container()
+                          : GestureDetector(
+                              onTap: () {
+                                if (widget.top != null) {
+                                  widget.top();
+                                }
+                              },
+                              child: Container(
+                                color: Color.fromRGBO(0, 0, 0, 0.001),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 5,
+                                    vertical: 10,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "上一镜",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_upward,
+                                        size: 18,
+                                        color: os_white,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                      !isDesktop()
+                          ? Container()
+                          : GestureDetector(
+                              onTap: () {
+                                if (widget.down != null) {
+                                  widget.down();
+                                }
+                              },
+                              child: Container(
+                                color: Color.fromRGBO(0, 0, 0, 0.001),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 5,
+                                    vertical: 10,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "下一镜",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_downward,
+                                        size: 18,
+                                        color: os_white,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                      !isDesktop()
+                          ? Container()
+                          : GestureDetector(
+                              onTap: () {
+                                if (widget.last != null) {
+                                  widget.last();
+                                }
+                              },
+                              child: Container(
+                                color: Color.fromRGBO(0, 0, 0, 0.001),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 5,
+                                    vertical: 10,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.chevron_left_rounded,
+                                        color: os_white,
+                                        size: 20,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                      !isDesktop()
+                          ? Container()
+                          : GestureDetector(
+                              onTap: () {
+                                if (widget.next != null) {
+                                  widget.next();
+                                }
+                              },
+                              child: Container(
+                                color: Color.fromRGBO(0, 0, 0, 0.001),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 5,
+                                    vertical: 10,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.chevron_right_rounded,
+                                        color: os_white,
+                                        size: 20,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
                       GestureDetector(
                         onTap: () {
                           if (widget.tapLike != null) {

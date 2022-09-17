@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/question/answer.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -604,64 +605,67 @@ class _QuestionState extends State<Question> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor:
-            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left_rounded),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          "水滴答题",
-          style: TextStyle(
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_white
-                : os_black,
-            fontSize: 16,
+    return Baaaar(
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          leading: IconButton(
+            icon: Icon(Icons.chevron_left_rounded),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-        ),
-      ),
-      backgroundColor:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      body: Column(
-        children: [
-          load_done ? Container() : BottomLoading(color: Colors.transparent),
-          Container(
-            height: MediaQuery.of(context).size.height -
-                MediaQuery.of(context).padding.top -
-                (status == 1 || status == 2 ? 56 : 250),
-            child: ListView(
-              physics: BouncingScrollPhysics(),
-              //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关
-              children: status == 0
-                  ? doing()
-                  : status == 1
-                      ? bouns()
-                      : status == 2
-                          ? done()
-                          : haveNext(),
+          title: Text(
+            "水滴答题",
+            style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
+              fontSize: 16,
             ),
           ),
-          status == 0 && load_done
-              ? Container(
-                  height: 150,
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_back
-                      : os_back,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: bottom(),
-                  ),
-                )
-              : Container(),
-        ],
+        ),
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        body: Column(
+          children: [
+            load_done ? Container() : BottomLoading(color: Colors.transparent),
+            Container(
+              height: MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).padding.top -
+                  (status == 1 || status == 2 ? 56 : 250),
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关
+                children: status == 0
+                    ? doing()
+                    : status == 1
+                        ? bouns()
+                        : status == 2
+                            ? done()
+                            : haveNext(),
+              ),
+            ),
+            status == 0 && load_done
+                ? Container(
+                    height: 150,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_back
+                        : os_back,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: bottom(),
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
       ),
     );
   }

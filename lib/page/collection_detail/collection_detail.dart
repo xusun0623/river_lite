@@ -2,11 +2,13 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/collection.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
@@ -41,10 +43,10 @@ class _CollectionDetailState extends State<CollectionDetail> {
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
     data.forEach((element) {
-      tmp.add(ListCard(data: element));
+      tmp.add(ResponsiveWidget(child: ListCard(data: element)));
     });
     if (!load_done) {
-      tmp.add(BottomLoading());
+      tmp.add(ResponsiveWidget(child: BottomLoading()));
       tmp.add(Container(height: MediaQuery.of(context).size.height));
     }
     if (load_done && data.length <= 6) {
@@ -265,54 +267,67 @@ class _CollectionDetailState extends State<CollectionDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_back
-            : Color(0xFFF1F4F8),
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        elevation: 0,
-        title: showTopTitle
-            ? FadeInUp(
-                duration: Duration(milliseconds: 100),
-                child: Text(
-                  widget.data["name"],
-                  style: TextStyle(fontSize: 16),
-                ),
-              )
-            : Container(),
-        actions: load_card
-            ? [
-                FadeInUp(
-                  duration: Duration(milliseconds: 300),
-                  child: myInkWell(
-                    color: Colors.transparent,
-                    tap: () async {
-                      var url = base_url +
-                          "forum.php?mod=collection&op=${is_subscribed ? "unfo" : "follow"}&action=follow&ctid=${widget.data["list_id"]}&formhash=${formhash}&inajax=1&ajaxtarget=undefined";
-                      // print(url);
-                      showToast(
-                        context: context,
-                        type: XSToast.loading,
-                        txt: "请稍后…",
-                      );
-                      await XHttp().pureHttpWithCookie(
-                        hadCookie: true,
-                        url: url,
-                      );
-                      hideToast();
-                      setState(() {
-                        is_subscribed = !is_subscribed;
-                      });
-                    },
-                    widget: Row(
-                      children: [
-                        Text(
-                          is_subscribed ? "取消订阅" : "订阅",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+    return Baaaar(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : Color(0xFFF1F4F8),
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          elevation: 0,
+          title: showTopTitle
+              ? FadeInUp(
+                  duration: Duration(milliseconds: 100),
+                  child: Text(
+                    widget.data["name"],
+                    style: TextStyle(fontSize: 16),
+                  ),
+                )
+              : Container(),
+          actions: load_card
+              ? [
+                  FadeInUp(
+                    duration: Duration(milliseconds: 300),
+                    child: myInkWell(
+                      color: Colors.transparent,
+                      tap: () async {
+                        var url = base_url +
+                            "forum.php?mod=collection&op=${is_subscribed ? "unfo" : "follow"}&action=follow&ctid=${widget.data["list_id"]}&formhash=${formhash}&inajax=1&ajaxtarget=undefined";
+                        // print(url);
+                        showToast(
+                          context: context,
+                          type: XSToast.loading,
+                          txt: "请稍后…",
+                        );
+                        await XHttp().pureHttpWithCookie(
+                          hadCookie: true,
+                          url: url,
+                        );
+                        hideToast();
+                        setState(() {
+                          is_subscribed = !is_subscribed;
+                        });
+                      },
+                      widget: Row(
+                        children: [
+                          Text(
+                            is_subscribed ? "取消订阅" : "订阅",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: is_subscribed
+                                  ? (Provider.of<ColorProvider>(context).isDark
+                                      ? os_color
+                                      : os_deep_blue)
+                                  : (Provider.of<ColorProvider>(context).isDark
+                                      ? os_dark_dark_white
+                                      : os_dark_card),
+                            ),
+                          ),
+                          Container(width: 5),
+                          Icon(
+                            is_subscribed ? Icons.star : Icons.star_border,
                             color: is_subscribed
                                 ? (Provider.of<ColorProvider>(context).isDark
                                     ? os_color
@@ -321,68 +336,57 @@ class _CollectionDetailState extends State<CollectionDetail> {
                                     ? os_dark_dark_white
                                     : os_dark_card),
                           ),
-                        ),
-                        Container(width: 5),
-                        Icon(
-                          is_subscribed ? Icons.star : Icons.star_border,
-                          color: is_subscribed
-                              ? (Provider.of<ColorProvider>(context).isDark
-                                  ? os_color
-                                  : os_deep_blue)
-                              : (Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_dark_white
-                                  : os_dark_card),
-                        ),
-                        Container(width: 10),
-                      ],
+                          Container(width: 10),
+                        ],
+                      ),
+                      radius: 100,
                     ),
-                    radius: 100,
                   ),
-                ),
-              ]
-            : [],
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left_rounded),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+                ]
+              : [],
+          leading: IconButton(
+            icon: Icon(Icons.chevron_left_rounded),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
-      ),
-      backgroundColor: Provider.of<ColorProvider>(context).isDark
-          ? os_dark_back
-          : Color(0xFFF1F4F8),
-      body: BackToTop(
-        color: Provider.of<ColorProvider>(context).isDark
-            ? Color(0x33FFFFFF)
-            : [
-                Color(0xFF282d38),
-                Color(0xFFe9775d),
-                Color(0xFF282d38),
-              ][widget.data["type"]],
-        controller: _scrollController,
-        show: showBackToTop,
-        bottom: 100,
-        child: ListView(
-          physics: BouncingScrollPhysics(),
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : Color(0xFFF1F4F8),
+        body: BackToTop(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? Color(0x33FFFFFF)
+              : [
+                  Color(0xFF282d38),
+                  Color(0xFFe9775d),
+                  Color(0xFF282d38),
+                ][widget.data["type"]],
           controller: _scrollController,
-          children: [
-            Collection(data: widget.data),
-            Container(height: 20),
-            data.length == 0 && !load_done
-                ? Container()
-                : Center(
-                    child: Text(
-                      "- 本专辑收录的帖子 -",
-                      style: TextStyle(
-                        color: Color(0xFFA3A3A3),
+          show: showBackToTop,
+          bottom: 100,
+          child: ListView(
+            physics: BouncingScrollPhysics(),
+            controller: _scrollController,
+            children: [
+              ResponsiveWidget(child: Collection(data: widget.data)),
+              Container(height: 20),
+              data.length == 0 && !load_done
+                  ? Container()
+                  : Center(
+                      child: Text(
+                        "- 本专辑收录的帖子 -",
+                        style: TextStyle(
+                          color: Color(0xFFA3A3A3),
+                        ),
                       ),
                     ),
-                  ),
-            data.length == 0 && !load_done
-                ? Container()
-                : Container(height: 15),
-            ..._buildCont(),
-          ],
+              data.length == 0 && !load_done
+                  ? Container()
+                  : Container(height: 15),
+              ..._buildCont(),
+            ],
+          ),
         ),
       ),
     );
@@ -457,7 +461,9 @@ class _ListCardState extends State<ListCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width - 120,
+                    width: MediaQuery.of(context).size.width -
+                        MinusSpace(context) -
+                        120,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -488,7 +494,9 @@ class _ListCardState extends State<ListCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.width - 170,
+                        width: MediaQuery.of(context).size.width -
+                            MinusSpace(context) -
+                            170,
                         child: Text(
                           widget.data["name"] ?? "淘贴名称",
                           style: TextStyle(

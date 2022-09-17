@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/outer/card_swiper/swiper.dart';
 import 'package:offer_show/outer/card_swiper/swiper_controller.dart';
 import 'package:offer_show/util/interface.dart';
@@ -88,150 +90,162 @@ class _LoginState extends State<Login> {
     FocusNode u_focus = new FocusNode();
     FocusNode p_focus = new FocusNode();
 
-    return Scaffold(
-      appBar: AppBar(
+    return Baaaar(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_white,
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          elevation: 0,
+        ),
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : os_white,
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        elevation: 0,
-      ),
-      backgroundColor:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
-      body: showSuccess
-          ? Container(
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.done,
-                    size: 50,
-                    color: os_deep_blue,
-                  ),
-                  Container(height: 10),
-                  Text(
-                    "登录成功",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_dark_white
-                          : os_black,
+        body: showSuccess
+            ? Container(
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.done,
+                      size: 50,
+                      color: os_deep_blue,
                     ),
-                  ),
-                  Container(height: 10),
-                  Container(
-                    width: 300,
-                    child: Text(
-                      "你已成功登录清水河畔，请敬请享受来自河畔的体验吧",
-                      textAlign: TextAlign.center,
+                    Container(height: 10),
+                    Text(
+                      "登录成功",
                       style: TextStyle(
-                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
                         color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_dark_white
+                            ? os_dark_white
                             : os_black,
                       ),
                     ),
-                  ),
-                  Container(height: 300),
-                  GestureDetector(
-                    onTap: () {
-                      if (Navigator.canPop(context)) Navigator.pop(context);
-                    },
-                    child: Container(
-                      width: 150,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_light_dark_card
-                            : Color.fromRGBO(0, 77, 255, 0.1),
+                    Container(height: 10),
+                    Container(
+                      width: 300,
+                      child: Text(
+                        "你已成功登录清水河畔，请敬请享受来自河畔的体验吧",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_dark_white
+                              : os_black,
+                        ),
                       ),
-                      child: Center(
-                        child: Text(
-                          "确定",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Provider.of<ColorProvider>(context).isDark
-                                ? os_dark_dark_white
-                                : Color.fromRGBO(0, 77, 255, 1),
+                    ),
+                    Container(height: 300),
+                    GestureDetector(
+                      onTap: () {
+                        if (Navigator.canPop(context)) Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 150,
+                        height: 45,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_light_dark_card
+                              : Color.fromRGBO(0, 77, 255, 0.1),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "确定",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_dark_white
+                                  : Color.fromRGBO(0, 77, 255, 1),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(height: 100),
-                ],
+                    Container(height: 100),
+                  ],
+                ),
+              )
+            : Container(
+                child: Swiper(
+                  itemCount: 2,
+                  loop: false,
+                  // index: _swiperController.index,
+                  controller: _swiperController,
+                  itemBuilder: (BuildContext context, int index) {
+                    return [
+                      ListView(
+                        physics: BouncingScrollPhysics(),
+                        children: [
+                          LoginHead(),
+                          Container(height: 200),
+                          ResponsiveWidget(
+                            child: LoginSubmit(
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_light_dark_card
+                                  : Color(0xFF222222),
+                              tap: () {
+                                _swiperController.next();
+                              },
+                            ),
+                          ),
+                          Container(height: 15),
+                          ResponsiveWidget(
+                            child: LoginSubmit(
+                              txt: "注册账号",
+                              color: Color.fromRGBO(34, 34, 34, 0.1),
+                              fontColor:
+                                  Provider.of<ColorProvider>(context).isDark
+                                      ? os_dark_dark_white
+                                      : os_black,
+                              tap: () {
+                                launch(
+                                    "http://bbs.uestc.edu.cn/member.php?mod=register&mobile=no");
+                              },
+                            ),
+                          ),
+                          Container(height: 150),
+                        ],
+                      ),
+                      ListView(
+                        physics: BouncingScrollPhysics(),
+                        children: [
+                          ResponsiveWidget(
+                            child: LoginInput(
+                              u_focus: u_focus,
+                              p_focus: p_focus,
+                              change: (uname, pword) {
+                                username = uname;
+                                password = pword;
+                              },
+                            ),
+                          ),
+                          Container(height: 50),
+                          ResponsiveWidget(
+                            child: LoginSubmit(
+                              txt: "提交",
+                              tap: () {
+                                u_focus.unfocus();
+                                p_focus.unfocus();
+                                _login();
+                              },
+                            ),
+                          ),
+                          Container(height: 150),
+                        ],
+                      ),
+                    ][index];
+                  },
+                ),
               ),
-            )
-          : Container(
-              child: Swiper(
-                itemCount: 2,
-                loop: false,
-                // index: _swiperController.index,
-                controller: _swiperController,
-                itemBuilder: (BuildContext context, int index) {
-                  return [
-                    ListView(
-                      physics: BouncingScrollPhysics(),
-                      children: [
-                        LoginHead(),
-                        Container(height: 200),
-                        LoginSubmit(
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_light_dark_card
-                              : Color(0xFF222222),
-                          tap: () {
-                            _swiperController.next();
-                          },
-                        ),
-                        Container(height: 15),
-                        LoginSubmit(
-                          txt: "注册账号",
-                          color: Color.fromRGBO(34, 34, 34, 0.1),
-                          fontColor: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_dark_white
-                              : os_black,
-                          tap: () {
-                            launch(
-                                "http://bbs.uestc.edu.cn/member.php?mod=register&mobile=no");
-                          },
-                        ),
-                        Container(height: 150),
-                      ],
-                    ),
-                    ListView(
-                      physics: BouncingScrollPhysics(),
-                      children: [
-                        LoginInput(
-                          u_focus: u_focus,
-                          p_focus: p_focus,
-                          change: (uname, pword) {
-                            username = uname;
-                            password = pword;
-                          },
-                        ),
-                        Container(height: 50),
-                        LoginSubmit(
-                          txt: "提交",
-                          tap: () {
-                            u_focus.unfocus();
-                            p_focus.unfocus();
-                            _login();
-                          },
-                        ),
-                        Container(height: 150),
-                      ],
-                    ),
-                  ][index];
-                },
-              ),
-            ),
+      ),
     );
   }
 }
@@ -487,23 +501,27 @@ class _LoginHeadState extends State<LoginHead> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            ["早安", "午安", "晚安"][time],
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.w900,
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_white
-                  : os_black,
+          ResponsiveWidget(
+            child: Text(
+              ["早安", "午安", "晚安"][time],
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w900,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
+              ),
             ),
           ),
           Container(height: 5),
-          Text(
-            "欢迎来到清水河畔",
-            style: TextStyle(
-              fontSize: 16,
-              color: Color(0xFF999999),
-              letterSpacing: 2,
+          ResponsiveWidget(
+            child: Text(
+              "欢迎来到清水河畔",
+              style: TextStyle(
+                fontSize: 16,
+                color: Color(0xFF999999),
+                letterSpacing: 2,
+              ),
             ),
           ),
           Container(height: 40),

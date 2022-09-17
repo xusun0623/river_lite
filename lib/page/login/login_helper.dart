@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/niw.dart';
@@ -80,51 +81,54 @@ class Link extends StatefulWidget {
 class _LinkState extends State<Link> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: EdgeInsets.only(bottom: 10),
-          child: Row(
-            children: [
-              myInkWell(
-                color: Colors.transparent,
-                tap: () {
-                  showModal(
-                    context: context,
-                    title: "请确认",
-                    cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
-                    confirmTxt: "立即前往",
-                    cancelTxt: "取消",
-                    confirm: () {
-                      launch(widget.txt);
-                    },
-                  );
-                },
-                radius: 5,
-                widget: Container(
-                  decoration: BoxDecoration(),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width -
-                            2 * os_edge -
-                            20,
-                        child: Text(
-                          (widget.txt ?? "标题").split("").join("\u{200B}"),
-                          style: TextStyle(
-                            color: os_color,
+    return ResponsiveWidget(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: Row(
+              children: [
+                myInkWell(
+                  color: Colors.transparent,
+                  tap: () {
+                    showModal(
+                      context: context,
+                      title: "请确认",
+                      cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
+                      confirmTxt: "立即前往",
+                      cancelTxt: "取消",
+                      confirm: () {
+                        launch(widget.txt);
+                      },
+                    );
+                  },
+                  radius: 5,
+                  widget: Container(
+                    decoration: BoxDecoration(),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width -
+                              2 * os_edge -
+                              MinusSpace(context) -
+                              20,
+                          child: Text(
+                            (widget.txt ?? "标题").split("").join("\u{200B}"),
+                            style: TextStyle(
+                              color: os_color,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -143,15 +147,17 @@ class Tip extends StatefulWidget {
 class _TipState extends State<Tip> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      child: Text(
-        widget.txt ?? "标题",
-        style: TextStyle(
-          fontSize: 17,
-          color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_white
-              : os_black,
+    return ResponsiveWidget(
+      child: Container(
+        margin: EdgeInsets.only(bottom: 10),
+        child: Text(
+          widget.txt ?? "标题",
+          style: TextStyle(
+            fontSize: 17,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
+          ),
         ),
       ),
     );
@@ -172,16 +178,18 @@ class Title extends StatefulWidget {
 class _TitleState extends State<Title> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 10, top: 10),
-      child: Text(
-        widget.txt ?? "标题",
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_white
-              : os_black,
+    return ResponsiveWidget(
+      child: Container(
+        margin: EdgeInsets.only(bottom: 10, top: 10),
+        child: Text(
+          widget.txt ?? "标题",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
+          ),
         ),
       ),
     );

@@ -5,6 +5,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/loading.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -69,33 +70,36 @@ class _SquareState extends State<Square> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      appBar: AppBar(
-        systemOverlayStyle: Provider.of<ColorProvider>(context).isDark
-            ? SystemUiOverlayStyle.light
-            : SystemUiOverlayStyle.dark,
+    return Baaaar(
+      child: Scaffold(
         backgroundColor:
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        title: Text("全部板块", style: TextStyle(fontSize: 16)),
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left_rounded),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        appBar: AppBar(
+          systemOverlayStyle: Provider.of<ColorProvider>(context).isDark
+              ? SystemUiOverlayStyle.light
+              : SystemUiOverlayStyle.dark,
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          title: Text("全部板块", style: TextStyle(fontSize: 16)),
+          leading: IconButton(
+            icon: Icon(Icons.chevron_left_rounded),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          elevation: 0,
         ),
-        elevation: 0,
+        body: !get_done
+            ? Loading(backgroundColor: os_back)
+            : ListView(
+                physics: BouncingScrollPhysics(),
+                children: _buildCont(),
+              ),
       ),
-      body: !get_done
-          ? Loading(backgroundColor: os_back)
-          : ListView(
-              physics: BouncingScrollPhysics(),
-              children: _buildCont(),
-            ),
     );
   }
 

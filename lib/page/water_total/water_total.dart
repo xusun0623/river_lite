@@ -3,6 +3,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -22,51 +23,54 @@ class _WaterTotalState extends State<WaterTotal> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return Baaaar(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          elevation: 0,
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          centerTitle: true,
+          title: Text(
+            "水滴",
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.chevron_left_rounded),
+          ),
+        ),
         backgroundColor:
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        elevation: 0,
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        centerTitle: true,
-        title: Text(
-          "水滴",
-          style: TextStyle(
-            fontSize: 16,
-          ),
+        body: ListView(
+          children: [
+            NavigatorCard(
+              title: "水滴答题",
+              tip: "自动答题，水滴多多",
+              url: "/question",
+              img: "lib/img/water_total/1.svg",
+            ),
+            NavigatorCard(
+              title: "水滴任务",
+              tip: "进度查看，领取任务",
+              url: "/water_task",
+              img: "lib/img/water_total/2.svg",
+            ),
+            NavigatorCard(
+              title: "积分记录",
+              tip: "水滴明细，收支详情",
+              url: "/water_inout_detail",
+              img: "lib/img/water_total/3.svg",
+            ),
+          ],
         ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.chevron_left_rounded),
-        ),
-      ),
-      backgroundColor:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      body: ListView(
-        children: [
-          NavigatorCard(
-            title: "水滴答题",
-            tip: "自动答题，水滴多多",
-            url: "/question",
-            img: "lib/img/water_total/1.svg",
-          ),
-          NavigatorCard(
-            title: "水滴任务",
-            tip: "进度查看，领取任务",
-            url: "/water_task",
-            img: "lib/img/water_total/2.svg",
-          ),
-          NavigatorCard(
-            title: "积分记录",
-            tip: "水滴明细，收支详情",
-            url: "/water_inout_detail",
-            img: "lib/img/water_total/3.svg",
-          ),
-        ],
       ),
     );
   }

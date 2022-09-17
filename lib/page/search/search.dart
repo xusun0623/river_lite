@@ -15,6 +15,7 @@ import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/empty.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
@@ -270,78 +271,81 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     nowMode(context);
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 80,
-        systemOverlayStyle: Provider.of<ColorProvider>(context).isDark
-            ? SystemUiOverlayStyle.light
-            : SystemUiOverlayStyle.dark,
-        backgroundColor:
-            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        elevation: 0,
-        actions: [
-          SearchBtn(
-            search: () {
+    return Baaaar(
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 80,
+          systemOverlayStyle: Provider.of<ColorProvider>(context).isDark
+              ? SystemUiOverlayStyle.light
+              : SystemUiOverlayStyle.dark,
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          elevation: 0,
+          actions: [
+            SearchBtn(
+              search: () {
+                _getData();
+                _commentFocus.unfocus();
+              },
+            )
+          ],
+          leadingWidth: 30,
+          leading: IconButton(
+            icon: Icon(
+              Icons.chevron_left_rounded,
+              size: 28,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_deep_grey
+                  : os_black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: SearchLeft(
+            confirm: () {
               _getData();
               _commentFocus.unfocus();
             },
-          )
-        ],
-        leadingWidth: 30,
-        leading: IconButton(
-          icon: Icon(
-            Icons.chevron_left_rounded,
-            size: 28,
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_deep_grey
-                : os_black,
+            focus: () async {
+              await _scrollController.animateTo(
+                0,
+                duration: Duration(milliseconds: 300),
+                curve: Curves.ease,
+              );
+              setState(() {
+                data = [];
+                load_done = false;
+              });
+            },
+            commentFocus: _commentFocus,
+            controller: _controller,
+            select: (idx) {
+              setState(() {
+                data = [];
+                load_done = false;
+                select = idx;
+              });
+            },
+            select_idx: select,
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
         ),
-        title: SearchLeft(
-          confirm: () {
-            _getData();
-            _commentFocus.unfocus();
-          },
-          focus: () async {
-            await _scrollController.animateTo(
-              0,
-              duration: Duration(milliseconds: 300),
-              curve: Curves.ease,
-            );
-            setState(() {
-              data = [];
-              load_done = false;
-            });
-          },
-          commentFocus: _commentFocus,
-          controller: _controller,
-          select: (idx) {
-            setState(() {
-              data = [];
-              load_done = false;
-              select = idx;
-            });
-          },
-          select_idx: select,
-        ),
-      ),
-      body: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_back
-              : os_back,
-          child: ListView(
-            controller: _scrollController,
-            physics: BouncingScrollPhysics(),
-            children: _buildTopic(),
+        body: Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_back
+                : os_back,
+            child: ListView(
+              controller: _scrollController,
+              physics: BouncingScrollPhysics(),
+              children: _buildTopic(),
+            ),
           ),
         ),
       ),

@@ -11,6 +11,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/loading.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/topic.dart';
@@ -296,136 +297,140 @@ class _TopicColumnState extends State<TopicColumn> {
   @override
   Widget build(BuildContext context) {
     nowMode(context);
-    return Scaffold(
-        backgroundColor:
-            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.chevron_left_rounded),
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_dark_white
-                : os_black,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: [
-            ...(isDesktop()
-                ? [
-                    TextButton(
-                      onPressed: () {
-                        xsLanuch(
-                          url:
-                              "https://bbs.uestc.edu.cn/forum.php?mod=post&action=newthread&fid=" +
-                                  widget.columnID.toString(),
-                        );
-                      },
-                      style: ButtonStyle(
-                        overlayColor: MaterialStateProperty.all(Colors.black12),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.near_me_outlined,
-                            color: os_deep_grey,
-                          ),
-                          Text(
-                            "前往网页端发帖",
-                            style: TextStyle(
-                              color: os_deep_grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ]
-                : []),
-            IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, "/search", arguments: 0);
-                },
-                icon: Icon(
-                  Icons.search,
-                  color: os_deep_grey,
-                )),
-            Container(width: 5),
-          ],
-          title: Text(
-            showTopTitle ? data["forumInfo"]["title"] : "",
-            style: TextStyle(
+    return Baaaar(
+      child: Scaffold(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.chevron_left_rounded),
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_dark_dark_white
                   : os_black,
-              fontSize: 16,
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
-          ),
-          backgroundColor: Provider.of<ColorProvider>(context).isDark
-              ? (!loading ? os_dark_back : os_light_dark_card)
-              : os_back,
-          elevation: 0,
-        ),
-        body: data == null || data["list"] == null
-            ? Loading(
-                showError: load_done,
-                msg: need_50_water
-                    ? '''水滴可以通过做任务、发帖回帖等方式积累。您需要扣除50滴水滴且升级至2级才能进入。
-扣除水滴后可能有延时，请尝试刷新试试。'''
-                    : "帖子专栏走丢了，或许网页端可以连接该星球",
-                backgroundColor: os_back,
-                loadingWidget: Opacity(
-                  opacity: 0.8,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: 500,
-                      maxHeight: 500,
-                    ),
-                    child: Lottie.asset("lib/lottie/book.json"),
-                  ),
-                ),
-                tapTxt1: "重新刷新一次 >",
-                tap1: need_50_water
-                    ? () {
-                        setState(() {
-                          load_done = false;
-                          loading = false;
-                          _getData();
-                        });
-                      }
-                    : () {
-                        xsLanuch(
-                          url: base_url +
-                              "forum.php?mod=forumdisplay&fid=${widget.columnID}",
-                        );
-                      },
-              )
-            : BackToTop(
-                // animation: false,
-                show: showBackToTop,
-                bottom: 100,
-                controller: _controller,
-                attachBtn: true,
-                tap: () {
-                  Navigator.pushNamed(
-                    context,
-                    "/new",
-                    arguments: widget.columnID,
-                  );
-                },
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    manualPull = true;
-                    await _getData();
-                    vibrate = false;
-                    manualPull = false;
-                    return;
+            actions: [
+              ...(isDesktop()
+                  ? [
+                      TextButton(
+                        onPressed: () {
+                          xsLanuch(
+                            url:
+                                "https://bbs.uestc.edu.cn/forum.php?mod=post&action=newthread&fid=" +
+                                    widget.columnID.toString(),
+                          );
+                        },
+                        style: ButtonStyle(
+                          overlayColor:
+                              MaterialStateProperty.all(Colors.black12),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.near_me_outlined,
+                              color: os_deep_grey,
+                            ),
+                            Text(
+                              "前往网页端发帖",
+                              style: TextStyle(
+                                color: os_deep_grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ]
+                  : []),
+              IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/search", arguments: 0);
                   },
-                  child: ListView(
-                    controller: _controller,
-                    physics: BouncingScrollPhysics(),
-                    children: _buildCont(),
+                  icon: Icon(
+                    Icons.search,
+                    color: os_deep_grey,
+                  )),
+              Container(width: 5),
+            ],
+            title: Text(
+              showTopTitle ? data["forumInfo"]["title"] : "",
+              style: TextStyle(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : os_black,
+                fontSize: 16,
+              ),
+            ),
+            backgroundColor: Provider.of<ColorProvider>(context).isDark
+                ? (!loading ? os_dark_back : os_light_dark_card)
+                : os_back,
+            elevation: 0,
+          ),
+          body: data == null || data["list"] == null
+              ? Loading(
+                  showError: load_done,
+                  msg: need_50_water
+                      ? '''水滴可以通过做任务、发帖回帖等方式积累。您需要扣除50滴水滴且升级至2级才能进入。
+    扣除水滴后可能有延时，请尝试刷新试试。'''
+                      : "帖子专栏走丢了，或许网页端可以连接该星球",
+                  backgroundColor: os_back,
+                  loadingWidget: Opacity(
+                    opacity: 0.8,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: 500,
+                        maxHeight: 500,
+                      ),
+                      child: Lottie.asset("lib/lottie/book.json"),
+                    ),
                   ),
-                ),
-              ));
+                  tapTxt1: "重新刷新一次 >",
+                  tap1: need_50_water
+                      ? () {
+                          setState(() {
+                            load_done = false;
+                            loading = false;
+                            _getData();
+                          });
+                        }
+                      : () {
+                          xsLanuch(
+                            url: base_url +
+                                "forum.php?mod=forumdisplay&fid=${widget.columnID}",
+                          );
+                        },
+                )
+              : BackToTop(
+                  // animation: false,
+                  show: showBackToTop,
+                  bottom: 100,
+                  controller: _controller,
+                  attachBtn: true,
+                  tap: () {
+                    Navigator.pushNamed(
+                      context,
+                      "/new",
+                      arguments: widget.columnID,
+                    );
+                  },
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      manualPull = true;
+                      await _getData();
+                      vibrate = false;
+                      manualPull = false;
+                      return;
+                    },
+                    child: ListView(
+                      controller: _controller,
+                      physics: BouncingScrollPhysics(),
+                      children: _buildCont(),
+                    ),
+                  ),
+                )),
+    );
   }
 }
 

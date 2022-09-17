@@ -5,6 +5,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -313,28 +314,31 @@ class _AccountState extends State<Account> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
-      appBar: AppBar(
+    return Baaaar(
+      child: Scaffold(
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : os_white,
-        elevation: 0,
-        title: Text("账号管理", style: TextStyle(fontSize: 16)),
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.chevron_left_rounded),
+        appBar: AppBar(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_white,
+          elevation: 0,
+          title: Text("账号管理", style: TextStyle(fontSize: 16)),
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.chevron_left_rounded),
+          ),
         ),
-      ),
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        children: _buildWidget(),
+        body: ListView(
+          physics: BouncingScrollPhysics(),
+          children: _buildWidget(),
+        ),
       ),
     );
   }
