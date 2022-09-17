@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/page/new/new.dart';
+import 'package:offer_show/page/new/success_display.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 

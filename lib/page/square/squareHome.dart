@@ -7,6 +7,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/square/square.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
@@ -98,9 +99,16 @@ class _SquareHomeState extends State<SquareHome> {
         leadingWidth: 0,
         elevation: 0,
       ),
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        children: _buildCont(),
+      body: BackToTop(
+        show: false,
+        controller: ScrollController(),
+        refresh: () {
+          _getData();
+        },
+        child: ListView(
+          physics: BouncingScrollPhysics(),
+          children: _buildCont(),
+        ),
       ),
     );
   }

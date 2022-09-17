@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:sizer/sizer.dart';
 
 bool isMacOS() {
-  return Platform.isMacOS;
+  return Platform.isMacOS || Platform.isWindows;
 }
 
 bool isDesktop() {

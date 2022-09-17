@@ -30,6 +30,8 @@ class _CollectionTabState extends State<CollectionTab>
   int pageSize = 25;
   int filter_type = 0; //0-按主题数排序 1-按评论数排序 2-按订阅数排序
   bool switchLoading = false;
+  GlobalKey<RefreshIndicatorState> _indicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -264,12 +266,16 @@ class _CollectionTabState extends State<CollectionTab>
         elevation: 0,
       ),
       body: RefreshIndicator(
+        key: _indicatorKey,
         color: os_color,
         onRefresh: () async {
           return await _getMydata();
         },
         child: BackToTop(
           show: showBackToTop,
+          refresh: () {
+            _indicatorKey.currentState.show();
+          },
           animation: true,
           bottom: 50,
           child: ListView(

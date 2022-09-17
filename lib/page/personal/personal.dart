@@ -12,6 +12,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/loading.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
@@ -205,159 +206,163 @@ class _PersonCenterState extends State<PersonCenter> {
   @override
   Widget build(BuildContext context) {
     nowMode(context);
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        title: Text(
-          showTopTitle ? userInfo["name"] : "",
-          style: TextStyle(
-              fontSize: 16,
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_white
-                  : os_black),
+    return Baaaar(
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          title: Text(
+            showTopTitle ? userInfo["name"] : "",
+            style: TextStyle(
+                fontSize: 16,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black),
+          ),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.chevron_left_rounded),
+          ),
+          actions: userInfo == null || isNotAvail
+              ? []
+              : _isBlack()
+                  ? []
+                  : widget.param["isMe"]
+                      ? [
+                          // IconButton(
+                          //   onPressed: () async {
+                          //     Clipboard.setData(
+                          //       ClipboardData(
+                          //         text:
+                          //             "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
+                          //       ),
+                          //     );
+                          //     showToast(
+                          //       context: context,
+                          //       type: XSToast.success,
+                          //       txt: "复制链接成功",
+                          //     );
+                          //   },
+                          //   icon: Icon(
+                          //     Icons.copy,
+                          //     color: Color(0xFFAAAAAA),
+                          //   ),
+                          // ),
+                        ]
+                      : [
+                          // IconButton(
+                          //   onPressed: () async {
+                          //     Clipboard.setData(
+                          //       ClipboardData(
+                          //         text:
+                          //             "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
+                          //       ),
+                          //     );
+                          //     showToast(
+                          //       context: context,
+                          //       type: XSToast.success,
+                          //       txt: "复制链接成功",
+                          //     );
+                          //   },
+                          //   icon: Icon(
+                          //     Icons.copy,
+                          //     color: Color(0xFFAAAAAA),
+                          //   ),
+                          // ),
+                          IconButton(
+                            onPressed: () async {
+                              await Api().user_useradmin({
+                                "type": userInfo["is_follow"] == 0
+                                    ? "follow"
+                                    : "unfollow",
+                                "uid": widget.param["uid"],
+                              });
+                              setState(() {
+                                userInfo["is_follow"] =
+                                    1 - userInfo["is_follow"];
+                              });
+                            },
+                            icon: Icon(
+                              Icons.person_add_rounded,
+                              color: userInfo["is_follow"] == 0
+                                  ? Color(0xFFAAAAAA)
+                                  : os_color,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, "/msg_detail",
+                                  arguments: {
+                                    "uid": widget.param["uid"],
+                                    "name": userInfo["name"],
+                                  });
+                            },
+                            icon: Icon(
+                              Icons.mail,
+                              color: Color(0xFFAAAAAA),
+                            ),
+                          )
+                        ],
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
         ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.chevron_left_rounded),
-        ),
-        actions: userInfo == null || isNotAvail
-            ? []
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        body: userInfo == null
+            ? Loading(
+                backgroundColor: Color(0xFFF3F3F3),
+              )
             : _isBlack()
-                ? []
-                : widget.param["isMe"]
-                    ? [
-                        // IconButton(
-                        //   onPressed: () async {
-                        //     Clipboard.setData(
-                        //       ClipboardData(
-                        //         text:
-                        //             "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
-                        //       ),
-                        //     );
-                        //     showToast(
-                        //       context: context,
-                        //       type: XSToast.success,
-                        //       txt: "复制链接成功",
-                        //     );
-                        //   },
-                        //   icon: Icon(
-                        //     Icons.copy,
-                        //     color: Color(0xFFAAAAAA),
-                        //   ),
-                        // ),
-                      ]
-                    : [
-                        // IconButton(
-                        //   onPressed: () async {
-                        //     Clipboard.setData(
-                        //       ClipboardData(
-                        //         text:
-                        //             "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
-                        //       ),
-                        //     );
-                        //     showToast(
-                        //       context: context,
-                        //       type: XSToast.success,
-                        //       txt: "复制链接成功",
-                        //     );
-                        //   },
-                        //   icon: Icon(
-                        //     Icons.copy,
-                        //     color: Color(0xFFAAAAAA),
-                        //   ),
-                        // ),
-                        IconButton(
-                          onPressed: () async {
-                            await Api().user_useradmin({
-                              "type": userInfo["is_follow"] == 0
-                                  ? "follow"
-                                  : "unfollow",
-                              "uid": widget.param["uid"],
-                            });
-                            setState(() {
-                              userInfo["is_follow"] = 1 - userInfo["is_follow"];
-                            });
-                          },
-                          icon: Icon(
-                            Icons.person_add_rounded,
-                            color: userInfo["is_follow"] == 0
-                                ? Color(0xFFAAAAAA)
-                                : os_color,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, "/msg_detail",
-                                arguments: {
-                                  "uid": widget.param["uid"],
-                                  "name": userInfo["name"],
-                                });
-                          },
-                          icon: Icon(
-                            Icons.mail,
-                            color: Color(0xFFAAAAAA),
-                          ),
-                        )
-                      ],
-        backgroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_back
-            : Color(0xFFF3F3F3),
-      ),
-      backgroundColor: Provider.of<ColorProvider>(context).isDark
-          ? os_dark_back
-          : Color(0xFFF3F3F3),
-      body: userInfo == null
-          ? Loading(
-              backgroundColor: Color(0xFFF3F3F3),
-            )
-          : _isBlack()
-              ? Container(
-                  margin: EdgeInsets.only(bottom: 150),
-                  child: Center(
-                    child: Text(
-                      "该用户已被你拉黑",
-                      style: TextStyle(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_dark_white
-                            : os_black,
-                      ),
-                    ),
-                  ),
-                )
-              : (isNotAvail
-                  ? Center(
-                      child: Container(
-                      margin: EdgeInsets.only(bottom: 100),
+                ? Container(
+                    margin: EdgeInsets.only(bottom: 150),
+                    child: Center(
                       child: Text(
-                        "抱歉，您指定的用户空间不存在",
+                        "该用户已被你拉黑",
                         style: TextStyle(
                           color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
+                              ? os_dark_dark_white
                               : os_black,
                         ),
                       ),
-                    ))
-                  : BackToTop(
-                      show: showBackToTop,
-                      controller: _controller,
-                      bottom: 100,
-                      child: RefreshIndicator(
-                        color: os_deep_blue,
-                        onRefresh: () async {
-                          return await _getInfo();
-                        },
-                        child: ListView(
-                          physics: BouncingScrollPhysics(),
-                          controller: _controller,
-                          children: _buildCont(),
+                    ),
+                  )
+                : (isNotAvail
+                    ? Center(
+                        child: Container(
+                        margin: EdgeInsets.only(bottom: 100),
+                        child: Text(
+                          "抱歉，您指定的用户空间不存在",
+                          style: TextStyle(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : os_black,
+                          ),
                         ),
-                      ),
-                    )),
+                      ))
+                    : BackToTop(
+                        show: showBackToTop,
+                        controller: _controller,
+                        bottom: 100,
+                        child: RefreshIndicator(
+                          color: os_deep_blue,
+                          onRefresh: () async {
+                            return await _getInfo();
+                          },
+                          child: ListView(
+                            physics: BouncingScrollPhysics(),
+                            controller: _controller,
+                            children: _buildCont(),
+                          ),
+                        ),
+                      )),
+      ),
     );
   }
 }

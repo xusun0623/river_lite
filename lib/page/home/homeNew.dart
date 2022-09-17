@@ -30,6 +30,8 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   bool showBackToTop = false;
   bool vibrate = false;
   int pageSize = 25;
+  GlobalKey<RefreshIndicatorState> _indicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -162,6 +164,9 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       bottom: 50,
       animation: true,
       attachBtn: true,
+      refresh: () {
+        _indicatorKey.currentState.show();
+      },
       tap: () {
         Navigator.pushNamed(context, "/new", arguments: 25);
       },
@@ -182,6 +187,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       body: Container(
         padding: EdgeInsets.only(top: 10),
         child: RefreshIndicator(
+          key: _indicatorKey,
           color: os_color,
           onRefresh: () async {
             var data = await _getInitData();

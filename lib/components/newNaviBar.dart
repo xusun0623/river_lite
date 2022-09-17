@@ -9,9 +9,11 @@ import 'package:provider/provider.dart';
 class Baaaar extends StatefulWidget {
   bool isDark;
   Widget child;
+  Color color;
   Baaaar({
     Key key,
     this.isDark,
+    this.color,
     @required this.child,
   }) : super(key: key);
 
@@ -36,11 +38,12 @@ class _BaaaarState extends State<Baaaar> {
                         width: MediaQuery.of(context).size.width,
                         padding: EdgeInsets.only(top: 2.5),
                         decoration: BoxDecoration(
-                          color: Provider.of<ColorProvider>(context).isDark ||
-                                  tabShowProvider.index == 2 ||
-                                  (widget.isDark ?? false)
-                              ? os_light_dark_card
-                              : Colors.white,
+                          color: widget.color ??
+                              (Provider.of<ColorProvider>(context).isDark ||
+                                      tabShowProvider.index == 2 ||
+                                      (widget.isDark ?? false)
+                                  ? os_light_dark_card
+                                  : Colors.white),
                           border: Border(
                             bottom: BorderSide(
                               color:

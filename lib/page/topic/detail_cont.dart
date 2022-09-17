@@ -87,7 +87,8 @@ class _DetailContState extends State<DetailCont> {
     String short_url = widget.data['url'].toString();
     if (!isIpad() &&
         short_url.startsWith("https://b23.tv/") &&
-        short_url.length < 25) {
+        short_url.length < 25 &&
+        !isMacOS()) {
       return BilibiliPlayer(short_url: short_url);
     }
     return myInkWell(
@@ -165,6 +166,7 @@ class _DetailContState extends State<DetailCont> {
 
   Widget WidgetLinkUrl() {
     if (!Platform.isMacOS &&
+        !Platform.isWindows &&
         (widget.data["infor"].toString().contains(".mp4") ||
             widget.data["infor"].toString().contains(".m4a") ||
             widget.data["infor"].toString().contains(".flv"))) {

@@ -27,6 +27,8 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
   var load_done = false;
   bool showBackToTop = false;
   bool vibrate = false;
+  GlobalKey<RefreshIndicatorState> _indicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -150,6 +152,9 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
     ));
     return BackToTop(
       show: showBackToTop,
+      refresh: () {
+        _indicatorKey.currentState.show();
+      },
       bottom: 50,
       animation: true,
       child: ListView(
@@ -168,6 +173,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: RefreshIndicator(
         color: os_color,
+        key: _indicatorKey,
         onRefresh: () async {
           var data = await _getInitData();
           return data;

@@ -28,6 +28,8 @@ class _AboutState extends State<About> {
   @override
   Widget build(BuildContext context) {
     return Baaaar(
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Provider.of<ColorProvider>(context).isDark
@@ -73,7 +75,7 @@ class _AboutState extends State<About> {
                 color: os_wonderful_color[5],
                 size: 40,
               ),
-              title: "开源地址",
+              title: "代码开源地址",
               cont: "https://gitee.com/xusun000/offershow",
               withUrl: true,
             ),
@@ -83,7 +85,7 @@ class _AboutState extends State<About> {
                 color: os_wonderful_color[4],
                 size: 40,
               ),
-              title: "设计文件",
+              title: "UI设计文件",
               cont:
                   "https://www.figma.com/file/McSp35qqjsUuWAbucxXdXn/河畔Max版-XS-Designed",
               withUrl: true,
@@ -106,7 +108,7 @@ class _AboutState extends State<About> {
               ),
               title: "鸣谢",
               cont:
-                  '''测试者：Star🌟、北冥小鱼、weijifen、TYTSSN、hola、fix\n功能&Bug贡献者：司空临风、炎舞、月夜的飘零\n代码贡献者：Dnieper、方觉\n河畔水滴答题题库：Zhenger666\n代码仓库：https://gitee.com\n设计工具：https://figma.com''',
+                  '''测试者：下划线、Star🌟、北冥小鱼、weijifen、TYTSSN、hola、fix\n功能&Bug贡献者：司空临风、鹅妹(ECRU)、炎舞、月夜的飘零\n代码贡献者：Dnieper、方觉\n河畔水滴答题题库：Zhenger666\n代码仓库：https://gitee.com \n设计工具：https://figma.com''',
             ),
             AboutCard(
               head: Icon(
@@ -115,7 +117,7 @@ class _AboutState extends State<About> {
                 size: 50,
               ),
               title: "开发&设计者",
-              cont: '''xusun000''',
+              cont: '''xusun000\n电子科技大学 2018级 计算机学院互联网+班本科生''',
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 30),
@@ -189,7 +191,7 @@ class _AboutCardState extends State<AboutCard> {
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
                         : os_black,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.bold,
                     fontSize: 22,
                   ),
                 ),

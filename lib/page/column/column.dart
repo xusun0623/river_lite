@@ -171,7 +171,7 @@ class _TopicColumnState extends State<TopicColumn> {
               data["forumInfo"]["title"],
               style: TextStyle(
                 fontSize: 29,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.bold,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
                     : os_black,
@@ -298,6 +298,8 @@ class _TopicColumnState extends State<TopicColumn> {
   Widget build(BuildContext context) {
     nowMode(context);
     return Baaaar(
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       child: Scaffold(
           backgroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_back
