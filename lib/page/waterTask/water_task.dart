@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/empty.dart';
@@ -277,24 +279,28 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
     List<Widget> tmp = [];
     [newTask, doingTask, doneTask, failTask][index].forEach((element) {
       tmp.add([
-        Card1(
-          data: element,
-          refresh: () {
-            showToast(context: context, type: XSToast.success, txt: "领取任务成功");
-            _getNew();
-            _getDoing();
-          },
+        ResponsiveWidget(
+          child: Card1(
+            data: element,
+            refresh: () {
+              showToast(context: context, type: XSToast.success, txt: "领取任务成功");
+              _getNew();
+              _getDoing();
+            },
+          ),
         ),
-        Card2(
-          data: element,
-          refresh: () {
-            showToast(context: context, type: XSToast.success, txt: "领取奖励成功");
-            _getDoing();
-            _getDone();
-          },
+        ResponsiveWidget(
+          child: Card2(
+            data: element,
+            refresh: () {
+              showToast(context: context, type: XSToast.success, txt: "领取奖励成功");
+              _getDoing();
+              _getDone();
+            },
+          ),
         ),
-        Card3(data: element),
-        Card4(data: element),
+        ResponsiveWidget(child: Card3(data: element)),
+        ResponsiveWidget(child: Card4(data: element)),
       ][index]);
     });
     tmp.add((!load_done1 && index == 0) ||

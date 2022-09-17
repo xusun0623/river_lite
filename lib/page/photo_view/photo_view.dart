@@ -212,7 +212,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
             ),
             isDesktop()
                 ? Positioned(
-                    ///布局自己换
+                    ///返回按钮
                     left: 50,
                     top: 50,
                     child: Container(
@@ -230,98 +230,122 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                     ),
                   )
                 : Container(),
-            (widget.title ?? "").length != 0
-                ? Container()
-                : Positioned(
-                    ///布局自己换
-                    left: MediaQuery.of(context).size.width / 2 - 45,
-                    bottom: 70,
-                    child: GestureDetector(
+            (widget.title ?? "").length == 0 || isDesktop()
+                ? FuncButton(
+                    widget: widget,
+                    tempSelect: tempSelect,
+                    pageController: _pageController)
+                : Container(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FuncButton extends StatelessWidget {
+  const FuncButton({
+    Key key,
+    @required this.widget,
+    @required this.tempSelect,
+    @required PageController pageController,
+  })  : _pageController = pageController,
+        super(key: key);
+
+  final PhotoPreview widget;
+  final int tempSelect;
+  final PageController _pageController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      ///布局自己换
+      left: MediaQuery.of(context).size.width / 2 - 90,
+      bottom: 70,
+      child: GestureDetector(
+        onTap: () {
+          if (!isDesktop()) {
+            saveImge(context, widget.galleryItems, tempSelect - 1);
+          }
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black45,
+            borderRadius: BorderRadius.all(
+              Radius.circular(5),
+            ),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+          child: isDesktop()
+              ? Row(
+                  children: [
+                    GestureDetector(
                       onTap: () {
-                        if (!isDesktop()) {
-                          saveImge(
-                              context, widget.galleryItems, tempSelect - 1);
-                        }
+                        _pageController.previousPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.ease);
                       },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black45,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.chevron_left_outlined,
+                            color: Colors.white,
+                            size: 22,
                           ),
-                        ),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                        child: isDesktop()
-                            ? Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      _pageController.previousPage(
-                                          duration: Duration(milliseconds: 300),
-                                          curve: Curves.ease);
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.chevron_left_outlined,
-                                          color: Colors.white,
-                                          size: 22,
-                                        ),
-                                        Text(
-                                          "上一张",
-                                          style: TextStyle(color: os_white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(width: 30),
-                                  GestureDetector(
-                                    onTap: () {
-                                      _pageController.nextPage(
-                                          duration: Duration(milliseconds: 300),
-                                          curve: Curves.ease);
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "下一张",
-                                          style: TextStyle(color: os_white),
-                                        ),
-                                        Icon(
-                                          Icons.chevron_right_outlined,
-                                          color: Colors.white,
-                                          size: 22,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : Row(
-                                children: [
-                                  Icon(
-                                    Icons.download,
-                                    color: Colors.white70,
-                                    size: 18,
-                                  ),
-                                  Container(width: 5),
-                                  Text(
-                                    "保存图片",
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                          Text(
+                            "上一张",
+                            style: TextStyle(color: os_white),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-          ],
+                    Container(width: 15),
+                    Container(
+                      width: 1,
+                      height: 15,
+                      color: Colors.white30,
+                    ),
+                    Container(width: 15),
+                    GestureDetector(
+                      onTap: () {
+                        _pageController.nextPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.ease);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "下一张",
+                            style: TextStyle(color: os_white),
+                          ),
+                          Icon(
+                            Icons.chevron_right_outlined,
+                            color: Colors.white,
+                            size: 22,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              : Row(
+                  children: [
+                    Icon(
+                      Icons.download,
+                      color: Colors.white70,
+                      size: 18,
+                    ),
+                    Container(width: 5),
+                    Text(
+                      "保存图片",
+                      style: TextStyle(
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
     );

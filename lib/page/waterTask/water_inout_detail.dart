@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:html/parser.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/totop.dart';
@@ -32,7 +34,7 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
     List<Widget> tmp = [];
     if (data != null && data.length != 0) {
       data.forEach((element) {
-        tmp.add(ListCard(data: element));
+        tmp.add(ResponsiveWidget(child: ListCard(data: element)));
       });
     }
     return tmp;
@@ -134,8 +136,9 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
             icon: Icon(Icons.chevron_left_rounded),
           ),
         ),
-        backgroundColor:
-            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
         body: RefreshIndicator(
           onRefresh: () async {
             data = [];
@@ -144,7 +147,7 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
           child: BackToTop(
             show: showBackToTop,
             bottom: 100,
-            color: Color(0x88FFFFFF),
+            color: isDesktop() ? os_black : Color(0x88FFFFFF),
             widget: Icon(
               Icons.arrow_drop_up,
               size: 25,

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
@@ -551,7 +552,9 @@ class _QuestionState extends State<Question> {
             : os_white,
         radius: 10,
         widget: Container(
-          width: (MediaQuery.of(context).size.width - 60) * 0.4,
+          width:
+              (MediaQuery.of(context).size.width - MinusSpace(context) - 60) *
+                  0.4,
           height: 50,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -583,7 +586,9 @@ class _QuestionState extends State<Question> {
         color: os_color,
         radius: 10,
         widget: Container(
-          width: (MediaQuery.of(context).size.width - 60) * 0.6,
+          width:
+              (MediaQuery.of(context).size.width - MinusSpace(context) - 60) *
+                  0.6,
           height: 50,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -636,20 +641,22 @@ class _QuestionState extends State<Question> {
         body: Column(
           children: [
             load_done ? Container() : BottomLoading(color: Colors.transparent),
-            Container(
-              height: MediaQuery.of(context).size.height -
-                  MediaQuery.of(context).padding.top -
-                  (status == 1 || status == 2 ? 56 : 250),
-              child: ListView(
-                physics: BouncingScrollPhysics(),
-                //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关
-                children: status == 0
-                    ? doing()
-                    : status == 1
-                        ? bouns()
-                        : status == 2
-                            ? done()
-                            : haveNext(),
+            ResponsiveWidget(
+              child: Container(
+                height: MediaQuery.of(context).size.height -
+                    MediaQuery.of(context).padding.top -
+                    (status == 1 || status == 2 ? 56 : 250),
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关
+                  children: status == 0
+                      ? doing()
+                      : status == 1
+                          ? bouns()
+                          : status == 2
+                              ? done()
+                              : haveNext(),
+                ),
               ),
             ),
             status == 0 && load_done

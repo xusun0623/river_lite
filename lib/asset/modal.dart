@@ -140,10 +140,7 @@ void showModal({
             cancelTxt == ""
                 ? Container()
                 : myInkWell(
-                    color: Provider.of<ColorProvider>(context, listen: false)
-                            .isDark
-                        ? os_light_dark_card
-                        : os_white,
+                    color: Colors.transparent,
                     widget: Container(
                       width: 130,
                       height: 50,
