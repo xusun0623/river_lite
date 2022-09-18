@@ -46,63 +46,58 @@ class MyApp extends StatelessWidget {
           SystemUiOverlayStyle(statusBarColor: Colors.transparent);
       SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     }
-    return AdaptiveTheme(
-      builder: (light, dark) => MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => ColorProvider()),
-          ChangeNotifierProvider(create: (context) => AdShowProvider()),
-          ChangeNotifierProvider(create: (context) => UserInfoProvider()),
-          ChangeNotifierProvider(create: (context) => TabShowProvider()),
-          ChangeNotifierProvider(create: (context) => HomeRefrshProvider()),
-          ChangeNotifierProvider(create: (context) => MsgProvider()),
-          ChangeNotifierProvider(create: (context) => BlackProvider()),
-          ChangeNotifierProvider(create: (context) => ShowPicProvider()),
-        ],
-        child: Sizer(
-          builder: (context, orientation, deviceType) => MaterialApp(
-            debugShowCheckedModeBanner: false,
-            initialRoute: "/",
-            theme: ThemeData(
-              fontFamily: '微软雅黑',
-              appBarTheme: AppBarTheme(
-                surfaceTintColor: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_back
-                    : os_back,
-              ),
-              primaryColor: os_color,
-              useMaterial3: true,
-              // fontFamily: "MiSans",
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ColorProvider()),
+        ChangeNotifierProvider(create: (context) => AdShowProvider()),
+        ChangeNotifierProvider(create: (context) => UserInfoProvider()),
+        ChangeNotifierProvider(create: (context) => TabShowProvider()),
+        ChangeNotifierProvider(create: (context) => HomeRefrshProvider()),
+        ChangeNotifierProvider(create: (context) => MsgProvider()),
+        ChangeNotifierProvider(create: (context) => BlackProvider()),
+        ChangeNotifierProvider(create: (context) => ShowPicProvider()),
+      ],
+      child: Sizer(
+        builder: (context, orientation, deviceType) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          initialRoute: "/",
+          theme: ThemeData(
+            fontFamily: '微软雅黑',
+            appBarTheme: AppBarTheme(
+              surfaceTintColor: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_back
+                  : os_back,
             ),
-            onGenerateRoute: (settings) {
-              final String routersname = settings.name;
-              final Function cotrollerFn = routers[routersname];
-              //判断访问不存在的路由地址
-              if (cotrollerFn == null) {
-                return CupertinoPageRoute(
-                  builder: (context) => routers['/404'](),
-                );
-              }
-              if (settings.arguments == null) {
-                return CupertinoPageRoute(
-                  builder: (context) => cotrollerFn(),
-                );
-              } else {
-                return CupertinoPageRoute(
-                  builder: (context) => cotrollerFn(settings.arguments),
-                );
-              }
-            },
-            onUnknownRoute: (setting) {
-              return CupertinoPageRoute(
-                builder: (context) => routers["/404"](),
-              );
-            },
+            primaryColor: os_color,
+            useMaterial3: true,
+            // fontFamily: "MiSans",
           ),
+          onGenerateRoute: (settings) {
+            final String routersname = settings.name;
+            final Function cotrollerFn = routers[routersname];
+            //判断访问不存在的路由地址
+            if (cotrollerFn == null) {
+              return CupertinoPageRoute(
+                builder: (context) => routers['/404'](),
+              );
+            }
+            if (settings.arguments == null) {
+              return CupertinoPageRoute(
+                builder: (context) => cotrollerFn(),
+              );
+            } else {
+              return CupertinoPageRoute(
+                builder: (context) => cotrollerFn(settings.arguments),
+              );
+            }
+          },
+          onUnknownRoute: (setting) {
+            return CupertinoPageRoute(
+              builder: (context) => routers["/404"](),
+            );
+          },
         ),
       ),
-      light: ThemeData(),
-      dark: ThemeData(),
-      // initial: AdaptiveThemeMode.dark,
     );
   }
 }
