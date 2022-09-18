@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +12,7 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/leftNavi.dart';
@@ -642,6 +644,23 @@ class _TopicState extends State<Topic> {
   }
 
   _tapWidget() async {
+    int tid = (widget.data["source_id"] ?? widget.data["topic_id"]);
+    if (Platform.isWindows &&
+        (widget.data["board_name"] == "视觉艺术" ||
+            widget.data["board_name"] == "镜头下的成电")) {
+      showModal(
+          context: context,
+          title: "请确认",
+          cont: "即将在浏览器中打开此帖子",
+          confirmTxt: "确认",
+          cancelTxt: "取消",
+          confirm: () {
+            xsLanuch(
+              url: "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=$tid",
+            );
+          });
+      return;
+    }
     String info_txt = await getStorage(key: "myinfo", initData: "");
     _setHistory();
     if (info_txt == "") {
