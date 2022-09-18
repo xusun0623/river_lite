@@ -16,6 +16,7 @@ import 'package:offer_show/router/router.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:window_manager/window_manager.dart';
 
 void main() async {
   if (Platform.isAndroid) {
@@ -24,18 +25,34 @@ void main() async {
     );
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
-  runApp(MyApp());
   if (Platform.isWindows) {
-    doWhenWindowReady(() {
-      final win = appWindow;
-      const initialSize = Size(1080, 720);
-      win.minSize = initialSize;
-      win.size = initialSize;
-      win.alignment = Alignment.center;
-      win.title = 'Hello World';
-      win.show();
+    WidgetsFlutterBinding.ensureInitialized();
+    await windowManager.ensureInitialized();
+    WindowOptions windowOptions = WindowOptions(
+      size: Size(1080, 720),
+      center: true,
+      alwaysOnTop: false,
+      backgroundColor: Colors.transparent,
+      skipTaskbar: false,
+      titleBarStyle: TitleBarStyle.hidden,
+    );
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
     });
   }
+  runApp(MyApp());
+  // if (Platform.isWindows) {
+  //   doWhenWindowReady(() {
+  //     final win = appWindow;
+  //     const initialSize = Size(1080, 720);
+  //     win.minSize = initialSize;
+  //     win.size = initialSize;
+  //     win.alignment = Alignment.center;
+  //     win.title = 'Hello World';
+  //     win.show();
+  //   });
+  // }
 }
 
 class MyApp extends StatelessWidget {
