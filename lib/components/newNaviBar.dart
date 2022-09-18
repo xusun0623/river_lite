@@ -8,12 +8,14 @@ import 'package:provider/provider.dart';
 
 class Baaaar extends StatefulWidget {
   bool isDark;
+  bool hideLogo;
   Widget child;
   Color color;
   Baaaar({
     Key key,
     this.isDark,
     this.color,
+    this.hideLogo,
     @required this.child,
   }) : super(key: key);
 
@@ -66,7 +68,8 @@ class _BaaaarState extends State<Baaaar> {
                                   opacity: Provider.of<ColorProvider>(context)
                                               .isDark ||
                                           tabShowProvider.index == 2 ||
-                                          (widget.isDark ?? false)
+                                          (widget.isDark ?? false) ||
+                                          (widget.hideLogo ?? false)
                                       ? 0
                                       : 1,
                                   child: Image.asset(

@@ -134,7 +134,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                     tap: () {
                       if (widget.tap != null) widget.tap();
                     },
-                    color: widget.color ?? os_color,
+                    color: widget.color ?? os_deep_blue,
                     widget: Container(
                       width: 55,
                       height: 55,
@@ -174,7 +174,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                   widget.show = false;
                   setState(() {});
                 },
-                color: widget.color ?? os_color,
+                color: widget.color ?? os_deep_blue,
                 widget: Container(
                   width: 55,
                   height: 55,

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
@@ -117,7 +119,7 @@ class _AboutState extends State<About> {
                 size: 50,
               ),
               title: "开发&设计者",
-              cont: '''xusun000\n电子科技大学 2018级 计算机学院互联网+班本科生''',
+              cont: '''xusun000\n电子科技大学 2018级 计算机学院\n互联网+班本科生''',
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 30),
@@ -178,57 +180,69 @@ class _AboutCardState extends State<AboutCard> {
                 ? os_light_dark_card
                 : os_white,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
             children: [
-              Center(child: widget.head),
-              Container(height: 10),
-              Center(
-                child: Text(
-                  widget.title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_white
-                        : os_black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22,
-                  ),
-                ),
-              ),
-              Container(height: 5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width -
-                        MinusSpace(context) -
-                        ((widget.withUrl ?? false) || widget.title == "开发&设计者"
-                            ? 124
-                            : 100),
-                    child: Text(
-                      (widget.title == "开发&设计者" ? "      " : "") + widget.cont,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_dark_white
-                            : os_light_dark_card,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16,
-                        height: 1.6,
-                      ),
-                    ),
-                  ),
-                  (widget.withUrl ?? false) || widget.title == "开发&设计者"
+              Positioned(
+                  right: 0,
+                  top: 0,
+                  child: (widget.withUrl ?? false) || widget.title == "开发&设计者"
                       ? Container(
-                          padding: EdgeInsets.only(top: 5),
+                          // padding: EdgeInsets.only(top: 5),
+                          child: Transform.rotate(
+                          angle: -pi / 4,
                           child: Icon(
-                            Icons.chevron_right,
+                            Icons.arrow_forward,
+                            // size: 20,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_dark_white
                                 : os_black,
-                          ))
-                      : Container()
+                          ),
+                        ))
+                      : Container()),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(child: widget.head),
+                  Container(height: 10),
+                  Center(
+                    child: Text(
+                      widget.title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_white
+                            : os_black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),
+                    ),
+                  ),
+                  Container(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width -
+                            MinusSpace(context) -
+                            ((widget.withUrl ?? false) ||
+                                    widget.title == "开发&设计者"
+                                ? 124
+                                : 100),
+                        child: Text(
+                          widget.cont,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_dark_white
+                                : os_light_dark_card,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16,
+                            height: 1.6,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ],

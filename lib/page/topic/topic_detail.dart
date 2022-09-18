@@ -773,6 +773,9 @@ class _TopicDetailState extends State<TopicDetail> {
   Widget build(BuildContext context) {
     nowMode(context);
     return Baaaar(
+      color: Provider.of<ColorProvider>(context).isDark
+          ? os_light_dark_card
+          : os_white,
       child: Scaffold(
         appBar: data == null || data["topic"] == null
             ? AppBar(
