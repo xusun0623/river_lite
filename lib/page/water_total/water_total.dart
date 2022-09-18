@@ -24,6 +24,8 @@ class _WaterTotalState extends State<WaterTotal> {
   @override
   Widget build(BuildContext context) {
     return Baaaar(
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Provider.of<ColorProvider>(context).isDark

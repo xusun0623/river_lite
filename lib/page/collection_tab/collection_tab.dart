@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/niw.dart';
@@ -36,6 +37,7 @@ class _CollectionTabState extends State<CollectionTab>
   @override
   void initState() {
     _getMydata(); //获取我的收藏
+    speedUp(_scrollController);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {

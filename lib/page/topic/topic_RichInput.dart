@@ -6,6 +6,7 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/uploadAttachment.dart';
 import 'package:offer_show/components/niw.dart';
@@ -107,132 +108,110 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
       bottom: widget.bottom ?? 0,
       child: Column(
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: popSection ? 200 : 250,
-            decoration: BoxDecoration(
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+            ),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding:
+                  EdgeInsets.symmetric(horizontal: MinusSpace(context) / 2),
+              height: popSection ? 200 : 250,
+              decoration: BoxDecoration(
                 color: Provider.of<ColorProvider>(context).isDark
                     ? Color(0xFF222222)
                     : os_white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15),
-                ),
+                border: Border(top: BorderSide(width: 1, color: os_grey)),
                 boxShadow: [
-                  BoxShadow(
-                    color: Color.fromRGBO(0, 0, 0, 0.1),
-                    blurRadius: 7,
-                    offset: Offset(1, -2),
-                  )
-                ]),
-            child: Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          SendFunc(
-                            path: Provider.of<ColorProvider>(context).isDark
-                                ? "lib/img/topic_dark_func/topic_emoji.svg"
-                                : "lib/img/topic_emoji.svg",
-                            tap: () {
-                              widget.focusNode.unfocus();
-                              popSectionIndex = 0;
-                              popSection = true;
-                              controller.forward();
-                              setState(() {});
-                            },
-                          ),
-                          SendFunc(
-                            path: Provider.of<ColorProvider>(context).isDark
-                                ? "lib/img/topic_dark_func/topic_@.svg"
-                                : "lib/img/topic_@.svg",
-                            tap: () async {
-                              widget.focusNode.unfocus();
-                              popSectionIndex = 1;
-                              popSection = true;
-                              controller.forward();
-                              setState(() {});
-                            },
-                          ),
-                          SendFunc(
-                            nums: image.length == 0 ? null : image.length,
-                            loading: upLoading,
-                            path: Provider.of<ColorProvider>(context).isDark
-                                ? "lib/img/topic_dark_func/topic_picture.svg"
-                                : "lib/img/topic_picture.svg",
-                            tap: () async {
-                              setState(() {
+                  // BoxShadow(
+                  //   color: Color.fromRGBO(0, 0, 0, 0.1),
+                  //   blurRadius: 7,
+                  //   offset: Offset(1, -2),
+                  // )
+                ],
+              ),
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: Row(
+                          children: [
+                            SendFunc(
+                              path: Provider.of<ColorProvider>(context).isDark
+                                  ? "lib/img/topic_dark_func/topic_emoji.svg"
+                                  : "lib/img/topic_emoji.svg",
+                              tap: () {
                                 widget.focusNode.unfocus();
-                                upLoading = true;
-                              });
-                              if (isMacOS()) {
-                                ///单独对MacOS进行处理
-                                image = await pickeImgFile(context);
-                              } else {
-                                final ImagePicker _picker = ImagePicker();
-                                image = await _picker.pickMultiImage(
-                                      imageQuality: 50,
-                                    ) ??
-                                    [];
-                                showToast(
+                                popSectionIndex = 0;
+                                popSection = true;
+                                controller.forward();
+                                setState(() {});
+                              },
+                            ),
+                            SendFunc(
+                              path: Provider.of<ColorProvider>(context).isDark
+                                  ? "lib/img/topic_dark_func/topic_@.svg"
+                                  : "lib/img/topic_@.svg",
+                              tap: () async {
+                                widget.focusNode.unfocus();
+                                popSectionIndex = 1;
+                                popSection = true;
+                                controller.forward();
+                                setState(() {});
+                              },
+                            ),
+                            SendFunc(
+                              nums: image.length == 0 ? null : image.length,
+                              loading: upLoading,
+                              path: Provider.of<ColorProvider>(context).isDark
+                                  ? "lib/img/topic_dark_func/topic_picture.svg"
+                                  : "lib/img/topic_picture.svg",
+                              tap: () async {
+                                setState(() {
+                                  widget.focusNode.unfocus();
+                                  upLoading = true;
+                                });
+                                if (isMacOS()) {
+                                  ///单独对MacOS进行处理
+                                  image = await pickeImgFile(context);
+                                } else {
+                                  final ImagePicker _picker = ImagePicker();
+                                  image = await _picker.pickMultiImage(
+                                        imageQuality: 50,
+                                      ) ??
+                                      [];
+                                  showToast(
+                                    context: context,
+                                    type: XSToast.loading,
+                                    txt: "上传中…",
+                                  );
+                                }
+                                var img_urls =
+                                    await Api().uploadImage(imgs: image) ?? [];
+                                await widget.uploadImg(img_urls);
+                                setState(() {
+                                  upLoading = false;
+                                });
+                                hideToast();
+                              },
+                            ),
+                            SendFunc(
+                              path: Provider.of<ColorProvider>(context).isDark
+                                  ? "lib/img/topic_attach_light.svg"
+                                  : "lib/img/topic_attach.svg",
+                              uploadProgress: uploadProgress,
+                              tap: () async {
+                                showActionSheet(
                                   context: context,
-                                  type: XSToast.loading,
-                                  txt: "上传中…",
-                                );
-                              }
-                              var img_urls =
-                                  await Api().uploadImage(imgs: image) ?? [];
-                              await widget.uploadImg(img_urls);
-                              setState(() {
-                                upLoading = false;
-                              });
-                              hideToast();
-                            },
-                          ),
-                          SendFunc(
-                            path: Provider.of<ColorProvider>(context).isDark
-                                ? "lib/img/topic_attach_light.svg"
-                                : "lib/img/topic_attach.svg",
-                            uploadProgress: uploadProgress,
-                            tap: () async {
-                              showActionSheet(
-                                context: context,
-                                actions: [
-                                  ActionItem(
-                                    title: "上传视频",
-                                    onPressed: () async {
-                                      Navigator.pop(context);
-                                      String aid = await getVideoUploadAid(
-                                        tid: widget.tid,
-                                        fid: widget.fid,
-                                        context: context,
-                                        onUploadProgress: (rate) {
-                                          setState(() {
-                                            uploadProgress = rate;
-                                          });
-                                        },
-                                      );
-                                      print("上传的附件${aid}");
-                                      if (aid != "") {
-                                        setState(() {
-                                          uploadFile = aid;
-                                        });
-                                        widget.uploadFile(aid); //上传附件
-                                      } else {
-                                        setState(() {
-                                          uploadFile = "";
-                                        });
-                                      }
-                                    },
-                                  ),
-                                  ActionItem(
-                                      title: "上传附件",
+                                  actions: [
+                                    ActionItem(
+                                      title: "上传视频",
                                       onPressed: () async {
                                         Navigator.pop(context);
-                                        String aid = await getUploadAid(
+                                        String aid = await getVideoUploadAid(
                                           tid: widget.tid,
                                           fid: widget.fid,
                                           context: context,
@@ -253,107 +232,145 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                             uploadFile = "";
                                           });
                                         }
-                                      }),
-                                ],
-                                bottomActionItem: BottomActionItem(title: "取消"),
-                              );
-                            },
-                          ),
-                          SwitchHead(),
-                        ],
+                                      },
+                                    ),
+                                    ActionItem(
+                                        title: "上传附件",
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+                                          String aid = await getUploadAid(
+                                            tid: widget.tid,
+                                            fid: widget.fid,
+                                            context: context,
+                                            onUploadProgress: (rate) {
+                                              setState(() {
+                                                uploadProgress = rate;
+                                              });
+                                            },
+                                          );
+                                          print("上传的附件${aid}");
+                                          if (aid != "") {
+                                            setState(() {
+                                              uploadFile = aid;
+                                            });
+                                            widget.uploadFile(aid); //上传附件
+                                          } else {
+                                            setState(() {
+                                              uploadFile = "";
+                                            });
+                                          }
+                                        }),
+                                  ],
+                                  bottomActionItem:
+                                      BottomActionItem(title: "取消"),
+                                );
+                              },
+                            ),
+                            SwitchHead(),
+                          ],
+                        ),
                       ),
-                    ),
-                    Center(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.75,
-                        height: popSection ? 135 : 185,
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: TextField(
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          focusNode: widget.focusNode,
-                          controller: widget.controller,
-                          style: TextStyle(
-                            height: 1.8,
-                            color: Provider.of<ColorProvider>(context).isDark
-                                ? os_dark_white
-                                : os_black,
-                          ),
-                          cursorColor: Color(0xFF004DFF),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: widget.placeholder ??
-                                (isMacOS()
-                                    ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
-                                    : "请在此编辑回复"),
-                            hintStyle: TextStyle(
+                      Center(
+                        child: Container(
+                          width: (MediaQuery.of(context).size.width -
+                                  MinusSpace(context)) *
+                              0.75,
+                          height: popSection ? 135 : 185,
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          child: TextField(
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            focusNode: widget.focusNode,
+                            controller: widget.controller,
+                            style: TextStyle(
                               height: 1.8,
                               color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_dark_white
-                                  : Color(0xFFBBBBBB),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    myInkWell(
-                      color: Colors.transparent,
-                      tap: () {
-                        widget.cancel();
-                      },
-                      widget: Container(
-                        width: MediaQuery.of(context).size.width * 0.25,
-                        height: 60,
-                        child: Center(
-                          child: Text(
-                            "取消",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Provider.of<ColorProvider>(context).isDark
                                   ? os_dark_white
-                                  : Color(0xFF656565),
+                                  : os_black,
                             ),
-                          ),
-                        ),
-                      ),
-                      radius: 15,
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 15),
-                      child: myInkWell(
-                        tap: () {
-                          widget.send();
-                        },
-                        color: Color(0xFF004DFF),
-                        widget: Container(
-                          width: MediaQuery.of(context).size.width * 0.2,
-                          height: 100,
-                          child: Center(
-                            child: Text(
-                              "发\n送",
-                              style: TextStyle(
-                                color: os_white,
-                                fontSize: 16,
+                            cursorColor: Color(0xFF004DFF),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: widget.placeholder ??
+                                  (isMacOS()
+                                      ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
+                                      : "请在此编辑回复"),
+                              hintStyle: TextStyle(
+                                height: 1.8,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_dark_white
+                                        : Color(0xFFBBBBBB),
                               ),
                             ),
                           ),
                         ),
-                        radius: 10,
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      myInkWell(
+                        color: Colors.transparent,
+                        tap: () {
+                          widget.cancel();
+                        },
+                        widget: Container(
+                          width: (MediaQuery.of(context).size.width -
+                                  MinusSpace(context)) *
+                              0.25,
+                          height: 60,
+                          child: Center(
+                            child: Text(
+                              "取消",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_white
+                                        : Color(0xFF656565),
+                              ),
+                            ),
+                          ),
+                        ),
+                        radius: 15,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 15),
+                        child: myInkWell(
+                          tap: () {
+                            widget.send();
+                          },
+                          color: Color(0xFF004DFF),
+                          widget: Container(
+                            width: (MediaQuery.of(context).size.width -
+                                    MinusSpace(context)) *
+                                0.2,
+                            height: 100,
+                            child: Center(
+                              child: Text(
+                                "发\n送",
+                                style: TextStyle(
+                                  color: os_white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                          radius: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           popSection
               ? Container(
-                  width: MediaQuery.of(context).size.width,
+                  width:
+                      (MediaQuery.of(context).size.width - MinusSpace(context)),
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_back
                       : os_white,

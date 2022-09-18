@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
@@ -108,7 +109,8 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
           ),
         ),
         height: 62 + widget.bottom ?? 0,
-        padding: EdgeInsets.fromLTRB(7, 7, 7, 7 + widget.bottom ?? 0),
+        padding: EdgeInsets.fromLTRB(7 + MinusSpace(context) / 2, 7,
+            7 + MinusSpace(context) / 2, 7 + widget.bottom ?? 0),
         width: MediaQuery.of(context).size.width,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,11 +122,15 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
               radius: 10,
               color: Colors.transparent,
               widget: Container(
-                width: MediaQuery.of(context).size.width - 156,
+                width: MediaQuery.of(context).size.width -
+                    MinusSpace(context) -
+                    156,
                 height: 47,
                 child: Center(
                   child: Container(
-                    width: MediaQuery.of(context).size.width - 200,
+                    width: MediaQuery.of(context).size.width -
+                        MinusSpace(context) -
+                        200,
                     child: Row(
                       children: [
                         Icon(

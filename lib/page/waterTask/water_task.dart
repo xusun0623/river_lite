@@ -342,6 +342,8 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Baaaar(
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Provider.of<ColorProvider>(context).isDark
@@ -359,14 +361,16 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
             indicatorColor: Colors.transparent,
             unselectedLabelStyle: TextStyle(
               fontWeight: FontWeight.normal,
-              fontSize: 14,
+              fontSize: 16,
               color: os_deep_grey,
+              fontFamily: "微软雅黑",
             ),
             isScrollable: true,
             labelStyle: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: 16,
               color: os_black,
+              fontFamily: "微软雅黑",
             ),
             tabs: [
               // Tab(text: "积分记录"),

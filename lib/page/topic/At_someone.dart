@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -28,6 +29,7 @@ class _AtSomeoneState extends State<AtSomeone> {
   @override
   void initState() {
     _getData();
+    speedUp(_scrollController);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {

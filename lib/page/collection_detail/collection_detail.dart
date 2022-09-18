@@ -4,6 +4,7 @@ import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
@@ -226,6 +227,7 @@ class _CollectionDetailState extends State<CollectionDetail> {
   @override
   void initState() {
     _initOp();
+    speedUp(_scrollController);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {

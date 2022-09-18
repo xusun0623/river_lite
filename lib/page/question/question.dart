@@ -611,6 +611,8 @@ class _QuestionState extends State<Question> {
   @override
   Widget build(BuildContext context) {
     return Baaaar(
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,

@@ -441,11 +441,14 @@ class _TopicDetailState extends State<TopicDetail> {
           ));
           img_count++; //有多少张图片连续
         }
-        tmp.add(Wrap(
-          children: renderImg,
-          spacing: 6,
-          runSpacing: 6,
-          alignment: WrapAlignment.start,
+        tmp.add(Container(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: Wrap(
+            children: renderImg,
+            spacing: 6,
+            runSpacing: 6,
+            alignment: WrapAlignment.start,
+          ),
         ));
         i += img_count - 1; //跳过渲染
       } else {
