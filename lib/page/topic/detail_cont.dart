@@ -296,7 +296,6 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                         )
                       : Container(
                           child: CachedNetworkImage(
-                            cacheManager: RiverListCacheManager.instance,
                             imageUrl: widget.data["infor"],
                             width: isDesktop()
                                 ? 200
@@ -449,7 +448,6 @@ List<InlineSpan> _getRichText(BuildContext context, String t) {
           child: Opacity(
             opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
             child: CachedNetworkImage(
-              cacheManager: RiverListCacheManager.instance,
               placeholder: (context, url) => Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
