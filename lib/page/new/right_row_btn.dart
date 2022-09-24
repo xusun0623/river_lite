@@ -180,13 +180,17 @@ class _RightRowBtnState extends State<RightRowBtn> {
                   child: Center(
                     child: Row(
                       children: [
-                        Text(
-                          "完成",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: os_white,
-                          ),
+                        Icon(
+                          Icons.keyboard_arrow_down,
+                          color: os_white,
                         ),
+                        // Text(
+                        //   "完成",
+                        //   style: TextStyle(
+                        //     fontSize: 12,
+                        //     color: os_white,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

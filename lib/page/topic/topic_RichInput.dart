@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:images_picker/images_picker.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -178,11 +179,17 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                   ///单独对MacOS进行处理
                                   image = await pickeImgFile(context);
                                 } else {
-                                  final ImagePicker _picker = ImagePicker();
-                                  image = await _picker.pickMultiImage(
-                                        imageQuality: 50,
-                                      ) ??
-                                      [];
+                                  print("选择小屏图片");
+                                  List<Media> res = await ImagesPicker.pick(
+                                    count: 50,
+                                    cropOpt: CropOption(),
+                                    pickType: PickType.image,
+                                    quality: 0.5, //一半的质量
+                                    maxSize: 1024, //1024KB
+                                  );
+                                  res.forEach((element) {
+                                    image.add(XFile(element.path));
+                                  });
                                   showToast(
                                     context: context,
                                     type: XSToast.loading,

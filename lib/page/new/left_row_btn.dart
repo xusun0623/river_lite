@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:images_picker/images_picker.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -45,6 +46,7 @@ class LeftRowBtn extends StatefulWidget {
 }
 
 class _LeftRowBtnState extends State<LeftRowBtn> {
+  bool isUpLoading = false;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -109,27 +111,42 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                 ActionItem(
                   title: "选择图片（建议3张以内）",
                   onPressed: () async {
-                    var image = [];
+                    List<XFile> image = [];
                     widget.setImgUrls([]);
                     Navigator.pop(context);
                     widget.title_focus.unfocus();
                     widget.tip_focus.unfocus();
                     if (isMacOS()) {
-                      ///针对MacOS进行适配
+                      print("选择大屏图片");
                       image = await pickeImgFile(context);
                     } else {
-                      final ImagePicker _picker = ImagePicker();
-                      image = await _picker.pickMultiImage(
-                        imageQuality: 50,
+                      print("选择小屏图片");
+                      List<Media> res = await ImagesPicker.pick(
+                        count: 50,
+                        cropOpt: CropOption(),
+                        pickType: PickType.image,
+                        quality: 0.5, //一半的质量
+                        maxSize: 1024, //1024KB
                       );
+                      res.forEach((element) {
+                        image.add(XFile(element.path));
+                      });
+                      // final ImagePicker _picker = ImagePicker();
+                      // image = await _picker.pickMultiImage(
+                      //   imageQuality: 50,
+                      // );
                     }
+                    print("${image}");
                     if (image == null || image.length == 0) {
                       return;
                     }
-                    widget.setUploading(true);
+                    setState(() {
+                      isUpLoading = true;
+                    });
                     widget.setImgUrls(await Api().uploadImage(imgs: image));
-                    widget.setUploading(false);
-                    setState(() {});
+                    setState(() {
+                      isUpLoading = false;
+                    });
                   },
                 ),
                 ...(widget.img_urls.length == 0
@@ -176,7 +193,26 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                 txt: "上传图片",
               ),
               widget.img_urls.length == 0
-                  ? Container()
+                  ? !isUpLoading
+                      ? Container()
+                      : Container(
+                          child: Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Container(
+                              width: 14,
+                              height: 14,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(
+                                    10,
+                                  ),
+                                ),
+                              ),
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        )
                   : Positioned(
                       right: 0,
                       top: 0,

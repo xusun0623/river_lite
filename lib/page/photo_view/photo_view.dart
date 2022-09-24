@@ -260,7 +260,9 @@ class FuncButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       ///布局自己换
-      left: MediaQuery.of(context).size.width / 2 - 90,
+      left: isDesktop()
+          ? MediaQuery.of(context).size.width / 2 - 90
+          : MediaQuery.of(context).size.width / 2 - 53,
       bottom: 70,
       child: GestureDetector(
         onTap: () {
