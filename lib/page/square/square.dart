@@ -86,7 +86,12 @@ class _SquareState extends State<Square> {
               : os_black,
           title: Text("全部板块", style: TextStyle(fontSize: 16)),
           leading: IconButton(
-            icon: Icon(Icons.chevron_left_rounded),
+            icon: Icon(
+              Icons.chevron_left_rounded,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_dark_back,
+            ),
             onPressed: () {
               Navigator.pop(context);
             },

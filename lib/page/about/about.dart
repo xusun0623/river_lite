@@ -52,7 +52,12 @@ class _AboutState extends State<About> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.chevron_left_rounded),
+            icon: Icon(
+              Icons.chevron_left_rounded,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_dark_back,
+            ),
           ),
         ),
         backgroundColor:
@@ -110,7 +115,7 @@ class _AboutState extends State<About> {
               ),
               title: "鸣谢",
               cont:
-                  '''测试者：下划线、Star🌟、北冥小鱼、weijifen、TYTSSN、hola、fix\n功能&Bug贡献者：司空临风、鹅妹(ECRU)、炎舞、月夜的飘零\n代码贡献者：Dnieper、方觉\n河畔水滴答题题库：Zhenger666\n代码仓库：https://gitee.com \n设计工具：https://figma.com''',
+                  '''测试者：下划线、Star🌟、北冥小鱼、weijifen、TYTSSN、hola、fix\n功能&Bug贡献者：司空临风、鹅妹(ECRU)、炎舞、月夜的飘零\n代码贡献者：熊熊、Dnieper、方觉\n河畔水滴答题题库：Zhenger666\n代码仓库：https://gitee.com \n设计工具：https://figma.com''',
             ),
             AboutCard(
               head: Icon(

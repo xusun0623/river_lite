@@ -113,7 +113,12 @@ class _UserListState extends State<UserList> {
             ),
           ),
           leading: IconButton(
-            icon: Icon(Icons.chevron_left_rounded),
+            icon: Icon(
+              Icons.chevron_left_rounded,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_dark_back,
+            ),
             onPressed: () {
               Navigator.pop(context);
             },

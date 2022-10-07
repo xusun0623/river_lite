@@ -123,7 +123,12 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                 color: Provider.of<ColorProvider>(context).isDark
                     ? Color(0xFF222222)
                     : os_white,
-                border: Border(top: BorderSide(width: 1, color: os_grey)),
+                border: Border(
+                    top: BorderSide(
+                        width: 1,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? Color(0x11ffffff)
+                            : os_grey)),
                 boxShadow: [
                   // BoxShadow(
                   //   color: Color.fromRGBO(0, 0, 0, 0.1),
