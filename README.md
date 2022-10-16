@@ -6,6 +6,7 @@
 本Repo是电子科技大学官方校园论坛【清水河畔】的第三方客户端的开源代码仓库。此App轻量、简洁、设计优雅，拥有诸多特性和功能。  
 
 ## 客户端下载（【提取码均为1234】）
+河畔Lite官网：[点击查看](http://hepan.site)  
 安卓客户端：[点击前往跳转下载安卓客户端](https://wwb.lanzouj.com/b027a448b)  
 IOS客户端：[点击访问AppStore下载客户端](https://apps.apple.com/cn/app/河畔lite/id1620829749)  
 MacOS客户端：[点击前往跳转下载MacOS客户端](https://wwb.lanzouj.com/b027gge2d)  
