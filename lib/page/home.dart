@@ -6,6 +6,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/autoQuestion.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -197,11 +198,7 @@ class _HomeState extends State<Home> {
           child: Container(
             width: MediaQuery.of(context).size.width / icons.length,
             height: barHeight,
-            color: Provider.of<ColorProvider>(context).isDark ||
-                    (Provider.of<ShowPicProvider>(context).isShow &&
-                        tabShowProvider.index == 1)
-                ? os_dark_back
-                : Color(0xFFFFFFFF),
+            color: Color(0x01FFFFFF),
             child: Badge(
               position: BadgePosition(
                 end: 35,
@@ -284,15 +281,6 @@ class _HomeState extends State<Home> {
               height: barHeight + barPadding,
               padding: EdgeInsets.only(bottom: barPadding),
               decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Provider.of<ColorProvider>(context).isDark ||
-                            (Provider.of<ShowPicProvider>(context).isShow &&
-                                tabShowProvider.index == 1)
-                        ? os_dark_back
-                        : Color(0xFFEEEEEE),
-                  ),
-                ),
                 color: Provider.of<ColorProvider>(context).isDark ||
                         (Provider.of<ShowPicProvider>(context).isShow &&
                             tabShowProvider.index == 1)
@@ -310,15 +298,60 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // children: _buildWidget(tabShowProvider.loadIndex),
-                children: _buildWidget(
-                    !Provider.of<ShowPicProvider>(context).isShow
-                        ? [0, 2, 3]
-                        : [0, 1, 2, 3]),
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: -2.5,
+                    top: 0,
+                    child: QueationProgress(),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: _buildWidget(
+                        !Provider.of<ShowPicProvider>(context).isShow
+                            ? [0, 2, 3]
+                            : [0, 1, 2, 3]),
+                  ),
+                ],
               ),
             ),
           );
+  }
+}
+
+class QueationProgress extends StatefulWidget {
+  const QueationProgress({Key key}) : super(key: key);
+
+  @override
+  State<QueationProgress> createState() => _QueationProgressState();
+}
+
+class _QueationProgressState extends State<QueationProgress> {
+  int progress = -1;
+
+  @override
+  void initState() {
+    autoQuestion((val) {
+      setState(() {
+        progress = val;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      width: progress == -1
+          ? 0
+          : (progress.toDouble() / 7) * MediaQuery.of(context).size.width,
+      height: 5,
+      decoration: BoxDecoration(
+        color: os_deep_blue,
+        borderRadius: BorderRadius.circular(100),
+      ),
+      curve: Curves.ease,
+      duration: Duration(milliseconds: 200),
+    );
   }
 }
