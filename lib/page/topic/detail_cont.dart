@@ -339,6 +339,9 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                   context,
                   MaterialPageRoute(
                     builder: (_) => PhotoPreview(
+                      isSmallPic: widget.imgLists.length > 3 ||
+                          isDesktop() ||
+                          widget.imgLists.length > 20,
                       desc: widget.desc,
                       title: widget.title,
                       galleryItems: widget.imgLists,
