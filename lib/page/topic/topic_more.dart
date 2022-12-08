@@ -214,6 +214,13 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       List<ActionItem> tmp = [];
       tmp.addAll([
         ActionItem(
+          title: "展示二维码",
+          onPressed: () {
+            Navigator.pop(context);
+            _showQrCode();
+          },
+        ),
+        ActionItem(
           title: "分享",
           onPressed: () {
             Navigator.pop(context);
@@ -368,15 +375,18 @@ class _QrCodeState extends State<QrCode> {
         children: [
           Container(height: 30),
           //https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1951303
-          SelectableText(
-            "请扫码或在河畔Lite App搜索框输入t${widget.url.split("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")[1]}在手机上查看",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_dark_white
-                  : os_black,
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            child: SelectableText(
+              "请扫码或在河畔Lite App搜索框输入t${widget.url.split("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")[1]}在手机上查看",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : os_black,
+              ),
             ),
           ),
           Container(height: 20),

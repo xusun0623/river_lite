@@ -767,9 +767,9 @@ class TitleInput extends StatelessWidget {
                 ? os_dark_white
                 : os_black,
           ),
-          cursorColor: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_back
-              : os_white,
+          // cursorColor: Provider.of<ColorProvider>(context).isDark
+          //     ? os_dark_back
+          //     : os_white,
           decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(15)),

@@ -56,6 +56,20 @@ class _QRViewExampleState extends State<QRViewExample> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode result;
   QRViewController controller;
+  bool isReady = false;
+
+  delay() async {
+    await Future.delayed(Duration(milliseconds: 1500));
+    setState(() {
+      isReady = true;
+    });
+  }
+
+  @override
+  void initState() {
+    delay();
+    super.initState();
+  }
 
   @override
   void reassemble() {
@@ -81,13 +95,35 @@ class _QRViewExampleState extends State<QRViewExample> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30),
-            child: Container(
-              width: MediaQuery.of(context).size.width - 100,
-              height: 400,
-              child: QRView(
-                key: qrKey,
-                onQRViewCreated: _onQRViewCreated,
-              ),
+            child: Stack(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width - 100,
+                  height: 400,
+                  child: QRView(
+                    key: qrKey,
+                    onQRViewCreated: _onQRViewCreated,
+                  ),
+                ),
+                isReady
+                    ? Container(
+                        width: MediaQuery.of(context).size.width - 100,
+                      )
+                    : Positioned(
+                        left: (MediaQuery.of(context).size.width - 100) / 2,
+                        top: 200,
+                        child: Transform.translate(
+                          offset: Offset(-20, -20),
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            child: CircularProgressIndicator(
+                              color: os_white,
+                            ),
+                          ),
+                        ),
+                      )
+              ],
             ),
           ),
         ),
