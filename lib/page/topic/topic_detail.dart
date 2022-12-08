@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
@@ -66,6 +67,7 @@ class _TopicDetailState extends State<TopicDetail> {
   bool isBlack = false;
   bool isInvalid = false; //帖子是否失效
   bool isNoAccess = false; //帖子是否没有访问权限
+  bool isDispose = false; //是否释放了页面
   String placeholder =
       (isMacOS() ? "请在此编辑回复，按住control键+空格键以切换中英文输入法" : "请在此编辑回复");
   List<Map> atUser = [];
@@ -300,6 +302,7 @@ class _TopicDetailState extends State<TopicDetail> {
       "page": 1,
       "pageSize": 20,
     });
+    // await Future.delayed(Duration(seconds: 1000));
     if (tmp.toString().contains("您没有权限访问该版块")) {
       setState(() {
         isNoAccess = true;
@@ -328,7 +331,7 @@ class _TopicDetailState extends State<TopicDetail> {
         data = null;
       }
     } catch (e) {}
-    if (data == null || data["topic"] == null) {
+    if ((data == null || data["topic"] == null) && !isDispose) {
       xsLanuch(
         url:
             "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${widget.topicID}",
@@ -360,6 +363,9 @@ class _TopicDetailState extends State<TopicDetail> {
 
   @override
   void dispose() {
+    setState(() {
+      isDispose = true;
+    });
     super.dispose();
   }
 
@@ -851,6 +857,13 @@ class _TopicDetailState extends State<TopicDetail> {
                     showError: load_done,
                     msg: "河畔Lite客户端没有权限访问或者帖子被删除，可以尝试网页端是否能访问",
                     tapTxt: "访问网页版>",
+                    cancel: () {
+                      // print("11111");
+                      setState(() {
+                        isDispose = true;
+                      });
+                      Navigator.of(context).pop();
+                    },
                     tap: () async {
                       xsLanuch(
                           url: base_url +

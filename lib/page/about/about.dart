@@ -124,7 +124,7 @@ class _AboutState extends State<About> {
                 size: 50,
               ),
               title: "开发&设计者",
-              cont: '''xusun000\n电子科技大学 2018级 计算机学院\n互联网+班本科生''',
+              cont: '''xusun000''',
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 30),
