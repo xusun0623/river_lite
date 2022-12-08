@@ -108,6 +108,10 @@ class _PostNewState extends State<PostNew> {
       for (var board in data["list"]) {
         for (var board_tip in board["board_list"]) {
           if (board_tip["board_id"] == select_section_id) {
+            if (board_tip["board_name"] == "鹊桥" &&
+                tip_controller.text.length == 0) {
+              tip_controller.text = bridgeFormatTxt;
+            }
             setState(() {
               select_section = board_tip["board_name"];
             });
