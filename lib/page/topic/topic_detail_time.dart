@@ -15,9 +15,11 @@ import 'package:provider/provider.dart';
 class TopicDetailTime extends StatefulWidget {
   var data;
   Function refresh;
+  Function capture;
   TopicDetailTime({
     Key key,
     this.refresh,
+    this.capture,
     @required this.data,
   }) : super(key: key);
 
@@ -276,6 +278,27 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                         width: 14,
                         height: 17),
                   ]),
+                ),
+                radius: 10),
+            myInkWell(
+                color: Colors.transparent,
+                tap: () async {
+                  if (widget.capture != null) {
+                    widget.capture();
+                  }
+                },
+                widget: Padding(
+                  padding:
+                      EdgeInsets.only(left: 8.0, right: 8, top: 9, bottom: 7),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        os_svg(
+                          path: "lib/img/topic_capture.svg",
+                          width: 17,
+                          height: 17,
+                        ),
+                      ]),
                 ),
                 radius: 10),
           ])
