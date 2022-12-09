@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:badges/badges.dart';
-import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:badges/badges.dart' as badgee;
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/components/niw.dart';
@@ -293,7 +292,7 @@ class _NaviBtnState extends State<NaviBtn> {
         radius: 7.5,
         widget: Container(
           padding: EdgeInsets.all(10),
-          child: Badge(
+          child: badgee.Badge(
             showBadge: (widget.isNewMsg ?? false) && widget.index == 3,
             child: Column(
               children: [

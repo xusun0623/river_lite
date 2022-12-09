@@ -2,10 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badgee;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/autoQuestion.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
@@ -199,8 +198,8 @@ class _HomeState extends State<Home> {
             width: MediaQuery.of(context).size.width / icons.length,
             height: barHeight,
             color: Color(0x01FFFFFF),
-            child: Badge(
-              position: BadgePosition(
+            child: badgee.Badge(
+              position: badgee.BadgePosition(
                 end: 35,
                 top: 20,
               ),
