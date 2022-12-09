@@ -74,9 +74,9 @@ class _CommentTabState extends State<CommentTab> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      color: Provider.of<ColorProvider>(context).isDark
-          ? os_detail_back
-          : os_white,
+      // color: Provider.of<ColorProvider>(context).isDark
+      //     ? os_detail_back
+      //     : os_white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

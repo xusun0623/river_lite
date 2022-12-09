@@ -402,7 +402,7 @@ class _TopicDetailState extends State<TopicDetail> {
     screenshotController.capture().then((Uint8List image) async {
       final result = await ImageGallerySaver.saveImage(
         image,
-        quality: 60,
+        quality: 100,
         name: "河畔-" + new DateTime.now().millisecondsSinceEpoch.toString(),
       );
       if (result["isSuccess"]) {
@@ -666,7 +666,7 @@ class _TopicDetailState extends State<TopicDetail> {
     hideToast();
   }
 
-  _buildTotal() {
+  List<Widget> _buildTotal() {
     //对整个页面的组件流进行整合
     List<Widget> tmp = [];
     tmp = [
@@ -923,16 +923,29 @@ class _TopicDetailState extends State<TopicDetail> {
                               show: showBackToTop,
                               animation: true,
                               controller: _scrollController,
-                              child: Screenshot(
-                                controller: screenshotController,
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(),
-                                  child: ListView(
-                                    physics: BouncingScrollPhysics(),
-                                    controller: _scrollController,
-                                    children: _buildTotal(),
+                              child: ListView(
+                                physics: BouncingScrollPhysics(),
+                                controller: _scrollController,
+                                children: [
+                                  SingleChildScrollView(
+                                    child: Screenshot(
+                                      child: Container(
+                                        color:
+                                            Provider.of<ColorProvider>(context)
+                                                    .isDark
+                                                ? os_light_dark_card
+                                                : os_white,
+                                        child: ListView(
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          children: _buildTotal(),
+                                        ),
+                                      ),
+                                      controller: screenshotController,
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
