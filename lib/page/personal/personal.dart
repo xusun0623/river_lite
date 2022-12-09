@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -24,6 +23,7 @@ import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
+import 'package:offer_show/page/topic/topic_more.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
@@ -204,6 +204,43 @@ class _PersonCenterState extends State<PersonCenter> {
     super.initState();
   }
 
+  _tapMore() {
+    showActionSheet(
+      context: context,
+      bottomActionItem: BottomActionItem(title: "取消"),
+      actions: [
+        ActionItem(
+            title: "复制空间链接",
+            onPressed: () {
+              Navigator.pop(context);
+              Clipboard.setData(
+                ClipboardData(
+                  text:
+                      "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
+                ),
+              );
+              showToast(
+                context: context,
+                type: XSToast.success,
+                txt: "复制链接成功",
+              );
+            }),
+        ActionItem(
+          title: "展示二维码",
+          onPressed: () {
+            Navigator.pop(context);
+            showPop(context, [
+              QrCode(
+                url:
+                    "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
+              )
+            ]);
+          },
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     nowMode(context);
@@ -241,46 +278,17 @@ class _PersonCenterState extends State<PersonCenter> {
                   ? []
                   : widget.param["isMe"]
                       ? [
-                          // IconButton(
-                          //   onPressed: () async {
-                          //     Clipboard.setData(
-                          //       ClipboardData(
-                          //         text:
-                          //             "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
-                          //       ),
-                          //     );
-                          //     showToast(
-                          //       context: context,
-                          //       type: XSToast.success,
-                          //       txt: "复制链接成功",
-                          //     );
-                          //   },
-                          //   icon: Icon(
-                          //     Icons.copy,
-                          //     color: Color(0xFFAAAAAA),
-                          //   ),
-                          // ),
+                          IconButton(
+                            onPressed: () async {
+                              _tapMore();
+                            },
+                            icon: Icon(
+                              Icons.more_horiz,
+                              color: Color(0xFFAAAAAA),
+                            ),
+                          ),
                         ]
                       : [
-                          // IconButton(
-                          //   onPressed: () async {
-                          //     Clipboard.setData(
-                          //       ClipboardData(
-                          //         text:
-                          //             "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
-                          //       ),
-                          //     );
-                          //     showToast(
-                          //       context: context,
-                          //       type: XSToast.success,
-                          //       txt: "复制链接成功",
-                          //     );
-                          //   },
-                          //   icon: Icon(
-                          //     Icons.copy,
-                          //     color: Color(0xFFAAAAAA),
-                          //   ),
-                          // ),
                           IconButton(
                             onPressed: () async {
                               await Api().user_useradmin({
@@ -313,7 +321,16 @@ class _PersonCenterState extends State<PersonCenter> {
                               Icons.mail,
                               color: Color(0xFFAAAAAA),
                             ),
-                          )
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              _tapMore();
+                            },
+                            icon: Icon(
+                              Icons.more_horiz,
+                              color: Color(0xFFAAAAAA),
+                            ),
+                          ),
                         ],
           backgroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_back

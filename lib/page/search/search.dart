@@ -9,6 +9,7 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/nowMode.dart';
+import 'package:offer_show/asset/processUrl.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
@@ -45,21 +46,8 @@ class _SearchState extends State<Search> {
   ScrollController _scrollController = new ScrollController();
   TextEditingController _controller = new TextEditingController();
   _getData() async {
-    if (_controller.text == "")
-      return;
-    else if (_controller.text
-        .contains("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")) {
-      int tid_tmp = int.parse(
-        _controller.text.split("mod=viewthread&tid=")[1].split("&")[0],
-      );
-      Navigator.pushNamed(context, "/topic_detail", arguments: tid_tmp);
-      return;
-    } else if (_controller.text
-        .contains("https://bbs.uestc.edu.cn/home.php?mod=space&uid=")) {
-      int uid_tmp = int.parse(
-        _controller.text.split("mod=space&uid=")[1].split("&")[0],
-      );
-      toUserSpace(context, uid_tmp);
+    if (specialUrl(_controller.text)) {
+      processUrl(_controller.text, context);
       return;
     } else {
       int tid = 0;

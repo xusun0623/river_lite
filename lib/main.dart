@@ -81,6 +81,11 @@ class MyApp extends StatelessWidget {
                   ? os_dark_back
                   : os_back,
             ),
+            dialogBackgroundColor: Colors.white,
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.blue,
+              backgroundColor: Colors.white,
+            ),
             primaryColor: os_color,
             useMaterial3: true,
             // fontFamily: "MiSans",

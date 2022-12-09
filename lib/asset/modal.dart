@@ -15,9 +15,7 @@ void showMidActionSheet({
     for (var i = 0; i < list.length; i++) {
       tmp.add(
         myInkWell(
-          color: Provider.of<ColorProvider>(context, listen: false).isDark
-              ? os_dark_card
-              : os_white,
+          color: Colors.transparent,
           tap: () {
             select(i);
             Navigator.pop(context);

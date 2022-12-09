@@ -60,18 +60,18 @@ _getQuestion({Function callback}) async {
       //还在答题
       await Api().next_question();
     }
-    await _getQuestion();
+    await _getQuestion(callback: callback);
   } else {
     if (callback != null) {
       print("正在答题");
       callback(count);
     }
     _getAns(get_q_a);
-    _submit();
+    _submit(callback: callback);
   }
 }
 
-_submit() async {
+_submit({Function callback}) async {
   if ((match_answer == "") || (match_answer == null)) {
   } else if ((match_answer == "") || (match_answer == null)) {
     //  机器没匹配到
@@ -85,7 +85,7 @@ _submit() async {
       );
       ret_value = 0;
       match_answer = "";
-      _getQuestion();
+      _getQuestion(callback: callback);
     }
   }
 }

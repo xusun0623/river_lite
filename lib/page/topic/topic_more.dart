@@ -367,6 +367,16 @@ class QrCode extends StatefulWidget {
 }
 
 class _QrCodeState extends State<QrCode> {
+  getBriefId() {
+    if (widget.url
+        .contains("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")) {
+      return "t${widget.url.split("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")[1].split("&")[0]}";
+    } else if (widget.url
+        .contains("https://bbs.uestc.edu.cn/home.php?mod=space&uid=")) {
+      return "u${widget.url.split("https://bbs.uestc.edu.cn/home.php?mod=space&uid=")[1].split("&")[0]}";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -378,7 +388,7 @@ class _QrCodeState extends State<QrCode> {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 15),
             child: SelectableText(
-              "请扫码或在河畔Lite App搜索框输入t${widget.url.split("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")[1]}在手机上查看",
+              "请扫码或在河畔Lite App搜索框输入${getBriefId()}在手机上查看",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,

@@ -1,16 +1,12 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:images_picker/images_picker.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/recognization.dart';
 import 'package:offer_show/asset/vibrate.dart';
-import 'package:offer_show/util/provider.dart';
-import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanQRCode extends StatefulWidget {
@@ -32,6 +28,21 @@ class _ScanQRCodeState extends State<ScanQRCode> {
         elevation: 0,
         foregroundColor: os_white,
         backgroundColor: os_black,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              List<Media> res = await ImagesPicker.pick(
+                count: 1,
+                cropOpt: CropOption(),
+                pickType: PickType.image,
+                quality: 0.7, //一半的质量
+                maxSize: 2048, //1024KB
+              );
+              recognizationQr(res[0].path, context);
+            },
+            icon: Icon(Icons.image_outlined),
+          )
+        ],
         leading: IconButton(
           icon: Icon(Icons.chevron_left_rounded),
           onPressed: () {

@@ -73,6 +73,7 @@ class _CommentState extends State<Comment> {
   }
 
   _tapLike() async {
+    Vibrate.feedback(FeedbackType.heavy);
     if (liked == 1) return;
     liked = 1;
     widget.data["extraPanel"][0]["extParams"]["recommendAdd"]++;
