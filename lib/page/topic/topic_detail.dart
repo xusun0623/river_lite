@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:html/parser.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -38,6 +39,7 @@ import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
@@ -79,6 +81,9 @@ class _TopicDetailState extends State<TopicDetail> {
   TextEditingController _txtController = new TextEditingController();
   FocusNode _focusNode = new FocusNode();
 
+  Uint8List _imageFile;
+  ScreenshotController screenshotController = ScreenshotController();
+
   var dislike_count = 0;
 
   //一键转发
@@ -104,16 +109,9 @@ class _TopicDetailState extends State<TopicDetail> {
       }
     }
     print("${contents}");
-    List cont_head_tmp = [
-      {
-        "infor": "由河畔Lite App一键转发\n",
-        "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
-      },
-      {
-        "infor":
-            "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1942769",
-        "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
-      },
+    List cont_head_tmp = [];
+    cont_head_tmp.addAll(contents);
+    cont_head_tmp.addAll([
       {
         "infor": "点此访问原帖\n",
         "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
@@ -123,8 +121,7 @@ class _TopicDetailState extends State<TopicDetail> {
             widget.topicID.toString(),
         "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
       }
-    ];
-    cont_head_tmp.addAll(contents);
+    ]);
     Map poll = {
       "expiration": 3,
       "options": data["topic"]["poll_info"] == null
@@ -402,6 +399,19 @@ class _TopicDetailState extends State<TopicDetail> {
       }
     });
     speedUp(_scrollController);
+  }
+
+  _captureScreenshot() {
+    screenshotController.capture().then((Uint8List image) async {
+      final result = await ImageGallerySaver.saveImage(
+        image,
+        quality: 60,
+        name: "河畔-" + new DateTime.now().millisecondsSinceEpoch.toString(),
+      );
+      if (result["isSuccess"]) {
+        showToast(context: context, type: XSToast.success, txt: "保存成功！");
+      }
+    });
   }
 
   _buildContBody() {
@@ -913,12 +923,15 @@ class _TopicDetailState extends State<TopicDetail> {
                               show: showBackToTop,
                               animation: true,
                               controller: _scrollController,
-                              child: ConstrainedBox(
-                                constraints: BoxConstraints(),
-                                child: ListView(
-                                  physics: BouncingScrollPhysics(),
-                                  controller: _scrollController,
-                                  children: _buildTotal(),
+                              child: Screenshot(
+                                controller: screenshotController,
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(),
+                                  child: ListView(
+                                    physics: BouncingScrollPhysics(),
+                                    controller: _scrollController,
+                                    children: _buildTotal(),
+                                  ),
                                 ),
                               ),
                             ),

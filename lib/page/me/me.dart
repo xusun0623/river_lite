@@ -79,7 +79,7 @@ class _MeState extends State<Me> {
             : os_black,
         elevation: 0,
         actions: [
-          !Platform.isIOS
+          isDesktop()
               ? Container()
               : IconButton(
                   icon: os_svg(

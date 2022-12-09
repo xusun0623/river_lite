@@ -54,7 +54,7 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
   }
 
   void _tapLike() async {
-    Vibrate.feedback(FeedbackType.heavy);
+    Vibrate.feedback(FeedbackType.impact);
     if (liked == 1) return;
     liked = 1;
     setState(() {
@@ -73,7 +73,7 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
   }
 
   void _tapDisLike() async {
-    Vibrate.feedback(FeedbackType.heavy);
+    Vibrate.feedback(FeedbackType.impact);
     if (disliked == 1) return;
     disliked = 1;
     setState(() {

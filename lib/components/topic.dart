@@ -496,14 +496,14 @@ class _TopicState extends State<Topic> {
                                 ? Color(0x11FFFFFF)
                                 : os_color_opa,
                             borderRadius: BorderRadius.all(
-                              Radius.circular(5),
+                              Radius.circular(100),
                             ),
                           ),
                           padding: EdgeInsets.only(
-                            left: 7.5,
-                            right: 10,
+                            left: 10,
+                            right: 12,
                             top: 3.5,
-                            bottom: 3.5,
+                            bottom: 3.8,
                           ),
                           child: Row(
                             children: [

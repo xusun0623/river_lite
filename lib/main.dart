@@ -67,18 +67,13 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             fontFamily: '微软雅黑',
             appBarTheme: AppBarTheme(
-              surfaceTintColor: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_back
-                  : os_back,
+              surfaceTintColor: Colors.transparent,
             ),
-            dialogBackgroundColor: Colors.white,
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.blue,
               backgroundColor: Colors.white,
             ),
-            primaryColor: os_color,
             useMaterial3: true,
-            // fontFamily: "MiSans",
           ),
           onGenerateRoute: (settings) {
             final String routersname = settings.name;

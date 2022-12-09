@@ -29,19 +29,19 @@ class _ScanQRCodeState extends State<ScanQRCode> {
         foregroundColor: os_white,
         backgroundColor: os_black,
         actions: [
-          IconButton(
-            onPressed: () async {
-              List<Media> res = await ImagesPicker.pick(
-                count: 1,
-                cropOpt: CropOption(),
-                pickType: PickType.image,
-                quality: 0.7, //一半的质量
-                maxSize: 2048, //1024KB
-              );
-              recognizationQr(res[0].path, context);
-            },
-            icon: Icon(Icons.image_outlined),
-          )
+          // IconButton(
+          //   onPressed: () async {
+          //     List<Media> res = await ImagesPicker.pick(
+          //       count: 1,
+          //       cropOpt: CropOption(),
+          //       pickType: PickType.image,
+          //       quality: 0.7, //一半的质量
+          //       maxSize: 2048, //1024KB
+          //     );
+          //     recognizationQr(res[0].path, context);
+          //   },
+          //   icon: Icon(Icons.image_outlined),
+          // )
         ],
         leading: IconButton(
           icon: Icon(Icons.chevron_left_rounded),

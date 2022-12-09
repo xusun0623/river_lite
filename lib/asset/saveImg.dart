@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -12,9 +11,9 @@ import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 
 saveImge(
-  @required BuildContext context,
-  @required List urls,
-  @required int index,
+  BuildContext context,
+  List urls,
+  int index,
 ) async {
   List<ActionItem> tmp = [
     ActionItem(
