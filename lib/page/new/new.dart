@@ -221,8 +221,12 @@ class _PostNewState extends State<PostNew> {
       child: Padding(
         padding: const EdgeInsets.only(right: 20, top: 5, bottom: 5),
         child: Text(
-            child.length == 0 && child_load_done ? "你不可以在此板块发布信息" : "选择子板块:",
-            style: TextStyle(color: os_deep_grey)),
+          child.length == 0 && child_load_done ? "你不可以在此板块发布信息" : "选择子板块:",
+          style: TextStyle(
+            color: os_dark_back,
+            // fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     ));
     if (child.length == 0 && !child_load_done) {

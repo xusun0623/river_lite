@@ -40,17 +40,6 @@ void main() async {
     });
   }
   runApp(MyApp());
-  // if (Platform.isWindows) {
-  //   doWhenWindowReady(() {
-  //     final win = appWindow;
-  //     const initialSize = Size(1080, 720);
-  //     win.minSize = initialSize;
-  //     win.size = initialSize;
-  //     win.alignment = Alignment.center;
-  //     win.title = 'Hello World';
-  //     win.show();
-  //   });
-  // }
 }
 
 class MyApp extends StatelessWidget {
@@ -69,6 +58,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MsgProvider()),
         ChangeNotifierProvider(create: (context) => BlackProvider()),
         ChangeNotifierProvider(create: (context) => ShowPicProvider()),
+        ChangeNotifierProvider(create: (context) => AutoQuestionProvider()),
       ],
       child: Sizer(
         builder: (context, orientation, deviceType) => MaterialApp(

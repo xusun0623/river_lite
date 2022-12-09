@@ -21,7 +21,6 @@ import 'package:offer_show/page/square/squareHome.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -328,14 +327,21 @@ class QueationProgress extends StatefulWidget {
 class _QueationProgressState extends State<QueationProgress> {
   int progress = -1;
 
+  auto() async {
+    String auto_txt = await getStorage(key: "auto", initData: "");
+    print("是否自动答题: $auto_txt");
+    if (auto_txt != "") {
+      autoQuestion((val) {
+        setState(() {
+          progress = val;
+        });
+      });
+    }
+  }
+
   @override
   void initState() {
-    autoQuestion((val) {
-      print("$val");
-      setState(() {
-        progress = val;
-      });
-    });
+    auto();
     super.initState();
   }
 
@@ -344,7 +350,8 @@ class _QueationProgressState extends State<QueationProgress> {
     return AnimatedContainer(
       width: progress == -1
           ? 0
-          : (progress.toDouble() / 7) * MediaQuery.of(context).size.width,
+          : (progress.toDouble() / 7) *
+              (isDesktop() ? 60 : MediaQuery.of(context).size.width),
       height: 5,
       decoration: BoxDecoration(
         color: os_deep_blue,

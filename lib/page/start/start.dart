@@ -58,12 +58,22 @@ class _StartState extends State<Start> {
     await FlutterDisplayMode.setHighRefreshRate();
   }
 
+  _autoQuestion() async {
+    //获取首页是自动答题
+    String tmp = await getStorage(key: "auto", initData: "");
+    if (tmp != "") {
+      Provider.of<AutoQuestionProvider>(context, listen: false).isAuto = true;
+      Provider.of<AutoQuestionProvider>(context, listen: false).refresh();
+    }
+  }
+
   @override
   void initState() {
     _navi();
     _dark();
     _pic();
     fetchAll();
+    _autoQuestion();
     super.initState();
   }
 

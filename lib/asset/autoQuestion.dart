@@ -27,7 +27,6 @@ Map q_a = {};
 autoQuestion(Function callback) async {
   await getWebCookie();
   await _getQuestion(callback: (res) {
-    print("hsdjkhfcjkdshcjkhsdjk: $res");
     if (callback != null) callback(res);
   });
 }
