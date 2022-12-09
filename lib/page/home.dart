@@ -331,6 +331,7 @@ class _QueationProgressState extends State<QueationProgress> {
   @override
   void initState() {
     autoQuestion((val) {
+      print("$val");
       setState(() {
         progress = val;
       });
