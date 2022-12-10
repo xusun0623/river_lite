@@ -104,7 +104,12 @@ class _PersonDetailState extends State<PersonDetail> {
           elevation: 0,
           leading: IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: Icon(Icons.chevron_left_rounded),
+            icon: Icon(
+              Icons.chevron_left_rounded,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_dark_back,
+            ),
           ),
           centerTitle: true,
           title: Text(

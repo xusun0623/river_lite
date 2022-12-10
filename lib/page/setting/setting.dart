@@ -2,9 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -13,9 +11,7 @@ import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class Setting extends StatefulWidget {
   Setting({Key key}) : super(key: key);
@@ -66,7 +62,40 @@ class _SettingState extends State<Setting> {
       Opacity(
           opacity: Provider.of<ColorProvider>(context).isDark ? 0.6 : 1,
           child: SelectCard()),
-      Container(height: 15),
+      Container(height: 20),
+      ResponsiveWidget(
+        child: SwitchListTile(
+          inactiveTrackColor: Provider.of<ColorProvider>(context).isDark
+              ? Color(0x33FFFFFF)
+              : os_middle_grey,
+          onChanged: (change_val) {
+            print("$change_val");
+            Provider.of<AutoQuestionProvider>(context, listen: false).isAuto =
+                change_val;
+            Provider.of<AutoQuestionProvider>(context, listen: false).refresh();
+          },
+          value: Provider.of<AutoQuestionProvider>(context).isAuto,
+          title: Row(
+            children: [
+              Text(
+                "启动App时自动答题",
+                style: TextStyle(
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_black),
+              ),
+            ],
+          ),
+          subtitle: Text(
+            "此功能基于离线的题库自动答题,流程时间取决于设备网络性能,请确保网络良好且水滴资产>=9\n开启后下次重启App时生效",
+            style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_deep_grey,
+            ),
+          ),
+        ),
+      ),
       ResponsiveWidget(
         child: ListTile(
           title: Text(
@@ -87,24 +116,6 @@ class _SettingState extends State<Setting> {
           },
         ),
       ),
-      // ListTile(
-      //   title: Text(
-      //     "意见反馈",
-      //     style: TextStyle(
-      //         color: Provider.of<ColorProvider>(context).isDark
-      //             ? os_dark_white
-      //             : os_black),
-      //   ),
-      //   trailing: Icon(
-      //     Icons.chevron_right_rounded,
-      //     color: Provider.of<ColorProvider>(context).isDark
-      //         ? os_dark_dark_white
-      //         : os_deep_grey,
-      //   ),
-      //   onTap: () {
-      //     xsLanuch(url: "https://www.wjx.cn/vj/mzgzO5S.aspx", isExtern: false);
-      //   },
-      // ),
       ResponsiveWidget(
         child: ListTile(
           title: Text(

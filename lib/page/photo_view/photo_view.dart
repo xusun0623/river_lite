@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart'; // Import package
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/saveImg.dart';
@@ -14,6 +15,7 @@ import 'package:provider/provider.dart';
 typedef PageChanged = void Function(int index);
 
 class PhotoPreview extends StatefulWidget {
+  bool isSmallPic;
   final List galleryItems; //图片列表
   final int defaultImage; //默认第几张
   final PageChanged pageChanged; //切换图片回调
@@ -22,15 +24,16 @@ class PhotoPreview extends StatefulWidget {
   final String desc; //图片描述
   final String title; //图片描述标题
 
-  PhotoPreview(
-      {this.galleryItems,
-      this.defaultImage = 1,
-      this.pageChanged,
-      this.direction = Axis.horizontal,
-      this.desc,
-      this.title,
-      this.decoration})
-      : assert(galleryItems != null);
+  PhotoPreview({
+    this.galleryItems,
+    this.defaultImage = 1,
+    this.isSmallPic,
+    this.pageChanged,
+    this.direction = Axis.horizontal,
+    this.desc,
+    this.title,
+    this.decoration,
+  }) : assert(galleryItems != null);
   @override
   _PhotoPreviewState createState() => _PhotoPreviewState();
 }
@@ -38,6 +41,7 @@ class PhotoPreview extends StatefulWidget {
 class _PhotoPreviewState extends State<PhotoPreview> {
   int tempSelect;
   PageController _pageController;
+
   @override
   void initState() {
     _pageController = new PageController(initialPage: widget.defaultImage);
@@ -128,7 +132,9 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                       ),
                       imageProvider: CachedNetworkImageProvider(
                         widget.galleryItems[index],
-                        cacheManager: RiverListCacheManager.instance,
+                        cacheManager: widget.isSmallPic ?? false
+                            ? null
+                            : RiverListCacheManager.instance,
                       ),
                     );
                   },
@@ -260,7 +266,9 @@ class FuncButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       ///布局自己换
-      left: MediaQuery.of(context).size.width / 2 - 90,
+      left: isDesktop()
+          ? MediaQuery.of(context).size.width / 2 - 90
+          : MediaQuery.of(context).size.width / 2 - 53,
       bottom: 70,
       child: GestureDetector(
         onTap: () {

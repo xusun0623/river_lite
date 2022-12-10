@@ -6,8 +6,6 @@
  */
 import 'dart:io';
 
-import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,27 +40,14 @@ void main() async {
     });
   }
   runApp(MyApp());
-  // if (Platform.isWindows) {
-  //   doWhenWindowReady(() {
-  //     final win = appWindow;
-  //     const initialSize = Size(1080, 720);
-  //     win.minSize = initialSize;
-  //     win.size = initialSize;
-  //     win.alignment = Alignment.center;
-  //     win.title = 'Hello World';
-  //     win.show();
-  //   });
-  // }
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (Platform.isAndroid) {
-      SystemUiOverlayStyle systemUiOverlayStyle =
-          SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-    }
+    SystemUiOverlayStyle systemUiOverlayStyle =
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ColorProvider()),
@@ -73,6 +58,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MsgProvider()),
         ChangeNotifierProvider(create: (context) => BlackProvider()),
         ChangeNotifierProvider(create: (context) => ShowPicProvider()),
+        ChangeNotifierProvider(create: (context) => AutoQuestionProvider()),
       ],
       child: Sizer(
         builder: (context, orientation, deviceType) => MaterialApp(
@@ -81,13 +67,13 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             fontFamily: '微软雅黑',
             appBarTheme: AppBarTheme(
-              surfaceTintColor: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_back
-                  : os_back,
+              surfaceTintColor: Colors.transparent,
             ),
-            primaryColor: os_color,
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.blue,
+              backgroundColor: Colors.white,
+            ),
             useMaterial3: true,
-            // fontFamily: "MiSans",
           ),
           onGenerateRoute: (settings) {
             final String routersname = settings.name;

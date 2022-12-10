@@ -6,13 +6,16 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/components/newNaviBar.dart';
+import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/new/draft.dart';
+import 'package:offer_show/page/new/format.dart';
 import 'package:offer_show/page/new/left_row_btn.dart';
 import 'package:offer_show/page/new/right_row_btn.dart';
+import 'package:offer_show/page/new/rules.dart';
 import 'package:offer_show/page/new/select_tag.dart';
 import 'package:offer_show/page/new/success_display.dart';
 import 'package:offer_show/page/new/vote_machine.dart';
@@ -105,6 +108,10 @@ class _PostNewState extends State<PostNew> {
       for (var board in data["list"]) {
         for (var board_tip in board["board_list"]) {
           if (board_tip["board_id"] == select_section_id) {
+            if (board_tip["board_name"] == "鹊桥" &&
+                tip_controller.text.length == 0) {
+              tip_controller.text = bridgeFormatTxt;
+            }
             setState(() {
               select_section = board_tip["board_name"];
             });
@@ -214,8 +221,12 @@ class _PostNewState extends State<PostNew> {
       child: Padding(
         padding: const EdgeInsets.only(right: 20, top: 5, bottom: 5),
         child: Text(
-            child.length == 0 && child_load_done ? "你不可以在此板块发布信息" : "可以选择子板块:",
-            style: TextStyle(color: os_deep_grey)),
+          child.length == 0 && child_load_done ? "你不可以在此板块发布信息" : "选择子板块:",
+          style: TextStyle(
+            color: os_dark_back,
+            // fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     ));
     if (child.length == 0 && !child_load_done) {
@@ -301,6 +312,7 @@ class _PostNewState extends State<PostNew> {
                         physics: BouncingScrollPhysics(),
                         controller: listview_controller,
                         children: [
+                          ColumnRule(select_section: select_section),
                           TitleInput(
                             title_controller: title_controller,
                             title_focus: title_focus,
@@ -462,6 +474,13 @@ class _PostNewState extends State<PostNew> {
                                           return ActionItem(
                                             title: e["board_name"],
                                             onPressed: () {
+                                              if (e["board_name"] == "鹊桥" &&
+                                                  tip_controller.text == "") {
+                                                setState(() {
+                                                  tip_controller.text =
+                                                      bridgeFormatTxt;
+                                                });
+                                              }
                                               select_section = e["board_name"];
                                               select_section_id = e["board_id"];
                                               _getChildColumnTip();
@@ -586,6 +605,54 @@ class _PostNewState extends State<PostNew> {
   }
 }
 
+class ColumnRule extends StatefulWidget {
+  String select_section;
+  ColumnRule({
+    Key key,
+    this.select_section,
+  }) : super(key: key);
+
+  @override
+  State<ColumnRule> createState() => _ColumnRuleState();
+}
+
+class _ColumnRuleState extends State<ColumnRule> {
+  @override
+  Widget build(BuildContext context) {
+    return true
+        ? Container()
+        : GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, "/rule",
+                  arguments: widget.select_section);
+            },
+            child: Container(
+              padding: EdgeInsets.only(left: 10, bottom: 7.5),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.info_outline_rounded,
+                    size: 16,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : os_deep_grey,
+                  ),
+                  Container(width: 2),
+                  Text(
+                    "查看${widget.select_section}版规",
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : os_deep_grey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+  }
+}
+
 class ChildColumnTip extends StatefulWidget {
   bool select;
   String name;
@@ -704,9 +771,9 @@ class TitleInput extends StatelessWidget {
                 ? os_dark_white
                 : os_black,
           ),
-          cursorColor: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_back
-              : os_white,
+          // cursorColor: Provider.of<ColorProvider>(context).isDark
+          //     ? os_dark_back
+          //     : os_white,
           decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(15)),

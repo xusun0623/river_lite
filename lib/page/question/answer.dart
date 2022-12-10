@@ -3,6 +3,7 @@ query_answer(String q) {
   for (var i = 0; i < river_answer.length; i++) {
     Map tmp = river_answer[i];
     if (q.contains(tmp["q"].toString())) {
+      print("返回：${tmp["a"]}");
       return tmp["a"];
     }
   }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/nowMode.dart';
+import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
@@ -23,6 +23,7 @@ import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
+import 'package:offer_show/page/topic/topic_more.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
@@ -203,6 +204,43 @@ class _PersonCenterState extends State<PersonCenter> {
     super.initState();
   }
 
+  _tapMore() {
+    showActionSheet(
+      context: context,
+      bottomActionItem: BottomActionItem(title: "取消"),
+      actions: [
+        ActionItem(
+            title: "复制空间链接",
+            onPressed: () {
+              Navigator.pop(context);
+              Clipboard.setData(
+                ClipboardData(
+                  text:
+                      "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
+                ),
+              );
+              showToast(
+                context: context,
+                type: XSToast.success,
+                txt: "复制链接成功",
+              );
+            }),
+        ActionItem(
+          title: "展示二维码",
+          onPressed: () {
+            Navigator.pop(context);
+            showPop(context, [
+              QrCode(
+                url:
+                    "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
+              )
+            ]);
+          },
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     nowMode(context);
@@ -227,7 +265,12 @@ class _PersonCenterState extends State<PersonCenter> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.chevron_left_rounded),
+            icon: Icon(
+              Icons.chevron_left_rounded,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_dark_back,
+            ),
           ),
           actions: userInfo == null || isNotAvail
               ? []
@@ -235,46 +278,17 @@ class _PersonCenterState extends State<PersonCenter> {
                   ? []
                   : widget.param["isMe"]
                       ? [
-                          // IconButton(
-                          //   onPressed: () async {
-                          //     Clipboard.setData(
-                          //       ClipboardData(
-                          //         text:
-                          //             "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
-                          //       ),
-                          //     );
-                          //     showToast(
-                          //       context: context,
-                          //       type: XSToast.success,
-                          //       txt: "复制链接成功",
-                          //     );
-                          //   },
-                          //   icon: Icon(
-                          //     Icons.copy,
-                          //     color: Color(0xFFAAAAAA),
-                          //   ),
-                          // ),
+                          IconButton(
+                            onPressed: () async {
+                              _tapMore();
+                            },
+                            icon: Icon(
+                              Icons.more_horiz,
+                              color: Color(0xFFAAAAAA),
+                            ),
+                          ),
                         ]
                       : [
-                          // IconButton(
-                          //   onPressed: () async {
-                          //     Clipboard.setData(
-                          //       ClipboardData(
-                          //         text:
-                          //             "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
-                          //       ),
-                          //     );
-                          //     showToast(
-                          //       context: context,
-                          //       type: XSToast.success,
-                          //       txt: "复制链接成功",
-                          //     );
-                          //   },
-                          //   icon: Icon(
-                          //     Icons.copy,
-                          //     color: Color(0xFFAAAAAA),
-                          //   ),
-                          // ),
                           IconButton(
                             onPressed: () async {
                               await Api().user_useradmin({
@@ -307,7 +321,16 @@ class _PersonCenterState extends State<PersonCenter> {
                               Icons.mail,
                               color: Color(0xFFAAAAAA),
                             ),
-                          )
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              _tapMore();
+                            },
+                            icon: Icon(
+                              Icons.more_horiz,
+                              color: Color(0xFFAAAAAA),
+                            ),
+                          ),
                         ],
           backgroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_back
@@ -581,148 +604,119 @@ class _PersonCardState extends State<PersonCard> {
   }
 
   _editSign() {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
-          ? os_light_dark_card
-          : os_white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+    showPop(context, [
+      Container(height: 30),
+      Text(
+        "请输入新的签名",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
         ),
       ),
-      context: context,
-      builder: (context) {
-        return Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: 30,
-          ),
-          height: MediaQuery.of(context).size.height - 100,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(height: 30),
-              Text(
-                "请输入新的签名",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : os_black,
-                ),
-              ),
-              Container(height: 10),
-              Container(
-                height: 60,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+      Container(height: 10),
+      Container(
+        height: 60,
+        padding: EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_white_opa
+              : os_grey,
+        ),
+        child: Center(
+          child: TextField(
+            controller: _sign_controller,
+            cursorColor: os_deep_blue,
+            style: TextStyle(
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
+            decoration: InputDecoration(
+                hintText: "请输入",
+                border: InputBorder.none,
+                hintStyle: TextStyle(
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_white_opa
-                          : os_grey,
-                ),
-                child: Center(
-                  child: TextField(
-                    controller: _sign_controller,
-                    cursorColor: os_deep_blue,
-                    style: TextStyle(
-                      color: Provider.of<ColorProvider>(context, listen: false)
-                              .isDark
                           ? os_dark_white
-                          : os_black,
+                          : os_deep_grey,
+                )),
+          ),
+        ),
+      ),
+      Container(height: 10),
+      Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            child: myInkWell(
+              tap: () {
+                Navigator.pop(context);
+              },
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_white_opa
+                  : Color(0x16004DFF),
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Text(
+                    "取消",
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : os_deep_blue,
                     ),
-                    decoration: InputDecoration(
-                        hintText: "请输入",
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                          color:
-                              Provider.of<ColorProvider>(context, listen: false)
-                                      .isDark
-                                  ? os_dark_white
-                                  : os_deep_grey,
-                        )),
                   ),
                 ),
               ),
-              Container(height: 10),
-              Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: myInkWell(
-                      tap: () {
-                        Navigator.pop(context);
-                      },
-                      color: Provider.of<ColorProvider>(context, listen: false)
-                              .isDark
-                          ? os_white_opa
-                          : Color(0x16004DFF),
-                      widget: Container(
-                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                        height: 40,
-                        child: Center(
-                          child: Text(
-                            "取消",
-                            style: TextStyle(
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_dark_white
-                                  : os_deep_blue,
-                            ),
-                          ),
-                        ),
-                      ),
-                      radius: 12.5,
-                    ),
-                  ),
-                  Container(
-                    child: myInkWell(
-                      tap: () async {
-                        String tmp = _sign_controller.text;
-                        await Api().user_updateuserinfo({
-                          "type": "info",
-                          "gender": widget.data["gender"],
-                          "sign": tmp,
-                        });
-                        widget.data["sign"] = tmp;
-                        setState(() {});
-                        Navigator.pop(context);
-                      },
-                      color: os_deep_blue,
-                      widget: Container(
-                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                        height: 40,
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.done, color: os_white, size: 18),
-                              Container(width: 5),
-                              Text(
-                                "完成",
-                                style: TextStyle(
-                                  color: os_white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      radius: 12.5,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              radius: 12.5,
+            ),
           ),
-        );
-      },
-    );
+          Container(
+            child: myInkWell(
+              tap: () async {
+                String tmp = _sign_controller.text;
+                await Api().user_updateuserinfo({
+                  "type": "info",
+                  "gender": widget.data["gender"],
+                  "sign": tmp,
+                });
+                widget.data["sign"] = tmp;
+                setState(() {});
+                Navigator.pop(context);
+              },
+              color: os_deep_blue,
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.done, color: os_white, size: 18),
+                      Container(width: 5),
+                      Text(
+                        "完成",
+                        style: TextStyle(
+                          color: os_white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              radius: 12.5,
+            ),
+          ),
+        ],
+      ),
+    ]);
   }
 
   @override

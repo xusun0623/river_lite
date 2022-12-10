@@ -2,13 +2,15 @@ name: offer_show
 description: A new Flutter project.
 
 publish_to: "none"
-version: 1.0.4+2
+version: 1.0.6+2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   webview_flutter: ^3.0.4
+  screenshot: ^1.2.3
+  # flutter_qr_reader: ^1.0.5
   bitsdojo_window: 
   window_manager: ^0.2.7
   images_picker: ^1.2.11
@@ -22,7 +24,7 @@ dependencies:
   characters: ^1.2.0
   flutter_vibrate: ^1.3.0
   vibration: ^1.7.3
-  image_picker: ^0.8.4+10
+  image_picker: ^0.8.5+3
   file_picker: ^4.5.0
   flutter:
     sdk: flutter

@@ -1,16 +1,12 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:images_picker/images_picker.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/recognization.dart';
 import 'package:offer_show/asset/vibrate.dart';
-import 'package:offer_show/util/provider.dart';
-import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanQRCode extends StatefulWidget {
@@ -32,6 +28,21 @@ class _ScanQRCodeState extends State<ScanQRCode> {
         elevation: 0,
         foregroundColor: os_white,
         backgroundColor: os_black,
+        actions: [
+          // IconButton(
+          //   onPressed: () async {
+          //     List<Media> res = await ImagesPicker.pick(
+          //       count: 1,
+          //       cropOpt: CropOption(),
+          //       pickType: PickType.image,
+          //       quality: 0.7, //一半的质量
+          //       maxSize: 2048, //1024KB
+          //     );
+          //     recognizationQr(res[0].path, context);
+          //   },
+          //   icon: Icon(Icons.image_outlined),
+          // )
+        ],
         leading: IconButton(
           icon: Icon(Icons.chevron_left_rounded),
           onPressed: () {
@@ -56,6 +67,20 @@ class _QRViewExampleState extends State<QRViewExample> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode result;
   QRViewController controller;
+  bool isReady = false;
+
+  delay() async {
+    await Future.delayed(Duration(milliseconds: 1500));
+    setState(() {
+      isReady = true;
+    });
+  }
+
+  @override
+  void initState() {
+    delay();
+    super.initState();
+  }
 
   @override
   void reassemble() {
@@ -81,13 +106,35 @@ class _QRViewExampleState extends State<QRViewExample> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30),
-            child: Container(
-              width: MediaQuery.of(context).size.width - 100,
-              height: 400,
-              child: QRView(
-                key: qrKey,
-                onQRViewCreated: _onQRViewCreated,
-              ),
+            child: Stack(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width - 100,
+                  height: 400,
+                  child: QRView(
+                    key: qrKey,
+                    onQRViewCreated: _onQRViewCreated,
+                  ),
+                ),
+                isReady
+                    ? Container(
+                        width: MediaQuery.of(context).size.width - 100,
+                      )
+                    : Positioned(
+                        left: (MediaQuery.of(context).size.width - 100) / 2,
+                        top: 200,
+                        child: Transform.translate(
+                          offset: Offset(-20, -20),
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            child: CircularProgressIndicator(
+                              color: os_white,
+                            ),
+                          ),
+                        ),
+                      )
+              ],
             ),
           ),
         ),

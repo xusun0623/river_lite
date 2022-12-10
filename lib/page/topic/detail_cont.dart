@@ -26,6 +26,7 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
+import '../../util/interface.dart';
 
 class DetailCont extends StatefulWidget {
   var data;
@@ -130,11 +131,98 @@ class _DetailContState extends State<DetailCont> {
               cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
               confirmTxt: "立即前往",
               cancelTxt: "取消",
-              confirm: () {
-                xsLanuch(
-                  url: widget.data['url'],
-                  isExtern: true,
-                );
+              confirm: () async {
+                String text = widget.data['url'];
+                if (context == "")
+                  return;
+                else if (text.contains(
+                    "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")) {
+                  int tid_tmp = int.parse(
+                    text.split("mod=viewthread&tid=")[1].split("&")[0],
+                  );
+                  Navigator.pushNamed(context, "/topic_detail",
+                      arguments: tid_tmp);
+                  return;
+                } else if (text.contains(
+                    "https://bbs.uestc.edu.cn/forum.php?mod=redirect&goto=findpost&ptid=")) {
+                  int tid_tmp = int.parse(
+                    text
+                        .split("mod=redirect&goto=findpost&ptid=")[1]
+                        .split("&")[0],
+                  );
+                  Navigator.pushNamed(context, "/topic_detail",
+                      arguments: tid_tmp);
+                  return;
+                } else if (text.contains(
+                    "https://bbs.uestc.edu.cn/home.php?mod=space&uid=")) {
+                  int uid_tmp = int.parse(
+                    text.split("mod=space&uid=")[1].split("&")[0],
+                  );
+                  toUserSpace(context, uid_tmp);
+                  return;
+                } else if (text.contains("https://bbs.uestc.edu.cn")) {
+                  int tid = 0;
+                  int uid = 0;
+                  try {
+                    if (text.startsWith("t")) {
+                      tid = int.parse(text.split("t")[1]);
+                      showToast(context: context, type: XSToast.loading);
+                      var pre_search = await Api().forum_postlist({
+                        "topicId": tid,
+                        "authorId": 0,
+                        "order": 0,
+                        "page": 1,
+                        "pageSize": 0,
+                      });
+                      hideToast();
+                      if (pre_search
+                          .toString()
+                          .contains("指定的主题不存在或已被删除或正在被审核")) {
+                        showToast(
+                          context: context,
+                          type: XSToast.none,
+                          txt: "指定的主题不存在或已被删除或正在被审核",
+                          duration: 300,
+                        );
+                      } else if (pre_search.toString().contains("您没有权限访问该版块")) {
+                        showToast(
+                          context: context,
+                          type: XSToast.none,
+                          txt: "您没有权限访问该版块",
+                          duration: 300,
+                        );
+                      } else {
+                        Navigator.pushNamed(context, "/topic_detail",
+                            arguments: tid);
+                      }
+                      return;
+                    }
+                    if (text.startsWith("u")) {
+                      uid = int.parse(text.split("u")[1]);
+                      showToast(context: context, type: XSToast.loading);
+                      var pre_search = await Api().user_userinfo({
+                        "userId": uid,
+                      });
+                      hideToast();
+                      if (pre_search.toString().contains("您指定的用户空间不存在")) {
+                        showToast(
+                          context: context,
+                          type: XSToast.none,
+                          txt: "您指定的用户空间不存在",
+                          duration: 300,
+                        );
+                      } else {
+                        toUserSpace(context, uid);
+                      }
+                      return;
+                    }
+                  } catch (e) {}
+                } else {
+                  xsLanuch(
+                    url: widget.data['url'],
+                    isExtern: true,
+                  );
+                }
               },
             );
         } catch (e) {
@@ -144,7 +232,7 @@ class _DetailContState extends State<DetailCont> {
             cont: "即将调用外部浏览器打开此链接，河畔App不保证此链接的安全性",
             confirmTxt: "立即前往",
             cancelTxt: "取消",
-            confirm: () {
+            confirm: () async {
               xsLanuch(
                 url: widget.data['url'],
                 isExtern: true,
@@ -251,6 +339,9 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                   context,
                   MaterialPageRoute(
                     builder: (_) => PhotoPreview(
+                      isSmallPic: widget.imgLists.length > 3 ||
+                          isDesktop() ||
+                          widget.imgLists.length > 20,
                       desc: widget.desc,
                       title: widget.title,
                       galleryItems: widget.imgLists,

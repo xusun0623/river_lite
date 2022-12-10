@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -53,6 +54,7 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
   }
 
   void _tapLike() async {
+    Vibrate.feedback(FeedbackType.impact);
     if (liked == 1) return;
     liked = 1;
     setState(() {
@@ -71,6 +73,7 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
   }
 
   void _tapDisLike() async {
+    Vibrate.feedback(FeedbackType.impact);
     if (disliked == 1) return;
     disliked = 1;
     setState(() {

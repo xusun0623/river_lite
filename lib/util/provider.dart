@@ -17,6 +17,20 @@ class SettingConfigProvider extends ChangeNotifier {
   }
 }
 
+class AutoQuestionProvider extends ChangeNotifier {
+  bool isAuto = false;
+
+  switchMode() async {
+    isAuto = !isAuto;
+    notifyListeners();
+  }
+
+  refresh() {
+    setStorage(key: "auto", value: isAuto ? "1" : "");
+    notifyListeners();
+  }
+}
+
 class ShowPicProvider extends ChangeNotifier {
   bool isShow = false;
 

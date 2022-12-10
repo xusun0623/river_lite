@@ -1,6 +1,5 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badgee;
 import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -248,8 +247,8 @@ class _ColorBtnState extends State<ColorBtn> {
             Positioned(
               top: 14,
               left: 20,
-              child: Badge(
-                position: BadgePosition(top: -10, end: 50),
+              child: badgee.Badge(
+                position: badgee.BadgePosition(top: -10, end: 50),
                 showBadge: widget.count != 0,
                 badgeContent: Text(
                   widget.count.toString(),
@@ -323,9 +322,9 @@ class _MsgCardState extends State<MsgCard> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Badge(
+            badgee.Badge(
               showBadge: widget.data["isNew"] == 0 ? false : true,
-              position: BadgePosition.topEnd(top: -2, end: -2),
+              position: badgee.BadgePosition.topEnd(top: -2, end: -2),
               child: Container(
                 width: headImgSize,
                 height: headImgSize,

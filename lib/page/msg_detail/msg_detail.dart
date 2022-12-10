@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:ui';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as Badgee;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
@@ -25,11 +23,9 @@ import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/Your_emoji.dart';
-import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 Color theme = Color(0xFF4577f6);
 
@@ -627,7 +623,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                     print("${img_urls}");
                                   },
                                   color: Colors.transparent,
-                                  widget: Badge(
+                                  widget: Badgee.Badge(
                                     showBadge: img_urls.length != 0,
                                     badgeContent: Text(
                                       img_urls.length.toString(),
@@ -637,8 +633,8 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                       ),
                                     ),
                                     badgeColor: os_deep_blue,
-                                    position:
-                                        BadgePosition.topEnd(top: 0, end: 0),
+                                    position: Badgee.BadgePosition.topEnd(
+                                        top: 0, end: 0),
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: os_svg(

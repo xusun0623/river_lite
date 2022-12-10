@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:html/parser.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -17,7 +17,6 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
-import 'package:offer_show/components/bilibili_player.dart';
 import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/loading.dart';
@@ -37,6 +36,7 @@ import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
 
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
@@ -66,6 +66,7 @@ class _TopicDetailState extends State<TopicDetail> {
   bool isBlack = false;
   bool isInvalid = false; //帖子是否失效
   bool isNoAccess = false; //帖子是否没有访问权限
+  bool isDispose = false; //是否释放了页面
   String placeholder =
       (isMacOS() ? "请在此编辑回复，按住control键+空格键以切换中英文输入法" : "请在此编辑回复");
   List<Map> atUser = [];
@@ -76,6 +77,9 @@ class _TopicDetailState extends State<TopicDetail> {
   ScrollController _scrollController = new ScrollController();
   TextEditingController _txtController = new TextEditingController();
   FocusNode _focusNode = new FocusNode();
+
+  Uint8List _imageFile;
+  ScreenshotController screenshotController = ScreenshotController();
 
   var dislike_count = 0;
 
@@ -102,16 +106,9 @@ class _TopicDetailState extends State<TopicDetail> {
       }
     }
     print("${contents}");
-    List cont_head_tmp = [
-      {
-        "infor": "由河畔Lite App一键转发\n",
-        "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
-      },
-      {
-        "infor":
-            "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1942769",
-        "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
-      },
+    List cont_head_tmp = [];
+    cont_head_tmp.addAll(contents);
+    cont_head_tmp.addAll([
       {
         "infor": "点此访问原帖\n",
         "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
@@ -121,8 +118,7 @@ class _TopicDetailState extends State<TopicDetail> {
             widget.topicID.toString(),
         "type": 0, // 0：文本；1：图片；3：音频；4:链接；5：附件
       }
-    ];
-    cont_head_tmp.addAll(contents);
+    ]);
     Map poll = {
       "expiration": 3,
       "options": data["topic"]["poll_info"] == null
@@ -300,6 +296,7 @@ class _TopicDetailState extends State<TopicDetail> {
       "page": 1,
       "pageSize": 20,
     });
+    // await Future.delayed(Duration(seconds: 1000));
     if (tmp.toString().contains("您没有权限访问该版块")) {
       setState(() {
         isNoAccess = true;
@@ -328,7 +325,7 @@ class _TopicDetailState extends State<TopicDetail> {
         data = null;
       }
     } catch (e) {}
-    if (data == null || data["topic"] == null) {
+    if ((data == null || data["topic"] == null) && !isDispose) {
       xsLanuch(
         url:
             "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${widget.topicID}",
@@ -360,6 +357,9 @@ class _TopicDetailState extends State<TopicDetail> {
 
   @override
   void dispose() {
+    setState(() {
+      isDispose = true;
+    });
     super.dispose();
   }
 
@@ -396,6 +396,19 @@ class _TopicDetailState extends State<TopicDetail> {
       }
     });
     speedUp(_scrollController);
+  }
+
+  _captureScreenshot() {
+    screenshotController.capture().then((Uint8List image) async {
+      final result = await ImageGallerySaver.saveImage(
+        image,
+        quality: 100,
+        name: "河畔-" + new DateTime.now().millisecondsSinceEpoch.toString(),
+      );
+      if (result["isSuccess"]) {
+        showToast(context: context, type: XSToast.success, txt: "保存成功！");
+      }
+    });
   }
 
   _buildContBody() {
@@ -653,7 +666,7 @@ class _TopicDetailState extends State<TopicDetail> {
     hideToast();
   }
 
-  _buildTotal() {
+  List<Widget> _buildTotal() {
     //对整个页面的组件流进行整合
     List<Widget> tmp = [];
     tmp = [
@@ -662,6 +675,9 @@ class _TopicDetailState extends State<TopicDetail> {
       data["boardId"] != 61 ? Container() : _getSecondBuy(), //二手专区
       TopicDetailTime(
         data: data,
+        capture: () {
+          _captureScreenshot();
+        },
         refresh: () async {
           //触发刷新、加水、收藏操作
           _getData();
@@ -851,6 +867,13 @@ class _TopicDetailState extends State<TopicDetail> {
                     showError: load_done,
                     msg: "河畔Lite客户端没有权限访问或者帖子被删除，可以尝试网页端是否能访问",
                     tapTxt: "访问网页版>",
+                    cancel: () {
+                      // print("11111");
+                      setState(() {
+                        isDispose = true;
+                      });
+                      Navigator.of(context).pop();
+                    },
                     tap: () async {
                       xsLanuch(
                           url: base_url +
@@ -900,13 +923,29 @@ class _TopicDetailState extends State<TopicDetail> {
                               show: showBackToTop,
                               animation: true,
                               controller: _scrollController,
-                              child: ConstrainedBox(
-                                constraints: BoxConstraints(),
-                                child: ListView(
-                                  physics: BouncingScrollPhysics(),
-                                  controller: _scrollController,
-                                  children: _buildTotal(),
-                                ),
+                              child: ListView(
+                                physics: BouncingScrollPhysics(),
+                                controller: _scrollController,
+                                children: [
+                                  SingleChildScrollView(
+                                    child: Screenshot(
+                                      child: Container(
+                                        color:
+                                            Provider.of<ColorProvider>(context)
+                                                    .isDark
+                                                ? os_light_dark_card
+                                                : os_white,
+                                        child: ListView(
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          children: _buildTotal(),
+                                        ),
+                                      ),
+                                      controller: screenshotController,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),

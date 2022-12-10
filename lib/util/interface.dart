@@ -76,7 +76,7 @@ class Api {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String html = await response.stream.bytesToString();
-      if (html.contains("错误")) {
+      if (html.contains("错误") && context != null) {
         showToast(context: context, type: XSToast.none, txt: "答题错误,扣除10水滴");
       }
     } else {
