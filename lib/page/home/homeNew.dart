@@ -225,7 +225,7 @@ class _TapMoreState extends State<TapMore> {
         widget.tap();
       },
       child: Container(
-        color: provider.isDark ? Color(0xFF111111) : os_back,
+        // color: provider.isDark ? Color(0xFF111111) : os_back,
         child: Center(
             child: Padding(
           padding: EdgeInsets.only(top: 20, bottom: 5),
