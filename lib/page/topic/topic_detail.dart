@@ -399,14 +399,18 @@ class _TopicDetailState extends State<TopicDetail> {
   }
 
   _captureScreenshot() {
-    screenshotController.capture().then((Uint8List image) async {
+    showToast(context: context, type: XSToast.loading, txt: "请稍后…");
+    screenshotController.capture(pixelRatio: 10).then((Uint8List image) async {
       final result = await ImageGallerySaver.saveImage(
         image,
         quality: 100,
         name: "河畔-" + new DateTime.now().millisecondsSinceEpoch.toString(),
       );
+      hideToast();
       if (result["isSuccess"]) {
-        showToast(context: context, type: XSToast.success, txt: "保存成功！");
+        // showToast(context: context, type: XSToast.success, txt: "保存成功！");
+      } else {
+        showToast(context: context, type: XSToast.none, txt: "保存失败！");
       }
     });
   }
