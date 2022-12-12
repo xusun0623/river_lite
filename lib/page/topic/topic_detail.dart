@@ -326,11 +326,11 @@ class _TopicDetailState extends State<TopicDetail> {
       }
     } catch (e) {}
     if ((data == null || data["topic"] == null) && !isDispose) {
-      xsLanuch(
-        url:
-            "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${widget.topicID}",
-        isExtern: false,
-      );
+      // xsLanuch(
+      //   url:
+      //       "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${widget.topicID}",
+      //   isExtern: false,
+      // );
     }
     setState(() {});
     return;
