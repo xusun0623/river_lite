@@ -6,8 +6,6 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/util/mid_request.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class Explore extends StatefulWidget {
   Explore({Key key}) : super(key: key);
@@ -31,13 +29,6 @@ class _ExploreState extends State<Explore> {
         physics: BouncingScrollPhysics(),
         children: [
           ExploreHead(),
-          // 删除探索卡片
-          // ExploreCard(index: 1),
-          // ExploreCard(index: 2),
-          // ExploreCard(index: 3),
-          // ExploreCard(index: 4),
-          // ExploreCard(index: 5),
-          // ExploreCard(index: 6),
           BottomBtns(),
           Container(height: 10),
         ],

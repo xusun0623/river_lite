@@ -1,8 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/empty.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/home/myhome.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -276,24 +279,28 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
     List<Widget> tmp = [];
     [newTask, doingTask, doneTask, failTask][index].forEach((element) {
       tmp.add([
-        Card1(
-          data: element,
-          refresh: () {
-            showToast(context: context, type: XSToast.success, txt: "领取任务成功");
-            _getNew();
-            _getDoing();
-          },
+        ResponsiveWidget(
+          child: Card1(
+            data: element,
+            refresh: () {
+              showToast(context: context, type: XSToast.success, txt: "领取任务成功");
+              _getNew();
+              _getDoing();
+            },
+          ),
         ),
-        Card2(
-          data: element,
-          refresh: () {
-            showToast(context: context, type: XSToast.success, txt: "领取奖励成功");
-            _getDoing();
-            _getDone();
-          },
+        ResponsiveWidget(
+          child: Card2(
+            data: element,
+            refresh: () {
+              showToast(context: context, type: XSToast.success, txt: "领取奖励成功");
+              _getDoing();
+              _getDone();
+            },
+          ),
         ),
-        Card3(data: element),
-        Card4(data: element),
+        ResponsiveWidget(child: Card3(data: element)),
+        ResponsiveWidget(child: Card4(data: element)),
       ][index]);
     });
     tmp.add((!load_done1 && index == 0) ||
@@ -334,92 +341,99 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor:
-            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        elevation: 0,
-        title: TabBar(
-          controller: tabController,
-          labelColor: Provider.of<ColorProvider>(context).isDark
+    return Baaaar(
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_white
               : os_black,
-          indicatorColor: Colors.transparent,
-          unselectedLabelStyle: TextStyle(
-            fontWeight: FontWeight.normal,
-            fontSize: 14,
-            color: os_deep_grey,
+          elevation: 0,
+          title: TabBar(
+            controller: tabController,
+            labelColor: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
+            indicatorColor: Colors.transparent,
+            unselectedLabelStyle: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 16,
+              color: os_deep_grey,
+              fontFamily: "微软雅黑",
+            ),
+            isScrollable: true,
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: os_black,
+              fontFamily: "微软雅黑",
+            ),
+            tabs: [
+              // Tab(text: "积分记录"),
+              Tab(text: "新任务"),
+              Tab(text: "进行中"),
+              Tab(text: "已完成"),
+              Tab(text: "已失败"),
+            ],
           ),
-          isScrollable: true,
-          labelStyle: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-            color: os_black,
+          leading: IconButton(
+            icon: Icon(Icons.chevron_left_rounded),
+            onPressed: () => Navigator.pop(context),
           ),
-          tabs: [
-            // Tab(text: "积分记录"),
-            Tab(text: "新任务"),
-            Tab(text: "进行中"),
-            Tab(text: "已完成"),
-            Tab(text: "已失败"),
+        ),
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        body: TabBarView(
+          physics: CustomTabBarViewScrollPhysics(),
+          controller: tabController,
+          children: [
+            // TaskList(),
+            RefreshIndicator(
+              onRefresh: () async {
+                await _getNew();
+                return;
+              },
+              child: ListView(
+                children: _buildCont(0),
+                physics: BouncingScrollPhysics(),
+              ),
+            ),
+            RefreshIndicator(
+              onRefresh: () async {
+                await _getDoing();
+                return;
+              },
+              child: ListView(
+                children: _buildCont(1),
+                physics: BouncingScrollPhysics(),
+              ),
+            ),
+            RefreshIndicator(
+              onRefresh: () async {
+                await _getDone();
+                return;
+              },
+              child: ListView(
+                children: _buildCont(2),
+                physics: BouncingScrollPhysics(),
+              ),
+            ),
+            RefreshIndicator(
+              onRefresh: () async {
+                await _getFail();
+                return;
+              },
+              child: ListView(
+                children: _buildCont(3),
+                physics: BouncingScrollPhysics(),
+              ),
+            ),
           ],
         ),
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left_rounded),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      backgroundColor:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      body: TabBarView(
-        physics: CustomTabBarViewScrollPhysics(),
-        controller: tabController,
-        children: [
-          // TaskList(),
-          RefreshIndicator(
-            onRefresh: () async {
-              await _getNew();
-              return;
-            },
-            child: ListView(
-              children: _buildCont(0),
-              physics: BouncingScrollPhysics(),
-            ),
-          ),
-          RefreshIndicator(
-            onRefresh: () async {
-              await _getDoing();
-              return;
-            },
-            child: ListView(
-              children: _buildCont(1),
-              physics: BouncingScrollPhysics(),
-            ),
-          ),
-          RefreshIndicator(
-            onRefresh: () async {
-              await _getDone();
-              return;
-            },
-            child: ListView(
-              children: _buildCont(2),
-              physics: BouncingScrollPhysics(),
-            ),
-          ),
-          RefreshIndicator(
-            onRefresh: () async {
-              await _getFail();
-              return;
-            },
-            child: ListView(
-              children: _buildCont(3),
-              physics: BouncingScrollPhysics(),
-            ),
-          ),
-        ],
       ),
     );
   }

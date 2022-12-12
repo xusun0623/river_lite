@@ -6,6 +6,7 @@ import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/myinfo.dart';
+import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
@@ -46,148 +47,120 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
 
   _feedback() async {
     String txt = "";
-    showModalBottomSheet(
-      isScrollControlled: true,
-      backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
-          ? os_light_dark_card
-          : os_white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+    showPop(context, [
+      Container(height: 30),
+      Text(
+        "请输入举报内容",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_dark_white
+              : os_black,
         ),
       ),
-      context: context,
-      builder: (context) {
-        return Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: 30,
-          ),
-          height: MediaQuery.of(context).size.height - 100,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(height: 30),
-              Text(
-                "请输入举报内容",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : os_black,
-                ),
-              ),
-              Container(height: 10),
-              Container(
-                height: 60,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+      Container(height: 10),
+      Container(
+        height: 60,
+        padding: EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_white_opa
+              : os_grey,
+        ),
+        child: Center(
+          child: TextField(
+            onChanged: (e) {
+              txt = e;
+            },
+            style: TextStyle(
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
+            cursorColor: os_deep_blue,
+            decoration: InputDecoration(
+                hintText: "请输入",
+                border: InputBorder.none,
+                hintStyle: TextStyle(
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_white_opa
-                          : os_grey,
-                ),
+                          ? os_dark_dark_white
+                          : os_deep_grey,
+                )),
+          ),
+        ),
+      ),
+      Container(height: 10),
+      Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            child: myInkWell(
+              tap: () {
+                Navigator.pop(context);
+              },
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_white_opa
+                  : Color(0x16004DFF),
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
                 child: Center(
-                  child: TextField(
-                    onChanged: (e) {
-                      txt = e;
-                    },
+                  child: Text(
+                    "取消",
                     style: TextStyle(
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
-                          ? os_dark_white
-                          : os_black,
+                          ? os_dark_dark_white
+                          : os_deep_blue,
                     ),
-                    cursorColor: os_deep_blue,
-                    decoration: InputDecoration(
-                        hintText: "请输入",
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                          color:
-                              Provider.of<ColorProvider>(context, listen: false)
-                                      .isDark
-                                  ? os_dark_dark_white
-                                  : os_deep_grey,
-                        )),
                   ),
                 ),
               ),
-              Container(height: 10),
-              Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: myInkWell(
-                      tap: () {
-                        Navigator.pop(context);
-                      },
-                      color: Provider.of<ColorProvider>(context, listen: false)
-                              .isDark
-                          ? os_white_opa
-                          : Color(0x16004DFF),
-                      widget: Container(
-                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                        height: 40,
-                        child: Center(
-                          child: Text(
-                            "取消",
-                            style: TextStyle(
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_dark_white
-                                  : os_deep_blue,
-                            ),
-                          ),
-                        ),
-                      ),
-                      radius: 12.5,
-                    ),
-                  ),
-                  Container(
-                    child: myInkWell(
-                      tap: () async {
-                        await Api().user_report({
-                          "idType": "thread",
-                          "message": txt,
-                          "id": widget.data["topic"]["topic_id"]
-                        });
-                        Navigator.pop(context);
-                        _feedbackSuccess();
-                      },
-                      color: os_deep_blue,
-                      widget: Container(
-                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                        height: 40,
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.done, color: os_white, size: 18),
-                              Container(width: 5),
-                              Text(
-                                "完成",
-                                style: TextStyle(
-                                  color: os_white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      radius: 12.5,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              radius: 12.5,
+            ),
           ),
-        );
-      },
-    );
+          Container(
+            child: myInkWell(
+              tap: () async {
+                await Api().user_report({
+                  "idType": "thread",
+                  "message": txt,
+                  "id": widget.data["topic"]["topic_id"]
+                });
+                Navigator.pop(context);
+                _feedbackSuccess();
+              },
+              color: os_deep_blue,
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.done, color: os_white, size: 18),
+                      Container(width: 5),
+                      Text(
+                        "完成",
+                        style: TextStyle(
+                          color: os_white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              radius: 12.5,
+            ),
+          ),
+        ],
+      ),
+    ]);
   }
 
   _toWaterColumn() async {
@@ -241,15 +214,22 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       List<ActionItem> tmp = [];
       tmp.addAll([
         ActionItem(
-          title: "分享",
+          title: "展示二维码",
           onPressed: () {
             Navigator.pop(context);
-            Share.share("【河畔Lite客户端】分享给你一个帖子" +
-                base_url +
-                "forum.php?mod=viewthread&tid=" +
-                widget.data["topic"]["topic_id"].toString());
+            _showQrCode();
           },
         ),
+        // ActionItem(
+        //   title: "分享",
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //     Share.share("【河畔Lite客户端】分享给你一个帖子" +
+        //         base_url +
+        //         "forum.php?mod=viewthread&tid=" +
+        //         widget.data["topic"]["topic_id"].toString());
+        //   },
+        // ),
         ...(widget.data["topic"]["user_id"] == await getUid()
             ? [
                 ActionItem(
@@ -387,6 +367,16 @@ class QrCode extends StatefulWidget {
 }
 
 class _QrCodeState extends State<QrCode> {
+  getBriefId() {
+    if (widget.url
+        .contains("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")) {
+      return "t${widget.url.split("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")[1].split("&")[0]}";
+    } else if (widget.url
+        .contains("https://bbs.uestc.edu.cn/home.php?mod=space&uid=")) {
+      return "u${widget.url.split("https://bbs.uestc.edu.cn/home.php?mod=space&uid=")[1].split("&")[0]}";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -395,15 +385,18 @@ class _QrCodeState extends State<QrCode> {
         children: [
           Container(height: 30),
           //https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=1951303
-          SelectableText(
-            "请扫码或在河畔Lite App搜索框输入t${widget.url.split("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")[1]}在手机上查看",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_dark_white
-                  : os_black,
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            child: SelectableText(
+              "请扫码或在河畔Lite App搜索框输入${getBriefId()}在手机上查看",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : os_black,
+              ),
             ),
           ),
           Container(height: 20),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -39,9 +38,6 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           ? os_dark_white
           : Colors.black87,
       unselectedLabelColor: Color(0xFF7A7A7A),
-      unselectedLabelStyle: TextStyle(
-        fontSize: 17,
-      ),
       indicator: TabSizeIndicator(
         wantWidth: 18,
         borderSide: BorderSide(
@@ -50,9 +46,14 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
                 ? os_dark_white
                 : Colors.black87),
       ),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 17,
+        fontFamily: "微软雅黑",
+      ),
       labelStyle: TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 17,
+        fontFamily: "微软雅黑",
       ),
       tabs: [
         Tab(text: "新发表"),
@@ -102,7 +103,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
         Container(width: 5),
       ],
       title: Container(
-        width: 300,
+        width: isDesktop() ? 400 : 300,
         height: 60,
         child: _getMyTabBar(),
       ),

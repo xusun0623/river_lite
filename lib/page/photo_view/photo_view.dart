@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart'; // Import package
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/saveImg.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/outer/cached_network_image/image_provider/cached_network_image_provider.dart';
 import 'package:offer_show/util/cache_manager.dart';
@@ -13,6 +15,7 @@ import 'package:provider/provider.dart';
 typedef PageChanged = void Function(int index);
 
 class PhotoPreview extends StatefulWidget {
+  bool isSmallPic;
   final List galleryItems; //图片列表
   final int defaultImage; //默认第几张
   final PageChanged pageChanged; //切换图片回调
@@ -21,23 +24,27 @@ class PhotoPreview extends StatefulWidget {
   final String desc; //图片描述
   final String title; //图片描述标题
 
-  PhotoPreview(
-      {this.galleryItems,
-      this.defaultImage = 1,
-      this.pageChanged,
-      this.direction = Axis.horizontal,
-      this.desc,
-      this.title,
-      this.decoration})
-      : assert(galleryItems != null);
+  PhotoPreview({
+    this.galleryItems,
+    this.defaultImage = 1,
+    this.isSmallPic,
+    this.pageChanged,
+    this.direction = Axis.horizontal,
+    this.desc,
+    this.title,
+    this.decoration,
+  }) : assert(galleryItems != null);
   @override
   _PhotoPreviewState createState() => _PhotoPreviewState();
 }
 
 class _PhotoPreviewState extends State<PhotoPreview> {
   int tempSelect;
+  PageController _pageController;
+
   @override
   void initState() {
+    _pageController = new PageController(initialPage: widget.defaultImage);
     tempSelect = widget.defaultImage + 1;
   }
 
@@ -74,195 +81,280 @@ class _PhotoPreviewState extends State<PhotoPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: os_black,
-      body: Stack(
-        children: [
-          Container(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              onLongPress: () {
-                saveImge(context, widget.galleryItems, tempSelect - 1);
-              },
-              child: PhotoViewGallery.builder(
-                loadingBuilder: (context, event) => Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    color: os_black,
-                    child: Center(
+    return Baaaar(
+      isDark: true,
+      child: Scaffold(
+        backgroundColor: os_black,
+        body: Stack(
+          children: [
+            Container(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                onLongPress: () {
+                  saveImge(context, widget.galleryItems, tempSelect - 1);
+                },
+                child: PhotoViewGallery.builder(
+                  loadingBuilder: (context, event) => Center(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      color: os_black,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: os_white,
+                                strokeWidth: 2.5,
+                              ),
+                            ),
+                            Container(width: 10),
+                            Text(
+                              "加载图片中…",
+                              style: TextStyle(color: os_white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  scrollPhysics: const BouncingScrollPhysics(),
+                  builder: (BuildContext context, int index) {
+                    return PhotoViewGalleryPageOptions(
+                      minScale: PhotoViewComputedScale.contained * 1,
+                      heroAttributes: PhotoViewHeroAttributes(
+                        tag: widget.galleryItems[index],
+                      ),
+                      imageProvider: CachedNetworkImageProvider(
+                        widget.galleryItems[index],
+                        cacheManager: widget.isSmallPic ?? false
+                            ? null
+                            : RiverListCacheManager.instance,
+                      ),
+                    );
+                  },
+                  scrollDirection: widget.direction,
+                  itemCount: widget.galleryItems.length,
+                  backgroundDecoration:
+                      widget.decoration ?? BoxDecoration(color: Colors.black),
+                  pageController: _pageController,
+                  onPageChanged: (index) => setState(
+                    () {
+                      tempSelect = index + 1;
+                      if (widget.pageChanged != null) {
+                        widget.pageChanged(index);
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ),
+            widget.desc == null || widget.title == null
+                ? Container()
+                : Positioned(
+                    left: 0,
+                    bottom: 0,
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                      width: MediaQuery.of(context).size.width,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: [0, 1],
+                          colors: [Colors.transparent, Colors.black87],
+                        ),
+                      ),
+                      child: ListView(
+                        physics: BouncingScrollPhysics(),
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: os_dark_white,
+                              ),
+                              children: _getRichText(widget.title),
+                            ),
+                          ),
+                          Container(height: 5),
+                          Text.rich(
+                            TextSpan(
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.white70,
+                              ),
+                              children: _getRichText(widget.desc),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+            Positioned(
+              ///布局自己换
+              left: MediaQuery.of(context).size.width / 2 - 52,
+              top: 50,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black45,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                child: Text(
+                  "图片预览 $tempSelect / ${widget.galleryItems.length}",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            isDesktop()
+                ? Positioned(
+                    ///返回按钮
+                    left: 50,
+                    top: 50,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color(0x33000000),
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: IconButton(
+                        color: os_white,
+                        icon: Icon(Icons.chevron_left_rounded),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  )
+                : Container(),
+            (widget.title ?? "").length == 0 || isDesktop()
+                ? FuncButton(
+                    widget: widget,
+                    tempSelect: tempSelect,
+                    pageController: _pageController)
+                : Container(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FuncButton extends StatelessWidget {
+  const FuncButton({
+    Key key,
+    @required this.widget,
+    @required this.tempSelect,
+    @required PageController pageController,
+  })  : _pageController = pageController,
+        super(key: key);
+
+  final PhotoPreview widget;
+  final int tempSelect;
+  final PageController _pageController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      ///布局自己换
+      left: isDesktop()
+          ? MediaQuery.of(context).size.width / 2 - 90
+          : MediaQuery.of(context).size.width / 2 - 53,
+      bottom: 70,
+      child: GestureDetector(
+        onTap: () {
+          if (!isDesktop()) {
+            saveImge(context, widget.galleryItems, tempSelect - 1);
+          }
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black45,
+            borderRadius: BorderRadius.all(
+              Radius.circular(5),
+            ),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+          child: isDesktop()
+              ? Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _pageController.previousPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.ease);
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              color: os_white,
-                              strokeWidth: 2.5,
-                            ),
+                          Icon(
+                            Icons.chevron_left_outlined,
+                            color: Colors.white,
+                            size: 22,
                           ),
-                          Container(width: 10),
                           Text(
-                            "加载图片中…",
+                            "上一张",
                             style: TextStyle(color: os_white),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ),
-                scrollPhysics: const BouncingScrollPhysics(),
-                builder: (BuildContext context, int index) {
-                  return PhotoViewGalleryPageOptions(
-                    minScale: PhotoViewComputedScale.contained * 1,
-                    heroAttributes: PhotoViewHeroAttributes(
-                      tag: widget.galleryItems[index],
+                    Container(width: 15),
+                    Container(
+                      width: 1,
+                      height: 15,
+                      color: Colors.white30,
                     ),
-                    imageProvider: CachedNetworkImageProvider(
-                      widget.galleryItems[index],
-                      cacheManager: RiverListCacheManager.instance,
-                    ),
-                  );
-                },
-                scrollDirection: widget.direction,
-                itemCount: widget.galleryItems.length,
-                backgroundDecoration:
-                    widget.decoration ?? BoxDecoration(color: Colors.black),
-                pageController:
-                    PageController(initialPage: widget.defaultImage),
-                onPageChanged: (index) => setState(
-                  () {
-                    tempSelect = index + 1;
-                    if (widget.pageChanged != null) {
-                      widget.pageChanged(index);
-                    }
-                  },
-                ),
-              ),
-            ),
-          ),
-          widget.desc == null || widget.title == null
-              ? Container()
-              : Positioned(
-                  left: 0,
-                  bottom: 0,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                    width: MediaQuery.of(context).size.width,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: [0, 1],
-                        colors: [Colors.transparent, Colors.black87],
-                      ),
-                    ),
-                    child: ListView(
-                      physics: BouncingScrollPhysics(),
-                      children: [
-                        Text.rich(
-                          TextSpan(
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: os_dark_white,
-                            ),
-                            children: _getRichText(widget.title),
-                          ),
-                        ),
-                        Container(height: 5),
-                        Text.rich(
-                          TextSpan(
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.white70,
-                            ),
-                            children: _getRichText(widget.desc),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-          Positioned(
-            ///布局自己换
-            left: MediaQuery.of(context).size.width / 2 - 52,
-            top: 50,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black45,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5),
-                ),
-              ),
-              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-              child: Text(
-                "图片预览 $tempSelect / ${widget.galleryItems.length}",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-          isDesktop()
-              ? Positioned(
-                  ///布局自己换
-                  left: 50,
-                  top: 50,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Color(0x33000000),
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                    ),
-                    child: IconButton(
-                      color: os_white,
-                      icon: Icon(Icons.chevron_left_rounded),
-                      onPressed: () {
-                        Navigator.pop(context);
+                    Container(width: 15),
+                    GestureDetector(
+                      onTap: () {
+                        _pageController.nextPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.ease);
                       },
-                    ),
-                  ),
-                )
-              : Container(),
-          (widget.title ?? "").length != 0
-              ? Container()
-              : Positioned(
-                  ///布局自己换
-                  left: MediaQuery.of(context).size.width / 2 - 45,
-                  bottom: 70,
-                  child: GestureDetector(
-                    onTap: () {
-                      saveImge(context, widget.galleryItems, tempSelect - 1);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black45,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
-                        ),
-                      ),
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            Icons.download,
-                            color: Colors.white70,
-                            size: 18,
-                          ),
-                          Container(width: 5),
                           Text(
-                            "保存图片",
-                            style: TextStyle(
-                              color: Colors.white70,
-                            ),
+                            "下一张",
+                            style: TextStyle(color: os_white),
+                          ),
+                          Icon(
+                            Icons.chevron_right_outlined,
+                            color: Colors.white,
+                            size: 22,
                           ),
                         ],
                       ),
                     ),
-                  ),
+                  ],
+                )
+              : Row(
+                  children: [
+                    Icon(
+                      Icons.download,
+                      color: Colors.white70,
+                      size: 18,
+                    ),
+                    Container(width: 5),
+                    Text(
+                      "保存图片",
+                      style: TextStyle(
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
                 ),
-        ],
+        ),
       ),
     );
   }

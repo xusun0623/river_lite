@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
@@ -42,145 +42,117 @@ class _BlackListState extends State<BlackList> {
   }
 
   _addNewWord() async {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
-          ? os_light_dark_card
-          : os_white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+    showPop(context, [
+      Container(height: 30),
+      Text(
+        "请输入关键词",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_dark_white
+              : os_black,
         ),
       ),
-      context: context,
-      builder: (context) {
-        return Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: 30,
-          ),
-          height: MediaQuery.of(context).size.height - 100,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(height: 30),
-              Text(
-                "请输入关键词",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : os_black,
-                ),
-              ),
-              Container(height: 10),
-              Container(
-                height: 60,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+      Container(height: 10),
+      Container(
+        height: 60,
+        padding: EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_white_opa
+              : os_grey,
+        ),
+        child: Center(
+          child: TextField(
+            onChanged: (e) {
+              tmp_txt = e;
+            },
+            onSubmitted: (e) {
+              _confirm();
+            },
+            style: TextStyle(
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
+            cursorColor: os_deep_blue,
+            decoration: InputDecoration(
+                hintText: "请输入",
+                border: InputBorder.none,
+                hintStyle: TextStyle(
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_white_opa
-                          : os_grey,
-                ),
+                          ? os_dark_dark_white
+                          : os_deep_grey,
+                )),
+          ),
+        ),
+      ),
+      Container(height: 10),
+      Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            child: myInkWell(
+              tap: () {
+                Navigator.pop(context);
+              },
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_white_opa
+                  : Color(0x16004DFF),
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
                 child: Center(
-                  child: TextField(
-                    onChanged: (e) {
-                      tmp_txt = e;
-                    },
-                    onSubmitted: (e) {
-                      _confirm();
-                    },
+                  child: Text(
+                    "取消",
                     style: TextStyle(
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
-                          ? os_dark_white
-                          : os_black,
+                          ? os_dark_dark_white
+                          : os_deep_blue,
                     ),
-                    cursorColor: os_deep_blue,
-                    decoration: InputDecoration(
-                        hintText: "请输入",
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                          color:
-                              Provider.of<ColorProvider>(context, listen: false)
-                                      .isDark
-                                  ? os_dark_dark_white
-                                  : os_deep_grey,
-                        )),
                   ),
                 ),
               ),
-              Container(height: 10),
-              Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: myInkWell(
-                      tap: () {
-                        Navigator.pop(context);
-                      },
-                      color: Provider.of<ColorProvider>(context, listen: false)
-                              .isDark
-                          ? os_white_opa
-                          : Color(0x16004DFF),
-                      widget: Container(
-                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                        height: 40,
-                        child: Center(
-                          child: Text(
-                            "取消",
-                            style: TextStyle(
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_dark_white
-                                  : os_deep_blue,
-                            ),
-                          ),
-                        ),
-                      ),
-                      radius: 12.5,
-                    ),
-                  ),
-                  Container(
-                    child: myInkWell(
-                      tap: () async {
-                        _confirm();
-                      },
-                      color: os_deep_blue,
-                      widget: Container(
-                        width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                        height: 40,
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.done, color: os_white, size: 18),
-                              Container(width: 5),
-                              Text(
-                                "完成",
-                                style: TextStyle(
-                                  color: os_white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      radius: 12.5,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              radius: 12.5,
+            ),
           ),
-        );
-      },
-    );
+          Container(
+            child: myInkWell(
+              tap: () async {
+                _confirm();
+              },
+              color: os_deep_blue,
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.done, color: os_white, size: 18),
+                      Container(width: 5),
+                      Text(
+                        "完成",
+                        style: TextStyle(
+                          color: os_white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              radius: 12.5,
+            ),
+          ),
+        ],
+      ),
+    ]);
   }
 
   List<Widget> _buildWidget() {
@@ -199,7 +171,7 @@ class _BlackListState extends State<BlackList> {
         title: Text(
           data[i],
           style: TextStyle(
-            color: Provider.of<ColorProvider>(context).isDark
+            color: Provider.of<ColorProvider>(context, listen: false).isDark
                 ? os_dark_white
                 : os_black,
           ),

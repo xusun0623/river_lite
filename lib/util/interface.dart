@@ -1,11 +1,10 @@
 /*
  * @Author: xusun000「xusun000@foxmail.com」 
  * @Date: 2022-08-03 10:38:34 
- * @Last Modified by:   xusun000 
- * @Last Modified time: 2022-08-03 10:38:34 
+ * @Last Modified by: xusun000
+ * @Last Modified time: 2022-09-06 14:39:39
  */
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,7 +16,6 @@ import 'package:http/http.dart' as http;
 import 'package:offer_show/util/storage.dart';
 
 /// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
-
 class Api {
   finish_question() async {
     String cookie = (await getStorage(key: "cookie", initData: "")).toString();
@@ -29,12 +27,9 @@ class Api {
       Uri.parse(base_url + 'plugin.php?id=ahome_dayquestion:pop'),
     );
     request.fields.addAll({'formhash': formhash, 'finish': 'true'});
-
     request.headers.addAll(headers);
     request.followRedirects = false;
-
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
       print(await response.stream.bytesToString());
     } else {
@@ -52,14 +47,10 @@ class Api {
       Uri.parse(base_url + 'plugin.php?id=ahome_dayquestion:pop'),
     );
     request.fields.addAll({'formhash': formhash, 'next': 'true'});
-
     request.headers.addAll(headers);
     request.followRedirects = false;
-
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
-      // print(await response.stream.bytesToString());
     } else {
       print(response.reasonPhrase);
     }
@@ -81,14 +72,11 @@ class Api {
         'submit': 'true',
       },
     );
-
     request.headers.addAll(headers);
-
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
       String html = await response.stream.bytesToString();
-      if (html.contains("错误")) {
+      if (html.contains("错误") && context != null) {
         showToast(context: context, type: XSToast.none, txt: "答题错误,扣除10水滴");
       }
     } else {
@@ -105,9 +93,7 @@ class Api {
       Uri.parse(base_url + 'plugin.php?id=ahome_dayquestion:pop'),
     );
     request.headers.addAll(headers);
-
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
       String html = await response.stream.bytesToString();
       await setStorage(
@@ -124,7 +110,6 @@ class Api {
       } else if (html.contains("您有勇气挑战下一关吗")) {
         return "2";
       } else {
-        // print("${html}");
         String tmp_q = html
             .split("【题目】</b>&nbsp;")[1]
             .split("</font>")[0]
@@ -153,7 +138,6 @@ class Api {
           "v_list": tmp_value, //题目答案的值
           "progress": progress.replaceAll(" ", ""), //答题进度
         };
-        // print("${q_a}");
         return jsonEncode(q_a);
       }
     } else {
@@ -396,6 +380,7 @@ class Api {
             'uploadFile[]',
             tmp_jpg_path,
             filename: "hello.png",
+            /* 一定要写！！！！！！！！！！！！！！！！！！！！！！！*/
             contentType: MediaType("image", "jpeg"),
           ),
         );
@@ -409,42 +394,6 @@ class Api {
         return [];
       }
     }
-    /** 
-    var dio = new Dio();
-    var formData = FormData();
-    for (var i = 0; i < imgs.length; i++) {
-      var tmp_jpg_path = imgs[i].path;
-      if (imgs[i].path.split(".")[1] == "heic") {
-        //支持苹果拍照格式
-        tmp_jpg_path = await HeicToJpg.convert(imgs[i].path);
-      }
-      print(tmp_jpg_path);
-      formData.files.addAll([
-        MapEntry(
-          'uploadFile[]',
-          MultipartFile.fromFileSync(
-            tmp_jpg_path,
-            filename: 'upload.' + tmp_jpg_path.split(".")[1],
-            /* 一定要写！！！！！！！！！！！！！！！！！！！！！！！*/
-            contentType: MediaType(
-              "image",
-              tmp_jpg_path.split(".")[1] == "jpg"
-                  ? "jepg"
-                  : tmp_jpg_path.split(".")[1],
-            ), //"image/png",
-          ),
-        ),
-      ]);
-    }
-    var response = await dio.post(
-      base_url + 'mobcent/app/web/index.php?r=forum/sendattachmentex&type=image&module=forum&accessToken=e9f49ac6acace2b9f6582800f32ff&accessSecret=8aef222107fcd2cedcc5f60b4edd1',
-      options: Options(headers: {
-        "Content-Type": "multipart/form-data;",
-      }),
-      data: formData,
-    );
-    print(jsonDecode(response.data)["body"]["attachment"]);
-    */
   }
 
   //获取板块列表

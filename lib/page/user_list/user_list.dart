@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/empty.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -70,7 +72,7 @@ class _UserListState extends State<UserList> {
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
     data.forEach((element) {
-      tmp.add(UserListCard(data: element));
+      tmp.add(ResponsiveWidget(child: UserListCard(data: element)));
     });
     if (!load_done) {
       tmp.add(BottomLoading(color: Colors.transparent));
@@ -92,37 +94,47 @@ class _UserListState extends State<UserList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor:
-            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        elevation: 0,
-        title: Text(
-          widget.data["type"] == 0 ? "粉丝" : "关注",
-          style: TextStyle(
-            fontSize: 16,
+    return Baaaar(
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          elevation: 0,
+          title: Text(
+            widget.data["type"] == 0 ? "粉丝" : "关注",
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          leading: IconButton(
+            icon: Icon(
+              Icons.chevron_left_rounded,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_dark_back,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left_rounded),
-          onPressed: () {
-            Navigator.pop(context);
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            return await _getData();
           },
-        ),
-      ),
-      backgroundColor:
-          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      body: RefreshIndicator(
-        onRefresh: () async {
-          return await _getData();
-        },
-        child: ListView(
-          controller: _controller,
-          physics: BouncingScrollPhysics(),
-          children: _buildCont(),
+          child: ListView(
+            controller: _controller,
+            physics: BouncingScrollPhysics(),
+            children: _buildCont(),
+          ),
         ),
       ),
     );
@@ -184,7 +196,9 @@ class _UserListCardState extends State<UserListCard> {
               ),
               Container(width: 15),
               Container(
-                width: MediaQuery.of(context).size.width - 120,
+                width: MediaQuery.of(context).size.width -
+                    MinusSpace(context) -
+                    120,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

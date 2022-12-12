@@ -43,6 +43,7 @@ class _myInkWellState extends State<myInkWell> {
         height: widget.height,
         child: widget.longPress == null
             ? InkWell(
+                splashFactory: InkSparkle.splashFactory,
                 highlightColor: widget.highlightColor ?? null,
                 splashColor: widget.splashColor ?? null,
                 onTap: () {
@@ -54,6 +55,7 @@ class _myInkWellState extends State<myInkWell> {
                 child: widget.widget,
               )
             : InkWell(
+                splashFactory: InkSparkle.splashFactory,
                 highlightColor: widget.highlightColor ?? null,
                 splashColor: widget.splashColor ?? null,
                 onTap: () {

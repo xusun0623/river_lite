@@ -1,19 +1,22 @@
-![输入图片说明](App%20Icon.png)
+[点击访问Github同源仓库](https://github.com/xusun0623/river_lite)   
+   
+   
+   
 
-河畔Lite 1.1.2
+![输入图片说明](App%20Icon.png)
 
 # 河畔Lite App
 本Repo是电子科技大学官方校园论坛【清水河畔】的第三方客户端的开源代码仓库。此App轻量、简洁、设计优雅，拥有诸多特性和功能。  
 
 ## 客户端下载（【提取码均为1234】）
-河畔Lite官网：[点击查看](http://hepan.site)    
+河畔Lite官网：「点击访问」(http://hepan.site)  
 
 安卓客户端：[点击前往跳转下载安卓客户端](https://wwb.lanzouj.com/b027a448b)  
 IOS客户端：[点击访问AppStore下载客户端](https://apps.apple.com/cn/app/河畔lite/id1620829749)  
 MacOS客户端：[点击前往跳转下载MacOS客户端](https://wwb.lanzouj.com/b027gge2d)  
 
 ## Flutter框架信息
-本项目使用Google开源的跨端页面构建框架Flutter，使用Skia调用GPU直接渲染，渲染速度和表现力十分优秀，并可以移植到macOS、Windows、Linux、Android、IOS等诸多平台。现已在app Store上架Release版本「河畔Lite」，对应的`安卓版本`也在站内个人主页帖子发布，感兴趣的同学欢迎体验！！  
+本项目使用Google开源的跨端页面构建框架Flutter，使用Skia调用GPU直接渲染，渲染速度和表现力十分优秀，并可以移植到macOS、Windows、Linux、Android、IOS等诸多平台。现已在app Store上架Release版本「河畔Lite」，对应的安卓版本也在站内个人主页帖子发布，感兴趣的同学欢迎体验！！  
 
 ## 编译此项目
 ```
@@ -43,7 +46,7 @@ https://doc.flutterchina.club/setup-macos
  ·在lib/main.dart的mainApp入口上方，点击run app，等待构建完成即可  
 
 3.编译到MacOS
- ·下载Xcode，并首次运行
+ ·下载Xcode，并首次运行，下载安卓SDK
  ·使用Git克隆此项目，用Visual Studio Code打开（需安装flutter扩展，仅安装这一个即可）
  ·运行flutter doctor命令，检查环境是否问题，仅检查vscode和xcode项目即可
  ·在VSCode右下角会出现MacOS的标识，说明配置成功

@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/niw.dart';
@@ -31,10 +31,13 @@ class _CollectionTabState extends State<CollectionTab>
   int pageSize = 25;
   int filter_type = 0; //0-按主题数排序 1-按评论数排序 2-按订阅数排序
   bool switchLoading = false;
+  GlobalKey<RefreshIndicatorState> _indicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     _getMydata(); //获取我的收藏
+    speedUp(_scrollController);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
@@ -265,12 +268,16 @@ class _CollectionTabState extends State<CollectionTab>
         elevation: 0,
       ),
       body: RefreshIndicator(
+        key: _indicatorKey,
         color: os_color,
         onRefresh: () async {
           return await _getMydata();
         },
         child: BackToTop(
           show: showBackToTop,
+          refresh: () {
+            _indicatorKey.currentState.show();
+          },
           animation: true,
           bottom: 50,
           child: ListView(

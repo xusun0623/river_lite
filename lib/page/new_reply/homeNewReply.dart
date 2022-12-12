@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
@@ -30,6 +29,8 @@ class _HomeNewReplyState extends State<HomeNewReply>
   bool showBackToTop = false;
   bool vibrate = false;
   int pageSize = 25;
+  GlobalKey<RefreshIndicatorState> _indicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -147,6 +148,9 @@ class _HomeNewReplyState extends State<HomeNewReply>
       show: showBackToTop,
       animation: true,
       bottom: 50,
+      refresh: () {
+        _indicatorKey.currentState.show();
+      },
       child: ListView(
         physics: BouncingScrollPhysics(),
         controller: _scrollController,
@@ -167,6 +171,7 @@ class _HomeNewReplyState extends State<HomeNewReply>
       ),
       body: RefreshIndicator(
         color: os_color,
+        key: _indicatorKey,
         onRefresh: () async {
           var data = await _getInitData();
           return data;

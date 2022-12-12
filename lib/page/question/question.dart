@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/question/answer.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -111,7 +113,15 @@ class _QuestionState extends State<Question> {
 
   _getQuestion() async {
     await getWebCookie();
-    String get_q_a = await Api().get_question();
+    String get_q_a;
+    try {
+      get_q_a = await Api().get_question();
+    } catch (e) {
+      setState(() {
+        load_done = true;
+        status = 4; //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关 4-水滴不够
+      });
+    }
     if (get_q_a == "") {
       setState(() {
         status = 2; //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关
@@ -121,11 +131,13 @@ class _QuestionState extends State<Question> {
         isFinish = true;
         status = 1; //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关
       });
-    } else if (get_q_a == "3") {
+    } else if (get_q_a == "2") {
       setState(() {
         status = 3; //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关
       });
     } else {
+      print("$get_q_a");
+      if (q_a == {}) return;
       q_a = jsonDecode(get_q_a);
       count = int.parse(q_a["progress"][0].toString());
       _queryAns();
@@ -497,8 +509,11 @@ class _QuestionState extends State<Question> {
               ),
               Container(height: 150),
               myInkWell(
-                tap: () {
-                  _next();
+                tap: () async {
+                  await _next();
+                  setState(() {
+                    status = 0; //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关
+                  });
                 },
                 color: os_white,
                 radius: 10,
@@ -515,6 +530,79 @@ class _QuestionState extends State<Question> {
                         color: os_deep_grey,
                         fontSize: 16,
                         // fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> nowater() {
+    return [
+      Container(
+        padding: EdgeInsets.symmetric(vertical: 100),
+        child: Container(
+          child: Column(
+            children: [
+              Icon(
+                Icons.water_drop_outlined,
+                color: os_red,
+                size: 60,
+              ),
+              Container(height: 10),
+              Text(
+                "答题系统无法使用",
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
+                ),
+              ),
+              Container(height: 5),
+              Container(
+                width: MediaQuery.of(context).size.width - 100,
+                child: Text(
+                  "请检查你的水滴是否>=9,您也可以登陆网页端查看错误详情",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_black,
+                  ),
+                ),
+              ),
+              Container(height: 150),
+              myInkWell(
+                tap: () {
+                  Navigator.pop(context);
+                },
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : os_white,
+                radius: 10,
+                widget: Container(
+                  width: 150,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "知道了",
+                      style: TextStyle(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_dark_white
+                            : os_dark_back,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -550,7 +638,9 @@ class _QuestionState extends State<Question> {
             : os_white,
         radius: 10,
         widget: Container(
-          width: (MediaQuery.of(context).size.width - 60) * 0.4,
+          width:
+              (MediaQuery.of(context).size.width - MinusSpace(context) - 60) *
+                  0.4,
           height: 50,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -582,7 +672,9 @@ class _QuestionState extends State<Question> {
         color: os_color,
         radius: 10,
         widget: Container(
-          width: (MediaQuery.of(context).size.width - 60) * 0.6,
+          width:
+              (MediaQuery.of(context).size.width - MinusSpace(context) - 60) *
+                  0.6,
           height: 50,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -604,64 +696,73 @@ class _QuestionState extends State<Question> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor:
-            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        leading: IconButton(
-          icon: Icon(Icons.chevron_left_rounded),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          "水滴答题",
-          style: TextStyle(
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_white
-                : os_black,
-            fontSize: 16,
-          ),
-        ),
-      ),
-      backgroundColor:
+    return Baaaar(
+      color:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      body: Column(
-        children: [
-          load_done ? Container() : BottomLoading(color: Colors.transparent),
-          Container(
-            height: MediaQuery.of(context).size.height -
-                MediaQuery.of(context).padding.top -
-                (status == 1 || status == 2 ? 56 : 250),
-            child: ListView(
-              physics: BouncingScrollPhysics(),
-              //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关
-              children: status == 0
-                  ? doing()
-                  : status == 1
-                      ? bouns()
-                      : status == 2
-                          ? done()
-                          : haveNext(),
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          leading: IconButton(
+            icon: Icon(Icons.chevron_left_rounded),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(
+            "水滴答题",
+            style: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
+              fontSize: 16,
             ),
           ),
-          status == 0 && load_done
-              ? Container(
-                  height: 150,
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_back
-                      : os_back,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: bottom(),
-                  ),
-                )
-              : Container(),
-        ],
+        ),
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        body: Column(
+          children: [
+            load_done ? Container() : BottomLoading(color: Colors.transparent),
+            ResponsiveWidget(
+              child: Container(
+                height: MediaQuery.of(context).size.height -
+                    MediaQuery.of(context).padding.top -
+                    (status == 1 || status == 2 ? 56 : 250),
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关
+                  children: status == 0
+                      ? doing()
+                      : status == 1
+                          ? bouns()
+                          : status == 2
+                              ? done()
+                              : status == 4
+                                  ? nowater()
+                                  : haveNext(),
+                ),
+              ),
+            ),
+            status == 0 && load_done
+                ? Container(
+                    height: 150,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_back
+                        : os_back,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: bottom(),
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
       ),
     );
   }

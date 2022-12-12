@@ -15,9 +15,7 @@ void showMidActionSheet({
     for (var i = 0; i < list.length; i++) {
       tmp.add(
         myInkWell(
-          color: Provider.of<ColorProvider>(context, listen: false).isDark
-              ? os_dark_card
-              : os_white,
+          color: Colors.transparent,
           tap: () {
             select(i);
             Navigator.pop(context);
@@ -140,10 +138,7 @@ void showModal({
             cancelTxt == ""
                 ? Container()
                 : myInkWell(
-                    color: Provider.of<ColorProvider>(context, listen: false)
-                            .isDark
-                        ? os_light_dark_card
-                        : os_white,
+                    color: Colors.transparent,
                     widget: Container(
                       width: 130,
                       height: 50,

@@ -2,19 +2,21 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/nowMode.dart';
+import 'package:offer_show/asset/processUrl.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/empty.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
@@ -44,21 +46,8 @@ class _SearchState extends State<Search> {
   ScrollController _scrollController = new ScrollController();
   TextEditingController _controller = new TextEditingController();
   _getData() async {
-    if (_controller.text == "")
-      return;
-    else if (_controller.text
-        .contains("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")) {
-      int tid_tmp = int.parse(
-        _controller.text.split("mod=viewthread&tid=")[1].split("&")[0],
-      );
-      Navigator.pushNamed(context, "/topic_detail", arguments: tid_tmp);
-      return;
-    } else if (_controller.text
-        .contains("https://bbs.uestc.edu.cn/home.php?mod=space&uid=")) {
-      int uid_tmp = int.parse(
-        _controller.text.split("mod=space&uid=")[1].split("&")[0],
-      );
-      toUserSpace(context, uid_tmp);
+    if (specialUrl(_controller.text)) {
+      processUrl(_controller.text, context);
       return;
     } else {
       int tid = 0;
@@ -270,78 +259,83 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     nowMode(context);
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 80,
-        systemOverlayStyle: Provider.of<ColorProvider>(context).isDark
-            ? SystemUiOverlayStyle.light
-            : SystemUiOverlayStyle.dark,
-        backgroundColor:
-            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : os_black,
-        elevation: 0,
-        actions: [
-          SearchBtn(
-            search: () {
+    return Baaaar(
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 80,
+          systemOverlayStyle: Provider.of<ColorProvider>(context).isDark
+              ? SystemUiOverlayStyle.light
+              : SystemUiOverlayStyle.dark,
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          elevation: 0,
+          actions: [
+            SearchBtn(
+              search: () {
+                _getData();
+                _commentFocus.unfocus();
+              },
+            )
+          ],
+          leadingWidth: 30,
+          leading: IconButton(
+            icon: Icon(
+              Icons.chevron_left_rounded,
+              size: 28,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_deep_grey
+                  : os_black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: SearchLeft(
+            confirm: () {
               _getData();
               _commentFocus.unfocus();
             },
-          )
-        ],
-        leadingWidth: 30,
-        leading: IconButton(
-          icon: Icon(
-            Icons.chevron_left_rounded,
-            size: 28,
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_deep_grey
-                : os_black,
+            focus: () async {
+              await _scrollController.animateTo(
+                0,
+                duration: Duration(milliseconds: 300),
+                curve: Curves.ease,
+              );
+              setState(() {
+                data = [];
+                load_done = false;
+              });
+            },
+            commentFocus: _commentFocus,
+            controller: _controller,
+            select: (idx) {
+              setState(() {
+                data = [];
+                load_done = false;
+                select = idx;
+              });
+            },
+            select_idx: select,
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
         ),
-        title: SearchLeft(
-          confirm: () {
-            _getData();
-            _commentFocus.unfocus();
-          },
-          focus: () async {
-            await _scrollController.animateTo(
-              0,
-              duration: Duration(milliseconds: 300),
-              curve: Curves.ease,
-            );
-            setState(() {
-              data = [];
-              load_done = false;
-            });
-          },
-          commentFocus: _commentFocus,
-          controller: _controller,
-          select: (idx) {
-            setState(() {
-              data = [];
-              load_done = false;
-              select = idx;
-            });
-          },
-          select_idx: select,
-        ),
-      ),
-      body: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_back
-              : os_back,
-          child: ListView(
-            controller: _scrollController,
-            physics: BouncingScrollPhysics(),
-            children: _buildTopic(),
+        body: Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_back
+                : os_back,
+            child: ListView(
+              controller: _scrollController,
+              physics: BouncingScrollPhysics(),
+              children: _buildTopic(),
+            ),
           ),
         ),
       ),
@@ -546,114 +540,119 @@ class UserListCard extends StatefulWidget {
 class _UserListCardState extends State<UserListCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
-      child: myInkWell(
-        color: Provider.of<ColorProvider>(context).isDark
-            ? os_light_dark_card
-            : os_white,
-        tap: () async {
-          int uid = await getUid();
-          Navigator.pushNamed(
-            context,
-            "/person_center",
-            arguments: {
-              "uid": widget.data["uid"],
-              "isMe": uid == widget.data["uid"],
-            },
-          );
-        },
-        widget: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(100)),
-                child: CachedNetworkImage(
-                  placeholder: (context, url) => Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_deep_grey
-                          : os_grey,
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                    ),
-                  ),
-                  width: 35,
-                  height: 35,
-                  fit: BoxFit.cover,
-                  imageUrl: widget.data["icon"],
-                ),
-              ),
-              Container(width: 15),
-              Container(
-                width: MediaQuery.of(context).size.width - 160,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          widget.data["name"],
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_white
-                                  : os_black),
-                        ),
-                        Container(width: 5),
-                        widget.data["userTitle"].toString().length < 6
-                            ? Tag(
-                                txt: widget.data["userTitle"],
-                                color: os_white,
-                                color_opa: os_wonderful_color[1],
-                              )
-                            : Container(),
-                      ],
-                    ),
-                    Container(height: 5),
-                    Text(
-                      widget.data["signture"] == ""
-                          ? "这位畔友很懒，什么也没写"
-                          : widget.data["signture"],
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF9F9F9F),
+    return ResponsiveWidget(
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
+        child: myInkWell(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_light_dark_card
+              : os_white,
+          tap: () async {
+            int uid = await getUid();
+            Navigator.pushNamed(
+              context,
+              "/person_center",
+              arguments: {
+                "uid": widget.data["uid"],
+                "isMe": uid == widget.data["uid"],
+              },
+            );
+          },
+          widget: Container(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                  child: CachedNetworkImage(
+                    placeholder: (context, url) => Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_deep_grey
+                            : os_grey,
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 40,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.person_add_rounded,
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_dark_white
-                        : os_deep_grey,
+                    width: 35,
+                    height: 35,
+                    fit: BoxFit.cover,
+                    imageUrl: widget.data["icon"],
                   ),
-                  onPressed: () async {
-                    var tmp = await Api().user_useradmin({
-                      "type": "follow",
-                      "uid": widget.data["uid"],
-                    });
-                    showToast(
-                      context: context,
-                      txt: tmp["errcode"],
-                      duration: 500,
-                      type: XSToast.none,
-                    );
-                  },
                 ),
-              ),
-            ],
+                Container(width: 15),
+                Container(
+                  width: MediaQuery.of(context).size.width -
+                      MinusSpace(context) -
+                      160,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            widget.data["name"],
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_white
+                                        : os_black),
+                          ),
+                          Container(width: 5),
+                          widget.data["userTitle"].toString().length < 6
+                              ? Tag(
+                                  txt: widget.data["userTitle"],
+                                  color: os_white,
+                                  color_opa: os_wonderful_color[1],
+                                )
+                              : Container(),
+                        ],
+                      ),
+                      Container(height: 5),
+                      Text(
+                        widget.data["signture"] == ""
+                            ? "这位畔友很懒，什么也没写"
+                            : widget.data["signture"],
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF9F9F9F),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 40,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.person_add_rounded,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : os_deep_grey,
+                    ),
+                    onPressed: () async {
+                      var tmp = await Api().user_useradmin({
+                        "type": "follow",
+                        "uid": widget.data["uid"],
+                      });
+                      showToast(
+                        context: context,
+                        txt: tmp["errcode"],
+                        duration: 500,
+                        type: XSToast.none,
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
+          radius: 10,
         ),
-        radius: 10,
       ),
     );
   }
@@ -847,150 +846,152 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
-      child: myInkWell(
-        color: Provider.of<ColorProvider>(context).isDark
-            ? os_light_dark_card
-            : os_white,
-        tap: () {
-          widget.tap();
-          Navigator.pushNamed(
-            context,
-            "/topic_detail",
-            arguments: widget.data["topic_id"],
-          );
-        },
-        widget: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(15, 16, 15, 16),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            width: 35,
-                            height: 35,
-                            color: Provider.of<ColorProvider>(context).isDark
-                                ? Color(0x19FFFFFF)
-                                : os_wonderful_color_opa[widget.index % 7],
-                            child: Center(
-                              child: Text(
-                                widget.data["user_nick_name"].length == 0
-                                    ? "X"
-                                    : widget.data["user_nick_name"][0],
-                                style: TextStyle(
-                                  color: Provider.of<ColorProvider>(context)
-                                          .isDark
-                                      ? os_dark_white
-                                      : os_wonderful_color[widget.index % 7],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(padding: EdgeInsets.all(4)),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.data["user_nick_name"],
-                              style: TextStyle(
-                                color:
-                                    Provider.of<ColorProvider>(context).isDark
+    return ResponsiveWidget(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
+        child: myInkWell(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_light_dark_card
+              : os_white,
+          tap: () {
+            widget.tap();
+            Navigator.pushNamed(
+              context,
+              "/topic_detail",
+              arguments: widget.data["topic_id"],
+            );
+          },
+          widget: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(15, 16, 15, 16),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              width: 35,
+                              height: 35,
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? Color(0x19FFFFFF)
+                                  : os_wonderful_color_opa[widget.index % 7],
+                              child: Center(
+                                child: Text(
+                                  widget.data["user_nick_name"].length == 0
+                                      ? "X"
+                                      : widget.data["user_nick_name"][0],
+                                  style: TextStyle(
+                                    color: Provider.of<ColorProvider>(context)
+                                            .isDark
                                         ? os_dark_white
-                                        : Color(0xFF636363),
-                                fontSize: 15,
-                              ),
-                            ),
-                            Text(
-                              RelativeDateFormat.format(
-                                DateTime.fromMillisecondsSinceEpoch(
-                                  int.parse(widget.data["last_reply_date"]),
+                                        : os_wonderful_color[widget.index % 7],
+                                  ),
                                 ),
                               ),
-                              style: TextStyle(
-                                color:
-                                    Provider.of<ColorProvider>(context).isDark
-                                        ? os_deep_grey
-                                        : Color(0xFFC4C4C4),
-                                fontSize: 12,
-                              ),
                             ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                Padding(padding: EdgeInsets.all(1)),
-                Container(
-                  width: MediaQuery.of(context).size.width - 60,
-                  child: Text(
-                    widget.data["title"].replaceAll("&nbsp1", " "),
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_dark_white
-                          : os_black,
-                    ),
-                  ),
-                ),
-                Padding(padding: EdgeInsets.all(2)),
-                Container(
-                  width: MediaQuery.of(context).size.width - 60,
-                  child: Text(
-                    (widget.data["summary"] ?? widget.data["subject"]) ?? "",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_deep_grey
-                          : Color(0xFFA3A3A3),
-                    ),
-                  ),
-                ),
-                Padding(padding: EdgeInsets.all(7)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        os_svg(
-                          path: "lib/img/comment.svg",
-                          width: 12.8,
-                          height: 12.8,
-                        ),
-                        Padding(padding: EdgeInsets.all(2)),
-                        Text(
-                          "评论 ${widget.data['replies']} · 浏览量 ${widget.data['hits']}",
-                          style: TextStyle(
-                            color: Color(0xFFC5C5C5),
-                            fontSize: 14,
                           ),
-                        )
-                      ],
+                          Padding(padding: EdgeInsets.all(4)),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.data["user_nick_name"],
+                                style: TextStyle(
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_white
+                                          : Color(0xFF636363),
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Text(
+                                RelativeDateFormat.format(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                    int.parse(widget.data["last_reply_date"]),
+                                  ),
+                                ),
+                                style: TextStyle(
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_deep_grey
+                                          : Color(0xFFC4C4C4),
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  Padding(padding: EdgeInsets.all(1)),
+                  Container(
+                    width: MediaQuery.of(context).size.width - 60,
+                    child: Text(
+                      widget.data["title"].replaceAll("&nbsp1", " "),
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_white
+                            : os_black,
+                      ),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  Padding(padding: EdgeInsets.all(2)),
+                  Container(
+                    width: MediaQuery.of(context).size.width - 60,
+                    child: Text(
+                      (widget.data["summary"] ?? widget.data["subject"]) ?? "",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_deep_grey
+                            : Color(0xFFA3A3A3),
+                      ),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.all(7)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          os_svg(
+                            path: "lib/img/comment.svg",
+                            width: 12.8,
+                            height: 12.8,
+                          ),
+                          Padding(padding: EdgeInsets.all(2)),
+                          Text(
+                            "评论 ${widget.data['replies']} · 浏览量 ${widget.data['hits']}",
+                            style: TextStyle(
+                              color: Color(0xFFC5C5C5),
+                              fontSize: 14,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
+          // width: width,
+          // height: height,
+          radius: 10,
         ),
-        // width: width,
-        // height: height,
-        radius: 10,
       ),
     );
   }

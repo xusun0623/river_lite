@@ -11,6 +11,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/empty.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
@@ -160,74 +161,78 @@ class _MeFuncState extends State<MeFunc> {
   @override
   Widget build(BuildContext context) {
     nowMode(context);
-    return Scaffold(
-      appBar: AppBar(
+    return Baaaar(
+      color:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : Color(0xFFF3F3F3),
+          foregroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : Color(0xFF505050),
+          elevation: 0,
+          title: Text(
+            _showTopTitle
+                ? ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type]
+                : "",
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          actions: (widget.type == 4 || widget.type == 5) && !_showTopTitle
+              ? [
+                  IconButton(
+                      onPressed: () {
+                        showModal(
+                          context: context,
+                          cont: "确定清除所有记录?此操作不可逆，请谨慎操作",
+                          title: "请确认",
+                          confirm: () async {
+                            if (widget.type == 4) {
+                              await setStorage(key: "history", value: "[]");
+                              _getData();
+                            }
+                            if (widget.type == 5) {
+                              await setStorage(key: "draft", value: "[]");
+                              _getData();
+                            }
+                          },
+                        );
+                      },
+                      icon: Icon(Icons.delete_outline_rounded)),
+                  Container(width: 10),
+                ]
+              : [],
+          leading: IconButton(
+            icon: Icon(
+              Icons.chevron_left_rounded,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : Color(0xFF505050),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : Color(0xFFF3F3F3),
-        foregroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_white
-            : Color(0xFF505050),
-        elevation: 0,
-        title: Text(
-          _showTopTitle
-              ? ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type]
-              : "",
-          style: TextStyle(
-            fontSize: 16,
-          ),
-        ),
-        actions: (widget.type == 4 || widget.type == 5) && !_showTopTitle
-            ? [
-                IconButton(
-                    onPressed: () {
-                      showModal(
-                        context: context,
-                        cont: "确定清除所有记录?此操作不可逆，请谨慎操作",
-                        title: "请确认",
-                        confirm: () async {
-                          if (widget.type == 4) {
-                            await setStorage(key: "history", value: "[]");
-                            _getData();
-                          }
-                          if (widget.type == 5) {
-                            await setStorage(key: "draft", value: "[]");
-                            _getData();
-                          }
-                        },
-                      );
-                    },
-                    icon: Icon(Icons.delete_outline_rounded)),
-                Container(width: 10),
-              ]
-            : [],
-        leading: IconButton(
-          icon: Icon(
-            Icons.chevron_left_rounded,
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_white
-                : Color(0xFF505050),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      backgroundColor: Provider.of<ColorProvider>(context).isDark
-          ? os_dark_back
-          : Color(0xFFF3F3F3),
-      body: BackToTop(
-        bottom: 100,
-        controller: _scrollController,
-        show: _showBackToTop,
-        child: RefreshIndicator(
-          onRefresh: () async {
-            return await _getData();
-          },
-          child: ListView(
-            controller: _scrollController,
-            physics: BouncingScrollPhysics(),
-            children: _buildCont(),
+        body: BackToTop(
+          bottom: 100,
+          controller: _scrollController,
+          show: _showBackToTop,
+          child: RefreshIndicator(
+            onRefresh: () async {
+              return await _getData();
+            },
+            child: ListView(
+              controller: _scrollController,
+              physics: BouncingScrollPhysics(),
+              children: _buildCont(),
+            ),
           ),
         ),
       ),
@@ -396,7 +401,6 @@ class _HistoryCardState extends State<HistoryCard> {
   _setHistory() async {
     var history_data = await getStorage(key: "history", initData: "[]");
     List history_arr = jsonDecode(history_data);
-    bool flag = false;
     for (int i = 0; i < history_arr.length; i++) {
       var ele = history_arr[i];
       if (ele["userAvatar"] == widget.data["userAvatar"] &&

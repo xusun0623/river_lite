@@ -9,6 +9,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/empty.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
@@ -203,59 +204,68 @@ class _MsgThreeState extends State<MsgThree> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_back
-            : colors[widget.type],
-        foregroundColor: os_white,
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        elevation: 0,
-        leading: BackIcon(),
-      ),
-      body: Container(
-        color: Provider.of<ColorProvider>(context).isDark
-            ? os_dark_back
-            : colors[widget.type],
-        height: MediaQuery.of(context).size.height,
-        child: Stack(
-          children: [
-            Head(titles: titles, widget: widget),
-            Positioned(
-              top: 60,
-              child: Container(
-                width: MediaQuery.of(context).size.width - 2 * os_edge,
-                height: MediaQuery.of(context).size.height -
-                    MediaQuery.of(context).padding.top -
-                    125,
-                decoration: BoxDecoration(
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_light_dark_card
-                      : os_white,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                ),
-                margin: EdgeInsets.symmetric(horizontal: os_edge),
-                child: RefreshIndicator(
-                  color: colors[widget.type],
-                  onRefresh: () async {
-                    return await _getData();
-                  },
-                  child: BackToTop(
+    return Baaaar(
+      hideLogo: true,
+      color: Provider.of<ColorProvider>(context).isDark
+          ? os_dark_back
+          : colors[widget.type],
+      child: Scaffold(
+        appBar: AppBar(
+          surfaceTintColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : colors[widget.type],
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : colors[widget.type],
+          foregroundColor: os_white,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          elevation: 0,
+          leading: BackIcon(),
+        ),
+        body: Container(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : colors[widget.type],
+          height: MediaQuery.of(context).size.height,
+          child: Stack(
+            children: [
+              Head(titles: titles, widget: widget),
+              Positioned(
+                top: 60,
+                child: Container(
+                  width: MediaQuery.of(context).size.width - 2 * os_edge,
+                  height: MediaQuery.of(context).size.height -
+                      MediaQuery.of(context).padding.top -
+                      125,
+                  decoration: BoxDecoration(
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_light_dark_card
+                        : os_white,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  margin: EdgeInsets.symmetric(horizontal: os_edge),
+                  child: RefreshIndicator(
                     color: colors[widget.type],
-                    show: showBackToTop,
-                    bottom: 80,
-                    controller: _scrollController,
-                    animation: true,
-                    child: ListView(
+                    onRefresh: () async {
+                      return await _getData();
+                    },
+                    child: BackToTop(
+                      color: colors[widget.type],
+                      show: showBackToTop,
+                      bottom: 80,
                       controller: _scrollController,
-                      physics: BouncingScrollPhysics(),
-                      children: _buildCont(),
+                      animation: true,
+                      child: ListView(
+                        controller: _scrollController,
+                        physics: BouncingScrollPhysics(),
+                        children: _buildCont(),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -404,7 +414,8 @@ class _ForumCardState extends State<ForumCard> {
               width: MediaQuery.of(context).size.width -
                   (isDesktop() ? (MinusSpace(context)) + 12 : 0) -
                   headImgSize -
-                  64,
+                  64 -
+                  15,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -509,6 +520,7 @@ class BackIcon extends StatelessWidget {
       icon: Icon(
         Icons.arrow_back_ios_new_rounded,
         size: 16,
+        color: os_white,
       ),
     );
   }

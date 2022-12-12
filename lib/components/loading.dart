@@ -7,9 +7,11 @@ import 'package:provider/provider.dart';
 class Loading extends StatefulWidget {
   Color backgroundColor;
   bool showError;
+  bool showCancel;
   String msg;
   Function tap;
   Function tap1;
+  Function cancel;
   String tapTxt;
   String tapTxt1;
   Widget loadingWidget;
@@ -17,9 +19,11 @@ class Loading extends StatefulWidget {
     Key key,
     this.backgroundColor,
     this.showError,
+    this.showCancel,
     this.msg,
     this.tap,
     this.tap1,
+    this.cancel,
     this.tapTxt,
     this.tapTxt1,
     this.loadingWidget,
@@ -74,6 +78,34 @@ class _LoadingState extends State<Loading> {
                 ),
               ),
             ),
+            widget.showCancel ?? false
+                ? GestureDetector(
+                    onTap: () {
+                      if (widget.cancel != null) {
+                        widget.cancel();
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(top: 10),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 3.5,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(
+                          color: Color(0xFFBBBBBB),
+                        ),
+                      ),
+                      child: Text(
+                        "取消",
+                        style: TextStyle(
+                          color: Color(0xFFBBBBBB),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             widget.tap == null || !widget.showError
                 ? Container()
                 : Container(height: 30),

@@ -9,20 +9,24 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 
-Map settingConfig = {
-  "isVibrate": true,
-};
-
 class SettingConfigProvider extends ChangeNotifier {
-  bool isShow = false;
+  Map LiteConfig;
+
+  refresh() {
+    notifyListeners();
+  }
+}
+
+class AutoQuestionProvider extends ChangeNotifier {
+  bool isAuto = false;
 
   switchMode() async {
-    isShow = !isShow;
+    isAuto = !isAuto;
     notifyListeners();
   }
 
   refresh() {
-    setStorage(key: "pic", value: isShow ? "1" : "");
+    setStorage(key: "auto", value: isAuto ? "1" : "");
     notifyListeners();
   }
 }

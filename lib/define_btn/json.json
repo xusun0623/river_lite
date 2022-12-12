@@ -1,0 +1,10 @@
+{
+  "name": "水手之家",
+  "iconType": "system/define",
+  "definePath": "lib/img/...",
+  "containerSize": 20,
+  "imgSize": 30,
+  "hasBackground": true,
+  "backgroundColor": "#000000",
+  "radius": 10
+}

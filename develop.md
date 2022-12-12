@@ -1,33 +1,46 @@
-# 河畔Lite客户端
+# 河畔 Lite 客户端
 
-## API文档  
+## API 文档
+
 https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 
 ## 编译相关
 
 #### 1.打包
-> flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform android-arm,android-arm64,android-x64 --split-per-abi  
 
-> git fetch  
+> flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform android-arm,android-arm64,android-x64 --split-per-abi
 
-> flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform android-arm,android-arm64,android-x64 --split-per-abi  
+> git fetch
+
+> flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform android-arm,android-arm64,android-x64 --split-per-abi
 
 > adb install build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk  
+
+> adb -s adb-56ca1081-vP9WNP._adb-tls-connect._tcp. kill-server  
 
 #### 2.命令行安装
-> adb -s 192.168.28.39:42163 install app-armeabi-v7a-release.apk  
-> adb install build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk  
 
-#### 3.IOS打包
+> adb -s 192.168.28.39:42163 install app-armeabi-v7a-release.apk  
+> adb install build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+
+#### 3.IOS 打包
+
 > flutter build ios --release  
 > flutter run --no-null-safety
 
-#### 4.MacOS打包
+#### 4.MacOS 打包
+
 > flutter build macOS --release  
-> https://zhuanlan.zhihu.com/p/56864296  
+> https://zhuanlan.zhihu.com/p/56864296
+
+## 窗口管理
+
+https://www.cnblogs.com/silentdoer/p/15041143.html
 
 ## 开发代码片段
+
 #### 1.Provider
+
 ```dart
 > main.dart
 MultiProvider(
@@ -38,6 +51,7 @@ MultiProvider(
   ]
 )
 ```
+
 ```dart
 > provider.dart
 class MainProvider extends ChangeNotifier {
@@ -52,12 +66,14 @@ class MainProvider extends ChangeNotifier {
   }
 }
 ```
+
 ```dart
 > ele.dart
-KeyBoard provider = Provider.of<KeyBoard>(context);  
+KeyBoard provider = Provider.of<KeyBoard>(context);
 ```
 
 #### 2.路由管理
+
 ```dart
 > main.dart
 MaterialApp(
@@ -87,6 +103,7 @@ MaterialApp(
   },
 ),
 ```
+
 ```dart
 > router.dart
 final routers = {
@@ -99,17 +116,20 @@ final routers = {
   "/404": () => Page404(),
 };
 ```
+
 ```dart
 > ele.dart
 Navigator.pushNamed(context, "/square");
 ```
 
-#### 3.载入SVG
+#### 3.载入 SVG
+
 ```dart
 > pubspec.yaml
   assets:
     - lib/img/logo.svg
 ```
+
 ```dart
 > svg.dart
 SvgPicture.asset(
@@ -120,6 +140,7 @@ SvgPicture.asset(
 ```
 
 #### 4.水波纹效果
+
 ```dart
 myInkWell(
   widget: GestureDetector(
@@ -139,12 +160,14 @@ myInkWell(
 ```
 
 #### 5.状态栏颜色
+
 ```dart
 AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Container()
 )
 ```
+
 ```dart
 if (Platform.isAndroid) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -153,24 +176,26 @@ if (Platform.isAndroid) {
 ```
 
 #### 6.屏幕宽度
+
 ```dart
 MediaQuery.of(context).size.width
 ```
 
 #### 7.帖子内容
+
 ```json
 {
-    "infor": "https://bbs.uestc.edu.cn/data/attachment/forum/202201/17/232224senjq9cjyiqqnyq6.jpg",
-    "type": 1,// 0-纯文字 1-图片 4-链接 5-附件
-    "url": "https://bbs.uestc.edu.cn/forum.php?mod=attachment&aid=MjEwNTQxOHw0OWY4ZDM5YnwxNjQ0MDcyNjY0fDIyMTc4OHwxOTE3OTc0",
-    "desc": "(7.88 MB, 下载次数: 352)",
-    "originalInfo": "https://bbs.uestc.edu.cn/data/attachment/forum/202201/17/232224senjq9cjyiqqnyq6.jpg",
-    "aid": 2105419
+  "infor": "https://bbs.uestc.edu.cn/data/attachment/forum/202201/17/232224senjq9cjyiqqnyq6.jpg",
+  "type": 1, // 0-纯文字 1-图片 4-链接 5-附件
+  "url": "https://bbs.uestc.edu.cn/forum.php?mod=attachment&aid=MjEwNTQxOHw0OWY4ZDM5YnwxNjQ0MDcyNjY0fDIyMTc4OHwxOTE3OTc0",
+  "desc": "(7.88 MB, 下载次数: 352)",
+  "originalInfo": "https://bbs.uestc.edu.cn/data/attachment/forum/202201/17/232224senjq9cjyiqqnyq6.jpg",
+  "aid": 2105419
 }
 ```
 
-
 ### 8.上拉刷新
+
 ```dart
 ScrollController _scrollController = new ScrollController();
 _scrollController.addListener(() {
@@ -181,8 +206,8 @@ _scrollController.addListener(() {
 });
 ```
 
-
 ### 9.震动
+
 ```dart
 bool vibrate = false;
 if (_scrollController.position.pixels < -100) {
@@ -197,6 +222,7 @@ if (_scrollController.position.pixels >= 0) {
 ```
 
 ### 10.动画
+
 ```dart
 AnimationController controller; //动画控制器
 Animation<double> animation;
@@ -231,6 +257,7 @@ void initState() {
 ```
 
 ### 11.下拉刷新
+
 ```dart
 RefreshIndicator(
   color: os_color,
@@ -244,6 +271,7 @@ RefreshIndicator(
 ```
 
 ### 12.回顶
+
 ```dart
 bool showBackToTop = false;
 ScrollController _controller = new ScrollController();

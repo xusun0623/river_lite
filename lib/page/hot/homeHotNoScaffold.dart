@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
@@ -10,6 +9,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic.dart';
+import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -25,6 +25,8 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
   ScrollController _scrollController = new ScrollController();
   var list = [];
   bool vibrate = false;
+  GlobalKey<RefreshIndicatorState> _indicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -106,19 +108,27 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
     return Container(
       color:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      child: RefreshIndicator(
-        color: os_color,
-        onRefresh: () async {
-          var data = await _getData();
-          return data;
+      child: BackToTop(
+        show: false,
+        controller: _scrollController,
+        refresh: () {
+          _indicatorKey.currentState.show();
         },
-        child: list.length == 0
-            ? OccuLoading()
-            : ListView(
-                controller: _scrollController,
-                physics: BouncingScrollPhysics(),
-                children: _buildComponents(),
-              ),
+        child: RefreshIndicator(
+          color: os_color,
+          key: _indicatorKey,
+          onRefresh: () async {
+            var data = await _getData();
+            return data;
+          },
+          child: list.length == 0
+              ? OccuLoading()
+              : ListView(
+                  controller: _scrollController,
+                  physics: BouncingScrollPhysics(),
+                  children: _buildComponents(),
+                ),
+        ),
       ),
     );
   }

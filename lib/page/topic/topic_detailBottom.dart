@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
@@ -52,6 +54,7 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
   }
 
   void _tapLike() async {
+    Vibrate.feedback(FeedbackType.impact);
     if (liked == 1) return;
     liked = 1;
     setState(() {
@@ -70,6 +73,7 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
   }
 
   void _tapDisLike() async {
+    Vibrate.feedback(FeedbackType.impact);
     if (disliked == 1) return;
     disliked = 1;
     setState(() {
@@ -108,7 +112,8 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
           ),
         ),
         height: 62 + widget.bottom ?? 0,
-        padding: EdgeInsets.fromLTRB(7, 7, 7, 7 + widget.bottom ?? 0),
+        padding: EdgeInsets.fromLTRB(7 + MinusSpace(context) / 2, 7,
+            7 + MinusSpace(context) / 2, 7 + widget.bottom ?? 0),
         width: MediaQuery.of(context).size.width,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,11 +125,15 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
               radius: 10,
               color: Colors.transparent,
               widget: Container(
-                width: MediaQuery.of(context).size.width - 156,
+                width: MediaQuery.of(context).size.width -
+                    MinusSpace(context) -
+                    156,
                 height: 47,
                 child: Center(
                   child: Container(
-                    width: MediaQuery.of(context).size.width - 200,
+                    width: MediaQuery.of(context).size.width -
+                        MinusSpace(context) -
+                        200,
                     child: Row(
                       children: [
                         Icon(

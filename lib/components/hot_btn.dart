@@ -93,11 +93,13 @@ class _HomeBtnState extends State<HomeBtn> {
                 txt: "水滴",
                 img: "lib/img/home/9.svg",
                 url: "/water_total",
+                board_id: 0,
               ),
               Btn(
                 txt: "全部板块",
                 img: "lib/img/home/1.svg",
                 url: "/square",
+                board_id: 0,
               ),
             ],
           ),
@@ -133,7 +135,9 @@ class _BtnState extends State<Btn> {
         if (myinfo == "") {
           Navigator.pushNamed(context, "/login", arguments: 0);
         } else {
-          if (widget.url != "" && widget.board_id != null) {
+          if (widget.url != "" &&
+              widget.board_id != null &&
+              widget.board_id != 0) {
             Navigator.pushNamed(context, widget.url,
                 arguments: widget.board_id);
           } else if (widget.url != "") {

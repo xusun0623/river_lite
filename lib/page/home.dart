@@ -2,16 +2,17 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badgee;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:offer_show/asset/autoQuestion.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/leftNavi.dart';
+import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/page/PicSquare/pic_square.dart';
 import 'package:offer_show/page/me/me.dart';
 import 'package:offer_show/page/msg/msg.dart';
@@ -20,7 +21,6 @@ import 'package:offer_show/page/square/squareHome.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -196,13 +196,9 @@ class _HomeState extends State<Home> {
           child: Container(
             width: MediaQuery.of(context).size.width / icons.length,
             height: barHeight,
-            color: Provider.of<ColorProvider>(context).isDark ||
-                    (Provider.of<ShowPicProvider>(context).isShow &&
-                        tabShowProvider.index == 1)
-                ? os_dark_back
-                : Color(0xFFFFFFFF),
-            child: Badge(
-              position: BadgePosition(
+            color: Color(0x01FFFFFF),
+            child: badgee.Badge(
+              position: badgee.BadgePosition(
                 end: 35,
                 top: 20,
               ),
@@ -239,21 +235,23 @@ class _HomeState extends State<Home> {
     }
 
     return isDesktop()
-        ? Scaffold(
-            //桌面端的UI布局
-            body: Row(
-              children: [
-                LeftNavi(),
-                Expanded(
-                    flex: 1,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(),
-                      child: IndexedStack(
-                        children: homePages(),
-                        index: Provider.of<TabShowProvider>(context).index,
-                      ),
-                    )),
-              ],
+        ? Baaaar(
+            child: Scaffold(
+              //桌面端的UI布局
+              body: Row(
+                children: [
+                  LeftNavi(),
+                  Expanded(
+                      flex: 1,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(),
+                        child: IndexedStack(
+                          children: homePages(),
+                          index: Provider.of<TabShowProvider>(context).index,
+                        ),
+                      )),
+                ],
+              ),
             ),
           )
         : Scaffold(
@@ -281,15 +279,6 @@ class _HomeState extends State<Home> {
               height: barHeight + barPadding,
               padding: EdgeInsets.only(bottom: barPadding),
               decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Provider.of<ColorProvider>(context).isDark ||
-                            (Provider.of<ShowPicProvider>(context).isShow &&
-                                tabShowProvider.index == 1)
-                        ? os_dark_back
-                        : Color(0xFFEEEEEE),
-                  ),
-                ),
                 color: Provider.of<ColorProvider>(context).isDark ||
                         (Provider.of<ShowPicProvider>(context).isShow &&
                             tabShowProvider.index == 1)
@@ -307,15 +296,69 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // children: _buildWidget(tabShowProvider.loadIndex),
-                children: _buildWidget(
-                    !Provider.of<ShowPicProvider>(context).isShow
-                        ? [0, 2, 3]
-                        : [0, 1, 2, 3]),
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: -2.5,
+                    top: 0,
+                    child: QueationProgress(),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: _buildWidget(
+                        !Provider.of<ShowPicProvider>(context).isShow
+                            ? [0, 2, 3]
+                            : [0, 1, 2, 3]),
+                  ),
+                ],
               ),
             ),
           );
+  }
+}
+
+class QueationProgress extends StatefulWidget {
+  const QueationProgress({Key key}) : super(key: key);
+
+  @override
+  State<QueationProgress> createState() => _QueationProgressState();
+}
+
+class _QueationProgressState extends State<QueationProgress> {
+  int progress = -1;
+
+  auto() async {
+    String auto_txt = await getStorage(key: "auto", initData: "");
+    print("是否自动答题: $auto_txt");
+    if (auto_txt != "") {
+      autoQuestion((val) {
+        setState(() {
+          progress = val;
+        });
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    auto();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      width: progress == -1
+          ? 0
+          : (progress.toDouble() / 7) *
+              (isDesktop() ? 60 : MediaQuery.of(context).size.width),
+      height: 5,
+      decoration: BoxDecoration(
+        color: os_deep_blue,
+        borderRadius: BorderRadius.circular(100),
+      ),
+      curve: Curves.ease,
+      duration: Duration(milliseconds: 200),
+    );
   }
 }

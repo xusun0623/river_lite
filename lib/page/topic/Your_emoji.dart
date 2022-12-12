@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/emoji.dart';
 import 'package:offer_show/util/provider.dart';
@@ -164,6 +165,14 @@ class _YourEmojiState extends State<YourEmoji> {
     return tmp;
   }
 
+  ScrollController _scrollController = new ScrollController();
+
+  @override
+  void initState() {
+    speedUp(_scrollController);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -176,6 +185,7 @@ class _YourEmojiState extends State<YourEmoji> {
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: ListView(
+        controller: _scrollController,
         physics: BouncingScrollPhysics(),
         children: [
           Container(

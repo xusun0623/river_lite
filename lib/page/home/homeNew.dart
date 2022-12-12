@@ -1,19 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
-import 'package:offer_show/components/bilibili_player.dart';
 import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
+import 'package:offer_show/page/home.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -33,6 +31,8 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   bool showBackToTop = false;
   bool vibrate = false;
   int pageSize = 25;
+  GlobalKey<RefreshIndicatorState> _indicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -117,7 +117,6 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   Widget _buildComponents() {
     List<Widget> t = [];
     t.add(HomeBtn());
-    // t.add(BilibiliPlayer());
     if (data.length == 0 && !load_done) {
       t.add(Container(
         padding: EdgeInsets.symmetric(vertical: 50),
@@ -166,11 +165,14 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       bottom: 50,
       animation: true,
       attachBtn: true,
+      refresh: () {
+        _indicatorKey.currentState.show();
+      },
       tap: () {
         Navigator.pushNamed(context, "/new", arguments: 25);
       },
       child: ListView(
-        physics: BouncingScrollPhysics(),
+        // physics: BouncingScrollPhysics(),
         controller: _scrollController,
         children: t,
       ),
@@ -180,13 +182,13 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    HomeRefrshProvider provider = Provider.of<HomeRefrshProvider>(context);
     ColorProvider provider_color = Provider.of<ColorProvider>(context);
     return Scaffold(
       backgroundColor: provider_color.isDark ? os_dark_back : os_back,
       body: Container(
         padding: EdgeInsets.only(top: 10),
         child: RefreshIndicator(
+          key: _indicatorKey,
           color: os_color,
           onRefresh: () async {
             var data = await _getInitData();
@@ -223,7 +225,7 @@ class _TapMoreState extends State<TapMore> {
         widget.tap();
       },
       child: Container(
-        color: provider.isDark ? Color(0xFF111111) : os_back,
+        // color: provider.isDark ? Color(0xFF111111) : os_back,
         child: Center(
             child: Padding(
           padding: EdgeInsets.only(top: 20, bottom: 5),
