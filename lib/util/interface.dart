@@ -478,6 +478,7 @@ class Api {
       param: {
         "r": "portal/newslist",
         "moduleId": 2,
+        "isImageList": 1,
       },
     );
   }

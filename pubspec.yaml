@@ -9,9 +9,11 @@ environment:
 
 dependencies:
   webview_flutter: ^3.0.4
+  connectivity_plus: ^3.0.2
   screenshot: ^1.2.3
   # flutter_qr_reader: ^1.0.5
   bitsdojo_window: 
+  route_transitions: ^2.0.1
   window_manager: ^0.2.7
   images_picker: ^1.2.11
   flick_video_player: ^0.5.0

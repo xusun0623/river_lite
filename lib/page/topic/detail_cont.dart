@@ -324,8 +324,8 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
     child: Opacity(
       opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
       child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(
-            widget.imgLists.length > 3 || isDesktop() ? 2.5 : 5)),
+        borderRadius: BorderRadius.all(
+            Radius.circular(widget.imgLists.length > 3 || isDesktop() ? 5 : 5)),
         child: Hero(
           tag: widget.imgLists.length > 10 ? "不显示Hero动画" : widget.data["infor"],
           child: Container(
@@ -388,18 +388,8 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                       : Container(
                           child: CachedNetworkImage(
                             imageUrl: widget.data["infor"],
-                            width: isDesktop()
-                                ? 200
-                                : (MediaQuery.of(context).size.width -
-                                        (widget.isComment ?? false ? 50 : 0) -
-                                        42) /
-                                    3,
-                            height: isDesktop()
-                                ? 200
-                                : (MediaQuery.of(context).size.width -
-                                        (widget.isComment ?? false ? 50 : 0) -
-                                        42) /
-                                    3,
+                            width: isDesktop() ? 200 : null,
+                            height: isDesktop() ? 200 : null,
                             maxHeightDiskCache: 800,
                             maxWidthDiskCache: 800,
                             memCacheWidth: 800,

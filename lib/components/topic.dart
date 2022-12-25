@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/bigScreen.dart';
@@ -20,11 +21,13 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
+import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
+import 'package:route_transitions/route_transitions.dart';
 
 import '../outer/cached_network_image/cached_image_widget.dart';
 
@@ -55,6 +58,7 @@ class Topic extends StatefulWidget {
 class _TopicState extends State<Topic> {
   var _isRated = false;
   bool isBlack = false;
+  bool isWifi = false;
   String blackKeyWord = "";
 
   bool _isBlack() {
@@ -83,9 +87,23 @@ class _TopicState extends State<Topic> {
     }
   }
 
+  _getIsWifi() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      setState(() {
+        isWifi = false;
+      });
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      setState(() {
+        isWifi = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     _getLikeStatus();
+    _getIsWifi();
     print(widget.data["imageList"]);
     super.initState();
   }
@@ -303,13 +321,65 @@ class _TopicState extends State<Topic> {
 
   //卡片图案
   Widget _getTopicCardImg() {
+    if (!isWifi) return Container();
+    // var connectivityResult = await (Connectivity().checkConnectivity());
+    double img_size = (MediaQuery.of(context).size.width - 55) / 3 - 3.3;
     // print(widget.data["imageList"]);
-    if (widget.data["imageList"].length != 0) {
-      // return Container(
-      //   width: MediaQuery.of(context).size.width - 55,
-      //   child: CachedNetworkImage(imageUrl: widget.data["imageList"][0]),
-      // );
-      return Container();
+    if (widget.data != null &&
+        widget.data["imageList"] != null &&
+        widget.data["imageList"].length != 0 &&
+        !isDesktop()) {
+      if (widget.data["imageList"].length > 3)
+        widget.data["imageList"] = widget.data["imageList"].sublist(0, 3);
+      List<Widget> _getImg(List a) {
+        List<Widget> t = [];
+        for (int i = 0; i < widget.data["imageList"].length; i++) {
+          var url = widget.data["imageList"][i];
+          t.add(ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: img_size,
+              maxWidth: img_size,
+            ),
+            child: GestureDetector(
+              onTap: () {
+                fadeWidget(
+                  newPage: PhotoPreview(
+                    isSmallPic: true,
+                    galleryItems: widget.data["imageList"],
+                    defaultImage: i,
+                  ),
+                  context: context,
+                );
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(2.5),
+                child: Hero(
+                  tag: url,
+                  child: CachedNetworkImage(
+                    imageUrl: url,
+                    maxHeightDiskCache: 800,
+                    maxWidthDiskCache: 800,
+                    memCacheWidth: 800,
+                    memCacheHeight: 800,
+                    width: img_size,
+                    height: img_size,
+                    filterQuality: FilterQuality.low,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+          ));
+          if (i != 2) {
+            t.add(Container(width: 5));
+          }
+        }
+        return t;
+      }
+
+      return Row(
+        children: _getImg(widget.data["imageList"]),
+      );
     } else {
       return Container();
     }

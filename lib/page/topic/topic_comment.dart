@@ -117,19 +117,25 @@ class _CommentState extends State<Comment> {
           data[i + 1]["type"] == 1) {
         List<Widget> renderImg = [];
         while (e["type"] == 1 && i + img_count < data.length && true) {
-          renderImg.add(DetailCont(
+          // renderImg.add(DetailCont(
+          //   data: data[i + img_count],
+          //   imgLists: imgLists,
+          //   isComment: true,
+          // ));
+          // img_count++; //有多少张图片连续
+
+          tmp.add(DetailCont(
             data: data[i + img_count],
             imgLists: imgLists,
             isComment: true,
           ));
-          img_count++; //有多少张图片连续
         }
-        tmp.add(Wrap(
-          children: renderImg,
-          spacing: 6,
-          runSpacing: 6,
-          alignment: WrapAlignment.start,
-        ));
+        // tmp.add(Wrap(
+        //   children: renderImg,
+        //   spacing: 6,
+        //   runSpacing: 6,
+        //   alignment: WrapAlignment.start,
+        // ));
         i += img_count - 1; //跳过渲染
       } else {
         tmp.add(Container(

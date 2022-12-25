@@ -15,3 +15,13 @@ class RiverListCacheManager {
     ),
   );
 }
+
+class RiverListTmpCacheManager {
+  static CacheManager instance = CacheManager(
+    Config(
+      'riverListCacheKey',
+      stalePeriod: Duration(days: 1), //缓存5天
+      maxNrOfCacheObjects: 100,
+    ),
+  );
+}
