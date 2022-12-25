@@ -98,6 +98,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       "sortby": "new"
     });
     Api().forum_topiclist({
+      //提前让服务器缓存下一次的数据
       "page": (data.length / pageSize + 1).toInt() + 1,
       "pageSize": pageSize,
       "sortby": "new"

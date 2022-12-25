@@ -412,6 +412,7 @@ class Api {
   certain_forum_topiclist(Map m) async {
     Map tmp = {
       "r": "forum/topiclist",
+      "isImageList": 1,
     };
     tmp.addAll(m);
     return await XHttp().postWithGlobalToken(
@@ -449,6 +450,7 @@ class Api {
   forum_topiclist(Map m) async {
     Map tmp = {
       "r": "forum/topiclist",
+      "isImageList": 1,
     };
     tmp.addAll(m);
     return await XHttp().postWithGlobalToken(

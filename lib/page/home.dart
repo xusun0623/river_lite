@@ -329,7 +329,7 @@ class _QueationProgressState extends State<QueationProgress> {
 
   auto() async {
     String auto_txt = await getStorage(key: "auto", initData: "");
-    print("是否自动答题: $auto_txt");
+    // print("是否自动答题: $auto_txt");
     if (auto_txt != "") {
       autoQuestion((val) {
         setState(() {

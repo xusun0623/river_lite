@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
@@ -87,6 +86,7 @@ class _TopicState extends State<Topic> {
   @override
   void initState() {
     _getLikeStatus();
+    print(widget.data["imageList"]);
     super.initState();
   }
 
@@ -301,6 +301,20 @@ class _TopicState extends State<Topic> {
     setStorage(key: "history", value: jsonEncode(tmp_list_history));
   }
 
+  //卡片图案
+  Widget _getTopicCardImg() {
+    // print(widget.data["imageList"]);
+    if (widget.data["imageList"].length != 0) {
+      // return Container(
+      //   width: MediaQuery.of(context).size.width - 55,
+      //   child: CachedNetworkImage(imageUrl: widget.data["imageList"][0]),
+      // );
+      return Container();
+    } else {
+      return Container();
+    }
+  }
+
   Widget _blackCont() {
     //拉黑的状态
     return Container(
@@ -353,57 +367,7 @@ class _TopicState extends State<Topic> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        if (widget.data["user_nick_name"] != "匿名")
-                          toUserSpace(context, widget.data["user_id"]);
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: CachedNetworkImage(
-                          width: 30,
-                          height: 30,
-                          fit: BoxFit.cover,
-                          imageUrl: widget.data["userAvatar"],
-                          placeholder: (context, url) => Container(
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_white
-                                  : os_grey),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                        ),
-                      ),
-                    ),
-                    Padding(padding: EdgeInsets.all(4)),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.data["user_nick_name"],
-                          style: TextStyle(
-                            color: Provider.of<ColorProvider>(context).isDark
-                                ? Color(0xffF1f1f1)
-                                : os_black,
-                            fontSize: 14,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Container(height: 1),
-                        Text(
-                          RelativeDateFormat.format(
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  int.parse(widget.data["last_reply_date"]))),
-                          style: TextStyle(
-                            color: Color(0xFFAAAAAA),
-                            fontSize: 12.5,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+                TopicTopSection(widget: widget),
                 Row(
                   children: [
                     myInkWell(
@@ -482,54 +446,11 @@ class _TopicState extends State<Topic> {
                     ),
                   ),
             Container(width: 16),
-            Padding(padding: EdgeInsets.all(3)),
+            Padding(padding: EdgeInsets.all(1.5)),
+            _getTopicCardImg(),
+            Padding(padding: EdgeInsets.all(1.5)),
             // 投票贴的Tag
-            (widget.data["vote"] ?? 0) == 0
-                ? Container()
-                : Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Provider.of<ColorProvider>(context).isDark
-                                ? Color(0x11FFFFFF)
-                                : os_color_opa,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(100),
-                            ),
-                          ),
-                          padding: EdgeInsets.only(
-                            left: 10,
-                            right: 12,
-                            top: 3.5,
-                            bottom: 3.8,
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.download_done,
-                                color:
-                                    Provider.of<ColorProvider>(context).isDark
-                                        ? os_dark_dark_white
-                                        : os_color,
-                                size: 18,
-                              ),
-                              Text(
-                                "投票帖",
-                                style: TextStyle(
-                                  color:
-                                      Provider.of<ColorProvider>(context).isDark
-                                          ? os_dark_dark_white
-                                          : os_color,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+            (widget.data["vote"] ?? 0) == 0 ? Container() : VoteTag(),
             //浏览量 评论数 点赞数 - 专栏按钮
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -579,33 +500,9 @@ class _TopicState extends State<Topic> {
                     ),
                   ],
                 ),
-                myInkWell(
-                  color: Colors.transparent,
-                  tap: () {
-                    Navigator.pushNamed(
-                      context,
-                      "/column",
-                      arguments: widget.data["board_id"],
-                    );
-                  },
-                  radius: 10,
-                  widget: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Text(
-                      (widget.hideColumn ?? false)
-                          ? " "
-                          : widget.data["board_name"],
-                      style: TextStyle(
-                        color: os_color,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
+                TopicColumn(
+                  context: context,
+                  widget: widget,
                 ),
               ],
             ),
@@ -681,5 +578,160 @@ class _TopicState extends State<Topic> {
                     radius: 10,
                   ),
           );
+  }
+}
+
+class VoteTag extends StatelessWidget {
+  const VoteTag({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? Color(0x11FFFFFF)
+                  : os_color_opa,
+              borderRadius: BorderRadius.all(
+                Radius.circular(100),
+              ),
+            ),
+            padding: EdgeInsets.only(
+              left: 10,
+              right: 12,
+              top: 3.5,
+              bottom: 3.8,
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.download_done,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : os_color,
+                  size: 18,
+                ),
+                Text(
+                  "投票帖",
+                  style: TextStyle(
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : os_color,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TopicTopSection extends StatelessWidget {
+  const TopicTopSection({
+    Key key,
+    @required this.widget,
+  }) : super(key: key);
+
+  final Topic widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () async {
+            if (widget.data["user_nick_name"] != "匿名")
+              toUserSpace(context, widget.data["user_id"]);
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: CachedNetworkImage(
+              width: 30,
+              height: 30,
+              fit: BoxFit.cover,
+              imageUrl: widget.data["userAvatar"],
+              placeholder: (context, url) => Container(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_grey),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            ),
+          ),
+        ),
+        Padding(padding: EdgeInsets.all(4)),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.data["user_nick_name"],
+              style: TextStyle(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? Color(0xffF1f1f1)
+                    : os_black,
+                fontSize: 14,
+                // fontWeight: FontWeight.bold,
+              ),
+            ),
+            Container(height: 1),
+            Text(
+              RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                  int.parse(widget.data["last_reply_date"]))),
+              style: TextStyle(
+                color: Color(0xFFAAAAAA),
+                fontSize: 12.5,
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class TopicColumn extends StatelessWidget {
+  const TopicColumn({
+    Key key,
+    @required this.context,
+    @required this.widget,
+  }) : super(key: key);
+
+  final BuildContext context;
+  final Topic widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return myInkWell(
+      color: Colors.transparent,
+      tap: () {
+        Navigator.pushNamed(
+          context,
+          "/column",
+          arguments: widget.data["board_id"],
+        );
+      },
+      radius: 10,
+      widget: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 8,
+        ),
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10))),
+        child: Text(
+          (widget.hideColumn ?? false) ? " " : widget.data["board_name"],
+          style: TextStyle(
+            color: os_color,
+            fontSize: 14,
+          ),
+        ),
+      ),
+    );
   }
 }
