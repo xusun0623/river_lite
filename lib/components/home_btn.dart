@@ -5,7 +5,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
 
 class HomeBtnCollect extends StatefulWidget {
-  const HomeBtnCollect({Key key}) : super(key: key);
+  const HomeBtnCollect({Key? key}) : super(key: key);
 
   @override
   _HomeBtnCollectState createState() => _HomeBtnCollectState();
@@ -35,7 +35,7 @@ class _HomeBtnCollectState extends State<HomeBtnCollect> {
 }
 
 class BtnAll extends StatefulWidget {
-  const BtnAll({Key key}) : super(key: key);
+  const BtnAll({Key? key}) : super(key: key);
 
   @override
   State<BtnAll> createState() => _BtnAllState();
@@ -78,10 +78,10 @@ class Btn extends StatefulWidget {
   String txt;
   int board_id;
   Btn({
-    Key key,
-    @required this.img,
-    @required this.txt,
-    @required this.board_id,
+    Key? key,
+    required this.img,
+    required this.txt,
+    required this.board_id,
   }) : super(key: key);
 
   @override

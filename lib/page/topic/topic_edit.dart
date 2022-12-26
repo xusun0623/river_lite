@@ -17,10 +17,10 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 class TopicEdit extends StatefulWidget {
-  int tid;
-  int pid;
+  int? tid;
+  int? pid;
   TopicEdit({
-    Key key,
+    Key? key,
     this.tid,
     this.pid,
   }) : super(key: key);
@@ -40,7 +40,7 @@ class _TopicEditState extends State<TopicEdit> {
   /// "subject": "", //就是标题
   /// "typeid": 755,
   /// "message": "", //就是内容
-  Map<String, String> ret_param = {
+  Map<String, String?> ret_param = {
     "formhash": "",
     "posttime": "",
     "fid": "0",
@@ -86,7 +86,7 @@ class _TopicEditState extends State<TopicEdit> {
 
     //获取帖子的各项上传参数
     document
-        .getElementById("typeid")
+        .getElementById("typeid")!
         .getElementsByTagName("option")
         .forEach((element) {
       if (element.attributes["selected"] != null &&
@@ -107,9 +107,9 @@ class _TopicEditState extends State<TopicEdit> {
         ct2_a_r.getElementsByTagName("input")[6].attributes["value"];
 
     //获取帖子的标题和内容
-    var postbox = document.getElementById("postbox");
+    var postbox = document.getElementById("postbox")!;
     _titleTextEditingController.text =
-        postbox.getElementsByTagName("input").first.attributes["value"];
+        postbox.getElementsByTagName("input").first.attributes["value"]!;
     _tipTextEditingController.text =
         postbox.getElementsByTagName("textarea").first.innerHtml;
     setState(() {
@@ -123,8 +123,9 @@ class _TopicEditState extends State<TopicEdit> {
       showToast(context: context, type: XSToast.none, txt: "请输入内容");
       return;
     }
-    if (ret_param["message"].length < 6) {
-      ret_param["message"] += (" " * (6 - ret_param["message"].length));
+    if (ret_param["message"]!.length < 6) {
+      ret_param["message"] = (ret_param["message"])! +
+          (" " * (6 - ret_param["message"]!.length)).toString();
     }
     showToast(context: context, type: XSToast.loading, txt: "请稍后…");
     var request = http.MultipartRequest(
@@ -134,7 +135,7 @@ class _TopicEditState extends State<TopicEdit> {
             'forum.php?mod=post&action=edit&extra=&editsubmit=yes&mobile=2&geoloc=&handlekey=postform&inajax=1',
       ),
     );
-    request.fields.addAll(ret_param);
+    request.fields.addAll(ret_param as Map<String, String>);
     request.headers.addAll({'Cookie': await getStorage(key: "cookie")});
 
     http.StreamedResponse response = await request.send();
@@ -331,7 +332,7 @@ class UploadImg extends StatefulWidget {
   // "urlName":
   //     "https://bbs.uestc.edu.cn/data/attachment//forum/202206/27/102235yqcb1bkcbbor6bbo.png"
   UploadImg({
-    Key key,
+    Key? key,
     this.data,
   }) : super(key: key);
 
@@ -379,9 +380,9 @@ class _UploadImgState extends State<UploadImg> {
 
 class EditTipInput extends StatelessWidget {
   const EditTipInput({
-    Key key,
-    @required TextEditingController tipTextEditingController,
-    @required FocusNode tipFocusNode,
+    Key? key,
+    required TextEditingController tipTextEditingController,
+    required FocusNode tipFocusNode,
   })  : _tipTextEditingController = tipTextEditingController,
         _tipFocusNode = tipFocusNode,
         super(key: key);
@@ -428,9 +429,9 @@ class EditTipInput extends StatelessWidget {
 
 class EditTitleInput extends StatelessWidget {
   const EditTitleInput({
-    Key key,
-    @required TextEditingController titleTextEditingController,
-    @required FocusNode titleFocusNode,
+    Key? key,
+    required TextEditingController titleTextEditingController,
+    required FocusNode titleFocusNode,
   })  : _titleTextEditingController = titleTextEditingController,
         _titleFocusNode = titleFocusNode,
         super(key: key);
@@ -488,7 +489,7 @@ class EditTitleInput extends StatelessWidget {
 
 class InfoTip extends StatelessWidget {
   const InfoTip({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -522,7 +523,7 @@ class InfoTip extends StatelessWidget {
 
 class EditDoneBtn extends StatelessWidget {
   const EditDoneBtn({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -553,7 +554,7 @@ class EditDoneBtn extends StatelessWidget {
 
 class EditSendBtn extends StatelessWidget {
   const EditSendBtn({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

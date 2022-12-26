@@ -10,10 +10,10 @@ class CommentsTab extends StatefulWidget {
   var select;
   var sort;
   var total_num;
-  Function bindSelect;
-  Function bindSort;
+  Function? bindSelect;
+  Function? bindSort;
   CommentsTab(
-      {Key key,
+      {Key? key,
       this.data,
       this.topic_id,
       this.host_id,
@@ -35,12 +35,12 @@ class _CommentsTabState extends State<CommentsTab> {
       total_num: widget.total_num,
       TapSelect: (idx) {
         setState(() {
-          widget.bindSelect(idx);
+          widget.bindSelect!(idx);
         });
       },
       TapSort: (idx) {
         if (idx != widget.sort) {
-          widget.bindSort(idx);
+          widget.bindSort!(idx);
         }
       },
       select: widget.select,
@@ -50,14 +50,14 @@ class _CommentsTabState extends State<CommentsTab> {
 }
 
 class CommentTab extends StatefulWidget {
-  Function TapSelect;
-  Function TapSort;
+  Function? TapSelect;
+  Function? TapSort;
   var select;
   var sort;
   var total_num;
 
   CommentTab({
-    Key key,
+    Key? key,
     this.TapSelect,
     this.TapSort,
     this.select,
@@ -84,7 +84,7 @@ class _CommentTabState extends State<CommentTab> {
             children: [
               GestureDetector(
                 onTap: () {
-                  widget.TapSelect(0);
+                  widget.TapSelect!(0);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(10),
@@ -116,7 +116,7 @@ class _CommentTabState extends State<CommentTab> {
               ),
               GestureDetector(
                 onTap: () {
-                  widget.TapSelect(1);
+                  widget.TapSelect!(1);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(10),
@@ -159,7 +159,7 @@ class _CommentTabState extends State<CommentTab> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    widget.TapSort(0);
+                    widget.TapSort!(0);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 9, vertical: 2),
@@ -185,7 +185,7 @@ class _CommentTabState extends State<CommentTab> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    widget.TapSort(1);
+                    widget.TapSort!(1);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 9, vertical: 2),

@@ -12,11 +12,11 @@ import 'action_item.dart';
 @immutable
 class ChoiceItem extends ActionItem {
   final bool isSelected;
-  final Widget leftIcon;
+  final Widget? leftIcon;
 
   const ChoiceItem(
-      {@required String title,
-      TextStyle titleTextStyle,
+      {required String title,
+      TextStyle? titleTextStyle,
       this.isSelected = false,
       this.leftIcon})
       : super(title: title, titleTextStyle: titleTextStyle);

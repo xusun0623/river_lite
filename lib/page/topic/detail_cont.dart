@@ -31,12 +31,12 @@ import '../../util/interface.dart';
 class DetailCont extends StatefulWidget {
   var data;
   var imgLists;
-  String desc; //在图片上的描述
-  String title; //在图片上的描述标题
-  bool isComment;
-  bool removeSelectable; //  是否可以长按复制文字
+  String? desc; //在图片上的描述
+  String? title; //在图片上的描述标题
+  bool? isComment;
+  bool? removeSelectable; //  是否可以长按复制文字
   DetailCont({
-    Key key,
+    Key? key,
     this.data,
     this.imgLists,
     this.isComment,
@@ -77,6 +77,7 @@ class _DetailContState extends State<DetailCont> {
         return WidgetLinkUrl(); //图片链接就不用下载了
         break;
       default:
+        return Container();
     }
   }
 
@@ -132,10 +133,10 @@ class _DetailContState extends State<DetailCont> {
               confirmTxt: "立即前往",
               cancelTxt: "取消",
               confirm: () async {
-                String text = widget.data['url'];
+                String? text = widget.data['url'];
                 if (context == "")
                   return;
-                else if (text.contains(
+                else if (text!.contains(
                     "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")) {
                   int tid_tmp = int.parse(
                     text.split("mod=viewthread&tid=")[1].split("&")[0],

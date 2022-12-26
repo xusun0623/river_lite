@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -8,8 +9,8 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/storage.dart';
 
-String _uid = "";
-String _hash = "";
+String? _uid = "";
+String? _hash = "";
 
 List<String> allowExtension = [
   //允许上传的文件类型
@@ -42,7 +43,7 @@ List<String> allowExtension = [
   'gif'
 ];
 
-void _post_parm(int tid, BuildContext context) async {
+_post_parm(int? tid, BuildContext? context) async {
   Response response = await XHttp().pureHttpWithCookie(
     url: base_url + "forum.php?mod=viewthread&tid=${tid}",
   );
@@ -80,12 +81,12 @@ void _post_parm(int tid, BuildContext context) async {
 Future<List<XFile>> pickeImgFile(BuildContext context) async {
   showToast(context: context, type: XSToast.loading);
   List<XFile> files = [];
-  FilePickerResult result = await FilePicker.platform.pickFiles(
+  FilePickerResult result = await (FilePicker.platform.pickFiles(
     allowMultiple: true,
     type: FileType.image,
-  );
+  ) as FutureOr<FilePickerResult>);
   for (var file in result.files) {
-    files.add(XFile(file.path));
+    files.add(XFile(file.path!));
   }
   hideToast();
   return files;
@@ -95,26 +96,26 @@ Future<List<XFile>> pickeImgFile(BuildContext context) async {
 ///此Api仅供MacOS选取图像调用
 Future<XFile> pickeSingleImgFile(BuildContext context) async {
   showToast(context: context, type: XSToast.loading);
-  FilePickerResult result = await FilePicker.platform.pickFiles(
+  FilePickerResult result = await (FilePicker.platform.pickFiles(
     type: FileType.image,
-  );
+  ) as FutureOr<FilePickerResult>);
   hideToast();
-  return XFile(result.files.first.path);
+  return XFile(result.files.first.path!);
 }
 
 //上传视频
 getVideoUploadAid({
-  int tid,
-  int fid,
-  BuildContext context,
-  Function onUploadProgress,
+  int? tid,
+  int? fid,
+  BuildContext? context,
+  Function? onUploadProgress,
 }) async {
   showToast(context: context, type: XSToast.loading, txt: "请稍后…");
   await _post_parm(tid, context); //获取上传参数
   if (_uid != "" && _hash != "") {
     final ImagePicker _picker = ImagePicker();
-    final XFile video_file =
-        await _picker.pickVideo(source: ImageSource.gallery);
+    final XFile video_file = await (_picker.pickVideo(
+        source: ImageSource.gallery) as FutureOr<XFile>);
     hideToast();
     if ((await video_file.readAsBytes()).lengthInBytes < 40 * 1024 * 1024) {
       if (video_file != null) {
@@ -136,7 +137,7 @@ getVideoUploadAid({
             'Cookie': (await getStorage(key: "cookie", initData: "")).toString()
           }),
           onSendProgress: (count, total) {
-            onUploadProgress(count / total);
+            onUploadProgress!(count / total);
           },
           data: formData,
         );
@@ -155,18 +156,18 @@ getVideoUploadAid({
 
 //上传附件
 getUploadAid({
-  int tid,
-  int fid,
-  BuildContext context,
-  Function onUploadProgress,
+  int? tid,
+  int? fid,
+  BuildContext? context,
+  Function? onUploadProgress,
 }) async {
   showToast(context: context, type: XSToast.loading, txt: "请稍后…");
   await _post_parm(tid, context); //获取上传参数
   if (_uid != "" && _hash != "") {
-    FilePickerResult result = await FilePicker.platform.pickFiles(
+    FilePickerResult result = await (FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: allowExtension,
-    );
+    ) as FutureOr<FilePickerResult>);
     hideToast();
     if (result.files.single.size < 40 * 1024 * 1024) {
       if (result != null) {
@@ -177,7 +178,7 @@ getUploadAid({
           'hash': _hash.toString(),
           'filetype': fileType,
           'Filename': fileName,
-          'Filedata': await MultipartFile.fromFile(result.files.single.path,
+          'Filedata': await MultipartFile.fromFile(result.files.single.path!,
               filename: fileName),
         });
         var response = await Dio().post(
@@ -187,7 +188,7 @@ getUploadAid({
             'Cookie': (await getStorage(key: "cookie", initData: "")).toString()
           }),
           onSendProgress: (count, total) {
-            onUploadProgress(count / total);
+            onUploadProgress!(count / total);
           },
           data: formData,
         );

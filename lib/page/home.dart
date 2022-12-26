@@ -73,10 +73,10 @@ class _HomeState extends State<Home> {
     var data = await Api().message_heart({});
     var count = 0;
     if (data != null && data["rs"] != 0 && data["body"] != null) {
-      count += data["body"]["replyInfo"]["count"];
-      count += data["body"]["atMeInfo"]["count"];
-      count += data["body"]["systemInfo"]["count"];
-      count += data["body"]["pmInfos"].length;
+      count += int.parse(data["body"]["replyInfo"]["count"]);
+      count += int.parse(data["body"]["atMeInfo"]["count"]);
+      count += int.parse(data["body"]["systemInfo"]["count"]);
+      count += int.parse(data["body"]["pmInfos"].length);
       data = data["body"];
       if (count != 0) {
         setState(() {
@@ -96,7 +96,7 @@ class _HomeState extends State<Home> {
 
   _getBlackStatus() async {
     String black_info_txt = await getStorage(key: "black", initData: "[]");
-    List black_info_map = jsonDecode(black_info_txt);
+    List? black_info_map = jsonDecode(black_info_txt);
     Provider.of<BlackProvider>(context, listen: false).black = black_info_map;
   }
 
@@ -229,8 +229,8 @@ class _HomeState extends State<Home> {
 
     int getConvertIndex() {
       int idx = Provider.of<ShowPicProvider>(context).isShow
-          ? ([0, 1, 2, 3, 0][tabShowProvider.index])
-          : ([0, 1, 2, 0, 0][tabShowProvider.index]);
+          ? ([0, 1, 2, 3, 0][tabShowProvider.index!])
+          : ([0, 1, 2, 0, 0][tabShowProvider.index!]);
       return idx;
     }
 
@@ -268,7 +268,7 @@ class _HomeState extends State<Home> {
                   );
                 }
                 return;
-              },
+              } as Future<bool> Function()?,
               child: IndexedStack(
                 children: homePages(),
                 index: getConvertIndex(),
@@ -318,7 +318,7 @@ class _HomeState extends State<Home> {
 }
 
 class QueationProgress extends StatefulWidget {
-  const QueationProgress({Key key}) : super(key: key);
+  const QueationProgress({Key? key}) : super(key: key);
 
   @override
   State<QueationProgress> createState() => _QueationProgressState();

@@ -16,9 +16,9 @@ import 'package:provider/provider.dart';
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
 class Msg extends StatefulWidget {
-  Function refresh;
+  Function? refresh;
   Msg({
-    Key key,
+    Key? key,
     this.refresh,
   }) : super(key: key);
 
@@ -122,9 +122,9 @@ class _MsgState extends State<Msg> {
                         children: [
                           ColorBtn(
                             tap: () {
-                              _msgProvider.msg["atMeInfoCount"] = 0;
+                              _msgProvider.msg!["atMeInfoCount"] = 0;
                               setState(() {});
-                              if (widget.refresh != null) widget.refresh();
+                              if (widget.refresh != null) widget.refresh!();
                               Navigator.pushNamed(
                                 context,
                                 "/msg_three",
@@ -133,16 +133,16 @@ class _MsgState extends State<Msg> {
                             },
                             path: "lib/img/msg/@.svg",
                             title: "@我",
-                            count: _msgProvider.msg["atMeInfoCount"],
+                            count: _msgProvider.msg!["atMeInfoCount"],
                           ),
                           ColorBtn(
                             path: "lib/img/msg/reply.svg",
                             title: "回复",
-                            count: _msgProvider.msg["replyInfoCount"],
+                            count: _msgProvider.msg!["replyInfoCount"],
                             tap: () {
-                              _msgProvider.msg["replyInfoCount"] = 0;
+                              _msgProvider.msg!["replyInfoCount"] = 0;
                               setState(() {});
-                              if (widget.refresh != null) widget.refresh();
+                              if (widget.refresh != null) widget.refresh!();
                               Navigator.pushNamed(
                                 context,
                                 "/msg_three",
@@ -153,10 +153,10 @@ class _MsgState extends State<Msg> {
                           ColorBtn(
                             path: "lib/img/msg/noti.svg",
                             title: "通知",
-                            count: _msgProvider.msg["systemInfoCount"],
+                            count: _msgProvider.msg!["systemInfoCount"],
                             tap: () {
-                              _msgProvider.msg["systemInfoCount"] = 0;
-                              if (widget.refresh != null) widget.refresh();
+                              _msgProvider.msg!["systemInfoCount"] = 0;
+                              if (widget.refresh != null) widget.refresh!();
                               Navigator.pushNamed(
                                 context,
                                 "/msg_three",
@@ -168,7 +168,7 @@ class _MsgState extends State<Msg> {
                         ],
                       ),
               ),
-              _msgProvider.pmMsgArr.length == 0
+              _msgProvider.pmMsgArr!.length == 0
                   ? Container()
                   : BottomTip(
                       top: 25,
@@ -176,7 +176,7 @@ class _MsgState extends State<Msg> {
                       color: os_deep_grey,
                       txt: "- 私信内容 -",
                     ),
-              _msgProvider.pmMsgArr.length != 0
+              _msgProvider.pmMsgArr!.length != 0
                   ? Container()
                   : Empty(
                       txt: "暂无私信内容，请尝试下拉刷新",
@@ -184,17 +184,17 @@ class _MsgState extends State<Msg> {
               ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 child: Column(
-                  children: _buildPMMsg(_msgProvider.pmMsgArr),
+                  children: _buildPMMsg(_msgProvider.pmMsgArr!),
                 ),
               ),
-              _msgProvider.pmMsgArr.length < 8
+              _msgProvider.pmMsgArr!.length < 8
                   ? Container(
                       height: MediaQuery.of(context).size.height -
                           51 -
-                          74 * _msgProvider.pmMsgArr.length,
+                          74 * _msgProvider.pmMsgArr!.length,
                     )
                   : Container(),
-              (_msgProvider.load_done || _msgProvider.pmMsgArr.length == 0)
+              (_msgProvider.load_done! || _msgProvider.pmMsgArr!.length == 0)
                   ? Container()
                   : Container(
                       margin: EdgeInsets.only(bottom: 20),
@@ -208,12 +208,12 @@ class _MsgState extends State<Msg> {
 }
 
 class ColorBtn extends StatefulWidget {
-  int count;
-  String path;
-  String title;
-  Function tap;
+  int? count;
+  String? path;
+  String? title;
+  Function? tap;
   ColorBtn({
-    Key key,
+    Key? key,
     this.count,
     this.path,
     this.title,
@@ -230,7 +230,7 @@ class _ColorBtnState extends State<ColorBtn> {
     return GestureDetector(
       onTap: () {
         if (widget.tap != null) {
-          widget.tap();
+          widget.tap!();
         }
       },
       child: Container(
@@ -261,13 +261,13 @@ class _ColorBtnState extends State<ColorBtn> {
                 ),
                 child: Container(
                   child: Hero(
-                    tag: widget.title,
+                    tag: widget.title!,
                     child: Material(
                       color: Colors.transparent,
                       child: Container(
                         width: 100,
                         child: Text(
-                          widget.title,
+                          widget.title!,
                           style: TextStyle(
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
@@ -290,10 +290,10 @@ class _ColorBtnState extends State<ColorBtn> {
 }
 
 class MsgCard extends StatefulWidget {
-  Map data;
-  bool isNew;
+  Map? data;
+  bool? isNew;
   MsgCard({
-    Key key,
+    Key? key,
     this.data,
     this.isNew,
   }) : super(key: key);
@@ -309,8 +309,8 @@ class _MsgCardState extends State<MsgCard> {
     return myInkWell(
       tap: () {
         Navigator.pushNamed(context, "/msg_detail", arguments: {
-          "uid": widget.data["toUserId"],
-          "name": widget.data["toUserName"],
+          "uid": widget.data!["toUserId"],
+          "name": widget.data!["toUserName"],
         });
       },
       radius: 0,
@@ -323,7 +323,7 @@ class _MsgCardState extends State<MsgCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             badgee.Badge(
-              showBadge: widget.data["isNew"] == 0 ? false : true,
+              showBadge: widget.data!["isNew"] == 0 ? false : true,
               position: badgee.BadgePosition.topEnd(top: -2, end: -2),
               child: Container(
                 width: headImgSize,
@@ -335,7 +335,7 @@ class _MsgCardState extends State<MsgCard> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(100)),
                   child: CachedNetworkImage(
-                    imageUrl: widget.data["toUserAvatar"],
+                    imageUrl: widget.data!["toUserAvatar"],
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -354,7 +354,7 @@ class _MsgCardState extends State<MsgCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        widget.data["toUserName"],
+                        widget.data!["toUserName"],
                         style: TextStyle(
                           fontSize: 16,
                           color: Provider.of<ColorProvider>(context).isDark
@@ -371,13 +371,13 @@ class _MsgCardState extends State<MsgCard> {
                   ),
                   Container(height: 5),
                   Text(
-                    (widget.data["lastSummary"] == ""
+                    (widget.data!["lastSummary"] == ""
                             ? "查看图片"
-                            : widget.data["lastSummary"]) +
+                            : widget.data!["lastSummary"]) +
                         " · " +
                         RelativeDateFormat.format(
                           DateTime.fromMillisecondsSinceEpoch(
-                            int.parse(widget.data["lastDateline"]),
+                            int.parse(widget.data!["lastDateline"]),
                           ),
                         ).toString(),
                     style: TextStyle(

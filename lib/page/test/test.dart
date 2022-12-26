@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/util/mid_request.dart';
 
 class Test extends StatefulWidget {
-  Test({Key key}) : super(key: key);
+  Test({Key? key}) : super(key: key);
 
   @override
   _TestState createState() => _TestState();

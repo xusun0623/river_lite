@@ -23,10 +23,10 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class MeFunc extends StatefulWidget {
-  int type;
-  int uid;
+  int? type;
+  int? uid;
   MeFunc({
-    Key key,
+    Key? key,
     this.type,
     this.uid,
   }) : super(key: key);
@@ -36,7 +36,7 @@ class MeFunc extends StatefulWidget {
 }
 
 class _MeFuncState extends State<MeFunc> {
-  List data = [];
+  List? data = [];
   bool load_done = false;
   bool loading = false;
   ScrollController _scrollController = new ScrollController();
@@ -46,17 +46,17 @@ class _MeFuncState extends State<MeFunc> {
   _getData() async {
     if (loading) return;
     loading = true;
-    if (widget.type <= 3) {
+    if (widget.type! <= 3) {
       //收藏、发表、回复
       var tmp = await Api().user_topiclist({
-        "type": ["favorite", "topic", "reply"][widget.type - 1],
+        "type": ["favorite", "topic", "reply"][widget.type! - 1],
         "uid": widget.uid,
         "page": 1,
         "pageSize": 10,
       });
       if (tmp != null && tmp["rs"] != 0 && tmp["list"] != null) {
         data = tmp["list"];
-        load_done = data.length % 10 != 0 || data.length == 0;
+        load_done = data!.length % 10 != 0 || data!.length == 0;
         setState(() {});
       } else {
         load_done = true;
@@ -84,17 +84,17 @@ class _MeFuncState extends State<MeFunc> {
     if (loading) return;
     loading = true;
     if (load_done) return;
-    if (widget.type <= 3) {
+    if (widget.type! <= 3) {
       //收藏、发表、回复
       var tmp = await Api().user_topiclist({
-        "type": ["favorite", "topic", "reply"][widget.type - 1],
+        "type": ["favorite", "topic", "reply"][widget.type! - 1],
         "uid": widget.uid,
-        "page": (data.length / 10).ceil() + 1,
+        "page": (data!.length / 10).ceil() + 1,
         "pageSize": 10,
       });
       if (tmp != null && tmp["rs"] != 0 && tmp["list"] != null) {
-        data.addAll(tmp["list"]);
-        load_done = data.length % 10 != 0;
+        data!.addAll(tmp["list"]);
+        load_done = data!.length % 10 != 0;
         setState(() {});
       }
     }
@@ -105,17 +105,17 @@ class _MeFuncState extends State<MeFunc> {
     List<Widget> tmp = [];
     tmp.add(ResponsiveWidget(child: MeFuncHead(type: widget.type)));
     if (widget.type == 5) {
-      data.forEach((element) {
+      data!.forEach((element) {
         tmp.add(ResponsiveWidget(child: DraftCard(data: element)));
       });
     } else {
-      data.forEach((element) {
+      data!.forEach((element) {
         tmp.add(ResponsiveWidget(
           child: FuncWidget(data: element, type: widget.type),
         ));
       });
     }
-    if (data.length == 0 && load_done) {
+    if (data!.length == 0 && load_done) {
       tmp.add(Empty(txt: "这里是一颗空的星球"));
     }
     if (!load_done) {
@@ -175,7 +175,7 @@ class _MeFuncState extends State<MeFunc> {
           elevation: 0,
           title: Text(
             _showTopTitle
-                ? ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type]
+                ? ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type!]
                 : "",
             style: TextStyle(
               fontSize: 16,
@@ -241,9 +241,9 @@ class _MeFuncState extends State<MeFunc> {
 }
 
 class MeFuncHead extends StatefulWidget {
-  int type;
+  int? type;
   MeFuncHead({
-    Key key,
+    Key? key,
     this.type,
   }) : super(key: key);
 
@@ -275,13 +275,13 @@ class _MeFuncHeadState extends State<MeFuncHead> {
           ),
           Container(width: 10),
           Hero(
-            tag: ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type],
+            tag: ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type!],
             child: Material(
               color: Colors.transparent,
               child: Container(
                 width: 200,
                 child: Text(
-                  ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type],
+                  ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type!],
                   style: TextStyle(
                     fontSize: 22,
                     color: Provider.of<ColorProvider>(context).isDark
@@ -299,10 +299,10 @@ class _MeFuncHeadState extends State<MeFuncHead> {
 }
 
 class FuncWidget extends StatefulWidget {
-  int type;
-  Map data;
+  int? type;
+  Map? data;
   FuncWidget({
-    Key key,
+    Key? key,
     this.type,
     this.data,
   }) : super(key: key);
@@ -319,14 +319,14 @@ class _FuncWidgetState extends State<FuncWidget> {
       Topic(data: widget.data, blackOccu: true),
       Topic(data: widget.data, blackOccu: true),
       HistoryCard(data: widget.data),
-    ][widget.type - 1];
+    ][widget.type! - 1];
   }
 }
 
 class DraftCard extends StatefulWidget {
-  String data;
+  String? data;
   DraftCard({
-    Key key,
+    Key? key,
     this.data,
   }) : super(key: key);
 
@@ -363,7 +363,7 @@ class _DraftCardState extends State<DraftCard> {
             children: [
               Container(
                 child: Text(
-                  widget.data,
+                  widget.data!,
                   style: TextStyle(
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
@@ -387,9 +387,9 @@ class _DraftCardState extends State<DraftCard> {
 }
 
 class HistoryCard extends StatefulWidget {
-  Map data;
+  Map? data;
   HistoryCard({
-    Key key,
+    Key? key,
     this.data,
   }) : super(key: key);
 
@@ -403,19 +403,19 @@ class _HistoryCardState extends State<HistoryCard> {
     List history_arr = jsonDecode(history_data);
     for (int i = 0; i < history_arr.length; i++) {
       var ele = history_arr[i];
-      if (ele["userAvatar"] == widget.data["userAvatar"] &&
-          ele["title"] == widget.data["title"] &&
-          ele["subject"] == widget.data["subject"]) {
+      if (ele["userAvatar"] == widget.data!["userAvatar"] &&
+          ele["title"] == widget.data!["title"] &&
+          ele["subject"] == widget.data!["subject"]) {
         history_arr.removeAt(i);
       }
     }
     List tmp_list_history = [
       {
-        "userAvatar": widget.data["userAvatar"],
-        "title": widget.data["title"],
-        "subject": widget.data["subject"],
-        "time": widget.data["time"],
-        "topic_id": widget.data["topic_id"],
+        "userAvatar": widget.data!["userAvatar"],
+        "title": widget.data!["title"],
+        "subject": widget.data!["subject"],
+        "time": widget.data!["time"],
+        "topic_id": widget.data!["topic_id"],
       }
     ];
     tmp_list_history.addAll(history_arr);
@@ -436,7 +436,7 @@ class _HistoryCardState extends State<HistoryCard> {
           Navigator.pushNamed(
             context,
             "/topic_detail",
-            arguments: widget.data["topic_id"],
+            arguments: widget.data!["topic_id"],
           );
         },
         widget: Container(
@@ -447,7 +447,7 @@ class _HistoryCardState extends State<HistoryCard> {
               ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
                 child: CachedNetworkImage(
-                  imageUrl: widget.data["userAvatar"],
+                  imageUrl: widget.data!["userAvatar"],
                   width: 50,
                   height: 50,
                   fit: BoxFit.cover,
@@ -461,7 +461,7 @@ class _HistoryCardState extends State<HistoryCard> {
                     Container(
                       width: 200,
                       child: Text(
-                        widget.data["title"],
+                        widget.data!["title"],
                         style: TextStyle(
                           fontSize: 16,
                           color: Provider.of<ColorProvider>(context).isDark
@@ -474,7 +474,7 @@ class _HistoryCardState extends State<HistoryCard> {
                     Text(
                       RelativeDateFormat.format(
                         DateTime.fromMillisecondsSinceEpoch(
-                          int.parse(widget.data["time"]),
+                          int.parse(widget.data!["time"]),
                         ),
                       ),
                       style: TextStyle(
@@ -486,9 +486,9 @@ class _HistoryCardState extends State<HistoryCard> {
                     ),
                     Container(height: 5),
                     Text(
-                      widget.data["subject"] == ""
+                      widget.data!["subject"] == ""
                           ? "无"
-                          : widget.data["subject"],
+                          : widget.data!["subject"],
                       style: TextStyle(
                         fontSize: 14,
                         color: Color(0xFFA3A3A3),

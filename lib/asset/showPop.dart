@@ -26,9 +26,9 @@ showPop(BuildContext context, List<Widget> widgets) {
         width: MediaQuery.of(context).size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             ...widgets,
-          ],
+          ].toList(),
         ),
       );
     },

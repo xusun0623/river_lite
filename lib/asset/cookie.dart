@@ -3,8 +3,8 @@ import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/storage.dart';
 
 getWebCookie({
-  String username,
-  String password,
+  String? username,
+  String? password,
 }) async {
   String name = await getStorage(key: "name", initData: "");
   String pwd = await getStorage(key: "pwd", initData: "");
@@ -18,9 +18,9 @@ getWebCookie({
   if (response.statusCode == 200) {
     await setStorage(
       key: "cookie",
-      value: "${response.headers["set-cookie"].join(";")};",
+      value: "${response.headers["set-cookie"]!.join(";")};",
     );
     // print("重新请求Token，用户名为${name}，密码是${pwd}");
   }
-  return "${response.headers["set-cookie"].join(";")};";
+  return "${response.headers["set-cookie"]!.join(";")};";
 }

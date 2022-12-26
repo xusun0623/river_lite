@@ -11,15 +11,15 @@ import 'choice_config.dart';
 import 'choice_item.dart';
 import 'top_action_item.dart';
 
-Future<T> showActionSheet<T>({
-  @required BuildContext context,
-  List<ActionItem> actions,
-  Widget content,
-  ChoiceConfig choiceConfig,
-  TopActionItem topActionItem,
-  BottomActionItem bottomActionItem,
-  Color barrierColor,
-  Color actionSheetColor,
+Future<T?> showActionSheet<T>({
+  required BuildContext context,
+  List<ActionItem>? actions,
+  Widget? content,
+  ChoiceConfig? choiceConfig,
+  TopActionItem? topActionItem,
+  BottomActionItem? bottomActionItem,
+  Color? barrierColor,
+  Color? actionSheetColor,
   bool isScrollControlled = false,
   bool isDismissible = true,
   bool enableDrag = true,
@@ -55,10 +55,10 @@ Future<T> showActionSheet<T>({
 
 /// 顶部组件
 class _TopActionItemWidget extends StatelessWidget {
-  final TopActionItem topActionItem;
-  final VoidCallback onDonePress;
+  final TopActionItem? topActionItem;
+  final VoidCallback? onDonePress;
 
-  const _TopActionItemWidget({@required this.topActionItem, this.onDonePress});
+  const _TopActionItemWidget({required this.topActionItem, this.onDonePress});
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +69,9 @@ class _TopActionItemWidget extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 20),
         child: Center(
           child: Text(
-            topActionItem.title,
+            topActionItem!.title!,
             style: const TextStyle()
-                .merge(topActionItem.titleTextStyle)
+                .merge(topActionItem!.titleTextStyle)
                 .merge(TextStyle(
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_white
@@ -83,15 +83,15 @@ class _TopActionItemWidget extends StatelessWidget {
       ),
     ]);
 
-    if (topActionItem.desc != null) {
+    if (topActionItem!.desc != null) {
       widgets.add(Expanded(
           child: Container(
               height: 50,
               alignment: Alignment.center,
               child: Text(
-                topActionItem.desc,
+                topActionItem!.desc!,
                 style: const TextStyle(color: Colors.black45, fontSize: 12)
-                    .merge(topActionItem.titleTextStyle),
+                    .merge(topActionItem!.titleTextStyle),
                 textAlign: TextAlign.center,
               ))));
     }
@@ -109,7 +109,7 @@ class _TopActionItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: widgets,
             ),
-            if (topActionItem.showBottomLine)
+            if (topActionItem!.showBottomLine)
               const Divider(
                 height: 0,
               )
@@ -122,7 +122,7 @@ class _TopActionItemWidget extends StatelessWidget {
 
 /// 底部组件
 class _BottomActionItemWidget extends StatelessWidget {
-  final BottomActionItem bottomActionItem;
+  final BottomActionItem? bottomActionItem;
 
   const _BottomActionItemWidget(this.bottomActionItem);
 
@@ -146,12 +146,12 @@ class _BottomActionItemWidget extends StatelessWidget {
         ),
         InkWell(
           onTap:
-              bottomActionItem.onPressed ?? () => Navigator.of(context).pop(),
+              bottomActionItem!.onPressed ?? () => Navigator.of(context).pop(),
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                bottomActionItem.title,
+                bottomActionItem!.title,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -170,11 +170,11 @@ class _BottomActionItemWidget extends StatelessWidget {
 
 /// ActionSheet
 class _ActionSheet extends StatefulWidget {
-  final List<ActionItem> actions;
-  final Widget content;
-  final ChoiceConfig choiceConfig;
-  final TopActionItem topActionItem;
-  final BottomActionItem bottomActionItem;
+  final List<ActionItem>? actions;
+  final Widget? content;
+  final ChoiceConfig? choiceConfig;
+  final TopActionItem? topActionItem;
+  final BottomActionItem? bottomActionItem;
 
   @override
   _ActionSheetState createState() => _ActionSheetState();
@@ -188,8 +188,8 @@ class _ActionSheet extends StatefulWidget {
 }
 
 class _ActionSheetState extends State<_ActionSheet> {
-  List<Widget> widgets = [];
-  int _groupValue;
+  List<Widget?> widgets = [];
+  int? _groupValue;
   Set<int> _checkBoxValue = {};
 
   @override
@@ -197,14 +197,14 @@ class _ActionSheetState extends State<_ActionSheet> {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       if (widget.choiceConfig != null) {
-        final List<ChoiceItem> selectedItems = widget.choiceConfig.items
+        final List<ChoiceItem> selectedItems = widget.choiceConfig!.items
             .where((element) => element.isSelected == true)
             .toList();
         final List<int> selectedItemsIndex = selectedItems
-            .map((e) => widget.choiceConfig.items.indexOf(e))
+            .map((e) => widget.choiceConfig!.items.indexOf(e))
             .toList();
 
-        if (widget.choiceConfig.isCheckBox) {
+        if (widget.choiceConfig!.isCheckBox) {
           _checkBoxValue = selectedItemsIndex.toSet();
         } else {
           if (selectedItemsIndex.isNotEmpty) {
@@ -215,8 +215,8 @@ class _ActionSheetState extends State<_ActionSheet> {
 
       /// 添加中间操作按钮
       if (widget.actions != null) {
-        widget.actions.forEach((action) {
-          final index = widget.actions.indexOf(action);
+        widget.actions!.forEach((action) {
+          final index = widget.actions!.indexOf(action);
           widgets.add(Container(
             width: double.infinity,
             color: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -229,7 +229,7 @@ class _ActionSheetState extends State<_ActionSheet> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  action.title,
+                  action.title!,
                   style: TextStyle(
                     fontSize: 16,
                   ).merge(action.titleTextStyle).merge(TextStyle(
@@ -244,7 +244,7 @@ class _ActionSheetState extends State<_ActionSheet> {
               ),
             ),
           ));
-          if (index < widget.actions.length - 1) {
+          if (index < widget.actions!.length - 1) {
             widgets.add(const Divider(
               height: 0,
             ));
@@ -263,19 +263,19 @@ class _ActionSheetState extends State<_ActionSheet> {
   List<Widget> _buildChoiceItems() {
     final List<Widget> choiceItems = [];
     if (widget.choiceConfig != null) {
-      widget.choiceConfig.items.forEach((item) {
-        final index = widget.choiceConfig.items.indexOf(item);
+      widget.choiceConfig!.items.forEach((item) {
+        final index = widget.choiceConfig!.items.indexOf(item);
 
-        choiceItems.add(__ChoiceItemWidget<int>(
+        choiceItems.add(__ChoiceItemWidget<int?>(
             value: index,
-            groupValue: widget.choiceConfig.isCheckBox
+            groupValue: widget.choiceConfig!.isCheckBox
                 ? (_checkBoxValue.contains(index) ? index : -1)
                 : _groupValue,
             title: item.title,
             titleTextStyle: item.titleTextStyle,
             leftIcon: item.leftIcon,
             onPress: (dynamic idx) {
-              if (widget.choiceConfig.isCheckBox) {
+              if (widget.choiceConfig!.isCheckBox) {
                 if (_checkBoxValue.contains(idx as int)) {
                   _checkBoxValue.remove(idx);
                 } else {
@@ -287,7 +287,7 @@ class _ActionSheetState extends State<_ActionSheet> {
 
               setState(() {});
             }));
-        if (index < widget.choiceConfig.items.length - 1) {
+        if (index < widget.choiceConfig!.items.length - 1) {
           choiceItems.add(const Divider(
             height: 0,
           ));
@@ -324,12 +324,12 @@ class _ActionSheetState extends State<_ActionSheet> {
                       _TopActionItemWidget(
                         topActionItem: widget.topActionItem,
                         onDonePress: () {
-                          if (widget.topActionItem.doneAction != null) {
-                            if (widget.choiceConfig.isCheckBox) {
-                              widget.topActionItem
-                                  .doneAction(_checkBoxValue.toList());
+                          if (widget.topActionItem!.doneAction != null) {
+                            if (widget.choiceConfig!.isCheckBox) {
+                              widget.topActionItem!
+                                  .doneAction!(_checkBoxValue.toList());
                             } else {
-                              widget.topActionItem.doneAction([_groupValue]);
+                              widget.topActionItem!.doneAction!([_groupValue]);
                             }
                           } else {
                             Navigator.pop(context);
@@ -345,7 +345,7 @@ class _ActionSheetState extends State<_ActionSheet> {
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              ...widgets,
+                              ...widgets as Iterable<Widget>,
                               ..._buildChoiceItems(),
                             ],
                           ),
@@ -368,11 +368,11 @@ class _ActionSheetState extends State<_ActionSheet> {
 class __ChoiceItemWidget<T> extends StatefulWidget {
   final T value;
   final T groupValue;
-  final String title;
-  final TextStyle titleTextStyle;
-  final Widget leftIcon;
-  final Widget selectedIcon;
-  final Widget unselectedIcon;
+  final String? title;
+  final TextStyle? titleTextStyle;
+  final Widget? leftIcon;
+  final Widget? selectedIcon;
+  final Widget? unselectedIcon;
   final ValueChanged<dynamic> onPress;
 
   const __ChoiceItemWidget(
@@ -380,10 +380,10 @@ class __ChoiceItemWidget<T> extends StatefulWidget {
       this.titleTextStyle,
       this.selectedIcon,
       this.unselectedIcon,
-      @required this.title,
-      @required this.onPress,
-      @required this.value,
-      @required this.groupValue});
+      required this.title,
+      required this.onPress,
+      required this.value,
+      required this.groupValue});
 
   @override
   _ChoiceItemWidgetState createState() => _ChoiceItemWidgetState();
@@ -410,7 +410,7 @@ class _ChoiceItemWidgetState extends State<__ChoiceItemWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (widget.leftIcon != null)
-              widget.leftIcon
+              widget.leftIcon!
             else
               const SizedBox(
                 height: 0,
@@ -420,7 +420,7 @@ class _ChoiceItemWidgetState extends State<__ChoiceItemWidget> {
                 child: Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Text(
-                widget.title,
+                widget.title!,
                 style: const TextStyle(
                   fontSize: 12,
                 ).merge(widget.titleTextStyle),
@@ -428,8 +428,8 @@ class _ChoiceItemWidgetState extends State<__ChoiceItemWidget> {
             )),
             if (widget.selectedIcon != null)
               widget.value == widget.groupValue
-                  ? widget.selectedIcon
-                  : widget.unselectedIcon
+                  ? widget.selectedIcon!
+                  : widget.unselectedIcon!
             else
               Icon(
                 Icons.check_box,

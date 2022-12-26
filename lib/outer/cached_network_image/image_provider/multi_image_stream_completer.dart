@@ -16,10 +16,10 @@ class MultiImageStreamCompleter extends ImageStreamCompleter {
   /// [chunkEvents] should indicate the [ImageChunkEvent]s of the first image
   /// to show.
   MultiImageStreamCompleter({
-    @required Stream<ui.Codec> codec,
-    @required double scale,
-    Stream<ImageChunkEvent> chunkEvents,
-    InformationCollector informationCollector,
+    required Stream<ui.Codec> codec,
+    required double scale,
+    Stream<ImageChunkEvent>? chunkEvents,
+    InformationCollector? informationCollector,
   })  : _informationCollector = informationCollector,
         _scale = scale {
     codec.listen((event) {
@@ -53,18 +53,18 @@ class MultiImageStreamCompleter extends ImageStreamCompleter {
     }
   }
 
-  ui.Codec _codec;
-  ui.Codec _nextImageCodec;
+  ui.Codec? _codec;
+  ui.Codec? _nextImageCodec;
   final double _scale;
-  final InformationCollector _informationCollector;
-  ui.FrameInfo _nextFrame;
+  final InformationCollector? _informationCollector;
+  ui.FrameInfo? _nextFrame;
   // When the current was first shown.
-  Duration _shownTimestamp;
+  late Duration _shownTimestamp;
   // The requested duration for the current frame;
-  Duration _frameDuration;
+  Duration? _frameDuration;
   // How many frames have been emitted so far.
   int _framesEmitted = 0;
-  Timer _timer;
+  Timer? _timer;
 
   // Used to guard against registering multiple _handleAppFrame callbacks for the same frame.
   bool _frameCallbackScheduled = false;
@@ -76,7 +76,7 @@ class MultiImageStreamCompleter extends ImageStreamCompleter {
     _nextImageCodec = null;
   }
 
-  void _handleCodecReady(ui.Codec codec) {
+  void _handleCodecReady(ui.Codec? codec) {
     _codec = codec;
 
     if (hasListeners) {
@@ -88,22 +88,22 @@ class MultiImageStreamCompleter extends ImageStreamCompleter {
     _frameCallbackScheduled = false;
     if (!hasListeners) return;
     if (_isFirstFrame() || _hasFrameDurationPassed(timestamp)) {
-      _emitFrame(ImageInfo(image: _nextFrame.image, scale: _scale));
+      _emitFrame(ImageInfo(image: _nextFrame!.image, scale: _scale));
       _shownTimestamp = timestamp;
-      _frameDuration = _nextFrame.duration;
+      _frameDuration = _nextFrame!.duration;
       _nextFrame = null;
-      if (_framesEmitted % _codec.frameCount == 0 && _nextImageCodec != null) {
+      if (_framesEmitted % _codec!.frameCount == 0 && _nextImageCodec != null) {
         _switchToNewCodec();
       } else {
-        final completedCycles = _framesEmitted ~/ _codec.frameCount;
-        if (_codec.repetitionCount == -1 ||
-            completedCycles <= _codec.repetitionCount) {
+        final completedCycles = _framesEmitted ~/ _codec!.frameCount;
+        if (_codec!.repetitionCount == -1 ||
+            completedCycles <= _codec!.repetitionCount) {
           _decodeNextFrameAndSchedule();
         }
       }
       return;
     }
-    final delay = _frameDuration - (timestamp - _shownTimestamp);
+    final delay = _frameDuration! - (timestamp - _shownTimestamp);
     _timer = Timer(delay * timeDilation, _scheduleAppFrame);
   }
 
@@ -112,12 +112,12 @@ class MultiImageStreamCompleter extends ImageStreamCompleter {
   }
 
   bool _hasFrameDurationPassed(Duration timestamp) {
-    return timestamp - _shownTimestamp >= _frameDuration;
+    return timestamp - _shownTimestamp >= _frameDuration!;
   }
 
   Future<void> _decodeNextFrameAndSchedule() async {
     try {
-      _nextFrame = await _codec.getNextFrame();
+      _nextFrame = await _codec!.getNextFrame();
     } catch (exception, stack) {
       reportError(
         context: ErrorDescription('resolving an image frame'),
@@ -128,7 +128,7 @@ class MultiImageStreamCompleter extends ImageStreamCompleter {
       );
       return;
     }
-    if (_codec.frameCount == 1) {
+    if (_codec!.frameCount == 1) {
       // ImageStreamCompleter listeners removed while waiting for next frame to
       // be decoded.
       // There's no reason to emit the frame without active listeners.
@@ -138,7 +138,7 @@ class MultiImageStreamCompleter extends ImageStreamCompleter {
 
       // This is not an animated image, just return it and don't schedule more
       // frames.
-      _emitFrame(ImageInfo(image: _nextFrame.image, scale: _scale));
+      _emitFrame(ImageInfo(image: _nextFrame!.image, scale: _scale));
       return;
     }
     _scheduleAppFrame();

@@ -76,12 +76,12 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
           ),
           onGenerateRoute: (settings) {
-            final String routersname = settings.name;
-            final Function cotrollerFn = routers[routersname];
+            final String? routersname = settings.name;
+            final Function? cotrollerFn = routers[routersname!];
             //判断访问不存在的路由地址
             if (cotrollerFn == null) {
               return CupertinoPageRoute(
-                builder: (context) => routers['/404'](),
+                builder: (context) => routers['/404']!(),
               );
             }
             if (settings.arguments == null) {
@@ -96,7 +96,7 @@ class MyApp extends StatelessWidget {
           },
           onUnknownRoute: (setting) {
             return CupertinoPageRoute(
-              builder: (context) => routers["/404"](),
+              builder: (context) => routers["/404"]!(),
             );
           },
         ),

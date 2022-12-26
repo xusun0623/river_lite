@@ -16,14 +16,14 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class WaterInoutDetail extends StatefulWidget {
-  WaterInoutDetail({Key key}) : super(key: key);
+  WaterInoutDetail({Key? key}) : super(key: key);
 
   @override
   State<WaterInoutDetail> createState() => _WaterInoutDetailState();
 }
 
 class _WaterInoutDetailState extends State<WaterInoutDetail> {
-  var data = [];
+  List<dynamic>? data = [];
   bool loading = false;
   bool load_done = false;
   bool showBackToTop = false;
@@ -32,8 +32,8 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
-    if (data != null && data.length != 0) {
-      data.forEach((element) {
+    if (data != null && data!.length != 0) {
+      data!.forEach((element) {
         tmp.add(ResponsiveWidget(child: ListCard(data: element)));
       });
     }
@@ -51,12 +51,12 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
         });
       }
     }
-    if (data.length % 20 != 0 && !isInit) return;
+    if (data!.length % 20 != 0 && !isInit) return;
     List<Map> tmp_ret = [];
     var document = parse((await XHttp().pureHttpWithCookie(
       url: base_url +
           "home.php?mod=spacecp&op=log&ac=credit&page=" +
-          (isInit ? 1 : (data.length / 20 + 1).floor()).toString(),
+          (isInit ? 1 : (data!.length / 20 + 1).floor()).toString(),
     ))
         .data
         .toString());
@@ -82,7 +82,7 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
       }
     } catch (e) {}
     if (!isInit) {
-      data.addAll(tmp_ret);
+      data!.addAll(tmp_ret);
     } else {
       setStorage(key: "score", value: jsonEncode(tmp_ret));
       data = tmp_ret;
@@ -170,10 +170,10 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
 }
 
 class ListCard extends StatefulWidget {
-  int type; //0-加水 1-扣水
-  Map data;
+  int? type; //0-加水 1-扣水
+  Map? data;
   ListCard({
-    Key key,
+    Key? key,
     this.type,
     this.data,
   }) : super(key: key);
@@ -197,7 +197,7 @@ class _ListCardState extends State<ListCard> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             stops: [0, 1],
-            colors: (widget.data["add"] ?? 1) == 1
+            colors: (widget.data!["add"] ?? 1) == 1
                 ? [Color(0xFF252B36), Color(0xFF47505B)]
                 : [Color(0xFFE83C2D), Color(0xFFFA6E54)],
           ),
@@ -209,7 +209,7 @@ class _ListCardState extends State<ListCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.data["type"] ?? "帖子评分",
+                    widget.data!["type"] ?? "帖子评分",
                     style: TextStyle(
                       color: Color.fromRGBO(255, 255, 255, 0.8),
                       fontSize: 14,
@@ -217,7 +217,7 @@ class _ListCardState extends State<ListCard> {
                   ),
                   Container(height: 5),
                   Text(
-                    widget.data["change"] ?? "水滴+6",
+                    widget.data!["change"] ?? "水滴+6",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -226,7 +226,7 @@ class _ListCardState extends State<ListCard> {
                   ),
                   Container(height: 5),
                   Text(
-                    widget.data["detail"] ??
+                    widget.data!["detail"] ??
                         "给 4月22日天府绿道100km环骑经验分享 的帖子评分扣除的积分",
                     style: TextStyle(
                       color: Color.fromRGBO(255, 255, 255, 0.8),
@@ -236,7 +236,7 @@ class _ListCardState extends State<ListCard> {
                   ),
                   Container(height: 7.5),
                   Text(
-                    widget.data["time"] ?? "2022-05-02 18:07",
+                    widget.data!["time"] ?? "2022-05-02 18:07",
                     style: TextStyle(
                       color: Color.fromRGBO(255, 255, 255, 0.4),
                       fontSize: 14,

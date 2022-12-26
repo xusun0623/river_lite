@@ -15,7 +15,7 @@ abstract class IndexControllerEventBase {
   }
 
   IndexControllerEventBase({
-    @required this.animation,
+    required this.animation,
   });
 }
 
@@ -25,10 +25,10 @@ mixin TargetedPositionControllerEvent on IndexControllerEventBase {
 mixin StepBasedIndexControllerEvent on TargetedPositionControllerEvent {
   int get step;
   int calcNextIndex({
-    @required int currentIndex,
-    @required int itemCount,
-    @required bool loop,
-    @required bool reverse,
+    required int currentIndex,
+    required int? itemCount,
+    required bool loop,
+    required bool reverse,
   }) {
     var cIndex = currentIndex;
     if (reverse) {
@@ -38,7 +38,7 @@ mixin StepBasedIndexControllerEvent on TargetedPositionControllerEvent {
     }
 
     if (!loop) {
-      if (cIndex >= itemCount) {
+      if (cIndex >= itemCount!) {
         cIndex = 0;
       } else if (cIndex < 0) {
         cIndex = itemCount - 1;
@@ -51,7 +51,7 @@ mixin StepBasedIndexControllerEvent on TargetedPositionControllerEvent {
 class NextIndexControllerEvent extends IndexControllerEventBase
     with TargetedPositionControllerEvent, StepBasedIndexControllerEvent {
   NextIndexControllerEvent({
-    @required bool animation,
+    required bool animation,
   }) : super(
           animation: animation,
         );
@@ -66,7 +66,7 @@ class NextIndexControllerEvent extends IndexControllerEventBase
 class PrevIndexControllerEvent extends IndexControllerEventBase
     with TargetedPositionControllerEvent, StepBasedIndexControllerEvent {
   PrevIndexControllerEvent({
-    @required bool animation,
+    required bool animation,
   }) : super(
           animation: animation,
         );
@@ -80,21 +80,21 @@ class PrevIndexControllerEvent extends IndexControllerEventBase
 class MoveIndexControllerEvent extends IndexControllerEventBase
     with TargetedPositionControllerEvent {
   final int newIndex;
-  final int oldIndex;
+  final int? oldIndex;
   MoveIndexControllerEvent({
-    @required this.newIndex,
-    @required this.oldIndex,
-    @required bool animation,
+    required this.newIndex,
+    required this.oldIndex,
+    required bool animation,
   }) : super(
           animation: animation,
         );
   @override
-  double get targetPosition => newIndex > oldIndex ? 1 : 0;
+  double get targetPosition => newIndex > oldIndex! ? 1 : 0;
 }
 
 class IndexController extends ChangeNotifier {
-  IndexControllerEventBase event;
-  int index = 0;
+  IndexControllerEventBase? event;
+  int? index = 0;
   Future move(int index, {bool animation = true}) {
     final e = event = MoveIndexControllerEvent(
       animation: animation,

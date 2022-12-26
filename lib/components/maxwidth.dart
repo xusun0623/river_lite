@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 
 class MaxWidth extends StatefulWidget {
-  Widget child;
-  double width;
+  Widget? child;
+  double? width;
   MaxWidth({
-    Key key,
+    Key? key,
     this.child,
     this.width,
   }) : super(key: key);

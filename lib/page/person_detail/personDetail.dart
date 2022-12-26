@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 class PersonDetail extends StatefulWidget {
   var uid;
   PersonDetail({
-    Key key,
+    Key? key,
     this.uid,
   }) : super(key: key);
 
@@ -26,7 +26,7 @@ class PersonDetail extends StatefulWidget {
 }
 
 class _PersonDetailState extends State<PersonDetail> {
-  Map data;
+  Map? data;
   String online_time = "";
   String last_come = "";
   String sign_time = "";
@@ -68,10 +68,10 @@ class _PersonDetailState extends State<PersonDetail> {
     List<Widget> tmp = [];
     List<List<String>> txt = [
       ["UID", "${widget.uid}"],
-      ["用户状态", data["status"] == 2 ? "在线" : "离线"],
-      ["性别", data["gender"] == 1 ? "男" : (data["gender"] == 2 ? "女" : "未知")],
-      ["积分", "${data["score"]}"],
-      ["用户头衔", "${data["userTitle"]}"],
+      ["用户状态", data!["status"] == 2 ? "在线" : "离线"],
+      ["性别", data!["gender"] == 1 ? "男" : (data!["gender"] == 2 ? "女" : "未知")],
+      ["积分", "${data!["score"]}"],
+      ["用户头衔", "${data!["userTitle"]}"],
       ["在线时间", "${online_time}"],
       ["上次访问", "${last_come}"],
       ["注册时间", "${sign_time}"],
@@ -165,10 +165,10 @@ class _PersonDetailState extends State<PersonDetail> {
 }
 
 class DetailListTitle extends StatefulWidget {
-  String left;
-  String right;
+  String? left;
+  String? right;
   DetailListTitle({
-    Key key,
+    Key? key,
     this.left,
     this.right,
   }) : super(key: key);

@@ -17,14 +17,14 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Me extends StatefulWidget {
-  Me({Key key}) : super(key: key);
+  Me({Key? key}) : super(key: key);
 
   @override
   _MeState createState() => _MeState();
 }
 
 class _MeState extends State<Me> {
-  Map data;
+  Map? data;
   ScrollController _scrollController = new ScrollController();
   _getData() async {
     var tmp = await Api().user_userinfo({});
@@ -113,9 +113,9 @@ class _MeState extends State<Me> {
                     score: 0,
                   )
                 : MeInfoHead(
-                    head: provider.data["icon"] ?? provider.data["avatar"],
-                    name: provider.data["name"] ?? provider.data["userName"],
-                    score: provider.data["score"],
+                    head: provider.data!["icon"] ?? provider.data!["avatar"],
+                    name: provider.data!["name"] ?? provider.data!["userName"],
+                    score: provider.data!["score"],
                   ),
             MeFiveBtns(),
             Container(height: 17.5),
@@ -129,7 +129,7 @@ class _MeState extends State<Me> {
 }
 
 class MeBottom extends StatefulWidget {
-  MeBottom({Key key}) : super(key: key);
+  MeBottom({Key? key}) : super(key: key);
 
   @override
   State<MeBottom> createState() => _MeBottomState();
@@ -169,7 +169,7 @@ class _MeBottomState extends State<MeBottom> {
 }
 
 class MeListGroup extends StatefulWidget {
-  MeListGroup({Key key}) : super(key: key);
+  MeListGroup({Key? key}) : super(key: key);
 
   @override
   State<MeListGroup> createState() => _MeListGroupState();
@@ -194,11 +194,11 @@ class _MeListGroupState extends State<MeListGroup> {
 }
 
 class MeList extends StatefulWidget {
-  String txt;
-  int index;
-  IconData icon;
+  String? txt;
+  int? index;
+  IconData? icon;
   MeList({
-    Key key,
+    Key? key,
     this.txt,
     this.index,
     this.icon,
@@ -281,7 +281,7 @@ class _MeListState extends State<MeList> {
 }
 
 class MeFiveBtns extends StatefulWidget {
-  MeFiveBtns({Key key}) : super(key: key);
+  MeFiveBtns({Key? key}) : super(key: key);
 
   @override
   State<MeFiveBtns> createState() => _MeFiveBtnsState();
@@ -330,12 +330,12 @@ class _MeFiveBtnsState extends State<MeFiveBtns> {
 }
 
 class MeBtnHero extends StatefulWidget {
-  String img;
-  String txt;
-  int type;
+  String? img;
+  String? txt;
+  int? type;
 
   MeBtnHero({
-    Key key,
+    Key? key,
     this.img,
     this.txt,
     this.type,
@@ -363,7 +363,7 @@ class _MeBtnHeroState extends State<MeBtnHero> {
       child: myInkWell(
         tap: () async {
           String myinfo_txt = await getStorage(key: "myinfo", initData: "");
-          if (myinfo_txt != "" && widget.type <= 3) {
+          if (myinfo_txt != "" && widget.type! <= 3) {
             Map myinfo = jsonDecode(myinfo_txt);
             Navigator.pushNamed(context, "/me_func", arguments: {
               "type": widget.type,
@@ -406,11 +406,11 @@ class _MeBtnHeroState extends State<MeBtnHero> {
                 ),
               ),
               Hero(
-                tag: widget.txt,
+                tag: widget.txt!,
                 child: Material(
                   color: Colors.transparent,
                   child: Text(
-                    widget.txt,
+                    widget.txt!,
                     style: TextStyle(
                       fontSize: 15,
                       color: Provider.of<ColorProvider>(context).isDark
@@ -430,14 +430,14 @@ class _MeBtnHeroState extends State<MeBtnHero> {
 }
 
 class MeInfoHead extends StatefulWidget {
-  String head;
-  String name;
-  int score;
+  String? head;
+  String? name;
+  int? score;
   MeInfoHead({
-    Key key,
-    @required this.head,
-    @required this.name,
-    @required this.score,
+    Key? key,
+    required this.head,
+    required this.name,
+    required this.score,
   }) : super(key: key);
 
   @override
@@ -476,7 +476,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
     var score = widget.score;
     for (int i = 0; i < map_tmp.length; i++) {
       if (map_tmp[i] > score) {
-        return score / map_tmp[i];
+        return score! / map_tmp[i];
       }
     }
     return 0;
@@ -548,7 +548,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.name,
+                  widget.name!,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,

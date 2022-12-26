@@ -13,7 +13,7 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class About extends StatefulWidget {
-  About({Key key}) : super(key: key);
+  About({Key? key}) : super(key: key);
 
   @override
   _AboutState createState() => _AboutState();
@@ -149,12 +149,12 @@ class AboutCard extends StatefulWidget {
   Widget head;
   String title;
   String cont;
-  bool withUrl;
+  bool? withUrl;
   AboutCard({
-    Key key,
-    @required this.head,
-    @required this.title,
-    @required this.cont,
+    Key? key,
+    required this.head,
+    required this.title,
+    required this.cont,
     this.withUrl,
   }) : super(key: key);
 

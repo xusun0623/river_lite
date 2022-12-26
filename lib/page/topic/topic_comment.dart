@@ -33,13 +33,13 @@ class Comment extends StatefulWidget {
   var topic_id;
   var host_id;
   var fid;
-  Function add_1;
-  int index;
-  Function tap;
-  Function fresh;
+  Function? add_1;
+  int? index;
+  Function? tap;
+  Function? fresh;
 
   Comment(
-      {Key key,
+      {Key? key,
       this.data,
       this.is_last,
       this.topic_id,
@@ -58,7 +58,7 @@ class Comment extends StatefulWidget {
 class _CommentState extends State<Comment> {
   var liked = 0;
   bool is_me = false;
-  String blackKeyWord;
+  String? blackKeyWord;
 
   _getLikedStatus() async {
     String tmp = await getStorage(
@@ -156,7 +156,7 @@ class _CommentState extends State<Comment> {
     String formhash = await getTopicFormHash(widget.topic_id);
     String fid = widget.fid.toString();
     String tid = widget.topic_id.toString();
-    String page = ((widget.index / 20) + 1).toString();
+    String page = ((widget.index! / 20) + 1).toString();
     String handlekey = "mods";
     String topiclist = widget.data["reply_posts_id"].toString(); //需要加一个[]
     String stickreply = widget.data["poststick"] == 1 ? "0" : "1";
@@ -190,7 +190,7 @@ class _CommentState extends State<Comment> {
       hideToast();
       Navigator.pop(context);
       showToast(context: context, type: XSToast.success, txt: "操作成功");
-      widget.fresh();
+      widget.fresh!();
     } else {
       print(response.reasonPhrase);
     }
@@ -206,120 +206,125 @@ class _CommentState extends State<Comment> {
 
   _feedback() async {
     String txt = "";
-    showPop(context, [
-      Container(height: 30),
-      Text(
-        "请输入举报内容",
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Provider.of<ColorProvider>(context, listen: false).isDark
-              ? os_dark_white
-              : os_black,
-        ),
-      ),
-      Container(height: 10),
-      Container(
-        height: 60,
-        padding: EdgeInsets.symmetric(
-          horizontal: 15,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-          color: Provider.of<ColorProvider>(context, listen: false).isDark
-              ? os_white_opa
-              : os_grey,
-        ),
-        child: Center(
-          child: TextField(
-            onChanged: (e) {
-              txt = e;
-            },
+    showPop(
+        context,
+        [
+          Container(height: 30),
+          Text(
+            "请输入举报内容",
             style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
             ),
-            cursorColor: os_deep_blue,
-            decoration: InputDecoration(
-                hintText: "请输入",
-                border: InputBorder.none,
-                hintStyle: TextStyle(
-                  color:
-                      Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_dark_dark_white
-                          : os_deep_grey,
-                )),
           ),
-        ),
-      ),
-      Container(height: 10),
-      Row(
-        children: [
+          Container(height: 10),
           Container(
-            margin: EdgeInsets.only(right: 10),
-            child: myInkWell(
-              tap: () {
-                Navigator.pop(context);
-              },
+            height: 60,
+            padding: EdgeInsets.symmetric(
+              horizontal: 15,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_white_opa
-                  : Color(0x16004DFF),
-              widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                height: 40,
-                child: Center(
-                  child: Text(
-                    "取消",
-                    style: TextStyle(
+                  : os_grey,
+            ),
+            child: Center(
+              child: TextField(
+                onChanged: (e) {
+                  txt = e;
+                },
+                style: TextStyle(
+                  color:
+                      Provider.of<ColorProvider>(context, listen: false).isDark
+                          ? os_dark_white
+                          : os_black,
+                ),
+                cursorColor: os_deep_blue,
+                decoration: InputDecoration(
+                    hintText: "请输入",
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
                           ? os_dark_dark_white
-                          : os_deep_blue,
-                    ),
-                  ),
-                ),
+                          : os_deep_grey,
+                    )),
               ),
-              radius: 12.5,
             ),
           ),
-          Container(
-            child: myInkWell(
-              tap: () async {
-                await Api().user_report({
-                  "idType": "post",
-                  "message": txt,
-                  "id": widget.data["reply_id"]
-                });
-                Navigator.pop(context);
-                _feedbackSuccess();
-              },
-              color: os_deep_blue,
-              widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                height: 40,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.done, color: os_white, size: 18),
-                      Container(width: 5),
-                      Text(
-                        "完成",
+          Container(height: 10),
+          Row(
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                child: myInkWell(
+                  tap: () {
+                    Navigator.pop(context);
+                  },
+                  color:
+                      Provider.of<ColorProvider>(context, listen: false).isDark
+                          ? os_white_opa
+                          : Color(0x16004DFF),
+                  widget: Container(
+                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                    height: 40,
+                    child: Center(
+                      child: Text(
+                        "取消",
                         style: TextStyle(
-                          color: os_white,
+                          color:
+                              Provider.of<ColorProvider>(context, listen: false)
+                                      .isDark
+                                  ? os_dark_dark_white
+                                  : os_deep_blue,
                         ),
                       ),
-                    ],
+                    ),
                   ),
+                  radius: 12.5,
                 ),
               ),
-              radius: 12.5,
-            ),
+              Container(
+                child: myInkWell(
+                  tap: () async {
+                    await Api().user_report({
+                      "idType": "post",
+                      "message": txt,
+                      "id": widget.data["reply_id"]
+                    });
+                    Navigator.pop(context);
+                    _feedbackSuccess();
+                  },
+                  color: os_deep_blue,
+                  widget: Container(
+                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                    height: 40,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.done, color: os_white, size: 18),
+                          Container(width: 5),
+                          Text(
+                            "完成",
+                            style: TextStyle(
+                              color: os_white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  radius: 12.5,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ]);
+        ].toList());
   }
 
   _blackID() async {
@@ -383,7 +388,7 @@ class _CommentState extends State<Comment> {
 
   _getIsMeTopic() async {
     //该帖子是不是这个用户的，用户方便用户置顶他人/自己评论
-    int uid = await getUid();
+    int? uid = await getUid();
     setState(() {
       is_me = widget.host_id == uid;
     });
@@ -391,7 +396,9 @@ class _CommentState extends State<Comment> {
 
   bool _getBlack() {
     bool flag = false;
-    Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
+    Provider.of<BlackProvider>(context, listen: false)
+        .black!
+        .forEach((element) {
       if (widget.data["reply_id"].toString().contains(element)) {
         flag = true;
         blackKeyWord = element;
@@ -605,7 +612,7 @@ class _CommentState extends State<Comment> {
                                               .contains("苹果")
                                           ? "iPhone客户端"
                                           : widget.data["mobileSign"]))) +
-                              " · #${widget.index + 1}楼",
+                              " · #${widget.index! + 1}楼",
                           style: TextStyle(
                             color: Color(0xFF9F9F9F),
                             fontSize: 12,
@@ -712,7 +719,7 @@ class _CommentState extends State<Comment> {
   }
 
   _tap() {
-    widget.tap(widget.data["reply_posts_id"], widget.data["reply_name"]);
+    widget.tap!(widget.data["reply_posts_id"], widget.data["reply_name"]);
   }
 
   _longPress() {

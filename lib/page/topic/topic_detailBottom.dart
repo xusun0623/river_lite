@@ -13,10 +13,10 @@ class DetailFixBottom extends StatefulWidget {
   var topic_id;
   var count;
   var dislike_count;
-  double bottom;
-  Function tapEdit;
+  double? bottom;
+  Function? tapEdit;
   DetailFixBottom({
-    Key key,
+    Key? key,
     this.topic_id,
     this.count,
     this.dislike_count,
@@ -111,16 +111,16 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
             ),
           ),
         ),
-        height: 62 + widget.bottom ?? 0,
+        height: 62 + widget.bottom! ?? 0,
         padding: EdgeInsets.fromLTRB(7 + MinusSpace(context) / 2, 7,
-            7 + MinusSpace(context) / 2, 7 + widget.bottom ?? 0),
+            7 + MinusSpace(context) / 2, 7 + widget.bottom! ?? 0),
         width: MediaQuery.of(context).size.width,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             myInkWell(
               tap: () {
-                widget.tapEdit();
+                widget.tapEdit!();
               },
               radius: 10,
               color: Colors.transparent,

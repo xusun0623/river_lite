@@ -27,7 +27,7 @@ class TabBarProperties {
   /// The width of the [TabBar].
   ///
   /// If not set, it's full available width.
-  final double width;
+  final double? width;
 
   /// The height of the [TabBar].
   ///
@@ -35,7 +35,7 @@ class TabBarProperties {
   final double height;
 
   /// Container that is behind the tabs.
-  final Container background;
+  final Container? background;
 
   /// Position of the [TabBar] in respect to it's [TabBarView].
   final TabBarPosition position;
@@ -56,12 +56,12 @@ class TabBarProperties {
   /// for various customization.
   ///
   /// Also see [TabBar documentation](https://api.flutter.dev/flutter/material/TabBar/indicator.html).
-  final Decoration indicator;
+  final Decoration? indicator;
 
   /// The color of the line that appears below the selected tab.
   ///
   /// See [TabBar documentation](https://api.flutter.dev/flutter/material/TabBar/indicatorColor.html).
-  final Color indicatorColor;
+  final Color? indicatorColor;
 
   /// Padding for indicator.
   ///
@@ -71,7 +71,7 @@ class TabBarProperties {
   /// Defines how the selected tab indicator's size is computed.
   ///
   /// See [TabBar documentation](https://api.flutter.dev/flutter/material/TabBar/indicatorSize.html).
-  final TabBarIndicatorSize indicatorSize;
+  final TabBarIndicatorSize? indicatorSize;
 
   /// The thickness of the line that appears below the selected tab.
   ///
@@ -86,7 +86,7 @@ class TabBarProperties {
   /// The color of selected tab labels.
   ///
   /// See [TabBar documentation](https://api.flutter.dev/flutter/material/TabBar/labelColor.html).
-  final Color labelColor;
+  final Color? labelColor;
 
   /// The padding added to each of the tab labels.
   ///
@@ -96,15 +96,15 @@ class TabBarProperties {
   /// The text style of the selected tab labels.
   ///
   /// See [TabBar documentation](https://api.flutter.dev/flutter/material/TabBar/labelStyle.html).
-  final TextStyle labelStyle;
+  final TextStyle? labelStyle;
 
   /// The color of unselected tab labels.
   ///
   /// See [TabBar documentation](https://api.flutter.dev/flutter/material/TabBar/unselectedLabelColor.html).
-  final Color unselectedLabelColor;
+  final Color? unselectedLabelColor;
 
   /// The text style of the unselected tab labels.
   ///
   /// See [TabBar documentation](https://api.flutter.dev/flutter/material/TabBar/unselectedLabelStyle.html).
-  final TextStyle unselectedLabelStyle;
+  final TextStyle? unselectedLabelStyle;
 }

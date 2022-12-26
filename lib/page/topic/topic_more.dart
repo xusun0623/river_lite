@@ -22,11 +22,11 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 class TopicDetailMore extends StatefulWidget {
-  Map data;
-  Function block;
-  Function alterSend;
+  Map? data;
+  Function? block;
+  Function? alterSend;
   TopicDetailMore({
-    Key key,
+    Key? key,
     this.data,
     this.block,
     this.alterSend,
@@ -47,120 +47,125 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
 
   _feedback() async {
     String txt = "";
-    showPop(context, [
-      Container(height: 30),
-      Text(
-        "请输入举报内容",
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Provider.of<ColorProvider>(context, listen: false).isDark
-              ? os_dark_white
-              : os_black,
-        ),
-      ),
-      Container(height: 10),
-      Container(
-        height: 60,
-        padding: EdgeInsets.symmetric(
-          horizontal: 15,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-          color: Provider.of<ColorProvider>(context, listen: false).isDark
-              ? os_white_opa
-              : os_grey,
-        ),
-        child: Center(
-          child: TextField(
-            onChanged: (e) {
-              txt = e;
-            },
+    showPop(
+        context,
+        [
+          Container(height: 30),
+          Text(
+            "请输入举报内容",
             style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
             ),
-            cursorColor: os_deep_blue,
-            decoration: InputDecoration(
-                hintText: "请输入",
-                border: InputBorder.none,
-                hintStyle: TextStyle(
-                  color:
-                      Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_dark_dark_white
-                          : os_deep_grey,
-                )),
           ),
-        ),
-      ),
-      Container(height: 10),
-      Row(
-        children: [
+          Container(height: 10),
           Container(
-            margin: EdgeInsets.only(right: 10),
-            child: myInkWell(
-              tap: () {
-                Navigator.pop(context);
-              },
+            height: 60,
+            padding: EdgeInsets.symmetric(
+              horizontal: 15,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_white_opa
-                  : Color(0x16004DFF),
-              widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                height: 40,
-                child: Center(
-                  child: Text(
-                    "取消",
-                    style: TextStyle(
+                  : os_grey,
+            ),
+            child: Center(
+              child: TextField(
+                onChanged: (e) {
+                  txt = e;
+                },
+                style: TextStyle(
+                  color:
+                      Provider.of<ColorProvider>(context, listen: false).isDark
+                          ? os_dark_white
+                          : os_black,
+                ),
+                cursorColor: os_deep_blue,
+                decoration: InputDecoration(
+                    hintText: "请输入",
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
                           ? os_dark_dark_white
-                          : os_deep_blue,
-                    ),
-                  ),
-                ),
+                          : os_deep_grey,
+                    )),
               ),
-              radius: 12.5,
             ),
           ),
-          Container(
-            child: myInkWell(
-              tap: () async {
-                await Api().user_report({
-                  "idType": "thread",
-                  "message": txt,
-                  "id": widget.data["topic"]["topic_id"]
-                });
-                Navigator.pop(context);
-                _feedbackSuccess();
-              },
-              color: os_deep_blue,
-              widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                height: 40,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.done, color: os_white, size: 18),
-                      Container(width: 5),
-                      Text(
-                        "完成",
+          Container(height: 10),
+          Row(
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                child: myInkWell(
+                  tap: () {
+                    Navigator.pop(context);
+                  },
+                  color:
+                      Provider.of<ColorProvider>(context, listen: false).isDark
+                          ? os_white_opa
+                          : Color(0x16004DFF),
+                  widget: Container(
+                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                    height: 40,
+                    child: Center(
+                      child: Text(
+                        "取消",
                         style: TextStyle(
-                          color: os_white,
+                          color:
+                              Provider.of<ColorProvider>(context, listen: false)
+                                      .isDark
+                                  ? os_dark_dark_white
+                                  : os_deep_blue,
                         ),
                       ),
-                    ],
+                    ),
                   ),
+                  radius: 12.5,
                 ),
               ),
-              radius: 12.5,
-            ),
+              Container(
+                child: myInkWell(
+                  tap: () async {
+                    await Api().user_report({
+                      "idType": "thread",
+                      "message": txt,
+                      "id": widget.data!["topic"]["topic_id"]
+                    });
+                    Navigator.pop(context);
+                    _feedbackSuccess();
+                  },
+                  color: os_deep_blue,
+                  widget: Container(
+                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                    height: 40,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.done, color: os_white, size: 18),
+                          Container(width: 5),
+                          Text(
+                            "完成",
+                            style: TextStyle(
+                              color: os_white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  radius: 12.5,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ]);
+        ].toList());
   }
 
   _toWaterColumn() async {
@@ -180,7 +185,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       builder: (context) {
         return ToWaterTip(
           confirm: () {
-            widget.alterSend();
+            widget.alterSend!();
           },
         );
       },
@@ -203,7 +208,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       builder: (context) {
         return QrCode(
           url:
-              "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${widget.data["topic"]["topic_id"]}",
+              "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${widget.data!["topic"]["topic_id"]}",
         );
       },
     );
@@ -230,15 +235,15 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         //         widget.data["topic"]["topic_id"].toString());
         //   },
         // ),
-        ...(widget.data["topic"]["user_id"] == await getUid()
+        ...(widget.data!["topic"]["user_id"] == await getUid()
             ? [
                 ActionItem(
                   title: "编辑帖子",
                   onPressed: () {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, "/topic_edit", arguments: {
-                      "tid": widget.data["topic"]["topic_id"],
-                      "pid": int.parse(widget.data["topic"]["extraPanel"][0]
+                      "tid": widget.data!["topic"]["topic_id"],
+                      "pid": int.parse(widget.data!["topic"]["extraPanel"][0]
                               ["action"]
                           .toString()
                           .split("&pid=")[1]
@@ -248,7 +253,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                 ),
               ]
             : []),
-        ...(widget.data["forumName"] == "水手之家"
+        ...(widget.data!["forumName"] == "水手之家"
             ? []
             : [
                 ActionItem(
@@ -273,7 +278,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
               ClipboardData(
                 text: base_url +
                     "forum.php?mod=viewthread&tid=" +
-                    widget.data["topic"]["topic_id"].toString(),
+                    widget.data!["topic"]["topic_id"].toString(),
               ),
             );
             Navigator.pop(context);
@@ -290,8 +295,8 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
           title: "屏蔽此贴",
           onPressed: () async {
             Navigator.pop(context);
-            setBlackWord(widget.data["topic"]["title"], context);
-            widget.block();
+            setBlackWord(widget.data!["topic"]["title"], context);
+            widget.block!();
           },
         ),
       ]);
@@ -335,7 +340,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                   xsLanuch(
                     url: base_url +
                         "forum.php?mod=viewthread&tid=" +
-                        widget.data["topic"]["topic_id"].toString(),
+                        widget.data!["topic"]["topic_id"].toString(),
                     isExtern: true,
                   );
                 },
@@ -356,9 +361,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
 }
 
 class QrCode extends StatefulWidget {
-  String url;
+  String? url;
   QrCode({
-    Key key,
+    Key? key,
     this.url,
   }) : super(key: key);
 
@@ -368,12 +373,12 @@ class QrCode extends StatefulWidget {
 
 class _QrCodeState extends State<QrCode> {
   getBriefId() {
-    if (widget.url
+    if (widget.url!
         .contains("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")) {
-      return "t${widget.url.split("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")[1].split("&")[0]}";
-    } else if (widget.url
+      return "t${widget.url!.split("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")[1].split("&")[0]}";
+    } else if (widget.url!
         .contains("https://bbs.uestc.edu.cn/home.php?mod=space&uid=")) {
-      return "u${widget.url.split("https://bbs.uestc.edu.cn/home.php?mod=space&uid=")[1].split("&")[0]}";
+      return "u${widget.url!.split("https://bbs.uestc.edu.cn/home.php?mod=space&uid=")[1].split("&")[0]}";
     }
   }
 

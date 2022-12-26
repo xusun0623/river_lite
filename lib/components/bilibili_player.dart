@@ -5,9 +5,9 @@ import 'package:offer_show/asset/color.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class BilibiliPlayer extends StatefulWidget {
-  String short_url;
+  String? short_url;
   BilibiliPlayer({
-    Key key,
+    Key? key,
     this.short_url,
   }) : super(key: key);
 
@@ -20,7 +20,7 @@ class _BilibiliPlayerState extends State<BilibiliPlayer> {
   bool load_done = false;
 
   _getBvNumber() async {
-    var response = (await Dio().get(widget.short_url)).toString();
+    var response = (await Dio().get(widget.short_url!)).toString();
     bvNumber =
         response.split("https://www.bilibili.com/video/")[1].split("/")[0];
     setState(() {});

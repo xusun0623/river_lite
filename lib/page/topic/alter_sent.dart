@@ -6,7 +6,7 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class AlterSent extends StatefulWidget {
-  AlterSent({Key key}) : super(key: key);
+  AlterSent({Key? key}) : super(key: key);
 
   @override
   State<AlterSent> createState() => _AlterSentState();

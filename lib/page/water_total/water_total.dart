@@ -8,7 +8,7 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class WaterTotal extends StatefulWidget {
-  WaterTotal({Key key}) : super(key: key);
+  WaterTotal({Key? key}) : super(key: key);
 
   @override
   State<WaterTotal> createState() => _WaterTotalState();
@@ -84,12 +84,12 @@ class _WaterTotalState extends State<WaterTotal> {
 }
 
 class NavigatorCard extends StatefulWidget {
-  String title;
-  String tip;
-  String url;
-  String img;
+  String? title;
+  String? tip;
+  String? url;
+  String? img;
   NavigatorCard({
-    Key key,
+    Key? key,
     this.title,
     this.tip,
     this.url,
@@ -106,7 +106,7 @@ class _NavigatorCardState extends State<NavigatorCard> {
     return ResponsiveWidget(
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, widget.url);
+          Navigator.pushNamed(context, widget.url!);
         },
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -130,7 +130,7 @@ class _NavigatorCardState extends State<NavigatorCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.title,
+                    widget.title!,
                     style: TextStyle(
                       fontSize: 16,
                       color: Provider.of<ColorProvider>(context).isDark
@@ -141,7 +141,7 @@ class _NavigatorCardState extends State<NavigatorCard> {
                   ),
                   Container(height: 3),
                   Text(
-                    widget.tip,
+                    widget.tip!,
                     style: TextStyle(
                       fontSize: 14,
                       color: Provider.of<ColorProvider>(context).isDark

@@ -14,16 +14,16 @@ import 'action_item.dart';
 ///
 @immutable
 class TopActionItem extends ActionItem {
-  final String desc;
-  final TextStyle descTextStyle;
+  final String? desc;
+  final TextStyle? descTextStyle;
   final bool showBottomLine;
-  final VoidCallback cancelAction;
-  final ValueChanged<List<int>> doneAction;
+  final VoidCallback? cancelAction;
+  final ValueChanged<List<int?>>? doneAction;
 
   const TopActionItem(
-      {@required String title,
+      {required String title,
       this.desc,
-      TextStyle titleTextStyle,
+      TextStyle? titleTextStyle,
       this.descTextStyle,
       this.showBottomLine = true,
       this.cancelAction,

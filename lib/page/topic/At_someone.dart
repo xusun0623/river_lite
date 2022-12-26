@@ -9,11 +9,11 @@ import 'package:provider/provider.dart';
 class AtSomeone extends StatefulWidget {
   Function tap;
   Function hide;
-  Color backgroundColor;
+  Color? backgroundColor;
   AtSomeone({
-    Key key,
-    @required this.tap,
-    @required this.hide,
+    Key? key,
+    required this.tap,
+    required this.hide,
     this.backgroundColor,
   }) : super(key: key);
 

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:offer_show/util/mid_request.dart';
 
-getTopicFormHash(int tid) async {
+getTopicFormHash(int? tid) async {
   Response response = await XHttp().pureHttpWithCookie(
     url: base_url + "forum.php?mod=viewthread&tid=${tid}",
   );

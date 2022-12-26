@@ -25,7 +25,7 @@ class HomeNew extends StatefulWidget {
 
 class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
-  var data = [];
+  List<dynamic>? data = [];
   var loading = false;
   var load_done = false;
   bool showBackToTop = false;
@@ -76,7 +76,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
       data = tmp["list"];
     }
-    if (data != null && data.length != 0)
+    if (data != null && data!.length != 0)
       setStorage(key: "home_new", value: jsonEncode(data));
     load_done = false;
     setState(() {});
@@ -93,13 +93,13 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     if (loading || load_done) return;
     loading = true;
     var tmp = await Api().forum_topiclist({
-      "page": (data.length / pageSize + 1).toInt(),
+      "page": (data!.length / pageSize + 1).toInt(),
       "pageSize": pageSize,
       "sortby": "new"
     });
     Api().forum_topiclist({
       //提前让服务器缓存下一次的数据
-      "page": (data.length / pageSize + 1).toInt() + 1,
+      "page": (data!.length / pageSize + 1).toInt() + 1,
       "pageSize": pageSize,
       "sortby": "new"
     });
@@ -107,7 +107,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
         tmp["rs"] != 0 &&
         tmp["list"] != null &&
         tmp["list"].length != 0) {
-      data.addAll(tmp["list"]);
+      data!.addAll(tmp["list"]);
       setStorage(key: "home_new_reply", value: jsonEncode(data));
     }
     load_done = tmp == null || ((tmp["list"] ?? []).length < pageSize);
@@ -118,7 +118,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   Widget _buildComponents() {
     List<Widget> t = [];
     t.add(HomeBtn());
-    if (data.length == 0 && !load_done) {
+    if (data!.length == 0 && !load_done) {
       t.add(Container(
         padding: EdgeInsets.symmetric(vertical: 50),
         child: Column(
@@ -131,18 +131,18 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
         ),
       ));
     }
-    if (data != null && data.length != 0) {
-      for (var i in data) {
+    if (data != null && data!.length != 0) {
+      for (var i in data!) {
         t.add(Topic(isLeftNaviUI: isDesktop() && true, data: i));
       }
     }
-    if (data.length == 0) {
+    if (data!.length == 0) {
       t.add(Container(
         height: MediaQuery.of(context).size.height - 100,
       ));
     }
     t.add(
-      load_done || data.length == 0
+      load_done || data!.length == 0
           ? TapMore(
               tap: () {
                 XSVibrate();
@@ -159,7 +159,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
             ),
     );
     t.add(Padding(
-      padding: EdgeInsets.all(load_done || data.length == 0 ? 7.5 : 0),
+      padding: EdgeInsets.all(load_done || data!.length == 0 ? 7.5 : 0),
     ));
     return BackToTop(
       show: showBackToTop,
@@ -167,7 +167,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       animation: true,
       attachBtn: true,
       refresh: () {
-        _indicatorKey.currentState.show();
+        _indicatorKey.currentState!.show();
       },
       tap: () {
         Navigator.pushNamed(context, "/new", arguments: 25);
@@ -207,9 +207,9 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 }
 
 class TapMore extends StatefulWidget {
-  Function tap;
+  Function? tap;
   TapMore({
-    Key key,
+    Key? key,
     this.tap,
   }) : super(key: key);
 
@@ -223,7 +223,7 @@ class _TapMoreState extends State<TapMore> {
     ColorProvider provider = Provider.of<ColorProvider>(context);
     return GestureDetector(
       onTap: () {
-        widget.tap();
+        widget.tap!();
       },
       child: Container(
         // color: provider.isDark ? Color(0xFF111111) : os_back,
@@ -251,10 +251,10 @@ class _TapMoreState extends State<TapMore> {
 }
 
 class StackIndex extends StatefulWidget {
-  int index;
-  Function tap;
+  int? index;
+  Function? tap;
   StackIndex({
-    Key key,
+    Key? key,
     this.index,
     this.tap,
   }) : super(key: key);
@@ -271,7 +271,7 @@ class _StackIndexState extends State<StackIndex> {
 }
 
 class ToSearch extends StatefulWidget {
-  const ToSearch({Key key}) : super(key: key);
+  const ToSearch({Key? key}) : super(key: key);
 
   @override
   State<ToSearch> createState() => _ToSearchState();
@@ -325,36 +325,36 @@ class TabSizeIndicator extends Decoration {
   final EdgeInsetsGeometry insets;
 
   @override
-  Decoration lerpFrom(Decoration a, double t) {
+  Decoration? lerpFrom(Decoration? a, double t) {
     if (a is UnderlineTabIndicator) {
       return UnderlineTabIndicator(
         borderSide: BorderSide.lerp(a.borderSide, borderSide, t),
-        insets: EdgeInsetsGeometry.lerp(a.insets, insets, t),
+        insets: EdgeInsetsGeometry.lerp(a.insets, insets, t)!,
       );
     }
     return super.lerpFrom(a, t);
   }
 
   @override
-  Decoration lerpTo(Decoration b, double t) {
+  Decoration? lerpTo(Decoration? b, double t) {
     if (b is TabSizeIndicator) {
       return TabSizeIndicator(
         borderSide: BorderSide.lerp(borderSide, b.borderSide, t),
-        insets: EdgeInsetsGeometry.lerp(insets, b.insets, t),
+        insets: EdgeInsetsGeometry.lerp(insets, b.insets, t)!,
       );
     }
     return super.lerpTo(b, t);
   }
 
   @override
-  _MyUnderlinePainter createBoxPainter([VoidCallback onChanged]) {
+  _MyUnderlinePainter createBoxPainter([VoidCallback? onChanged]) {
     return _MyUnderlinePainter(this, wantWidth, onChanged);
   }
 }
 
 class _MyUnderlinePainter extends BoxPainter {
   final double wantWidth;
-  _MyUnderlinePainter(this.decoration, this.wantWidth, VoidCallback onChanged)
+  _MyUnderlinePainter(this.decoration, this.wantWidth, VoidCallback? onChanged)
       : assert(decoration != null),
         super(onChanged);
 
@@ -380,8 +380,8 @@ class _MyUnderlinePainter extends BoxPainter {
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
     assert(configuration != null);
     assert(configuration.size != null);
-    final Rect rect = offset & configuration.size;
-    final TextDirection textDirection = configuration.textDirection;
+    final Rect rect = offset & configuration.size!;
+    final TextDirection textDirection = configuration.textDirection!;
     final Rect indicator =
         _indicatorRectFor(rect, textDirection).deflate(borderSide.width / 2.0);
     final Paint paint = borderSide.toPaint()..strokeCap = StrokeCap.round;
