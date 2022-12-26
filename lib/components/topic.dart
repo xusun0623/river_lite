@@ -9,6 +9,7 @@ import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -120,9 +121,8 @@ class _TopicState extends State<Topic> {
 
   _feedback() async {
     String txt = "";
-    showPop(
-        context,
-        [
+    showPop(context,
+        widgets: [
           Container(height: 30),
           Text(
             "请输入举报内容",
@@ -240,6 +240,15 @@ class _TopicState extends State<Topic> {
   }
 
   _moreAction() async {
+    showAction(
+      context: context,
+      options: [
+        "屏蔽此贴",
+        "屏蔽此人",
+      ],
+      icons: [Icons.dangerous_outlined, Icons.dangerous_outlined],
+    );
+    return;
     showActionSheet(
       context: context,
       actions: [

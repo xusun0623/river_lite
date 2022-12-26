@@ -42,9 +42,8 @@ class _BlackListState extends State<BlackList> {
   }
 
   _addNewWord() async {
-    showPop(
-        context,
-        [
+    showPop(context,
+        widgets: [
           Container(height: 30),
           Text(
             "请输入关键词",

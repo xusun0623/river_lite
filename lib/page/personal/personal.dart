@@ -231,9 +231,8 @@ class _PersonCenterState extends State<PersonCenter> {
           title: "展示二维码",
           onPressed: () {
             Navigator.pop(context);
-            showPop(
-                context,
-                [
+            showPop(context,
+                widgets: [
                   QrCode(
                     url:
                         "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param!["uid"]}",
@@ -608,9 +607,8 @@ class _PersonCardState extends State<PersonCard> {
   }
 
   _editSign() {
-    showPop(
-        context,
-        [
+    showPop(context,
+        widgets: [
           Container(height: 30),
           Text(
             "请输入新的签名",

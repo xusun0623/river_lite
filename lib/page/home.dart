@@ -257,18 +257,12 @@ class _HomeState extends State<Home> {
         : Scaffold(
             //移动端的UI布局
             body: WillPopScope(
-              onWillPop: () {
+              onWillPop: () async {
                 if (_firstBack) {
                   SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-                } else {
-                  showToast(
-                    context: context,
-                    type: XSToast.none,
-                    txt: "再次返回",
-                  );
                 }
-                return;
-              } as Future<bool> Function()?,
+                return true;
+              },
               child: IndexedStack(
                 children: homePages(),
                 index: getConvertIndex(),

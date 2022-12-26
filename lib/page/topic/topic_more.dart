@@ -47,9 +47,8 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
 
   _feedback() async {
     String txt = "";
-    showPop(
-        context,
-        [
+    showPop(context,
+        widgets: [
           Container(height: 30),
           Text(
             "请输入举报内容",
