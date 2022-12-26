@@ -173,7 +173,7 @@ SPEC CHECKSUMS:
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_vibrate: 9f4c2ab57008965f78969472367c329dd77eb801
-  fluttertoast: 74526702fea2c060ea55dde75895b7e1bde1c86b
+  fluttertoast: eb263d302cc92e04176c053d2385237e9f43fad0
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   heic_to_jpg: cce9d6463ab11852a7393daa61be23f98a951c64
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
