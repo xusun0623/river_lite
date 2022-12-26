@@ -140,8 +140,8 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                   },
                   scrollDirection: widget.direction!,
                   itemCount: widget.galleryItems.length,
-                  backgroundDecoration:
-                      widget.decoration as BoxDecoration? ?? BoxDecoration(color: Colors.black),
+                  backgroundDecoration: widget.decoration as BoxDecoration? ??
+                      BoxDecoration(color: Colors.black),
                   pageController: _pageController,
                   onPageChanged: (index) => setState(
                     () {
@@ -173,7 +173,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                         ),
                       ),
                       child: ListView(
-                        physics: BouncingScrollPhysics(),
+                        // physics: BouncingScrollPhysics(),
                         children: [
                           Text.rich(
                             TextSpan(

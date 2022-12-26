@@ -17,7 +17,7 @@ class _ImgBannerState extends State<ImgBanner> {
       width: MediaQuery.of(context).size.width - os_edge * 2,
       height: (MediaQuery.of(context).size.width - os_edge * 2) / 360 * 144,
       child: Swiper(
-        physics: BouncingScrollPhysics(),
+        // // physics: BouncingScrollPhysics(),
         itemCount: 1,
         autoplay: true,
         duration: 800,

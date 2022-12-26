@@ -68,7 +68,7 @@ class _CropImgState extends State<CropImg> {
       body: edit_done
           ? EditDoneDisplay()
           : ListView(
-              physics: BouncingScrollPhysics(),
+              // physics: BouncingScrollPhysics(),
               children: [
                 img == null
                     ? Bounce(
@@ -121,12 +121,15 @@ class _CropImgState extends State<CropImg> {
                               image: img!,
                               onCropped: (image) async {
                                 IMG.Image img = IMG.decodeImage(image)!;
-                                Uint8List resizedData200 = IMG.encodeJpg(IMG
-                                    .copyResize(img, width: 200, height: 200)) as Uint8List;
-                                Uint8List resizedData120 = IMG.encodeJpg(IMG
-                                    .copyResize(img, width: 120, height: 120)) as Uint8List;
-                                Uint8List resizedData48 = IMG.encodeJpg(
-                                    IMG.copyResize(img, width: 48, height: 48)) as Uint8List;
+                                Uint8List resizedData200 = IMG.encodeJpg(
+                                    IMG.copyResize(img,
+                                        width: 200, height: 200)) as Uint8List;
+                                Uint8List resizedData120 = IMG.encodeJpg(
+                                    IMG.copyResize(img,
+                                        width: 120, height: 120)) as Uint8List;
+                                Uint8List resizedData48 = IMG.encodeJpg(IMG
+                                        .copyResize(img, width: 48, height: 48))
+                                    as Uint8List;
                                 String base64_200 =
                                     base64Encode(resizedData200);
                                 String base64_120 =

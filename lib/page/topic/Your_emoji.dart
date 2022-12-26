@@ -186,7 +186,7 @@ class _YourEmojiState extends State<YourEmoji> {
       ),
       child: ListView(
         controller: _scrollController,
-        physics: BouncingScrollPhysics(),
+        // physics: BouncingScrollPhysics(),
         children: [
           Container(
             padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),

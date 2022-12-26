@@ -101,7 +101,7 @@ class _SquareState extends State<Square> {
         body: !get_done
             ? Loading(backgroundColor: os_back)
             : ListView(
-                physics: BouncingScrollPhysics(),
+                // physics: BouncingScrollPhysics(),
                 children: _buildCont(),
               ),
       ),

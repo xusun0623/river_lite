@@ -26,7 +26,7 @@ class _ExploreState extends State<Explore> {
       ),
       backgroundColor: os_white,
       body: ListView(
-        physics: BouncingScrollPhysics(),
+        // physics: BouncingScrollPhysics(),
         children: [
           ExploreHead(),
           BottomBtns(),

@@ -106,7 +106,7 @@ class _SquareHomeState extends State<SquareHome> {
           _getData();
         },
         child: ListView(
-          physics: BouncingScrollPhysics(),
+          // physics: BouncingScrollPhysics(),
           children: _buildCont(),
         ),
       ),

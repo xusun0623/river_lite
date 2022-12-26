@@ -155,7 +155,7 @@ class _PersonDetailState extends State<PersonDetail> {
                 ),
                 child: ListView(
                   shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
+                  // physics: BouncingScrollPhysics(),
                   children: _buildList(),
                 ),
               ),

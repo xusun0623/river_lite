@@ -333,7 +333,7 @@ class _SearchState extends State<Search> {
                 : os_back,
             child: ListView(
               controller: _scrollController,
-              physics: BouncingScrollPhysics(),
+              // physics: BouncingScrollPhysics(),
               children: _buildTopic(),
             ),
           ),
@@ -950,7 +950,8 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                   Container(
                     width: MediaQuery.of(context).size.width - 60,
                     child: Text(
-                      (widget.data!["summary"] ?? widget.data!["subject"]) ?? "",
+                      (widget.data!["summary"] ?? widget.data!["subject"]) ??
+                          "",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 15,

@@ -217,7 +217,7 @@ class _TopicEditState extends State<TopicEdit> {
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: ListView(
-        physics: BouncingScrollPhysics(),
+        // physics: BouncingScrollPhysics(),
         children: requesting
             ? [BottomLoading()]
             : (denyEdit

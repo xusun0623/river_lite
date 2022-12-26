@@ -132,7 +132,7 @@ class _UserListState extends State<UserList> {
           },
           child: ListView(
             controller: _controller,
-            physics: BouncingScrollPhysics(),
+            // physics: BouncingScrollPhysics(),
             children: _buildCont(),
           ),
         ),

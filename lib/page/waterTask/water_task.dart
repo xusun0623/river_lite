@@ -399,7 +399,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               },
               child: ListView(
                 children: _buildCont(0),
-                physics: BouncingScrollPhysics(),
+                // physics: BouncingScrollPhysics(),
               ),
             ),
             RefreshIndicator(
@@ -409,7 +409,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               },
               child: ListView(
                 children: _buildCont(1),
-                physics: BouncingScrollPhysics(),
+                // physics: BouncingScrollPhysics(),
               ),
             ),
             RefreshIndicator(
@@ -419,7 +419,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               },
               child: ListView(
                 children: _buildCont(2),
-                physics: BouncingScrollPhysics(),
+                // physics: BouncingScrollPhysics(),
               ),
             ),
             RefreshIndicator(
@@ -429,7 +429,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               },
               child: ListView(
                 children: _buildCont(3),
-                physics: BouncingScrollPhysics(),
+                // physics: BouncingScrollPhysics(),
               ),
             ),
           ],
@@ -713,10 +713,10 @@ class _Card1State extends State<Card1> {
             : os_white,
         tap: () async {
           showToast(context: context, type: XSToast.loading, txt: "加载中…");
-          String html =
-              (await XHttp().pureHttpWithCookie(url: widget.data!["apply_link"]))
-                  .data
-                  .toString();
+          String html = (await XHttp()
+                  .pureHttpWithCookie(url: widget.data!["apply_link"]))
+              .data
+              .toString();
           hideToast();
           if (widget.refresh != null && !html.contains("另一个任务")) {
             widget.refresh!();

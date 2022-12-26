@@ -182,7 +182,7 @@ class _LoginState extends State<Login> {
                   itemBuilder: (BuildContext context, int index) {
                     return [
                       ListView(
-                        physics: BouncingScrollPhysics(),
+                        // physics: BouncingScrollPhysics(),
                         children: [
                           LoginHead(),
                           Container(height: 200),
@@ -215,7 +215,7 @@ class _LoginState extends State<Login> {
                         ],
                       ),
                       ListView(
-                        physics: BouncingScrollPhysics(),
+                        // physics: BouncingScrollPhysics(),
                         children: [
                           ResponsiveWidget(
                             child: LoginInput(

@@ -368,7 +368,7 @@ class _CollectionDetailState extends State<CollectionDetail> {
           show: showBackToTop,
           bottom: 100,
           child: ListView(
-            physics: BouncingScrollPhysics(),
+            // physics: BouncingScrollPhysics(),
             controller: _scrollController,
             children: [
               ResponsiveWidget(child: Collection(data: widget.data)),

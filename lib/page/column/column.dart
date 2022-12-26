@@ -427,7 +427,7 @@ class _TopicColumnState extends State<TopicColumn> {
                     },
                     child: ListView(
                       controller: _controller,
-                      physics: BouncingScrollPhysics(),
+                      // physics: BouncingScrollPhysics(),
                       children: _buildCont(),
                     ),
                   ),
@@ -458,7 +458,7 @@ class _TopSectionState extends State<TopSection> {
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(15)),
         child: Swiper(
-          physics: BouncingScrollPhysics(),
+          // physics: BouncingScrollPhysics(),
           loop: false,
           autoplay: true,
           autoplayDelay: 3000,

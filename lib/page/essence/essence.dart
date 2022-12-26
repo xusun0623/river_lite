@@ -158,7 +158,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
       bottom: 50,
       animation: true,
       child: ListView(
-        physics: BouncingScrollPhysics(),
+        // physics: BouncingScrollPhysics(),
         controller: _scrollController,
         children: t,
       ),

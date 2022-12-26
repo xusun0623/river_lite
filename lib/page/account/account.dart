@@ -223,7 +223,8 @@ class _AccountState extends State<Account> {
           ),
           onTap: () {
             if (i == logined) return;
-            _switchLogin(accountData![i]["name"], accountData![i]["password"], i);
+            _switchLogin(
+                accountData![i]["name"], accountData![i]["password"], i);
           },
           trailing: Container(
             width: 100,
@@ -234,8 +235,8 @@ class _AccountState extends State<Account> {
                 IconButton(
                   onPressed: () {
                     if (i == logined) return;
-                    _switchLogin(
-                        accountData![i]["name"], accountData![i]["password"], i);
+                    _switchLogin(accountData![i]["name"],
+                        accountData![i]["password"], i);
                   },
                   icon: Icon(
                     logined == i
@@ -341,7 +342,7 @@ class _AccountState extends State<Account> {
           ),
         ),
         body: ListView(
-          physics: BouncingScrollPhysics(),
+          // // physics: BouncingScrollPhysics(),
           children: _buildWidget(),
         ),
       ),

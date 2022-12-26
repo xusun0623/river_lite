@@ -278,7 +278,9 @@ class _TopicDetailState extends State<TopicDetail> {
 
   bool _isBlack() {
     bool flag = false;
-    Provider.of<BlackProvider>(context, listen: false).black!.forEach((element) {
+    Provider.of<BlackProvider>(context, listen: false)
+        .black!
+        .forEach((element) {
       if (data["topic"]["title"].toString().contains(element) ||
           data["topic"]["user_nick_name"].toString().contains(element)) {
         flag = true;
@@ -928,7 +930,7 @@ class _TopicDetailState extends State<TopicDetail> {
                               animation: true,
                               controller: _scrollController,
                               child: ListView(
-                                physics: BouncingScrollPhysics(),
+                                // physics: BouncingScrollPhysics(),
                                 controller: _scrollController,
                                 children: [
                                   SingleChildScrollView(

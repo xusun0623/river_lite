@@ -281,7 +281,7 @@ class _CollectionTabState extends State<CollectionTab>
           animation: true,
           bottom: 50,
           child: ListView(
-            physics: BouncingScrollPhysics(),
+            // physics: BouncingScrollPhysics(),
             controller: _scrollController,
             children: _buildComponents(),
           ),

@@ -257,7 +257,7 @@ class _MsgThreeState extends State<MsgThree> {
                       animation: true,
                       child: ListView(
                         controller: _scrollController,
-                        physics: BouncingScrollPhysics(),
+                        // physics: BouncingScrollPhysics(),
                         children: _buildCont(),
                       ),
                     ),
@@ -458,7 +458,9 @@ class _ForumCardState extends State<ForumCard> {
                                   (isDesktop() ? (MinusSpace(context)) : 0) -
                                   90,
                               child: Text(
-                                widget.forum!["topic_subject"].toString().trim(),
+                                widget.forum!["topic_subject"]
+                                    .toString()
+                                    .trim(),
                                 style: TextStyle(
                                   color: Color(0xFFA0A0A0),
                                   fontSize: 14,

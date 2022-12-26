@@ -368,18 +368,20 @@ class _TopicState extends State<Topic> {
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(2.5),
-                child: Hero(
-                  tag: url,
-                  child: CachedNetworkImage(
-                    imageUrl: url,
-                    maxHeightDiskCache: 800,
-                    maxWidthDiskCache: 800,
-                    memCacheWidth: 800,
-                    memCacheHeight: 800,
-                    width: img_size,
-                    height: img_size,
-                    filterQuality: FilterQuality.low,
-                    fit: BoxFit.cover,
+                child: CachedNetworkImage(
+                  imageUrl: url,
+                  maxHeightDiskCache: 800,
+                  maxWidthDiskCache: 800,
+                  memCacheWidth: 800,
+                  memCacheHeight: 800,
+                  width: img_size,
+                  height: img_size,
+                  filterQuality: FilterQuality.low,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_light_dark_card
+                        : os_grey,
                   ),
                 ),
               ),
@@ -392,8 +394,12 @@ class _TopicState extends State<Topic> {
         return t;
       }
 
-      return Row(
-        children: _getImg(widget.data!["imageList"]),
+      return Container(
+        height: img_size,
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          children: _getImg(widget.data!["imageList"]),
+        ),
       );
     } else {
       return Container();
@@ -533,7 +539,14 @@ class _TopicState extends State<Topic> {
                   ),
             Container(width: 16),
             Padding(padding: EdgeInsets.all(1.5)),
-            _getTopicCardImg(),
+            Container(
+              height: widget.data != null &&
+                      widget.data!["imageList"] != null &&
+                      widget.data!["imageList"].length != 0
+                  ? (MediaQuery.of(context).size.width - 55) / 3 - 3.3
+                  : 0,
+              child: _getTopicCardImg(),
+            ),
             Padding(padding: EdgeInsets.all(1.5)),
             // 投票贴的Tag
             (widget.data!["vote"] ?? 0) == 0 ? Container() : VoteTag(),

@@ -230,7 +230,7 @@ class _MeFuncState extends State<MeFunc> {
             },
             child: ListView(
               controller: _scrollController,
-              physics: BouncingScrollPhysics(),
+              // physics: BouncingScrollPhysics(),
               children: _buildCont(),
             ),
           ),

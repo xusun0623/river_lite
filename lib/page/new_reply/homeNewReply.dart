@@ -152,7 +152,7 @@ class _HomeNewReplyState extends State<HomeNewReply>
         _indicatorKey.currentState!.show();
       },
       child: ListView(
-        physics: BouncingScrollPhysics(),
+        // physics: BouncingScrollPhysics(),
         controller: _scrollController,
         children: t,
       ),

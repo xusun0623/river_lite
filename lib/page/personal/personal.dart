@@ -382,7 +382,7 @@ class _PersonCenterState extends State<PersonCenter> {
                             return await _getInfo();
                           },
                           child: ListView(
-                            physics: BouncingScrollPhysics(),
+                            // physics: BouncingScrollPhysics(),
                             controller: _controller,
                             children: _buildCont(),
                           ),
