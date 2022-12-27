@@ -16,10 +16,11 @@ class ServerConfig {
   String url = base_url + "mobcent/app/web/index.php";
 }
 
-bool isLog = false; //控制是否打印网络输出日志
+bool isLog = true; //控制是否打印网络输出日志
 
 class XHttp {
-  pureHttpWithCookie({required String url, Map? param, bool hadCookie = false}) async {
+  pureHttpWithCookie(
+      {required String url, Map? param, bool hadCookie = false}) async {
     var dio = Dio();
     String cookie = "";
     if (hadCookie) {

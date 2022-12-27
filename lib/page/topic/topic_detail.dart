@@ -249,7 +249,7 @@ class _TopicDetailState extends State<TopicDetail> {
     });
   }
 
-  void _getLikeCount() async {
+  _getLikeCount() async {
     var document = parse((await XHttp().pureHttpWithCookie(
       url: base_url + "forum.php?mod=viewthread&tid=${widget.topicID}",
     ))
@@ -327,13 +327,6 @@ class _TopicDetailState extends State<TopicDetail> {
         data = null;
       }
     } catch (e) {}
-    if ((data == null || data["topic"] == null) && !isDispose) {
-      // xsLanuch(
-      //   url:
-      //       "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${widget.topicID}",
-      //   isExtern: false,
-      // );
-    }
     setState(() {});
     return;
   }
@@ -417,7 +410,7 @@ class _TopicDetailState extends State<TopicDetail> {
     });
   }
 
-  _buildContBody() {
+  Widget _buildContBody() {
     //返回帖子的正文内容
     List<Widget> tmp = [];
     bool isAlter = false; //是否转发的标志
@@ -576,7 +569,7 @@ class _TopicDetailState extends State<TopicDetail> {
     return tmp;
   }
 
-  _getEssenceCont() {
+  Widget _getEssenceCont() {
     //获取精华内容提示的Banner
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -607,7 +600,7 @@ class _TopicDetailState extends State<TopicDetail> {
     );
   }
 
-  _getSecondBuy() {
+  Widget _getSecondBuy() {
     //获取二手交易提示的Banner
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -872,7 +865,7 @@ class _TopicDetailState extends State<TopicDetail> {
                 : Loading(
                     showError: load_done,
                     msg: "河畔Lite客户端没有权限访问或者帖子被删除，可以尝试网页端是否能访问",
-                    tapTxt: "访问网页版>",
+                    tapTxt: "访问网页版 >",
                     cancel: () {
                       // print("11111");
                       setState(() {

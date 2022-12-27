@@ -60,22 +60,16 @@ class _DetailContState extends State<DetailCont> {
     switch (widget.data["type"]) {
       case 0: //纯文字
         return WidgetTxt(context, widget);
-        break;
       case 1: //图片
         return WidgetImage(context, widget);
-        break;
       case 2: //未知
         return Container();
-        break;
       case 3: //未知
         return Container();
-        break;
       case 4: //网页链接
         return WidgetBilibiliPlayer();
-        break;
       case 5: //附件下载
         return WidgetLinkUrl(); //图片链接就不用下载了
-        break;
       default:
         return Container();
     }
