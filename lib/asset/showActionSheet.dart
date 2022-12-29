@@ -91,7 +91,9 @@ showAction({
           margin: EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: os_middle_grey,
+            color: Provider.of<ColorProvider>(context, listen: false).isDark
+                ? Color(0x22ffffff)
+                : os_middle_grey,
           ),
         ),
       ),

@@ -222,8 +222,8 @@ class _TopicReplyState extends State<TopicReply> {
     showAction(
       context: context,
       options: [
-        "【不感兴趣】屏蔽此贴",
-        "【不感兴趣】屏蔽此人",
+        "屏蔽此贴",
+        "屏蔽此人",
         "收藏",
         "复制帖子链接",
         "举报反馈",

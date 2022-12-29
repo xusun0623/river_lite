@@ -263,14 +263,19 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
           widget.block();
         }
         if (res == 4) {
-          Navigator.pop(context);
-          Navigator.pushNamed(context, "/topic_edit", arguments: {
-            "tid": widget.data["topic"]["topic_id"],
-            "pid": int.parse(widget.data["topic"]["extraPanel"][0]["action"]
-                .toString()
-                .split("&pid=")[1]
-                .split("&")[0]),
-          });
+          if (widget.data["topic"]["user_id"] == await getUid()) {
+            Navigator.pop(context);
+            Navigator.pushNamed(context, "/topic_edit", arguments: {
+              "tid": widget.data["topic"]["topic_id"],
+              "pid": int.parse(widget.data["topic"]["extraPanel"][0]["action"]
+                  .toString()
+                  .split("&pid=")[1]
+                  .split("&")[0]),
+            });
+          } else {
+            Navigator.pop(context);
+            _toWaterColumn();
+          }
         }
         if (res == 5) {
           Navigator.pop(context);
