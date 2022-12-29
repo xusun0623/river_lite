@@ -337,11 +337,11 @@ class _TopicState extends State<Topic> {
   //卡片图案
   Widget _getTopicCardImg() {
     double img_size = (MediaQuery.of(context).size.width - 55) / 3 - 3.3;
+    img_size = img_size > 150 ? 150 : img_size;
     // print(widget.data["imageList"]);
     if (widget.data != null &&
         widget.data["imageList"] != null &&
-        widget.data["imageList"].length != 0 &&
-        !isDesktop()) {
+        widget.data["imageList"].length != 0) {
       if (widget.data["imageList"].length > 3)
         widget.data["imageList"] = widget.data["imageList"].sublist(0, 3);
       List<Widget> _getImg(List a) {
@@ -559,7 +559,9 @@ class _TopicState extends State<Topic> {
               height: widget.data != null &&
                       widget.data["imageList"] != null &&
                       widget.data["imageList"].length != 0
-                  ? (MediaQuery.of(context).size.width - 55) / 3 - 3.3
+                  ? ((MediaQuery.of(context).size.width - 55) / 3 - 3.3 > 150
+                      ? 150
+                      : (MediaQuery.of(context).size.width - 55) / 3 - 3.3)
                   : 0,
               child: _getTopicCardImg(),
             ),

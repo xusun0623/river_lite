@@ -205,7 +205,6 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
               title: TabBar(
                 controller: _tabController,
                 indicatorSize: TabBarIndicatorSize.tab,
-                labelColor: os_white,
                 onTap: ((value) async {
                   showToast(context: context, type: XSToast.loading);
                   setState(() {
@@ -221,6 +220,9 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
                 ),
                 isScrollable: true,
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
+                dividerColor: Colors.transparent,
+                labelColor: os_white,
+                unselectedLabelColor: Color(0x88ffffff),
                 tabs: [
                   Tab(text: "镜头下的成电"),
                   Tab(text: "全部"),

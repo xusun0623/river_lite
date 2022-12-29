@@ -223,7 +223,9 @@ class _PostNewState extends State<PostNew> {
         child: Text(
           child.length == 0 && child_load_done ? "你不可以在此板块发布信息" : "选择子板块:",
           style: TextStyle(
-            color: os_dark_back,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_dark_white
+                : os_dark_back,
             // fontWeight: FontWeight.bold,
           ),
         ),
