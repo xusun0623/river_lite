@@ -33,9 +33,9 @@ Color boy_color = os_deep_blue;
 Color girl_color = Color(0xFFFF6B3D);
 
 class PersonCenter extends StatefulWidget {
-  Map? param;
+  Map param;
   PersonCenter({
-    Key? key,
+    Key key,
     this.param,
   }) : super(key: key);
 
@@ -45,11 +45,11 @@ class PersonCenter extends StatefulWidget {
 
 class _PersonCenterState extends State<PersonCenter> {
   int index = 0;
-  List? data = [];
-  Map? userInfo;
+  List data = [];
+  Map userInfo;
 
-  int? sendNum = 0;
-  int? replyNum = 0;
+  int sendNum = 0;
+  int replyNum = 0;
 
   bool loading = false;
   bool load_done = false;
@@ -61,10 +61,8 @@ class _PersonCenterState extends State<PersonCenter> {
 
   bool _isBlack() {
     bool flag = false;
-    Provider.of<BlackProvider>(context, listen: false)
-        .black!
-        .forEach((element) {
-      if (userInfo!["name"].toString().contains(element)) {
+    Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
+      if (userInfo["name"].toString().contains(element)) {
         flag = true;
       }
     });
@@ -73,7 +71,7 @@ class _PersonCenterState extends State<PersonCenter> {
 
   _getInfo() async {
     var data = await Api().user_userinfo({
-      "userId": widget.param!["uid"],
+      "userId": widget.param["uid"],
     });
     if (data.toString().contains("您指定的用户空间不存在")) {
       setState(() {
@@ -92,7 +90,7 @@ class _PersonCenterState extends State<PersonCenter> {
     loading = true;
     var tmp = await Api().user_topiclist({
       "type": ["topic", "reply", "favorite"][index],
-      "uid": widget.param!["uid"],
+      "uid": widget.param["uid"],
       "page": 1,
       "pageSize": 10,
     });
@@ -101,7 +99,7 @@ class _PersonCenterState extends State<PersonCenter> {
         tmp["list"] != null &&
         tmp["list"].length != 0) {
       data = tmp["list"];
-      load_done = data!.length % 10 != 0;
+      load_done = data.length % 10 != 0;
       sendNum = index == 0 ? tmp["total_num"] : sendNum;
       replyNum = index == 1 ? tmp["total_num"] : replyNum;
       setState(() {});
@@ -117,13 +115,13 @@ class _PersonCenterState extends State<PersonCenter> {
     loading = true;
     var tmp = await Api().user_topiclist({
       "type": ["topic", "reply", "favorite"][index],
-      "uid": widget.param!["uid"],
-      "page": (data!.length / 10).ceil() + 1,
+      "uid": widget.param["uid"],
+      "page": (data.length / 10).ceil() + 1,
       "pageSize": 10,
     });
     if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
-      data!.addAll(tmp["list"]);
-      load_done = data!.length % 10 != 0;
+      data.addAll(tmp["list"]);
+      load_done = data.length % 10 != 0;
       setState(() {});
     }
     loading = false;
@@ -133,16 +131,16 @@ class _PersonCenterState extends State<PersonCenter> {
     List<Widget> tmp = [
       ResponsiveWidget(
         child: PersonCard(
-          isMe: widget.param!["isMe"],
+          isMe: widget.param["isMe"],
           data: userInfo,
         ),
       ),
       ResponsiveWidget(
         child: PersonIndex(
           index: index,
-          sendNum: userInfo!["topic_num"],
-          replyNum: userInfo!["reply_posts_num"],
-          isMe: widget.param!["isMe"],
+          sendNum: userInfo["topic_num"],
+          replyNum: userInfo["reply_posts_num"],
+          isMe: widget.param["isMe"],
           tapIndex: (idx) {
             if (idx == index) return;
             setState(() {
@@ -155,10 +153,10 @@ class _PersonCenterState extends State<PersonCenter> {
         ),
       ),
     ];
-    if (data!.length == 0 && load_done) {
+    if (data.length == 0 && load_done) {
       tmp.add(Empty());
     }
-    data!.forEach((element) {
+    data.forEach((element) {
       tmp.add(ResponsiveWidget(
         child: Topic(
           data: element,
@@ -218,7 +216,7 @@ class _PersonCenterState extends State<PersonCenter> {
               Clipboard.setData(
                 ClipboardData(
                   text:
-                      "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param!["uid"]}",
+                      "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
                 ),
               );
               showToast(
@@ -231,13 +229,12 @@ class _PersonCenterState extends State<PersonCenter> {
           title: "展示二维码",
           onPressed: () {
             Navigator.pop(context);
-            showPop(context,
-                widgets: [
-                  QrCode(
-                    url:
-                        "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param!["uid"]}",
-                  )
-                ].toList());
+            showPop(context, [
+              QrCode(
+                url:
+                    "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
+              )
+            ]);
           },
         ),
       ],
@@ -257,7 +254,7 @@ class _PersonCenterState extends State<PersonCenter> {
               ? os_dark_white
               : os_black,
           title: Text(
-            showTopTitle ? userInfo!["name"] : "",
+            showTopTitle ? userInfo["name"] : "",
             style: TextStyle(
                 fontSize: 16,
                 color: Provider.of<ColorProvider>(context).isDark
@@ -279,7 +276,7 @@ class _PersonCenterState extends State<PersonCenter> {
               ? []
               : _isBlack()
                   ? []
-                  : widget.param!["isMe"]
+                  : widget.param["isMe"]
                       ? [
                           IconButton(
                             onPressed: () async {
@@ -295,19 +292,19 @@ class _PersonCenterState extends State<PersonCenter> {
                           IconButton(
                             onPressed: () async {
                               await Api().user_useradmin({
-                                "type": userInfo!["is_follow"] == 0
+                                "type": userInfo["is_follow"] == 0
                                     ? "follow"
                                     : "unfollow",
-                                "uid": widget.param!["uid"],
+                                "uid": widget.param["uid"],
                               });
                               setState(() {
-                                userInfo!["is_follow"] =
-                                    1 - userInfo!["is_follow"];
+                                userInfo["is_follow"] =
+                                    1 - userInfo["is_follow"];
                               });
                             },
                             icon: Icon(
                               Icons.person_add_rounded,
-                              color: userInfo!["is_follow"] == 0
+                              color: userInfo["is_follow"] == 0
                                   ? Color(0xFFAAAAAA)
                                   : os_color,
                             ),
@@ -316,8 +313,8 @@ class _PersonCenterState extends State<PersonCenter> {
                             onPressed: () {
                               Navigator.pushNamed(context, "/msg_detail",
                                   arguments: {
-                                    "uid": widget.param!["uid"],
-                                    "name": userInfo!["name"],
+                                    "uid": widget.param["uid"],
+                                    "name": userInfo["name"],
                                   });
                             },
                             icon: Icon(
@@ -382,7 +379,7 @@ class _PersonCenterState extends State<PersonCenter> {
                             return await _getInfo();
                           },
                           child: ListView(
-                            // physics: BouncingScrollPhysics(),
+                            physics: BouncingScrollPhysics(),
                             controller: _controller,
                             children: _buildCont(),
                           ),
@@ -394,12 +391,12 @@ class _PersonCenterState extends State<PersonCenter> {
 }
 
 class ActionButton extends StatefulWidget {
-  Function? tap;
-  String? txt;
-  Color? color;
-  Color? backgroundColor;
+  Function tap;
+  String txt;
+  Color color;
+  Color backgroundColor;
   ActionButton({
-    Key? key,
+    Key key,
     this.tap,
     this.txt,
     this.color,
@@ -417,7 +414,7 @@ class _ActionButtonState extends State<ActionButton> {
       padding: EdgeInsets.symmetric(vertical: 10),
       child: myInkWell(
         tap: () {
-          if (widget.tap != null) widget.tap!();
+          if (widget.tap != null) widget.tap();
         },
         color: widget.backgroundColor ?? Color(0xFFEEEEEE),
         widget: Container(
@@ -438,13 +435,13 @@ class _ActionButtonState extends State<ActionButton> {
 
 class PersonIndex extends StatefulWidget {
   int index;
-  bool? isMe;
-  Function? tapIndex;
-  int? sendNum;
-  int? replyNum;
+  bool isMe;
+  Function tapIndex;
+  int sendNum;
+  int replyNum;
 
   PersonIndex({
-    Key? key,
+    Key key,
     this.index = 0,
     this.tapIndex,
     this.isMe,
@@ -467,7 +464,7 @@ class _PersonIndexState extends State<PersonIndex> {
         children: [
           PersonIndexTab(
             tap: (idx) {
-              widget.tapIndex!(0);
+              widget.tapIndex(0);
             },
             countNum: widget.sendNum,
             isMe: widget.isMe,
@@ -476,7 +473,7 @@ class _PersonIndexState extends State<PersonIndex> {
           ),
           PersonIndexTab(
             tap: (idx) {
-              widget.tapIndex!(1);
+              widget.tapIndex(1);
             },
             countNum: widget.replyNum,
             isMe: widget.isMe,
@@ -485,7 +482,7 @@ class _PersonIndexState extends State<PersonIndex> {
           ),
           PersonIndexTab(
             tap: (idx) {
-              widget.tapIndex!(2);
+              widget.tapIndex(2);
             },
             countNum: widget.replyNum,
             isMe: widget.isMe,
@@ -499,14 +496,14 @@ class _PersonIndexState extends State<PersonIndex> {
 }
 
 class PersonIndexTab extends StatefulWidget {
-  Function? tap;
-  int? index;
-  int? countNum;
-  bool? select;
-  bool? isMe;
+  Function tap;
+  int index;
+  int countNum;
+  bool select;
+  bool isMe;
 
   PersonIndexTab({
-    Key? key,
+    Key key,
     this.tap,
     this.index,
     this.select,
@@ -525,7 +522,7 @@ class _PersonIndexTabState extends State<PersonIndexTab> {
       margin: EdgeInsets.symmetric(vertical: 10),
       child: myInkWell(
         tap: () {
-          widget.tap!(widget.index);
+          widget.tap(widget.index);
         },
         color: Colors.transparent,
         radius: 25,
@@ -538,12 +535,12 @@ class _PersonIndexTabState extends State<PersonIndexTab> {
           child: Column(
             children: [
               Text(
-                ["发表", "回复", "收藏"][widget.index!] +
+                ["发表", "回复", "收藏"][widget.index] +
                     (widget.countNum == 0 || widget.index == 2
                         ? ""
                         : "(${widget.countNum})"),
                 style: TextStyle(
-                  color: widget.select!
+                  color: widget.select
                       ? (Provider.of<ColorProvider>(context).isDark
                           ? os_dark_white
                           : os_black)
@@ -557,7 +554,7 @@ class _PersonIndexTabState extends State<PersonIndexTab> {
                 height: 2,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(100)),
-                  color: widget.select! ? os_deep_blue : Colors.transparent,
+                  color: widget.select ? os_deep_blue : Colors.transparent,
                 ),
               ),
             ],
@@ -569,10 +566,10 @@ class _PersonIndexTabState extends State<PersonIndexTab> {
 }
 
 class PersonCard extends StatefulWidget {
-  Map? data;
-  bool? isMe;
+  Map data;
+  bool isMe;
   PersonCard({
-    Key? key,
+    Key key,
     this.data,
     this.isMe,
   }) : super(key: key);
@@ -607,122 +604,119 @@ class _PersonCardState extends State<PersonCard> {
   }
 
   _editSign() {
-    showPop(context,
-        widgets: [
-          Container(height: 30),
-          Text(
-            "请输入新的签名",
+    showPop(context, [
+      Container(height: 30),
+      Text(
+        "请输入新的签名",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+        ),
+      ),
+      Container(height: 10),
+      Container(
+        height: 60,
+        padding: EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_white_opa
+              : os_grey,
+        ),
+        child: Center(
+          child: TextField(
+            controller: _sign_controller,
+            cursorColor: os_deep_blue,
             style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Provider.of<ColorProvider>(context).isDark
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
             ),
-          ),
-          Container(height: 10),
-          Container(
-            height: 60,
-            padding: EdgeInsets.symmetric(
-              horizontal: 15,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Provider.of<ColorProvider>(context, listen: false).isDark
-                  ? os_white_opa
-                  : os_grey,
-            ),
-            child: Center(
-              child: TextField(
-                controller: _sign_controller,
-                cursorColor: os_deep_blue,
-                style: TextStyle(
+            decoration: InputDecoration(
+                hintText: "请输入",
+                border: InputBorder.none,
+                hintStyle: TextStyle(
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_dark_white
-                          : os_black,
-                ),
-                decoration: InputDecoration(
-                    hintText: "请输入",
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(
-                      color: Provider.of<ColorProvider>(context, listen: false)
-                              .isDark
                           ? os_dark_white
                           : os_deep_grey,
-                    )),
+                )),
+          ),
+        ),
+      ),
+      Container(height: 10),
+      Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            child: myInkWell(
+              tap: () {
+                Navigator.pop(context);
+              },
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_white_opa
+                  : Color(0x16004DFF),
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Text(
+                    "取消",
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : os_deep_blue,
+                    ),
+                  ),
+                ),
               ),
+              radius: 12.5,
             ),
           ),
-          Container(height: 10),
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 10),
-                child: myInkWell(
-                  tap: () {
-                    Navigator.pop(context);
-                  },
-                  color:
-                      Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_white_opa
-                          : Color(0x16004DFF),
-                  widget: Container(
-                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                    height: 40,
-                    child: Center(
-                      child: Text(
-                        "取消",
+          Container(
+            child: myInkWell(
+              tap: () async {
+                String tmp = _sign_controller.text;
+                await Api().user_updateuserinfo({
+                  "type": "info",
+                  "gender": widget.data["gender"],
+                  "sign": tmp,
+                });
+                widget.data["sign"] = tmp;
+                setState(() {});
+                Navigator.pop(context);
+              },
+              color: os_deep_blue,
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.done, color: os_white, size: 18),
+                      Container(width: 5),
+                      Text(
+                        "完成",
                         style: TextStyle(
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_dark_white
-                              : os_deep_blue,
+                          color: os_white,
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  radius: 12.5,
                 ),
               ),
-              Container(
-                child: myInkWell(
-                  tap: () async {
-                    String tmp = _sign_controller.text;
-                    await Api().user_updateuserinfo({
-                      "type": "info",
-                      "gender": widget.data!["gender"],
-                      "sign": tmp,
-                    });
-                    widget.data!["sign"] = tmp;
-                    setState(() {});
-                    Navigator.pop(context);
-                  },
-                  color: os_deep_blue,
-                  widget: Container(
-                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                    height: 40,
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.done, color: os_white, size: 18),
-                          Container(width: 5),
-                          Text(
-                            "完成",
-                            style: TextStyle(
-                              color: os_white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  radius: 12.5,
-                ),
-              ),
-            ],
+              radius: 12.5,
+            ),
           ),
-        ].toList());
+        ],
+      ),
+    ]);
   }
 
   @override
@@ -742,7 +736,7 @@ class _PersonCardState extends State<PersonCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     PersonName(
-                      name: widget.data!["name"],
+                      name: widget.data["name"],
                       isMe: widget.isMe,
                     ),
                     Container(height: 5),
@@ -755,39 +749,39 @@ class _PersonCardState extends State<PersonCard> {
                         ),
                         Text(
                           "水滴 " +
-                              widget.data!["body"]["creditShowList"][1]["data"]
+                              widget.data["body"]["creditShowList"][1]["data"]
                                   .toString(),
                           style: TextStyle(color: os_deep_grey),
                         ),
                       ],
                     ),
-                    widget.isMe!
+                    widget.isMe
                         ? Sign(
                             data: widget.data,
                             tap: () {
-                              _sign_controller.text = widget.data!["sign"];
+                              _sign_controller.text = widget.data["sign"];
                               _editSign();
                             },
                           )
-                        : (widget.data!["sign"].toString().trim() == ""
+                        : (widget.data["sign"].toString().trim() == ""
                             ? Container()
                             : Sign(data: widget.data)),
                     Container(height: 10),
                     PersonScore(
-                      score: widget.data!["score"],
-                      gender: widget.data!["gender"] == 0
+                      score: widget.data["score"],
+                      gender: widget.data["gender"] == 0
                           ? 1
-                          : widget.data!["gender"],
-                      water: widget.data!["body"]["creditShowList"][1]["data"],
+                          : widget.data["gender"],
+                      water: widget.data["body"]["creditShowList"][1]["data"],
                     ),
                     PersonRow(
-                      uid: int.parse(widget.data!["icon"]
+                      uid: int.parse(widget.data["icon"]
                           .toString()
                           .split("uid=")[1]
                           .split("&size")[0]),
-                      follow: widget.data!["follow_num"],
-                      friend: widget.data!["friend_num"],
-                      score: widget.data!["score"],
+                      follow: widget.data["follow_num"],
+                      friend: widget.data["friend_num"],
+                      score: widget.data["score"],
                     ),
                   ],
                 ),
@@ -798,7 +792,7 @@ class _PersonCardState extends State<PersonCard> {
             right: 20,
             child: GestureDetector(
               onTap: () {
-                if (widget.isMe!) {
+                if (widget.isMe) {
                   showActionSheet(
                     context: context,
                     topActionItem: TopActionItem(title: "请选择你的性别"),
@@ -814,10 +808,10 @@ class _PersonCardState extends State<PersonCard> {
                           await Api().user_updateuserinfo({
                             "type": "info",
                             "gender": 1,
-                            "sign": widget.data!["sign"],
+                            "sign": widget.data["sign"],
                           });
                           hideToast();
-                          widget.data!["gender"] = 1;
+                          widget.data["gender"] = 1;
                           setState(() {});
                           Navigator.pop(context);
                         },
@@ -833,10 +827,10 @@ class _PersonCardState extends State<PersonCard> {
                           await Api().user_updateuserinfo({
                             "type": "info",
                             "gender": 2,
-                            "sign": widget.data!["sign"],
+                            "sign": widget.data["sign"],
                           });
                           hideToast();
-                          widget.data!["gender"] = 2;
+                          widget.data["gender"] = 2;
                           setState(() {});
                           Navigator.pop(context);
                         },
@@ -850,7 +844,7 @@ class _PersonCardState extends State<PersonCard> {
                 opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
                 child: os_svg(
                   path:
-                      "lib/img/person/${widget.data!["gender"] == 0 ? 1 : widget.data!["gender"]}.svg",
+                      "lib/img/person/${widget.data["gender"] == 0 ? 1 : widget.data["gender"]}.svg",
                   width: 143,
                   height: 166,
                 ),
@@ -862,7 +856,7 @@ class _PersonCardState extends State<PersonCard> {
             top: 20,
             child: GestureDetector(
               onTap: () {
-                if (widget.isMe!) {
+                if (widget.isMe) {
                   showActionSheet(
                     context: context,
                     bottomActionItem: BottomActionItem(title: "取消"),
@@ -875,7 +869,7 @@ class _PersonCardState extends State<PersonCard> {
                             context,
                             MaterialPageRoute(
                               builder: (_) => PhotoPreview(
-                                galleryItems: [widget.data!["icon"]],
+                                galleryItems: [widget.data["icon"]],
                                 defaultImage: 0,
                               ),
                             ),
@@ -896,7 +890,7 @@ class _PersonCardState extends State<PersonCard> {
                     context,
                     MaterialPageRoute(
                       builder: (_) => PhotoPreview(
-                        galleryItems: [widget.data!["icon"]],
+                        galleryItems: [widget.data["icon"]],
                         defaultImage: 0,
                       ),
                     ),
@@ -909,7 +903,7 @@ class _PersonCardState extends State<PersonCard> {
                   onLongPress: () {
                     XSVibrate();
                     CachedNetworkImage.evictFromCache("url");
-                    int uid = int.parse(widget.data!["icon"]
+                    int uid = int.parse(widget.data["icon"]
                         .toString()
                         .split("uid=")[1]
                         .split("&size")[0]);
@@ -927,7 +921,7 @@ class _PersonCardState extends State<PersonCard> {
                         context: context, type: XSToast.success, txt: "清除缓存成功");
                   },
                   child: CachedNetworkImage(
-                    imageUrl: widget.data!["icon"],
+                    imageUrl: widget.data["icon"],
                     width: 66,
                     height: 66,
                     fit: BoxFit.cover,
@@ -950,9 +944,9 @@ class _PersonCardState extends State<PersonCard> {
 
 class Sign extends StatefulWidget {
   var data;
-  Function? tap;
+  Function tap;
   Sign({
-    Key? key,
+    Key key,
     this.data,
     this.tap,
   }) : super(key: key);
@@ -968,7 +962,7 @@ class _SignState extends State<Sign> {
       margin: EdgeInsets.only(top: 10),
       child: myInkWell(
         tap: () {
-          if (widget.tap != null) widget.tap!();
+          if (widget.tap != null) widget.tap();
         },
         radius: 10,
         color: Provider.of<ColorProvider>(context).isDark
@@ -1020,12 +1014,12 @@ class _SignState extends State<Sign> {
 }
 
 class PersonRow extends StatefulWidget {
-  int? follow;
-  int? friend;
-  int? score;
-  int? uid;
+  int follow;
+  int friend;
+  int score;
+  int uid;
   PersonRow({
-    Key? key,
+    Key key,
     this.follow,
     this.friend,
     this.score,
@@ -1075,11 +1069,11 @@ class _PersonRowState extends State<PersonRow> {
 }
 
 class PersonColumn extends StatefulWidget {
-  int? index;
-  int? count;
-  int? uid;
+  int index;
+  int count;
+  int uid;
   PersonColumn({
-    Key? key,
+    Key key,
     this.index,
     this.count,
     this.uid,
@@ -1136,7 +1130,7 @@ class _PersonColumnState extends State<PersonColumn> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              ["粉丝", "关注", "积分"][widget.index!],
+              ["粉丝", "关注", "积分"][widget.index],
               style: TextStyle(
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
@@ -1159,7 +1153,7 @@ class _PersonColumnState extends State<PersonColumn> {
                           Color(0xFF0d28f5),
                           Color(0xFFFF5E00),
                           Color(0xFFe93625),
-                        ][_getScoreLevel(widget.count!)],
+                        ][_getScoreLevel(widget.count)],
                       )
                     : Container(),
                 Text(
@@ -1182,12 +1176,12 @@ class _PersonColumnState extends State<PersonColumn> {
 }
 
 class PersonScore extends StatefulWidget {
-  int? score;
-  int? gender;
-  int? water;
+  int score;
+  int gender;
+  int water;
   PersonScore({
-    Key? key,
-    required this.score,
+    Key key,
+    @required this.score,
     this.gender,
     this.water,
   }) : super(key: key);
@@ -1231,7 +1225,7 @@ class PersonScoreState extends State<PersonScore> {
         setState(() {
           now_score_total = map_tmp[i];
         });
-        return score! / map_tmp[i];
+        return score / map_tmp[i];
       }
     }
     return 0.999;
@@ -1292,10 +1286,10 @@ class PersonScoreState extends State<PersonScore> {
 }
 
 class PersonName extends StatefulWidget {
-  String? name;
-  bool? isMe;
+  String name;
+  bool isMe;
   PersonName({
-    Key? key,
+    Key key,
     this.name,
     this.isMe,
   }) : super(key: key);
@@ -1311,7 +1305,7 @@ class _PersonNameState extends State<PersonName> {
       child: Row(
         children: [
           Text(
-            widget.name!,
+            widget.name,
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,

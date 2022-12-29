@@ -4,7 +4,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/outer/card_swiper/swiper.dart';
 
 class ImgBanner extends StatefulWidget {
-  const ImgBanner({Key? key}) : super(key: key);
+  const ImgBanner({Key key}) : super(key: key);
 
   @override
   State<ImgBanner> createState() => _ImgBannerState();
@@ -17,7 +17,7 @@ class _ImgBannerState extends State<ImgBanner> {
       width: MediaQuery.of(context).size.width - os_edge * 2,
       height: (MediaQuery.of(context).size.width - os_edge * 2) / 360 * 144,
       child: Swiper(
-        // // physics: BouncingScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         itemCount: 1,
         autoplay: true,
         duration: 800,

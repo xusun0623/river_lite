@@ -16,10 +16,10 @@ import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayContainer extends StatefulWidget {
-  String? video_url;
-  String? video_name;
+  String video_url;
+  String video_name;
   VideoPlayContainer({
-    Key? key,
+    Key key,
     this.video_url,
     this.video_name,
   }) : super(key: key);
@@ -29,22 +29,22 @@ class VideoPlayContainer extends StatefulWidget {
 }
 
 class _VideoPlayContainerState extends State<VideoPlayContainer> {
-  VideoPlayerController? _controller;
-  ChewieController? _chewieController;
+  VideoPlayerController _controller;
+  ChewieController _chewieController;
   double _progress = 0.0;
   bool is_ok = false;
   bool is_to_fullscreen = false;
-  File? _videoFile;
+  File _videoFile;
 
   _setController() async {
     if (_videoFile != null) {
-      _controller = VideoPlayerController.file(_videoFile!);
-      await _controller!.initialize();
+      _controller = VideoPlayerController.file(_videoFile);
+      await _controller.initialize();
       _chewieController = ChewieController(
-        videoPlayerController: _controller!,
+        videoPlayerController: _controller,
         autoPlay: false,
         allowFullScreen: false,
-        aspectRatio: _controller!.value.aspectRatio,
+        aspectRatio: _controller.value.aspectRatio,
         allowedScreenSleep: false,
         showOptions: false,
       );
@@ -58,24 +58,24 @@ class _VideoPlayContainerState extends State<VideoPlayContainer> {
   _prepareVideo() async {
     var directory = await getTemporaryDirectory();
     String savePath = directory.path;
-    String? saveFileName = widget.video_name;
+    String saveFileName = widget.video_name;
 
     _videoFile = File("$savePath$saveFileName");
 
-    if (_videoFile!.existsSync()) {
+    if (_videoFile.existsSync()) {
       _setController();
     } else {
       String video_arr_txt = await getStorage(key: "video", initData: "[]");
       List video_arr = jsonDecode(video_arr_txt);
-      if (!video_arr.contains(_videoFile!.path)) {
-        video_arr.add(_videoFile!.path);
+      if (!video_arr.contains(_videoFile.path)) {
+        video_arr.add(_videoFile.path);
         await setStorage(key: "video", value: jsonEncode(video_arr));
       }
 
       String cookie = await getWebCookie();
       Dio dio = new Dio();
       await dio.download(
-        widget.video_url!,
+        widget.video_url,
         "$savePath$saveFileName",
         options: Options(
           headers: {"Cookie": cookie},
@@ -110,10 +110,10 @@ class _VideoPlayContainerState extends State<VideoPlayContainer> {
     );
     is_to_fullscreen = true;
     _chewieController = ChewieController(
-      videoPlayerController: _controller!,
+      videoPlayerController: _controller,
       autoPlay: false,
       allowFullScreen: false,
-      aspectRatio: _controller!.value.aspectRatio,
+      aspectRatio: _controller.value.aspectRatio,
       allowedScreenSleep: false,
       showControls: true,
     );
@@ -140,10 +140,10 @@ class _VideoPlayContainerState extends State<VideoPlayContainer> {
         print("false");
         is_to_fullscreen = false;
         _chewieController = ChewieController(
-          videoPlayerController: _controller!,
+          videoPlayerController: _controller,
           autoPlay: false,
           allowFullScreen: false,
-          aspectRatio: _controller!.value.aspectRatio,
+          aspectRatio: _controller.value.aspectRatio,
           allowedScreenSleep: false,
           showControls: false,
         );
@@ -179,7 +179,7 @@ class _VideoPlayContainerState extends State<VideoPlayContainer> {
       _progress = 0.0;
       is_ok = false;
     });
-    _videoFile!.delete();
+    _videoFile.delete();
     _chewieController?.dispose();
     _controller?.dispose();
     _prepareVideo();
@@ -200,9 +200,9 @@ class _VideoPlayContainerState extends State<VideoPlayContainer> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         child: AspectRatio(
-                          aspectRatio: _controller!.value.aspectRatio,
+                          aspectRatio: _controller.value.aspectRatio,
                           child: Chewie(
-                            controller: _chewieController!,
+                            controller: _chewieController,
                           ),
                         ),
                       ),

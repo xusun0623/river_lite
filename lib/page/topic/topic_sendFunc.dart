@@ -9,13 +9,13 @@ import 'package:provider/provider.dart';
 class SendFunc extends StatefulWidget {
   String path;
   Function tap;
-  bool? loading;
-  int? nums;
-  double? uploadProgress;
+  bool loading;
+  int nums;
+  double uploadProgress;
   SendFunc({
-    Key? key,
-    required this.path,
-    required this.tap,
+    Key key,
+    @required this.path,
+    @required this.tap,
     this.loading,
     this.nums,
     this.uploadProgress,
@@ -110,7 +110,7 @@ class _SendFuncState extends State<SendFunc> {
                                 child: CircularPercentIndicator(
                                   radius: 12,
                                   lineWidth: 3,
-                                  percent: widget.uploadProgress!,
+                                  percent: widget.uploadProgress,
                                   progressColor: os_deep_blue,
                                 ),
                               )))),

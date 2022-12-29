@@ -12,14 +12,14 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class BlackList extends StatefulWidget {
-  BlackList({Key? key}) : super(key: key);
+  BlackList({Key key}) : super(key: key);
 
   @override
   _BlackListState createState() => _BlackListState();
 }
 
 class _BlackListState extends State<BlackList> {
-  List? data = [];
+  List data = [];
 
   List<int> select = [];
   String tmp_txt = "";
@@ -29,12 +29,12 @@ class _BlackListState extends State<BlackList> {
       showToast(context: context, type: XSToast.none, txt: "关键词不能为空");
       return;
     }
-    if (data!.indexOf(tmp_txt) > -1) {
+    if (data.indexOf(tmp_txt) > -1) {
       showToast(context: context, type: XSToast.none, txt: "已有关键词");
       return;
     }
     setState(() {
-      data!.add(tmp_txt);
+      data.add(tmp_txt);
       tmp_txt = "";
     });
     _update();
@@ -42,127 +42,123 @@ class _BlackListState extends State<BlackList> {
   }
 
   _addNewWord() async {
-    showPop(context,
-        widgets: [
-          Container(height: 30),
-          Text(
-            "请输入关键词",
+    showPop(context, [
+      Container(height: 30),
+      Text(
+        "请输入关键词",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_dark_white
+              : os_black,
+        ),
+      ),
+      Container(height: 10),
+      Container(
+        height: 60,
+        padding: EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_white_opa
+              : os_grey,
+        ),
+        child: Center(
+          child: TextField(
+            onChanged: (e) {
+              tmp_txt = e;
+            },
+            onSubmitted: (e) {
+              _confirm();
+            },
             style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
             ),
-          ),
-          Container(height: 10),
-          Container(
-            height: 60,
-            padding: EdgeInsets.symmetric(
-              horizontal: 15,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Provider.of<ColorProvider>(context, listen: false).isDark
-                  ? os_white_opa
-                  : os_grey,
-            ),
-            child: Center(
-              child: TextField(
-                onChanged: (e) {
-                  tmp_txt = e;
-                },
-                onSubmitted: (e) {
-                  _confirm();
-                },
-                style: TextStyle(
+            cursorColor: os_deep_blue,
+            decoration: InputDecoration(
+                hintText: "请输入",
+                border: InputBorder.none,
+                hintStyle: TextStyle(
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_dark_white
-                          : os_black,
-                ),
-                cursorColor: os_deep_blue,
-                decoration: InputDecoration(
-                    hintText: "请输入",
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(
+                          ? os_dark_dark_white
+                          : os_deep_grey,
+                )),
+          ),
+        ),
+      ),
+      Container(height: 10),
+      Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            child: myInkWell(
+              tap: () {
+                Navigator.pop(context);
+              },
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_white_opa
+                  : Color(0x16004DFF),
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Text(
+                    "取消",
+                    style: TextStyle(
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
                           ? os_dark_dark_white
-                          : os_deep_grey,
-                    )),
+                          : os_deep_blue,
+                    ),
+                  ),
+                ),
               ),
+              radius: 12.5,
             ),
           ),
-          Container(height: 10),
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 10),
-                child: myInkWell(
-                  tap: () {
-                    Navigator.pop(context);
-                  },
-                  color:
-                      Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_white_opa
-                          : Color(0x16004DFF),
-                  widget: Container(
-                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                    height: 40,
-                    child: Center(
-                      child: Text(
-                        "取消",
+          Container(
+            child: myInkWell(
+              tap: () async {
+                _confirm();
+              },
+              color: os_deep_blue,
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.done, color: os_white, size: 18),
+                      Container(width: 5),
+                      Text(
+                        "完成",
                         style: TextStyle(
-                          color:
-                              Provider.of<ColorProvider>(context, listen: false)
-                                      .isDark
-                                  ? os_dark_dark_white
-                                  : os_deep_blue,
+                          color: os_white,
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  radius: 12.5,
                 ),
               ),
-              Container(
-                child: myInkWell(
-                  tap: () async {
-                    _confirm();
-                  },
-                  color: os_deep_blue,
-                  widget: Container(
-                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                    height: 40,
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.done, color: os_white, size: 18),
-                          Container(width: 5),
-                          Text(
-                            "完成",
-                            style: TextStyle(
-                              color: os_white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  radius: 12.5,
-                ),
-              ),
-            ],
+              radius: 12.5,
+            ),
           ),
-        ].toList());
+        ],
+      ),
+    ]);
   }
 
   List<Widget> _buildWidget() {
     List<Widget> tmp = [];
     tmp.add(InfoTip());
-    for (var i = 0; i < data!.length; i++) {
+    for (var i = 0; i < data.length; i++) {
       tmp.add(ListTile(
         onTap: () {
           if (select.indexOf(i) > -1) {
@@ -173,7 +169,7 @@ class _BlackListState extends State<BlackList> {
           setState(() {});
         },
         title: Text(
-          data![i],
+          data[i],
           style: TextStyle(
             color: Provider.of<ColorProvider>(context, listen: false).isDark
                 ? os_dark_white
@@ -240,11 +236,11 @@ class _BlackListState extends State<BlackList> {
           isDesktop()
               ? Container()
               : IconButton(
-                  icon: Text(select.length == data!.length ? "取消" : "全选"),
+                  icon: Text(select.length == data.length ? "取消" : "全选"),
                   onPressed: () {
-                    if (select.length != data!.length) {
+                    if (select.length != data.length) {
                       select = [];
-                      for (var i = 0; i < data!.length; i++) {
+                      for (var i = 0; i < data.length; i++) {
                         select.add(i);
                       }
                     } else {
@@ -265,7 +261,7 @@ class _BlackListState extends State<BlackList> {
                       select.sort();
                       select = select.reversed.toList();
                       select.forEach((element) {
-                        data!.removeAt(element);
+                        data.removeAt(element);
                       });
                       select = [];
                       _update();
@@ -284,7 +280,7 @@ class _BlackListState extends State<BlackList> {
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: ListView(
-        // // physics: BouncingScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         children: _buildWidget(),
       ),
     );
@@ -292,7 +288,7 @@ class _BlackListState extends State<BlackList> {
 }
 
 class InfoTip extends StatelessWidget {
-  const InfoTip({Key? key}) : super(key: key);
+  const InfoTip({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

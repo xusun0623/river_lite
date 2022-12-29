@@ -9,9 +9,9 @@ import 'package:provider/provider.dart';
 
 class SaveDraftBtn extends StatelessWidget {
   const SaveDraftBtn({
-    Key? key,
-    required this.tip_controller,
-    required this.tip_focus,
+    Key key,
+    @required this.tip_controller,
+    @required this.tip_focus,
   }) : super(key: key);
 
   final TextEditingController tip_controller;
@@ -37,7 +37,7 @@ class SaveDraftBtn extends StatelessWidget {
 
 class SaveDraft extends StatelessWidget {
   const SaveDraft({
-    Key? key,
+    Key key,
   }) : super(key: key);
 
   @override

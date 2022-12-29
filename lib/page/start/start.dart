@@ -9,7 +9,7 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class Start extends StatefulWidget {
-  const Start({Key? key}) : super(key: key);
+  const Start({Key key}) : super(key: key);
 
   @override
   State<Start> createState() => _StartState();

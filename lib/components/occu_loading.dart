@@ -4,7 +4,7 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class OccuLoading extends StatefulWidget {
-  OccuLoading({Key? key}) : super(key: key);
+  OccuLoading({Key key}) : super(key: key);
 
   @override
   _OccuLoadingState createState() => _OccuLoadingState();

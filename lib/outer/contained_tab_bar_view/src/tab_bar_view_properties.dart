@@ -11,7 +11,7 @@ class TabBarViewProperties {
   /// How the page view should respond to user input.
   ///
   /// See [TabBarView documentation](https://api.flutter.dev/flutter/material/TabBarView/physics.html).
-  final ScrollPhysics? physics;
+  final ScrollPhysics physics;
 
   /// Determines the way that drag start behavior is handled.
   ///

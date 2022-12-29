@@ -19,9 +19,9 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class CollectionDetail extends StatefulWidget {
-  Map? data;
+  Map data;
   CollectionDetail({
-    Key? key,
+    Key key,
     this.data,
   }) : super(key: key);
 
@@ -38,7 +38,7 @@ class _CollectionDetailState extends State<CollectionDetail> {
   bool load_done = false;
   bool load_card = false;
   bool is_subscribed = false;
-  String? formhash = "";
+  String formhash = "";
   bool vibrate = false;
 
   List<Widget> _buildCont() {
@@ -58,20 +58,20 @@ class _CollectionDetailState extends State<CollectionDetail> {
 
   _setShadow() async {
     setState(() {
-      widget.data!["isShadow"] = true;
+      widget.data["isShadow"] = true;
     });
   }
 
   _getCardData() async {
     String d_tmp = (await XHttp().pureHttpWithCookie(
       url: base_url +
-          "forum.php?mod=collection&action=view&ctid=${widget.data!["list_id"]}",
+          "forum.php?mod=collection&action=view&ctid=${widget.data["list_id"]}",
     ))
         .data
         .toString();
     var document = parse(d_tmp);
     try {
-      widget.data!["desc"] = document
+      widget.data["desc"] = document
           .getElementsByClassName("mn")
           .first
           .getElementsByClassName("bm_c")
@@ -104,7 +104,7 @@ class _CollectionDetailState extends State<CollectionDetail> {
     loading = true;
     String d_tmp = (await XHttp().pureHttpWithCookie(
       url: base_url +
-          "forum.php?mod=collection&action=view&ctid=${widget.data!["list_id"]}&page=${isInit ? 1 : ((data.length / 120).ceil() + 1)}",
+          "forum.php?mod=collection&action=view&ctid=${widget.data["list_id"]}&page=${isInit ? 1 : ((data.length / 120).ceil() + 1)}",
       hadCookie: true,
     ))
         .data
@@ -283,7 +283,7 @@ class _CollectionDetailState extends State<CollectionDetail> {
               ? FadeInUp(
                   duration: Duration(milliseconds: 100),
                   child: Text(
-                    widget.data!["name"],
+                    widget.data["name"],
                     style: TextStyle(fontSize: 16),
                   ),
                 )
@@ -296,7 +296,7 @@ class _CollectionDetailState extends State<CollectionDetail> {
                       color: Colors.transparent,
                       tap: () async {
                         var url = base_url +
-                            "forum.php?mod=collection&op=${is_subscribed ? "unfo" : "follow"}&action=follow&ctid=${widget.data!["list_id"]}&formhash=${formhash}&inajax=1&ajaxtarget=undefined";
+                            "forum.php?mod=collection&op=${is_subscribed ? "unfo" : "follow"}&action=follow&ctid=${widget.data["list_id"]}&formhash=${formhash}&inajax=1&ajaxtarget=undefined";
                         // print(url);
                         showToast(
                           context: context,
@@ -363,12 +363,12 @@ class _CollectionDetailState extends State<CollectionDetail> {
                   Color(0xFF282d38),
                   Color(0xFFe9775d),
                   Color(0xFF282d38),
-                ][widget.data!["type"]],
+                ][widget.data["type"]],
           controller: _scrollController,
           show: showBackToTop,
           bottom: 100,
           child: ListView(
-            // physics: BouncingScrollPhysics(),
+            physics: BouncingScrollPhysics(),
             controller: _scrollController,
             children: [
               ResponsiveWidget(child: Collection(data: widget.data)),
@@ -396,7 +396,7 @@ class _CollectionDetailState extends State<CollectionDetail> {
 }
 
 class ListCard extends StatefulWidget {
-  Map? data;
+  Map data;
   /**
    * name 淘贴名称       String
    * topic_id 帖子ID    int
@@ -408,7 +408,7 @@ class ListCard extends StatefulWidget {
    * essence 精华       bool
    */
   ListCard({
-    Key? key,
+    Key key,
     this.data,
   }) : super(key: key);
 
@@ -426,7 +426,7 @@ class _ListCardState extends State<ListCard> {
           Navigator.pushNamed(
             context,
             "/topic_detail",
-            arguments: widget.data!["topic_id"],
+            arguments: widget.data["topic_id"],
           );
         },
         color: Provider.of<ColorProvider>(context).isDark
@@ -441,8 +441,8 @@ class _ListCardState extends State<ListCard> {
             children: [
               GestureDetector(
                 onTap: () {
-                  if (widget.data!["uid"] != "" && widget.data!["uid"] != 0)
-                    toUserSpace(context, widget.data!["uid"]);
+                  if (widget.data["uid"] != "" && widget.data["uid"] != 0)
+                    toUserSpace(context, widget.data["uid"]);
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(100)),
@@ -454,7 +454,7 @@ class _ListCardState extends State<ListCard> {
                     ),
                     fit: BoxFit.cover,
                     imageUrl: base_url +
-                        "uc_server/avatar.php?uid=${widget.data!["uid"]}&size=middle",
+                        "uc_server/avatar.php?uid=${widget.data["uid"]}&size=middle",
                   ),
                 ),
               ),
@@ -470,7 +470,7 @@ class _ListCardState extends State<ListCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "${widget.data!["user_name"]}",
+                          "${widget.data["user_name"]}",
                           style: TextStyle(
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_dark_white
@@ -500,7 +500,7 @@ class _ListCardState extends State<ListCard> {
                             MinusSpace(context) -
                             170,
                         child: Text(
-                          widget.data!["name"] ?? "淘贴名称",
+                          widget.data["name"] ?? "淘贴名称",
                           style: TextStyle(
                             fontSize: 16,
                             color: Provider.of<ColorProvider>(context).isDark
@@ -511,8 +511,8 @@ class _ListCardState extends State<ListCard> {
                       ),
                     ],
                   ),
-                  Container(height: widget.data!["essence"] ? 7.5 : 0),
-                  widget.data!["essence"]
+                  Container(height: widget.data["essence"] ? 7.5 : 0),
+                  widget.data["essence"]
                       ? Container(
                           decoration: BoxDecoration(
                             color: os_color_opa,
@@ -542,7 +542,7 @@ class _ListCardState extends State<ListCard> {
                   Row(
                     children: [
                       Text(
-                        "${widget.data!["reply"]}回复 · ${widget.data!["view"]}查看",
+                        "${widget.data["reply"]}回复 · ${widget.data["view"]}查看",
                         style: TextStyle(
                           color: Color(0xFF9C9C9C),
                         ),
@@ -558,7 +558,7 @@ class _ListCardState extends State<ListCard> {
                       ),
                       Container(width: 5),
                       Text(
-                        widget.data!["time"].toString(),
+                        widget.data["time"].toString(),
                         style: TextStyle(
                           color: Color(0xFF9C9C9C),
                         ),

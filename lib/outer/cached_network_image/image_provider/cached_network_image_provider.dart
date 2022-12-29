@@ -37,30 +37,30 @@ class CachedNetworkImageProvider
   });
 
   /// CacheManager from which the image files are loaded.
-  final BaseCacheManager? cacheManager;
+  final BaseCacheManager cacheManager;
 
   /// Web url of the image to load
-  final String? url;
+  final String url;
 
   /// Cache key of the image to cache
-  final String? cacheKey;
+  final String cacheKey;
 
   /// Scale of the image
   final double scale;
 
   /// Listener to be called when images fails to load.
-  final image_provider.ErrorListener? errorListener;
+  final image_provider.ErrorListener errorListener;
 
   /// Set headers for the image provider, for example for authentication
-  final Map<String, String>? headers;
+  final Map<String, String> headers;
 
   /// Maximum height of the loaded image. If not null and using an
   /// [ImageCacheManager] the image is resized on disk to fit the height.
-  final int? maxHeight;
+  final int maxHeight;
 
   /// Maximum width of the loaded image. If not null and using an
   /// [ImageCacheManager] the image is resized on disk to fit the width.
-  final int? maxWidth;
+  final int maxWidth;
 
   /// Render option for images on the web platform.
   final ImageRenderMethodForWeb imageRenderMethodForWeb;
@@ -96,7 +96,7 @@ class CachedNetworkImageProvider
   ) {
     assert(key == this);
     return ImageLoader().loadAsync(
-      url!,
+      url,
       cacheKey,
       chunkEvents,
       decode,

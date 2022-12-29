@@ -16,7 +16,7 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class SquareHome extends StatefulWidget {
-  const SquareHome({Key? key}) : super(key: key);
+  const SquareHome({Key key}) : super(key: key);
 
   @override
   _SquareHomeState createState() => _SquareHomeState();
@@ -27,7 +27,7 @@ class _SquareHomeState extends State<SquareHome> {
   TextEditingController _controller = new TextEditingController();
   bool showCancel = false;
   bool get_done = false;
-  List<dynamic>? data = [];
+  var data = [];
 
   _getData() async {
     String tmp_txt = await getStorage(key: "column_data", initData: "");
@@ -49,9 +49,9 @@ class _SquareHomeState extends State<SquareHome> {
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
     tmp.add(SpecialSquareCard());
-    if (data != null && data!.length != 0) {
-      for (var i = 0; i < data!.length; i++) {
-        tmp.add(SquareCard(data: data![i], index: i));
+    if (data != null && data.length != 0) {
+      for (var i = 0; i < data.length; i++) {
+        tmp.add(SquareCard(data: data[i], index: i));
       }
     } else {
       tmp.add(BottomLoading(color: Colors.transparent));
@@ -106,7 +106,7 @@ class _SquareHomeState extends State<SquareHome> {
           _getData();
         },
         child: ListView(
-          // physics: BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(),
           children: _buildCont(),
         ),
       ),
@@ -172,9 +172,9 @@ class SquareCard extends StatefulWidget {
   var data;
   int index;
   SquareCard({
-    Key? key,
-    required this.data,
-    required this.index,
+    Key key,
+    @required this.data,
+    @required this.index,
   }) : super(key: key);
 
   @override

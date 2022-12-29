@@ -57,20 +57,20 @@ class SalaryData {
     if (type != null) this.type = type;
     if (salaryId != null) this.salaryId = salaryId;
   }
-  String? company;
-  String? city;
-  String? confidence;
-  String? education;
-  String? money;
-  String? job;
-  String? remark;
-  String? look;
-  String? salaryLow;
-  String? salaryHigh;
-  String? time;
-  String? industry;
-  String? type;
-  String? salaryId;
+  String company;
+  String city;
+  String confidence;
+  String education;
+  String money;
+  String job;
+  String remark;
+  String look;
+  String salaryLow;
+  String salaryHigh;
+  String time;
+  String industry;
+  String type;
+  String salaryId;
 }
 
 class CommentData {
@@ -87,11 +87,11 @@ class CommentData {
     if (isMine != null) this.isMine = isMine;
     if (isOwner != null) this.isOwner = isOwner;
   }
-  String? commentId;
-  String? content;
-  String? time;
-  String? isMine;
-  String? isOwner;
+  String commentId;
+  String content;
+  String time;
+  String isMine;
+  String isOwner;
 }
 
 /// 转化为本地的评论格式

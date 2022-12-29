@@ -25,14 +25,14 @@ import 'package:provider/provider.dart';
 import '../outer/cached_network_image/cached_image_widget.dart';
 
 class TopicReply extends StatefulWidget {
-  Map? data;
-  double? top;
-  double? bottom;
-  bool? blackOccu;
-  Color? backgroundColor;
+  Map data;
+  double top;
+  double bottom;
+  bool blackOccu;
+  Color backgroundColor;
 
   TopicReply({
-    Key? key,
+    Key key,
     this.data,
     this.top,
     this.bottom,
@@ -47,16 +47,14 @@ class TopicReply extends StatefulWidget {
 class _TopicReplyState extends State<TopicReply> {
   var _isRated = false;
   bool isBlack = false;
-  String? blackKeyWord = "";
+  String blackKeyWord = "";
 
   bool _isBlack() {
     bool flag = false;
-    Provider.of<BlackProvider>(context, listen: false)
-        .black!
-        .forEach((element) {
-      if (widget.data!["title"].toString().contains(element) ||
-          widget.data!["subject"].toString().contains(element) ||
-          widget.data!["user_nick_name"].toString().contains(element)) {
+    Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
+      if (widget.data["title"].toString().contains(element) ||
+          widget.data["subject"].toString().contains(element) ||
+          widget.data["user_nick_name"].toString().contains(element)) {
         flag = true;
         blackKeyWord = element;
       }
@@ -69,8 +67,8 @@ class _TopicReplyState extends State<TopicReply> {
       key: "topic_like",
     );
     List<String> ids = tmp.split(",");
-    if (ids.indexOf((widget.data!["source_id"] ?? widget.data!["topic_id"])
-            .toString()) >
+    if (ids.indexOf(
+            (widget.data["source_id"] ?? widget.data["topic_id"]).toString()) >
         -1) {
       setState(() {
         _isRated = true;
@@ -82,14 +80,14 @@ class _TopicReplyState extends State<TopicReply> {
     if (_isRated == true) return;
     _isRated = true;
     await Api().forum_support({
-      "tid": (widget.data!["source_id"] ?? widget.data!["topic_id"]),
+      "tid": (widget.data["source_id"] ?? widget.data["topic_id"]),
       "type": "thread",
       "action": "support",
     });
     String tmp = await getStorage(
       key: "topic_like",
     );
-    tmp += ",${widget.data!['source_id'] ?? widget.data!['topic_id']}";
+    tmp += ",${widget.data['source_id'] ?? widget.data['topic_id']}";
     setStorage(key: "topic_like", value: tmp);
   }
 
@@ -109,122 +107,119 @@ class _TopicReplyState extends State<TopicReply> {
 
   _feedback() async {
     String txt = "";
-    showPop(context,
-        widgets: [
-          Container(height: 30),
-          Text(
-            "请输入举报内容",
+    showPop(context, [
+      Container(height: 30),
+      Text(
+        "请输入举报内容",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+        ),
+      ),
+      Container(height: 10),
+      Container(
+        height: 60,
+        padding: EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_white_opa
+              : os_grey,
+        ),
+        child: Center(
+          child: TextField(
+            onChanged: (e) {
+              txt = e;
+            },
             style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Provider.of<ColorProvider>(context).isDark
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
             ),
-          ),
-          Container(height: 10),
-          Container(
-            height: 60,
-            padding: EdgeInsets.symmetric(
-              horizontal: 15,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Provider.of<ColorProvider>(context, listen: false).isDark
-                  ? os_white_opa
-                  : os_grey,
-            ),
-            child: Center(
-              child: TextField(
-                onChanged: (e) {
-                  txt = e;
-                },
-                style: TextStyle(
+            cursorColor: os_deep_blue,
+            decoration: InputDecoration(
+                hintText: "请输入",
+                border: InputBorder.none,
+                hintStyle: TextStyle(
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_dark_white
-                          : os_black,
-                ),
-                cursorColor: os_deep_blue,
-                decoration: InputDecoration(
-                    hintText: "请输入",
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(
-                      color: Provider.of<ColorProvider>(context, listen: false)
-                              .isDark
                           ? os_dark_dark_white
                           : os_deep_grey,
-                    )),
+                )),
+          ),
+        ),
+      ),
+      Container(height: 10),
+      Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            child: myInkWell(
+              tap: () {
+                Navigator.pop(context);
+              },
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_white_opa
+                  : Color(0x16004DFF),
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Text(
+                    "取消",
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : os_deep_blue,
+                    ),
+                  ),
+                ),
               ),
+              radius: 12.5,
             ),
           ),
-          Container(height: 10),
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 10),
-                child: myInkWell(
-                  tap: () {
-                    Navigator.pop(context);
-                  },
-                  color:
-                      Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_white_opa
-                          : Color(0x16004DFF),
-                  widget: Container(
-                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                    height: 40,
-                    child: Center(
-                      child: Text(
-                        "取消",
+          Container(
+            child: myInkWell(
+              tap: () async {
+                await Api().user_report({
+                  "idType": "thread",
+                  "message": txt,
+                  "id": widget.data["topic_id"]
+                });
+                Navigator.pop(context);
+                _feedbackSuccess();
+              },
+              color: os_deep_blue,
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.done, color: os_white, size: 18),
+                      Container(width: 5),
+                      Text(
+                        "完成",
                         style: TextStyle(
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_dark_white
-                              : os_deep_blue,
+                          color: os_white,
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  radius: 12.5,
                 ),
               ),
-              Container(
-                child: myInkWell(
-                  tap: () async {
-                    await Api().user_report({
-                      "idType": "thread",
-                      "message": txt,
-                      "id": widget.data!["topic_id"]
-                    });
-                    Navigator.pop(context);
-                    _feedbackSuccess();
-                  },
-                  color: os_deep_blue,
-                  widget: Container(
-                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                    height: 40,
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.done, color: os_white, size: 18),
-                          Container(width: 5),
-                          Text(
-                            "完成",
-                            style: TextStyle(
-                              color: os_white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  radius: 12.5,
-                ),
-              ),
-            ],
+              radius: 12.5,
+            ),
           ),
-        ].toList());
+        ],
+      ),
+    ]);
   }
 
   _moreAction() async {
@@ -234,7 +229,7 @@ class _TopicReplyState extends State<TopicReply> {
         ActionItem(
             title: "【不感兴趣】屏蔽此贴",
             onPressed: () async {
-              await setBlackWord(widget.data!["title"], context);
+              await setBlackWord(widget.data["title"], context);
               Navigator.pop(context);
               showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
               setState(() {
@@ -244,7 +239,7 @@ class _TopicReplyState extends State<TopicReply> {
         ActionItem(
             title: "【不感兴趣】屏蔽此人",
             onPressed: () async {
-              await setBlackWord(widget.data!["user_nick_name"], context);
+              await setBlackWord(widget.data["user_nick_name"], context);
               Navigator.pop(context);
               showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
               setState(() {
@@ -259,7 +254,7 @@ class _TopicReplyState extends State<TopicReply> {
               await Api().user_userfavorite({
                 "idType": "tid",
                 "action": "favorite",
-                "id": widget.data!["topic_id"],
+                "id": widget.data["topic_id"],
               });
               hideToast();
               showToast(context: context, type: XSToast.success, txt: "收藏成功");
@@ -271,7 +266,7 @@ class _TopicReplyState extends State<TopicReply> {
                 ClipboardData(
                     text: base_url +
                         "forum.php?mod=viewthread&tid=" +
-                        widget.data!["topic_id"].toString()),
+                        widget.data["topic_id"].toString()),
               );
               Navigator.pop(context);
               showToast(context: context, type: XSToast.success, txt: "复制成功");
@@ -293,20 +288,20 @@ class _TopicReplyState extends State<TopicReply> {
     bool flag = false;
     for (int i = 0; i < history_arr.length; i++) {
       var ele = history_arr[i];
-      if (ele["userAvatar"] == widget.data!["userAvatar"] &&
-          ele["title"] == widget.data!["title"] &&
+      if (ele["userAvatar"] == widget.data["userAvatar"] &&
+          ele["title"] == widget.data["title"] &&
           ele["subject"] ==
-              ((widget.data!["summary"] ?? widget.data!["subject"]) ?? "")) {
+              ((widget.data["summary"] ?? widget.data["subject"]) ?? "")) {
         history_arr.removeAt(i);
       }
     }
     List tmp_list_history = [
       {
-        "userAvatar": widget.data!["userAvatar"],
-        "title": widget.data!["title"],
-        "subject": (widget.data!["summary"] ?? widget.data!["subject"]) ?? "",
-        "time": widget.data!["last_reply_date"],
-        "topic_id": (widget.data!["source_id"] ?? widget.data!["topic_id"]),
+        "userAvatar": widget.data["userAvatar"],
+        "title": widget.data["title"],
+        "subject": (widget.data["summary"] ?? widget.data["subject"]) ?? "",
+        "time": widget.data["last_reply_date"],
+        "topic_id": (widget.data["source_id"] ?? widget.data["topic_id"]),
       }
     ];
     tmp_list_history.addAll(history_arr);
@@ -333,7 +328,7 @@ class _TopicReplyState extends State<TopicReply> {
                       widget: Padding(
                         padding: const EdgeInsets.all(15),
                         child: Text(
-                          "此贴已被你屏蔽，屏蔽关键词为:" + blackKeyWord!,
+                          "此贴已被你屏蔽，屏蔽关键词为:" + blackKeyWord,
                           style: TextStyle(
                             color: os_deep_grey,
                           ),
@@ -369,7 +364,7 @@ class _TopicReplyState extends State<TopicReply> {
                     context,
                     "/topic_detail",
                     arguments:
-                        (widget.data!["source_id"] ?? widget.data!["topic_id"]),
+                        (widget.data["source_id"] ?? widget.data["topic_id"]),
                     // arguments: 1903247,
                   );
                 }
@@ -479,7 +474,7 @@ class _TopicReplyState extends State<TopicReply> {
                               width: 27,
                               height: 27,
                               fit: BoxFit.cover,
-                              imageUrl: widget.data!["userAvatar"],
+                              imageUrl: widget.data["userAvatar"],
                               placeholder: (context, url) => Container(
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
@@ -493,7 +488,7 @@ class _TopicReplyState extends State<TopicReply> {
                           Container(
                             width: MediaQuery.of(context).size.width - 100,
                             child: Text(
-                              widget.data!["title"],
+                              widget.data["title"],
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontSize: 17,
@@ -507,15 +502,15 @@ class _TopicReplyState extends State<TopicReply> {
                         ],
                       ),
                       Padding(padding: EdgeInsets.all(3)),
-                      ((widget.data!["summary"] ?? widget.data!["subject"]) ??
+                      ((widget.data["summary"] ?? widget.data["subject"]) ??
                                   "") ==
                               ""
                           ? Container()
                           : Container(
                               width: MediaQuery.of(context).size.width,
                               child: Text(
-                                (widget.data!["summary"] ??
-                                        widget.data!["subject"]) ??
+                                (widget.data["summary"] ??
+                                        widget.data["subject"]) ??
                                     "",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
@@ -538,7 +533,7 @@ class _TopicReplyState extends State<TopicReply> {
                               ),
                               Container(width: 5),
                               Text(
-                                "${widget.data!['hits']}",
+                                "${widget.data['hits']}",
                                 style: TextStyle(
                                   color: Color(0xFF6B6B6B),
                                   fontSize: 12,
@@ -552,7 +547,7 @@ class _TopicReplyState extends State<TopicReply> {
                               ),
                               Container(width: 5),
                               Text(
-                                "${widget.data!['replies']}",
+                                "${widget.data['replies']}",
                                 style: TextStyle(
                                   color: Color(0xFF6B6B6B),
                                   fontSize: 12,
@@ -576,8 +571,8 @@ class _TopicReplyState extends State<TopicReply> {
                           ),
                           Text(
                             RelativeDateFormat.format(
-                                DateTime.fromMillisecondsSinceEpoch(int.parse(
-                                    widget.data!["last_reply_date"]))),
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    int.parse(widget.data["last_reply_date"]))),
                             style: TextStyle(
                               color: Color(0xFF9C9C9C),
                               fontSize: 14,

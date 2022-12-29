@@ -5,18 +5,18 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class Loading extends StatefulWidget {
-  Color? backgroundColor;
-  bool? showError;
-  bool? showCancel;
-  String? msg;
-  Function? tap;
-  Function? tap1;
-  Function? cancel;
-  String? tapTxt;
-  String? tapTxt1;
-  Widget? loadingWidget;
+  Color backgroundColor;
+  bool showError;
+  bool showCancel;
+  String msg;
+  Function tap;
+  Function tap1;
+  Function cancel;
+  String tapTxt;
+  String tapTxt1;
+  Widget loadingWidget;
   Loading({
-    Key? key,
+    Key key,
     this.backgroundColor,
     this.showError,
     this.showCancel,
@@ -82,7 +82,7 @@ class _LoadingState extends State<Loading> {
                 ? GestureDetector(
                     onTap: () {
                       if (widget.cancel != null) {
-                        widget.cancel!();
+                        widget.cancel();
                       }
                     },
                     child: Container(
@@ -106,14 +106,14 @@ class _LoadingState extends State<Loading> {
                     ),
                   )
                 : Container(),
-            widget.tap == null || !widget.showError!
+            widget.tap == null || !widget.showError
                 ? Container()
                 : Container(height: 30),
-            widget.tap == null || !widget.showError!
+            widget.tap == null || !widget.showError
                 ? Container()
                 : GestureDetector(
                     onTap: () async {
-                      widget.tap!();
+                      widget.tap();
                     },
                     child: Container(
                       width: 150,
@@ -134,11 +134,11 @@ class _LoadingState extends State<Loading> {
                       ),
                     ),
                   ),
-            widget.tap1 == null || !widget.showError!
+            widget.tap1 == null || !widget.showError
                 ? Container()
                 : GestureDetector(
                     onTap: () async {
-                      widget.tap1!();
+                      widget.tap1();
                     },
                     child: Container(
                       width: 150,

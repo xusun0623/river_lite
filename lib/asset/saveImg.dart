@@ -13,7 +13,7 @@ import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 saveImge(
   BuildContext context,
   List urls,
-  int? index,
+  int index,
 ) async {
   List<ActionItem> tmp = [
     ActionItem(
@@ -26,7 +26,7 @@ saveImge(
           txt: "保存中…",
         );
         var response = await Dio().get(
-          urls[index!],
+          urls[index],
           options: Options(responseType: ResponseType.bytes),
         );
         hideToast();

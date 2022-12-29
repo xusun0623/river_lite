@@ -8,7 +8,7 @@ import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/util/mid_request.dart';
 
 class Explore extends StatefulWidget {
-  Explore({Key? key}) : super(key: key);
+  Explore({Key key}) : super(key: key);
 
   @override
   _ExploreState createState() => _ExploreState();
@@ -26,7 +26,7 @@ class _ExploreState extends State<Explore> {
       ),
       backgroundColor: os_white,
       body: ListView(
-        // physics: BouncingScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         children: [
           ExploreHead(),
           BottomBtns(),
@@ -38,7 +38,7 @@ class _ExploreState extends State<Explore> {
 }
 
 class BottomBtns extends StatefulWidget {
-  BottomBtns({Key? key}) : super(key: key);
+  BottomBtns({Key key}) : super(key: key);
 
   @override
   State<BottomBtns> createState() => _BottomBtnsState();
@@ -96,9 +96,9 @@ class _BottomBtnsState extends State<BottomBtns> {
 }
 
 class ExploreCard extends StatefulWidget {
-  int? index;
+  int index;
   ExploreCard({
-    Key? key,
+    Key key,
     this.index,
   }) : super(key: key);
 
@@ -136,7 +136,7 @@ class _ExploreCardState extends State<ExploreCard> {
 }
 
 class ExploreHead extends StatefulWidget {
-  const ExploreHead({Key? key}) : super(key: key);
+  const ExploreHead({Key key}) : super(key: key);
 
   @override
   State<ExploreHead> createState() => _ExploreHeadState();

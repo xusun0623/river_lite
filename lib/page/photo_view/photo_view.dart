@@ -15,17 +15,17 @@ import 'package:provider/provider.dart';
 typedef PageChanged = void Function(int index);
 
 class PhotoPreview extends StatefulWidget {
-  bool? isSmallPic;
+  bool isSmallPic;
   final List galleryItems; //图片列表
-  final int? defaultImage; //默认第几张
-  final PageChanged? pageChanged; //切换图片回调
-  final Axis? direction; //图片查看方向
-  final Decoration? decoration; //背景设计
-  final String? desc; //图片描述
-  final String? title; //图片描述标题
+  final int defaultImage; //默认第几张
+  final PageChanged pageChanged; //切换图片回调
+  final Axis direction; //图片查看方向
+  final Decoration decoration; //背景设计
+  final String desc; //图片描述
+  final String title; //图片描述标题
 
   PhotoPreview({
-    required this.galleryItems,
+    this.galleryItems,
     this.defaultImage = 1,
     this.isSmallPic,
     this.pageChanged,
@@ -39,13 +39,13 @@ class PhotoPreview extends StatefulWidget {
 }
 
 class _PhotoPreviewState extends State<PhotoPreview> {
-  int? tempSelect;
-  PageController? _pageController;
+  int tempSelect;
+  PageController _pageController;
 
   @override
   void initState() {
-    _pageController = new PageController(initialPage: widget.defaultImage!);
-    tempSelect = widget.defaultImage! + 1;
+    _pageController = new PageController(initialPage: widget.defaultImage);
+    tempSelect = widget.defaultImage + 1;
   }
 
   List<InlineSpan> _getRichText(String t) {
@@ -93,7 +93,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                   Navigator.pop(context);
                 },
                 onLongPress: () {
-                  saveImge(context, widget.galleryItems, tempSelect! - 1);
+                  saveImge(context, widget.galleryItems, tempSelect - 1);
                 },
                 child: PhotoViewGallery.builder(
                   loadingBuilder: (context, event) => Center(
@@ -138,16 +138,16 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                       ),
                     );
                   },
-                  scrollDirection: widget.direction!,
+                  scrollDirection: widget.direction,
                   itemCount: widget.galleryItems.length,
-                  backgroundDecoration: widget.decoration as BoxDecoration? ??
-                      BoxDecoration(color: Colors.black),
+                  backgroundDecoration:
+                      widget.decoration ?? BoxDecoration(color: Colors.black),
                   pageController: _pageController,
                   onPageChanged: (index) => setState(
                     () {
                       tempSelect = index + 1;
                       if (widget.pageChanged != null) {
-                        widget.pageChanged!(index);
+                        widget.pageChanged(index);
                       }
                     },
                   ),
@@ -173,7 +173,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                         ),
                       ),
                       child: ListView(
-                        // physics: BouncingScrollPhysics(),
+                        physics: BouncingScrollPhysics(),
                         children: [
                           Text.rich(
                             TextSpan(
@@ -181,7 +181,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                                 fontSize: 16,
                                 color: os_dark_white,
                               ),
-                              children: _getRichText(widget.title!),
+                              children: _getRichText(widget.title),
                             ),
                           ),
                           Container(height: 5),
@@ -191,7 +191,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                                 fontSize: 13,
                                 color: Colors.white70,
                               ),
-                              children: _getRichText(widget.desc!),
+                              children: _getRichText(widget.desc),
                             ),
                           ),
                         ],
@@ -251,16 +251,16 @@ class _PhotoPreviewState extends State<PhotoPreview> {
 
 class FuncButton extends StatelessWidget {
   const FuncButton({
-    Key? key,
-    required this.widget,
-    required this.tempSelect,
-    required PageController? pageController,
+    Key key,
+    @required this.widget,
+    @required this.tempSelect,
+    @required PageController pageController,
   })  : _pageController = pageController,
         super(key: key);
 
   final PhotoPreview widget;
-  final int? tempSelect;
-  final PageController? _pageController;
+  final int tempSelect;
+  final PageController _pageController;
 
   @override
   Widget build(BuildContext context) {
@@ -273,7 +273,7 @@ class FuncButton extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           if (!isDesktop()) {
-            saveImge(context, widget.galleryItems, tempSelect! - 1);
+            saveImge(context, widget.galleryItems, tempSelect - 1);
           }
         },
         child: Container(
@@ -289,7 +289,7 @@ class FuncButton extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        _pageController!.previousPage(
+                        _pageController.previousPage(
                             duration: Duration(milliseconds: 300),
                             curve: Curves.ease);
                       },
@@ -317,7 +317,7 @@ class FuncButton extends StatelessWidget {
                     Container(width: 15),
                     GestureDetector(
                       onTap: () {
-                        _pageController!.nextPage(
+                        _pageController.nextPage(
                             duration: Duration(milliseconds: 300),
                             curve: Curves.ease);
                       },

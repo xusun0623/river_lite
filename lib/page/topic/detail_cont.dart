@@ -31,12 +31,12 @@ import '../../util/interface.dart';
 class DetailCont extends StatefulWidget {
   var data;
   var imgLists;
-  String? desc; //在图片上的描述
-  String? title; //在图片上的描述标题
-  bool? isComment;
-  bool? removeSelectable; //  是否可以长按复制文字
+  String desc; //在图片上的描述
+  String title; //在图片上的描述标题
+  bool isComment;
+  bool removeSelectable; //  是否可以长按复制文字
   DetailCont({
-    Key? key,
+    Key key,
     this.data,
     this.imgLists,
     this.isComment,
@@ -60,18 +60,23 @@ class _DetailContState extends State<DetailCont> {
     switch (widget.data["type"]) {
       case 0: //纯文字
         return WidgetTxt(context, widget);
+        break;
       case 1: //图片
         return WidgetImage(context, widget);
+        break;
       case 2: //未知
         return Container();
+        break;
       case 3: //未知
         return Container();
+        break;
       case 4: //网页链接
         return WidgetBilibiliPlayer();
+        break;
       case 5: //附件下载
         return WidgetLinkUrl(); //图片链接就不用下载了
+        break;
       default:
-        return Container();
     }
   }
 
@@ -127,10 +132,10 @@ class _DetailContState extends State<DetailCont> {
               confirmTxt: "立即前往",
               cancelTxt: "取消",
               confirm: () async {
-                String? text = widget.data['url'];
+                String text = widget.data['url'];
                 if (context == "")
                   return;
-                else if (text!.contains(
+                else if (text.contains(
                     "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")) {
                   int tid_tmp = int.parse(
                     text.split("mod=viewthread&tid=")[1].split("&")[0],
@@ -319,8 +324,8 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
     child: Opacity(
       opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
       child: ClipRRect(
-        borderRadius: BorderRadius.all(
-            Radius.circular(widget.imgLists.length > 3 || isDesktop() ? 5 : 5)),
+        borderRadius: BorderRadius.all(Radius.circular(
+            widget.imgLists.length > 3 || isDesktop() ? 2.5 : 5)),
         child: Hero(
           tag: widget.imgLists.length > 10 ? "不显示Hero动画" : widget.data["infor"],
           child: Container(
@@ -383,8 +388,18 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                       : Container(
                           child: CachedNetworkImage(
                             imageUrl: widget.data["infor"],
-                            width: isDesktop() ? 200 : null,
-                            height: isDesktop() ? 200 : null,
+                            width: isDesktop()
+                                ? 200
+                                : (MediaQuery.of(context).size.width -
+                                        (widget.isComment ?? false ? 50 : 0) -
+                                        42) /
+                                    3,
+                            height: isDesktop()
+                                ? 200
+                                : (MediaQuery.of(context).size.width -
+                                        (widget.isComment ?? false ? 50 : 0) -
+                                        42) /
+                                    3,
                             maxHeightDiskCache: 800,
                             maxWidthDiskCache: 800,
                             memCacheWidth: 800,

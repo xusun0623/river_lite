@@ -7,7 +7,7 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class Collection extends StatefulWidget {
-  Map? data = {
+  Map data = {
     // "name": "甜甜的狗粮铺", //专辑的名称
     // "desc": "愿每日的心酸在青春与岁月证明的爱情中融化，愿你憧憬爱情相信爱情并拥有爱情。", //专辑的描述
     // "user": "xusun000", //专辑的创建者姓名
@@ -21,7 +21,7 @@ class Collection extends StatefulWidget {
     // "isShadow": false, //true-阴影 false-无阴影
   };
   Collection({
-    Key? key,
+    Key key,
     this.data,
   }) : super(key: key);
 
@@ -32,7 +32,7 @@ class Collection extends StatefulWidget {
 class _CollectionState extends State<Collection> {
   List<Widget> _buildTag() {
     List<Widget> tmp = [];
-    widget.data!["tags"].forEach((element) {
+    widget.data["tags"].forEach((element) {
       tmp.add(Container(
         padding: EdgeInsets.symmetric(horizontal: 11, vertical: 4),
         decoration: BoxDecoration(
@@ -40,7 +40,7 @@ class _CollectionState extends State<Collection> {
             begin: Alignment.topLeft,
             end: Alignment.centerRight,
             stops: [0, 1],
-            colors: widget.data!["type"] == 2
+            colors: widget.data["type"] == 2
                 ? (Provider.of<ColorProvider>(context).isDark
                     ? [Color(0x11F6F6F6), Color(0x18F6F6F6)]
                     : [Color(0xFFF6F6F6), Color(0xFFF6F6F6)])
@@ -54,7 +54,7 @@ class _CollectionState extends State<Collection> {
         child: Text(
           element,
           style: TextStyle(
-            color: widget.data!["type"] == 2
+            color: widget.data["type"] == 2
                 ? (Provider.of<ColorProvider>(context).isDark
                     ? os_dark_dark_white
                     : Color(0xFF313131))
@@ -70,8 +70,8 @@ class _CollectionState extends State<Collection> {
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: widget.data!["list_id"].toString() +
-          widget.data!["type"].toString(), //Hero标志
+      tag: widget.data["list_id"].toString() +
+          widget.data["type"].toString(), //Hero标志
       child: Material(
         color: Colors.transparent,
         child: Container(
@@ -104,7 +104,7 @@ class _CollectionState extends State<Collection> {
                   Provider.of<ColorProvider>(context).isDark
                       ? [Color(0xFF313131), Color(0xFF373737)]
                       : [Color(0xFFFFFFFF), Color(0xFFFFFFFF)],
-                ][widget.data!["type"]]),
+                ][widget.data["type"]]),
           ),
           child: Stack(
             children: [
@@ -121,7 +121,7 @@ class _CollectionState extends State<Collection> {
                   (Provider.of<ColorProvider>(context).isDark
                       ? os_svg(path: "lib/img/quote.svg")
                       : os_svg(path: "lib/img/quote_dark.svg")),
-                ][widget.data!["type"]],
+                ][widget.data["type"]],
               ),
               Column(
                 children: [
@@ -129,9 +129,9 @@ class _CollectionState extends State<Collection> {
                     children: [
                       Container(
                         child: Text(
-                          widget.data!["name"].toString(),
+                          widget.data["name"].toString(),
                           style: TextStyle(
-                            color: widget.data!["type"] == 2
+                            color: widget.data["type"] == 2
                                 ? (Provider.of<ColorProvider>(context).isDark
                                     ? os_dark_white
                                     : Color(0xFF272C38))
@@ -146,7 +146,7 @@ class _CollectionState extends State<Collection> {
                         padding:
                             EdgeInsets.symmetric(horizontal: 7.5, vertical: 3),
                         decoration: BoxDecoration(
-                          color: widget.data!["type"] == 2
+                          color: widget.data["type"] == 2
                               ? (Provider.of<ColorProvider>(context).isDark
                                   ? Color(0x33FFFFFF)
                                   : Color.fromRGBO(0, 0, 0, 0.07))
@@ -154,9 +154,9 @@ class _CollectionState extends State<Collection> {
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
                         child: Text(
-                          "${widget.data!["subs_txt"] ?? "主题数"}: ${widget.data!["subs_num"]}",
+                          "${widget.data["subs_txt"] ?? "主题数"}: ${widget.data["subs_num"]}",
                           style: TextStyle(
-                            color: widget.data!["type"] == 2
+                            color: widget.data["type"] == 2
                                 ? (Provider.of<ColorProvider>(context).isDark
                                     ? os_dark_white
                                     : os_dark_back)
@@ -168,16 +168,16 @@ class _CollectionState extends State<Collection> {
                     ],
                   ),
                   Container(height: 5),
-                  ...(widget.data!["desc"].toString().trim() == ""
+                  ...(widget.data["desc"].toString().trim() == ""
                       ? []
                       : [
                           Container(height: 2.5),
                           Container(
                             width: MediaQuery.of(context).size.width,
                             child: Text(
-                              widget.data!["desc"],
+                              widget.data["desc"],
                               style: TextStyle(
-                                color: widget.data!["type"] == 2
+                                color: widget.data["type"] == 2
                                     ? (Provider.of<ColorProvider>(context)
                                             .isDark
                                         ? os_dark_dark_white
@@ -217,12 +217,12 @@ class _CollectionState extends State<Collection> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(100)),
                               child: CachedNetworkImage(
-                                imageUrl: widget.data!["head"],
+                                imageUrl: widget.data["head"],
                                 width: 20,
                                 height: 20,
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) => Container(
-                                  color: widget.data!["type"] == 2
+                                  color: widget.data["type"] == 2
                                       ? Color.fromRGBO(0, 0, 0, 0.1)
                                       : Color.fromRGBO(255, 255, 255, 0.6),
                                 ),
@@ -230,9 +230,9 @@ class _CollectionState extends State<Collection> {
                             ),
                             Container(width: 7.5),
                             Text(
-                              widget.data!["user"],
+                              widget.data["user"],
                               style: TextStyle(
-                                color: widget.data!["type"] == 2
+                                color: widget.data["type"] == 2
                                     ? (Provider.of<ColorProvider>(context)
                                             .isDark
                                         ? os_dark_dark_white
@@ -245,7 +245,7 @@ class _CollectionState extends State<Collection> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            toUserSpace(context, widget.data!["user_id"]);
+                            toUserSpace(context, widget.data["user_id"]);
                           },
                           child: Transform.translate(
                             offset: Offset(7.5, 0),
@@ -254,14 +254,14 @@ class _CollectionState extends State<Collection> {
                                 Text(
                                   "个人首页",
                                   style: TextStyle(
-                                    color: widget.data!["type"] == 2
+                                    color: widget.data["type"] == 2
                                         ? Color(0xFF9a9a9a)
                                         : Color.fromRGBO(255, 255, 255, 0.5),
                                   ),
                                 ),
                                 Icon(
                                   Icons.chevron_right_rounded,
-                                  color: widget.data!["type"] == 2
+                                  color: widget.data["type"] == 2
                                       ? Color(0xFF9a9a9a)
                                       : Color.fromRGBO(255, 255, 255, 0.5),
                                   size: 18,

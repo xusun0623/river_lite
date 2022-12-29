@@ -12,7 +12,7 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class Account extends StatefulWidget {
-  Account({Key? key}) : super(key: key);
+  Account({Key key}) : super(key: key);
 
   @override
   _AccountState createState() => _AccountState();
@@ -28,18 +28,18 @@ class _AccountState extends State<Account> {
     });
   }
 
-  List? accountData = [];
+  List accountData = [];
   int logined = 0;
 
   _setManage() async {
-    List? quick = [];
+    List quick = [];
     String txt_quick = await getStorage(key: "quick", initData: "[]");
     quick = jsonDecode(txt_quick);
     String txt_manage = await getStorage(key: "myinfo", initData: "");
     if (txt_manage != "") {
-      Map? map_manage = jsonDecode(txt_manage);
-      for (int i = 0; i < quick!.length; i++) {
-        if (map_manage!["userName"] == quick[i]["name"]) {
+      Map map_manage = jsonDecode(txt_manage);
+      for (int i = 0; i < quick.length; i++) {
+        if (map_manage["userName"] == quick[i]["name"]) {
           logined = i;
         }
       }
@@ -49,7 +49,7 @@ class _AccountState extends State<Account> {
     }
   }
 
-  _switchLogin(String? username, String? password, int index) async {
+  _switchLogin(String username, String password, int index) async {
     showToast(context: context, type: XSToast.loading, txt: "加载中…");
     var data = await Api().user_login({
       "type": "login",
@@ -77,11 +77,11 @@ class _AccountState extends State<Account> {
   }
 
   //删除某账号
-  _deleteAccount(String? name) async {
-    List? quick = [];
+  _deleteAccount(String name) async {
+    List quick = [];
     String txt_quick = await getStorage(key: "quick", initData: "[]");
     quick = jsonDecode(txt_quick);
-    for (int i = 0; i < quick!.length; i++) {
+    for (int i = 0; i < quick.length; i++) {
       if (name == quick[i]["name"]) {
         quick.removeAt(i);
       }
@@ -210,11 +210,11 @@ class _AccountState extends State<Account> {
       ),
       Container(height: 10),
     ]);
-    for (int i = 0; i < accountData!.length; i++) {
+    for (int i = 0; i < accountData.length; i++) {
       tmp.add(ResponsiveWidget(
         child: ListTile(
           title: Text(
-            accountData![i]["name"],
+            accountData[i]["name"],
             style: TextStyle(
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_dark_white
@@ -223,8 +223,7 @@ class _AccountState extends State<Account> {
           ),
           onTap: () {
             if (i == logined) return;
-            _switchLogin(
-                accountData![i]["name"], accountData![i]["password"], i);
+            _switchLogin(accountData[i]["name"], accountData[i]["password"], i);
           },
           trailing: Container(
             width: 100,
@@ -235,8 +234,8 @@ class _AccountState extends State<Account> {
                 IconButton(
                   onPressed: () {
                     if (i == logined) return;
-                    _switchLogin(accountData![i]["name"],
-                        accountData![i]["password"], i);
+                    _switchLogin(
+                        accountData[i]["name"], accountData[i]["password"], i);
                   },
                   icon: Icon(
                     logined == i
@@ -252,7 +251,7 @@ class _AccountState extends State<Account> {
                       title: "请确认",
                       cont: "是否要删除该账号信息，此操作不可逆",
                       confirm: () {
-                        _deleteAccount(accountData![i]["name"]);
+                        _deleteAccount(accountData[i]["name"]);
                       },
                     );
                   },
@@ -342,7 +341,7 @@ class _AccountState extends State<Account> {
           ),
         ),
         body: ListView(
-          // // physics: BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(),
           children: _buildWidget(),
         ),
       ),

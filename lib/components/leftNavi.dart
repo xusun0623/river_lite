@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:badges/badges.dart' as badgee;
 import 'package:flutter/material.dart';
@@ -16,15 +15,15 @@ import 'package:provider/provider.dart';
 final double LeftNaviWidth = 80;
 
 class LeftNavi extends StatefulWidget {
-  LeftNavi({Key? key}) : super(key: key);
+  LeftNavi({Key key}) : super(key: key);
 
   @override
   _LeftNaviState createState() => _LeftNaviState();
 }
 
 class _LeftNaviState extends State<LeftNavi> {
-  String? head_url = "";
-  String? name = "";
+  String head_url = "";
+  String name = "";
   bool _isNewMsg = false;
 
   _getData() async {
@@ -55,12 +54,12 @@ class _LeftNaviState extends State<LeftNavi> {
 
   _getNewMsg() async {
     var data = await Api().message_heart({});
-    int count = 0;
+    var count = 0;
     if (data != null && data["rs"] != 0 && data["body"] != null) {
-      count += int.parse(data["body"]["replyInfo"]["count"].toString());
-      count += int.parse(data["body"]["atMeInfo"]["count"].toString());
-      count += int.parse(data["body"]["systemInfo"]["count"].toString());
-      count += int.parse(data["body"]["pmInfos"].length.toString());
+      count += data["body"]["replyInfo"]["count"];
+      count += data["body"]["atMeInfo"]["count"];
+      count += data["body"]["systemInfo"]["count"];
+      count += data["body"]["pmInfos"].length;
       data = data["body"];
       if (count != 0) {
         setState(() {
@@ -152,8 +151,8 @@ class _LeftNaviState extends State<LeftNavi> {
                                     child: Text(
                                       (provider.data == null
                                               ? "X"
-                                              : provider.data!["name"] ??
-                                                  provider.data!["userName"])[0]
+                                              : provider.data["name"] ??
+                                                  provider.data["userName"])[0]
                                           .toString(),
                                       style: TextStyle(
                                         color:
@@ -169,8 +168,8 @@ class _LeftNaviState extends State<LeftNavi> {
                               : CachedNetworkImage(
                                   imageUrl: provider.data == null
                                       ? ""
-                                      : (provider.data!["icon"] ??
-                                          provider.data!["avatar"]),
+                                      : (provider.data["icon"] ??
+                                          provider.data["avatar"]),
                                   placeholder: (BuildContext, String) {
                                     return Container(
                                       color: Provider.of<ColorProvider>(context)
@@ -250,14 +249,14 @@ class _LeftNaviState extends State<LeftNavi> {
 }
 
 class NaviBtn extends StatefulWidget {
-  int? index;
-  bool? isNewMsg;
+  int index;
+  bool isNewMsg;
   Function tap;
   NaviBtn({
-    Key? key,
+    Key key,
     this.index,
     this.isNewMsg,
-    required this.tap,
+    @required this.tap,
   }) : super(key: key);
 
   @override
@@ -311,7 +310,7 @@ class _NaviBtnState extends State<NaviBtn> {
             child: Column(
               children: [
                 Icon(
-                  icons[widget.index!],
+                  icons[widget.index],
                   size: 30,
                   color: provider.index == widget.index
                       ? (Provider.of<ColorProvider>(context).isDark ||
@@ -325,7 +324,7 @@ class _NaviBtnState extends State<NaviBtn> {
                 ),
                 Container(height: 5),
                 Text(
-                  icon_desc[widget.index!],
+                  icon_desc[widget.index],
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,

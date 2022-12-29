@@ -16,7 +16,7 @@ removeBlackWord(String t, BuildContext context) async {
   return;
 }
 
-setBlackWord(String? t, BuildContext context) async {
+setBlackWord(String t, BuildContext context) async {
   //新增拉黑关键词
   String tmp = await getStorage(key: "black", initData: "[]");
   List tmp_arr = jsonDecode(tmp);

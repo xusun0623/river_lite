@@ -26,10 +26,10 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class PostNew extends StatefulWidget {
-  int? board_id;
+  int board_id;
 
   PostNew({
-    Key? key,
+    Key key,
     this.board_id,
   }) : super(key: key);
 
@@ -40,8 +40,8 @@ class PostNew extends StatefulWidget {
 class _PostNewState extends State<PostNew> {
   bool sendSuccess = false; //是否发布成功
 
-  String? select_section = "水手之家"; //选择的专栏的名称
-  int? select_section_id = 25; //选择的专栏的ID
+  String select_section = "水手之家"; //选择的专栏的名称
+  int select_section_id = 25; //选择的专栏的ID
   int select_section_child_id = 0; //选择的专栏的子专栏ID
   TextEditingController title_controller =
       new TextEditingController(); //输入的标题控制器
@@ -53,7 +53,7 @@ class _PostNewState extends State<PostNew> {
   bool uploading = false;
   int pop_section_index = -1;
   int tip_controller_offset = 0;
-  List<String?> vote_options = [];
+  List<String> vote_options = [];
   ScrollController listview_controller = new ScrollController();
   int secret_see = 0;
   bool child_load_done = false;
@@ -309,7 +309,7 @@ class _PostNewState extends State<PostNew> {
                   children: [
                     Positioned(
                       child: ListView(
-                        // physics: BouncingScrollPhysics(),
+                        physics: BouncingScrollPhysics(),
                         controller: listview_controller,
                         children: [
                           ColumnRule(select_section: select_section),
@@ -324,7 +324,7 @@ class _PostNewState extends State<PostNew> {
                           show_vote
                               ? VoteMachine(
                                   editVote: (options) {
-                                    List<String?> tmp = [];
+                                    List<String> tmp = [];
                                     for (var item in options) {
                                       tmp.add(item["txt"]);
                                     }
@@ -505,12 +505,12 @@ class _PostNewState extends State<PostNew> {
                                   ),
                                   Container(
                                     width: MediaQuery.of(context).size.width -
-                                        select_section!.length * 14 -
+                                        select_section.length * 14 -
                                         MinusSpace(context) -
                                         70,
                                     height: 30,
                                     child: ListView(
-                                      // physics: BouncingScrollPhysics(),
+                                      physics: BouncingScrollPhysics(),
                                       scrollDirection: Axis.horizontal,
                                       children: quick.map((e) {
                                         return SelectTag(
@@ -606,9 +606,9 @@ class _PostNewState extends State<PostNew> {
 }
 
 class ColumnRule extends StatefulWidget {
-  String? select_section;
+  String select_section;
   ColumnRule({
-    Key? key,
+    Key key,
     this.select_section,
   }) : super(key: key);
 
@@ -654,12 +654,12 @@ class _ColumnRuleState extends State<ColumnRule> {
 }
 
 class ChildColumnTip extends StatefulWidget {
-  bool? select;
-  String? name;
-  int? child_id;
-  Function? tap;
+  bool select;
+  String name;
+  int child_id;
+  Function tap;
   ChildColumnTip({
-    Key? key,
+    Key key,
     this.select,
     this.name,
     this.child_id,
@@ -675,7 +675,7 @@ class _ChildColumnTipState extends State<ChildColumnTip> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.tap!(widget.child_id);
+        widget.tap(widget.child_id);
       },
       child: Container(
         padding: EdgeInsets.only(left: 0, right: 20, top: 5, bottom: 5),
@@ -683,9 +683,9 @@ class _ChildColumnTipState extends State<ChildColumnTip> {
             ? os_light_dark_card
             : os_white,
         child: Text(
-          widget.name!,
+          widget.name,
           style: TextStyle(
-            color: widget.select! ? os_color : os_deep_grey,
+            color: widget.select ? os_color : os_deep_grey,
           ),
         ),
       ),
@@ -697,9 +697,9 @@ class ContInput extends StatefulWidget {
   final TextEditingController tip_controller;
   final FocusNode tip_focus;
   ContInput({
-    Key? key,
-    required this.tip_controller,
-    required this.tip_focus,
+    Key key,
+    @required this.tip_controller,
+    @required this.tip_focus,
   }) : super(key: key);
 
   @override
@@ -743,9 +743,9 @@ class _ContInputState extends State<ContInput> {
 
 class TitleInput extends StatelessWidget {
   const TitleInput({
-    Key? key,
-    required this.title_controller,
-    required this.title_focus,
+    Key key,
+    @required this.title_controller,
+    @required this.title_focus,
   }) : super(key: key);
 
   final TextEditingController title_controller;

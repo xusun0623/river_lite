@@ -1,15 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
-import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -33,16 +32,16 @@ import 'package:route_transitions/route_transitions.dart';
 import '../outer/cached_network_image/cached_image_widget.dart';
 
 class Topic extends StatefulWidget {
-  Map? data;
-  double? top;
-  double? bottom;
-  bool? blackOccu;
-  bool? hideColumn;
-  bool? isLeftNaviUI;
-  Color? backgroundColor;
+  Map data;
+  double top;
+  double bottom;
+  bool blackOccu;
+  bool hideColumn;
+  bool isLeftNaviUI;
+  Color backgroundColor;
 
   Topic({
-    Key? key,
+    Key key,
     this.data,
     this.top,
     this.bottom,
@@ -59,17 +58,14 @@ class Topic extends StatefulWidget {
 class _TopicState extends State<Topic> {
   var _isRated = false;
   bool isBlack = false;
-  bool isWifi = false;
-  String? blackKeyWord = "";
+  String blackKeyWord = "";
 
   bool _isBlack() {
     bool flag = false;
-    Provider.of<BlackProvider>(context, listen: false)
-        .black!
-        .forEach((element) {
-      if (widget.data!["title"].toString().contains(element) ||
-          widget.data!["subject"].toString().contains(element) ||
-          widget.data!["user_nick_name"].toString().contains(element)) {
+    Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
+      if (widget.data["title"].toString().contains(element) ||
+          widget.data["subject"].toString().contains(element) ||
+          widget.data["user_nick_name"].toString().contains(element)) {
         flag = true;
         blackKeyWord = element;
       }
@@ -81,8 +77,8 @@ class _TopicState extends State<Topic> {
     String tmp = await getStorage(key: "topic_like", initData: "");
     String tmp1 = await getStorage(key: "topic_dis_like", initData: "");
     List<String> ids = tmp.split(",");
-    if (ids.indexOf((widget.data!["source_id"] ?? widget.data!["topic_id"])
-            .toString()) >
+    if (ids.indexOf(
+            (widget.data["source_id"] ?? widget.data["topic_id"]).toString()) >
         -1) {
       setState(() {
         _isRated = true;
@@ -90,24 +86,9 @@ class _TopicState extends State<Topic> {
     }
   }
 
-  _getIsWifi() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile) {
-      setState(() {
-        isWifi = false;
-      });
-    } else if (connectivityResult == ConnectivityResult.wifi) {
-      setState(() {
-        isWifi = true;
-      });
-    }
-  }
-
   @override
   void initState() {
     _getLikeStatus();
-    _getIsWifi();
-    print(widget.data!["imageList"]);
     super.initState();
   }
 
@@ -121,141 +102,129 @@ class _TopicState extends State<Topic> {
 
   _feedback() async {
     String txt = "";
-    showPop(context,
-        widgets: [
-          Container(height: 30),
-          Text(
-            "请输入举报内容",
+    showPop(context, [
+      Container(height: 30),
+      Text(
+        "请输入举报内容",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+        ),
+      ),
+      Container(height: 10),
+      Container(
+        height: 60,
+        padding: EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_white_opa
+              : os_grey,
+        ),
+        child: Center(
+          child: TextField(
+            onChanged: (e) {
+              txt = e;
+            },
             style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Provider.of<ColorProvider>(context).isDark
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
             ),
-          ),
-          Container(height: 10),
-          Container(
-            height: 60,
-            padding: EdgeInsets.symmetric(
-              horizontal: 15,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Provider.of<ColorProvider>(context, listen: false).isDark
-                  ? os_white_opa
-                  : os_grey,
-            ),
-            child: Center(
-              child: TextField(
-                onChanged: (e) {
-                  txt = e;
-                },
-                style: TextStyle(
+            cursorColor: os_deep_blue,
+            decoration: InputDecoration(
+                hintText: "请输入",
+                border: InputBorder.none,
+                hintStyle: TextStyle(
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_dark_white
-                          : os_black,
-                ),
-                cursorColor: os_deep_blue,
-                decoration: InputDecoration(
-                    hintText: "请输入",
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(
-                      color: Provider.of<ColorProvider>(context, listen: false)
-                              .isDark
                           ? os_dark_dark_white
                           : os_deep_grey,
-                    )),
+                )),
+          ),
+        ),
+      ),
+      Container(height: 10),
+      Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            child: myInkWell(
+              tap: () {
+                Navigator.pop(context);
+              },
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_white_opa
+                  : Color(0x16004DFF),
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Text(
+                    "取消",
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : os_deep_blue,
+                    ),
+                  ),
+                ),
               ),
+              radius: 12.5,
             ),
           ),
-          Container(height: 10),
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 10),
-                child: myInkWell(
-                  tap: () {
-                    Navigator.pop(context);
-                  },
-                  color:
-                      Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_white_opa
-                          : Color(0x16004DFF),
-                  widget: Container(
-                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                    height: 40,
-                    child: Center(
-                      child: Text(
-                        "取消",
+          Container(
+            child: myInkWell(
+              tap: () async {
+                await Api().user_report({
+                  "idType": "thread",
+                  "message": txt,
+                  "id": widget.data["topic_id"]
+                });
+                Navigator.pop(context);
+                _feedbackSuccess();
+              },
+              color: os_deep_blue,
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.done, color: os_white, size: 18),
+                      Container(width: 5),
+                      Text(
+                        "完成",
                         style: TextStyle(
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_dark_white
-                              : os_deep_blue,
+                          color: os_white,
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  radius: 12.5,
                 ),
               ),
-              Container(
-                child: myInkWell(
-                  tap: () async {
-                    await Api().user_report({
-                      "idType": "thread",
-                      "message": txt,
-                      "id": widget.data!["topic_id"]
-                    });
-                    Navigator.pop(context);
-                    _feedbackSuccess();
-                  },
-                  color: os_deep_blue,
-                  widget: Container(
-                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                    height: 40,
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.done, color: os_white, size: 18),
-                          Container(width: 5),
-                          Text(
-                            "完成",
-                            style: TextStyle(
-                              color: os_white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  radius: 12.5,
-                ),
-              ),
-            ],
+              radius: 12.5,
+            ),
           ),
-        ].toList());
+        ],
+      ),
+    ]);
   }
 
   _moreAction() async {
-    showAction(
-      context: context,
-      options: [
-        "屏蔽此贴",
-        "屏蔽此人",
-      ],
-      icons: [Icons.dangerous_outlined, Icons.dangerous_outlined],
-    );
-    return;
     showActionSheet(
       context: context,
       actions: [
         ActionItem(
             title: "【不感兴趣】屏蔽此贴",
             onPressed: () async {
-              await setBlackWord(widget.data!["title"], context);
+              await setBlackWord(widget.data["title"], context);
               Navigator.pop(context);
               showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
               setState(() {
@@ -265,7 +234,7 @@ class _TopicState extends State<Topic> {
         ActionItem(
             title: "【不感兴趣】屏蔽此人",
             onPressed: () async {
-              await setBlackWord(widget.data!["user_nick_name"], context);
+              await setBlackWord(widget.data["user_nick_name"], context);
               Navigator.pop(context);
               showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
               setState(() {
@@ -280,7 +249,7 @@ class _TopicState extends State<Topic> {
               await Api().user_userfavorite({
                 "idType": "tid",
                 "action": "favorite",
-                "id": widget.data!["topic_id"],
+                "id": widget.data["topic_id"],
               });
               hideToast();
               showToast(context: context, type: XSToast.success, txt: "收藏成功");
@@ -292,7 +261,7 @@ class _TopicState extends State<Topic> {
                 ClipboardData(
                     text: base_url +
                         "forum.php?mod=viewthread&tid=" +
-                        widget.data!["topic_id"].toString()),
+                        widget.data["topic_id"].toString()),
               );
               Navigator.pop(context);
               showToast(context: context, type: XSToast.success, txt: "复制成功");
@@ -314,42 +283,71 @@ class _TopicState extends State<Topic> {
     bool flag = false;
     for (int i = 0; i < history_arr.length; i++) {
       var ele = history_arr[i];
-      if (ele["userAvatar"] == widget.data!["userAvatar"] &&
-          ele["title"] == widget.data!["title"] &&
+      if (ele["userAvatar"] == widget.data["userAvatar"] &&
+          ele["title"] == widget.data["title"] &&
           ele["subject"] ==
-              ((widget.data!["summary"] ?? widget.data!["subject"]) ?? "")) {
+              ((widget.data["summary"] ?? widget.data["subject"]) ?? "")) {
         history_arr.removeAt(i);
       }
     }
     List tmp_list_history = [
       {
-        "userAvatar": widget.data!["userAvatar"],
-        "title": widget.data!["title"],
-        "subject": (widget.data!["summary"] ?? widget.data!["subject"]) ?? "",
-        "time": widget.data!["last_reply_date"],
-        "topic_id": (widget.data!["source_id"] ?? widget.data!["topic_id"]),
+        "userAvatar": widget.data["userAvatar"],
+        "title": widget.data["title"],
+        "subject": (widget.data["summary"] ?? widget.data["subject"]) ?? "",
+        "time": widget.data["last_reply_date"],
+        "topic_id": (widget.data["source_id"] ?? widget.data["topic_id"]),
       }
     ];
     tmp_list_history.addAll(history_arr);
     setStorage(key: "history", value: jsonEncode(tmp_list_history));
   }
 
+  Widget _blackCont() {
+    //拉黑的状态
+    return Container(
+      child: (widget.blackOccu ?? false)
+          ? Padding(
+              padding: EdgeInsets.fromLTRB(
+                os_edge,
+                widget.top ?? 10,
+                os_edge,
+                widget.bottom ?? 0,
+              ),
+              child: myInkWell(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : os_white,
+                radius: 10,
+                widget: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Text(
+                    "此贴已被你屏蔽，屏蔽关键词为:" + blackKeyWord,
+                    style: TextStyle(
+                      color: os_deep_grey,
+                    ),
+                  ),
+                ),
+              ),
+            )
+          : Container(),
+    );
+  }
+
   //卡片图案
   Widget _getTopicCardImg() {
-    if (!isWifi) return Container();
-    // var connectivityResult = await (Connectivity().checkConnectivity());
     double img_size = (MediaQuery.of(context).size.width - 55) / 3 - 3.3;
     // print(widget.data["imageList"]);
     if (widget.data != null &&
-        widget.data!["imageList"] != null &&
-        widget.data!["imageList"].length != 0 &&
+        widget.data["imageList"] != null &&
+        widget.data["imageList"].length != 0 &&
         !isDesktop()) {
-      if (widget.data!["imageList"].length > 3)
-        widget.data!["imageList"] = widget.data!["imageList"].sublist(0, 3);
-      List<Widget> _getImg(List? a) {
+      if (widget.data["imageList"].length > 3)
+        widget.data["imageList"] = widget.data["imageList"].sublist(0, 3);
+      List<Widget> _getImg(List a) {
         List<Widget> t = [];
-        for (int i = 0; i < widget.data!["imageList"].length; i++) {
-          var url = widget.data!["imageList"][i];
+        for (int i = 0; i < widget.data["imageList"].length; i++) {
+          var url = widget.data["imageList"][i];
           t.add(ConstrainedBox(
             constraints: BoxConstraints(
               maxHeight: img_size,
@@ -360,7 +358,7 @@ class _TopicState extends State<Topic> {
                 fadeWidget(
                   newPage: PhotoPreview(
                     isSmallPic: true,
-                    galleryItems: widget.data!["imageList"],
+                    galleryItems: widget.data["imageList"],
                     defaultImage: i,
                   ),
                   context: context,
@@ -398,43 +396,12 @@ class _TopicState extends State<Topic> {
         height: img_size,
         width: MediaQuery.of(context).size.width,
         child: Row(
-          children: _getImg(widget.data!["imageList"]),
+          children: _getImg(widget.data["imageList"]),
         ),
       );
     } else {
       return Container();
     }
-  }
-
-  Widget _blackCont() {
-    //拉黑的状态
-    return Container(
-      child: (widget.blackOccu ?? false)
-          ? Padding(
-              padding: EdgeInsets.fromLTRB(
-                os_edge,
-                widget.top ?? 10,
-                os_edge,
-                widget.bottom ?? 0,
-              ),
-              child: myInkWell(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_light_dark_card
-                    : os_white,
-                radius: 10,
-                widget: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Text(
-                    "此贴已被你屏蔽，屏蔽关键词为:" + blackKeyWord!,
-                    style: TextStyle(
-                      color: os_deep_grey,
-                    ),
-                  ),
-                ),
-              ),
-            )
-          : Container(),
-    );
   }
 
   Widget _topicCont() {
@@ -458,7 +425,57 @@ class _TopicState extends State<Topic> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TopicTopSection(widget: widget),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        if (widget.data["user_nick_name"] != "匿名")
+                          toUserSpace(context, widget.data["user_id"]);
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: CachedNetworkImage(
+                          width: 30,
+                          height: 30,
+                          fit: BoxFit.cover,
+                          imageUrl: widget.data["userAvatar"],
+                          placeholder: (context, url) => Container(
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_white
+                                  : os_grey),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.all(4)),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.data["user_nick_name"],
+                          style: TextStyle(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? Color(0xffF1f1f1)
+                                : os_black,
+                            fontSize: 14,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Container(height: 1),
+                        Text(
+                          RelativeDateFormat.format(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  int.parse(widget.data["last_reply_date"]))),
+                          style: TextStyle(
+                            color: Color(0xFFAAAAAA),
+                            fontSize: 12.5,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
                 Row(
                   children: [
                     myInkWell(
@@ -500,7 +517,7 @@ class _TopicState extends State<Topic> {
                   ((widget.hideColumn ?? false) ? MinusSpace(context) : 0) -
                   54,
               child: Text(
-                widget.data!["title"],
+                widget.data["title"],
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontSize: 17,
@@ -511,13 +528,13 @@ class _TopicState extends State<Topic> {
               ),
             ),
             //中部区域：正文
-            (widget.data!["summary"] ?? widget.data!["subject"])
+            (widget.data["summary"] ?? widget.data["subject"])
                         .toString()
                         .trim() ==
                     ""
                 ? Container()
                 : Padding(padding: EdgeInsets.all(3)),
-            ((widget.data!["summary"] ?? widget.data!["subject"]) ?? "") == ""
+            ((widget.data["summary"] ?? widget.data["subject"]) ?? "") == ""
                 ? Container()
                 : Container(
                     width: MediaQuery.of(context).size.width -
@@ -527,8 +544,7 @@ class _TopicState extends State<Topic> {
                             : 0) -
                         54,
                     child: Text(
-                      (widget.data!["summary"] ?? widget.data!["subject"]) ??
-                          "",
+                      (widget.data["summary"] ?? widget.data["subject"]) ?? "",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 16,
@@ -541,15 +557,60 @@ class _TopicState extends State<Topic> {
             Padding(padding: EdgeInsets.all(1.5)),
             Container(
               height: widget.data != null &&
-                      widget.data!["imageList"] != null &&
-                      widget.data!["imageList"].length != 0
+                      widget.data["imageList"] != null &&
+                      widget.data["imageList"].length != 0
                   ? (MediaQuery.of(context).size.width - 55) / 3 - 3.3
                   : 0,
               child: _getTopicCardImg(),
             ),
             Padding(padding: EdgeInsets.all(1.5)),
             // 投票贴的Tag
-            (widget.data!["vote"] ?? 0) == 0 ? Container() : VoteTag(),
+            (widget.data["vote"] ?? 0) == 0
+                ? Container()
+                : Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? Color(0x11FFFFFF)
+                                : os_color_opa,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(100),
+                            ),
+                          ),
+                          padding: EdgeInsets.only(
+                            left: 10,
+                            right: 12,
+                            top: 3.5,
+                            bottom: 3.8,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.download_done,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_dark_white
+                                        : os_color,
+                                size: 18,
+                              ),
+                              Text(
+                                "投票帖",
+                                style: TextStyle(
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_dark_white
+                                          : os_color,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
             //浏览量 评论数 点赞数 - 专栏按钮
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -563,7 +624,7 @@ class _TopicState extends State<Topic> {
                     ),
                     Container(width: 5),
                     Text(
-                      "${widget.data!['hits']}",
+                      "${widget.data['hits']}",
                       style: TextStyle(
                         color: Color(0xFF6B6B6B),
                         fontSize: 12,
@@ -577,7 +638,7 @@ class _TopicState extends State<Topic> {
                     ),
                     Container(width: 5),
                     Text(
-                      "${widget.data!['replies']}",
+                      "${widget.data['replies']}",
                       style: TextStyle(
                         color: Color(0xFF6B6B6B),
                         fontSize: 12,
@@ -591,7 +652,7 @@ class _TopicState extends State<Topic> {
                     ),
                     Container(width: 5),
                     Text(
-                      (widget.data!["recommendAdd"] ?? 0).toString(),
+                      (widget.data["recommendAdd"] ?? 0).toString(),
                       style: TextStyle(
                         color: Color(0xFF6B6B6B),
                         fontSize: 12,
@@ -599,9 +660,33 @@ class _TopicState extends State<Topic> {
                     ),
                   ],
                 ),
-                TopicColumn(
-                  context: context,
-                  widget: widget,
+                myInkWell(
+                  color: Colors.transparent,
+                  tap: () {
+                    Navigator.pushNamed(
+                      context,
+                      "/column",
+                      arguments: widget.data["board_id"],
+                    );
+                  },
+                  radius: 10,
+                  widget: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child: Text(
+                      (widget.hideColumn ?? false)
+                          ? " "
+                          : widget.data["board_name"],
+                      style: TextStyle(
+                        color: os_color,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -612,10 +697,10 @@ class _TopicState extends State<Topic> {
   }
 
   _tapWidget() async {
-    int? tid = (widget.data!["source_id"] ?? widget.data!["topic_id"]);
+    int tid = (widget.data["source_id"] ?? widget.data["topic_id"]);
     if (Platform.isWindows &&
-        (widget.data!["board_name"] == "视觉艺术" ||
-            widget.data!["board_name"] == "镜头下的成电")) {
+        (widget.data["board_name"] == "视觉艺术" ||
+            widget.data["board_name"] == "镜头下的成电")) {
       showModal(
           context: context,
           title: "请确认",
@@ -637,7 +722,7 @@ class _TopicState extends State<Topic> {
       Navigator.pushNamed(
         context,
         "/topic_detail",
-        arguments: (widget.data!["source_id"] ?? widget.data!["topic_id"]),
+        arguments: (widget.data["source_id"] ?? widget.data["topic_id"]),
       );
     }
   }
@@ -677,160 +762,5 @@ class _TopicState extends State<Topic> {
                     radius: 10,
                   ),
           );
-  }
-}
-
-class VoteTag extends StatelessWidget {
-  const VoteTag({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? Color(0x11FFFFFF)
-                  : os_color_opa,
-              borderRadius: BorderRadius.all(
-                Radius.circular(100),
-              ),
-            ),
-            padding: EdgeInsets.only(
-              left: 10,
-              right: 12,
-              top: 3.5,
-              bottom: 3.8,
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.download_done,
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_dark_white
-                      : os_color,
-                  size: 18,
-                ),
-                Text(
-                  "投票帖",
-                  style: TextStyle(
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_dark_white
-                        : os_color,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class TopicTopSection extends StatelessWidget {
-  const TopicTopSection({
-    Key? key,
-    required this.widget,
-  }) : super(key: key);
-
-  final Topic widget;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        GestureDetector(
-          onTap: () async {
-            if (widget.data!["user_nick_name"] != "匿名")
-              toUserSpace(context, widget.data!["user_id"]);
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: CachedNetworkImage(
-              width: 30,
-              height: 30,
-              fit: BoxFit.cover,
-              imageUrl: widget.data!["userAvatar"],
-              placeholder: (context, url) => Container(
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : os_grey),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            ),
-          ),
-        ),
-        Padding(padding: EdgeInsets.all(4)),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.data!["user_nick_name"],
-              style: TextStyle(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? Color(0xffF1f1f1)
-                    : os_black,
-                fontSize: 14,
-                // fontWeight: FontWeight.bold,
-              ),
-            ),
-            Container(height: 1),
-            Text(
-              RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                  int.parse(widget.data!["last_reply_date"]))),
-              style: TextStyle(
-                color: Color(0xFFAAAAAA),
-                fontSize: 12.5,
-              ),
-            ),
-          ],
-        )
-      ],
-    );
-  }
-}
-
-class TopicColumn extends StatelessWidget {
-  const TopicColumn({
-    Key? key,
-    required this.context,
-    required this.widget,
-  }) : super(key: key);
-
-  final BuildContext context;
-  final Topic widget;
-
-  @override
-  Widget build(BuildContext context) {
-    return myInkWell(
-      color: Colors.transparent,
-      tap: () {
-        Navigator.pushNamed(
-          context,
-          "/column",
-          arguments: widget.data!["board_id"],
-        );
-      },
-      radius: 10,
-      widget: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 8,
-        ),
-        decoration:
-            BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10))),
-        child: Text(
-          (widget.hideColumn ?? false) ? " " : widget.data!["board_name"],
-          style: TextStyle(
-            color: os_color,
-            fontSize: 14,
-          ),
-        ),
-      ),
-    );
   }
 }

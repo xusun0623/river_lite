@@ -12,7 +12,7 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class Square extends StatefulWidget {
-  const Square({Key? key}) : super(key: key);
+  const Square({Key key}) : super(key: key);
 
   @override
   _SquareState createState() => _SquareState();
@@ -23,7 +23,7 @@ class _SquareState extends State<Square> {
   TextEditingController _controller = new TextEditingController();
   bool showCancel = false;
   bool get_done = false;
-  List<dynamic>? data = [];
+  var data = [];
 
   _getData() async {
     var tmp = await Api().forum_forumlist({});
@@ -38,10 +38,10 @@ class _SquareState extends State<Square> {
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
     tmp.add(ResponsiveWidget(child: SpecialSquareCard()));
-    if (data != null && data!.length != 0) {
-      for (var i = 0; i < data!.length; i++) {
+    if (data != null && data.length != 0) {
+      for (var i = 0; i < data.length; i++) {
         tmp.add(
-            ResponsiveWidget(child: SquareCard(data: data![i], index: i + 1)));
+            ResponsiveWidget(child: SquareCard(data: data[i], index: i + 1)));
       }
     }
     return tmp;
@@ -101,7 +101,7 @@ class _SquareState extends State<Square> {
         body: !get_done
             ? Loading(backgroundColor: os_back)
             : ListView(
-                // physics: BouncingScrollPhysics(),
+                physics: BouncingScrollPhysics(),
                 children: _buildCont(),
               ),
       ),
@@ -116,7 +116,7 @@ class _SquareState extends State<Square> {
 }
 
 class SpecialSquareCard extends StatefulWidget {
-  const SpecialSquareCard({Key? key}) : super(key: key);
+  const SpecialSquareCard({Key key}) : super(key: key);
 
   @override
   State<SpecialSquareCard> createState() => _SpecialSquareCardState();
@@ -149,9 +149,9 @@ class SquareCard extends StatefulWidget {
   var data;
   int index;
   SquareCard({
-    Key? key,
-    required this.data,
-    required this.index,
+    Key key,
+    @required this.data,
+    @required this.index,
   }) : super(key: key);
 
   @override

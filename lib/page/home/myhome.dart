@@ -11,14 +11,14 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class MyHome extends StatefulWidget {
-  const MyHome({Key? key}) : super(key: key);
+  const MyHome({Key key}) : super(key: key);
 
   @override
   _MyHomeState createState() => _MyHomeState();
 }
 
 class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
-  TabController? tabController;
+  TabController tabController;
 
   @override
   void initState() {
@@ -134,11 +134,11 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
 }
 
 class CustomTabBarViewScrollPhysics extends ScrollPhysics {
-  const CustomTabBarViewScrollPhysics({ScrollPhysics? parent})
+  const CustomTabBarViewScrollPhysics({ScrollPhysics parent})
       : super(parent: parent);
 
   @override
-  CustomTabBarViewScrollPhysics applyTo(ScrollPhysics? ancestor) {
+  CustomTabBarViewScrollPhysics applyTo(ScrollPhysics ancestor) {
     return CustomTabBarViewScrollPhysics(parent: buildParent(ancestor));
   }
 

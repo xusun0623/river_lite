@@ -8,20 +8,20 @@ import 'package:provider/provider.dart';
 import 'niw.dart';
 
 class BackToTop extends StatefulWidget {
-  ScrollController? controller;
-  Widget? child;
+  ScrollController controller;
+  Widget child;
   bool show;
-  double? bottom;
-  bool? animation;
-  bool? attachBtn;
-  Function? tap;
-  Function? refresh;
-  Widget? widget;
-  Color? color;
+  double bottom;
+  bool animation;
+  bool attachBtn;
+  Function tap;
+  Function refresh;
+  Widget widget;
+  Color color;
   BackToTop({
-    Key? key,
+    Key key,
     this.child,
-    required this.show,
+    @required this.show,
     this.color,
     this.controller,
     this.bottom,
@@ -37,13 +37,13 @@ class BackToTop extends StatefulWidget {
 }
 
 class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
-  late AnimationController controller; //动画控制器
-  late Animation<double> animation;
+  AnimationController controller; //动画控制器
+  Animation<double> animation;
   double _right = -200;
   @override
   void initState() {
     super.initState();
-    widget.controller!.addListener(() {
+    widget.controller.addListener(() {
       if (widget.show ?? false)
         controller.forward();
       else
@@ -92,7 +92,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                   ),
                   child: myInkWell(
                     tap: () {
-                      if (widget.refresh != null) widget.refresh!();
+                      if (widget.refresh != null) widget.refresh();
                     },
                     color: widget.color ??
                         (Provider.of<ColorProvider>(context).isDark
@@ -132,7 +132,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
                   ),
                   child: myInkWell(
                     tap: () {
-                      if (widget.tap != null) widget.tap!();
+                      if (widget.tap != null) widget.tap();
                     },
                     color: widget.color ?? os_deep_blue,
                     widget: Container(
@@ -165,7 +165,7 @@ class _BackToTopState extends State<BackToTop> with TickerProviderStateMixin {
               ),
               child: myInkWell(
                 tap: () {
-                  widget.controller!.animateTo(
+                  widget.controller.animateTo(
                     0,
                     duration: Duration(
                         milliseconds: (widget.animation ?? true ? 500 : 1)),

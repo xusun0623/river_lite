@@ -57,7 +57,7 @@ class Api {
     return;
   }
 
-  submit_question({int? answer, BuildContext? context}) async {
+  submit_question({int answer, BuildContext context}) async {
     String cookie = await getStorage(key: "cookie", initData: "");
     var headers = {'Cookie': cookie};
     var request = http.MultipartRequest(
@@ -145,7 +145,7 @@ class Api {
     }
   }
 
-  edit_avator({String? base64_1, String? base64_2, String? base64_3}) async {
+  edit_avator({String base64_1, String base64_2, String base64_3}) async {
     await getWebCookie();
     String cookie = await getStorage(key: "cookie", initData: "");
     if (cookie != "") {
@@ -168,9 +168,9 @@ class Api {
           ),
         );
         request2.fields.addAll({
-          'avatar1': base64_1!,
-          'avatar2': base64_2!,
-          'avatar3': base64_3!,
+          'avatar1': base64_1,
+          'avatar2': base64_2,
+          'avatar3': base64_3,
         });
         request2.headers.addAll({'Cookie': cookie});
         http.StreamedResponse response2 = await request2.send();
@@ -356,7 +356,7 @@ class Api {
 
   //此处有
   uploadImage({
-    List<XFile>? imgs,
+    List<XFile> imgs,
   }) async {
     print("上传图片 ${imgs}");
     String myinfo_txt = await getStorage(key: "myinfo", initData: "");
@@ -369,8 +369,8 @@ class Api {
               'mobcent/app/web/index.php?r=forum/sendattachmentex&type=image&module=forum&accessToken=${myinfo["token"]}&accessSecret=${myinfo["secret"]}',
         ),
       );
-      for (var i = 0; i < imgs!.length; i++) {
-        String? tmp_jpg_path = imgs[i].path;
+      for (var i = 0; i < imgs.length; i++) {
+        var tmp_jpg_path = imgs[i].path;
         if (imgs[i].path.split(".")[1] == "heic") {
           //支持苹果拍照格式
           tmp_jpg_path = await HeicToJpg.convert(imgs[i].path);
@@ -378,7 +378,7 @@ class Api {
         request.files.add(
           await http.MultipartFile.fromPath(
             'uploadFile[]',
-            tmp_jpg_path!,
+            tmp_jpg_path,
             filename: "hello.png",
             /* 一定要写！！！！！！！！！！！！！！！！！！！！！！！*/
             contentType: MediaType("image", "jpeg"),
@@ -478,7 +478,6 @@ class Api {
       param: {
         "r": "portal/newslist",
         "moduleId": 2,
-        "isImageList": 1,
       },
     );
   }

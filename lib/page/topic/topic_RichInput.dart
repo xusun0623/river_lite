@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
@@ -25,11 +24,11 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class RichInput extends StatefulWidget {
-  double? bottom;
+  double bottom;
   TextEditingController controller;
   FocusNode focusNode;
-  int? tid;
-  int? fid;
+  int tid;
+  int fid;
   Function cancel;
   Function send;
   Function uploadImg;
@@ -37,18 +36,18 @@ class RichInput extends StatefulWidget {
   String placeholder;
   Function atUser;
   RichInput({
-    Key? key,
+    Key key,
     this.bottom,
-    required this.tid,
-    required this.fid,
-    required this.controller,
-    required this.focusNode,
-    required this.cancel,
-    required this.send,
-    required this.uploadImg,
-    required this.atUser,
-    required this.placeholder,
-    required this.uploadFile,
+    @required this.tid,
+    @required this.fid,
+    @required this.controller,
+    @required this.focusNode,
+    @required this.cancel,
+    @required this.send,
+    @required this.uploadImg,
+    @required this.atUser,
+    @required this.placeholder,
+    @required this.uploadFile,
   }) : super(key: key);
 
   @override
@@ -65,8 +64,8 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
 
   double uploadProgress = 0; //上传进度
 
-  late AnimationController controller; //动画控制器
-  late Animation<double> animation;
+  AnimationController controller; //动画控制器
+  Animation<double> animation;
   double popHeight = 0;
 
   _foldPop() async {
@@ -186,13 +185,13 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                   image = await pickeImgFile(context);
                                 } else {
                                   print("选择小屏图片");
-                                  List<Media> res = await (ImagesPicker.pick(
+                                  List<Media> res = await ImagesPicker.pick(
                                     count: 50,
                                     cropOpt: CropOption(),
                                     pickType: PickType.image,
                                     quality: 0.5, //一半的质量
                                     maxSize: 1024, //1024KB
-                                  ) as FutureOr<List<Media>>);
+                                  );
                                   res.forEach((element) {
                                     image.add(XFile(element.path));
                                   });
@@ -426,14 +425,14 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
 }
 
 class SwitchHead extends StatefulWidget {
-  const SwitchHead({Key? key}) : super(key: key);
+  const SwitchHead({Key key}) : super(key: key);
 
   @override
   State<SwitchHead> createState() => _SwitchHeadState();
 }
 
 class _SwitchHeadState extends State<SwitchHead> {
-  String? head_url = "";
+  String head_url = "";
 
   getHead() async {
     String myinfo_txt = await getStorage(key: "myinfo", initData: "");
@@ -460,7 +459,7 @@ class _SwitchHeadState extends State<SwitchHead> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(100),
                   child: Image.network(
-                    head_url!,
+                    head_url,
                     width: 26.5,
                     height: 26.5,
                   ),

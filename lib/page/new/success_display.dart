@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 class SuccessDisplay extends StatelessWidget {
   const SuccessDisplay({
-    Key? key,
+    Key key,
   }) : super(key: key);
 
   @override

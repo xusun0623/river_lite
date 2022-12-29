@@ -12,10 +12,10 @@ import 'tab_bar_view_properties.dart';
 /// about internal workings of "TabBar ecosystem".
 class ContainedTabBarView extends StatefulWidget {
   const ContainedTabBarView({
-    Key? key,
-    required this.tabs,
+    Key key,
+    @required this.tabs,
     this.tabBarProperties = const TabBarProperties(),
-    required this.views,
+    @required this.views,
     this.tabBarViewProperties = const TabBarViewProperties(),
     this.initialIndex = 0,
     this.onChange,
@@ -52,7 +52,7 @@ class ContainedTabBarView extends StatefulWidget {
   /// If [callOnChangeWhileIndexIsChanging] is true this method is
   /// also called while we're animating from previousIndex to index
   /// as a consequence of calling animateTo.
-  final void Function(int)? onChange;
+  final void Function(int) onChange;
 
   /// Whether [onChange] should also get called while we're animating
   /// from previousIndex to index as a consequence of calling animateTo.
@@ -64,7 +64,7 @@ class ContainedTabBarView extends StatefulWidget {
 
 class ContainedTabBarViewState extends State<ContainedTabBarView>
     with SingleTickerProviderStateMixin {
-  TabController? _controller;
+  TabController _controller;
 
   @override
   void initState() {
@@ -76,15 +76,15 @@ class ContainedTabBarViewState extends State<ContainedTabBarView>
     )..addListener(() {
         if (widget.callOnChangeWhileIndexIsChanging ||
             (!widget.callOnChangeWhileIndexIsChanging &&
-                !_controller!.indexIsChanging)) {
-          widget.onChange?.call(_controller!.index);
+                !_controller.indexIsChanging)) {
+          widget.onChange?.call(_controller.index);
         }
       });
   }
 
   /// True while we're animating from previousIndex to index
   /// as a consequence of calling animateTo.
-  bool get indexIsChanging => _controller!.indexIsChanging;
+  bool get indexIsChanging => _controller.indexIsChanging;
 
   /// Animates to the tab with the given index.
   void animateTo(
@@ -92,16 +92,16 @@ class ContainedTabBarViewState extends State<ContainedTabBarView>
     Duration duration = kTabScrollDuration,
     Curve curve = Curves.ease,
   }) =>
-      _controller!.animateTo(value, duration: duration, curve: curve);
+      _controller.animateTo(value, duration: duration, curve: curve);
 
   /// Animates to the next tab.
   void next({
     Duration duration = kTabScrollDuration,
     Curve curve = Curves.ease,
   }) {
-    if (_controller!.index == _controller!.length - 1) return;
+    if (_controller.index == _controller.length - 1) return;
 
-    animateTo(_controller!.index + 1);
+    animateTo(_controller.index + 1);
   }
 
   /// Animates to the previous tab.
@@ -109,9 +109,9 @@ class ContainedTabBarViewState extends State<ContainedTabBarView>
     Duration duration = kTabScrollDuration,
     Curve curve = Curves.ease,
   }) {
-    if (_controller!.index == 0) return;
+    if (_controller.index == 0) return;
 
-    animateTo(_controller!.index - 1);
+    animateTo(_controller.index - 1);
   }
 
   @override
@@ -155,7 +155,7 @@ class ContainedTabBarViewState extends State<ContainedTabBarView>
   Widget _buildTabBar() {
     final List<Widget> backgroundStackChildren = [];
     if (widget.tabBarProperties.background != null) {
-      backgroundStackChildren.add(widget.tabBarProperties.background!);
+      backgroundStackChildren.add(widget.tabBarProperties.background);
     }
     backgroundStackChildren.add(
       Positioned.fill(
@@ -256,7 +256,7 @@ class ContainedTabBarViewState extends State<ContainedTabBarView>
 
   @override
   void dispose() {
-    _controller!.dispose();
+    _controller.dispose();
     super.dispose();
   }
 }

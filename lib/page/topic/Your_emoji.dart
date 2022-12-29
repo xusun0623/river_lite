@@ -8,11 +8,11 @@ import 'package:provider/provider.dart';
 
 class YourEmoji extends StatefulWidget {
   Function tap;
-  Color? backgroundColor;
-  double? size;
+  Color backgroundColor;
+  double size;
   YourEmoji({
-    Key? key,
-    required this.tap,
+    Key key,
+    @required this.tap,
     this.backgroundColor,
     this.size,
   }) : super(key: key);
@@ -156,7 +156,7 @@ class _YourEmojiState extends State<YourEmoji> {
           child: Text(
             emoji[index].characters.elementAt(i),
             style: TextStyle(
-              fontSize: widget.size == null ? 30 : widget.size! - 5,
+              fontSize: widget.size == null ? 30 : widget.size - 5,
             ),
           ),
         ),
@@ -186,7 +186,7 @@ class _YourEmojiState extends State<YourEmoji> {
       ),
       child: ListView(
         controller: _scrollController,
-        // physics: BouncingScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         children: [
           Container(
             padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),

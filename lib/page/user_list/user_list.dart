@@ -15,9 +15,9 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class UserList extends StatefulWidget {
-  Map? data;
+  Map data;
   UserList({
-    Key? key,
+    Key key,
     this.data,
   }) : super(key: key);
 
@@ -26,7 +26,7 @@ class UserList extends StatefulWidget {
 }
 
 class _UserListState extends State<UserList> {
-  List? data = [];
+  List data = [];
   bool load_done = false;
   ScrollController _controller = new ScrollController();
 
@@ -34,13 +34,13 @@ class _UserListState extends State<UserList> {
     var tmp = await Api().user_userlist({
       "page": 1,
       "pageSize": 10,
-      "uid": widget.data!["uid"],
-      "type": ["followed", "follow"][widget.data!["type"]],
+      "uid": widget.data["uid"],
+      "type": ["followed", "follow"][widget.data["type"]],
     });
     if (tmp != null && tmp["rs"] != 0 && tmp["list"] != null) {
       setState(() {
         data = tmp["list"];
-        load_done = data!.length % 10 != 0 || data!.length == 0;
+        load_done = data.length % 10 != 0 || data.length == 0;
       });
     } else {
       setState(() {
@@ -52,15 +52,15 @@ class _UserListState extends State<UserList> {
   _getMore() async {
     if (load_done) return;
     var tmp = await Api().user_userlist({
-      "page": (data!.length / 10).ceil() + 1,
+      "page": (data.length / 10).ceil() + 1,
       "pageSize": 10,
-      "uid": widget.data!["uid"],
-      "type": ["followed", "follow"][widget.data!["type"]],
+      "uid": widget.data["uid"],
+      "type": ["followed", "follow"][widget.data["type"]],
     });
     if (tmp != null && tmp["list"] != null) {
       setState(() {
-        data!.addAll(tmp["list"]);
-        load_done = data!.length % 10 != 0 || data!.length == 0;
+        data.addAll(tmp["list"]);
+        load_done = data.length % 10 != 0 || data.length == 0;
       });
     } else {
       setState(() {
@@ -71,12 +71,12 @@ class _UserListState extends State<UserList> {
 
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
-    data!.forEach((element) {
+    data.forEach((element) {
       tmp.add(ResponsiveWidget(child: UserListCard(data: element)));
     });
     if (!load_done) {
       tmp.add(BottomLoading(color: Colors.transparent));
-    } else if (load_done && data!.length == 0) tmp.add(Empty(txt: "这里是一颗空的星球"));
+    } else if (load_done && data.length == 0) tmp.add(Empty(txt: "这里是一颗空的星球"));
     return tmp;
   }
 
@@ -107,7 +107,7 @@ class _UserListState extends State<UserList> {
               : os_black,
           elevation: 0,
           title: Text(
-            widget.data!["type"] == 0 ? "粉丝" : "关注",
+            widget.data["type"] == 0 ? "粉丝" : "关注",
             style: TextStyle(
               fontSize: 16,
             ),
@@ -132,7 +132,7 @@ class _UserListState extends State<UserList> {
           },
           child: ListView(
             controller: _controller,
-            // physics: BouncingScrollPhysics(),
+            physics: BouncingScrollPhysics(),
             children: _buildCont(),
           ),
         ),
@@ -142,9 +142,9 @@ class _UserListState extends State<UserList> {
 }
 
 class UserListCard extends StatefulWidget {
-  Map? data;
+  Map data;
   UserListCard({
-    Key? key,
+    Key key,
     this.data,
   }) : super(key: key);
 
@@ -162,13 +162,13 @@ class _UserListCardState extends State<UserListCard> {
             ? os_light_dark_card
             : os_white,
         tap: () async {
-          int? uid = await getUid();
+          int uid = await getUid();
           Navigator.pushNamed(
             context,
             "/person_center",
             arguments: {
-              "uid": widget.data!["uid"],
-              "isMe": uid == widget.data!["uid"],
+              "uid": widget.data["uid"],
+              "isMe": uid == widget.data["uid"],
             },
           );
         },
@@ -191,7 +191,7 @@ class _UserListCardState extends State<UserListCard> {
                   width: 50,
                   height: 50,
                   fit: BoxFit.cover,
-                  imageUrl: widget.data!["icon"],
+                  imageUrl: widget.data["icon"],
                 ),
               ),
               Container(width: 15),
@@ -205,7 +205,7 @@ class _UserListCardState extends State<UserListCard> {
                     Row(
                       children: [
                         Text(
-                          widget.data!["name"],
+                          widget.data["name"],
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -215,9 +215,9 @@ class _UserListCardState extends State<UserListCard> {
                           ),
                         ),
                         Container(width: 5),
-                        widget.data!["userTitle"].toString().length < 6
+                        widget.data["userTitle"].toString().length < 6
                             ? Tag(
-                                txt: widget.data!["userTitle"],
+                                txt: widget.data["userTitle"],
                                 color: os_white,
                                 color_opa: os_wonderful_color[1],
                               )
@@ -226,9 +226,9 @@ class _UserListCardState extends State<UserListCard> {
                     ),
                     Container(height: 5),
                     Text(
-                      widget.data!["signature"] == ""
+                      widget.data["signature"] == ""
                           ? "这位畔友很懒，什么也没写"
-                          : widget.data!["signature"],
+                          : widget.data["signature"],
                       style: TextStyle(
                         fontSize: 16,
                         color: Color(0xFF9F9F9F),
@@ -238,7 +238,7 @@ class _UserListCardState extends State<UserListCard> {
                     Text(
                       RelativeDateFormat.format(
                             DateTime.fromMillisecondsSinceEpoch(
-                              int.parse(widget.data!["lastLogin"]),
+                              int.parse(widget.data["lastLogin"]),
                             ),
                           ) +
                           "在线",

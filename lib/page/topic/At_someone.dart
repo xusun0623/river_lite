@@ -9,11 +9,11 @@ import 'package:provider/provider.dart';
 class AtSomeone extends StatefulWidget {
   Function tap;
   Function hide;
-  Color? backgroundColor;
+  Color backgroundColor;
   AtSomeone({
-    Key? key,
-    required this.tap,
-    required this.hide,
+    Key key,
+    @required this.tap,
+    @required this.hide,
     this.backgroundColor,
   }) : super(key: key);
 
@@ -185,7 +185,7 @@ class _AtSomeoneState extends State<AtSomeone> {
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: ListView(
-        // physics: BouncingScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         controller: _scrollController,
         children: _buildCont(),
       ),

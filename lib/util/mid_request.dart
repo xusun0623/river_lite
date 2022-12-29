@@ -16,11 +16,10 @@ class ServerConfig {
   String url = base_url + "mobcent/app/web/index.php";
 }
 
-bool isLog = true; //控制是否打印网络输出日志
+bool isLog = false; //控制是否打印网络输出日志
 
 class XHttp {
-  pureHttpWithCookie(
-      {required String url, Map? param, bool hadCookie = false}) async {
+  pureHttpWithCookie({String url, Map param, bool hadCookie = false}) async {
     var dio = Dio();
     String cookie = "";
     if (hadCookie) {
@@ -44,7 +43,7 @@ class XHttp {
         );
     if (response != null) {
       try {
-        Map<String, dynamic>? data = jsonDecode(response.toString());
+        Map<String, dynamic> data = jsonDecode(response.toString());
         if (isLog) print("地址:$url入参:$param回参:$data");
         return data;
       } catch (e) {
@@ -55,7 +54,7 @@ class XHttp {
     }
   }
 
-  pureHttp({required String url, Map? param}) async {
+  pureHttp({String url, Map param}) async {
     var dio = Dio();
     dio.options.contentType = Headers.formUrlEncodedContentType;
     dio.options.responseType = ResponseType.plain;
@@ -69,7 +68,7 @@ class XHttp {
         );
     if (response != null) {
       try {
-        Map<String, dynamic>? data = jsonDecode(response.toString());
+        Map<String, dynamic> data = jsonDecode(response.toString());
         if (isLog) print("地址:$url入参:$param回参:$data");
         return data;
       } catch (e) {
@@ -81,10 +80,10 @@ class XHttp {
   }
 
   netWorkRequest({
-    bool? noTimeOut, //是否有超时
+    bool noTimeOut, //是否有超时
     String url = "",
-    Map? header,
-    Map? param, //参数
+    Map header,
+    Map param, //参数
   }) async {
     var dio = Dio();
     dio.options.baseUrl = ServerConfig().url;
@@ -101,7 +100,7 @@ class XHttp {
       },
     );
     if (response != null) {
-      Map<String, dynamic>? data = jsonDecode(response.toString());
+      Map<String, dynamic> data = jsonDecode(response.toString());
       if (isLog) print("地址:$url入参:$param回参:$data");
       return data;
     } else {
@@ -111,14 +110,14 @@ class XHttp {
   }
 
   postWithGlobalToken({
-    bool? noTimeOut,
-    Map? param,
-    required String url,
+    bool noTimeOut,
+    Map param,
+    String url,
   }) async {
     String myinfo_txt = await getStorage(key: "myinfo", initData: "");
     if (myinfo_txt != "") {
       Map myinfo = jsonDecode(myinfo_txt);
-      param!.addAll({
+      param.addAll({
         "accessToken": myinfo["token"],
         "accessSecret": myinfo["secret"],
         "platType": Platform.isAndroid ? "" : 5,
@@ -134,9 +133,9 @@ class XHttp {
 
   //发起POST请求
   post({
-    required String url,
-    Map? header,
-    Map? param,
+    String url,
+    Map header,
+    Map param,
   }) async {
     return netWorkRequest(
       url: url,

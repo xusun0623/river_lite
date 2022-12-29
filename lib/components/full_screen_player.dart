@@ -4,10 +4,10 @@ import 'package:offer_show/asset/color.dart';
 import 'package:video_player/video_player.dart';
 
 class FullScreenPlayer extends StatefulWidget {
-  VideoPlayerController? controller;
-  ChewieController? chewieController;
+  VideoPlayerController controller;
+  ChewieController chewieController;
   FullScreenPlayer({
-    Key? key,
+    Key key,
     this.controller,
     this.chewieController,
   }) : super(key: key);
@@ -28,7 +28,7 @@ class _FullScreenPlayerState extends State<FullScreenPlayer> {
                 Center(
                   child: SafeArea(
                     child: Chewie(
-                      controller: widget.chewieController!,
+                      controller: widget.chewieController,
                     ),
                   ),
                 ),
@@ -40,7 +40,7 @@ class _FullScreenPlayerState extends State<FullScreenPlayer> {
                         backgroundColor:
                             MaterialStateProperty.all(Color(0x11000000))),
                     onPressed: () {
-                      widget.chewieController!.pause();
+                      widget.chewieController.pause();
                       Navigator.of(context).pop();
                     },
                     icon: Icon(

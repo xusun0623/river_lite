@@ -16,13 +16,13 @@ import 'package:provider/provider.dart';
 
 class TopicDetailTime extends StatefulWidget {
   var data;
-  Function? refresh;
-  Function? capture;
+  Function refresh;
+  Function capture;
   TopicDetailTime({
-    Key? key,
+    Key key,
     this.refresh,
     this.capture,
-    required this.data,
+    @required this.data,
   }) : super(key: key);
 
   @override
@@ -33,153 +33,149 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
   String _value = "";
 
   _giveWater() async {
-    showPop(context,
-        widgets: [
-          Container(height: 30),
-          Text(
-            "请给楼主加水",
+    showPop(context, [
+      Container(height: 30),
+      Text(
+        "请给楼主加水",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_dark_white
+              : os_black,
+        ),
+      ),
+      Container(height: 10),
+      Text(
+        "注意：会扣除你等量的水（扣水额外收税10%）",
+        style: TextStyle(
+          fontSize: 14,
+          color: os_deep_grey,
+        ),
+      ),
+      Container(height: 10),
+      Container(
+        height: 60,
+        padding: EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_white_opa
+              : os_grey,
+        ),
+        child: Center(
+          child: TextField(
+            cursorColor: os_deep_blue,
+            onChanged: (ele) {
+              _value = ele;
+            },
             style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
             ),
-          ),
-          Container(height: 10),
-          Text(
-            "注意：会扣除你等量的水（扣水额外收税10%）",
-            style: TextStyle(
-              fontSize: 14,
-              color: os_deep_grey,
-            ),
-          ),
-          Container(height: 10),
-          Container(
-            height: 60,
-            padding: EdgeInsets.symmetric(
-              horizontal: 15,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Provider.of<ColorProvider>(context, listen: false).isDark
-                  ? os_white_opa
-                  : os_grey,
-            ),
-            child: Center(
-              child: TextField(
-                cursorColor: os_deep_blue,
-                onChanged: (ele) {
-                  _value = ele;
-                },
-                style: TextStyle(
+            decoration: InputDecoration(
+                hintText: "请输入水滴数，从-5~30",
+                border: InputBorder.none,
+                hintStyle: TextStyle(
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_dark_white
-                          : os_black,
-                ),
-                decoration: InputDecoration(
-                    hintText: "请输入水滴数，从-5~30",
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(
+                          ? os_dark_dark_white
+                          : os_deep_grey,
+                )),
+          ),
+        ),
+      ),
+      Container(height: 10),
+      Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            child: myInkWell(
+              tap: () {
+                Navigator.pop(context);
+              },
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_white_opa
+                  : Color(0x16004DFF),
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Text(
+                    "取消",
+                    style: TextStyle(
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
                           ? os_dark_dark_white
-                          : os_deep_grey,
-                    )),
+                          : os_deep_blue,
+                    ),
+                  ),
+                ),
               ),
+              radius: 12.5,
             ),
           ),
-          Container(height: 10),
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 10),
-                child: myInkWell(
-                  tap: () {
+          Container(
+            child: myInkWell(
+              tap: () async {
+                try {
+                  int val_int = int.parse(_value);
+                  if (val_int < -5 || val_int > 30) {
+                    showToast(
+                      context: context,
+                      type: XSToast.none,
+                      txt: "请输入-5~30的整数",
+                    );
+                  } else {
+                    await XHttp().pureHttp(
+                        url: widget.data["topic"]["extraPanel"][0]["action"]
+                                .toString() +
+                            "&modsubmit=确定",
+                        param: {
+                          "score2": "${val_int}",
+                          "sendreasonpm": "on",
+                          "reason": "水滴操作",
+                        });
+                    if (widget.refresh != null) widget.refresh();
                     Navigator.pop(context);
-                  },
-                  color:
-                      Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_white_opa
-                          : Color(0x16004DFF),
-                  widget: Container(
-                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                    height: 40,
-                    child: Center(
-                      child: Text(
-                        "取消",
+                  }
+                } catch (e) {
+                  showToast(
+                    context: context,
+                    type: XSToast.none,
+                    txt: "请输入整数",
+                  );
+                }
+              },
+              color: os_deep_blue,
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.done, color: os_white, size: 18),
+                      Container(width: 5),
+                      Text(
+                        "完成",
                         style: TextStyle(
-                          color:
-                              Provider.of<ColorProvider>(context, listen: false)
-                                      .isDark
-                                  ? os_dark_dark_white
-                                  : os_deep_blue,
+                          color: os_white,
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  radius: 12.5,
                 ),
               ),
-              Container(
-                child: myInkWell(
-                  tap: () async {
-                    try {
-                      int val_int = int.parse(_value);
-                      if (val_int < -5 || val_int > 30) {
-                        showToast(
-                          context: context,
-                          type: XSToast.none,
-                          txt: "请输入-5~30的整数",
-                        );
-                      } else {
-                        await XHttp().pureHttp(
-                            url: widget.data["topic"]["extraPanel"][0]["action"]
-                                    .toString() +
-                                "&modsubmit=确定",
-                            param: {
-                              "score2": "${val_int}",
-                              "sendreasonpm": "on",
-                              "reason": "水滴操作",
-                            });
-                        if (widget.refresh != null) widget.refresh!();
-                        Navigator.pop(context);
-                      }
-                    } catch (e) {
-                      showToast(
-                        context: context,
-                        type: XSToast.none,
-                        txt: "请输入整数",
-                      );
-                    }
-                  },
-                  color: os_deep_blue,
-                  widget: Container(
-                    width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                    height: 40,
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.done, color: os_white, size: 18),
-                          Container(width: 5),
-                          Text(
-                            "完成",
-                            style: TextStyle(
-                              color: os_white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  radius: 12.5,
-                ),
-              ),
-            ],
+              radius: 12.5,
+            ),
           ),
-        ].toList());
+        ],
+      ),
+    ]);
   }
 
   @override
@@ -297,7 +293,7 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                             title: "截图功能",
                             cont: "轻触确认以截取帖子和评论并保存到相册,如果长度过长可能会导致图片像素质量不佳",
                             confirm: () {
-                              widget.capture!();
+                              widget.capture();
                             });
                       }
                     },

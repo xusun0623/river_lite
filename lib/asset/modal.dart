@@ -5,10 +5,10 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 void showMidActionSheet({
-  required BuildContext context,
-  String? title,
-  required List<String> list,
-  required Function select,
+  @required BuildContext context,
+  String title,
+  @required List<String> list,
+  @required Function select,
 }) {
   List<Widget> _buildChidren() {
     List<Widget> tmp = [];
@@ -88,13 +88,13 @@ void showMidActionSheet({
 }
 
 void showModal({
-  required BuildContext context,
-  String? title,
-  String? cont,
-  String? confirmTxt,
-  String? cancelTxt,
-  Function? confirm,
-  Function? cancel,
+  @required BuildContext context,
+  String title,
+  String cont,
+  String confirmTxt,
+  String cancelTxt,
+  Function confirm,
+  Function cancel,
 }) {
   AlertDialog alert = AlertDialog(
     backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -202,7 +202,7 @@ void showModal({
 }
 
 var isShown = false;
-late BuildContext context_tmp;
+BuildContext context_tmp;
 
 enum XSToast {
   loading,
@@ -219,17 +219,17 @@ void hideToast() {
 }
 
 void showToast({
-  required BuildContext? context,
-  required XSToast type,
-  String? txt,
-  int? duration,
+  @required BuildContext context,
+  @required XSToast type,
+  String txt,
+  int duration,
 }) {
   if (isShown) return;
   isShown = true;
   if (type == XSToast.none) {
     popDialogNoWill(
       delay: duration ?? 1500,
-      context: context!,
+      context: context,
       widget: Container(
         // padding: EdgeInsets.all(30),
         width: 240,
@@ -256,7 +256,7 @@ void showToast({
   if (type == XSToast.loading) {
     popDialog(
       delay: duration ?? 3000,
-      context: context!,
+      context: context,
       widget: Container(
         padding: EdgeInsets.all(30),
         width: 150,
@@ -281,7 +281,7 @@ void showToast({
   if (type == XSToast.success) {
     popDialogNoWill(
       delay: duration ?? 700,
-      context: context!,
+      context: context,
       widget: Container(
         padding: EdgeInsets.all(30),
         width: 150,
@@ -308,8 +308,8 @@ void showToast({
 }
 
 void popDialogNoWill({
-  required BuildContext context,
-  required Widget widget,
+  @required BuildContext context,
+  @required Widget widget,
   int delay = 600,
   Color back = Colors.black38,
 }) {
@@ -339,8 +339,8 @@ void popDialogNoWill({
 }
 
 void popDialog({
-  required BuildContext context,
-  required Widget widget,
+  @required BuildContext context,
+  @required Widget widget,
   int delay = 600,
   Color back = Colors.black38,
 }) {
@@ -356,7 +356,7 @@ void popDialog({
           //阻止用户返回
           onWillPop: () {
             return;
-          } as Future<bool> Function()?,
+          },
           child: Container(
             color: Provider.of<ColorProvider>(context, listen: false).isDark
                 ? Colors.transparent

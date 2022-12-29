@@ -4,11 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'color.dart';
 
-showPop(
-  BuildContext context, {
-  required List<Widget> widgets,
-  double? height,
-}) {
+showPop(BuildContext context, List<Widget> widgets) {
   showModalBottomSheet(
     isScrollControlled: true,
     backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -26,13 +22,13 @@ showPop(
         margin: EdgeInsets.symmetric(
           horizontal: 30,
         ),
-        height: height ?? MediaQuery.of(context).size.height - 100,
+        height: MediaQuery.of(context).size.height - 100,
         width: MediaQuery.of(context).size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ...widgets,
-          ].whereType<Widget>().toList(),
+          ],
         ),
       );
     },

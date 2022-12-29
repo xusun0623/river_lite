@@ -22,8 +22,8 @@ class CollectionTab extends StatefulWidget {
 class _CollectionTabState extends State<CollectionTab>
     with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
-  List? mydata = [];
-  List? data = [];
+  List mydata = [];
+  List data = [];
   var loading = false;
   var load_done = false;
   bool showBackToTop = false;
@@ -102,7 +102,7 @@ class _CollectionTabState extends State<CollectionTab>
                   "threadnum",
                   "commentnum",
                   "follownum"
-                ][filter_type]}&page=${isInit ? 1 : (data!.length / 20).ceil() + 1}",
+                ][filter_type]}&page=${isInit ? 1 : (data.length / 20).ceil() + 1}",
         hadCookie: isInit ? false : true, //第二次请求时使用原有Cookie
       ))
           .data
@@ -151,11 +151,11 @@ class _CollectionTabState extends State<CollectionTab>
                 .first
                 .getElementsByTagName("a")
                 .first
-                .attributes["href"]!
+                .attributes["href"]
                 .split("&uid=")[1]), //专辑的创建者ID
             "list_id": int.parse(dl
                 .getElementsByClassName("xi2")[1]
-                .attributes["href"]!
+                .attributes["href"]
                 .split("&ctid=")[1]
                 .split("&fromop")[0]), //专辑ID
             "subs_num":
@@ -173,10 +173,10 @@ class _CollectionTabState extends State<CollectionTab>
             data = tmp;
           }
         } else {
-          data!.addAll(tmp);
+          data.addAll(tmp);
         }
         setState(() {
-          load_done = data!.length % 20 != 0;
+          load_done = data.length % 20 != 0;
         });
       } catch (e) {
         print("${e}");
@@ -188,8 +188,8 @@ class _CollectionTabState extends State<CollectionTab>
     loading = false;
   }
 
-  List<String?> _getTag(t) {
-    List<String?> tmp = [];
+  List<String> _getTag(t) {
+    List<String> tmp = [];
     if (t.innerHtml.toString().contains("ctag_keyword")) {
       t
           .getElementsByClassName("ctag_keyword")
@@ -204,8 +204,8 @@ class _CollectionTabState extends State<CollectionTab>
 
   List<Widget> _buildComponents() {
     List<Widget> t = [];
-    if (mydata!.length != 0) {
-      mydata!.forEach((element) {
+    if (mydata.length != 0) {
+      mydata.forEach((element) {
         t.add(GestureDetector(
           onTap: () {
             Navigator.pushNamed(
@@ -219,7 +219,7 @@ class _CollectionTabState extends State<CollectionTab>
       });
       t.add(Container(height: 10));
     }
-    if (data!.length != 0 || loading) {
+    if (data.length != 0 || loading) {
       t.add(Container(height: 5));
       t.add(ListTab(
           loading: switchLoading,
@@ -234,7 +234,7 @@ class _CollectionTabState extends State<CollectionTab>
           }));
       t.add(Container(height: 5));
     }
-    data!.forEach((element) {
+    data.forEach((element) {
       t.add(GestureDetector(
         onTap: () {
           Navigator.pushNamed(
@@ -248,11 +248,11 @@ class _CollectionTabState extends State<CollectionTab>
     });
     if (!load_done) {
       t.add(BottomLoading());
-      if (data!.length == 0)
+      if (data.length == 0)
         t.add(Container(height: MediaQuery.of(context).size.height));
     }
     t.add(Container(height: 15));
-    if (load_done && data!.length == 0 && mydata!.length == 0) {
+    if (load_done && data.length == 0 && mydata.length == 0) {
       t.add(Container(height: MediaQuery.of(context).size.height));
     }
     return t;
@@ -276,12 +276,12 @@ class _CollectionTabState extends State<CollectionTab>
         child: BackToTop(
           show: showBackToTop,
           refresh: () {
-            _indicatorKey.currentState!.show();
+            _indicatorKey.currentState.show();
           },
           animation: true,
           bottom: 50,
           child: ListView(
-            // physics: BouncingScrollPhysics(),
+            physics: BouncingScrollPhysics(),
             controller: _scrollController,
             children: _buildComponents(),
           ),
@@ -296,11 +296,11 @@ class _CollectionTabState extends State<CollectionTab>
 }
 
 class ListTab extends StatefulWidget {
-  int? index;
-  Function? tap;
-  bool? loading;
+  int index;
+  Function tap;
+  bool loading;
   ListTab({
-    Key? key,
+    Key key,
     this.index,
     this.tap,
     this.loading,
@@ -317,7 +317,7 @@ class _ListTabState extends State<ListTab> {
       tmp.add(Container(
         child: myInkWell(
           tap: () {
-            widget.tap!(i);
+            widget.tap(i);
           },
           radius: 10,
           color: widget.index == i

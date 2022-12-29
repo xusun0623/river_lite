@@ -5,9 +5,9 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class RulePage extends StatefulWidget {
-  String? name;
+  String name;
   RulePage({
-    Key? key,
+    Key key,
     this.name,
   }) : super(key: key);
 

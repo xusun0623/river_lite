@@ -61,7 +61,7 @@ class NonePainter extends BasePainter {
   @override
   void draw(Canvas canvas, double space, double size, double radius) {
     final progress = page - index;
-    final secondOffset = index == widget.count! - 1
+    final secondOffset = index == widget.count - 1
         ? radius
         : radius + ((index + 1) * (size + space));
 
@@ -91,7 +91,7 @@ class ScalePainter extends BasePainter {
 
   @override
   bool _shouldSkip(int index) {
-    if (this.index == widget.count! - 1) {
+    if (this.index == widget.count - 1) {
       return index == 0 || index == this.index;
     }
     return (index == this.index || index == this.index + 1);
@@ -103,7 +103,7 @@ class ScalePainter extends BasePainter {
     final space = widget.space;
     final size = widget.size;
     final radius = size / 2;
-    final c = widget.count!;
+    final c = widget.count;
     for (var i = 0; i < c; ++i) {
       if (_shouldSkip(i)) {
         continue;
@@ -118,17 +118,17 @@ class ScalePainter extends BasePainter {
 
   @override
   void draw(Canvas canvas, double space, double size, double radius) {
-    final secondOffset = index == widget.count! - 1
+    final secondOffset = index == widget.count - 1
         ? radius
         : radius + ((index + 1) * (size + space));
 
     final progress = page - index;
-    _paint.color = Color.lerp(widget.activeColor, widget.color, progress)!;
+    _paint.color = Color.lerp(widget.activeColor, widget.color, progress);
     //last
     canvas.drawCircle(Offset(radius + (index * (size + space)), radius),
         lerp(radius, radius * widget.scale, progress), _paint);
     //first
-    _paint.color = Color.lerp(widget.color, widget.activeColor, progress)!;
+    _paint.color = Color.lerp(widget.color, widget.activeColor, progress);
     canvas.drawCircle(Offset(secondOffset, radius),
         lerp(radius * widget.scale, radius, progress), _paint);
   }
@@ -140,7 +140,7 @@ class ColorPainter extends BasePainter {
 
   @override
   bool _shouldSkip(int index) {
-    if (this.index == widget.count! - 1) {
+    if (this.index == widget.count - 1) {
       return index == 0 || index == this.index;
     }
     return (index == this.index || index == this.index + 1);
@@ -149,16 +149,16 @@ class ColorPainter extends BasePainter {
   @override
   void draw(Canvas canvas, double space, double size, double radius) {
     final progress = page - index;
-    final secondOffset = index == widget.count! - 1
+    final secondOffset = index == widget.count - 1
         ? radius
         : radius + ((index + 1) * (size + space));
 
-    _paint.color = Color.lerp(widget.activeColor, widget.color, progress)!;
+    _paint.color = Color.lerp(widget.activeColor, widget.color, progress);
     //left
     canvas.drawCircle(
         Offset(radius + (index * (size + space)), radius), radius, _paint);
     //right
-    _paint.color = Color.lerp(widget.color, widget.activeColor, progress)!;
+    _paint.color = Color.lerp(widget.color, widget.activeColor, progress);
     canvas.drawCircle(Offset(secondOffset, radius), radius, _paint);
   }
 }
@@ -189,7 +189,7 @@ abstract class BasePainter extends CustomPainter {
     final space = widget.space;
     final size = widget.size;
     final radius = size / 2;
-    final c = widget.count!;
+    final c = widget.count;
     for (var i = 0; i < c; ++i) {
       if (_shouldSkip(i)) {
         continue;
@@ -239,7 +239,7 @@ class _PageIndicatorState extends State<PageIndicator> {
   @override
   Widget build(BuildContext context) {
     Widget child = SizedBox(
-      width: widget.count! * widget.size + (widget.count! - 1) * widget.space,
+      width: widget.count * widget.size + (widget.count - 1) * widget.space,
       height: widget.size,
       child: CustomPaint(
         painter: _createPainter(),
@@ -259,7 +259,7 @@ class _PageIndicatorState extends State<PageIndicator> {
   }
 
   void _onController([bool doSetState = true]) {
-    page = (widget.controller!.hasClients ? widget.controller!.page : 0) ?? 0.0;
+    page = (widget.controller.hasClients ? widget.controller.page : 0) ?? 0.0;
     index = page.floor();
     if (doSetState) {
       setState(() {});
@@ -269,7 +269,7 @@ class _PageIndicatorState extends State<PageIndicator> {
   @override
   void initState() {
     super.initState();
-    widget.controller!.addListener(_onController);
+    widget.controller.addListener(_onController);
     _onController(false);
   }
 
@@ -277,14 +277,14 @@ class _PageIndicatorState extends State<PageIndicator> {
   void didUpdateWidget(PageIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
-      oldWidget.controller!.removeListener(_onController);
-      widget.controller!.addListener(_onController);
+      oldWidget.controller.removeListener(_onController);
+      widget.controller.addListener(_onController);
     }
   }
 
   @override
   void dispose() {
-    widget.controller!.removeListener(_onController);
+    widget.controller.removeListener(_onController);
     super.dispose();
   }
 }
@@ -306,7 +306,7 @@ class PageIndicator extends StatefulWidget {
   final double space;
 
   /// count of dots
-  final int? count;
+  final int count;
 
   /// active color
   final Color activeColor;
@@ -315,7 +315,7 @@ class PageIndicator extends StatefulWidget {
   final Color color;
 
   /// layout of the dots,default is [PageIndicatorLayout.SLIDE]
-  final PageIndicatorLayout? layout;
+  final PageIndicatorLayout layout;
 
   // Only valid when layout==PageIndicatorLayout.scale
   final double scale;
@@ -323,17 +323,17 @@ class PageIndicator extends StatefulWidget {
   // Only valid when layout==PageIndicatorLayout.drop
   final double dropHeight;
 
-  final PageController? controller;
+  final PageController controller;
 
   final double activeSize;
 
   const PageIndicator({
-    Key? key,
+    Key key,
     this.size = 20.0,
     this.space = 5.0,
-    required this.count,
+    @required this.count,
     this.activeSize = 20.0,
-    required this.controller,
+    @required this.controller,
     this.color = Colors.white30,
     this.layout = PageIndicatorLayout.SLIDE,
     this.activeColor = Colors.white,
