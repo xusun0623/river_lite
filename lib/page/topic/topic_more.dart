@@ -6,6 +6,7 @@ import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/myinfo.dart';
+import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/components/niw.dart';
@@ -210,88 +211,72 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
   }
 
   _tapMore() async {
-    Future<List<ActionItem>> _buildAction() async {
-      List<ActionItem> tmp = [];
-      tmp.addAll([
-        ActionItem(
-          title: "展示二维码",
-          onPressed: () {
-            Navigator.pop(context);
-            _showQrCode();
-          },
-        ),
+    showAction(
+      context: context,
+      options: [
+        "展示二维码",
+        "复制帖子链接",
+        "举报反馈",
+        "屏蔽此贴",
+        ...(widget.data["topic"]["user_id"] == await getUid() ? ["编辑帖子"] : []),
+        ...(widget.data["forumName"] == "水手之家" ? ["转帖到水区"] : []),
+      ],
+      icons: [
+        Icons.qr_code,
+        Icons.copy,
+        Icons.feedback_outlined,
+        Icons.block,
         ...(widget.data["topic"]["user_id"] == await getUid()
-            ? [
-                ActionItem(
-                  title: "编辑帖子",
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, "/topic_edit", arguments: {
-                      "tid": widget.data["topic"]["topic_id"],
-                      "pid": int.parse(widget.data["topic"]["extraPanel"][0]
-                              ["action"]
-                          .toString()
-                          .split("&pid=")[1]
-                          .split("&")[0]),
-                    });
-                  },
-                ),
-              ]
+            ? [Icons.edit]
             : []),
         ...(widget.data["forumName"] == "水手之家"
-            ? []
-            : [
-                ActionItem(
-                  title: "转帖到水区",
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _toWaterColumn();
-                  },
-                ),
-              ]),
-        ActionItem(
-          title: "举报",
-          onPressed: () async {
-            Navigator.pop(context);
-            _feedback();
-          },
-        ),
-        ActionItem(
-          title: "复制帖子链接",
-          onPressed: () {
-            Clipboard.setData(
-              ClipboardData(
-                text: base_url +
-                    "forum.php?mod=viewthread&tid=" +
-                    widget.data["topic"]["topic_id"].toString(),
-              ),
-            );
-            Navigator.pop(context);
-            showToast(
-              context: context,
-              type: XSToast.success,
-              txt: "复制成功！",
-            );
-          },
-        ),
-      ]);
-      tmp.addAll([
-        ActionItem(
-          title: "屏蔽此贴",
-          onPressed: () async {
-            Navigator.pop(context);
-            setBlackWord(widget.data["topic"]["title"], context);
-            widget.block();
-          },
-        ),
-      ]);
-      return tmp;
-    }
-
-    showActionSheet(
-      context: context,
-      bottomActionItem: BottomActionItem(title: "取消"),
-      actions: await _buildAction(),
+            ? [Icons.move_down_rounded]
+            : []),
+      ],
+      tap: (res) async {
+        if (res == 0) {
+          Navigator.pop(context);
+          _showQrCode();
+        }
+        if (res == 1) {
+          Clipboard.setData(
+            ClipboardData(
+              text: base_url +
+                  "forum.php?mod=viewthread&tid=" +
+                  widget.data["topic"]["topic_id"].toString(),
+            ),
+          );
+          Navigator.pop(context);
+          showToast(
+            context: context,
+            type: XSToast.success,
+            txt: "复制成功！",
+          );
+        }
+        if (res == 2) {
+          Navigator.pop(context);
+          _feedback();
+        }
+        if (res == 3) {
+          Navigator.pop(context);
+          setBlackWord(widget.data["topic"]["title"], context);
+          widget.block();
+        }
+        if (res == 4) {
+          Navigator.pop(context);
+          Navigator.pushNamed(context, "/topic_edit", arguments: {
+            "tid": widget.data["topic"]["topic_id"],
+            "pid": int.parse(widget.data["topic"]["extraPanel"][0]["action"]
+                .toString()
+                .split("&pid=")[1]
+                .split("&")[0]),
+          });
+        }
+        if (res == 5) {
+          Navigator.pop(context);
+          _toWaterColumn();
+        }
+      },
     );
   }
 
