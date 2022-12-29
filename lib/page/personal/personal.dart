@@ -6,6 +6,7 @@ import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/nowMode.dart';
+import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -17,10 +18,6 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
-import 'package:offer_show/outer/showActionSheet/action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
-import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/page/topic/topic_more.dart';
@@ -205,39 +202,35 @@ class _PersonCenterState extends State<PersonCenter> {
   }
 
   _tapMore() {
-    showActionSheet(
+    showAction(
       context: context,
-      bottomActionItem: BottomActionItem(title: "取消"),
-      actions: [
-        ActionItem(
-            title: "复制空间链接",
-            onPressed: () {
-              Navigator.pop(context);
-              Clipboard.setData(
-                ClipboardData(
-                  text:
-                      "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
-                ),
-              );
-              showToast(
-                context: context,
-                type: XSToast.success,
-                txt: "复制链接成功",
-              );
-            }),
-        ActionItem(
-          title: "展示二维码",
-          onPressed: () {
-            Navigator.pop(context);
-            showPop(context, [
-              QrCode(
-                url:
-                    "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
-              )
-            ]);
-          },
-        ),
-      ],
+      options: ["复制空间链接", "展示二维码"],
+      icons: [Icons.copy, Icons.qr_code],
+      tap: (res) {
+        if (res == 0) {
+          Navigator.pop(context);
+          Clipboard.setData(
+            ClipboardData(
+              text:
+                  "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
+            ),
+          );
+          showToast(
+            context: context,
+            type: XSToast.success,
+            txt: "复制链接成功",
+          );
+        }
+        if (res == 1) {
+          Navigator.pop(context);
+          showPop(context, [
+            QrCode(
+              url:
+                  "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param["uid"]}",
+            )
+          ]);
+        }
+      },
     );
   }
 
@@ -793,50 +786,29 @@ class _PersonCardState extends State<PersonCard> {
             child: GestureDetector(
               onTap: () {
                 if (widget.isMe) {
-                  showActionSheet(
+                  showAction(
                     context: context,
-                    topActionItem: TopActionItem(title: "请选择你的性别"),
-                    actions: [
-                      ActionItem(
-                        title: "男生",
-                        onPressed: () async {
-                          showToast(
-                            context: context,
-                            type: XSToast.loading,
-                            txt: "请稍后…",
-                          );
-                          await Api().user_updateuserinfo({
-                            "type": "info",
-                            "gender": 1,
-                            "sign": widget.data["sign"],
-                          });
-                          hideToast();
-                          widget.data["gender"] = 1;
-                          setState(() {});
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ActionItem(
-                        title: "女生",
-                        onPressed: () async {
-                          showToast(
-                            context: context,
-                            type: XSToast.loading,
-                            txt: "请稍后…",
-                          );
-                          await Api().user_updateuserinfo({
-                            "type": "info",
-                            "gender": 2,
-                            "sign": widget.data["sign"],
-                          });
-                          hideToast();
-                          widget.data["gender"] = 2;
-                          setState(() {});
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                    bottomActionItem: BottomActionItem(title: "取消"),
+                    options: ["我是男生", "我是女生"],
+                    icons: [Icons.male, Icons.female],
+                    tap: (res) async {
+                      if (res == 0 || res == 1) {
+                        showToast(
+                          context: context,
+                          type: XSToast.loading,
+                          txt: "请稍后…",
+                        );
+                        await Api().user_updateuserinfo({
+                          "type": "info",
+                          "gender": res + 1,
+                          "sign": widget.data["sign"],
+                        });
+                        hideToast();
+                        widget.data["gender"] = res + 1;
+                        setState(() {});
+                        Navigator.pop(context);
+                      }
+                      if (res == 1) {}
+                    },
                   );
                 }
               },
@@ -857,33 +829,28 @@ class _PersonCardState extends State<PersonCard> {
             child: GestureDetector(
               onTap: () {
                 if (widget.isMe) {
-                  showActionSheet(
+                  showAction(
                     context: context,
-                    bottomActionItem: BottomActionItem(title: "取消"),
-                    actions: [
-                      ActionItem(
-                        title: "查看头像",
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => PhotoPreview(
-                                galleryItems: [widget.data["icon"]],
-                                defaultImage: 0,
-                              ),
+                    options: ["查看头像", "上传新头像"],
+                    icons: [Icons.image_outlined, Icons.upload_file_outlined],
+                    tap: (res) {
+                      if (res == 0) {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => PhotoPreview(
+                              galleryItems: [widget.data["icon"]],
+                              defaultImage: 0,
                             ),
-                          );
-                        },
-                      ),
-                      ActionItem(
-                        title: "上传新头像",
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.pushNamed(context, "/crop");
-                        },
-                      ),
-                    ],
+                          ),
+                        );
+                      }
+                      if (res == 1) {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, "/crop");
+                      }
+                    },
                   );
                 } else {
                   Navigator.push(

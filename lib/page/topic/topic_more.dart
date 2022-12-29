@@ -220,16 +220,6 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
             _showQrCode();
           },
         ),
-        // ActionItem(
-        //   title: "分享",
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //     Share.share("【河畔Lite客户端】分享给你一个帖子" +
-        //         base_url +
-        //         "forum.php?mod=viewthread&tid=" +
-        //         widget.data["topic"]["topic_id"].toString());
-        //   },
-        // ),
         ...(widget.data["topic"]["user_id"] == await getUid()
             ? [
                 ActionItem(

@@ -2,21 +2,17 @@ import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:images_picker/images_picker.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/uploadAttachment.dart';
 import 'package:offer_show/components/niw.dart';
-import 'package:offer_show/outer/showActionSheet/action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/page/topic/At_someone.dart';
 import 'package:offer_show/page/topic/Your_emoji.dart';
-import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/page/topic/topic_sendFunc.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -216,65 +212,63 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                   : "lib/img/topic_attach.svg",
                               uploadProgress: uploadProgress,
                               tap: () async {
-                                showActionSheet(
+                                showAction(
                                   context: context,
-                                  actions: [
-                                    ActionItem(
-                                      title: "上传视频",
-                                      onPressed: () async {
-                                        Navigator.pop(context);
-                                        String aid = await getVideoUploadAid(
-                                          tid: widget.tid,
-                                          fid: widget.fid,
-                                          context: context,
-                                          onUploadProgress: (rate) {
-                                            setState(() {
-                                              uploadProgress = rate;
-                                            });
-                                          },
-                                        );
-                                        print("上传的附件${aid}");
-                                        if (aid != "") {
-                                          setState(() {
-                                            uploadFile = aid;
-                                          });
-                                          widget.uploadFile(aid); //上传附件
-                                        } else {
-                                          setState(() {
-                                            uploadFile = "";
-                                          });
-                                        }
-                                      },
-                                    ),
-                                    ActionItem(
-                                        title: "上传附件",
-                                        onPressed: () async {
-                                          Navigator.pop(context);
-                                          String aid = await getUploadAid(
-                                            tid: widget.tid,
-                                            fid: widget.fid,
-                                            context: context,
-                                            onUploadProgress: (rate) {
-                                              setState(() {
-                                                uploadProgress = rate;
-                                              });
-                                            },
-                                          );
-                                          print("上传的附件${aid}");
-                                          if (aid != "") {
-                                            setState(() {
-                                              uploadFile = aid;
-                                            });
-                                            widget.uploadFile(aid); //上传附件
-                                          } else {
-                                            setState(() {
-                                              uploadFile = "";
-                                            });
-                                          }
-                                        }),
+                                  options: ["上传视频", "上传附件"],
+                                  icons: [
+                                    Icons.videocam_outlined,
+                                    Icons.attachment
                                   ],
-                                  bottomActionItem:
-                                      BottomActionItem(title: "取消"),
+                                  tap: (res) async {
+                                    if (res == 0) {
+                                      Navigator.pop(context);
+                                      String aid = await getVideoUploadAid(
+                                        tid: widget.tid,
+                                        fid: widget.fid,
+                                        context: context,
+                                        onUploadProgress: (rate) {
+                                          setState(() {
+                                            uploadProgress = rate;
+                                          });
+                                        },
+                                      );
+                                      print("上传的附件${aid}");
+                                      if (aid != "") {
+                                        setState(() {
+                                          uploadFile = aid;
+                                        });
+                                        widget.uploadFile(aid); //上传附件
+                                      } else {
+                                        setState(() {
+                                          uploadFile = "";
+                                        });
+                                      }
+                                    }
+                                    if (res == 1) {
+                                      Navigator.pop(context);
+                                      String aid = await getUploadAid(
+                                        tid: widget.tid,
+                                        fid: widget.fid,
+                                        context: context,
+                                        onUploadProgress: (rate) {
+                                          setState(() {
+                                            uploadProgress = rate;
+                                          });
+                                        },
+                                      );
+                                      print("上传的附件${aid}");
+                                      if (aid != "") {
+                                        setState(() {
+                                          uploadFile = aid;
+                                        });
+                                        widget.uploadFile(aid); //上传附件
+                                      } else {
+                                        setState(() {
+                                          uploadFile = "";
+                                        });
+                                      }
+                                    }
+                                  },
                                 );
                               },
                             ),

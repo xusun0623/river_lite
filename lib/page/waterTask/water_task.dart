@@ -769,13 +769,25 @@ class _Card1State extends State<Card1> {
               Container(height: 10),
               Container(
                 width: MediaQuery.of(context).size.width,
-                child: Text(
-                  "立即申请",
-                  style: TextStyle(
-                    color: os_color,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: os_color,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Text(
+                        "立即申请",
+                        style: TextStyle(
+                          color: os_white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

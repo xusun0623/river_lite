@@ -9,6 +9,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/saveImg.dart';
+import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
@@ -18,9 +19,6 @@ import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
-import 'package:offer_show/outer/showActionSheet/action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/Your_emoji.dart';
 import 'package:offer_show/util/interface.dart';
@@ -854,31 +852,22 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                 saveImge(context, [widget.cont], 0);
               } else {
                 XSVibrate();
-                showActionSheet(
-                    context: context,
-                    actions: [
-                      ActionItem(
-                          title: "复制文本",
-                          onPressed: () {
-                            Clipboard.setData(ClipboardData(text: widget.cont));
-                            Navigator.pop(context);
-                            showToast(
-                              context: context,
-                              type: XSToast.success,
-                              txt: widget.isImage ? "复制链接成功" : "复制文本成功",
-                            );
-                          }),
-                      // ActionItem(
-                      //     title: "删除此条消息",
-                      //     onPressed: () {
-                      //       Navigator.pop(context);
-                      //       Api().message_pmadmin({
-                      //         "json":
-                      //             '{"action": "delpmid","pmid": ${widget.mid}}'
-                      //       });
-                      //     }),
-                    ],
-                    bottomActionItem: BottomActionItem(title: "取消"));
+                showAction(
+                  context: context,
+                  options: ["复制文本"],
+                  icons: [Icons.copy],
+                  tap: (res) {
+                    if (res == 0) {
+                      Clipboard.setData(ClipboardData(text: widget.cont));
+                      Navigator.pop(context);
+                      showToast(
+                        context: context,
+                        type: XSToast.success,
+                        txt: widget.isImage ? "复制链接成功" : "复制文本成功",
+                      );
+                    }
+                  },
+                );
               }
             },
             color: widget.index == 0

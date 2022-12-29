@@ -3,12 +3,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -18,9 +18,6 @@ import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
-import 'package:offer_show/outer/showActionSheet/action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
@@ -218,62 +215,59 @@ class _TopicState extends State<Topic> {
   }
 
   _moreAction() async {
-    showActionSheet(
+    showAction(
       context: context,
-      actions: [
-        ActionItem(
-            title: "【不感兴趣】屏蔽此贴",
-            onPressed: () async {
-              await setBlackWord(widget.data["title"], context);
-              Navigator.pop(context);
-              showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
-              setState(() {
-                isBlack = true;
-              });
-            }),
-        ActionItem(
-            title: "【不感兴趣】屏蔽此人",
-            onPressed: () async {
-              await setBlackWord(widget.data["user_nick_name"], context);
-              Navigator.pop(context);
-              showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
-              setState(() {
-                isBlack = true;
-              });
-            }),
-        ActionItem(
-            title: "收藏",
-            onPressed: () async {
-              Navigator.pop(context);
-              showToast(context: context, type: XSToast.loading);
-              await Api().user_userfavorite({
-                "idType": "tid",
-                "action": "favorite",
-                "id": widget.data["topic_id"],
-              });
-              hideToast();
-              showToast(context: context, type: XSToast.success, txt: "收藏成功");
-            }),
-        ActionItem(
-            title: "复制帖子链接",
-            onPressed: () async {
-              Clipboard.setData(
-                ClipboardData(
-                    text: base_url +
-                        "forum.php?mod=viewthread&tid=" +
-                        widget.data["topic_id"].toString()),
-              );
-              Navigator.pop(context);
-              showToast(context: context, type: XSToast.success, txt: "复制成功");
-            }),
-        ActionItem(
-            title: "举报反馈",
-            onPressed: () async {
-              Navigator.pop(context);
-              _feedback();
-            }),
+      options: ["屏蔽此贴", "屏蔽此人", "收藏", "复制帖子链接", "举报反馈"],
+      icons: [
+        Icons.block,
+        Icons.person_off_outlined,
+        Icons.collections_bookmark_outlined,
+        Icons.copy,
+        Icons.feedback_outlined
       ],
-      bottomActionItem: BottomActionItem(title: "取消"),
+      tap: (res) async {
+        if (res == 0) {
+          await setBlackWord(widget.data["title"], context);
+          Navigator.pop(context);
+          showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
+          setState(() {
+            isBlack = true;
+          });
+        }
+        if (res == 1) {
+          await setBlackWord(widget.data["user_nick_name"], context);
+          Navigator.pop(context);
+          showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
+          setState(() {
+            isBlack = true;
+          });
+        }
+        if (res == 2) {
+          Navigator.pop(context);
+          showToast(context: context, type: XSToast.loading);
+          await Api().user_userfavorite({
+            "idType": "tid",
+            "action": "favorite",
+            "id": widget.data["topic_id"],
+          });
+          hideToast();
+          showToast(context: context, type: XSToast.success, txt: "收藏成功");
+        }
+        if (res == 3) {
+          Clipboard.setData(
+            ClipboardData(
+                text: base_url +
+                    "forum.php?mod=viewthread&tid=" +
+                    widget.data["topic_id"].toString()),
+          );
+          Navigator.pop(context);
+          showToast(context: context, type: XSToast.success, txt: "复制成功");
+        }
+        if (res == 4) {
+          Navigator.pop(context);
+          _feedback();
+        }
+      },
     );
   }
 

@@ -7,6 +7,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/myinfo.dart';
+import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
@@ -15,9 +16,6 @@ import 'package:offer_show/asset/topic_formhash.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
-import 'package:offer_show/outer/showActionSheet/action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
@@ -326,52 +324,61 @@ class _CommentState extends State<Comment> {
   }
 
   _showMore() async {
+    String copy_txt = "";
+    widget.data["reply_content"].forEach((e) {
+      if (e["type"] == 0) {
+        copy_txt += e["infor"].toString();
+      }
+    });
     XSVibrate();
-    List<ActionItem> _buildAction() {
-      List<ActionItem> tmp = [];
-      String copy_txt = "";
-      widget.data["reply_content"].forEach((e) {
-        if (e["type"] == 0) {
-          copy_txt += e["infor"].toString();
-        }
-      });
-      tmp.add(
-        ActionItem(
-            title: "复制文本内容",
-            onPressed: () {
-              Clipboard.setData(
-                ClipboardData(text: copy_txt),
-              );
-              Navigator.pop(context);
-              showToast(context: context, type: XSToast.success, txt: "复制成功！");
-            }),
-      );
-      tmp.add(ActionItem(
-          title: "举报反馈",
-          onPressed: () {
-            Navigator.pop(context);
-            _feedback();
-          }));
-      tmp.add(ActionItem(
-          title: _getBlack() ? "取消屏蔽此帖子" : "屏蔽此贴的ID",
-          onPressed: () {
-            Navigator.pop(context);
-            _blackID();
-          }));
-      if (is_me)
-        tmp.add(ActionItem(
-          title: widget.data["poststick"] == 1 ? "取消置顶评论" : "置顶评论",
-          onPressed: () {
-            stickyForm();
-          },
-        ));
-      return tmp;
-    }
-
-    showActionSheet(
+    showAction(
       context: context,
-      actions: _buildAction(),
-      bottomActionItem: BottomActionItem(title: "取消"),
+      options: is_me
+          ? [
+              "复制文本内容",
+              "举报反馈",
+              _getBlack() ? "取消屏蔽此帖子" : "屏蔽此贴的ID",
+              widget.data["poststick"] == 1 ? "取消置顶评论" : "置顶评论",
+            ]
+          : [
+              "复制文本内容",
+              "举报反馈",
+              _getBlack() ? "取消屏蔽此帖子" : "屏蔽此贴的ID",
+            ],
+      icons: is_me
+          ? [
+              Icons.copy,
+              Icons.feedback_outlined,
+              _getBlack() ? Icons.remove_circle_outline_rounded : Icons.block,
+              widget.data["poststick"] == 1
+                  ? Icons.cancel_presentation
+                  : Icons.vertical_align_top,
+            ]
+          : [
+              Icons.copy,
+              Icons.feedback_outlined,
+              _getBlack() ? Icons.remove_circle_outline_rounded : Icons.block,
+            ],
+      tap: (res) async {
+        if (res == 0) {
+          Clipboard.setData(
+            ClipboardData(text: copy_txt),
+          );
+          Navigator.pop(context);
+          showToast(context: context, type: XSToast.success, txt: "复制成功！");
+        }
+        if (res == 1) {
+          Navigator.pop(context);
+          _feedback();
+        }
+        if (res == 2) {
+          Navigator.pop(context);
+          _blackID();
+        }
+        if (res == 3) {
+          stickyForm();
+        }
+      },
     );
   }
 

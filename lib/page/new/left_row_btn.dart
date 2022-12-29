@@ -5,12 +5,10 @@ import 'package:images_picker/images_picker.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/uploadAttachment.dart';
 import 'package:offer_show/components/niw.dart';
-import 'package:offer_show/outer/showActionSheet/action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -105,85 +103,78 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
               ? os_light_dark_card
               : os_white,
           tap: () async {
-            showActionSheet(
+            showAction(
               context: context,
-              actions: [
-                ActionItem(
-                  title: "选择图片（建议3张以内）",
-                  onPressed: () async {
-                    List<XFile> image = [];
-                    widget.setImgUrls([]);
-                    Navigator.pop(context);
-                    widget.title_focus.unfocus();
-                    widget.tip_focus.unfocus();
-                    if (isMacOS()) {
-                      print("选择大屏图片");
-                      image = await pickeImgFile(context);
-                    } else {
-                      print("选择小屏图片");
-                      List<Media> res = await ImagesPicker.pick(
-                        count: 50,
-                        cropOpt: CropOption(),
-                        pickType: PickType.image,
-                        quality: 0.7, //一半的质量
-                        maxSize: 2048, //1024KB
-                      );
-                      res.forEach((element) {
-                        image.add(XFile(element.path));
-                      });
-                      // final ImagePicker _picker = ImagePicker();
-                      // image = await _picker.pickMultiImage(
-                      //   imageQuality: 50,
-                      // );
-                    }
-                    print("${image}");
-                    if (image == null || image.length == 0) {
-                      return;
-                    }
-                    setState(() {
-                      isUpLoading = true;
+              options: widget.img_urls.length == 0
+                  ? ["选择图片（建议3张以内）"]
+                  : ["选择图片（建议3张以内）", "查看图片", "清空已上传图片"],
+              icons: widget.img_urls.length == 0
+                  ? [Icons.image_outlined]
+                  : [
+                      Icons.image_outlined,
+                      Icons.preview_outlined,
+                      Icons.clear_all,
+                    ],
+              tap: (res) async {
+                if (res == 0) {
+                  List<XFile> image = [];
+                  widget.setImgUrls([]);
+                  Navigator.pop(context);
+                  widget.title_focus.unfocus();
+                  widget.tip_focus.unfocus();
+                  if (isMacOS()) {
+                    print("选择大屏图片");
+                    image = await pickeImgFile(context);
+                  } else {
+                    print("选择小屏图片");
+                    List<Media> res = await ImagesPicker.pick(
+                      count: 50,
+                      cropOpt: CropOption(),
+                      pickType: PickType.image,
+                      quality: 0.7, //一半的质量
+                      maxSize: 2048, //1024KB
+                    );
+                    res.forEach((element) {
+                      image.add(XFile(element.path));
                     });
-                    widget.setImgUrls(await Api().uploadImage(imgs: image));
-                    setState(() {
-                      isUpLoading = false;
-                    });
-                  },
-                ),
-                ...(widget.img_urls.length == 0
-                    ? []
-                    : [
-                        ActionItem(
-                          title: "查看图片",
-                          onPressed: () async {
-                            Navigator.pop(context);
-                            if (widget.img_urls.length != 0) {
-                              print("${widget.img_urls}");
-                              Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (_) => PhotoPreview(
-                                    galleryItems: widget.img_urls
-                                        .map((e) => e["urlName"])
-                                        .toList(),
-                                    defaultImage: 0,
-                                  ),
-                                ),
-                              );
-                            }
-                          },
+                    // final ImagePicker _picker = ImagePicker();
+                    // image = await _picker.pickMultiImage(
+                    //   imageQuality: 50,
+                    // );
+                  }
+                  print("${image}");
+                  if (image == null || image.length == 0) {
+                    return;
+                  }
+                  setState(() {
+                    isUpLoading = true;
+                  });
+                  widget.setImgUrls(await Api().uploadImage(imgs: image));
+                  setState(() {
+                    isUpLoading = false;
+                  });
+                }
+                if (res == 1) {
+                  Navigator.pop(context);
+                  if (widget.img_urls.length != 0) {
+                    print("${widget.img_urls}");
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => PhotoPreview(
+                          galleryItems:
+                              widget.img_urls.map((e) => e["urlName"]).toList(),
+                          defaultImage: 0,
                         ),
-                        ActionItem(
-                          title: "清空已上传图片",
-                          onPressed: () {
-                            widget.setImgUrls([]);
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ]),
-              ],
-              bottomActionItem: BottomActionItem(
-                title: "取消",
-              ),
+                      ),
+                    );
+                  }
+                }
+                if (res == 2) {
+                  widget.setImgUrls([]);
+                  Navigator.pop(context);
+                }
+              },
             );
           },
           widget: Stack(
