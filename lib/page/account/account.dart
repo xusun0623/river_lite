@@ -341,7 +341,7 @@ class _AccountState extends State<Account> {
           ),
         ),
         body: ListView(
-          physics: BouncingScrollPhysics(),
+          //physics: BouncingScrollPhysics(),
           children: _buildWidget(),
         ),
       ),

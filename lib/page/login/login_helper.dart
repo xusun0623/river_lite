@@ -41,7 +41,7 @@ class _LoginHelperState extends State<LoginHelper> {
           vertical: os_edge,
         ),
         child: ListView(
-          physics: BouncingScrollPhysics(),
+          //physics: BouncingScrollPhysics(),
           children: [
             Title(txt: "密码找回"),
             Tip(txt: "若不慎忘记密码，请使用密码重置功能通过注册时关联的学号以及对应的信息门户密码重置密码。"),

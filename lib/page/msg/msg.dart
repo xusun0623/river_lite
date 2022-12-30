@@ -110,7 +110,7 @@ class _MsgState extends State<Msg> {
             return;
           },
           child: ListView(
-            physics: BouncingScrollPhysics(),
+            //physics: BouncingScrollPhysics(),
             controller: _scrollController,
             children: [
               Padding(

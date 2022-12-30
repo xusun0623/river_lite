@@ -362,7 +362,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
                 ? os_dark_white
                 : os_black,
             indicatorColor: Colors.transparent,
-            dividerColor: Colors.transparent,
+            // dividerColor: Colors.transparent,
             unselectedLabelStyle: TextStyle(
               fontWeight: FontWeight.normal,
               fontSize: 16,
@@ -407,7 +407,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               },
               child: ListView(
                 children: _buildCont(0),
-                physics: BouncingScrollPhysics(),
+                //physics: BouncingScrollPhysics(),
               ),
             ),
             RefreshIndicator(
@@ -417,7 +417,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               },
               child: ListView(
                 children: _buildCont(1),
-                physics: BouncingScrollPhysics(),
+                //physics: BouncingScrollPhysics(),
               ),
             ),
             RefreshIndicator(
@@ -427,7 +427,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               },
               child: ListView(
                 children: _buildCont(2),
-                physics: BouncingScrollPhysics(),
+                //physics: BouncingScrollPhysics(),
               ),
             ),
             RefreshIndicator(
@@ -437,7 +437,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               },
               child: ListView(
                 children: _buildCont(3),
-                physics: BouncingScrollPhysics(),
+                //physics: BouncingScrollPhysics(),
               ),
             ),
           ],

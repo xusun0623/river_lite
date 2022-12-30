@@ -271,7 +271,7 @@ class _SettingState extends State<Setting> {
           ),
         ),
         body: ListView(
-          physics: BouncingScrollPhysics(),
+          //physics: BouncingScrollPhysics(),
           children: _buildWidget(),
         ),
       ),

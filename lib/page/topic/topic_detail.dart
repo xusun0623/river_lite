@@ -928,7 +928,7 @@ class _TopicDetailState extends State<TopicDetail> {
                               animation: true,
                               controller: _scrollController,
                               child: ListView(
-                                physics: BouncingScrollPhysics(),
+                                //physics: BouncingScrollPhysics(),
                                 controller: _scrollController,
                                 children: [
                                   SingleChildScrollView(

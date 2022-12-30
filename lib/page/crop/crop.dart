@@ -68,7 +68,7 @@ class _CropImgState extends State<CropImg> {
       body: edit_done
           ? EditDoneDisplay()
           : ListView(
-              physics: BouncingScrollPhysics(),
+              //physics: BouncingScrollPhysics(),
               children: [
                 img == null
                     ? Bounce(

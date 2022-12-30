@@ -333,7 +333,7 @@ class _SearchState extends State<Search> {
                 : os_back,
             child: ListView(
               controller: _scrollController,
-              physics: BouncingScrollPhysics(),
+              //physics: BouncingScrollPhysics(),
               children: _buildTopic(),
             ),
           ),

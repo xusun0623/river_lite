@@ -257,7 +257,7 @@ class _MsgThreeState extends State<MsgThree> {
                       animation: true,
                       child: ListView(
                         controller: _scrollController,
-                        physics: BouncingScrollPhysics(),
+                        //physics: BouncingScrollPhysics(),
                         children: _buildCont(),
                       ),
                     ),

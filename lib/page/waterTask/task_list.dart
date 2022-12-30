@@ -137,7 +137,7 @@ class _TaskListState extends State<TaskList> {
                 ..._buildCont(),
                 load_done ? Container() : BottomLoading(),
               ],
-              physics: BouncingScrollPhysics(),
+              //physics: BouncingScrollPhysics(),
             ),
           ),
         ),

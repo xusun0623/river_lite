@@ -68,6 +68,7 @@ class MyApp extends StatelessWidget {
             fontFamily: '微软雅黑',
             appBarTheme: AppBarTheme(
               surfaceTintColor: Colors.transparent,
+              scrolledUnderElevation: 0,
             ),
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.blue,

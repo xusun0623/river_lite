@@ -263,7 +263,7 @@ class MsgDetailState extends State<MsgDetail> {
                       return;
                     },
                     child: ListView(
-                      physics: BouncingScrollPhysics(),
+                      //physics: BouncingScrollPhysics(),
                       controller: _controller,
                       shrinkWrap: true,
                       reverse: true,

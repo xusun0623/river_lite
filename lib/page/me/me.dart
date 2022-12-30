@@ -104,7 +104,7 @@ class _MeState extends State<Me> {
         },
         child: ListView(
           controller: _scrollController,
-          physics: BouncingScrollPhysics(),
+          //physics: BouncingScrollPhysics(),
           children: [
             provider.data == null
                 ? MeInfoHead(

@@ -185,7 +185,7 @@ class _AtSomeoneState extends State<AtSomeone> {
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: ListView(
-        physics: BouncingScrollPhysics(),
+        //physics: BouncingScrollPhysics(),
         controller: _scrollController,
         children: _buildCont(),
       ),

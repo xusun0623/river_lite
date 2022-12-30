@@ -173,7 +173,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                         ),
                       ),
                       child: ListView(
-                        physics: BouncingScrollPhysics(),
+                        //physics: BouncingScrollPhysics(),
                         children: [
                           Text.rich(
                             TextSpan(

@@ -64,7 +64,7 @@ class _AboutState extends State<About> {
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
         body: ListView(
           controller: _scrollController,
-          physics: BouncingScrollPhysics(),
+          //physics: BouncingScrollPhysics(),
           children: [
             AboutCard(
               head: Icon(

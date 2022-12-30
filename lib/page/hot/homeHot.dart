@@ -101,7 +101,7 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
                 },
                 child: ListView(
                   controller: _scrollController,
-                  physics: BouncingScrollPhysics(),
+                  //physics: BouncingScrollPhysics(),
                   children: _buildComponents(),
                 ),
               ),

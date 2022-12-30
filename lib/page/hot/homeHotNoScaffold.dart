@@ -125,7 +125,7 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
               ? OccuLoading()
               : ListView(
                   controller: _scrollController,
-                  physics: BouncingScrollPhysics(),
+                  //physics: BouncingScrollPhysics(),
                   children: _buildComponents(),
                 ),
         ),

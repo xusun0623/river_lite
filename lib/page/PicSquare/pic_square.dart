@@ -217,7 +217,7 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
                 ),
                 isScrollable: true,
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
-                dividerColor: Colors.transparent,
+                // dividerColor: Colors.transparent,
                 labelColor: os_white,
                 unselectedLabelColor: Color(0x88ffffff),
                 tabs: [
@@ -977,7 +977,7 @@ class _PopCommentState extends State<PopComment> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height - 317,
             child: ListView(
-              physics: BouncingScrollPhysics(),
+              //physics: BouncingScrollPhysics(),
               controller: _scrollController,
               children: _buildCont(),
             ),

@@ -735,7 +735,7 @@ class _QuestionState extends State<Question> {
                     MediaQuery.of(context).padding.top -
                     (status == 1 || status == 2 ? 56 : 250),
                 child: ListView(
-                  physics: BouncingScrollPhysics(),
+                  //physics: BouncingScrollPhysics(),
                   //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关
                   children: status == 0
                       ? doing()

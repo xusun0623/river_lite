@@ -160,7 +160,7 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
                 ..._buildCont(),
                 load_done ? Container() : BottomLoading(),
               ],
-              physics: BouncingScrollPhysics(),
+              //physics: BouncingScrollPhysics(),
             ),
           ),
         ),

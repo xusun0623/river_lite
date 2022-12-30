@@ -311,7 +311,7 @@ class _PostNewState extends State<PostNew> {
                   children: [
                     Positioned(
                       child: ListView(
-                        physics: BouncingScrollPhysics(),
+                        //physics: BouncingScrollPhysics(),
                         controller: listview_controller,
                         children: [
                           ColumnRule(select_section: select_section),
@@ -512,7 +512,7 @@ class _PostNewState extends State<PostNew> {
                                         70,
                                     height: 30,
                                     child: ListView(
-                                      physics: BouncingScrollPhysics(),
+                                      //physics: BouncingScrollPhysics(),
                                       scrollDirection: Axis.horizontal,
                                       children: quick.map((e) {
                                         return SelectTag(
