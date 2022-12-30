@@ -1,0 +1,21 @@
+{
+  "name": "offershow",
+  "version": "1.0.0",
+  "description": "[点击访问Github同源仓库](https://github.com/xusun0623/river_lite)",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "andriod": "flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform android-arm,android-arm64,android-x64 --split-per-abi",
+    "macos": "flutter build macos --release",
+    "windows": "flutter build windows --release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/xusun000/offershow.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
