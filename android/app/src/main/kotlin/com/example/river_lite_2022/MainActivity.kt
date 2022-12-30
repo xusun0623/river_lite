@@ -1,4 +1,4 @@
-package com.example.river_lite_2022
+package com.xusun000.river_lite_2022
 
 import io.flutter.embedding.android.FlutterActivity
 import android.os.Build;
