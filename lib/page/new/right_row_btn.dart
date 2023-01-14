@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
-import 'package:offer_show/outer/showActionSheet/action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
-import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
 
 class RightRowBtn extends StatefulWidget {
   bool show_vote;
@@ -96,71 +92,6 @@ class _RightRowBtnState extends State<RightRowBtn> {
             ),
           ),
         ),
-        widget.select_section != "密语"
-            ? Container()
-            : GestureDetector(
-                onTap: () {
-                  showActionSheet(
-                    context: context,
-                    topActionItem: TopActionItem(
-                      title: "评论有哪些人可以👀",
-                      titleTextStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    actions: [
-                      ActionItem(
-                        title: "评论所有人可见",
-                        onPressed: () {
-                          Navigator.pop(context);
-                          widget.changeSecretSee(0);
-                        },
-                      ),
-                      ActionItem(
-                        title: "评论仅作者可见",
-                        onPressed: () {
-                          Navigator.pop(context);
-                          widget.changeSecretSee(1);
-                        },
-                      ),
-                    ],
-                    bottomActionItem: BottomActionItem(title: "取消"),
-                  );
-                },
-                child: Container(
-                  height: 25,
-                  padding: EdgeInsets.symmetric(horizontal: 7),
-                  margin: EdgeInsets.only(left: 5),
-                  decoration: BoxDecoration(
-                    color: os_white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(100),
-                    ),
-                    border: Border.all(
-                      color: Color(0xFF9D9D9D),
-                    ),
-                  ),
-                  child: Center(
-                    child: Row(
-                      children: [
-                        Text(
-                          widget.secret_see == 0 ? "所有人可见" : "仅作者可见",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFF9D9D9D),
-                          ),
-                        ),
-                        Icon(
-                          Icons.keyboard_arrow_up_rounded,
-                          size: 12,
-                          color: Color(0xFF9D9D9D),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
         !widget.tip_focus.hasFocus || isDesktop()
             ? Container()
             : GestureDetector(

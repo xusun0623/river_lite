@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
@@ -11,7 +14,6 @@ import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
-import 'package:offer_show/page/home.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -114,6 +116,145 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     setState(() {});
   }
 
+  showPopNew() {
+    Widget getImgCard(String path) {
+      return Image.asset(
+        path,
+        width: MediaQuery.of(context).size.width > 500
+            ? 160
+            : (MediaQuery.of(context).size.width - 80 - MinusSpace(context)) /
+                2,
+        height: MediaQuery.of(context).size.width > 500
+            ? 160 * 88 / 160
+            : (MediaQuery.of(context).size.width - 80 - MinusSpace(context)) /
+                2 *
+                88 /
+                160,
+      );
+    }
+
+    showPopWithHeightColor(
+      context,
+      [
+        Center(
+          child: Container(
+            margin: EdgeInsets.symmetric(vertical: 20),
+            width: 40,
+            height: 6,
+            decoration: BoxDecoration(
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_light_dark_card
+                  : os_middle_grey,
+              borderRadius: BorderRadius.circular(100),
+            ),
+          ),
+        ),
+        Container(height: 15),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            GestureDetector(
+              onTap: () async {
+                Navigator.of(context).pop();
+                Navigator.pushNamed(context, "/new", arguments: 25);
+              },
+              child: getImgCard("lib/img/home/new_topic.png"),
+            ),
+            ...(MediaQuery.of(context).size.width > 500
+                ? [Container(width: 10)]
+                : []),
+            GestureDetector(
+              onTap: () {},
+              child: getImgCard("lib/img/home/new_pic_topic.png"),
+            ),
+          ],
+        ),
+        Container(height: 50),
+        Padding(
+          padding: EdgeInsets.only(left: 20),
+          child: Row(
+            children: [
+              Text(
+                "推荐板块",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFFA9A9A9),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(height: 10),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: wrapNew(),
+        ),
+      ],
+      550,
+      os_white,
+    );
+  }
+
+  Widget wrapNew() {
+    List<String> columnString = ["卖闲置", "情感专区", "密语区", "鹊桥征友", "吃喝玩乐", "就业创业"];
+    List<Widget> tapBtn() {
+      List<Widget> tmp = [];
+      columnString.forEach((element) {
+        tmp.add(
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+              if (element == "卖闲置") {
+                Navigator.of(context).pushNamed("/new_transaction");
+              }
+              if (element == "情感专区") {
+                Navigator.of(context).pushNamed("/new", arguments: 45);
+              }
+              if (element == "鹊桥征友") {
+                Navigator.of(context).pushNamed("/new", arguments: 313);
+              }
+              if (element == "密语区") {
+                Navigator.of(context).pushNamed("/new", arguments: 371);
+              }
+              if (element == "吃喝玩乐") {
+                Navigator.of(context).pushNamed("/new", arguments: 370);
+              }
+              if (element == "就业创业") {
+                Navigator.of(context).pushNamed("/new", arguments: 174);
+              }
+            },
+            child: Container(
+              margin: EdgeInsets.only(right: 10, bottom: 10),
+              padding: EdgeInsets.symmetric(horizontal: 17.5, vertical: 12.5),
+              decoration: BoxDecoration(
+                color: Provider.of<ColorProvider>(context, listen: false).isDark
+                    ? os_light_dark_card
+                    : Color(0xFFF1F4F8),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                element,
+                style: TextStyle(
+                  color:
+                      Provider.of<ColorProvider>(context, listen: false).isDark
+                          ? os_dark_dark_white
+                          : Color(0xFF42546B),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+          ),
+        );
+      });
+      return tmp;
+    }
+
+    return Wrap(
+      children: tapBtn(),
+    );
+  }
+
   Widget _buildComponents() {
     List<Widget> t = [];
     t.add(HomeBtn());
@@ -169,10 +310,10 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
         _indicatorKey.currentState.show();
       },
       tap: () {
-        Navigator.pushNamed(context, "/new", arguments: 25);
+        // Navigator.pushNamed(context, "/new_transaction");
+        showPopNew();
       },
       child: ListView(
-        // //physics: BouncingScrollPhysics(),
         controller: _scrollController,
         children: t,
       ),

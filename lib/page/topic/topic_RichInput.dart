@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -443,28 +444,51 @@ class _SwitchHeadState extends State<SwitchHead> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: head_url == ""
-          ? Container()
-          : myInkWell(
-              radius: 100,
-              widget: Padding(
-                padding: const EdgeInsets.all(12.5),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: Image.network(
-                    head_url,
-                    width: 26.5,
-                    height: 26.5,
+    return Stack(
+      children: [
+        Container(
+          child: head_url == ""
+              ? Container()
+              : myInkWell(
+                  radius: 100,
+                  widget: Padding(
+                    padding: const EdgeInsets.all(12.5),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_light_dark_card
+                            : os_grey,
+                        child: Image.network(
+                          head_url,
+                          width: 26.5,
+                          height: 26.5,
+                        ),
+                      ),
+                    ),
                   ),
+                  color: Colors.transparent,
+                  tap: () {
+                    Navigator.pushNamed(context, "/account")
+                        .then((value) => getHead());
+                  },
                 ),
-              ),
-              color: Colors.transparent,
-              tap: () {
-                Navigator.pushNamed(context, "/account")
-                    .then((value) => getHead());
-              },
+        ),
+        Positioned(
+          right: 3,
+          bottom: 3,
+          child: Transform.rotate(
+            angle: pi / 4,
+            child: Icon(
+              Icons.arrow_right_rounded,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_dark_card,
+              size: 18,
             ),
+          ),
+        ),
+      ],
     );
   }
 }

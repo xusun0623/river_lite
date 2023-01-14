@@ -6,41 +6,33 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/components/newNaviBar.dart';
-import 'package:offer_show/outer/showActionSheet/action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
-import 'package:offer_show/outer/showActionSheet/top_action_item.dart';
-import 'package:offer_show/page/new/draft.dart';
-import 'package:offer_show/page/new/format.dart';
-import 'package:offer_show/page/new/left_row_btn.dart';
-import 'package:offer_show/page/new/right_row_btn.dart';
-import 'package:offer_show/page/new/select_tag.dart';
-import 'package:offer_show/page/new/success_display.dart';
-import 'package:offer_show/page/new/vote_machine.dart';
 import 'package:offer_show/page/topic/At_someone.dart';
 import 'package:offer_show/page/topic/Your_emoji.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
-class PostNew extends StatefulWidget {
-  int board_id;
+import 'draft.dart';
+import 'left_row_btn.dart';
+import 'right_row_btn.dart';
+import 'select_tag.dart';
+import 'success_display.dart';
 
-  PostNew({
+class PostNewTransaction extends StatefulWidget {
+  PostNewTransaction({
     Key key,
-    this.board_id,
   }) : super(key: key);
 
   @override
-  _PostNewState createState() => _PostNewState();
+  _PostNewTransactionState createState() => _PostNewTransactionState();
 }
 
-class _PostNewState extends State<PostNew> {
+class _PostNewTransactionState extends State<PostNewTransaction> {
   bool sendSuccess = false; //是否发布成功
 
-  String select_section = "水手之家"; //选择的专栏的名称
-  int select_section_id = 25; //选择的专栏的ID
-  int select_section_child_id = 0; //选择的专栏的子专栏ID
+  String select_section = "二手专区"; //选择的专栏的名称
+  int select_section_id = 61; //选择的专栏的ID
+  int select_section_child_id = 286; //选择的专栏的子专栏ID
   TextEditingController title_controller =
       new TextEditingController(); //输入的标题控制器
   FocusNode title_focus = new FocusNode(); //标题输入框的focus控制器
@@ -56,79 +48,10 @@ class _PostNewState extends State<PostNew> {
   int secret_see = 0;
   bool child_load_done = false;
   List<Map> total = []; //全部帖子专栏
-  List<Map> child = []; //子帖子专栏
   List img_urls = [];
-  List<Map> quick = [
-    {"board_id": 45, "board_name": "情感专区"},
-    {"board_id": 61, "board_name": "二手专区"},
-    {"board_id": 236, "board_name": "校园热点"},
-    {"board_id": 174, "board_name": "就业创业"},
-    {"board_id": 199, "board_name": "保研考研"},
-    {"board_id": 370, "board_name": "吃喝玩乐"},
-    {"board_id": 309, "board_name": "成电锐评"},
-    {"board_id": 25, "board_name": "水手之家"},
-  ];
 
-  _getChildColumnTip() async {
-    setState(() {
-      select_section_child_id = 0;
-    });
-    var data = await Api().certain_forum_topiclist({
-      "page": 1,
-      "pageSize": 0,
-      "boardId": select_section_id,
-      "filterType": "typeid",
-      "filterId": "",
-      "sortby": "new",
-    });
-    if (data != null &&
-        data["classificationType_list"] != null &&
-        data["classificationType_list"].length != 0) {
-      List<Map> tmp = [];
-      for (var board in data["classificationType_list"]) {
-        tmp.add({
-          "board_id": board["classificationType_id"],
-          "board_name": board["classificationType_name"],
-        });
-      }
-      child = tmp;
-    } else {
-      child = [];
-    }
-    child_load_done = true;
-    setState(() {});
-  }
-
-  _getTotalColumn() async {
-    if (widget.board_id == 371) {
-      setState(() {
-        select_section = "密语";
-      });
-    }
-    var data = await Api().forum_forumlist({});
-    if (data != null && data["list"] != null && data["list"].length != 0) {
-      List<Map> tmp = [];
-      for (var board in data["list"]) {
-        for (var board_tip in board["board_list"]) {
-          if (board_tip["board_id"] == select_section_id) {
-            if (board_tip["board_name"] == "鹊桥" &&
-                tip_controller.text.length == 0) {
-              tip_controller.text = bridgeFormatTxt;
-            }
-            setState(() {
-              select_section = board_tip["board_name"];
-            });
-          }
-          tmp.add({
-            "board_id": board_tip["board_id"],
-            "board_name": board_tip["board_name"],
-          });
-        }
-      }
-      total = tmp;
-      setState(() {});
-    }
-  }
+  // 想问下 M1 MacBook air 16+512 多少钱收比较合适
+  // rt，最近想换一台设备，但是感觉全新的有点贵
 
   _send() async {
     var contents = [
@@ -153,7 +76,7 @@ class _PostNewState extends State<PostNew> {
     Map json = {
       "body": {
         "json": {
-          "isAnonymous": select_section_id == 371 ? 1 : 0,
+          "isAnonymous": 0,
           "isOnlyAuthor": 0,
           "typeId": select_section_child_id == 0 ? "" : select_section_child_id,
           "aid": img_urls.map((attachment) => attachment["id"]).join(","),
@@ -188,9 +111,6 @@ class _PostNewState extends State<PostNew> {
 
   @override
   void initState() {
-    select_section_id = widget.board_id;
-    _getTotalColumn();
-    _getChildColumnTip();
     tip_controller.addListener(() {
       setState(() {
         tip_controller_offset = tip_controller.selection.base.offset;
@@ -213,53 +133,6 @@ class _PostNewState extends State<PostNew> {
     super.initState();
   }
 
-  List<Widget> _buildChildList() {
-    List<Widget> tmp = [];
-    tmp.add(GestureDetector(
-      onTap: () {
-        setState(() {
-          select_section_child_id = 0;
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(right: 20, top: 5, bottom: 5),
-        child: Text(
-          child.length == 0 && child_load_done ? "你不可以在此板块发布信息" : "选择子板块:",
-          style: TextStyle(
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_dark_white
-                : os_dark_back,
-            // fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    ));
-    if (child.length == 0 && !child_load_done) {
-      tmp.add(Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5),
-        child: Text(
-          "加载中…",
-          style: TextStyle(
-            color: os_deep_grey,
-          ),
-        ),
-      ));
-    }
-    child.forEach((element) {
-      tmp.add(ChildColumnTip(
-        select: element["board_id"] == select_section_child_id,
-        child_id: element["board_id"],
-        name: element["board_name"],
-        tap: (child_id) {
-          setState(() {
-            select_section_child_id = child_id;
-          });
-        },
-      ));
-    });
-    return tmp;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Baaaar(
@@ -272,12 +145,13 @@ class _PostNewState extends State<PostNew> {
               : os_back,
           elevation: 0,
           title: Text(
-            sendSuccess ? "" : "发帖",
+            sendSuccess ? "" : "发闲置二手",
             style: TextStyle(
-                fontSize: 16,
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_dark_white
-                    : Color(0xFF2E2E2E)),
+              fontSize: 16,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : Color(0xFF2E2E2E),
+            ),
           ),
           leading: IconButton(
             icon: Icon(Icons.chevron_left_rounded,
@@ -295,13 +169,7 @@ class _PostNewState extends State<PostNew> {
                     tip_controller: tip_controller,
                     tip_focus: tip_focus,
                   ),
-                  uploading
-                      ? Container(width: 10)
-                      : RightTopSend(
-                          tap: () async {
-                            _send();
-                          },
-                        )
+                  uploading ? Container(width: 10) : RightTopSend(tap: _send)
                 ],
         ),
         body: Container(
@@ -314,11 +182,8 @@ class _PostNewState extends State<PostNew> {
                   children: [
                     Positioned(
                       child: ListView(
-                        //physics: BouncingScrollPhysics(),
                         controller: listview_controller,
                         children: [
-                          ColumnRule(select_section: select_section),
-                          select_section_id == 371 ? SecretTip() : Container(),
                           TitleInput(
                             title_controller: title_controller,
                             title_focus: title_focus,
@@ -327,37 +192,6 @@ class _PostNewState extends State<PostNew> {
                             tip_controller: tip_controller,
                             tip_focus: tip_focus,
                           ),
-                          show_vote
-                              ? VoteMachine(
-                                  editVote: (options) {
-                                    List<String> tmp = [];
-                                    for (var item in options) {
-                                      tmp.add(item["txt"]);
-                                    }
-                                    vote_options = tmp;
-                                  },
-                                  focus: () async {
-                                    if (isDesktop()) return;
-                                    await Future.delayed(
-                                        Duration(milliseconds: 800));
-                                    listview_controller.animateTo(
-                                      listview_controller
-                                          .position.maxScrollExtent,
-                                      duration: Duration(milliseconds: 200),
-                                      curve: Curves.ease,
-                                    );
-                                  },
-                                  tap: () {
-                                    if (isDesktop()) return;
-                                    listview_controller.animateTo(
-                                        listview_controller
-                                                .position.maxScrollExtent +
-                                            50,
-                                        duration: Duration(milliseconds: 200),
-                                        curve: Curves.ease);
-                                  },
-                                )
-                              : Container(),
                         ],
                       ),
                     ),
@@ -393,20 +227,21 @@ class _PostNewState extends State<PostNew> {
                                 ),
                                 ResponsiveWidget(
                                   child: AtSomeone(
-                                      hide: () {
-                                        setState(() {
-                                          pop_section = false;
-                                        });
-                                      },
-                                      backgroundColor:
-                                          Provider.of<ColorProvider>(context)
-                                                  .isDark
-                                              ? os_dark_back
-                                              : os_grey,
-                                      tap: (uid, name) {
-                                        tip_controller.text =
-                                            tip_controller.text + " @${name} ";
-                                      }),
+                                    hide: () {
+                                      setState(() {
+                                        pop_section = false;
+                                      });
+                                    },
+                                    backgroundColor:
+                                        Provider.of<ColorProvider>(context)
+                                                .isDark
+                                            ? os_dark_back
+                                            : os_grey,
+                                    tap: (uid, name) {
+                                      tip_controller.text =
+                                          tip_controller.text + " @${name} ";
+                                    },
+                                  ),
                                 ),
                               ][pop_section_index],
                             )
@@ -435,114 +270,14 @@ class _PostNewState extends State<PostNew> {
                         ),
                         child: Column(
                           children: [
-                            (tip_focus.hasFocus && !isDesktop()) ||
-                                    select_section_id == 371
-                                ? Container()
-                                : ResponsiveWidget(
-                                    child: isDesktop()
-                                        ? ConstrainedBox(
-                                            constraints: BoxConstraints(
-                                              minHeight: 40,
-                                            ),
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 10),
-                                              child: Wrap(
-                                                children: [
-                                                  ..._buildChildList(),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        : Container(
-                                            height: 40,
-                                            child: Center(
-                                              child: ListView(
-                                                physics:
-                                                    BouncingScrollPhysics(),
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                children: _buildChildList(),
-                                              ),
-                                            ),
-                                          ),
-                                  ),
-                            ResponsiveWidget(
-                              child: Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      title_focus.unfocus();
-                                      tip_focus.unfocus();
-                                      showActionSheet(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        actions: total.map((e) {
-                                          return ActionItem(
-                                            title: e["board_name"],
-                                            onPressed: () {
-                                              if (e["board_name"] == "鹊桥" &&
-                                                  tip_controller.text == "") {
-                                                setState(() {
-                                                  tip_controller.text =
-                                                      bridgeFormatTxt;
-                                                });
-                                              }
-                                              select_section = e["board_name"];
-                                              select_section_id = e["board_id"];
-                                              _getChildColumnTip();
-                                              Navigator.pop(context);
-                                              setState(() {});
-                                            },
-                                          );
-                                        }).toList(),
-                                        topActionItem: TopActionItem(
-                                          title: "已选择:${select_section}✅",
-                                          titleTextStyle: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        bottomActionItem:
-                                            BottomActionItem(title: "取消"),
-                                      );
-                                    },
-                                    child: SelectColumn(
-                                        select_section: select_section),
-                                  ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width -
-                                        select_section.length * 14 -
-                                        MinusSpace(context) -
-                                        70,
-                                    height: 30,
-                                    child: ListView(
-                                      //physics: BouncingScrollPhysics(),
-                                      scrollDirection: Axis.horizontal,
-                                      children: quick.map((e) {
-                                        return SelectTag(
-                                          selected:
-                                              e["board_name"] == select_section,
-                                          tap: (tap_board) {
-                                            title_focus.unfocus();
-                                            tip_focus.unfocus();
-                                            setState(() {
-                                              select_section =
-                                                  tap_board["board_name"];
-                                              select_section_id =
-                                                  tap_board["board_id"];
-                                              _getChildColumnTip();
-                                            });
-                                          },
-                                          quick: e,
-                                        );
-                                      }).toList(),
-                                    ),
-                                  )
-                                ],
-                              ),
+                            SectionSelect(
+                              hideSection: !tip_focus.hasFocus,
+                              tap: (column_id) {
+                                setState(() {
+                                  select_section_child_id = column_id;
+                                });
+                              },
                             ),
-                            ColumnSpace(),
                             ResponsiveWidget(
                               child: Row(
                                 mainAxisAlignment:
@@ -612,69 +347,194 @@ class _PostNewState extends State<PostNew> {
   }
 }
 
-class SecretTip extends StatelessWidget {
-  const SecretTip({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-      child: Text(
-        "密语区需要扣除您的10水滴，且需要您有密语区的访问权限，请确保你此前访问过密语区",
-        style: TextStyle(
-          color: os_deep_grey,
-          fontSize: 14,
-        ),
-      ),
-    );
-  }
-}
-
-class ColumnRule extends StatefulWidget {
-  String select_section;
-  ColumnRule({
+class SectionSelect extends StatefulWidget {
+  Function tap;
+  bool hideSection;
+  SectionSelect({
     Key key,
-    this.select_section,
+    this.tap,
+    this.hideSection,
   }) : super(key: key);
 
   @override
-  State<ColumnRule> createState() => _ColumnRuleState();
+  State<SectionSelect> createState() => _SectionSelectState();
 }
 
-class _ColumnRuleState extends State<ColumnRule> {
+class _SectionSelectState extends State<SectionSelect> {
+  int section_idx = 0;
+  int type_idx = 0;
+  Map child = {
+    "清水河-书籍资料": 286,
+    "清水河-生活用品": 291,
+    "清水河-交通工具": 290,
+    "清水河-卡券虚拟": 289,
+    "清水河-数码硬件": 287,
+    "清水河-拼单": 288,
+    "清水河-物品租借": 1287,
+    "清水河-其他": 292,
+    "沙河-书籍资料": 293,
+    "沙河-生活用品": 777,
+    "沙河-交通工具": 297,
+    "沙河-卡券虚拟": 296,
+    "沙河-数码硬件": 294,
+    "沙河-拼单": 1286,
+    "沙河-物品租借": 1288,
+    "沙河-其他": 778,
+  }; //子帖子专栏
+  List<String> child_type = [
+    "书籍资料",
+    "生活用品",
+    "交通工具",
+    "卡券虚拟",
+    "数码硬件",
+    "拼单",
+    "物品租借",
+    "其他",
+  ]; //子帖子专栏
+  List<String> section_type = [
+    "清水河",
+    "沙河",
+  ]; //子帖子专栏
+
+  refresh() {
+    String child_section =
+        "${section_type[section_idx]}-${child_type[type_idx]}";
+    if (widget.tap != null) {
+      widget.tap(child["$child_section"]);
+    }
+  }
+
+  List<Widget> _buildChildList() {
+    List<Widget> tmp = [];
+    tmp.add(Padding(
+      padding: const EdgeInsets.only(right: 10, top: 7.5, bottom: 7.5),
+      child: Text(
+        "选择校区:",
+        style: TextStyle(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_dark_white
+              : os_dark_back,
+        ),
+      ),
+    ));
+    for (var i = 0; i < section_type.length; i++) {
+      tmp.add(GestureDetector(
+        onTap: () {
+          setState(() {
+            section_idx = i;
+          });
+          refresh();
+        },
+        child: Container(
+          padding: EdgeInsets.only(left: 10, right: 10, top: 7.5, bottom: 7.5),
+          decoration: BoxDecoration(
+            color: i == section_idx
+                ? os_color_opa
+                : (Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : os_white),
+            borderRadius: BorderRadius.circular(100),
+          ),
+          child: Text(
+            section_type[i],
+            style: TextStyle(
+              color: i == section_idx ? os_color : os_deep_grey,
+              fontWeight:
+                  i == section_idx ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ),
+      ));
+    }
+    return tmp;
+  }
+
+  List<Widget> _buildTypeList() {
+    List<Widget> tmp = [];
+    tmp.add(Padding(
+      padding: const EdgeInsets.only(right: 10, top: 7.5, bottom: 7.5),
+      child: Text(
+        "选择类型:",
+        style: TextStyle(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_dark_white
+              : os_dark_back,
+        ),
+      ),
+    ));
+    for (var i = 0; i < child_type.length; i++) {
+      tmp.add(GestureDetector(
+        onTap: () {
+          setState(() {
+            type_idx = i;
+          });
+          refresh();
+        },
+        child: Container(
+          padding: EdgeInsets.only(left: 10, right: 10, top: 7.5, bottom: 7.5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            color: i == type_idx
+                ? os_color_opa
+                : (Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : os_white),
+          ),
+          child: Text(
+            child_type[i],
+            style: TextStyle(
+              color: i == type_idx ? os_color : os_deep_grey,
+              fontWeight: i == type_idx ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ),
+      ));
+    }
+    return tmp;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return true
-        ? Container()
-        : GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, "/rule",
-                  arguments: widget.select_section);
-            },
-            child: Container(
-              padding: EdgeInsets.only(left: 10, bottom: 7.5),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.info_outline_rounded,
-                    size: 16,
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_dark_white
-                        : os_deep_grey,
+    return ResponsiveWidget(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: 40,
+        ),
+        child: Column(
+          children: [
+            widget.hideSection ?? false
+                ? Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Wrap(
+                          children: [
+                            ..._buildChildList(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(),
+            Row(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width -
+                      30 -
+                      MinusSpace(context),
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: Wrap(
+                    children: [
+                      ..._buildTypeList(),
+                    ],
                   ),
-                  Container(width: 2),
-                  Text(
-                    "查看${widget.select_section}版规",
-                    style: TextStyle(
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_dark_dark_white
-                          : os_deep_grey,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -750,7 +610,7 @@ class _ContInputState extends State<ContInput> {
                 : os_black,
           ),
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: 200, top: 10),
+            contentPadding: EdgeInsets.only(bottom: 500, top: 10),
             border: InputBorder.none,
             hintStyle: TextStyle(
               height: 1.8,
@@ -796,9 +656,6 @@ class TitleInput extends StatelessWidget {
                 ? os_dark_white
                 : os_black,
           ),
-          // cursorColor: Provider.of<ColorProvider>(context).isDark
-          //     ? os_dark_back
-          //     : os_white,
           decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(15)),

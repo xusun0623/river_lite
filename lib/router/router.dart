@@ -18,6 +18,7 @@ import 'package:offer_show/page/msg_detail/msg_detail.dart';
 import 'package:offer_show/page/msg_three/msg_three.dart';
 import 'package:offer_show/page/new/new.dart';
 import 'package:offer_show/page/new/rule_page.dart';
+import 'package:offer_show/page/new_transaction/new_transaction.dart';
 import 'package:offer_show/page/person_detail/personDetail.dart';
 import 'package:offer_show/page/personal/personal.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
@@ -39,6 +40,7 @@ import 'package:offer_show/page/water_total/water_total.dart';
 
 final routers = {
   "/": () => Start(),
+  "/new_transaction": () => PostNewTransaction(),
   "/rule": (data) => RulePage(name: data),
   "/water_inout_detail": () => WaterInoutDetail(),
   "/water_total": () => WaterTotal(),
