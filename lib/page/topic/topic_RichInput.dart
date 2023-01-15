@@ -32,6 +32,7 @@ class RichInput extends StatefulWidget {
   Function uploadFile;
   String placeholder;
   Function atUser;
+  bool sending;
   RichInput({
     Key key,
     this.bottom,
@@ -45,6 +46,7 @@ class RichInput extends StatefulWidget {
     @required this.atUser,
     @required this.placeholder,
     @required this.uploadFile,
+    @required this.sending,
   }) : super(key: key);
 
   @override
@@ -347,7 +349,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                         margin: EdgeInsets.only(bottom: 15),
                         child: myInkWell(
                           tap: () {
-                            widget.send();
+                            if (!widget.sending) {
+                              widget.send();
+                            }
                           },
                           color: Color(0xFF004DFF),
                           widget: Container(
@@ -356,13 +360,17 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                 0.2,
                             height: 100,
                             child: Center(
-                              child: Text(
-                                "发\n送",
-                                style: TextStyle(
-                                  color: os_white,
-                                  fontSize: 16,
-                                ),
-                              ),
+                              child: widget.sending
+                                  ? CircularProgressIndicator(
+                                      color: os_white,
+                                    )
+                                  : Text(
+                                      "发\n送",
+                                      style: TextStyle(
+                                        color: os_white,
+                                        fontSize: 16,
+                                      ),
+                                    ),
                             ),
                           ),
                           radius: 10,
@@ -474,20 +482,20 @@ class _SwitchHeadState extends State<SwitchHead> {
                   },
                 ),
         ),
-        Positioned(
-          right: 3,
-          bottom: 3,
-          child: Transform.rotate(
-            angle: pi / 4,
-            child: Icon(
-              Icons.arrow_right_rounded,
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_dark_white
-                  : os_dark_card,
-              size: 18,
-            ),
-          ),
-        ),
+        // Positioned(
+        //   right: 5,
+        //   bottom: 5,
+        //   child: Transform.rotate(
+        //     angle: pi / 4,
+        //     child: Icon(
+        //       Icons.chevron_right_rounded,
+        //       color: Provider.of<ColorProvider>(context).isDark
+        //           ? os_dark_dark_white
+        //           : os_deep_grey,
+        //       size: 18,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

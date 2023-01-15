@@ -67,6 +67,7 @@ class _TopicDetailState extends State<TopicDetail> {
   bool isInvalid = false; //帖子是否失效
   bool isNoAccess = false; //帖子是否没有访问权限
   bool isDispose = false; //是否释放了页面
+  bool sending = false; //是否正在发送
   String placeholder =
       (isMacOS() ? "请在此编辑回复，按住control键+空格键以切换中英文输入法" : "请在此编辑回复");
   List<Map> atUser = [];
@@ -956,6 +957,7 @@ class _TopicDetailState extends State<TopicDetail> {
                         ),
                         editing //编辑回复框
                             ? RichInput(
+                                sending: sending,
                                 fid: data["topic"]["boardId"],
                                 tid: widget.topicID,
                                 uploadFile: (aid) {
@@ -1035,19 +1037,24 @@ class _TopicDetailState extends State<TopicDetail> {
                                     }
                                   };
                                   //发表评论
-                                  showToast(
-                                    context: context,
-                                    type: XSToast.loading,
-                                    txt: "发表中…",
-                                    duration: 100000,
-                                  );
+                                  // showToast(
+                                  //   context: context,
+                                  //   type: XSToast.loading,
+                                  //   txt: "发表中…",
+                                  //   duration: 100000,
+                                  // );
+                                  setState(() {
+                                    sending = true;
+                                  });
                                   await Api().forum_topicadmin(
                                     {
                                       "act": "reply",
                                       "json": jsonEncode(json),
                                     },
                                   );
-                                  hideToast();
+                                  setState(() {
+                                    sending = false;
+                                  });
                                   showToast(
                                     context: context,
                                     type: XSToast.success,
