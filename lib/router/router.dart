@@ -18,6 +18,7 @@ import 'package:offer_show/page/msg_detail/msg_detail.dart';
 import 'package:offer_show/page/msg_three/msg_three.dart';
 import 'package:offer_show/page/new/new.dart';
 import 'package:offer_show/page/new/rule_page.dart';
+import 'package:offer_show/page/new_mix/new_mix.dart';
 import 'package:offer_show/page/new_transaction/new_transaction.dart';
 import 'package:offer_show/page/person_detail/personDetail.dart';
 import 'package:offer_show/page/personal/personal.dart';
@@ -40,6 +41,8 @@ import 'package:offer_show/page/water_total/water_total.dart';
 
 final routers = {
   "/": () => Start(),
+  "/new": (data) => PostNew(board_id: data),
+  "/new_mix": (data) => PostNewMix(board_id: data),
   "/new_transaction": () => PostNewTransaction(),
   "/rule": (data) => RulePage(name: data),
   "/water_inout_detail": () => WaterInoutDetail(),
@@ -72,7 +75,6 @@ final routers = {
   "/crop": () => CropImg(),
   "/column": (data) => TopicColumn(columnID: data),
   "/hot": () => Hot(),
-  "/new": (data) => PostNew(board_id: data),
   "/black_list": () => BlackList(),
   "/msg_three": (data) => MsgThree(type: data),
   "/msg_detail": (data) => MsgDetail(usrInfo: data),

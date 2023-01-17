@@ -164,7 +164,10 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
                 ? [Container(width: 10)]
                 : []),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.pushNamed(context, "/new_mix", arguments: 25);
+              },
               child: getImgCard("lib/img/home/new_pic_topic.png"),
             ),
           ],
