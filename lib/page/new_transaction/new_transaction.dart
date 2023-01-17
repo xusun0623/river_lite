@@ -524,9 +524,38 @@ class _SectionSelectState extends State<SectionSelect> {
                       MinusSpace(context),
                   margin: EdgeInsets.only(bottom: 10),
                   child: Wrap(
-                    children: [
-                      ..._buildTypeList(),
-                    ],
+                    children: widget.hideSection ?? false
+                        ? _buildTypeList()
+                        : [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 10, top: 7.5, bottom: 7.5),
+                              child: Text(
+                                "已选类型:",
+                                style: TextStyle(
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_dark_white
+                                          : os_dark_back,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(
+                                  left: 10, right: 10, top: 7.5, bottom: 7.5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                color: os_color_opa,
+                              ),
+                              child: Text(
+                                child_type[type_idx],
+                                style: TextStyle(
+                                  color: os_color,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            )
+                          ],
                   ),
                 ),
               ],

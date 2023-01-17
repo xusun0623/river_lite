@@ -401,7 +401,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                         child: myInkWell(
                           tap: () {
                             if (!widget.sending) {
-                              widget.send();
+                              widget.send(isAnonymous);
                             }
                           },
                           color: Color(0xFF004DFF),

@@ -56,8 +56,8 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
         fontFamily: "微软雅黑",
       ),
       tabs: [
-        Tab(text: "新发表"),
-        Tab(text: "新回复"),
+        Tab(text: "最新"),
+        Tab(text: "回复"),
         Tab(text: "热门"),
         Tab(text: "精华"),
         Tab(text: "专辑"),

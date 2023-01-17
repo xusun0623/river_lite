@@ -20,6 +20,7 @@ class LeftRowBtn extends StatefulWidget {
   int pop_section_index;
   bool pop_section;
   bool uploading;
+  bool showAttach;
   Function setPopSection;
   Function setPopSectionIndex;
   Function setUploading;
@@ -32,6 +33,7 @@ class LeftRowBtn extends StatefulWidget {
     @required this.pop_section_index,
     @required this.pop_section,
     @required this.uploading,
+    @required this.showAttach,
     @required this.setPopSection,
     @required this.setPopSectionIndex,
     @required this.setUploading,
@@ -236,29 +238,31 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
           height: 29,
         ),
         Container(width: 15),
-        myInkWell(
-          color: Provider.of<ColorProvider>(context).isDark
-              ? os_light_dark_card
-              : os_white,
-          tap: () {
-            widget.title_focus.unfocus();
-            widget.tip_focus.unfocus();
-            showModal(
-              context: context,
-              title: "提示",
-              cont: "由于河畔后台限制，请在发帖后于评论区上传附件",
-              confirmTxt: "我知道了",
-              cancelTxt: "",
-            );
-          },
-          widget: BtnContainer(
-            svg_path: "lib/img/topic_attach_black.svg",
-            txt: "上传附件",
-          ),
-          radius: 10,
-          // width: 30,
-          height: 29,
-        ),
+        widget.showAttach ?? true
+            ? myInkWell(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : os_white,
+                tap: () {
+                  widget.title_focus.unfocus();
+                  widget.tip_focus.unfocus();
+                  showModal(
+                    context: context,
+                    title: "提示",
+                    cont: "由于河畔后台限制，请在发帖后于评论区上传附件",
+                    confirmTxt: "我知道了",
+                    cancelTxt: "",
+                  );
+                },
+                widget: BtnContainer(
+                  svg_path: "lib/img/topic_attach_black.svg",
+                  txt: "上传附件",
+                ),
+                radius: 10,
+                // width: 30,
+                height: 29,
+              )
+            : Container(),
       ],
     );
   }

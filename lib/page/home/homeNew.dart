@@ -186,7 +186,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
         ),
         Container(height: 10),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 15),
           child: wrapNew(),
         ),
       ],
@@ -196,7 +196,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   }
 
   Widget wrapNew() {
-    List<String> columnString = ["卖闲置", "情感专区", "密语区", "鹊桥征友", "吃喝玩乐", "就业创业"];
+    List<String> columnString = ["二手专区", "情感专区", "密语区", "鹊桥", "吃喝玩乐", "就业创业"];
     List<Widget> tapBtn() {
       List<Widget> tmp = [];
       columnString.forEach((element) {
@@ -204,13 +204,13 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
           GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
-              if (element == "卖闲置") {
+              if (element == "二手专区") {
                 Navigator.of(context).pushNamed("/new_transaction");
               }
               if (element == "情感专区") {
                 Navigator.of(context).pushNamed("/new", arguments: 45);
               }
-              if (element == "鹊桥征友") {
+              if (element == "鹊桥") {
                 Navigator.of(context).pushNamed("/new", arguments: 313);
               }
               if (element == "密语区") {
@@ -224,7 +224,13 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
               }
             },
             child: Container(
-              margin: EdgeInsets.only(right: 10, bottom: 10),
+              width: isDesktop()
+                  ? null
+                  : (MediaQuery.of(context).size.width -
+                          MinusSpace(context) -
+                          90) /
+                      3,
+              margin: EdgeInsets.only(left: 5, right: 5, bottom: 10),
               padding: EdgeInsets.symmetric(horizontal: 17.5, vertical: 12.5),
               decoration: BoxDecoration(
                 color: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -232,15 +238,18 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
                     : Color(0xFFF1F4F8),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Text(
-                element,
-                style: TextStyle(
-                  color:
-                      Provider.of<ColorProvider>(context, listen: false).isDark
-                          ? os_dark_dark_white
-                          : Color(0xFF42546B),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
+              child: Center(
+                child: Text(
+                  element,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Provider.of<ColorProvider>(context, listen: false)
+                            .isDark
+                        ? os_dark_dark_white
+                        : Color(0xFF42546B),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ),

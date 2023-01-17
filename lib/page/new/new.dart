@@ -467,88 +467,99 @@ class _PostNewState extends State<PostNew> {
                                             ),
                                           ),
                                   ),
-                            ResponsiveWidget(
-                              child: Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      title_focus.unfocus();
-                                      tip_focus.unfocus();
-                                      showActionSheet(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        actions: total.map((e) {
-                                          return ActionItem(
-                                            title: e["board_name"],
-                                            onPressed: () {
-                                              if (e["board_name"] == "鹊桥" &&
-                                                  tip_controller.text == "") {
-                                                setState(() {
-                                                  tip_controller.text =
-                                                      bridgeFormatTxt;
-                                                });
-                                              }
-                                              select_section = e["board_name"];
-                                              select_section_id = e["board_id"];
-                                              _getChildColumnTip();
-                                              Navigator.pop(context);
-                                              setState(() {});
-                                            },
-                                          );
-                                        }).toList(),
-                                        topActionItem: TopActionItem(
-                                          title: "已选择:${select_section}✅",
-                                          titleTextStyle: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        bottomActionItem:
-                                            BottomActionItem(title: "取消"),
-                                      );
-                                    },
-                                    child: SelectColumn(
-                                        select_section: select_section),
-                                  ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width -
-                                        select_section.length * 14 -
-                                        MinusSpace(context) -
-                                        70,
-                                    height: 30,
-                                    child: ListView(
-                                      //physics: BouncingScrollPhysics(),
-                                      scrollDirection: Axis.horizontal,
-                                      children: quick.map((e) {
-                                        return SelectTag(
-                                          selected:
-                                              e["board_name"] == select_section,
-                                          tap: (tap_board) {
+                            select_section_id == 371
+                                ? Container()
+                                : ResponsiveWidget(
+                                    child: Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
                                             title_focus.unfocus();
                                             tip_focus.unfocus();
-                                            setState(() {
-                                              select_section =
-                                                  tap_board["board_name"];
-                                              select_section_id =
-                                                  tap_board["board_id"];
-                                              _getChildColumnTip();
-                                            });
+                                            showActionSheet(
+                                              context: context,
+                                              isScrollControlled: true,
+                                              actions: total.map((e) {
+                                                return ActionItem(
+                                                  title: e["board_name"],
+                                                  onPressed: () {
+                                                    if (e["board_name"] ==
+                                                            "鹊桥" &&
+                                                        tip_controller.text ==
+                                                            "") {
+                                                      setState(() {
+                                                        tip_controller.text =
+                                                            bridgeFormatTxt;
+                                                      });
+                                                    }
+                                                    select_section =
+                                                        e["board_name"];
+                                                    select_section_id =
+                                                        e["board_id"];
+                                                    _getChildColumnTip();
+                                                    Navigator.pop(context);
+                                                    setState(() {});
+                                                  },
+                                                );
+                                              }).toList(),
+                                              topActionItem: TopActionItem(
+                                                title: "已选择:${select_section}✅",
+                                                titleTextStyle: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              bottomActionItem:
+                                                  BottomActionItem(title: "取消"),
+                                            );
                                           },
-                                          quick: e,
-                                        );
-                                      }).toList(),
+                                          child: SelectColumn(
+                                              select_section: select_section),
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              select_section.length * 14 -
+                                              MinusSpace(context) -
+                                              70,
+                                          height: 30,
+                                          child: ListView(
+                                            //physics: BouncingScrollPhysics(),
+                                            scrollDirection: Axis.horizontal,
+                                            children: quick.map((e) {
+                                              return SelectTag(
+                                                selected: e["board_name"] ==
+                                                    select_section,
+                                                tap: (tap_board) {
+                                                  title_focus.unfocus();
+                                                  tip_focus.unfocus();
+                                                  setState(() {
+                                                    select_section =
+                                                        tap_board["board_name"];
+                                                    select_section_id =
+                                                        tap_board["board_id"];
+                                                    _getChildColumnTip();
+                                                  });
+                                                },
+                                                quick: e,
+                                              );
+                                            }).toList(),
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            ColumnSpace(),
+                                  ),
+                            select_section_id == 371
+                                ? Container()
+                                : ColumnSpace(),
                             ResponsiveWidget(
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   LeftRowBtn(
+                                    showAttach: select_section_id != 371,
                                     title_focus: title_focus,
                                     tip_focus: tip_focus,
                                     pop_section_index: pop_section_index,

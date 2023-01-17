@@ -991,7 +991,7 @@ class _TopicDetailState extends State<TopicDetail> {
                                   editing = false;
                                   setState(() {});
                                 },
-                                send: () async {
+                                send: (bool isAnonymous) async {
                                   var contents = [
                                     {
                                       "type":
@@ -1020,7 +1020,8 @@ class _TopicDetailState extends State<TopicDetail> {
                                   Map json = {
                                     "body": {
                                       "json": {
-                                        "isAnonymous": 0,
+                                        "isAnonymous":
+                                            isAnonymous ?? false ? 1 : 0,
                                         "isOnlyAuthor": 0,
                                         "typeId": "",
                                         "aid": aids.join(","),
@@ -1251,7 +1252,7 @@ class TopicDetailTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-      child: Text(
+      child: SelectableText(
         data["topic"]["title"].replaceAll("&nbsp1", " "),
         style: TextStyle(
           fontSize: 18,
