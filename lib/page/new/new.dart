@@ -318,11 +318,11 @@ class _PostNewState extends State<PostNew> {
                         controller: listview_controller,
                         children: [
                           ColumnRule(select_section: select_section),
-                          select_section_id == 371 ? SecretTip() : Container(),
                           TitleInput(
                             title_controller: title_controller,
                             title_focus: title_focus,
                           ),
+                          select_section_id == 371 ? SecretTip() : Container(),
                           ContInput(
                             tip_controller: tip_controller,
                             tip_focus: tip_focus,
@@ -618,12 +618,28 @@ class SecretTip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-      child: Text(
-        "密语区需要扣除您的10水滴，且需要您有密语区的访问权限，请确保你此前访问过密语区",
-        style: TextStyle(
-          color: os_deep_grey,
-          fontSize: 14,
+      margin: EdgeInsets.only(top: 15, left: 20, right: 20),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, "/column", arguments: 371);
+        },
+        child: RichText(
+          text: TextSpan(
+            style: TextStyle(
+              color: os_deep_grey,
+              fontSize: 14,
+            ),
+            children: [
+              TextSpan(text: "密语区需要扣除您的10水滴，且需要您有密语区的访问权限，请确保你此前"),
+              TextSpan(
+                text: "访问过密语区>",
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  color: os_deep_grey,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

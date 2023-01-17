@@ -957,6 +957,8 @@ class _TopicDetailState extends State<TopicDetail> {
                         ),
                         editing //编辑回复框
                             ? RichInput(
+                                anonymous:
+                                    data["topic"]["user_nick_name"] == "匿名",
                                 sending: sending,
                                 fid: data["topic"]["boardId"],
                                 tid: widget.topicID,

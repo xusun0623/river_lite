@@ -158,13 +158,13 @@ class _HomeState extends State<Home> {
       loadIndex.forEach((element) {
         icons.add([
           Icons.home_outlined,
-          Icons.burst_mode_rounded,
+          Icons.image_outlined,
           Icons.notifications_outlined,
           Icons.person_outlined
         ][element]);
         select_icons.add([
           Icons.home,
-          Icons.burst_mode_rounded,
+          Icons.image_outlined,
           Icons.notifications,
           Icons.person
         ][element]);

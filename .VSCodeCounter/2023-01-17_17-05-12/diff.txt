@@ -1,0 +1,147 @@
+Date : 2023-01-17 17:05:12
+Directory : /Users/xusun/Desktop/Flutter/offershow/lib
+Total : 79 files,  2367 codes, 70 comments, 123 blanks, all 2560 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Dart     |         77 |      2,354 |         70 |        121 |      2,545 |
+| JSON     |          1 |         10 |          0 |          1 |         11 |
+| XML      |          1 |          3 |          0 |          1 |          4 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                     | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                        |         79 |      2,367 |         70 |        123 |      2,560 |
+| asset                                                                                    |          7 |        343 |         23 |         19 |        385 |
+| components                                                                               |          5 |         59 |          3 |          2 |         64 |
+| define_btn                                                                               |          1 |         10 |          0 |          1 |         11 |
+| img                                                                                      |          1 |          3 |          0 |          1 |          4 |
+| page                                                                                     |         62 |      1,935 |         44 |         97 |      2,076 |
+| page (Files)                                                                             |          1 |         35 |         -1 |          6 |         40 |
+| page/PicSquare                                                                           |          1 |         -3 |          2 |          0 |         -1 |
+| page/about                                                                               |          1 |          4 |          1 |          0 |          5 |
+| page/account                                                                             |          1 |          4 |          1 |          0 |          5 |
+| page/blacklist                                                                           |          1 |        -28 |          1 |          0 |        -27 |
+| page/collection_detail                                                                   |          1 |         -1 |          1 |          0 |          0 |
+| page/collection_tab                                                                      |          1 |         -1 |          1 |          0 |          0 |
+| page/column                                                                              |          1 |         -2 |          2 |          0 |          0 |
+| page/crop                                                                                |          1 |         -1 |          1 |          0 |          0 |
+| page/essence                                                                             |          1 |         -1 |          1 |          0 |          0 |
+| page/explore                                                                             |          1 |         -1 |          1 |          0 |          0 |
+| page/home                                                                                |          1 |        137 |          1 |          4 |        142 |
+| page/hot                                                                                 |          2 |         -2 |          2 |          0 |          0 |
+| page/login                                                                               |          2 |         -3 |          3 |          0 |          0 |
+| page/me                                                                                  |          1 |         -1 |          1 |          0 |          0 |
+| page/me_func                                                                             |          1 |          5 |          1 |          0 |          6 |
+| page/msg                                                                                 |          1 |         -2 |          1 |          0 |         -1 |
+| page/msg_detail                                                                          |          1 |         -7 |         -8 |          0 |        -15 |
+| page/msg_three                                                                           |          1 |         -1 |          1 |          0 |          0 |
+| page/new                                                                                 |          6 |        145 |          7 |         13 |        165 |
+| page/new_reply                                                                           |          1 |         -1 |          1 |          0 |          0 |
+| page/new_transaction                                                                     |          7 |      1,422 |          7 |         64 |      1,493 |
+| page/person_detail                                                                       |          1 |          4 |          1 |          0 |          5 |
+| page/personal                                                                            |          1 |         -3 |        -37 |          1 |        -39 |
+| page/photo_view                                                                          |          1 |          4 |          1 |          1 |          6 |
+| page/question                                                                            |          2 |         87 |          1 |          1 |         89 |
+| page/scan_qrcode                                                                         |          1 |         32 |         13 |          2 |         47 |
+| page/search                                                                              |          1 |         30 |          8 |          3 |         41 |
+| page/setting                                                                             |          1 |         28 |        -17 |          0 |         11 |
+| page/square                                                                              |          2 |          3 |          2 |          0 |          5 |
+| page/start                                                                               |          1 |          8 |          1 |          1 |         10 |
+| page/topic                                                                               |         11 |         22 |         35 |          1 |         58 |
+| page/user_list                                                                           |          1 |          4 |          1 |          0 |          5 |
+| page/waterTask                                                                           |          3 |         14 |          7 |          0 |         21 |
+| page/water_total                                                                         |          1 |          5 |          0 |          0 |          5 |
+| router                                                                                   |          1 |          4 |          0 |          0 |          4 |
+| util                                                                                     |          2 |         13 |          0 |          3 |         16 |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                 | language | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /Users/xusun/Desktop/Flutter/offershow/lib/asset/autoQuestion.dart                       | Dart     |         90 |         15 |          7 |        112 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/asset/modal.dart                              | Dart     |         -2 |          0 |          0 |         -2 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/asset/processUrl.dart                         | Dart     |         24 |          2 |          3 |         29 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/asset/recognization.dart                      | Dart     |          4 |          5 |          2 |         11 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/asset/saveImg.dart                            | Dart     |        -13 |          0 |          0 |        -13 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/asset/showActionSheet.dart                    | Dart     |        113 |          1 |          2 |        116 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/asset/showPop.dart                            | Dart     |        127 |          0 |          5 |        132 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/components/banner.dart                        | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/components/leftNavi.dart                      | Dart     |         12 |          0 |          0 |         12 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/components/loading.dart                       | Dart     |         32 |          0 |          0 |         32 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/components/topic.dart                         | Dart     |         45 |          2 |          2 |         49 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/components/topic_reply.dart                   | Dart     |        -29 |          0 |          0 |        -29 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/define_btn/json.json                          | JSON     |         10 |          0 |          1 |         11 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/img/topic_capture.svg                         | XML      |          3 |          0 |          1 |          4 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/PicSquare/pic_square.dart                | Dart     |         -3 |          2 |          0 |         -1 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/about/about.dart                         | Dart     |          4 |          1 |          0 |          5 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/account/account.dart                     | Dart     |          4 |          1 |          0 |          5 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/blacklist/black_list.dart                | Dart     |        -28 |          1 |          0 |        -27 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/collection_detail/collection_detail.dart | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/collection_tab/collection_tab.dart       | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/column/column.dart                       | Dart     |         -2 |          2 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/crop/crop.dart                           | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/essence/essence.dart                     | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/explore/explore.dart                     | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/home.dart                                | Dart     |         35 |         -1 |          6 |         40 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/home/homeNew.dart                        | Dart     |        137 |          1 |          4 |        142 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/hot/homeHot.dart                         | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/hot/homeHotNoScaffold.dart               | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/login/login.dart                         | Dart     |         -2 |          2 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/login/login_helper.dart                  | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/me/me.dart                               | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/me_func/me_func.dart                     | Dart     |          5 |          1 |          0 |          6 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/msg/msg.dart                             | Dart     |         -2 |          1 |          0 |         -1 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/msg_detail/msg_detail.dart               | Dart     |         -7 |         -8 |          0 |        -15 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/msg_three/msg_three.dart                 | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new/format.dart                          | Dart     |         34 |          0 |          3 |         37 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new/left_row_btn.dart                    | Dart     |         -9 |          0 |          0 |         -9 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new/new.dart                             | Dart     |         97 |          6 |          5 |        108 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new/right_row_btn.dart                   | Dart     |        -69 |          0 |          0 |        -69 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new/rule_page.dart                       | Dart     |         62 |          1 |          4 |         67 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new/rules.dart                           | Dart     |         30 |          0 |          1 |         31 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new_reply/homeNewReply.dart              | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new_transaction/draft.dart               | Dart     |         60 |          0 |          7 |         67 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new_transaction/left_row_btn.dart        | Dart     |        239 |          3 |          6 |        248 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new_transaction/new_transaction.dart     | Dart     |        662 |          3 |         27 |        692 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new_transaction/right_row_btn.dart       | Dart     |         66 |          1 |          4 |         71 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new_transaction/select_tag.dart          | Dart     |        152 |          0 |         12 |        164 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new_transaction/success_display.dart     | Dart     |         90 |          0 |          4 |         94 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/new_transaction/vote_machine.dart        | Dart     |        153 |          0 |          4 |        157 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/person_detail/personDetail.dart          | Dart     |          4 |          1 |          0 |          5 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/personal/personal.dart                   | Dart     |         -3 |        -37 |          1 |        -39 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/photo_view/photo_view.dart               | Dart     |          4 |          1 |          1 |          6 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/question/answer.dart                     | Dart     |          1 |          0 |          0 |          1 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/question/question.dart                   | Dart     |         86 |          1 |          1 |         88 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/scan_qrcode/scan_qrcode.dart             | Dart     |         32 |         13 |          2 |         47 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/search/search.dart                       | Dart     |         30 |          8 |          3 |         41 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/setting/setting.dart                     | Dart     |         28 |        -17 |          0 |         11 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/square/square.dart                       | Dart     |          4 |          1 |          0 |          5 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/square/squareHome.dart                   | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/start/start.dart                         | Dart     |          8 |          1 |          1 |         10 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/topic/At_someone.dart                    | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/topic/Your_emoji.dart                    | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/topic/detail_cont.dart                   | Dart     |          3 |          0 |          0 |          3 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/topic/topic_RichInput.dart               | Dart     |         21 |         14 |          0 |         35 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/topic/topic_comment.dart                 | Dart     |        -10 |          0 |         -1 |        -11 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/topic/topic_comment_tab.dart             | Dart     |         -3 |          3 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/topic/topic_detail.dart                  | Dart     |         35 |         15 |          2 |         52 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/topic/topic_detailBottom.dart            | Dart     |          3 |          0 |          0 |          3 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/topic/topic_detail_time.dart             | Dart     |          4 |          0 |          0 |          4 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/topic/topic_edit.dart                    | Dart     |         -2 |          1 |          0 |         -1 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/topic/topic_more.dart                    | Dart     |        -27 |          0 |          0 |        -27 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/user_list/user_list.dart                 | Dart     |          4 |          1 |          0 |          5 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/waterTask/task_list.dart                 | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/waterTask/water_inout_detail.dart        | Dart     |         -1 |          1 |          0 |          0 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/waterTask/water_task.dart                | Dart     |         16 |          5 |          0 |         21 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/page/water_total/water_total.dart             | Dart     |          5 |          0 |          0 |          5 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/router/router.dart                            | Dart     |          4 |          0 |          0 |          4 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/util/interface.dart                           | Dart     |          2 |          0 |          0 |          2 |
+| /Users/xusun/Desktop/Flutter/offershow/lib/util/provider.dart                            | Dart     |         11 |          0 |          3 |         14 |
+| Total                                                                                    |          |      2,367 |         70 |        123 |      2,560 |
++------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

@@ -275,7 +275,7 @@ class _NaviBtnState extends State<NaviBtn> {
     //首页左侧导航栏存放的图片，依次为主页、探索、图区特别版块、消息、我的
     Icons.home_rounded,
     Icons.explore,
-    Icons.burst_mode_rounded,
+    Icons.image_outlined,
     Icons.notifications_rounded,
     Icons.settings,
   ];

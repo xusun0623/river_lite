@@ -33,6 +33,7 @@ class RichInput extends StatefulWidget {
   String placeholder;
   Function atUser;
   bool sending;
+  bool anonymous;
   RichInput({
     Key key,
     this.bottom,
@@ -47,6 +48,7 @@ class RichInput extends StatefulWidget {
     @required this.placeholder,
     @required this.uploadFile,
     @required this.sending,
+    @required this.anonymous,
   }) : super(key: key);
 
   @override
@@ -58,6 +60,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
   List<PlatformFile> files = [];
   String uploadFile = "";
   bool popSection = false;
+  bool isAnonymous = false; //是否勾选匿名
   int popSectionIndex = 0; //0-表情包 1-艾特某人
   int inserting_num = 0; //插入的位置
 
@@ -280,39 +283,87 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                         ),
                       ),
                       Center(
-                        child: Container(
-                          width: (MediaQuery.of(context).size.width -
-                                  MinusSpace(context)) *
-                              0.75,
-                          height: popSection ? 135 : 185,
-                          padding: EdgeInsets.symmetric(horizontal: 15),
-                          child: TextField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            focusNode: widget.focusNode,
-                            controller: widget.controller,
-                            style: TextStyle(
-                              height: 1.8,
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_white
-                                  : os_black,
-                            ),
-                            cursorColor: Color(0xFF004DFF),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: widget.placeholder ??
-                                  (isMacOS()
-                                      ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
-                                      : "请在此编辑回复"),
-                              hintStyle: TextStyle(
-                                height: 1.8,
-                                color:
-                                    Provider.of<ColorProvider>(context).isDark
+                        child: Column(
+                          children: [
+                            Container(
+                              width: (MediaQuery.of(context).size.width -
+                                      MinusSpace(context)) *
+                                  0.75,
+                              height: popSection
+                                  ? (widget.anonymous ?? false ? 95 : 135)
+                                  : (widget.anonymous ?? false ? 145 : 185),
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              child: TextField(
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                focusNode: widget.focusNode,
+                                controller: widget.controller,
+                                style: TextStyle(
+                                  height: 1.8,
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_white
+                                          : os_black,
+                                ),
+                                cursorColor: Color(0xFF004DFF),
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: widget.placeholder ??
+                                      (isMacOS()
+                                          ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
+                                          : "请在此编辑回复"),
+                                  hintStyle: TextStyle(
+                                    height: 1.8,
+                                    color: Provider.of<ColorProvider>(context)
+                                            .isDark
                                         ? os_dark_dark_white
                                         : Color(0xFFBBBBBB),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            widget.anonymous
+                                ? Container(
+                                    // color: os_color,
+                                    padding: EdgeInsets.only(left: 10),
+                                    height: 40,
+                                    width: (MediaQuery.of(context).size.width -
+                                            MinusSpace(context)) *
+                                        0.75,
+                                    child: Row(
+                                      children: [
+                                        Switch(
+                                          trackColor: MaterialStatePropertyAll(
+                                            isAnonymous
+                                                ? os_deep_blue
+                                                : os_middle_grey,
+                                          ),
+                                          value: isAnonymous,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              isAnonymous = val;
+                                            });
+                                          },
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              isAnonymous = !isAnonymous;
+                                            });
+                                          },
+                                          child: Text(
+                                            "是否匿名",
+                                            style: TextStyle(
+                                              color: os_deep_grey,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : Container(),
+                          ],
                         ),
                       ),
                     ],

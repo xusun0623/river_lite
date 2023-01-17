@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -315,11 +316,11 @@ class _SearchState extends State<Search> {
             commentFocus: _commentFocus,
             controller: _controller,
             select: (idx) {
-              setState(() {
-                data = [];
-                load_done = false;
-                select = idx;
-              });
+              // setState(() {
+              //   data = [];
+              //   load_done = false;
+              //   select = idx;
+              // });
             },
             select_idx: select,
           ),
@@ -334,10 +335,106 @@ class _SearchState extends State<Search> {
             child: ListView(
               controller: _scrollController,
               //physics: BouncingScrollPhysics(),
-              children: _buildTopic(),
+              children: [
+                SwitchTypeTab(
+                  index: select,
+                  select: (idx) {
+                    Vibrate.feedback(FeedbackType.impact);
+                    setState(() {
+                      data = [];
+                      load_done = false;
+                      select = idx;
+                    });
+                  },
+                ),
+                ..._buildTopic(),
+              ],
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SwitchTypeTab extends StatefulWidget {
+  int index;
+  Function select;
+  SwitchTypeTab({
+    Key key,
+    this.index,
+    this.select,
+  }) : super(key: key);
+
+  @override
+  State<SwitchTypeTab> createState() => _SwitchTypeTabState();
+}
+
+class _SwitchTypeTabState extends State<SwitchTypeTab> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.all(3.5),
+            decoration: BoxDecoration(
+              // color: os_white,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    if (widget.select != null) {
+                      widget.select(0);
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: widget.index == 0 ? os_white : Colors.transparent,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Text(
+                      "搜帖子",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: widget.index == 0 ? os_color : Color(0xFF777777),
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    if (widget.select != null) {
+                      widget.select(1);
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: widget.index == 1 ? os_white : Colors.transparent,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Text(
+                      "搜用户",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: widget.index == 1 ? os_color : Color(0xFF777777),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Text("哈哈哈哈说${widget.index}"),
+        ],
       ),
     );
   }
@@ -727,52 +824,8 @@ class _SearchLeftState extends State<SearchLeft> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          myInkWell(
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_light_dark_card
-                : os_white,
-            tap: () {
-              widget.commentFocus.unfocus();
-              showMidActionSheet(
-                context: context,
-                list: ["帖子", "用户"],
-                select: (idx) {
-                  widget.select(idx);
-                },
-              );
-            },
-            radius: 10,
-            widget: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.select_idx == 0 ? "帖子" : "用户",
-                    style: TextStyle(
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_dark_dark_white
-                          : os_deep_blue,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Container(width: 2),
-                  Container(
-                    margin: EdgeInsets.only(top: 2),
-                    child: Icon(
-                      Icons.arrow_drop_down_outlined,
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_dark_dark_white
-                          : os_deep_blue,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
           Container(
-            width: MediaQuery.of(context).size.width - 207,
+            width: MediaQuery.of(context).size.width - 130,
             child: TextField(
               onSubmitted: (context) {
                 widget.confirm();
