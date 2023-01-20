@@ -333,7 +333,7 @@ class _QueationProgressState extends State<QueationProgress> {
     if (auto_txt != "") {
       autoQuestion((val) {
         setState(() {
-          progress = val;
+          // progress = val;
         });
       });
     }

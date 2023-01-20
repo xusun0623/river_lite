@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/components/newNaviBar.dart';
@@ -64,36 +65,64 @@ class _SettingState extends State<Setting> {
           child: SelectCard()),
       Container(height: 20),
       ResponsiveWidget(
-        child: SwitchListTile(
-          inactiveTrackColor: Provider.of<ColorProvider>(context).isDark
-              ? Color(0x33FFFFFF)
-              : os_middle_grey,
-          onChanged: (change_val) {
-            print("$change_val");
-            Provider.of<AutoQuestionProvider>(context, listen: false).isAuto =
-                change_val;
-            Provider.of<AutoQuestionProvider>(context, listen: false).refresh();
-          },
-          value: Provider.of<AutoQuestionProvider>(context).isAuto,
-          title: Row(
-            children: [
-              Text(
-                "启动App时自动答题",
-                style: TextStyle(
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_white
-                        : os_black),
-              ),
-            ],
-          ),
-          subtitle: Text(
-            "此功能基于离线的题库自动答题,流程时间取决于设备网络性能,请确保网络良好且水滴资产>=9\n开启后下次重启App时生效",
+        child: ListTile(
+          title: Text(
+            "水滴自动答题",
             style: TextStyle(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_dark_white
-                  : os_deep_grey,
-            ),
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black),
           ),
+          trailing: Icon(
+            Icons.chevron_right_rounded,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_dark_white
+                : os_deep_grey,
+          ),
+          onTap: () async {
+            showPop(context, [
+              Container(height: 70),
+              Center(
+                child: Icon(
+                  Icons.auto_awesome,
+                  size: 70,
+                  color: os_deep_blue,
+                ),
+              ),
+              Container(height: 40),
+              ResponsiveWidget(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  child: Center(
+                    child: Text(
+                      "水滴答题",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(height: 15),
+              ResponsiveWidget(
+                child: Center(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15),
+                    child: Text(
+                      "河畔Lite在启动App时会自动触发答题，您无需操作即可每日收获10水滴（需要9水滴的启动资金）",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ]);
+          },
         ),
       ),
       ResponsiveWidget(

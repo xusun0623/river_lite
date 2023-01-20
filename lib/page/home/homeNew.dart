@@ -199,7 +199,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   }
 
   Widget wrapNew() {
-    List<String> columnString = ["二手专区", "情感专区", "密语区", "鹊桥", "吃喝玩乐", "就业创业"];
+    List<String> columnString = ["二手专区", "情感专区", "密语区", "鹊桥", "吃喝玩乐", "水手之家"];
     List<Widget> tapBtn() {
       List<Widget> tmp = [];
       columnString.forEach((element) {
@@ -222,8 +222,8 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
               if (element == "吃喝玩乐") {
                 Navigator.of(context).pushNamed("/new", arguments: 370);
               }
-              if (element == "就业创业") {
-                Navigator.of(context).pushNamed("/new", arguments: 174);
+              if (element == "水手之家") {
+                Navigator.of(context).pushNamed("/new", arguments: 25);
               }
             },
             child: Container(
