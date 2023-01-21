@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -26,6 +25,8 @@ class PostNewMix extends StatefulWidget {
 
 class _PostNewMixState extends State<PostNewMix> {
   bool choosingEmoji = false;
+  int state = 0; // 0-不显示 1-显示Icon 2-显示Emoji
+  ScrollController _controller = new ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,7 @@ class _PostNewMixState extends State<PostNewMix> {
       color:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           backgroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_back
@@ -53,96 +55,169 @@ class _PostNewMixState extends State<PostNewMix> {
             },
           ),
         ),
-        body: KeyboardVisibilityBuilder(
-          builder: (p0, isKeyboardVisible) => Container(
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_back
-                : os_white,
-            child: Stack(
-              children: [
-                ListView(
-                  children: [
-                    MixTitleInput(),
-                    MixContSection(key: mixContSectionKey),
-                    Container(
-                      height: (!isKeyboardVisible && choosingEmoji) ? 360 : 70,
-                    ),
-                  ],
-                ),
-                // isKeyboardVisible
-                true || choosingEmoji
-                    ? Positioned(
-                        child: Container(
-                          color: os_white,
-                          height:
-                              (!isKeyboardVisible && choosingEmoji) ? 360 : 70,
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    top: BorderSide(
-                                      color: os_grey,
-                                    ),
-                                  ),
-                                ),
-                                width: MediaQuery.of(context).size.width,
-                                child: ResponsiveWidget(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.emoji_emotions_outlined,
-                                          color: os_deep_grey,
-                                        ),
-                                        onPressed: () {
-                                          if (!choosingEmoji) {
-                                            FocusManager.instance.primaryFocus
-                                                .unfocus();
-                                          }
-                                          setState(() {
-                                            choosingEmoji = !choosingEmoji;
-                                          });
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.keyboard_hide_rounded,
-                                          color: os_deep_grey,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            choosingEmoji = false;
-                                          });
-                                          FocusManager.instance.primaryFocus
-                                              .unfocus(); //去除焦点
-                                        },
-                                      ),
-                                    ],
+        body: Container(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_white,
+          child: Stack(
+            children: [
+              ListView(
+                controller: _controller,
+                children: [
+                  MixTitleInput(),
+                  MixContSection(
+                    key: mixContSectionKey,
+                    focus: () async {
+                      setState(() {
+                        state = 1;
+                      });
+                      print("134567876543");
+                      await Future.delayed(Duration(milliseconds: 1000));
+                      _controller.animateTo(
+                        _controller.offset + 100,
+                        duration: Duration(milliseconds: 100),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                  Container(
+                    height: state == 1
+                        ? 100
+                        : state == 2
+                            ? 360
+                            : 100,
+                  ),
+                ],
+              ),
+              state == 1
+                  ? Positioned(
+                      child: Container(
+                        color: os_white,
+                        height: 50,
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(
+                                    color: os_grey,
                                   ),
                                 ),
                               ),
-                              (!isKeyboardVisible && choosingEmoji)
-                                  ? Expanded(child: YourEmoji(
-                                      tap: (res) {
-                                        mixContSectionKey.currentState
-                                            .insertEmoji(res);
-                                        print("$res");
+                              width: MediaQuery.of(context).size.width,
+                              child: ResponsiveWidget(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.emoji_emotions_outlined,
+                                        color: os_deep_grey,
+                                      ),
+                                      onPressed: () {
+                                        FocusManager.instance.primaryFocus
+                                            .unfocus();
+                                        setState(() {
+                                          choosingEmoji = true;
+                                          state = 2;
+                                        });
                                       },
-                                    ))
-                                  : Container(),
-                            ],
-                          ),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.keyboard_hide_rounded,
+                                        color: os_deep_grey,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          choosingEmoji = false;
+                                          state = 0;
+                                        });
+                                        FocusManager.instance.primaryFocus
+                                            .unfocus(); //去除焦点
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        bottom: 0,
-                        left: 0,
-                      )
-                    : Container(),
-              ],
-            ),
+                      ),
+                      bottom: 0,
+                      left: 0,
+                    )
+                  : Container(),
+              state == 2
+                  ? Positioned(
+                      child: Container(
+                        color: os_white,
+                        height: 360,
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(
+                                    color: os_grey,
+                                  ),
+                                ),
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                              child: ResponsiveWidget(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.emoji_emotions_outlined,
+                                        color: os_deep_grey,
+                                      ),
+                                      onPressed: () {
+                                        FocusManager.instance.primaryFocus
+                                            .unfocus();
+                                        setState(() {
+                                          choosingEmoji = true;
+                                          state = 2;
+                                        });
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.keyboard_hide_rounded,
+                                        color: os_deep_grey,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          choosingEmoji = false;
+                                          state = 0;
+                                        });
+                                        FocusManager.instance.primaryFocus
+                                            .unfocus(); //去除焦点
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(child: YourEmoji(
+                              tap: (res) {
+                                mixContSectionKey.currentState.insertEmoji(res);
+                                print("$res");
+                              },
+                            )),
+                          ],
+                        ),
+                      ),
+                      bottom: 0,
+                      left: 0,
+                    )
+                  : Container(),
+            ],
           ),
         ),
       ),
@@ -167,7 +242,11 @@ class BodyCont {
 }
 
 class MixContSection extends StatefulWidget {
-  MixContSection({Key key}) : super(key: key);
+  Function focus;
+  MixContSection({
+    Key key,
+    this.focus,
+  }) : super(key: key);
 
   @override
   State<MixContSection> createState() => MixContSectionState();
@@ -298,6 +377,7 @@ class MixContSectionState extends State<MixContSection> {
     for (var i = 0; i < _focusNode.length; i++) {
       _focusNode[i].addListener(() {
         if (_focusNode[i].hasFocus) {
+          if (widget.focus != null) widget.focus();
           setState(() {
             lastEditIndex = i;
           });
