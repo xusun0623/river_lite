@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   webview_flutter: ^3.0.4
+  flutter_keyboard_visibility: ^5.4.0
   route_transitions: ^2.0.1
   screenshot: ^1.2.3
   # flutter_qr_reader: ^1.0.5
