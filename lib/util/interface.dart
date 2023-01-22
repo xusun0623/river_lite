@@ -355,9 +355,7 @@ class Api {
   }
 
   //此处有
-  uploadImage({
-    List<XFile> imgs,
-  }) async {
+  uploadImage({List<XFile> imgs}) async {
     print("上传图片 ${imgs}");
     String myinfo_txt = await getStorage(key: "myinfo", initData: "");
     if (myinfo_txt != "") {
