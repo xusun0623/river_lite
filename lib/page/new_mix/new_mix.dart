@@ -158,10 +158,20 @@ class _PostWithImagePopWidgetState extends State<PostWithImagePopWidget> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : os_black,
               ),
             ),
             Container(height: 10),
-            Text("上传图片中"),
+            Text(
+              "上传图片中",
+              style: TextStyle(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : os_black,
+              ),
+            ),
           ],
         ),
       ),
@@ -377,7 +387,9 @@ class _PostNewMixState extends State<PostNewMix> {
                     state == 1
                         ? Positioned(
                             child: Container(
-                              color: os_white,
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_light_dark_card
+                                  : os_white,
                               height: 50,
                               width: MediaQuery.of(context).size.width,
                               child: Column(
@@ -386,7 +398,11 @@ class _PostNewMixState extends State<PostNewMix> {
                                     decoration: BoxDecoration(
                                       border: Border(
                                         top: BorderSide(
-                                          color: os_grey,
+                                          color: Provider.of<ColorProvider>(
+                                                      context)
+                                                  .isDark
+                                              ? os_light_dark_card
+                                              : os_grey,
                                         ),
                                       ),
                                     ),
@@ -438,7 +454,9 @@ class _PostNewMixState extends State<PostNewMix> {
                     state == 2
                         ? Positioned(
                             child: Container(
-                              color: os_white,
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_light_dark_card
+                                  : os_white,
                               height: 360,
                               width: MediaQuery.of(context).size.width,
                               child: Column(
@@ -447,7 +465,11 @@ class _PostNewMixState extends State<PostNewMix> {
                                     decoration: BoxDecoration(
                                       border: Border(
                                         top: BorderSide(
-                                          color: os_grey,
+                                          color: Provider.of<ColorProvider>(
+                                                      context)
+                                                  .isDark
+                                              ? os_light_dark_card
+                                              : os_grey,
                                         ),
                                       ),
                                     ),
@@ -638,7 +660,9 @@ class MixContSectionState extends State<MixContSection> {
           child: myInkWell(
             radius: 2.5,
             tap: addPic,
-            color: os_grey,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_light_dark_card
+                : os_grey,
             widget: Container(
               padding: EdgeInsets.all(25),
               child: Icon(
@@ -725,16 +749,18 @@ class MixContSectionState extends State<MixContSection> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        MixTitleInput(
-          emitTxt: (res) {
-            if (widget.emitTitle != null) {
-              widget.emitTitle(res);
-            }
-          },
-        ),
         SingleChildScrollView(
           child: Column(
-            children: _buildCont(),
+            children: [
+              MixTitleInput(
+                emitTxt: (res) {
+                  if (widget.emitTitle != null) {
+                    widget.emitTitle(res);
+                  }
+                },
+              ),
+              ..._buildCont(),
+            ],
           ),
         ),
         Container(
@@ -823,8 +849,15 @@ class _MixContInputState extends State<MixContInput> {
           scrollPadding: EdgeInsets.only(bottom: 60),
           controller: widget.controller,
           focusNode: widget.focusNode,
-          cursorColor: os_deep_blue,
+          cursorColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_dark_white
+              : os_deep_blue,
           maxLines: null,
+          style: TextStyle(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
+          ),
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 15),
             enabledBorder: UnderlineInputBorder(
@@ -834,6 +867,11 @@ class _MixContInputState extends State<MixContInput> {
               borderSide: BorderSide.none,
             ),
             hintText: widget.placeholder ?? "点击输入内容",
+            hintStyle: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? Color(0x55ffffff)
+                  : os_deep_grey,
+            ),
           ),
         ),
       ),
@@ -860,27 +898,43 @@ class _MixTitleInputState extends State<MixTitleInput> {
         height: 60,
         margin: EdgeInsets.symmetric(horizontal: 20),
         child: TextField(
-          cursorColor: os_deep_blue,
+          cursorColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_dark_white
+              : os_deep_blue,
           onChanged: (value) {
             if (widget.emitTxt != null) {
               widget.emitTxt(value);
             }
           },
+          style: TextStyle(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
+          ),
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 15),
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: os_grey,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : os_grey,
                 width: 2,
               ),
             ),
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: os_deep_blue,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : os_deep_blue,
                 width: 2,
               ),
             ),
             hintText: "标题",
+            hintStyle: TextStyle(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? Color(0x55ffffff)
+                  : os_deep_grey,
+            ),
           ),
         ),
       ),
@@ -900,16 +954,22 @@ class ConfirmPost extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 2.5, horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
-        color: os_deep_blue,
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_white
+            : os_deep_blue,
         border: Border.all(
-          color: os_deep_blue,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_deep_blue,
           width: 2,
         ),
       ),
       child: Text(
         "发布",
         style: TextStyle(
-          color: os_white,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_white,
         ),
       ),
     );
@@ -956,14 +1016,18 @@ class _SelectColumnState extends State<SelectColumn> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
           border: Border.all(
-            color: os_deep_blue,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_deep_blue,
             width: 2,
           ),
         ),
         child: Text(
           widget.txt == "" ? "选择板块" : widget.txt,
           style: TextStyle(
-            color: os_deep_blue,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_deep_blue,
           ),
         ),
       ),
@@ -1074,15 +1138,25 @@ class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
             padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
             margin: EdgeInsets.only(right: 5, bottom: 5),
             decoration: BoxDecoration(
-              color: column_id == element["board_id"] ? os_deep_blue : os_grey,
+              color: column_id == element["board_id"]
+                  ? (Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_deep_blue)
+                  : (Provider.of<ColorProvider>(context).isDark
+                      ? Color(0x11ffffff)
+                      : os_grey),
               borderRadius: BorderRadius.circular(100),
             ),
             child: Text(
               element["board_name"],
               style: TextStyle(
                 color: column_id == element["board_id"]
-                    ? os_white
-                    : Color.fromARGB(255, 74, 77, 87),
+                    ? (Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_back
+                        : os_white)
+                    : (Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : Color.fromARGB(255, 74, 77, 87)),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -1105,7 +1179,9 @@ class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
               if (widget.selectColumn != null) {
                 // 子板块名字 板块ID 子板块ID
                 widget.selectColumn(
-                  column_title + "-" + element["board_name"],
+                  column_title +
+                      (column_title == "" ? "" : "-") +
+                      element["board_name"],
                   column_id,
                   column_child_id,
                 );
@@ -1117,16 +1193,24 @@ class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
             margin: EdgeInsets.only(right: 5, bottom: 5),
             decoration: BoxDecoration(
               color: column_child_id == element["board_id"]
-                  ? Color(0xFFEA8324)
-                  : os_grey,
+                  ? (Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : Color(0xFFEA8324))
+                  : (Provider.of<ColorProvider>(context).isDark
+                      ? Color(0x11ffffff)
+                      : os_grey),
               borderRadius: BorderRadius.circular(100),
             ),
             child: Text(
               element["board_name"],
               style: TextStyle(
                 color: column_child_id == element["board_id"]
-                    ? os_white
-                    : Color.fromARGB(255, 74, 77, 87),
+                    ? (Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_back
+                        : os_white)
+                    : (Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : Color.fromARGB(255, 74, 77, 87)),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -1161,12 +1245,19 @@ class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
                   },
                   icon: Container(
                     decoration: BoxDecoration(
-                      color: os_grey,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? Color(0x22ffffff)
+                          : os_grey,
                       borderRadius: BorderRadius.circular(100),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Center(
-                      child: Icon(Icons.keyboard_arrow_down_rounded),
+                      child: Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_dark_white
+                            : os_black,
+                      ),
                     ),
                   ),
                 ),
@@ -1195,14 +1286,18 @@ class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
           width: 20,
           height: 20,
           decoration: BoxDecoration(
-            color: [os_deep_blue, Color(0xFFEA8324)][index - 1],
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : [os_deep_blue, Color(0xFFEA8324)][index - 1],
             borderRadius: BorderRadius.circular(100),
           ),
           child: Center(
             child: Text(
               "$index",
               style: TextStyle(
-                color: os_white,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_back
+                    : os_white,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -1213,6 +1308,9 @@ class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
           "$txt",
           style: TextStyle(
             fontSize: 16,
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
           ),
         ),
         Container(width: 10),
@@ -1222,7 +1320,9 @@ class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
                 height: 16,
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
-                  color: [os_deep_blue, Color(0xFFEA8324)][index - 1],
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : [os_deep_blue, Color(0xFFEA8324)][index - 1],
                 ),
               )
             : Container(),

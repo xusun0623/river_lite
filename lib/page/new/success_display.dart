@@ -40,7 +40,7 @@ class SuccessDisplay extends StatelessWidget {
           Container(
             width: 300,
             child: Text(
-              "你已成功发送该帖子，帖子显示在首页会有延时，你可以点击下方按钮查看",
+              "你已成功发送该帖子，客户端内帖子显示图片会有延时，你可以点击下方按钮查看",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
