@@ -355,7 +355,12 @@ class _PostNewMixState extends State<PostNewMix> {
           ),
         ),
         body: successSent
-            ? SuccessDisplay()
+            ? Container(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_back
+                    : os_white,
+                child: SuccessDisplay(),
+              )
             : Container(
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_back
@@ -698,7 +703,7 @@ class MixContSectionState extends State<MixContSection> {
     unFocus();
     List<Media> res = await ImagesPicker.pick(
       count: 10,
-      cropOpt: CropOption(),
+      // cropOpt: CropOption(),
       pickType: PickType.image,
       quality: 0.7, //一半的质量
       maxSize: 2048, //1024KB
@@ -846,6 +851,10 @@ class _MixContInputState extends State<MixContInput> {
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20),
         child: TextField(
+          keyboardAppearance:
+              Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? Brightness.dark
+                  : Brightness.light,
           scrollPadding: EdgeInsets.only(bottom: 60),
           controller: widget.controller,
           focusNode: widget.focusNode,
@@ -898,6 +907,10 @@ class _MixTitleInputState extends State<MixTitleInput> {
         height: 60,
         margin: EdgeInsets.symmetric(horizontal: 20),
         child: TextField(
+          keyboardAppearance:
+              Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? Brightness.dark
+                  : Brightness.light,
           cursorColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_dark_white
               : os_deep_blue,
@@ -1017,7 +1030,7 @@ class _SelectColumnState extends State<SelectColumn> {
           borderRadius: BorderRadius.circular(100),
           border: Border.all(
             color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_white
+                ? os_dark_dark_white
                 : os_deep_blue,
             width: 2,
           ),
@@ -1026,7 +1039,7 @@ class _SelectColumnState extends State<SelectColumn> {
           widget.txt == "" ? "选择板块" : widget.txt,
           style: TextStyle(
             color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_white
+                ? os_dark_dark_white
                 : os_deep_blue,
           ),
         ),

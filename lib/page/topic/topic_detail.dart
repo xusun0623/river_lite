@@ -839,15 +839,17 @@ class _TopicDetailState extends State<TopicDetail> {
                     : [
                         TopicDetailHead(data: data),
                         TopicDetailMore(
-                            data: data,
-                            alterSend: () {
-                              _alterSend();
-                            },
-                            block: () {
-                              setState(() {
-                                isBlack = true;
-                              });
-                            }),
+                          data: data,
+                          fresh: _getData,
+                          alterSend: () {
+                            _alterSend();
+                          },
+                          block: () {
+                            setState(() {
+                              isBlack = true;
+                            });
+                          },
+                        ),
                       ],
               ),
         backgroundColor: Provider.of<ColorProvider>(context).isDark

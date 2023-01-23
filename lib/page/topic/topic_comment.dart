@@ -56,6 +56,7 @@ class Comment extends StatefulWidget {
 class _CommentState extends State<Comment> {
   var liked = 0;
   bool is_me = false;
+  bool is_my_comment = false;
   String blackKeyWord;
 
   _getLikedStatus() async {
@@ -224,6 +225,10 @@ class _CommentState extends State<Comment> {
         ),
         child: Center(
           child: TextField(
+            keyboardAppearance:
+                Provider.of<ColorProvider>(context, listen: false).isDark
+                    ? Brightness.dark
+                    : Brightness.light,
             onChanged: (e) {
               txt = e;
             },
@@ -333,53 +338,178 @@ class _CommentState extends State<Comment> {
     XSVibrate();
     showAction(
       context: context,
-      options: is_me
-          ? [
-              "复制文本内容",
-              "举报反馈",
-              _getBlack() ? "取消屏蔽此帖子" : "屏蔽此贴的ID",
-              widget.data["poststick"] == 1 ? "取消置顶评论" : "置顶评论",
-            ]
-          : [
-              "复制文本内容",
-              "举报反馈",
-              _getBlack() ? "取消屏蔽此帖子" : "屏蔽此贴的ID",
-            ],
-      icons: is_me
-          ? [
-              Icons.copy,
-              Icons.feedback_outlined,
-              _getBlack() ? Icons.remove_circle_outline_rounded : Icons.block,
-              widget.data["poststick"] == 1
-                  ? Icons.cancel_presentation
-                  : Icons.vertical_align_top,
-            ]
-          : [
-              Icons.copy,
-              Icons.feedback_outlined,
-              _getBlack() ? Icons.remove_circle_outline_rounded : Icons.block,
-            ],
+      options: [
+        "复制文本内容",
+        "举报反馈",
+        _getBlack() ? "取消屏蔽此帖子" : "屏蔽此贴的ID",
+        ...(is_my_comment ? ["追加内容"] : []),
+        ...(is_me ? [widget.data["poststick"] == 1 ? "取消置顶评论" : "置顶评论"] : []),
+      ],
+      icons: [
+        Icons.copy,
+        Icons.feedback_outlined,
+        _getBlack() ? Icons.remove_circle_outline_rounded : Icons.block,
+        ...(is_my_comment ? [Icons.edit] : []),
+        ...(is_me
+            ? [
+                widget.data["poststick"] == 1
+                    ? Icons.cancel_presentation
+                    : Icons.vertical_align_top
+              ]
+            : []),
+      ],
       tap: (res) async {
+        Navigator.pop(context);
         if (res == 0) {
           Clipboard.setData(
             ClipboardData(text: copy_txt),
           );
-          Navigator.pop(context);
           showToast(context: context, type: XSToast.success, txt: "复制成功！");
         }
         if (res == 1) {
-          Navigator.pop(context);
           _feedback();
         }
         if (res == 2) {
-          Navigator.pop(context);
           _blackID();
         }
         if (res == 3) {
+          if (is_my_comment) {
+            _append_cont();
+          }
+          if (!is_my_comment && is_me) {
+            stickyForm();
+          }
+        }
+        if (res == 4) {
+          //水水
           stickyForm();
         }
       },
     );
+  }
+
+  _append_cont() {
+    String txt = "";
+    showPop(context, [
+      Container(height: 30),
+      Text(
+        "请输入补充内容",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_dark_white
+              : os_black,
+        ),
+      ),
+      Container(height: 10),
+      Container(
+        height: 60,
+        padding: EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_white_opa
+              : os_grey,
+        ),
+        child: Center(
+          child: TextField(
+            keyboardAppearance:
+                Provider.of<ColorProvider>(context, listen: false).isDark
+                    ? Brightness.dark
+                    : Brightness.light,
+            onChanged: (e) {
+              txt = e;
+            },
+            style: TextStyle(
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
+            cursorColor: os_deep_blue,
+            decoration: InputDecoration(
+                hintText: "请输入",
+                border: InputBorder.none,
+                hintStyle: TextStyle(
+                  color:
+                      Provider.of<ColorProvider>(context, listen: false).isDark
+                          ? os_dark_dark_white
+                          : os_deep_grey,
+                )),
+          ),
+        ),
+      ),
+      Container(height: 10),
+      Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            child: myInkWell(
+              tap: () {
+                Navigator.pop(context);
+              },
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_white_opa
+                  : Color(0x16004DFF),
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Text(
+                    "取消",
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? os_dark_dark_white
+                          : os_deep_blue,
+                    ),
+                  ),
+                ),
+              ),
+              radius: 12.5,
+            ),
+          ),
+          Container(
+            child: myInkWell(
+              tap: () async {
+                await Api().post_append(
+                  tid: widget.topic_id,
+                  pid: widget.data["reply_posts_id"],
+                  message: txt,
+                );
+                if (widget.fresh != null) {
+                  widget.fresh();
+                }
+                Navigator.pop(context); //水水
+              },
+              color: os_deep_blue,
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.done, color: os_white, size: 18),
+                      Container(width: 5),
+                      Text(
+                        "完成",
+                        style: TextStyle(
+                          color: os_white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              radius: 12.5,
+            ),
+          ),
+        ],
+      ),
+    ]);
   }
 
   _getIsMeTopic() async {
@@ -387,6 +517,7 @@ class _CommentState extends State<Comment> {
     int uid = await getUid();
     setState(() {
       is_me = widget.host_id == uid;
+      is_my_comment = widget.data["reply_id"] == uid;
     });
   }
 

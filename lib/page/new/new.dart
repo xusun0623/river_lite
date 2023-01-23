@@ -765,6 +765,10 @@ class _ContInputState extends State<ContInput> {
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20, top: 0),
         child: TextField(
+          keyboardAppearance:
+              Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? Brightness.dark
+                  : Brightness.light,
           controller: widget.tip_controller,
           focusNode: widget.tip_focus,
           keyboardType: TextInputType.multiline,
@@ -815,6 +819,10 @@ class TitleInput extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         child: TextField(
+          keyboardAppearance:
+              Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? Brightness.dark
+                  : Brightness.light,
           controller: title_controller,
           focusNode: title_focus,
           style: TextStyle(

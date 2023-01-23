@@ -67,6 +67,10 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
         ),
         child: Center(
           child: TextField(
+            keyboardAppearance:
+                Provider.of<ColorProvider>(context, listen: false).isDark
+                    ? Brightness.dark
+                    : Brightness.light,
             cursorColor: os_deep_blue,
             onChanged: (ele) {
               _value = ele;

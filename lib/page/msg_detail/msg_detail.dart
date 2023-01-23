@@ -493,6 +493,12 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                       MediaQuery.of(context).size.width - 120,
                                   height: 53,
                                   child: TextField(
+                                    keyboardAppearance:
+                                        Provider.of<ColorProvider>(context,
+                                                    listen: false)
+                                                .isDark
+                                            ? Brightness.dark
+                                            : Brightness.light,
                                     enabled: !dont_send_flag,
                                     controller: widget.textEditingController,
                                     focusNode: _focusNode,

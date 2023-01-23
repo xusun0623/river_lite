@@ -19,7 +19,8 @@ class ServerConfig {
 bool isLog = true; //控制是否打印网络输出日志
 
 class XHttp {
-  pureHttpWithCookie({String url, Map param, bool hadCookie = false}) async {
+  pureHttpWithCookie(
+      {String url, Map param, bool hadCookie = false, String method}) async {
     var dio = Dio();
     String cookie = "";
     if (hadCookie) {
@@ -35,7 +36,7 @@ class XHttp {
         .request(url,
             data: param,
             options: Options(
-              method: "POST",
+              method: method ?? "POST",
               headers: {"Cookie": cookie},
             ))
         .catchError(
@@ -54,7 +55,7 @@ class XHttp {
     }
   }
 
-  pureHttp({String url, Map param}) async {
+  pureHttp({String url, Map param, String method}) async {
     var dio = Dio();
     dio.options.contentType = Headers.formUrlEncodedContentType;
     dio.options.responseType = ResponseType.plain;
@@ -62,7 +63,7 @@ class XHttp {
     dio.options.receiveTimeout = 10000;
     if (isLog) print("地址:$url入参:$param");
     Response response = await dio
-        .request(url, data: param, options: Options(method: "POST"))
+        .request(url, data: param, options: Options(method: method ?? "POST"))
         .catchError(
           (err) {},
         );

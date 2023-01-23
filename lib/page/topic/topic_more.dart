@@ -10,27 +10,24 @@ import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/components/niw.dart';
-import 'package:offer_show/outer/showActionSheet/action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
-import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
-import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/page/topic/topic_water.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:share_plus/share_plus.dart';
 
 class TopicDetailMore extends StatefulWidget {
   Map data;
   Function block;
   Function alterSend;
+  Function fresh;
   TopicDetailMore({
     Key key,
     this.data,
     this.block,
     this.alterSend,
+    this.fresh,
   }) : super(key: key);
 
   @override
@@ -74,6 +71,10 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         ),
         child: Center(
           child: TextField(
+            keyboardAppearance:
+                Provider.of<ColorProvider>(context, listen: false).isDark
+                    ? Brightness.dark
+                    : Brightness.light,
             onChanged: (e) {
               txt = e;
             },
@@ -219,7 +220,8 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         "举报反馈",
         "屏蔽此贴",
         ...(widget.data["topic"]["user_id"] == await getUid() ? ["编辑帖子"] : []),
-        ...(widget.data["forumName"] == "水手之家" ? ["转帖到水区"] : []),
+        ...(widget.data["topic"]["user_id"] == await getUid() ? ["补充内容"] : []),
+        // ...(widget.data["forumName"] == "水手之家" ? ["转帖到水区"] : []),
       ],
       icons: [
         Icons.qr_code,
@@ -229,13 +231,16 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         ...(widget.data["topic"]["user_id"] == await getUid()
             ? [Icons.edit]
             : []),
-        ...(widget.data["forumName"] == "水手之家"
-            ? [Icons.move_down_rounded]
+        ...(widget.data["topic"]["user_id"] == await getUid()
+            ? [Icons.add_box_rounded]
             : []),
+        // ...(widget.data["forumName"] == "水手之家"
+        //     ? [Icons.move_down_rounded]
+        //     : []),
       ],
       tap: (res) async {
+        Navigator.pop(context);
         if (res == 0) {
-          Navigator.pop(context);
           _showQrCode();
         }
         if (res == 1) {
@@ -246,7 +251,6 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                   widget.data["topic"]["topic_id"].toString(),
             ),
           );
-          Navigator.pop(context);
           showToast(
             context: context,
             type: XSToast.success,
@@ -254,17 +258,14 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
           );
         }
         if (res == 2) {
-          Navigator.pop(context);
           _feedback();
         }
         if (res == 3) {
-          Navigator.pop(context);
           setBlackWord(widget.data["topic"]["title"], context);
           widget.block();
         }
         if (res == 4) {
           if (widget.data["topic"]["user_id"] == await getUid()) {
-            Navigator.pop(context);
             Navigator.pushNamed(context, "/topic_edit", arguments: {
               "tid": widget.data["topic"]["topic_id"],
               "pid": int.parse(widget.data["topic"]["extraPanel"][0]["action"]
@@ -273,16 +274,145 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                   .split("&")[0]),
             });
           } else {
-            Navigator.pop(context);
             _toWaterColumn();
           }
         }
         if (res == 5) {
-          Navigator.pop(context);
+          _append_cont();
+        }
+        if (res == 6) {
           _toWaterColumn();
         }
       },
     );
+  }
+
+  _append_cont() {
+    String txt = "";
+    showPop(context, [
+      Container(height: 30),
+      Text(
+        "请输入补充内容",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_dark_white
+              : os_black,
+        ),
+      ),
+      Container(height: 10),
+      Container(
+        height: 60,
+        padding: EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_white_opa
+              : os_grey,
+        ),
+        child: Center(
+          child: TextField(
+            keyboardAppearance:
+                Provider.of<ColorProvider>(context, listen: false).isDark
+                    ? Brightness.dark
+                    : Brightness.light,
+            onChanged: (e) {
+              txt = e;
+            },
+            style: TextStyle(
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
+            cursorColor: os_deep_blue,
+            decoration: InputDecoration(
+                hintText: "请输入",
+                border: InputBorder.none,
+                hintStyle: TextStyle(
+                  color:
+                      Provider.of<ColorProvider>(context, listen: false).isDark
+                          ? os_dark_dark_white
+                          : os_deep_grey,
+                )),
+          ),
+        ),
+      ),
+      Container(height: 10),
+      Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            child: myInkWell(
+              tap: () {
+                Navigator.pop(context);
+              },
+              color: Provider.of<ColorProvider>(context, listen: false).isDark
+                  ? os_white_opa
+                  : Color(0x16004DFF),
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Text(
+                    "取消",
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? os_dark_dark_white
+                          : os_deep_blue,
+                    ),
+                  ),
+                ),
+              ),
+              radius: 12.5,
+            ),
+          ),
+          Container(
+            child: myInkWell(
+              tap: () async {
+                await Api().post_append(
+                  tid: widget.data["topic"]["topic_id"],
+                  pid: int.parse(widget.data["topic"]["extraPanel"][0]["action"]
+                      .toString()
+                      .split("&pid=")[1]
+                      .split("&")[0]),
+                  message: txt,
+                );
+                Navigator.pop(context); //水水
+                await Future.delayed(Duration(milliseconds: 500));
+                if (widget.fresh != null) {
+                  widget.fresh();
+                }
+              },
+              color: os_deep_blue,
+              widget: Container(
+                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                height: 40,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.done, color: os_white, size: 18),
+                      Container(width: 5),
+                      Text(
+                        "完成",
+                        style: TextStyle(
+                          color: os_white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              radius: 12.5,
+            ),
+          ),
+        ],
+      ),
+    ]);
   }
 
   Widget _buildIcon(IconData i) {

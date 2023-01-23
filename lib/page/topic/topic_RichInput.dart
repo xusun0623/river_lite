@@ -189,7 +189,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                   print("选择小屏图片");
                                   List<Media> res = await ImagesPicker.pick(
                                     count: 50,
-                                    cropOpt: CropOption(),
+                                    // cropOpt: CropOption(),
                                     pickType: PickType.image,
                                     quality: 0.5, //一半的质量
                                     maxSize: 1024, //1024KB
@@ -294,6 +294,12 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                   : (widget.anonymous ?? false ? 145 : 185),
                               padding: EdgeInsets.symmetric(horizontal: 15),
                               child: TextField(
+                                keyboardAppearance: Provider.of<ColorProvider>(
+                                            context,
+                                            listen: false)
+                                        .isDark
+                                    ? Brightness.dark
+                                    : Brightness.light,
                                 keyboardType: TextInputType.multiline,
                                 maxLines: null,
                                 focusNode: widget.focusNode,
@@ -412,8 +418,12 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                             height: 100,
                             child: Center(
                               child: widget.sending
-                                  ? CircularProgressIndicator(
-                                      color: os_white,
+                                  ? Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        color: os_white,
+                                      ),
                                     )
                                   : Text(
                                       "发\n送",

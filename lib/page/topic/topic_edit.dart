@@ -401,6 +401,10 @@ class EditTipInput extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       child: TextField(
+        keyboardAppearance:
+            Provider.of<ColorProvider>(context, listen: false).isDark
+                ? Brightness.dark
+                : Brightness.light,
         controller: _tipTextEditingController,
         focusNode: _tipFocusNode,
         maxLines: null,
@@ -449,6 +453,10 @@ class EditTitleInput extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       child: TextField(
+        keyboardAppearance:
+            Provider.of<ColorProvider>(context, listen: false).isDark
+                ? Brightness.dark
+                : Brightness.light,
         controller: _titleTextEditingController,
         focusNode: _titleFocusNode,
         style: TextStyle(

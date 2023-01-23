@@ -6,6 +6,7 @@
  */
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:html/dom.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/cookie.dart';
@@ -17,6 +18,34 @@ import 'package:offer_show/util/storage.dart';
 
 /// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 class Api {
+  post_append({
+    int tid,
+    int pid,
+    String message,
+  }) async {
+    // 补充帖子评论内容
+    String html = (await XHttp().pureHttpWithCookie(
+      url:
+          "https://bbs.uestc.edu.cn/forum.php?mod=misc&action=postappend&tid=${tid}&pid=${pid}&extra=&page=1&infloat=yes&handlekey=postappend&inajax=1&ajaxtarget=fwin_content_postappend",
+      hadCookie: true,
+      method: "GET",
+    ))
+        .toString();
+    Document html_doc = Document.html(html);
+    String formhash = html_doc.getElementById("formhash").attributes["value"];
+    await XHttp().pureHttpWithCookie(
+      url:
+          "https://bbs.uestc.edu.cn/forum.php?mod=misc&action=postappend&tid=${tid}&pid=${pid}&extra=&page=1&postappendsubmit=yes&infloat=yes&inajax=1",
+      hadCookie: true,
+      param: {
+        "formhash": formhash,
+        "handlekey": "postappend",
+        "postappendmessage": message,
+        "postappendsubmit": true,
+      },
+    );
+  }
+
   finish_question() async {
     String cookie = (await getStorage(key: "cookie", initData: "")).toString();
     String formhash =

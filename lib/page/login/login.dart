@@ -381,6 +381,10 @@ class _LoginInputState extends State<LoginInput> {
                   : Color.fromRGBO(0, 0, 0, 0.08),
             ),
             child: TextField(
+              keyboardAppearance:
+                  Provider.of<ColorProvider>(context, listen: false).isDark
+                      ? Brightness.dark
+                      : Brightness.light,
               controller: u_controller,
               focusNode: widget.u_focus,
               style: TextStyle(
@@ -425,6 +429,10 @@ class _LoginInputState extends State<LoginInput> {
                   : Color.fromRGBO(0, 0, 0, 0.08),
             ),
             child: TextField(
+              keyboardAppearance:
+                  Provider.of<ColorProvider>(context, listen: false).isDark
+                      ? Brightness.dark
+                      : Brightness.light,
               controller: p_controller,
               focusNode: widget.p_focus,
               obscureText: isHide,

@@ -68,6 +68,10 @@ class _BlackListState extends State<BlackList> {
         ),
         child: Center(
           child: TextField(
+            keyboardAppearance:
+                Provider.of<ColorProvider>(context, listen: false).isDark
+                    ? Brightness.dark
+                    : Brightness.light,
             onChanged: (e) {
               tmp_txt = e;
             },
@@ -236,7 +240,14 @@ class _BlackListState extends State<BlackList> {
           isDesktop()
               ? Container()
               : IconButton(
-                  icon: Text(select.length == data.length ? "取消" : "全选"),
+                  icon: Text(
+                    select.length == data.length ? "取消" : "全选",
+                    style: TextStyle(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_dark_white
+                          : os_black,
+                    ),
+                  ),
                   onPressed: () {
                     if (select.length != data.length) {
                       select = [];

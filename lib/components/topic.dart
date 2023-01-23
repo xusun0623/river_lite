@@ -125,6 +125,10 @@ class _TopicState extends State<Topic> {
         ),
         child: Center(
           child: TextField(
+            keyboardAppearance:
+                Provider.of<ColorProvider>(context, listen: false).isDark
+                    ? Brightness.dark
+                    : Brightness.light,
             onChanged: (e) {
               txt = e;
             },

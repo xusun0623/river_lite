@@ -15,6 +15,7 @@ https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 > flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform android-arm,android-arm64,android-x64 --split-per-abi
 
 > adb install build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk  
+> adb install build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
 
 > adb -s adb-56ca1081-vP9WNP._adb-tls-connect._tcp. kill-server  
 

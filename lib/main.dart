@@ -72,7 +72,9 @@ class MyApp extends StatelessWidget {
             ),
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.blue,
-              backgroundColor: Colors.white,
+              backgroundColor: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_back
+                  : Colors.white,
             ),
             useMaterial3: true,
           ),

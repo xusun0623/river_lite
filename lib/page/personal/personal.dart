@@ -623,6 +623,10 @@ class _PersonCardState extends State<PersonCard> {
         ),
         child: Center(
           child: TextField(
+            keyboardAppearance:
+                Provider.of<ColorProvider>(context, listen: false).isDark
+                    ? Brightness.dark
+                    : Brightness.light,
             controller: _sign_controller,
             cursorColor: os_deep_blue,
             style: TextStyle(

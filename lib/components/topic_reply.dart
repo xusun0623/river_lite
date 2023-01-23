@@ -129,6 +129,10 @@ class _TopicReplyState extends State<TopicReply> {
         ),
         child: Center(
           child: TextField(
+            keyboardAppearance:
+                Provider.of<ColorProvider>(context, listen: false).isDark
+                    ? Brightness.dark
+                    : Brightness.light,
             onChanged: (e) {
               txt = e;
             },

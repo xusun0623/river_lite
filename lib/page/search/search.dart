@@ -827,6 +827,10 @@ class _SearchLeftState extends State<SearchLeft> {
           Container(
             width: MediaQuery.of(context).size.width - 130,
             child: TextField(
+              keyboardAppearance:
+                  Provider.of<ColorProvider>(context, listen: false).isDark
+                      ? Brightness.dark
+                      : Brightness.light,
               onSubmitted: (context) {
                 widget.confirm();
               },

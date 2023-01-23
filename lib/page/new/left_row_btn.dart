@@ -131,7 +131,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                     print("选择小屏图片");
                     List<Media> res = await ImagesPicker.pick(
                       count: 50,
-                      cropOpt: CropOption(),
+                      // cropOpt: CropOption(),
                       pickType: PickType.image,
                       quality: 0.7, //一半的质量
                       maxSize: 2048, //1024KB

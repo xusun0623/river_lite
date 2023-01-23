@@ -99,6 +99,11 @@ class _VoteMachineState extends State<VoteMachine> {
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         height: 45,
                         child: TextField(
+                          keyboardAppearance:
+                              Provider.of<ColorProvider>(context, listen: false)
+                                      .isDark
+                                  ? Brightness.dark
+                                  : Brightness.light,
                           onTap: () {
                             widget.focus();
                           },
