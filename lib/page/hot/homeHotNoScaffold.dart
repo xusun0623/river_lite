@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
@@ -77,7 +78,12 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
       t.add(
         Stack(
           children: [
-            Topic(isLeftNaviUI: isDesktop() && true, data: list[i]),
+            Topic(
+              isLeftNaviUI: isDesktop() && true,
+              data: list[i],
+              top: 0,
+              removeMargin: true,
+            ),
             Positioned(
               right: os_edge + 80,
               top: 5,
@@ -105,6 +111,7 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
 
   @override
   Widget build(BuildContext context) {
+    double w = MediaQuery.of(context).size.width;
     return Container(
       color:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
@@ -123,10 +130,16 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
           },
           child: list.length == 0
               ? OccuLoading()
-              : ListView(
+              : MasonryGridView.count(
                   controller: _scrollController,
-                  //physics: BouncingScrollPhysics(),
-                  children: _buildComponents(),
+                  itemCount: _buildComponents().length,
+                  padding: EdgeInsets.all(os_edge),
+                  crossAxisCount: w > 800 ? 2 : 1,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                  itemBuilder: (BuildContext context, int index) {
+                    return _buildComponents()[index];
+                  },
                 ),
         ),
       ),

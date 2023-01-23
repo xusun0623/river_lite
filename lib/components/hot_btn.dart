@@ -26,7 +26,7 @@ class _HomeBtnState extends State<HomeBtn> {
             : os_white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      margin: EdgeInsets.only(left: os_edge, right: os_edge),
+      // margin: EdgeInsets.only(left: os_edge, right: os_edge),
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       width: MediaQuery.of(context).size.width -
           os_edge * 2 -
@@ -129,6 +129,13 @@ class Btn extends StatefulWidget {
 class _BtnState extends State<Btn> {
   @override
   Widget build(BuildContext context) {
+    double w = MediaQuery.of(context).size.width;
+    double btn_width = (MediaQuery.of(context).size.width -
+            os_edge * 2 -
+            (isDesktop() ? LeftNaviWidth : 0) -
+            50) /
+        5 /
+        (w > 1200 ? 3 : (w > 800 ? 2 : 1));
     return myInkWell(
       tap: () async {
         String myinfo = await getStorage(key: "myinfo", initData: "");
@@ -149,11 +156,7 @@ class _BtnState extends State<Btn> {
           ? os_light_dark_card
           : os_white,
       widget: Container(
-        width: (MediaQuery.of(context).size.width -
-                os_edge * 2 -
-                (isDesktop() ? LeftNaviWidth : 0) -
-                10) /
-            5,
+        width: btn_width,
         padding: EdgeInsets.only(top: 10, bottom: 15),
         child: Column(
           children: [

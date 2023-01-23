@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/niw.dart';
@@ -58,8 +60,8 @@ class _CollectionTabState extends State<CollectionTab>
       if (_scrollController.position.pixels >= 0) {
         vibrate = false; //允许震动
       }
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 50) {
         _getData();
       }
     });
@@ -204,23 +206,8 @@ class _CollectionTabState extends State<CollectionTab>
 
   List<Widget> _buildComponents() {
     List<Widget> t = [];
-    if (mydata.length != 0) {
-      mydata.forEach((element) {
-        t.add(GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              "/list",
-              arguments: element,
-            );
-          },
-          child: Collection(data: element),
-        ));
-      });
-      t.add(Container(height: 10));
-    }
     if (data.length != 0 || loading) {
-      t.add(Container(height: 5));
+      // t.add(Container(height: 5));
       t.add(ListTab(
           loading: switchLoading,
           index: filter_type,
@@ -232,7 +219,25 @@ class _CollectionTabState extends State<CollectionTab>
             });
             _getMydata();
           }));
-      t.add(Container(height: 5));
+      // t.add(Container(height: 5));
+    }
+    if (mydata.length != 0) {
+      mydata.forEach((element) {
+        t.add(GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              "/list",
+              arguments: element,
+            );
+          },
+          child: Collection(
+            data: element,
+            removeMargin: true,
+          ),
+        ));
+      });
+      // t.add(Container(height: 10));
     }
     data.forEach((element) {
       t.add(GestureDetector(
@@ -243,7 +248,10 @@ class _CollectionTabState extends State<CollectionTab>
             arguments: element,
           );
         },
-        child: Collection(data: element),
+        child: Collection(
+          data: element,
+          removeMargin: true,
+        ),
       ));
     });
     if (!load_done) {
@@ -260,6 +268,7 @@ class _CollectionTabState extends State<CollectionTab>
 
   @override
   Widget build(BuildContext context) {
+    double w = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
@@ -280,10 +289,16 @@ class _CollectionTabState extends State<CollectionTab>
           },
           animation: true,
           bottom: 50,
-          child: ListView(
-            //physics: BouncingScrollPhysics(),
+          child: MasonryGridView.count(
             controller: _scrollController,
-            children: _buildComponents(),
+            itemCount: _buildComponents().length,
+            padding: EdgeInsets.all(os_edge),
+            crossAxisCount: w > 1200 ? 3 : (w > 800 ? 2 : 1),
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            itemBuilder: (BuildContext context, int index) {
+              return _buildComponents()[index];
+            },
           ),
           controller: _scrollController,
         ),

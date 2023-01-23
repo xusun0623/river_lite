@@ -33,6 +33,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
   void initState() {
     tabController = TabController(
       length: tabs.length,
+      initialIndex: 2,
       vsync: this,
     );
     super.initState();

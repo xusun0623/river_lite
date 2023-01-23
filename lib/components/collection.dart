@@ -20,9 +20,11 @@ class Collection extends StatefulWidget {
     // "type": 2, //0-黑 1-红 2-白
     // "isShadow": false, //true-阴影 false-无阴影
   };
+  bool removeMargin;
   Collection({
     Key key,
     this.data,
+    this.removeMargin,
   }) : super(key: key);
 
   @override
@@ -75,7 +77,9 @@ class _CollectionState extends State<Collection> {
       child: Material(
         color: Colors.transparent,
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          margin: widget.removeMargin ?? false
+              ? null
+              : EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(

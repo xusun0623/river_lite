@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bounce/flutter_bounce.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -11,6 +11,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/hot_btn.dart';
+import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/components/totop.dart';
@@ -53,8 +54,8 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       if (_scrollController.position.pixels >= 0) {
         vibrate = false; //允许震动
       }
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 50) {
         // print("触底");
         _getData();
       }
@@ -94,6 +95,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
   _getData() async {
     if (loading || load_done) return;
     loading = true;
+    setState(() {});
     var tmp = await Api().forum_topiclist({
       "page": (data.length / pageSize + 1).toInt(),
       "pageSize": pageSize,
@@ -269,6 +271,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 
   Widget _buildComponents() {
     List<Widget> t = [];
+    double w = MediaQuery.of(context).size.width;
     t.add(HomeBtn());
     if (data.length == 0 && !load_done) {
       t.add(Container(
@@ -285,7 +288,12 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     }
     if (data != null && data.length != 0) {
       for (var i in data) {
-        t.add(Topic(isLeftNaviUI: isDesktop() && true, data: i));
+        t.add(Topic(
+          isLeftNaviUI: isDesktop() && true,
+          data: i,
+          top: 0,
+          removeMargin: true,
+        ));
       }
     }
     if (data.length == 0) {
@@ -293,43 +301,98 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
         height: MediaQuery.of(context).size.height - 100,
       ));
     }
-    t.add(
-      load_done || data.length == 0
-          ? TapMore(
-              tap: () {
-                XSVibrate();
-                setState(() {
-                  loading = false;
-                  load_done = false;
-                  _getData();
-                });
-              },
-            )
-          : BottomLoading(
-              color: Colors.transparent,
-              txt: "努力加载中…",
-            ),
-    );
+    if (w < 800) {
+      t.add(
+        load_done || data.length == 0
+            ? TapMore(
+                tap: () {
+                  XSVibrate();
+                  setState(() {
+                    loading = false;
+                    load_done = false;
+                    _getData();
+                  });
+                },
+              )
+            : BottomLoading(
+                color: Colors.transparent,
+                txt: "努力加载中…",
+              ),
+      );
+    }
     t.add(Padding(
       padding: EdgeInsets.all(load_done || data.length == 0 ? 7.5 : 0),
     ));
-    return BackToTop(
-      show: showBackToTop,
-      bottom: 50,
-      animation: true,
-      attachBtn: true,
-      refresh: () {
-        _indicatorKey.currentState.show();
-      },
-      tap: () {
-        // Navigator.pushNamed(context, "/new_transaction");
-        showPopNew();
-      },
-      child: ListView(
-        controller: _scrollController,
-        children: t,
-      ),
-      controller: _scrollController,
+    return Stack(
+      children: [
+        BackToTop(
+          show: showBackToTop,
+          bottom: 50,
+          animation: true,
+          attachBtn: true,
+          refresh: () {
+            _indicatorKey.currentState.show();
+          },
+          tap: () {
+            // Navigator.pushNamed(context, "/new_transaction");
+            showPopNew();
+          },
+          child: MasonryGridView.count(
+            controller: _scrollController,
+            itemCount: t.length,
+            padding: EdgeInsets.all(os_edge),
+            crossAxisCount: w > 1200 ? 3 : (w > 800 ? 2 : 1),
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            itemBuilder: (BuildContext context, int index) {
+              return t[index];
+            },
+          ),
+          controller: _scrollController,
+        ),
+        loading && w > 800
+            ? Positioned(
+                bottom: 20,
+                left: (MediaQuery.of(context).size.width - LeftNaviWidth) / 2 -
+                    30,
+                child: Container(
+                  width: 120,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: os_white,
+                    borderRadius: BorderRadius.circular(100),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0x33000000),
+                        blurRadius: 20,
+                        offset: Offset(3, 3),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          color: os_deep_blue,
+                        ),
+                      ),
+                      Container(width: 10),
+                      Text(
+                        "加载中…",
+                        style: TextStyle(
+                          color: os_black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : Container(),
+      ],
     );
   }
 
@@ -339,7 +402,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
     return Scaffold(
       backgroundColor: provider_color.isDark ? os_dark_back : os_back,
       body: Container(
-        padding: EdgeInsets.only(top: 10),
+        // padding: EdgeInsets.only(top: 10),
         child: RefreshIndicator(
           key: _indicatorKey,
           color: os_color,
