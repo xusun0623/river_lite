@@ -228,7 +228,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
             },
             child: Container(
               width: isDesktop()
-                  ? null
+                  ? element.length * 16.0 + 50
                   : (MediaQuery.of(context).size.width -
                           MinusSpace(context) -
                           90) /

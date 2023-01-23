@@ -628,28 +628,30 @@ class SecretTip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 15, left: 20, right: 20),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, "/column", arguments: 371);
-        },
-        child: RichText(
-          text: TextSpan(
-            style: TextStyle(
-              color: os_deep_grey,
-              fontSize: 14,
-            ),
-            children: [
-              TextSpan(text: "密语区需要扣除您的10水滴，且需要您有密语区的访问权限，请确保你此前"),
-              TextSpan(
-                text: "访问过密语区>",
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  color: os_deep_grey,
-                ),
+    return ResponsiveWidget(
+      child: Container(
+        margin: EdgeInsets.only(top: 15, left: 20, right: 20),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, "/column", arguments: 371);
+          },
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(
+                color: os_deep_grey,
+                fontSize: 14,
               ),
-            ],
+              children: [
+                TextSpan(text: "密语区需要扣除您的10水滴，且需要您有密语区的访问权限，请确保你此前"),
+                TextSpan(
+                  text: "访问过密语区>",
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: os_deep_grey,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:images_picker/images_picker.dart';
 import 'package:lottie/lottie.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/showPop.dart';
+import 'package:offer_show/asset/uploadAttachment.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/new/success_display.dart';
@@ -302,6 +304,14 @@ class _PostNewMixState extends State<PostNewMix> {
     }
   }
 
+  clickEmoji() {
+    FocusManager.instance.primaryFocus.unfocus();
+    setState(() {
+      choosingEmoji = true;
+      state = 2;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Baaaar(
@@ -369,6 +379,7 @@ class _PostNewMixState extends State<PostNewMix> {
                   children: [
                     MixContSection(
                       state: state,
+                      clickEmoji: clickEmoji,
                       key: mixContSectionKey,
                       emitTitle: (res) {
                         setState(() {
@@ -384,12 +395,14 @@ class _PostNewMixState extends State<PostNewMix> {
                         });
                       },
                       focus: () {
-                        setState(() {
-                          state = 1;
-                        });
+                        if (!isDesktop()) {
+                          setState(() {
+                            state = 1;
+                          });
+                        }
                       },
                     ),
-                    state == 1
+                    state == 1 && !isDesktop()
                         ? Positioned(
                             child: Container(
                               color: Provider.of<ColorProvider>(context).isDark
@@ -422,14 +435,7 @@ class _PostNewMixState extends State<PostNewMix> {
                                               Icons.emoji_emotions_outlined,
                                               color: os_deep_grey,
                                             ),
-                                            onPressed: () {
-                                              FocusManager.instance.primaryFocus
-                                                  .unfocus();
-                                              setState(() {
-                                                choosingEmoji = true;
-                                                state = 2;
-                                              });
-                                            },
+                                            onPressed: clickEmoji,
                                           ),
                                           IconButton(
                                             icon: Icon(
@@ -464,67 +470,77 @@ class _PostNewMixState extends State<PostNewMix> {
                                   : os_white,
                               height: 360,
                               width: MediaQuery.of(context).size.width,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        top: BorderSide(
-                                          color: Provider.of<ColorProvider>(
-                                                      context)
-                                                  .isDark
-                                              ? os_light_dark_card
-                                              : os_grey,
+                              child: ResponsiveWidget(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          top: BorderSide(
+                                            color: Provider.of<ColorProvider>(
+                                                        context)
+                                                    .isDark
+                                                ? os_light_dark_card
+                                                : os_grey,
+                                          ),
+                                        ),
+                                      ),
+                                      width: MediaQuery.of(context).size.width,
+                                      child: ResponsiveWidget(
+                                        child: Row(
+                                          mainAxisAlignment: isDesktop()
+                                              ? MainAxisAlignment.center
+                                              : MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            ...(isDesktop()
+                                                ? []
+                                                : [
+                                                    IconButton(
+                                                      icon: Icon(
+                                                        Icons
+                                                            .emoji_emotions_outlined,
+                                                        color: os_deep_grey,
+                                                      ),
+                                                      onPressed: () {
+                                                        FocusManager.instance
+                                                            .primaryFocus
+                                                            .unfocus();
+                                                        setState(() {
+                                                          choosingEmoji = true;
+                                                          state = 2;
+                                                        });
+                                                      },
+                                                    )
+                                                  ]),
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.keyboard_hide_rounded,
+                                                color: os_deep_grey,
+                                              ),
+                                              onPressed: () {
+                                                setState(() {
+                                                  choosingEmoji = false;
+                                                  state = 0;
+                                                });
+                                                FocusManager
+                                                    .instance.primaryFocus
+                                                    .unfocus(); //去除焦点
+                                              },
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
-                                    width: MediaQuery.of(context).size.width,
-                                    child: ResponsiveWidget(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          IconButton(
-                                            icon: Icon(
-                                              Icons.emoji_emotions_outlined,
-                                              color: os_deep_grey,
-                                            ),
-                                            onPressed: () {
-                                              FocusManager.instance.primaryFocus
-                                                  .unfocus();
-                                              setState(() {
-                                                choosingEmoji = true;
-                                                state = 2;
-                                              });
-                                            },
-                                          ),
-                                          IconButton(
-                                            icon: Icon(
-                                              Icons.keyboard_hide_rounded,
-                                              color: os_deep_grey,
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                choosingEmoji = false;
-                                                state = 0;
-                                              });
-                                              FocusManager.instance.primaryFocus
-                                                  .unfocus(); //去除焦点
-                                            },
-                                          ),
-                                        ],
+                                    Expanded(
+                                      child: YourEmoji(
+                                        tap: (res) {
+                                          mixContSectionKey.currentState
+                                              .insertEmoji(res);
+                                        },
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: YourEmoji(
-                                      tap: (res) {
-                                        mixContSectionKey.currentState
-                                            .insertEmoji(res);
-                                      },
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                             bottom: 0,
@@ -560,6 +576,7 @@ class MixContSection extends StatefulWidget {
   Function setState;
   Function emit;
   Function emitTitle;
+  Function clickEmoji;
   int state;
   MixContSection({
     Key key,
@@ -568,6 +585,7 @@ class MixContSection extends StatefulWidget {
     this.state,
     this.emit,
     this.emitTitle,
+    this.clickEmoji,
   }) : super(key: key);
 
   @override
@@ -658,27 +676,59 @@ class MixContSectionState extends State<MixContSection> {
         ));
       }
     }
-    _body_cont_tmp.add(Row(
-      children: [
-        Container(
-          margin: EdgeInsets.all(20),
-          child: myInkWell(
-            radius: 2.5,
-            tap: addPic,
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_light_dark_card
-                : os_grey,
-            widget: Container(
-              padding: EdgeInsets.all(25),
-              child: Icon(
-                Icons.add,
-                color: os_deep_grey,
+    _body_cont_tmp.add(
+      ResponsiveWidget(
+        child: Row(
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: 20, top: 20, bottom: 20, right: 10),
+              child: myInkWell(
+                radius: 2.5,
+                tap: addPic,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_light_dark_card
+                    : os_grey,
+                widget: Container(
+                  padding: EdgeInsets.all(25),
+                  child: Icon(
+                    Provider.of<ColorProvider>(context).isDark
+                        ? Icons.add_photo_alternate
+                        : Icons.add,
+                    color: os_deep_grey,
+                  ),
+                ),
               ),
             ),
-          ),
-        )
-      ],
-    ));
+            !isDesktop()
+                ? Container()
+                : Container(
+                    margin: EdgeInsets.only(
+                      top: 20,
+                      bottom: 20,
+                    ),
+                    child: myInkWell(
+                      radius: 2.5,
+                      tap: () {
+                        if (widget.clickEmoji != null) {
+                          widget.clickEmoji();
+                        }
+                      },
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_light_dark_card
+                          : os_grey,
+                      widget: Container(
+                        padding: EdgeInsets.all(25),
+                        child: Icon(
+                          Icons.emoji_emotions_outlined,
+                          color: os_deep_grey,
+                        ),
+                      ),
+                    ),
+                  )
+          ],
+        ),
+      ),
+    );
     return _body_cont_tmp;
   }
 
@@ -701,17 +751,27 @@ class MixContSectionState extends State<MixContSection> {
 
   addPic() async {
     unFocus();
-    List<Media> res = await ImagesPicker.pick(
-      count: 10,
-      // cropOpt: CropOption(),
-      pickType: PickType.image,
-      quality: 0.7, //一半的质量
-      maxSize: 2048, //1024KB
-    );
-    for (var i = 0; i < res.length; i++) {
-      final XFile element = XFile(res[i].path);
-      body_cont.add(BodyCont(BodyContType.image, element.path));
-      body_cont.add(BodyCont(BodyContType.txt, ""));
+    if (isMacOS()) {
+      // 桌面端
+      List<XFile> images = await pickeImgFile(context);
+      for (var i = 0; i < images.length; i++) {
+        final XFile element = images[i];
+        body_cont.add(BodyCont(BodyContType.image, element.path));
+        body_cont.add(BodyCont(BodyContType.txt, ""));
+      }
+    } else {
+      // 移动端
+      List<Media> res = await ImagesPicker.pick(
+        count: 10,
+        pickType: PickType.image,
+        quality: 0.7, //一半的质量
+        maxSize: 2048, //1024KB
+      );
+      for (var i = 0; i < res.length; i++) {
+        final XFile element = XFile(res[i].path);
+        body_cont.add(BodyCont(BodyContType.image, element.path));
+        body_cont.add(BodyCont(BodyContType.txt, ""));
+      }
     }
     rebuildControlList();
     returnTotalCont();
@@ -800,9 +860,14 @@ class _MixPicState extends State<MixPic> {
       padding: EdgeInsets.symmetric(horizontal: 15),
       child: Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(2.5),
-            child: Image.file(File(widget.path)),
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: isDesktop() ? 400 : 10000,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(2.5),
+              child: Image.file(File(widget.path)),
+            ),
           ),
           Positioned(
             right: 10,
