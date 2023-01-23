@@ -355,11 +355,11 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
       "json":
           '{"action": "send","msg": {"type": "image","content": "${img_urls[0]["urlName"]}"},"toUid": ${widget.uid}}'
     });
-    showToast(
-      context: context,
-      type: XSToast.success,
-      txt: "发送成功！",
-    );
+    // showToast(
+    //   context: context,
+    //   type: XSToast.success,
+    //   txt: "发送成功！",
+    // );
     setState(() {
       dont_send_flag = true;
       dont_send_clock = 10;
@@ -396,11 +396,11 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
       "json":
           '{"action": "send","msg": {"type": "text","content": "${widget.textEditingController.text}"},"toUid": ${widget.uid}}'
     });
-    showToast(
-      context: context,
-      type: XSToast.success,
-      txt: "发送成功！",
-    );
+    // showToast(
+    //   context: context,
+    //   type: XSToast.success,
+    //   txt: "发送成功！",
+    // );
     setState(() {
       dont_send_flag = true;
       dont_send_clock = 12;

@@ -398,7 +398,17 @@ class _CommentState extends State<Comment> {
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Provider.of<ColorProvider>(context, listen: false).isDark
-              ? os_dark_white
+              ? os_dark_dark_white
+              : os_black,
+        ),
+      ),
+      Container(height: 10),
+      Text(
+        "补充内容显示在客户端可能有延时，可以尝试稍后刷新一下或者在网页端查看",
+        style: TextStyle(
+          fontSize: 14,
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
+              ? os_dark_dark_white
               : os_black,
         ),
       ),
