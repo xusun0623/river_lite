@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
@@ -162,6 +163,7 @@ class _HomeNewReplyState extends State<HomeNewReply>
 
   @override
   Widget build(BuildContext context) {
+    double w = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
@@ -176,7 +178,24 @@ class _HomeNewReplyState extends State<HomeNewReply>
           var data = await _getInitData();
           return data;
         },
-        child: data.length == 0 ? OccuLoading() : _buildComponents(),
+        // child: data.length == 0 ? OccuLoading() : _buildComponents(),//11223344
+        child: data.length == 0
+            ? OccuLoading()
+            : MasonryGridView.count(
+                itemCount: data.length,
+                crossAxisCount: w > 1200 ? 3 : (w > 800 ? 2 : 1),
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                itemBuilder: (BuildContext context, int index) {
+                  return Topic(
+                    // isLeftNaviUI: isDesktop() && true,
+                    top: 0,
+                    removeMargin: true,
+                    data: data[index],
+                  );
+                },
+              ),
+        // 112233
       ),
     );
   }

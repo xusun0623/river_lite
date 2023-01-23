@@ -35,6 +35,7 @@ class Topic extends StatefulWidget {
   bool blackOccu;
   bool hideColumn;
   bool isLeftNaviUI;
+  bool removeMargin;
   Color backgroundColor;
 
   Topic({
@@ -45,6 +46,7 @@ class Topic extends StatefulWidget {
     this.blackOccu,
     this.hideColumn,
     this.isLeftNaviUI,
+    this.removeMargin,
     this.backgroundColor,
   }) : super(key: key);
 
@@ -340,8 +342,10 @@ class _TopicState extends State<Topic> {
     if (widget.data != null &&
         widget.data["imageList"] != null &&
         widget.data["imageList"].length != 0) {
-      if (widget.data["imageList"].length > 3)
-        widget.data["imageList"] = widget.data["imageList"].sublist(0, 3);
+      int splitCount = isDesktop() ? 2 : 3;
+      if (widget.data["imageList"].length > splitCount)
+        widget.data["imageList"] =
+            widget.data["imageList"].sublist(0, splitCount);
       List<Widget> _getImg(List a) {
         List<Widget> t = [];
         for (int i = 0; i < widget.data["imageList"].length; i++) {
@@ -739,9 +743,9 @@ class _TopicState extends State<Topic> {
         ? _blackCont()
         : Padding(
             padding: EdgeInsets.fromLTRB(
-              os_edge,
+              widget.removeMargin ?? false ? 0 : os_edge,
               widget.top ?? 10,
-              os_edge,
+              widget.removeMargin ?? false ? 0 : os_edge,
               widget.bottom ?? 0,
             ),
             child: isDesktop()

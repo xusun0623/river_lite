@@ -3,6 +3,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/page/collection_tab/collection_tab.dart';
+import 'package:offer_show/page/column_waterfall/column_waterfall.dart';
 import 'package:offer_show/page/essence/essence.dart';
 import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/hot/homeHotNoScaffold.dart';
@@ -19,11 +20,19 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
   TabController tabController;
+  List<Tab> tabs = [
+    Tab(text: "板块"),
+    Tab(text: "最新"),
+    Tab(text: "回复"),
+    Tab(text: "热门"),
+    Tab(text: "精华"),
+    Tab(text: "专辑"),
+  ];
 
   @override
   void initState() {
     tabController = TabController(
-      length: 5,
+      length: tabs.length,
       vsync: this,
     );
     super.initState();
@@ -55,13 +64,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
         fontSize: 17,
         fontFamily: "微软雅黑",
       ),
-      tabs: [
-        Tab(text: "最新"),
-        Tab(text: "回复"),
-        Tab(text: "热门"),
-        Tab(text: "精华"),
-        Tab(text: "专辑"),
-      ],
+      tabs: tabs,
       onTap: (index) {
         setState(() {
           Provider.of<HomeRefrshProvider>(
@@ -121,6 +124,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           physics: CustomTabBarViewScrollPhysics(),
           controller: tabController,
           children: [
+            ColumnWaterfall(),
             HomeNew(),
             HomeNewReply(),
             HotNoScaffold(),
