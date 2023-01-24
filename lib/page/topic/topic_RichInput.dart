@@ -191,8 +191,8 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                     count: 50,
                                     // cropOpt: CropOption(),
                                     pickType: PickType.image,
-                                    quality: 0.5, //一半的质量
-                                    maxSize: 1024, //1024KB
+                                    quality: 0.7, //一半的质量
+                                    // maxSize: 1024, //1024KB
                                   );
                                   res.forEach((element) {
                                     image.add(XFile(element.path));

@@ -108,7 +108,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                       // cropOpt: CropOption(),
                       pickType: PickType.image,
                       quality: 0.7, //一半的质量
-                      maxSize: 2048, //1024KB
+                      // maxSize: 2048, //1024KB
                     );
                     res.forEach((element) {
                       image.add(XFile(element.path));
