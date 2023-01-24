@@ -101,9 +101,9 @@ class _CollectionTabState extends State<CollectionTab>
             ? base_url + "forum.php?mod=collection&op=my"
             : base_url +
                 "forum.php?mod=collection&op=all&order=${[
-                  "threadnum",
+                  "follownum",
                   "commentnum",
-                  "follownum"
+                  "threadnum",
                 ][filter_type]}&page=${isInit ? 1 : (data.length / 20).ceil() + 1}",
         hadCookie: isInit ? false : true, //第二次请求时使用原有Cookie
       ))
@@ -348,7 +348,7 @@ class _ListTabState extends State<ListTab> {
               ),
             ),
             child: Text(
-              ["主题数", "评论数", "订阅数"][i],
+              ["订阅数", "评论数", "主题数"][i],
               style: TextStyle(
                 fontWeight:
                     widget.index == i ? FontWeight.bold : FontWeight.normal,
@@ -369,17 +369,17 @@ class _ListTabState extends State<ListTab> {
     return Container(
       child: Row(
         children: [
-          Container(width: 20),
-          Text(
-            "排序",
-            style: TextStyle(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_white
-                  : os_black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Container(width: 15),
+          // Container(width: 20),
+          // Text(
+          //   "排序",
+          //   style: TextStyle(
+          //     color: Provider.of<ColorProvider>(context).isDark
+          //         ? os_dark_white
+          //         : os_black,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
+          Container(width: 10),
           ..._buildCont(),
           Container(width: (widget.loading ?? false) ? 5 : 0),
           (widget.loading ?? false)

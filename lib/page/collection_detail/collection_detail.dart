@@ -371,7 +371,12 @@ class _CollectionDetailState extends State<CollectionDetail> {
             //physics: BouncingScrollPhysics(),
             controller: _scrollController,
             children: [
-              ResponsiveWidget(child: Collection(data: widget.data)),
+              ResponsiveWidget(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Collection(data: widget.data),
+                ),
+              ),
               Container(height: 20),
               data.length == 0 && !load_done
                   ? Container()

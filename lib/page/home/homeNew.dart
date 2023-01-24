@@ -286,14 +286,31 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
         ),
       ));
     }
+
     if (data != null && data.length != 0) {
       for (var i in data) {
-        t.add(Topic(
-          isLeftNaviUI: isDesktop() && true,
-          data: i,
-          top: 0,
-          removeMargin: true,
-        ));
+        bool _isBlack() {
+          bool flag = false;
+          Provider.of<BlackProvider>(context, listen: false)
+              .black
+              .forEach((element) {
+            if (i["title"].toString().contains(element) ||
+                i["subject"].toString().contains(element) ||
+                i["user_nick_name"].toString().contains(element)) {
+              flag = true;
+            }
+          });
+          return flag;
+        }
+
+        if (!_isBlack()) {
+          t.add(Topic(
+            isLeftNaviUI: isDesktop() && true,
+            data: i,
+            top: 0,
+            removeMargin: true,
+          ));
+        }
       }
     }
     if (data.length == 0) {
@@ -320,9 +337,9 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
               ),
       );
     }
-    t.add(Padding(
-      padding: EdgeInsets.all(load_done || data.length == 0 ? 7.5 : 0),
-    ));
+    // t.add(Padding(
+    //   padding: EdgeInsets.all(load_done || data.length == 0 ? 7.5 : 0),
+    // ));
     return Stack(
       children: [
         BackToTop(

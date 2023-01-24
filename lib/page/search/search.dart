@@ -395,7 +395,11 @@ class _SwitchTypeTabState extends State<SwitchTypeTab> {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     decoration: BoxDecoration(
-                      color: widget.index == 0 ? os_white : Colors.transparent,
+                      color: widget.index == 0
+                          ? (Provider.of<ColorProvider>(context).isDark
+                              ? os_light_dark_card
+                              : os_white)
+                          : Colors.transparent,
                       borderRadius: BorderRadius.circular(100),
                     ),
                     child: Text(
@@ -403,7 +407,11 @@ class _SwitchTypeTabState extends State<SwitchTypeTab> {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: widget.index == 0 ? os_color : Color(0xFF777777),
+                        color: widget.index == 0
+                            ? (Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : os_color)
+                            : Color(0xFF777777),
                       ),
                     ),
                   ),
@@ -417,7 +425,11 @@ class _SwitchTypeTabState extends State<SwitchTypeTab> {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     decoration: BoxDecoration(
-                      color: widget.index == 1 ? os_white : Colors.transparent,
+                      color: widget.index == 1
+                          ? (Provider.of<ColorProvider>(context).isDark
+                              ? os_light_dark_card
+                              : os_white)
+                          : Colors.transparent,
                       borderRadius: BorderRadius.circular(100),
                     ),
                     child: Text(
@@ -425,7 +437,11 @@ class _SwitchTypeTabState extends State<SwitchTypeTab> {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: widget.index == 1 ? os_color : Color(0xFF777777),
+                        color: widget.index == 1
+                            ? (Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : os_color)
+                            : Color(0xFF777777),
                       ),
                     ),
                   ),

@@ -21,7 +21,7 @@ class MyHome extends StatefulWidget {
 class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
   TabController tabController;
   List<Tab> tabs = [
-    Tab(text: "板块"),
+    ...(isDesktop() ? [] : [Tab(text: "板块")]),
     Tab(text: "最新"),
     Tab(text: "回复"),
     Tab(text: "热门"),
@@ -33,7 +33,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
   void initState() {
     tabController = TabController(
       length: tabs.length,
-      initialIndex: 1,
+      initialIndex: isDesktop() ? 0 : 1,
       vsync: this,
     );
     super.initState();
@@ -41,7 +41,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
 
   TabBar _getMyTabBar() {
     return TabBar(
-      labelPadding: EdgeInsets.symmetric(horizontal: 11),
+      labelPadding: EdgeInsets.symmetric(horizontal: 8),
       isScrollable: true,
       splashBorderRadius: BorderRadius.all(Radius.circular(5)),
       labelColor: Provider.of<ColorProvider>(context).isDark
@@ -125,7 +125,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           physics: CustomTabBarViewScrollPhysics(),
           controller: tabController,
           children: [
-            ColumnWaterfall(),
+            ...(isDesktop() ? [] : [ColumnWaterfall()]),
             HomeNew(),
             HomeNewReply(),
             HotNoScaffold(),

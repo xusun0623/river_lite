@@ -560,14 +560,16 @@ class _TopicDetailState extends State<TopicDetail> {
             Navigator.pushNamed(context, "/list", arguments: element);
           },
           child: Container(
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                  color: Color(0x16000000),
-                  blurRadius: 15,
-                  offset: Offset(6, 6),
-                ),
-              ]),
-              child: Collection(data: element)),
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                color: Color(0x16000000),
+                blurRadius: 15,
+                offset: Offset(6, 6),
+              ),
+            ]),
+            child: Collection(data: element),
+          ),
         ),
       );
     });

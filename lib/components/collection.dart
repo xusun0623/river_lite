@@ -77,7 +77,7 @@ class _CollectionState extends State<Collection> {
       child: Material(
         color: Colors.transparent,
         child: Container(
-          margin: widget.removeMargin ?? false
+          margin: widget.removeMargin ?? true
               ? null
               : EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
