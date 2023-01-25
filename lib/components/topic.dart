@@ -514,10 +514,11 @@ class _TopicState extends State<Topic> {
             Padding(padding: EdgeInsets.all(4)),
             //中部区域：标题
             Container(
-              width: MediaQuery.of(context).size.width -
-                  ((widget.isLeftNaviUI ?? false) ? LeftNaviWidth : 0) -
-                  ((widget.hideColumn ?? false) ? MinusSpace(context) : 0) -
-                  54,
+              // width: MediaQuery.of(context).size.width -
+              //     ((widget.isLeftNaviUI ?? false) ? LeftNaviWidth : 0) -
+              //     ((widget.hideColumn ?? false) ? MinusSpace(context) : 0) -
+              //     54,
+              margin: EdgeInsets.only(right: 10),
               child: Text(
                 widget.data["title"],
                 textAlign: TextAlign.start,
@@ -539,12 +540,13 @@ class _TopicState extends State<Topic> {
             ((widget.data["summary"] ?? widget.data["subject"]) ?? "") == ""
                 ? Container()
                 : Container(
-                    width: MediaQuery.of(context).size.width -
-                        ((widget.isLeftNaviUI ?? false) ? LeftNaviWidth : 0) -
-                        ((widget.hideColumn ?? false)
-                            ? MinusSpace(context)
-                            : 0) -
-                        54,
+                    // width: MediaQuery.of(context).size.width -
+                    //     ((widget.isLeftNaviUI ?? false) ? LeftNaviWidth : 0) -
+                    //     ((widget.hideColumn ?? false)
+                    //         ? MinusSpace(context)
+                    //         : 0) -
+                    //     54,
+                    margin: EdgeInsets.only(right: 10),
                     child: Text(
                       (widget.data["summary"] ?? widget.data["subject"]) ?? "",
                       textAlign: TextAlign.start,

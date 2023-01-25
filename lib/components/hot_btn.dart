@@ -37,10 +37,10 @@ class _HomeBtnState extends State<HomeBtn> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Btn(
-                txt: "成电镜头",
+                txt: "视觉艺术",
                 img: "lib/img/home/10.svg",
                 url: "/column",
-                board_id: 307,
+                board_id: 55,
               ),
               Btn(
                 txt: "淘二手",

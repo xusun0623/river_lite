@@ -18,7 +18,6 @@ import 'package:offer_show/page/topic/Your_emoji.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
-import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 final GlobalKey<MixContSectionState> mixContSectionKey = GlobalKey();
 
@@ -698,11 +697,12 @@ class MixContSectionState extends State<MixContSection> {
                 ),
               ),
             ),
-            !isMacOS() && !isDesktop()
+            Platform.isAndroid || Platform.isIOS
                 ? Container(
                     margin: EdgeInsets.only(
                       top: 20,
                       bottom: 20,
+                      right: 10,
                     ),
                     child: myInkWell(
                       radius: 2.5,
@@ -726,6 +726,7 @@ class MixContSectionState extends State<MixContSection> {
                     margin: EdgeInsets.only(
                       top: 20,
                       bottom: 20,
+                      right: 10,
                     ),
                     child: myInkWell(
                       radius: 2.5,
