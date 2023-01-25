@@ -113,6 +113,46 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.1"
+  camera:
+    dependency: transitive
+    description:
+      name: camera
+      sha256: "045e7739f9362f3c01d5c7187ac7e2ba9e2bc9f2ae6470ecdcc5e34d060ed81c"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.10.2+1"
+  camera_android:
+    dependency: transitive
+    description:
+      name: camera_android
+      sha256: "417e9eddda8025d7342f82ee53b214f149793e95c8490c3440a46144409f7966"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.10.2+3"
+  camera_avfoundation:
+    dependency: transitive
+    description:
+      name: camera_avfoundation
+      sha256: eeda6a7947b1f7c47395c4459342d1e6866014186449e141a251f0549aba0c8b
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.9.10+2"
+  camera_platform_interface:
+    dependency: transitive
+    description:
+      name: camera_platform_interface
+      sha256: "0eedd642d905ca24f1c483fe9ea0d0e7287b86a402845c28d24df28cc7b0ee6e"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.3.4"
+  camera_web:
+    dependency: transitive
+    description:
+      name: camera_web
+      sha256: "496de93c5d462738ce991dbfe91fb19026f115ed36406700a20a380fb0018299"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.1+1"
   characters:
     dependency: "direct main"
     description:
@@ -688,6 +728,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "5.1.0"
+  photo_manager:
+    dependency: transitive
+    description:
+      name: photo_manager
+      sha256: "55d50ad1b8f984c57fa7c4bd4980f4760e80d3d9355263cf72624a6ff1bf2b5b"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.5.2"
   photo_view:
     dependency: "direct main"
     description:
@@ -768,6 +816,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.0"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      sha256: b1c1ac5ce6688d77f65f3375a9abb9319b3cb32486bdc7a1e0fdf004d7ba4e47
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.2.1"
   route_transitions:
     dependency: "direct main"
     description:
@@ -973,6 +1029,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.1"
+  stream_transform:
+    dependency: transitive
+    description:
+      name: stream_transform
+      sha256: "14a00e794c7c11aa145a170587321aedce29769c08d7f58b1d141da75e3b1c6f"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.0"
   string_scanner:
     dependency: transitive
     description:
@@ -1245,6 +1309,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.9.5"
+  wechat_camera_picker:
+    dependency: "direct main"
+    description:
+      name: wechat_camera_picker
+      sha256: "1ba40432f1f146e3adcb87c6a5cb6c28218661bf07ea5497be86aa3925314d28"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.7.0"
   win32:
     dependency: transitive
     description:

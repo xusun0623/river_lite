@@ -18,6 +18,7 @@ import 'package:offer_show/page/topic/Your_emoji.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
+import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 
 final GlobalKey<MixContSectionState> mixContSectionKey = GlobalKey();
 
@@ -691,14 +692,34 @@ class MixContSectionState extends State<MixContSection> {
                 widget: Container(
                   padding: EdgeInsets.all(25),
                   child: Icon(
-                    Provider.of<ColorProvider>(context).isDark
-                        ? Icons.add_photo_alternate
-                        : Icons.add,
+                    Icons.add_photo_alternate_outlined,
                     color: os_deep_grey,
                   ),
                 ),
               ),
             ),
+            !isMacOS() && !isDesktop()
+                ? Container(
+                    margin: EdgeInsets.only(
+                      top: 20,
+                      bottom: 20,
+                    ),
+                    child: myInkWell(
+                      radius: 2.5,
+                      tap: addCamera,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_light_dark_card
+                          : os_grey,
+                      widget: Container(
+                        padding: EdgeInsets.all(25),
+                        child: Icon(
+                          Icons.camera_alt_outlined,
+                          color: os_deep_grey,
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             !isDesktop()
                 ? Container()
                 : Container(
@@ -747,6 +768,18 @@ class MixContSectionState extends State<MixContSection> {
         rebuildControlList();
       }
     }
+  }
+
+  addCamera() async {
+    unFocus();
+    final XFile photo = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+    );
+    body_cont.add(BodyCont(BodyContType.image, photo.path));
+    body_cont.add(BodyCont(BodyContType.txt, ""));
+    rebuildControlList();
+    returnTotalCont();
+    setState(() {});
   }
 
   addPic() async {

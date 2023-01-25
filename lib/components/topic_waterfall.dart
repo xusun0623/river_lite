@@ -681,7 +681,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
             : ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: myInkWell(
-                  // color: _widgetBackgroundColor(),
+                  color: _widgetBackgroundColor(),
                   tap: () => _tapWidget(),
                   widget: _topicCont(),
                   radius: 10,

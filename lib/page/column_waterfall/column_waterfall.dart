@@ -2,9 +2,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/vibrate.dart';
@@ -32,6 +34,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
   List<String> theme = [];
   var data = [];
   var loading = false;
+  var init_loading = false;
   var load_done = false;
   bool showBackToTop = false;
   bool vibrate = false;
@@ -41,11 +44,27 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
   GlobalKey<RefreshIndicatorState> _indicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
-  @override
-  void initState() {
-    super.initState();
+  prepareData() async {
+    String id_name = await getStorage(
+      key: "left_column",
+      initData: jsonEncode({
+        "name": "二手专区",
+        "fid": 61,
+      }),
+    );
+    Map id_name_map = jsonDecode(id_name);
+    setState(() {
+      columnID = id_name_map["fid"];
+      columnName = id_name_map["name"];
+    });
     _getStorageData();
     _getInitData();
+  }
+
+  @override
+  void initState() {
+    prepareData();
+    super.initState();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
@@ -58,14 +77,8 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
       }
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 50) {
-        // print("触底");
         _getData();
       }
-      // if (_scrollController.position.pixels ==
-      //     _scrollController.position.maxScrollExtent) {
-      //   // print("触底");
-      //   _getData();
-      // }
       if (_scrollController.position.pixels > 1000 && !showBackToTop) {
         setState(() {
           showBackToTop = true;
@@ -90,8 +103,23 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
       "sortby": "all",
       "topOrder": 1,
     });
+    setState(() {
+      init_loading = false;
+    });
     if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
       data = tmp["list"];
+    } else {
+      try {
+        Fluttertoast.showToast(
+          msg: tmp["errcode"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      } catch (e) {}
     }
     if (data != null && data.length != 0)
       setStorage(key: "home_left_column", value: jsonEncode(data));
@@ -111,9 +139,9 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
     loading = true;
     setState(() {});
     var tmp = await Api().certain_forum_topiclist({
-      "page": 1,
+      "page": data.length / pageSize + 1,
       "pageSize": pageSize,
-      "boardId": 61, //columnID
+      "boardId": columnID, //columnID
       "filterType": "typeid",
       "filterId": "",
       "sortby": "all",
@@ -204,6 +232,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
           left: (MediaQuery.of(context).size.width - LeftNaviWidth) / 2 - 30,
           child: ColumnBtn(
             needPush: true,
+            loading: init_loading,
             name: columnName,
             fid: columnID,
             backData: (res) {
@@ -211,7 +240,15 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
                 setState(() {
                   columnName = res["name"];
                   columnID = res["fid"];
+                  init_loading = true;
                 });
+                setStorage(
+                  key: "left_column",
+                  value: jsonEncode({
+                    "name": columnName,
+                    "fid": columnID,
+                  }),
+                );
                 _getInitData();
               }
               // print("接收到$res");
