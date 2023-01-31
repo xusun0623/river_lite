@@ -8,16 +8,18 @@ https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 
 #### 1.打包
 
-> flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform android-arm,android-arm64,android-x64 --split-per-abi
+> flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform
+> android-arm,android-arm64,android-x64 --split-per-abi
 
 > git fetch
 
-> flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform android-arm,android-arm64,android-x64 --split-per-abi
+> flutter build apk --obfuscate --split-debug-info=HLQ_Struggle --target-platform
+> android-arm,android-arm64,android-x64 --split-per-abi
 
 > adb install build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk  
 > adb install build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
 
-> adb -s adb-56ca1081-vP9WNP._adb-tls-connect._tcp. kill-server  
+> adb -s adb-56ca1081-vP9WNP.\_adb-tls-connect.\_tcp. kill-server
 
 #### 2.命令行安装
 
@@ -39,6 +41,28 @@ https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 https://www.cnblogs.com/silentdoer/p/15041143.html
 
 ## 开发代码片段
+
+#### 草稿箱
+
+```json
+{
+  "id": 123, // 本地缓存的草稿ID
+  "poll": ["1", "2", "3"], // 投票信息
+  "column_id": 0, // 板块ID
+  "column_child_id": 0, // 子板块ID
+  "type": 0, // 0-普通, 1-二手专区, 2-密语区, 3-图文
+  "body": [ // 信息
+    {
+      "type": "image",
+      "cont": "https://bbs.uestc.edu.cn/..."
+    },
+    {
+      "type": "txt",
+      "cont": "blabla..."
+    }
+  ]
+}
+```
 
 #### 1.Provider
 
