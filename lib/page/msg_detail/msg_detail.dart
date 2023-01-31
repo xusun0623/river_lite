@@ -8,6 +8,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/size.dart';
@@ -256,7 +257,8 @@ class MsgDetailState extends State<MsgDetail> {
                       : os_white,
                   height: MediaQuery.of(context).size.height -
                       MediaQuery.of(context).padding.top,
-                  child: RefreshIndicator(
+                  child: getMyRrefreshIndicator(
+                    context: context,
                     color: theme,
                     onRefresh: () async {
                       await _getMore();

@@ -2,6 +2,7 @@ import 'package:badges/badges.dart' as badgee;
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/vibrate.dart';
@@ -102,7 +103,8 @@ class _MsgState extends State<Msg> {
         color: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : os_white,
-        child: RefreshIndicator(
+        child: getMyRrefreshIndicator(
+          context: context,
           color: Color(0xFF2FCC7E),
           onRefresh: () async {
             _msgProvider.getMsg();

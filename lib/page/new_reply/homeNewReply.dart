@@ -6,6 +6,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/leftNavi.dart';
@@ -240,7 +241,8 @@ class _HomeNewReplyState extends State<HomeNewReply>
         toolbarHeight: 0,
         elevation: 0,
       ),
-      body: RefreshIndicator(
+      body: getMyRrefreshIndicator(
+        context: context,
         color: os_color,
         key: _indicatorKey,
         onRefresh: () async {

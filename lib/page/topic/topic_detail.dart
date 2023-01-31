@@ -12,6 +12,7 @@ import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/nowMode.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
@@ -921,7 +922,8 @@ class _TopicDetailState extends State<TopicDetail> {
                                 ? os_detail_back
                                 : os_white,
                           ),
-                          child: RefreshIndicator(
+                          child: getMyRrefreshIndicator(
+                            context: context,
                             onRefresh: () async {
                               await _getData();
                               vibrate = false;

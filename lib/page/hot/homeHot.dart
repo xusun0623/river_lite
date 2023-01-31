@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic.dart';
@@ -93,7 +94,8 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
           ? OccuLoading()
           : Container(
               color: os_back,
-              child: RefreshIndicator(
+              child: getMyRrefreshIndicator(
+                context: context,
                 color: os_color,
                 onRefresh: () async {
                   var data = await _getData();

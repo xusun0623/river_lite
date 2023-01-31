@@ -7,6 +7,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/nowMode.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/vibrate.dart';
@@ -417,7 +418,8 @@ class _TopicColumnState extends State<TopicColumn> {
                       arguments: widget.columnID,
                     );
                   },
-                  child: RefreshIndicator(
+                  child: getMyRrefreshIndicator(
+                    context: context,
                     onRefresh: () async {
                       manualPull = true;
                       await _getData();

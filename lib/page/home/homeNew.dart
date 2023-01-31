@@ -6,6 +6,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
@@ -420,7 +421,8 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       backgroundColor: provider_color.isDark ? os_dark_back : os_back,
       body: Container(
         // padding: EdgeInsets.only(top: 10),
-        child: RefreshIndicator(
+        child: getMyRrefreshIndicator(
+          context: context,
           key: _indicatorKey,
           color: os_color,
           onRefresh: () async {

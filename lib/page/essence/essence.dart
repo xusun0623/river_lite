@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/leftNavi.dart';
@@ -234,7 +235,8 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
     return Scaffold(
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      body: RefreshIndicator(
+      body: getMyRrefreshIndicator(
+        context: context,
         color: os_color,
         key: _indicatorKey,
         onRefresh: () async {

@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
@@ -121,7 +122,8 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
         refresh: () {
           _indicatorKey.currentState.show();
         },
-        child: RefreshIndicator(
+        child: getMyRrefreshIndicator(
+          context: context,
           color: os_color,
           key: _indicatorKey,
           onRefresh: () async {

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/leftNavi.dart';
@@ -97,7 +98,8 @@ class _MeState extends State<Me> {
       ),
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
-      body: RefreshIndicator(
+      body: getMyRrefreshIndicator(
+        context: context,
         color: os_deep_blue,
         onRefresh: () async {
           return await _getData();

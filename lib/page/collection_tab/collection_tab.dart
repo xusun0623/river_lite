@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/collection.dart';
@@ -276,7 +277,8 @@ class _CollectionTabState extends State<CollectionTab>
         toolbarHeight: 0,
         elevation: 0,
       ),
-      body: RefreshIndicator(
+      body: getMyRrefreshIndicator(
+        context: context,
         key: _indicatorKey,
         color: os_color,
         onRefresh: () async {

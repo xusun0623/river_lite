@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/totop.dart';
@@ -116,7 +117,8 @@ class _TaskListState extends State<TaskList> {
   Widget build(BuildContext context) {
     return Baaaar(
       child: Scaffold(
-        body: RefreshIndicator(
+        body: getMyRrefreshIndicator(
+          context: context,
           onRefresh: () async {
             data = [];
             return await _getData(true);

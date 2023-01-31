@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/newNaviBar.dart';
@@ -401,7 +402,8 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
           controller: tabController,
           children: [
             // TaskList(),
-            RefreshIndicator(
+            getMyRrefreshIndicator(
+              context: context,
               onRefresh: () async {
                 await _getNew();
                 return;
@@ -411,7 +413,8 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
                 //physics: BouncingScrollPhysics(),
               ),
             ),
-            RefreshIndicator(
+            getMyRrefreshIndicator(
+              context: context,
               onRefresh: () async {
                 await _getDoing();
                 return;
@@ -421,7 +424,8 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
                 //physics: BouncingScrollPhysics(),
               ),
             ),
-            RefreshIndicator(
+            getMyRrefreshIndicator(
+              context: context,
               onRefresh: () async {
                 await _getDone();
                 return;
@@ -431,7 +435,8 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
                 //physics: BouncingScrollPhysics(),
               ),
             ),
-            RefreshIndicator(
+            getMyRrefreshIndicator(
+              context: context,
               onRefresh: () async {
                 await _getFail();
                 return;

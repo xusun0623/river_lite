@@ -6,6 +6,7 @@ import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/nowMode.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
@@ -366,7 +367,8 @@ class _PersonCenterState extends State<PersonCenter> {
                         show: showBackToTop,
                         controller: _controller,
                         bottom: 100,
-                        child: RefreshIndicator(
+                        child: getMyRrefreshIndicator(
+                          context: context,
                           color: os_deep_blue,
                           onRefresh: () async {
                             return await _getInfo();

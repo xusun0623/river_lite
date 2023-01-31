@@ -6,6 +6,7 @@ import 'package:html/parser.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
+import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/totop.dart';
@@ -139,7 +140,8 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : os_white,
-        body: RefreshIndicator(
+        body: getMyRrefreshIndicator(
+          context: context,
           onRefresh: () async {
             data = [];
             return await _getData(true);
