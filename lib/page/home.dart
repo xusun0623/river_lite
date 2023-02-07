@@ -163,19 +163,19 @@ class _HomeState extends State<Home> {
           Icons.person_outlined
         ][element]);
         select_icons.add([
-          Icons.home,
+          Icons.home_rounded,
           Icons.image_outlined,
-          Icons.notifications,
-          Icons.person
+          Icons.notifications_rounded,
+          Icons.person_rounded
         ][element]);
       });
       for (int i = 0; i < icons.length; i++) {
         tmp.add(GestureDetector(
-          onTapDown: tabShowProvider.index == i
-              ? (e) {
+          onTap: tabShowProvider.index == i
+              ? () {
                   _getNewMsg();
                 }
-              : (e) {
+              : () {
                   _getNewMsg();
                   if (_isNewMsg) {
                     Provider.of<MsgProvider>(context, listen: false).getMsg();
@@ -185,14 +185,14 @@ class _HomeState extends State<Home> {
                     tabShowProvider.index = i;
                   });
                 },
-          onDoubleTap: tabShowProvider.index == i
-              ? () {
-                  _getNewMsg();
-                  Provider.of<HomeRefrshProvider>(context, listen: false)
-                      .totop();
-                  // XSVibrate();
-                }
-              : null,
+          // onDoubleTap: tabShowProvider.index == i
+          //     ? () {
+          //         _getNewMsg();
+          //         Provider.of<HomeRefrshProvider>(context, listen: false)
+          //             .totop();
+          //         // XSVibrate();
+          //       }
+          //     : null,
           child: Container(
             width: MediaQuery.of(context).size.width / icons.length,
             height: barHeight,
@@ -306,9 +306,10 @@ class _HomeState extends State<Home> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: _buildWidget(
-                        !Provider.of<ShowPicProvider>(context).isShow
-                            ? [0, 2, 3]
-                            : [0, 1, 2, 3]),
+                      !Provider.of<ShowPicProvider>(context).isShow
+                          ? [0, 2, 3]
+                          : [0, 1, 2, 3],
+                    ),
                   ),
                 ],
               ),

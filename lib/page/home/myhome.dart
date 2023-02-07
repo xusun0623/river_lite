@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
@@ -6,6 +8,7 @@ import 'package:offer_show/page/collection_tab/collection_tab.dart';
 import 'package:offer_show/page/column_waterfall/column_waterfall.dart';
 import 'package:offer_show/page/essence/essence.dart';
 import 'package:offer_show/page/home/homeNew.dart';
+import 'package:offer_show/page/home/scale_tab.dart';
 import 'package:offer_show/page/hot/homeHotNoScaffold.dart';
 import 'package:offer_show/page/new_reply/homeNewReply.dart';
 import 'package:offer_show/util/provider.dart';
@@ -39,8 +42,8 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
     super.initState();
   }
 
-  TabBar _getMyTabBar() {
-    return TabBar(
+  ScaleTabBar _getMyTabBar() {
+    return ScaleTabBar(
       labelPadding: EdgeInsets.symmetric(horizontal: 8),
       isScrollable: true,
       splashBorderRadius: BorderRadius.all(Radius.circular(5)),
@@ -49,20 +52,21 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           : Colors.black87,
       unselectedLabelColor: Color(0xFF7A7A7A),
       indicator: TabSizeIndicator(
-        wantWidth: 18,
+        wantWidth: 10,
         borderSide: BorderSide(
-            width: 3.0,
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_white
-                : Colors.black87),
+          width: 3.0,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_dark_back,
+        ),
       ),
       unselectedLabelStyle: TextStyle(
-        fontSize: 17,
+        fontSize: 16,
         fontFamily: "微软雅黑",
       ),
       labelStyle: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: 17,
+        fontSize: 18,
         fontFamily: "微软雅黑",
       ),
       tabs: tabs,

@@ -1,14 +1,17 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/components/maxwidth.dart';
 import 'package:offer_show/components/newNaviBar.dart';
+import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -75,6 +78,16 @@ class _AboutState extends State<About> {
               title: "UESTC官方论坛",
               cont:
                   "清水河畔是电子科技大学官方论坛（bbs.uestc.edu.cn），由电子科技大学网络文化建设工作办公室指导，星辰工作室开发并提供技术支持。\n2007年11月13日正式开放注册。欢迎你加入到清水河畔大家庭。",
+            ),
+            AboutCard(
+              head: Icon(
+                Icons.web_outlined,
+                color: os_wonderful_color[2],
+                size: 40,
+              ),
+              title: "河畔Lite官网",
+              cont: "http://hepan.site",
+              withUrl: true,
             ),
             AboutCard(
               head: Icon(
@@ -168,7 +181,26 @@ class _AboutCardState extends State<AboutCard> {
     return Bounce(
       onPressed: () {
         if (widget.withUrl != null) {
-          xsLanuch(url: widget.cont);
+          showAction(
+            context: context,
+            options: [
+              "复制链接",
+              "打开网站",
+            ],
+            icons: [
+              Icons.copy,
+              Icons.link,
+            ],
+            tap: (res) async {
+              Navigator.of(context).pop();
+              if (res == 0) {
+                Clipboard.setData(ClipboardData(text: widget.cont));
+              }
+              if (res == 1) {
+                xsLanuch(url: widget.cont);
+              }
+            },
+          );
         }
         if (widget.title == "开发&设计者") {
           toUserSpace(context, 221788);
