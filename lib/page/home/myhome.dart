@@ -174,7 +174,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
         borderSide: BorderSide(
           width: 37,
           color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_white
+              ? os_light_dark_card
               : os_deep_blue_opa,
         ),
       ),
