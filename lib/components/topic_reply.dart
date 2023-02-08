@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/showPop.dart';
@@ -110,7 +111,7 @@ class _TopicReplyState extends State<TopicReply> {
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: Provider.of<ColorProvider>(context).isDark
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
               ? os_dark_white
               : os_black,
         ),
@@ -167,13 +168,18 @@ class _TopicReplyState extends State<TopicReply> {
                   ? os_white_opa
                   : Color(0x16004DFF),
               widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                width: (MediaQuery.of(context).size.width -
+                            MinusSpace(context) -
+                            60) /
+                        2 -
+                    5,
                 height: 40,
                 child: Center(
                   child: Text(
                     "取消",
                     style: TextStyle(
-                      color: Provider.of<ColorProvider>(context).isDark
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
                           ? os_dark_dark_white
                           : os_deep_blue,
                     ),
@@ -196,7 +202,11 @@ class _TopicReplyState extends State<TopicReply> {
               },
               color: os_deep_blue,
               widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                width: (MediaQuery.of(context).size.width -
+                            MinusSpace(context) -
+                            60) /
+                        2 -
+                    5,
                 height: 40,
                 child: Center(
                   child: Row(

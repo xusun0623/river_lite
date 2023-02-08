@@ -102,7 +102,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: Provider.of<ColorProvider>(context).isDark
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
               ? os_dark_white
               : os_black,
         ),
@@ -159,13 +159,18 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                   ? os_white_opa
                   : Color(0x16004DFF),
               widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                width: (MediaQuery.of(context).size.width -
+                            MinusSpace(context) -
+                            60) /
+                        2 -
+                    5,
                 height: 40,
                 child: Center(
                   child: Text(
                     "取消",
                     style: TextStyle(
-                      color: Provider.of<ColorProvider>(context).isDark
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
                           ? os_dark_dark_white
                           : os_deep_blue,
                     ),
@@ -188,7 +193,11 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
               },
               color: os_deep_blue,
               widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                width: (MediaQuery.of(context).size.width -
+                            MinusSpace(context) -
+                            60) /
+                        2 -
+                    5,
                 height: 40,
                 child: Center(
                   child: Row(
@@ -331,7 +340,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
   //卡片图案
   Widget _getTopicCardImg() {
     double w = MediaQuery.of(context).size.width;
-    int count = w > 1200 ? 6 : (w > 800 ? 4 : 2);
+    int count = w > 1200 ? 5 : (w > 800 ? 3 : 2);
     double img_size = (w - (count + 1) * 10) / count;
     if (widget.data != null &&
         widget.data["imageList"] != null &&
@@ -381,8 +390,11 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
 
   Widget _topicCont() {
     double w = MediaQuery.of(context).size.width;
-    int count = w > 1200 ? 6 : (w > 800 ? 4 : 2);
-    double img_size = (w - (count + 1) * 10) / count;
+    int count = w > 1200 ? 5 : (w > 800 ? 3 : 2);
+    double img_size = (w -
+            (count + 1) * 10 -
+            (widget.isLeftNaviUI ?? false ? LeftNaviWidth : 0)) /
+        count;
     //帖子卡片正文内容
     return Container(
       decoration: BoxDecoration(
@@ -667,25 +679,14 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
   Widget build(BuildContext context) {
     return _isBlack() || isBlack
         ? _blackCont()
-        : isDesktop()
-            ? GestureDetector(
-                onTap: () => _tapWidget(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: _widgetBackgroundColor(),
-                  ),
-                  child: _topicCont(),
-                ),
-              )
-            : ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: myInkWell(
-                  color: _widgetBackgroundColor(),
-                  tap: () => _tapWidget(),
-                  widget: _topicCont(),
-                  radius: 10,
-                ),
-              );
+        : ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: myInkWell(
+              color: _widgetBackgroundColor(),
+              tap: () => _tapWidget(),
+              widget: _topicCont(),
+              radius: 10,
+            ),
+          );
   }
 }

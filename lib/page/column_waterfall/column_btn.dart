@@ -30,8 +30,8 @@ class ColumnBtn extends StatefulWidget {
 class _ColumnBtnState extends State<ColumnBtn> {
   @override
   Widget build(BuildContext context) {
-    return FadeInUp(
-      duration: Duration(milliseconds: 100),
+    return Container(
+      // duration: Duration(milliseconds: 300),
       child: GestureDetector(
         onTap: () {
           if (widget.needPush ?? false) {
@@ -81,13 +81,15 @@ class _ColumnBtnState extends State<ColumnBtn> {
                   ? os_light_dark_card
                   : os_white,
               borderRadius: BorderRadius.circular(100),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0x33000000),
-                  blurRadius: 20,
-                  offset: Offset(3, 3),
-                ),
-              ],
+              boxShadow: widget.hideArrow ?? false
+                  ? []
+                  : [
+                      BoxShadow(
+                        color: Color(0x33000000),
+                        blurRadius: 20,
+                        offset: Offset(3, 3),
+                      ),
+                    ],
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -100,23 +100,30 @@ class _SettingState extends State<Setting> {
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
+                        color:
+                            Provider.of<ColorProvider>(context, listen: false)
+                                    .isDark
+                                ? os_dark_white
+                                : os_black,
                       ),
                     ),
                   ),
                 ),
               ),
               Container(height: 15),
-              ResponsiveWidget(
-                child: Center(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      "河畔Lite在启动App时会自动触发答题，您无需操作即可每日收获10水滴（需要9水滴的启动资金）",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        // fontWeight: FontWeight.bold,
-                      ),
+              Center(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  child: Text(
+                    "河畔Lite在启动App时会自动触发答题，您无需操作即可每日收获10水滴（需要9水滴的启动资金）",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? os_dark_dark_white
+                          : os_deep_grey,
+                      // fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),

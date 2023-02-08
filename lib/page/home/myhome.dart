@@ -24,19 +24,93 @@ class MyHome extends StatefulWidget {
 class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
   TabController tabController;
   List<Tab> tabs = [
-    ...(isDesktop() ? [] : [Tab(text: "板块")]),
+    Tab(text: "板块"),
     Tab(text: "最新"),
     Tab(text: "回复"),
     Tab(text: "热门"),
     Tab(text: "精华"),
     Tab(text: "专辑"),
   ];
+  List<Tab> tabs_desktop = [
+    Tab(
+      child: Row(
+        children: [
+          Icon(
+            Icons.view_array_outlined,
+            size: 18,
+          ),
+          Container(width: 5),
+          Text("板块"),
+        ],
+      ),
+    ),
+    Tab(
+      child: Row(
+        children: [
+          Icon(
+            Icons.comment_bank_outlined,
+            size: 18,
+          ),
+          Container(width: 5),
+          Text("最新"),
+        ],
+      ),
+    ),
+    Tab(
+      child: Row(
+        children: [
+          Icon(
+            Icons.reply_rounded,
+            size: 18,
+          ),
+          Container(width: 5),
+          Text("回复"),
+        ],
+      ),
+    ),
+    Tab(
+      child: Row(
+        children: [
+          Icon(
+            Icons.local_fire_department_outlined,
+            size: 18,
+          ),
+          Container(width: 5),
+          Text("热门"),
+        ],
+      ),
+    ),
+    Tab(
+      child: Row(
+        children: [
+          Icon(
+            Icons.verified_user_outlined,
+            size: 18,
+          ),
+          Container(width: 5),
+          Text("精华"),
+        ],
+      ),
+    ),
+    Tab(
+      child: Row(
+        children: [
+          Icon(
+            Icons.collections_bookmark_outlined,
+            size: 18,
+          ),
+          Container(width: 5),
+          Text("专辑"),
+        ],
+      ),
+    ),
+  ];
 
   @override
   void initState() {
     tabController = TabController(
       length: tabs.length,
-      initialIndex: isDesktop() ? 0 : 1,
+      initialIndex: 1,
       vsync: this,
     );
     super.initState();
@@ -86,6 +160,50 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
     );
   }
 
+  TabBar _getMyDesktopTabBar() {
+    return TabBar(
+      overlayColor: MaterialStateProperty.all(Colors.transparent),
+      labelPadding: EdgeInsets.symmetric(horizontal: 18),
+      isScrollable: true,
+      labelColor: Provider.of<ColorProvider>(context).isDark
+          ? os_dark_white
+          : os_deep_blue,
+      unselectedLabelColor: Color.fromARGB(255, 106, 114, 133),
+      indicator: TabSizeIndicator(
+        wantWidth: 90,
+        borderSide: BorderSide(
+          width: 37,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_deep_blue_opa,
+        ),
+      ),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 16,
+        fontFamily: "微软雅黑",
+      ),
+      labelStyle: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 16,
+        fontFamily: "微软雅黑",
+      ),
+      tabs: tabs_desktop,
+      onTap: (index) {
+        setState(() {
+          Provider.of<HomeRefrshProvider>(
+            context,
+            listen: false,
+          ).index = index;
+          Provider.of<HomeRefrshProvider>(
+            context,
+            listen: false,
+          ).refresh();
+        });
+      },
+      controller: tabController,
+    );
+  }
+
   AppBar _getAppBar() {
     return AppBar(
       elevation: 0,
@@ -110,10 +228,11 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
         ),
         Container(width: 5),
       ],
+      centerTitle: isDesktop() ? true : null,
       title: Container(
-        width: isDesktop() ? 400 : 300,
+        width: isDesktop() ? 600 : 300,
         height: 60,
-        child: _getMyTabBar(),
+        child: isDesktop() ? _getMyDesktopTabBar() : _getMyTabBar(),
       ),
     );
   }
@@ -129,7 +248,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           physics: CustomTabBarViewScrollPhysics(),
           controller: tabController,
           children: [
-            ...(isDesktop() ? [] : [ColumnWaterfall()]),
+            ColumnWaterfall(),
             HomeNew(),
             HomeNewReply(),
             HotNoScaffold(),

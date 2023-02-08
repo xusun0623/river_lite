@@ -263,7 +263,11 @@ class _CommentState extends State<Comment> {
                   ? os_white_opa
                   : Color(0x16004DFF),
               widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                width: (MediaQuery.of(context).size.width -
+                            MinusSpace(context) -
+                            60) /
+                        2 -
+                    5,
                 height: 40,
                 child: Center(
                   child: Text(
@@ -293,7 +297,11 @@ class _CommentState extends State<Comment> {
               },
               color: os_deep_blue,
               widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                width: (MediaQuery.of(context).size.width -
+                            MinusSpace(context) -
+                            60) /
+                        2 -
+                    5,
                 height: 40,
                 child: Center(
                   child: Row(

@@ -108,7 +108,7 @@ class _TopicState extends State<Topic> {
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: Provider.of<ColorProvider>(context).isDark
+          color: Provider.of<ColorProvider>(context, listen: false).isDark
               ? os_dark_white
               : os_black,
         ),
@@ -165,13 +165,18 @@ class _TopicState extends State<Topic> {
                   ? os_white_opa
                   : Color(0x16004DFF),
               widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                width: (MediaQuery.of(context).size.width -
+                            MinusSpace(context) -
+                            60) /
+                        2 -
+                    5,
                 height: 40,
                 child: Center(
                   child: Text(
                     "取消",
                     style: TextStyle(
-                      color: Provider.of<ColorProvider>(context).isDark
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
                           ? os_dark_dark_white
                           : os_deep_blue,
                     ),
@@ -194,7 +199,11 @@ class _TopicState extends State<Topic> {
               },
               color: os_deep_blue,
               widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                width: (MediaQuery.of(context).size.width -
+                            MinusSpace(context) -
+                            60) /
+                        2 -
+                    5,
                 height: 40,
                 child: Center(
                   child: Row(
@@ -750,23 +759,12 @@ class _TopicState extends State<Topic> {
               widget.removeMargin ?? false ? 0 : os_edge,
               widget.bottom ?? 0,
             ),
-            child: isDesktop()
-                ? GestureDetector(
-                    onTap: () => _tapWidget(),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: _widgetBackgroundColor(),
-                      ),
-                      child: _topicCont(),
-                    ),
-                  )
-                : myInkWell(
-                    color: _widgetBackgroundColor(),
-                    tap: () => _tapWidget(),
-                    widget: _topicCont(),
-                    radius: 10,
-                  ),
+            child: myInkWell(
+              color: _widgetBackgroundColor(),
+              tap: () => _tapWidget(),
+              widget: _topicCont(),
+              radius: 10,
+            ),
           );
   }
 }

@@ -30,7 +30,7 @@ class _ColumnWaterfallSelectionState extends State<ColumnWaterfallSelection> {
         child: Scaffold(
           backgroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_back
-              : Color(0x66000000),
+              : os_grey,
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

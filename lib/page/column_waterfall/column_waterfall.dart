@@ -6,7 +6,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/size.dart';
@@ -16,7 +15,6 @@ import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic_waterfall.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/column_waterfall/column_btn.dart';
-import 'package:offer_show/page/column_waterfall/waterfall_selection.dart';
 import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
@@ -138,7 +136,11 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
   _getData() async {
     if (loading || load_done) return;
     loading = true;
-    setState(() {});
+    setState(() {
+      if (isDesktop()) {
+        init_loading = true;
+      }
+    });
     var tmp = await Api().certain_forum_topiclist({
       "page": data.length / pageSize + 1,
       "pageSize": pageSize,
@@ -150,6 +152,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
     });
     setState(() {
       loading = false;
+      init_loading = false;
     });
     if (tmp != null &&
         tmp["rs"] != 0 &&
@@ -176,7 +179,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
       for (var i in data) {
         t.add(
           TopicWaterFall(
-            isLeftNaviUI: isDesktop() && true,
+            isLeftNaviUI: isDesktop(),
             data: i,
           ),
         );
@@ -206,6 +209,8 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
     t.add(Padding(
       padding: EdgeInsets.all(load_done || data.length == 0 ? 7.5 : 0),
     ));
+
+    int count = w > 1200 ? 5 : (w > 800 ? 3 : 2);
     return Stack(
       children: [
         BackToTop(
@@ -219,7 +224,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
             controller: _scrollController,
             itemCount: t.length,
             padding: EdgeInsets.all(os_edge),
-            crossAxisCount: w > 1200 ? 6 : (w > 800 ? 4 : 2),
+            crossAxisCount: count,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
             itemBuilder: (BuildContext context, int index) {

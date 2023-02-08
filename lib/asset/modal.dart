@@ -130,8 +130,8 @@ void showModal({
       ),
     ),
     actions: [
-      Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
+      Container(
+        // padding: const EdgeInsets.only(bottom: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -140,7 +140,8 @@ void showModal({
                 : myInkWell(
                     color: Colors.transparent,
                     widget: Container(
-                      width: 130,
+                      // width: 130,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
                       height: 50,
                       child: Center(
                         child: Text(
@@ -163,12 +164,14 @@ void showModal({
                     },
                   ),
             myInkWell(
-              color: Provider.of<ColorProvider>(context, listen: false).isDark
-                  ? Color(0x11FFFFFF)
-                  : os_color_opa,
+              // color: Provider.of<ColorProvider>(context, listen: false).isDark
+              //     ? Color(0x11FFFFFF)
+              //     : os_color_opa,
+              color: Colors.transparent,
               widget: Container(
-                width: cancelTxt == "" ? 260 : 130,
+                // width: cancelTxt == "" ? 260 : 130,
                 height: 50,
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Center(
                   child: Text(
                     confirmTxt ?? "确认",

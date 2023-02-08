@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/showActionSheet.dart';
@@ -109,7 +110,11 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                   ? os_white_opa
                   : Color(0x16004DFF),
               widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                width: (MediaQuery.of(context).size.width -
+                            MinusSpace(context) -
+                            60) /
+                        2 -
+                    5,
                 height: 40,
                 child: Center(
                   child: Text(
@@ -139,7 +144,11 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
               },
               color: os_deep_blue,
               widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                width: (MediaQuery.of(context).size.width -
+                            MinusSpace(context) -
+                            60) /
+                        2 -
+                    5,
                 height: 40,
                 child: Center(
                   child: Row(

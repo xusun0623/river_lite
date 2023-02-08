@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 final os_color = Color(0xFF0092FF); //主题蓝色
 final os_deep_blue = Color(0xFF004DFF);
+final os_deep_blue_opa = Color(0x14004DFF);
 final os_color_opa = Color.fromRGBO(0, 146, 255, 0.1); //主题蓝色
 final os_black = Color(0xFF000000); //纯黑色
 final os_black_opa = Color.fromRGBO(0, 0, 0, 0.1); //透黑色
