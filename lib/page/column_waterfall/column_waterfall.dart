@@ -210,7 +210,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
       padding: EdgeInsets.all(load_done || data.length == 0 ? 7.5 : 0),
     ));
 
-    int count = w > 1200 ? 5 : (w > 800 ? 3 : 2);
+    int count = w > 1200 ? 5 : (w > 800 ? 4 : 2);
     return Stack(
       children: [
         BackToTop(

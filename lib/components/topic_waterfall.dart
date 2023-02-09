@@ -340,7 +340,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
   //卡片图案
   Widget _getTopicCardImg() {
     double w = MediaQuery.of(context).size.width;
-    int count = w > 1200 ? 5 : (w > 800 ? 3 : 2);
+    int count = w > 1200 ? 5 : (w > 800 ? 4 : 2);
     double img_size = (w - (count + 1) * 10) / count;
     if (widget.data != null &&
         widget.data["imageList"] != null &&
@@ -390,7 +390,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
 
   Widget _topicCont() {
     double w = MediaQuery.of(context).size.width;
-    int count = w > 1200 ? 5 : (w > 800 ? 3 : 2);
+    int count = w > 1200 ? 5 : (w > 800 ? 4 : 2);
     double img_size = (w -
             (count + 1) * 10 -
             (widget.isLeftNaviUI ?? false ? LeftNaviWidth : 0)) /
