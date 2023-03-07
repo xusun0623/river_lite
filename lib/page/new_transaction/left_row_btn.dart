@@ -104,7 +104,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                     image = await pickeImgFile(context);
                   } else {
                     print("选择小屏图片");
-                    List res = await getPhoneImages();
+                    List res = await getPhoneImages(context);
                     res.forEach((element) {
                       image.add(XFile(element.path));
                     });

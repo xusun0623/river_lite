@@ -149,7 +149,7 @@ class _LoginState extends State<Login> {
                         width: 150,
                         height: 45,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
                           color: Provider.of<ColorProvider>(context).isDark
                               ? os_light_dark_card
                               : Color.fromRGBO(0, 77, 255, 0.1),

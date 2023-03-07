@@ -188,7 +188,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                   image = await pickeImgFile(context);
                                 } else {
                                   print("选择小屏图片");
-                                  List res = await getPhoneImages();
+                                  List res = await getPhoneImages(context);
                                   // List<Media> res = await ImagesPicker.pick(
                                   //   count: 50,
                                   //   // cropOpt: CropOption(),

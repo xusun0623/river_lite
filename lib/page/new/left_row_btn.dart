@@ -136,7 +136,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                     //   pickType: PickType.image,
                     //   quality: 0.7, //图片质量
                     // );
-                    List res = await getPhoneImages();
+                    List res = await getPhoneImages(context);
                     res.forEach((element) {
                       image.add(XFile(element.path));
                     });

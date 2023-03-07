@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:html/parser.dart';
+import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
@@ -163,7 +165,7 @@ class _CollectionTabState extends State<CollectionTab>
                 .split("&fromop")[0]), //专辑ID
             "subs_num":
                 int.parse(dl.getElementsByClassName("xi2").first.innerHtml),
-            "subs_txt": isMine ? "主题数" : ["主题数", "评论数", "订阅数"][filter_type],
+            "subs_txt": isMine ? "主题数" : ["订阅数", "评论数", "主题数"][filter_type],
             "tags": _getTag(dl), //专辑的标签
             "type": isMine ? 0 : 2, //0-黑 1-红 2-白
             "isShadow": false, //true-阴影 false-无阴影
@@ -207,7 +209,7 @@ class _CollectionTabState extends State<CollectionTab>
 
   List<Widget> _buildComponents() {
     List<Widget> t = [];
-    if (data.length != 0 || loading) {
+    if ((data.length != 0 || loading) && isDesktop()) {
       // t.add(Container(height: 5));
       t.add(ListTab(
           loading: switchLoading,
@@ -239,6 +241,21 @@ class _CollectionTabState extends State<CollectionTab>
         ));
       });
       // t.add(Container(height: 10));
+    }
+    if ((data.length != 0 || loading) && !isDesktop()) {
+      // t.add(Container(height: 5));
+      t.add(ListTab(
+          loading: switchLoading,
+          index: filter_type,
+          tap: (idx) {
+            setState(() {
+              switchLoading = true;
+              filter_type = idx;
+              data = [];
+            });
+            _getMydata();
+          }));
+      // t.add(Container(height: 5));
     }
     data.forEach((element) {
       t.add(GestureDetector(

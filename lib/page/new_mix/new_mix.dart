@@ -803,7 +803,7 @@ class MixContSectionState extends State<MixContSection> {
       //   quality: 0.7, //一半的质量
       //   // maxSize: 2048, //1024KB
       // );
-      List res = await getPhoneImages();
+      List res = await getPhoneImages(context);
       for (var i = 0; i < res.length; i++) {
         final XFile element = XFile(res[i].path);
         body_cont.add(BodyCont(BodyContType.image, element.path));
