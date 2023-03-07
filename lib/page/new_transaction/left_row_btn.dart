@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:images_picker/images_picker.dart';
+import 'package:image_pickers/image_pickers.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/gallery_permission.dart';
+import 'package:offer_show/asset/phone_pick_images.dart';
 import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/uploadAttachment.dart';
@@ -103,13 +104,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                     image = await pickeImgFile(context);
                   } else {
                     print("选择小屏图片");
-                    List<Media> res = await ImagesPicker.pick(
-                      count: 50,
-                      // cropOpt: CropOption(),
-                      pickType: PickType.image,
-                      quality: 0.7, //一半的质量
-                      // maxSize: 2048, //1024KB
-                    );
+                    List res = await getPhoneImages();
                     res.forEach((element) {
                       image.add(XFile(element.path));
                     });

@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
-import 'package:images_picker/images_picker.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/recognization.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 

@@ -146,7 +146,6 @@ class _HomeState extends State<Home> {
     os_width = MediaQuery.of(context).size.width;
     os_height = MediaQuery.of(context).size.height;
     os_padding = os_width * 0.025;
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     double barHeight = 55;
     double barPadding = 10;
 
@@ -164,7 +163,7 @@ class _HomeState extends State<Home> {
         ][element]);
         select_icons.add([
           Icons.home_rounded,
-          Icons.image_outlined,
+          Icons.image_rounded,
           Icons.notifications_rounded,
           Icons.person_rounded
         ][element]);
@@ -274,47 +273,284 @@ class _HomeState extends State<Home> {
                 index: getConvertIndex(),
               ),
             ),
-            bottomNavigationBar: Container(
-              width: MediaQuery.of(context).size.width,
-              height: barHeight + barPadding,
-              padding: EdgeInsets.only(bottom: barPadding),
-              decoration: BoxDecoration(
-                color: Provider.of<ColorProvider>(context).isDark ||
-                        (Provider.of<ShowPicProvider>(context).isShow &&
-                            tabShowProvider.index == 1)
-                    ? os_dark_back
-                    : os_white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Provider.of<ColorProvider>(context).isDark ||
-                            (Provider.of<ShowPicProvider>(context).isShow &&
-                                tabShowProvider.index == 1)
-                        ? Color(0x55000000)
-                        : Color(0x22000000),
-                    blurRadius: 10,
-                    offset: Offset(3, 3),
+            bottomNavigationBar: Platform.isAndroid
+                ? MaterialBottomNavigationBar()
+                : IosBottomNavigatorBar(
+                    barHeight: barHeight,
+                    barPadding: barPadding,
                   ),
-                ],
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: -2.5,
-                    top: 0,
-                    child: QueationProgress(),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: _buildWidget(
-                      !Provider.of<ShowPicProvider>(context).isShow
-                          ? [0, 2, 3]
-                          : [0, 1, 2, 3],
-                    ),
-                  ),
-                ],
-              ),
-            ),
           );
+  }
+}
+
+class IosBottomNavigatorBar extends StatefulWidget {
+  double barHeight;
+  double barPadding;
+
+  IosBottomNavigatorBar({
+    Key key,
+    @required this.barHeight,
+    @required this.barPadding,
+  }) : super(key: key);
+
+  @override
+  State<IosBottomNavigatorBar> createState() => _IosBottomNavigatorBarState();
+}
+
+class _IosBottomNavigatorBarState extends State<IosBottomNavigatorBar> {
+  bool _isNewMsg = false;
+  List<int> loadIndex = [];
+
+  _getNewMsg() async {
+    var data = await Api().message_heart({});
+    var count = 0;
+    if (data != null && data["rs"] != 0 && data["body"] != null) {
+      count += data["body"]["replyInfo"]["count"];
+      count += data["body"]["atMeInfo"]["count"];
+      count += data["body"]["systemInfo"]["count"];
+      count += data["body"]["pmInfos"].length;
+      data = data["body"];
+      if (count != 0) {
+        setState(() {
+          _isNewMsg = true;
+        });
+      } else {
+        setState(() {
+          _isNewMsg = false;
+        });
+      }
+    } else {
+      setState(() {
+        _isNewMsg = false;
+      });
+    }
+  }
+
+  List<Widget> _buildWidget(List<int> _loadIndex) {
+    TabShowProvider tabShowProvider = Provider.of<TabShowProvider>(context);
+    ShowPicProvider showPicProvider = Provider.of<ShowPicProvider>(context);
+
+    loadIndex = _loadIndex;
+    List<Widget> tmp = [];
+    List<IconData> select_icons = [];
+    List<IconData> icons = [];
+    loadIndex.forEach((element) {
+      icons.add([
+        Icons.home_rounded,
+        Icons.image_rounded,
+        Icons.notifications_rounded,
+        Icons.person_rounded
+      ][element]);
+      select_icons.add([
+        Icons.home_rounded,
+        Icons.image_rounded,
+        Icons.notifications_rounded,
+        Icons.person_rounded
+      ][element]);
+    });
+    for (int i = 0; i < icons.length; i++) {
+      tmp.add(GestureDetector(
+        onTap: tabShowProvider.index == i
+            ? () {
+                _getNewMsg();
+              }
+            : () {
+                _getNewMsg();
+                if (_isNewMsg) {
+                  Provider.of<MsgProvider>(context, listen: false).getMsg();
+                }
+                if (Platform.isIOS) XSVibrate();
+                setState(() {
+                  tabShowProvider.index = i;
+                  tabShowProvider.changeIndex(i);
+                });
+              },
+        child: Container(
+          width: MediaQuery.of(context).size.width / icons.length,
+          height: widget.barHeight,
+          color: Color(0x01FFFFFF),
+          child: badgee.Badge(
+            position: badgee.BadgePosition(
+              end: 35,
+              top: 20,
+            ),
+            showBadge:
+                (i == (!Provider.of<ShowPicProvider>(context).isShow ? 1 : 2) &&
+                    _isNewMsg),
+            child: Icon(
+              tabShowProvider.index == i ? select_icons[i] : icons[i],
+              size: 26,
+              color: tabShowProvider.index == i
+                  ? (Provider.of<ColorProvider>(context).isDark ||
+                          (Provider.of<ShowPicProvider>(context).isShow &&
+                              tabShowProvider.index == 1)
+                      ? os_dark_white
+                      : Color(0xFF222222))
+                  : (Provider.of<ColorProvider>(context).isDark ||
+                          (Provider.of<ShowPicProvider>(context).isShow &&
+                              tabShowProvider.index == 1)
+                      ? os_deep_grey
+                      : Color(0xFFa4a4a6)),
+            ),
+          ),
+        ),
+      ));
+    }
+    return tmp;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    TabShowProvider tabShowProvider = Provider.of<TabShowProvider>(context);
+    ShowPicProvider showPicProvider = Provider.of<ShowPicProvider>(context);
+
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: widget.barHeight + widget.barPadding,
+      padding: EdgeInsets.only(bottom: widget.barPadding),
+      decoration: BoxDecoration(
+        color: Provider.of<ColorProvider>(context).isDark ||
+                (Provider.of<ShowPicProvider>(context).isShow &&
+                    tabShowProvider.index == 1)
+            ? os_dark_back
+            : os_white,
+        boxShadow: [
+          BoxShadow(
+            color: Provider.of<ColorProvider>(context).isDark ||
+                    (Provider.of<ShowPicProvider>(context).isShow &&
+                        tabShowProvider.index == 1)
+                ? Color(0x55000000)
+                : Color(0x22000000),
+            blurRadius: 10,
+            offset: Offset(3, 3),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            left: -2.5,
+            top: 0,
+            child: QueationProgress(),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: _buildWidget(
+              !Provider.of<ShowPicProvider>(context).isShow
+                  ? [0, 2, 3]
+                  : [0, 1, 2, 3],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MaterialBottomNavigationBar extends StatefulWidget {
+  MaterialBottomNavigationBar({Key key}) : super(key: key);
+
+  @override
+  State<MaterialBottomNavigationBar> createState() =>
+      _MaterialBottomNavigationBarState();
+}
+
+class _MaterialBottomNavigationBarState
+    extends State<MaterialBottomNavigationBar> {
+  bool _isNewMsg = false;
+
+  _getNewMsg() async {
+    var data = await Api().message_heart({});
+    var count = 0;
+    if (data != null && data["rs"] != 0 && data["body"] != null) {
+      count += data["body"]["replyInfo"]["count"];
+      count += data["body"]["atMeInfo"]["count"];
+      count += data["body"]["systemInfo"]["count"];
+      count += data["body"]["pmInfos"].length;
+      data = data["body"];
+      if (count != 0) {
+        setState(() {
+          _isNewMsg = true;
+        });
+      } else {
+        setState(() {
+          _isNewMsg = false;
+        });
+      }
+    } else {
+      setState(() {
+        _isNewMsg = false;
+      });
+    }
+    if (_isNewMsg) {
+      Provider.of<MsgProvider>(context, listen: false).getMsg();
+    }
+  }
+
+  List<BottomNavigationBarItem> bottomBar() {
+    return [
+      BottomNavigationBarItem(
+        label: "首页",
+        icon: Icon(Icons.home_rounded),
+      ),
+      ...(Provider.of<ShowPicProvider>(context).isShow
+          ? [
+              BottomNavigationBarItem(
+                label: "图区",
+                icon: Icon(Icons.image),
+              )
+            ]
+          : []),
+      BottomNavigationBarItem(
+        label: "消息",
+        icon: badgee.Badge(
+          showBadge: _isNewMsg,
+          child: Icon(Icons.notifications),
+        ),
+      ),
+      BottomNavigationBarItem(
+        label: "我",
+        icon: Icon(Icons.person),
+      ),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    TabShowProvider tabShowProvider = Provider.of<TabShowProvider>(context);
+    ShowPicProvider showPicProvider = Provider.of<ShowPicProvider>(context);
+
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      showUnselectedLabels: false,
+      showSelectedLabels: false,
+      enableFeedback: false,
+      selectedFontSize: 10,
+      unselectedFontSize: 10,
+      iconSize: 24,
+      selectedItemColor:
+          (showPicProvider.isShow && tabShowProvider.index == 1) ||
+                  Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_deep_blue,
+      unselectedItemColor: os_deep_grey,
+      backgroundColor: (showPicProvider.isShow && tabShowProvider.index == 1) ||
+              Provider.of<ColorProvider>(context).isDark
+          ? os_dark_back
+          : os_white,
+      unselectedLabelStyle: const TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+      selectedLabelStyle: const TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+      onTap: (value) {
+        _getNewMsg();
+        tabShowProvider.changeIndex(value);
+      },
+      currentIndex: tabShowProvider.index,
+      items: bottomBar(),
+    );
   }
 }
 

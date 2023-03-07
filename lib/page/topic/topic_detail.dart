@@ -85,6 +85,10 @@ class _TopicDetailState extends State<TopicDetail> {
 
   var dislike_count = 0;
 
+  double getBottomSafeArea() {
+    return MediaQuery.of(context).padding.bottom;
+  }
+
   //一键转发
   _alterSend() async {
     // showToast(context: context, type: XSToast.loading, txt: "转发中…");
@@ -787,7 +791,11 @@ class _TopicDetailState extends State<TopicDetail> {
           : Container(
               height: 30,
             ),
-      Container(height: editing ? 250 : 60 + bottom_safeArea)
+      Container(
+        height: editing
+            ? 250
+            : 60 + (Platform.isIOS ? bottom_safeArea : getBottomSafeArea()),
+      )
     ]);
     //针对大屏进行适配
     for (var i = 0; i < tmp.length; i++) {
@@ -1088,7 +1096,9 @@ class _TopicDetailState extends State<TopicDetail> {
                               )
                             : DetailFixBottom(
                                 dislike_count: dislike_count,
-                                bottom: bottom_safeArea,
+                                bottom: (Platform.isIOS
+                                    ? bottom_safeArea
+                                    : getBottomSafeArea()),
                                 tapEdit: () {
                                   _focusNode.requestFocus();
                                   editing = true;

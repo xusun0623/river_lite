@@ -36,7 +36,7 @@ if (flutterTargetSdkVersion == null) {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {

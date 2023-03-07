@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 // import 'package:offer_show/asset/size.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+// import 'package:webview_flutter/webview_flutter.dart';
 
 class BilibiliPlayer extends StatefulWidget {
   String short_url;
@@ -49,17 +49,17 @@ class _BilibiliPlayerState extends State<BilibiliPlayer> {
                     height: (MediaQuery.of(context).size.width) / 16 * 9,
                     width: MediaQuery.of(context).size.width,
                     color: os_middle_grey,
-                    child: WebView(
-                      onPageFinished: (_) async {
-                        await Future.delayed(Duration(milliseconds: 500));
-                        setState(() {
-                          load_done = true;
-                        });
-                      },
-                      initialUrl:
-                          "https://player.bilibili.com/player.html?bvid=${bvNumber}",
-                      javascriptMode: JavascriptMode.unrestricted,
-                    ),
+                    // child: WebView(
+                    //   onPageFinished: (_) async {
+                    //     await Future.delayed(Duration(milliseconds: 500));
+                    //     setState(() {
+                    //       load_done = true;
+                    //     });
+                    //   },
+                    //   initialUrl:
+                    //       "https://player.bilibili.com/player.html?bvid=${bvNumber}",
+                    //   javascriptMode: JavascriptMode.unrestricted,
+                    // ),
                   ),
                 ),
               ),

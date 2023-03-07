@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:badges/badges.dart' as Badgee;
 import 'package:flutter/material.dart';
@@ -441,7 +442,13 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
         color: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : os_white,
-        padding: EdgeInsets.only(bottom: 30, top: 10),
+        padding: EdgeInsets.only(
+          bottom: (Platform.isAndroid
+                  ? MediaQuery.of(context).padding.bottom
+                  : 20) +
+              10,
+          top: 10,
+        ),
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: os_edge),
           decoration: BoxDecoration(

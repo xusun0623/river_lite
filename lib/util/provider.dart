@@ -4,8 +4,12 @@
  * @Last Modified by:   xusun000 
  * @Last Modified time: 2022-08-03 10:38:43 
  */
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:offer_show/asset/bigScreen.dart';
+import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 
@@ -153,6 +157,11 @@ class MsgProvider extends ChangeNotifier {
 
 class TabShowProvider extends ChangeNotifier {
   int index = 0;
+
+  changeIndex(int idx) {
+    index = idx;
+    notifyListeners();
+  }
 
   refresh() {
     notifyListeners();

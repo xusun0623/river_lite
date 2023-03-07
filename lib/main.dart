@@ -17,12 +17,6 @@ import 'package:sizer/sizer.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
-  if (Platform.isAndroid) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Color.fromRGBO(0, 0, 0, 0)),
-    );
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-  }
   if (Platform.isWindows) {
     WidgetsFlutterBinding.ensureInitialized();
     await windowManager.ensureInitialized();
@@ -45,9 +39,9 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SystemUiOverlayStyle systemUiOverlayStyle =
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    // SystemUiOverlayStyle systemUiOverlayStyle =
+    //     SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    // SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ColorProvider()),
@@ -60,50 +54,71 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ShowPicProvider()),
         ChangeNotifierProvider(create: (context) => AutoQuestionProvider()),
       ],
-      child: Sizer(
-        builder: (context, orientation, deviceType) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          initialRoute: "/",
-          theme: ThemeData(
-            fontFamily: '微软雅黑',
-            appBarTheme: AppBarTheme(
-              surfaceTintColor: Colors.transparent,
-              scrolledUnderElevation: 0,
-            ),
-            colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.blue,
-              backgroundColor: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_back
-                  : Colors.white,
-            ),
-            useMaterial3: true,
+      child: Sizer(builder: (context, orientation, deviceType) {
+        // if (Platform.isAndroid) {
+        //   SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+        //     statusBarColor: Colors.transparent,
+        //     systemNavigationBarColor: Provider.of<ColorProvider>(context).isDark
+        //         ? os_dark_back
+        //         : os_white,
+        //     systemNavigationBarContrastEnforced: true,
+        //   );
+        //   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+        //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+        // }
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            systemNavigationBarColor: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_back
+                : os_white,
+            statusBarIconBrightness: Brightness.dark,
+            systemNavigationBarIconBrightness: Brightness.dark,
           ),
-          onGenerateRoute: (settings) {
-            final String routersname = settings.name;
-            final Function cotrollerFn = routers[routersname];
-            //判断访问不存在的路由地址
-            if (cotrollerFn == null) {
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            initialRoute: "/",
+            theme: ThemeData(
+              fontFamily: '微软雅黑',
+              appBarTheme: AppBarTheme(
+                surfaceTintColor: Colors.transparent,
+                scrolledUnderElevation: 0,
+              ),
+              colorScheme: ColorScheme.fromSwatch(
+                primarySwatch: Colors.blue,
+                backgroundColor: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_back
+                    : Colors.white,
+              ),
+              useMaterial3: true,
+            ),
+            onGenerateRoute: (settings) {
+              final String routersname = settings.name;
+              final Function cotrollerFn = routers[routersname];
+              //判断访问不存在的路由地址
+              if (cotrollerFn == null) {
+                return CupertinoPageRoute(
+                  builder: (context) => routers['/404'](),
+                );
+              }
+              if (settings.arguments == null) {
+                return CupertinoPageRoute(
+                  builder: (context) => cotrollerFn(),
+                );
+              } else {
+                return CupertinoPageRoute(
+                  builder: (context) => cotrollerFn(settings.arguments),
+                );
+              }
+            },
+            onUnknownRoute: (setting) {
               return CupertinoPageRoute(
-                builder: (context) => routers['/404'](),
+                builder: (context) => routers["/404"](),
               );
-            }
-            if (settings.arguments == null) {
-              return CupertinoPageRoute(
-                builder: (context) => cotrollerFn(),
-              );
-            } else {
-              return CupertinoPageRoute(
-                builder: (context) => cotrollerFn(settings.arguments),
-              );
-            }
-          },
-          onUnknownRoute: (setting) {
-            return CupertinoPageRoute(
-              builder: (context) => routers["/404"](),
-            );
-          },
-        ),
-      ),
+            },
+          ),
+        );
+      }),
     );
   }
 }
