@@ -2,7 +2,7 @@ name: offer_show
 description: A new Flutter project.
 
 publish_to: "none"
-version: 1.0.8+2
+version: 1.0.9+2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
