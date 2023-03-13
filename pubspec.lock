@@ -560,14 +560,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.6.2"
-  image_pickers:
-    dependency: "direct main"
-    description:
-      name: image_pickers
-      sha256: c4fd50c04d470e2dc9c0786788a4a1034adcfed63348fd04f686cbee9ea8ae93
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.0+6"
   images_picker:
     dependency: "direct main"
     description:
@@ -1341,6 +1333,38 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.2.1"
+  webview_flutter:
+    dependency: "direct main"
+    description:
+      name: webview_flutter
+      sha256: b6cd42db3ced5411f3d01599906156885b18e4188f7065a8a351eb84bee347e0
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.0.6"
+  webview_flutter_android:
+    dependency: transitive
+    description:
+      name: webview_flutter_android
+      sha256: "5dd3f32b5c2d8f4bf9d05a349e4a65fa718eb137f396f336c3893d558a58fe84"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.3.2"
+  webview_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: webview_flutter_platform_interface
+      sha256: df6472164b3f4eaf3280422227f361dc8424b106726b7f21d79a8656ba53f71f
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.2"
+  webview_flutter_wkwebview:
+    dependency: transitive
+    description:
+      name: webview_flutter_wkwebview
+      sha256: "87b6353b40e04f04d5f895a484ad6d92d682d9cce4d2d5b32d2d8aca2448d46e"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.2.0"
   wechat_camera_picker:
     dependency: "direct main"
     description:

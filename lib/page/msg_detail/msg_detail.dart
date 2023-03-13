@@ -445,9 +445,9 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
         padding: EdgeInsets.only(
           bottom: (Platform.isAndroid
                   ? MediaQuery.of(context).padding.bottom
-                  : 20) +
-              10,
-          top: 10,
+                  : 20.0) +
+              10.0,
+          top: 10.0,
         ),
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: os_edge),
