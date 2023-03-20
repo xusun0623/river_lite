@@ -411,8 +411,10 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                                 padding: const EdgeInsets.all(45.0),
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2.5,
-                                  color: os_middle_grey,
+                                  color: Color.fromARGB(255, 172, 172, 172),
                                   value: progress.progress,
+                                  backgroundColor:
+                                      Color.fromARGB(255, 223, 223, 223),
                                 ),
                               );
                             },

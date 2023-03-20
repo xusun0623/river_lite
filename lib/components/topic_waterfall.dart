@@ -374,9 +374,28 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
               height: img_size,
               filterQuality: FilterQuality.low,
               fit: BoxFit.cover,
-              placeholder: (context, url) => Container(
+              errorWidget: (context, url, error) => Container(
+                child: Icon(
+                  Icons.image,
+                  size: 40,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? Color(0x22ffffff)
+                      : os_middle_grey,
+                ),
                 color: Provider.of<ColorProvider>(context).isDark
-                    ? os_light_dark_card
+                    ? os_white_opa
+                    : os_grey,
+              ),
+              placeholder: (context, url) => Container(
+                child: Icon(
+                  Icons.image,
+                  size: 40,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? Color(0x22ffffff)
+                      : os_middle_grey,
+                ),
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_white_opa
                     : os_grey,
               ),
             ),

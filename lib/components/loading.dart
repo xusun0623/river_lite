@@ -8,10 +8,12 @@ class Loading extends StatefulWidget {
   Color backgroundColor;
   bool showError;
   bool showCancel;
+  bool showRefresh;
   String msg;
   Function tap;
   Function tap1;
   Function cancel;
+  Function refresh;
   String tapTxt;
   String tapTxt1;
   Widget loadingWidget;
@@ -20,10 +22,12 @@ class Loading extends StatefulWidget {
     this.backgroundColor,
     this.showError,
     this.showCancel,
+    this.showRefresh,
     this.msg,
     this.tap,
     this.tap1,
     this.cancel,
+    this.refresh,
     this.tapTxt,
     this.tapTxt1,
     this.loadingWidget,
@@ -159,6 +163,39 @@ class _LoadingState extends State<Loading> {
                       ),
                     ),
                   ),
+            ((widget.showRefresh ?? false) && (widget.showError ?? false))
+                ? GestureDetector(
+                    onTap: () {
+                      if (widget.refresh != null) {
+                        widget.refresh();
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(top: 10),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        // color: os_color,
+                        border: Border.all(
+                          color: os_deep_blue,
+                          width: 2,
+                        ),
+                      ),
+                      child: Text(
+                        "重新加载",
+                        style: TextStyle(
+                          color: os_deep_blue,
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+            widget.tap == null || !widget.showError
+                ? Container()
+                : Container(height: 30),
             Container(height: 100),
           ],
         ),

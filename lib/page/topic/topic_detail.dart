@@ -882,9 +882,15 @@ class _TopicDetailState extends State<TopicDetail> {
                     ),
                   )
                 : Loading(
+                    showRefresh: true,
                     showError: load_done,
                     msg: "河畔Lite客户端没有权限访问或者帖子被删除，可以尝试网页端是否能访问",
                     tapTxt: "访问网页版>",
+                    refresh: () async {
+                      showToast(context: context, type: XSToast.loading);
+                      await _getData();
+                      hideToast();
+                    },
                     cancel: () {
                       // print("11111");
                       setState(() {
