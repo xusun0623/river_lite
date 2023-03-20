@@ -290,7 +290,7 @@ class _CommentState extends State<Comment> {
                 await Api().user_report({
                   "idType": "post",
                   "message": txt,
-                  "id": widget.data["reply_id"]
+                  "id": widget.data["reply_posts_id"]
                 });
                 Navigator.pop(context);
                 _feedbackSuccess();
