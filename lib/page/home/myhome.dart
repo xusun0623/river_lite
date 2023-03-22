@@ -36,7 +36,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       child: Row(
         children: [
           Icon(
-            Icons.view_array_outlined,
+            Icons.dashboard_rounded,
             size: 18,
           ),
           Container(width: 5),
@@ -48,7 +48,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       child: Row(
         children: [
           Icon(
-            Icons.comment_bank_outlined,
+            Icons.explore_rounded,
             size: 18,
           ),
           Container(width: 5),
@@ -59,9 +59,12 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
     Tab(
       child: Row(
         children: [
-          Icon(
-            Icons.reply_rounded,
-            size: 18,
+          Transform.scale(
+            scaleX: -1,
+            child: Icon(
+              Icons.reply_rounded,
+              size: 18,
+            ),
           ),
           Container(width: 5),
           Text("回复"),
@@ -72,7 +75,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       child: Row(
         children: [
           Icon(
-            Icons.local_fire_department_outlined,
+            Icons.stars_rounded,
             size: 18,
           ),
           Container(width: 5),
@@ -84,7 +87,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       child: Row(
         children: [
           Icon(
-            Icons.verified_user_outlined,
+            Icons.verified_rounded,
             size: 18,
           ),
           Container(width: 5),
@@ -96,7 +99,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       child: Row(
         children: [
           Icon(
-            Icons.collections_bookmark_outlined,
+            Icons.turned_in_rounded,
             size: 18,
           ),
           Container(width: 5),
@@ -175,7 +178,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
           width: 37,
           color: Provider.of<ColorProvider>(context).isDark
               ? os_light_dark_card
-              : os_deep_blue_opa,
+              : os_white,
         ),
       ),
       unselectedLabelStyle: TextStyle(

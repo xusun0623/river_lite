@@ -180,14 +180,18 @@ class _LoadingState extends State<Loading> {
                         borderRadius: BorderRadius.circular(100),
                         // color: os_color,
                         border: Border.all(
-                          color: os_deep_blue,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_deep_blue,
                           width: 2,
                         ),
                       ),
                       child: Text(
                         "重新加载",
                         style: TextStyle(
-                          color: os_deep_blue,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_deep_blue,
                         ),
                       ),
                     ),
