@@ -65,6 +65,12 @@ class _WaterTotalState extends State<WaterTotal> {
               img: "lib/img/water_total/1.svg",
             ),
             NavigatorCard(
+              title: "道具商店",
+              tip: "自动答题，水滴多多",
+              url: "/shop",
+              img: "lib/img/water_total/1.svg",
+            ),
+            NavigatorCard(
               title: "水滴任务",
               tip: "进度查看，领取任务",
               url: "/water_task",

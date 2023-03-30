@@ -27,6 +27,7 @@ import 'package:offer_show/page/question/question.dart';
 import 'package:offer_show/page/scan_qrcode/scan_qrcode.dart';
 import 'package:offer_show/page/search/search.dart';
 import 'package:offer_show/page/setting/setting.dart';
+import 'package:offer_show/page/shop/shop.dart';
 import 'package:offer_show/page/square/square.dart';
 import 'package:offer_show/page/start/start.dart';
 import 'package:offer_show/page/test/test.dart';
@@ -41,6 +42,7 @@ import 'package:offer_show/page/water_total/water_total.dart';
 
 final routers = {
   "/": () => Start(),
+  "/shop": () => Shop(),
   "/new": (data) => PostNew(board_id: data),
   "/new_mix": (data) => PostNewMix(board_id: data),
   "/new_transaction": () => PostNewTransaction(),
