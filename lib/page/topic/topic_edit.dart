@@ -501,29 +501,33 @@ class InfoTip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(
-            child: Text(
-          "1.水区的帖子不允许编辑",
-          style: TextStyle(
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_white
-                : os_black,
-          ),
-        )),
-        Container(height: 5),
-        Center(
-          child: Text(
-            "2.15天前的帖子不允许编辑",
+    return Container(
+      height: 500,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+              child: Text(
+            "1.水区的帖子不允许编辑",
             style: TextStyle(
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_dark_white
                   : os_black,
             ),
+          )),
+          Container(height: 5),
+          Center(
+            child: Text(
+              "2.15天前的帖子不允许编辑",
+              style: TextStyle(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

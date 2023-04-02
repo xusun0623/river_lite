@@ -59,7 +59,7 @@ showAction({
         tmp.add(
           GestureDetector(
             onTap: () {
-              if (tap != null) tap(i);
+              if (tap != null) tap(option);
             },
             child: _optionBar(option, icon, context),
           ),

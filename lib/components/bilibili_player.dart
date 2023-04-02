@@ -1,6 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/toWebUrl.dart';
+import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/util/provider.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 // import 'package:offer_show/asset/size.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -67,26 +73,60 @@ class _BilibiliPlayerState extends State<BilibiliPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return bvNumber == ""
-        ? Container()
-        : Opacity(
-            opacity: load_done ? 1 : 0.01,
-            child: Container(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: 400,
+    return Column(
+      children: [
+        bvNumber == ""
+            ? Container(
+                child: CupertinoActivityIndicator(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : os_dark_back,
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    height: (MediaQuery.of(context).size.width) / 16 * 9,
-                    width: MediaQuery.of(context).size.width,
-                    color: os_middle_grey,
-                    child: WebViewWidget(controller: controller),
+              )
+            : Opacity(
+                opacity: load_done ? 1 : 0.01,
+                child: Container(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: 400,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        height: (MediaQuery.of(context).size.width) / 16 * 9,
+                        width: MediaQuery.of(context).size.width,
+                        color: os_middle_grey,
+                        child: WebViewWidget(controller: controller),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+        Container(height: 5),
+        Row(
+          children: [
+            myInkWell(
+              tap: () {
+                xsLanuch(url: widget.short_url, isExtern: true);
+              },
+              radius: 5,
+              widget: Container(
+                padding: EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  "在浏览器中打开",
+                  style: TextStyle(
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : os_color,
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
               ),
             ),
-          );
+          ],
+        ),
+      ],
+    );
   }
 }

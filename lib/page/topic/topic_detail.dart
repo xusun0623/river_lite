@@ -1273,9 +1273,56 @@ class TopicDetailTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-      child: SelectableText(
-        data["topic"]["title"].replaceAll("&nbsp1", " "),
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+      child: SelectableText.rich(
+        TextSpan(
+          text: data["topic"]["title"].replaceAll("&nbsp1", " "),
+          children: [
+            WidgetSpan(
+                child: Transform.translate(
+              offset: Offset(5, 4),
+              child: myInkWell(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_white_opa
+                    : os_grey,
+                radius: 100,
+                tap: () {
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    backgroundColor:
+                        Provider.of<ColorProvider>(context, listen: false)
+                                .isDark
+                            ? os_light_dark_card
+                            : os_white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    context: context,
+                    builder: (context) {
+                      return QrCode(
+                        url:
+                            "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${data["topic"]["topic_id"]}",
+                      );
+                    },
+                  );
+                },
+                widget: Container(
+                  padding: EdgeInsets.all(7.5),
+                  child: Icon(
+                    Icons.qr_code,
+                    size: 15,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_dark_back,
+                  ),
+                ),
+              ),
+            )),
+          ],
+        ),
         style: TextStyle(
           fontSize: 18,
           fontWeight: Provider.of<ColorProvider>(context).isDark

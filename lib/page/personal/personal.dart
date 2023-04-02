@@ -208,7 +208,7 @@ class _PersonCenterState extends State<PersonCenter> {
       options: ["复制空间链接", "展示二维码"],
       icons: [Icons.copy, Icons.qr_code],
       tap: (res) {
-        if (res == 0) {
+        if (res == "复制空间链接") {
           Navigator.pop(context);
           Clipboard.setData(
             ClipboardData(
@@ -222,7 +222,7 @@ class _PersonCenterState extends State<PersonCenter> {
             txt: "复制链接成功",
           );
         }
-        if (res == 1) {
+        if (res == "展示二维码") {
           Navigator.pop(context);
           showPop(context, [
             QrCode(
@@ -797,7 +797,7 @@ class _PersonCardState extends State<PersonCard> {
                     options: ["我是男生", "我是女生"],
                     icons: [Icons.male, Icons.female],
                     tap: (res) async {
-                      if (res == 0 || res == 1) {
+                      if (res == "我是男生" || res == "我是女生") {
                         showToast(
                           context: context,
                           type: XSToast.loading,
@@ -840,7 +840,7 @@ class _PersonCardState extends State<PersonCard> {
                     options: ["查看头像", "上传新头像"],
                     icons: [Icons.image_outlined, Icons.upload_file_outlined],
                     tap: (res) {
-                      if (res == 0) {
+                      if (res == "查看头像") {
                         Navigator.pop(context);
                         Navigator.push(
                           context,
@@ -852,7 +852,7 @@ class _PersonCardState extends State<PersonCard> {
                           ),
                         );
                       }
-                      if (res == 1) {
+                      if (res == "上传新头像") {
                         Navigator.pop(context);
                         Navigator.pushNamed(context, "/crop");
                       }

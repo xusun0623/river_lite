@@ -1,6 +1,8 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
@@ -10,6 +12,7 @@ import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
+import 'package:offer_show/asset/topic_formhash.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/topic_water.dart';
 import 'package:offer_show/util/interface.dart';
@@ -230,6 +233,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         "屏蔽此贴",
         ...(widget.data["topic"]["user_id"] == await getUid() ? ["编辑帖子"] : []),
         ...(widget.data["topic"]["user_id"] == await getUid() ? ["补充内容"] : []),
+        ...(widget.data["topic"]["user_id"] == await getUid() ? ["删除帖子"] : []),
         // ...(widget.data["forumName"] == "水手之家" ? ["转帖到水区"] : []),
       ],
       icons: [
@@ -243,16 +247,19 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         ...(widget.data["topic"]["user_id"] == await getUid()
             ? [Icons.add_box_rounded]
             : []),
+        ...(widget.data["topic"]["user_id"] == await getUid()
+            ? [Icons.delete_outline_rounded]
+            : []),
         // ...(widget.data["forumName"] == "水手之家"
         //     ? [Icons.move_down_rounded]
         //     : []),
       ],
       tap: (res) async {
         Navigator.pop(context);
-        if (res == 0) {
+        if (res == "展示二维码") {
           _showQrCode();
         }
-        if (res == 1) {
+        if (res == "复制帖子链接") {
           Clipboard.setData(
             ClipboardData(
               text: base_url +
@@ -266,34 +273,96 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
             txt: "复制成功！",
           );
         }
-        if (res == 2) {
+        if (res == "举报反馈") {
           _feedback();
         }
-        if (res == 3) {
+        if (res == "屏蔽此贴") {
           setBlackWord(widget.data["topic"]["title"], context);
           widget.block();
         }
-        if (res == 4) {
-          if (widget.data["topic"]["user_id"] == await getUid()) {
-            Navigator.pushNamed(context, "/topic_edit", arguments: {
-              "tid": widget.data["topic"]["topic_id"],
-              "pid": int.parse(widget.data["topic"]["extraPanel"][0]["action"]
-                  .toString()
-                  .split("&pid=")[1]
-                  .split("&")[0]),
-            });
-          } else {
-            _toWaterColumn();
-          }
+        if (res == "编辑帖子") {
+          Navigator.pushNamed(context, "/topic_edit", arguments: {
+            "tid": widget.data["topic"]["topic_id"],
+            "pid": int.parse(widget.data["topic"]["extraPanel"][0]["action"]
+                .toString()
+                .split("&pid=")[1]
+                .split("&")[0]),
+          });
         }
-        if (res == 5) {
+        if (res == "补充内容") {
           _append_cont();
         }
-        if (res == 6) {
-          _toWaterColumn();
+        if (res == "删除帖子") {
+          showModal(
+            context: context,
+            title: "请确认",
+            cont: "删除此回复需要一张【悔悟卡】道具，你可以在道具商店购买；并且，每天能删除的帖子数量是有限制的",
+            confirm: () {
+              deleteComment();
+            },
+          );
         }
+        // if (res == "转帖到水区") {
+        //   _toWaterColumn();
+        // }
       },
     );
+  }
+
+  deleteComment() async {
+    showToast(
+      context: context,
+      type: XSToast.loading,
+      txt: "请稍后…",
+      duration: 5000,
+    );
+    String formhash = await getTopicFormHash(widget.data["topic"]["topic_id"]);
+    String tid = widget.data["topic"]["topic_id"].toString();
+    int pid = int.parse(widget.data["topic"]["extraPanel"][0]["action"]
+        .toString()
+        .split("&pid=")[1]
+        .split("&")[0]);
+    Response tmp = await XHttp().pureHttpWithCookie(
+      hadCookie: true,
+      url:
+          "https://bbs.uestc.edu.cn/home.php?mod=magic&action=mybox&infloat=yes&inajax=1",
+      param: {
+        "formhash": formhash,
+        "handlekey": "a_repent_" + pid.toString(),
+        "operation": "use",
+        "magicid": 20,
+        "pid": pid,
+        "ptid": tid,
+        "usesubmit": "yes",
+        "idtype": "pid",
+        "id": widget.data["reply_posts_id"].toString() + ":" + tid.toString(),
+      },
+    );
+    Clipboard.setData(ClipboardData(text: tmp.data.toString()));
+    String tmp_txt = tmp.data.toString();
+    hideToast();
+    if (tmp_txt.contains("抱歉，您选择的道具不存在")) {
+      Fluttertoast.showToast(
+        msg: "抱歉，您选择的道具不存在",
+        gravity: ToastGravity.CENTER,
+      );
+    } else if (tmp_txt.contains("已删除")) {
+      Fluttertoast.showToast(
+        msg: "你操作的帖子已删除，请手动刷新页面",
+        gravity: ToastGravity.CENTER,
+      );
+    } else if (tmp_txt.contains("24 小时内您只能使用 3 次本道具")) {
+      Fluttertoast.showToast(
+        msg: "24 小时内您只能使用 3 次本道具",
+        gravity: ToastGravity.CENTER,
+      );
+    } else {
+      Fluttertoast.showToast(
+        msg: "出错了，你可以尝试在网页端删除此评论",
+        gravity: ToastGravity.CENTER,
+      );
+    }
+    print("${tmp.data.toString()}");
   }
 
   _append_cont() {

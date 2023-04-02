@@ -118,7 +118,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                       Icons.clear_all,
                     ],
               tap: (res) async {
-                if (res == 0) {
+                if (res == "选择图片（建议3张以内）") {
                   List<XFile> image = [];
                   widget.setImgUrls([]);
                   Navigator.pop(context);
@@ -155,7 +155,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                     isUpLoading = false;
                   });
                 }
-                if (res == 1) {
+                if (res == "查看图片") {
                   Navigator.pop(context);
                   if (widget.img_urls.length != 0) {
                     print("${widget.img_urls}");
@@ -171,7 +171,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                     );
                   }
                 }
-                if (res == 2) {
+                if (res == "清空已上传图片") {
                   widget.setImgUrls([]);
                   Navigator.pop(context);
                 }

@@ -226,7 +226,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                     Icons.attachment
                                   ],
                                   tap: (res) async {
-                                    if (res == 0) {
+                                    if (res == "上传视频") {
                                       Navigator.pop(context);
                                       String aid = await getVideoUploadAid(
                                         tid: widget.tid,
@@ -250,7 +250,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                         });
                                       }
                                     }
-                                    if (res == 1) {
+                                    if (res == "上传附件") {
                                       Navigator.pop(context);
                                       String aid = await getUploadAid(
                                         tid: widget.tid,

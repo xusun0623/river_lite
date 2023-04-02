@@ -872,7 +872,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                   options: ["复制文本"],
                   icons: [Icons.copy],
                   tap: (res) {
-                    if (res == 0) {
+                    if (res == "复制文本") {
                       Clipboard.setData(ClipboardData(text: widget.cont));
                       Navigator.pop(context);
                       showToast(

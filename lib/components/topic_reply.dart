@@ -250,7 +250,7 @@ class _TopicReplyState extends State<TopicReply> {
         Icons.feedback_outlined
       ],
       tap: (res) async {
-        if (res == 0) {
+        if (res == "屏蔽此贴") {
           await setBlackWord(widget.data["title"], context);
           Navigator.pop(context);
           showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
@@ -258,7 +258,7 @@ class _TopicReplyState extends State<TopicReply> {
             isBlack = true;
           });
         }
-        if (res == 1) {
+        if (res == "屏蔽此人") {
           await setBlackWord(widget.data["user_nick_name"], context);
           Navigator.pop(context);
           showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
@@ -266,7 +266,7 @@ class _TopicReplyState extends State<TopicReply> {
             isBlack = true;
           });
         }
-        if (res == 2) {
+        if (res == "收藏") {
           Navigator.pop(context);
           showToast(context: context, type: XSToast.loading);
           await Api().user_userfavorite({
@@ -277,7 +277,7 @@ class _TopicReplyState extends State<TopicReply> {
           hideToast();
           showToast(context: context, type: XSToast.success, txt: "收藏成功");
         }
-        if (res == 3) {
+        if (res == "复制帖子链接") {
           Clipboard.setData(
             ClipboardData(
                 text: base_url +
@@ -287,7 +287,7 @@ class _TopicReplyState extends State<TopicReply> {
           Navigator.pop(context);
           showToast(context: context, type: XSToast.success, txt: "复制成功");
         }
-        if (res == 4) {
+        if (res == "举报反馈") {
           Navigator.pop(context);
           _feedback();
         }

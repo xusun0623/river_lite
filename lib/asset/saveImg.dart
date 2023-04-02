@@ -20,7 +20,7 @@ saveImge(
         ? [Icons.save_alt_outlined, Icons.downloading_rounded]
         : [Icons.save_alt_outlined],
     tap: (res) async {
-      if (res == 0) {
+      if (res == "保存原图") {
         Navigator.pop(context);
         showToast(
           context: context,
@@ -41,7 +41,7 @@ saveImge(
           showToast(context: context, type: XSToast.success, txt: "保存成功！");
         }
       }
-      if (res == 1) {
+      if (res == "一键保存所有原图") {
         Navigator.pop(context);
         showToast(
           duration: 10000,

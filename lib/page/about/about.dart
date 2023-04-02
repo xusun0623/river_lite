@@ -193,10 +193,10 @@ class _AboutCardState extends State<AboutCard> {
             ],
             tap: (res) async {
               Navigator.of(context).pop();
-              if (res == 0) {
+              if (res == "复制链接") {
                 Clipboard.setData(ClipboardData(text: widget.cont));
               }
-              if (res == 1) {
+              if (res == "打开网站") {
                 xsLanuch(url: widget.cont);
               }
             },

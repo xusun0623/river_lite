@@ -409,7 +409,7 @@ class _PhotoCardState extends State<PhotoCard> {
         Icons.copy,
       ],
       tap: (res) async {
-        if (res == 0) {
+        if (res == "屏蔽此贴") {
           await setBlackWord(widget.data["title"], context);
           Navigator.pop(context);
           showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
@@ -417,7 +417,7 @@ class _PhotoCardState extends State<PhotoCard> {
             isBlack = true;
           });
         }
-        if (res == 1) {
+        if (res == "屏蔽此人") {
           await setBlackWord(widget.data["name"], context);
           Navigator.pop(context);
           showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
@@ -425,7 +425,7 @@ class _PhotoCardState extends State<PhotoCard> {
             isBlack = true;
           });
         }
-        if (res == 2) {
+        if (res == "收藏") {
           Navigator.pop(context);
           showToast(context: context, type: XSToast.loading);
           await Api().user_userfavorite({
@@ -436,7 +436,7 @@ class _PhotoCardState extends State<PhotoCard> {
           hideToast();
           showToast(context: context, type: XSToast.success, txt: "收藏成功");
         }
-        if (res == 3) {
+        if (res == "复制帖子链接") {
           Clipboard.setData(
             ClipboardData(
                 text: base_url +

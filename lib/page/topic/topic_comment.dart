@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
@@ -142,6 +144,61 @@ class _CommentState extends State<Comment> {
       }
     }
     return Column(children: tmp);
+  }
+
+  deleteComment() async {
+    // print("删除");
+    // return;
+    showToast(
+      context: context,
+      type: XSToast.loading,
+      txt: "请稍后…",
+      duration: 5000,
+    );
+    String formhash = await getTopicFormHash(widget.topic_id);
+    // String fid = widget.fid.toString();
+    String tid = widget.topic_id.toString();
+    Response tmp = await XHttp().pureHttpWithCookie(
+      hadCookie: true,
+      url:
+          "https://bbs.uestc.edu.cn/home.php?mod=magic&action=mybox&infloat=yes&inajax=1",
+      param: {
+        "formhash": formhash,
+        "handlekey": "a_repent_" + widget.data["reply_posts_id"].toString(),
+        "operation": "use",
+        "magicid": 20,
+        "pid": widget.data["reply_posts_id"],
+        "ptid": tid,
+        "usesubmit": "yes",
+        "idtype": "pid",
+        "id": widget.data["reply_posts_id"].toString() + ":" + tid.toString(),
+      },
+    );
+    Clipboard.setData(ClipboardData(text: tmp.data.toString()));
+    String tmp_txt = tmp.data.toString();
+    hideToast();
+    if (tmp_txt.contains("抱歉，您选择的道具不存在")) {
+      Fluttertoast.showToast(
+        msg: "抱歉，您选择的道具不存在",
+        gravity: ToastGravity.CENTER,
+      );
+    } else if (tmp_txt.contains("已删除")) {
+      Fluttertoast.showToast(
+        msg: "你操作的评论已删除，请手动刷新页面",
+        gravity: ToastGravity.CENTER,
+      );
+    } else if (tmp_txt.contains("24 小时内您只能使用 3 次本道具")) {
+      Fluttertoast.showToast(
+        msg: "24 小时内您只能使用 3 次本道具",
+        gravity: ToastGravity.CENTER,
+      );
+    } else {
+      Fluttertoast.showToast(
+        msg: "出错了，你可以尝试在网页端删除此评论",
+        gravity: ToastGravity.CENTER,
+      );
+    }
+    print("${tmp.data.toString()}");
   }
 
   stickyForm() async {
@@ -352,6 +409,7 @@ class _CommentState extends State<Comment> {
         _getBlack() ? "取消屏蔽此帖子" : "屏蔽此贴的ID",
         ...(is_my_comment ? ["追加内容"] : []),
         ...(is_me ? [widget.data["poststick"] == 1 ? "取消置顶评论" : "置顶评论"] : []),
+        ...(is_my_comment ? ["删除评论"] : []),
       ],
       icons: [
         Icons.copy,
@@ -365,32 +423,37 @@ class _CommentState extends State<Comment> {
                     : Icons.vertical_align_top
               ]
             : []),
+        ...(is_my_comment ? [Icons.delete_outline_rounded] : []),
       ],
       tap: (res) async {
         Navigator.pop(context);
-        if (res == 0) {
+        if (res == "复制文本内容") {
           Clipboard.setData(
             ClipboardData(text: copy_txt),
           );
           showToast(context: context, type: XSToast.success, txt: "复制成功！");
         }
-        if (res == 1) {
+        if (res == "举报反馈") {
           _feedback();
         }
-        if (res == 2) {
+        if (res == "取消屏蔽此帖子" || res == "屏蔽此贴的ID") {
           _blackID();
         }
-        if (res == 3) {
-          if (is_my_comment) {
-            _append_cont();
-          }
-          if (!is_my_comment && is_me) {
-            stickyForm();
-          }
+        if (res == "追加内容") {
+          _append_cont();
         }
-        if (res == 4) {
-          //水水
+        if (res == "取消置顶评论" || res == "置顶评论") {
           stickyForm();
+        }
+        if (res == "删除评论") {
+          showModal(
+            context: context,
+            title: "请确认",
+            cont: "删除此回复需要一张【悔悟卡】道具，你可以在道具商店购买；并且，每天能删除的帖子数量是有限制的",
+            confirm: () {
+              deleteComment();
+            },
+          );
         }
       },
     );
