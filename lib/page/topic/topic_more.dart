@@ -227,7 +227,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
     showAction(
       context: context,
       options: [
-        "展示二维码",
+        // "展示二维码",
         "复制帖子链接",
         "举报反馈",
         "屏蔽此贴",
@@ -237,7 +237,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         // ...(widget.data["forumName"] == "水手之家" ? ["转帖到水区"] : []),
       ],
       icons: [
-        Icons.qr_code,
+        // Icons.qr_code,
         Icons.copy,
         Icons.feedback_outlined,
         Icons.block,
