@@ -18,6 +18,24 @@ import 'package:offer_show/util/storage.dart';
 
 /// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 class Api {
+  buyItem(Map m) async {
+    /**
+     * formhash: aa6ff688
+     * operation: buy
+     * mid: namepost
+     * magicnum: 0
+     * operatesubmit: yes
+     * operatesubmit: true
+     */
+    return await XHttp().pureHttpWithCookie(
+      method: "POST",
+      url:
+          "https://bbs.uestc.edu.cn/home.php?mod=magic&action=shop&infloat=yes",
+      param: m,
+      hadCookie: true,
+    );
+  }
+
   post_append({
     int tid,
     int pid,

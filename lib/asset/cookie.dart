@@ -10,11 +10,12 @@ getWebCookie({
   String pwd = await getStorage(key: "pwd", initData: "");
 
   Response response = await XHttp().pureHttp(
-      url: base_url + "member.php?mod=logging&action=login&loginsubmit=yes",
-      param: {
-        "username": name,
-        "password": pwd,
-      });
+    url: base_url + "member.php?mod=logging&action=login&loginsubmit=yes",
+    param: {
+      "username": name,
+      "password": pwd,
+    },
+  );
   if (response.statusCode == 200) {
     await setStorage(
       key: "cookie",
