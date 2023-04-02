@@ -1,6 +1,7 @@
 import 'package:offer_show/page/404.dart';
 import 'package:offer_show/page/about/about.dart';
 import 'package:offer_show/page/account/account.dart';
+import 'package:offer_show/page/bag/bag.dart';
 import 'package:offer_show/page/blacklist/black_list.dart';
 import 'package:offer_show/page/broke.dart';
 import 'package:offer_show/page/collection_detail/collection_detail.dart';
@@ -43,6 +44,7 @@ import 'package:offer_show/page/water_total/water_total.dart';
 final routers = {
   "/": () => Start(),
   "/shop": () => Shop(),
+  "/bag": () => MyBag(),
   "/new": (data) => PostNew(board_id: data),
   "/new_mix": (data) => PostNewMix(board_id: data),
   "/new_transaction": () => PostNewTransaction(),

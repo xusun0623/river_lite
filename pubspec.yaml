@@ -79,6 +79,7 @@ flutter:
   #       - asset: lib/font/MiSans-Regular.ttf
   assets:
     # - lib/font/
+    - lib/img/celebration/
     - lib/emoji/1/
     - lib/emoji/2/
     - lib/emoji/3/

@@ -113,7 +113,9 @@ class _LoginState extends State<Login> {
                     Icon(
                       Icons.done,
                       size: 50,
-                      color: os_deep_blue,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_white
+                          : os_deep_blue,
                     ),
                     Container(height: 10),
                     Text(
@@ -146,8 +148,8 @@ class _LoginState extends State<Login> {
                         if (Navigator.canPop(context)) Navigator.pop(context);
                       },
                       child: Container(
-                        width: 150,
-                        height: 45,
+                        width: 200,
+                        height: 55,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(100)),
                           color: Provider.of<ColorProvider>(context).isDark

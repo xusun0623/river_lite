@@ -750,7 +750,7 @@ class _TopicDetailState extends State<TopicDetail> {
       ),
     ];
     tmp.add(comment.length == 0
-        ? Empty(txt: _select == 0 ? "暂无评论, 快去抢沙发吧~" : "楼主没有发表评论~")
+        ? Empty(txt: _select == 0 ? "暂无评论, 快去抢沙发吧" : "楼主没有发表评论~")
         : Container());
     for (var i = 0; i < comment.length; i++) {
       tmp.add(Comment(

@@ -1345,6 +1345,7 @@ class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
     return Container(
       height: MediaQuery.of(context).size.height - 120,
       child: ListView(
+        physics: ClampingScrollPhysics(),
         children: [
           Container(height: 5),
           Container(

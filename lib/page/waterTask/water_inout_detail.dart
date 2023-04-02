@@ -28,6 +28,7 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
   bool loading = false;
   bool load_done = false;
   bool showBackToTop = false;
+  bool foldCard = false;
   ScrollController _scrollController = new ScrollController();
   /* { "type": "", "change": "", "detail": "", "time": "" } */
 
@@ -35,7 +36,12 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
     List<Widget> tmp = [];
     if (data != null && data.length != 0) {
       data.forEach((element) {
-        tmp.add(ResponsiveWidget(child: ListCard(data: element)));
+        tmp.add(ResponsiveWidget(
+          child: ListCard(
+            data: element,
+            fold: foldCard,
+          ),
+        ));
       });
     }
     return tmp;
@@ -125,6 +131,21 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
           backgroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_back
               : os_white,
+          actions: [
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  foldCard = !foldCard;
+                });
+              },
+              icon: Icon(
+                foldCard
+                    ? Icons.unfold_more_rounded
+                    : Icons.unfold_less_rounded,
+              ),
+            ),
+            Container(width: 5),
+          ],
           elevation: 0,
           title: Text("积分记录", style: TextStyle(fontSize: 16)),
           foregroundColor: Provider.of<ColorProvider>(context).isDark
@@ -174,10 +195,12 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
 class ListCard extends StatefulWidget {
   int type; //0-加水 1-扣水
   Map data;
+  bool fold;
   ListCard({
     Key key,
     this.type,
     this.data,
+    this.fold,
   }) : super(key: key);
 
   @override
@@ -190,7 +213,7 @@ class _ListCardState extends State<ListCard> {
     return Bounce(
       duration: Duration(milliseconds: 100),
       onPressed: () {},
-      child: Container(
+      child: AnimatedContainer(
         margin: EdgeInsets.symmetric(horizontal: 7.5, vertical: 5),
         padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
         decoration: BoxDecoration(
@@ -204,57 +227,69 @@ class _ListCardState extends State<ListCard> {
                 : [Color(0xFFE83C2D), Color(0xFFFA6E54)],
           ),
         ),
+        duration: Duration(microseconds: 100),
         child: Stack(
           children: [
             Container(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.data["type"] ?? "帖子评分",
-                    style: TextStyle(
-                      color: Color.fromRGBO(255, 255, 255, 0.8),
-                      fontSize: 14,
-                    ),
-                  ),
-                  Container(height: 5),
-                  Text(
-                    widget.data["change"] ?? "水滴+6",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: os_white,
-                    ),
-                  ),
-                  Container(height: 5),
-                  Text(
-                    widget.data["detail"] ??
-                        "给 4月22日天府绿道100km环骑经验分享 的帖子评分扣除的积分",
-                    style: TextStyle(
-                      color: Color.fromRGBO(255, 255, 255, 0.8),
-                      fontSize: 15,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  Container(height: 7.5),
-                  Text(
-                    widget.data["time"] ?? "2022-05-02 18:07",
-                    style: TextStyle(
-                      color: Color.fromRGBO(255, 255, 255, 0.4),
-                      fontSize: 14,
-                    ),
-                  ),
+                  widget.fold
+                      ? Text(
+                          widget.data["change"] ?? "",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: os_white,
+                          ),
+                        )
+                      : Text(
+                          widget.data["type"] ?? "",
+                          style: TextStyle(
+                            color: Color.fromRGBO(255, 255, 255, 0.8),
+                            fontSize: 14,
+                          ),
+                        ),
+                  widget.fold ? Container() : Container(height: 5),
+                  widget.fold
+                      ? Container()
+                      : Text(
+                          widget.data["change"] ?? "",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: os_white,
+                          ),
+                        ),
+                  widget.fold ? Container() : Container(height: 7.5),
+                  widget.fold
+                      ? Container()
+                      : Text(
+                          widget.data["time"] ?? "",
+                          style: TextStyle(
+                            color: Color.fromRGBO(255, 255, 255, 0.4),
+                            fontSize: 14,
+                          ),
+                        ),
                 ],
               ),
             ),
             Positioned(
               right: 0,
               bottom: 0,
-              child: os_svg(
-                width: 110,
-                height: 110,
-                path: "lib/img/water.svg",
-              ),
+              child: widget.fold
+                  ? Text(
+                      widget.data["type"] ?? "",
+                      style: TextStyle(
+                        color: Color.fromRGBO(255, 255, 255, 0.8),
+                        fontSize: 14,
+                      ),
+                    )
+                  : os_svg(
+                      width: widget.fold ? 30 : 80,
+                      height: widget.fold ? 30 : 80,
+                      path: "lib/img/water.svg",
+                    ),
             )
           ],
         ),

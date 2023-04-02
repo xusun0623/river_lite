@@ -103,6 +103,28 @@ class _ShopState extends State<Shop> {
             Navigator.of(context).pop();
           },
         ),
+        actions: [
+          myInkWell(
+            tap: () {
+              Navigator.of(context).pushNamed("/bag");
+            },
+            color: Colors.transparent,
+            widget: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Text(
+                "我的背包",
+                style: TextStyle(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            radius: 10,
+          ),
+        ],
         backgroundColor:
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       ),
@@ -168,7 +190,9 @@ class _PopChatState extends State<PopChat> {
         .getElementsByTagName("p")[0]
         .innerHtml
         .split("<script")[0];
-    Navigator.pop(context);
+    if (!msg.contains("抱歉")) {
+      Navigator.pop(context);
+    }
     Fluttertoast.showToast(
       msg: msg,
       gravity: ToastGravity.CENTER,
@@ -226,6 +250,7 @@ class _PopChatState extends State<PopChat> {
     setState(() {
       loading = false;
     });
+    print(MediaQuery.of(context).size.height);
   }
 
   TextStyle titleStyle() {
@@ -276,244 +301,253 @@ class _PopChatState extends State<PopChat> {
               ),
             ),
           )
-        : Column(
-            children: [
-              Container(height: 30),
-              Text(
-                "请确认你的订单",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : os_black,
-                  fontSize: 30,
-                  fontWeight: FontWeight.w900,
-                ),
+        : Container(
+            height: MediaQuery.of(context).size.height - 100,
+            child: ListView(
+              physics: ClampingScrollPhysics(),
+              shrinkWrap: true,
+              children: getWidgets(),
+            ),
+          );
+  }
+
+  List<Widget> getWidgets() {
+    return [
+      Container(height: 50),
+      Text(
+        "请确认你的订单",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+          fontSize: 30,
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+      Container(height: 15),
+      Text(
+        "水滴并非实体/数字货币，仅能在本论坛内流通，不能与实体/数字货币兑换",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_black,
+        ),
+      ),
+      Container(height: 40),
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+        decoration: BoxDecoration(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_grey,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CachedNetworkImage(
+              imageUrl: widget.data.img,
+              width: 40,
+              height: 40,
+            ),
+            Container(width: 10),
+            DefaultTextStyle(
+              style: TextStyle(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : Color(0xff575757),
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
               ),
-              Container(height: 10),
-              Text(
-                "水滴并非实体/数字货币，仅能在本论坛内流通，不能与实体/数字货币兑换",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : os_black,
-                ),
-              ),
-              Container(height: 20),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 25),
-                decoration: BoxDecoration(
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_back
-                      : os_grey,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CachedNetworkImage(
-                      imageUrl: widget.data.img,
-                      width: 40,
-                      height: 40,
-                    ),
-                    Container(width: 10),
-                    DefaultTextStyle(
-                      style: TextStyle(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_dark_white
-                            : Color(0xff575757),
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(widget.data.name, style: titleStyle()),
-                          Container(height: 3),
-                          Text.rich(
-                            TextSpan(
-                              style: TextStyle(
-                                color: os_red,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.lineThrough,
-                              ),
-                              text: widget.data.price.toString(),
-                              children: [
-                                TextSpan(
-                                  text: " 水滴/张（原价）",
-                                  style: TextStyle(
-                                    color: Provider.of<ColorProvider>(context)
-                                            .isDark
-                                        ? os_dark_dark_white
-                                        : Color(0xff575757),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(height: 2),
-                          Text.rich(
-                            TextSpan(
-                              style: TextStyle(
-                                color: os_red,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              text: now_price.toString(),
-                              children: [
-                                TextSpan(
-                                  text: " 水滴/张（折扣价）",
-                                  style: TextStyle(
-                                    color: Color(0xff575757),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(height: 2),
-                          Text(
-                            "我目前有${total_water}水滴 -> ${total_water - purchase_num * now_price}水滴",
-                          ),
-                          Container(height: 12),
-                          Text("重量", style: titleStyle()),
-                          Container(height: 3),
-                          Text("${weight}"),
-                          Container(height: 12),
-                          Text("背包剩余容量", style: titleStyle()),
-                          Container(height: 3),
-                          Text(
-                            "${available_space} -> ${available_space - weight * purchase_num}",
-                          ),
-                          Container(height: 12),
-                          Text("库存", style: titleStyle()),
-                          Container(height: 3),
-                          Text(
-                            "${remain_num} -> ${remain_num - purchase_num}",
-                          ),
-                          Container(height: 12),
-                          remark == ""
-                              ? Container()
-                              : Text("备注", style: titleStyle()),
-                          remark == "" ? Container() : Container(height: 3),
-                          remark == ""
-                              ? Container()
-                              : Text(
-                                  "${remark}",
-                                )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(height: 10),
-              Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Bounce(
-                    onPressed: () {
-                      changeNum(-1);
-                    },
-                    duration: Duration(milliseconds: 100),
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_back
-                            : os_grey,
-                        borderRadius: BorderRadius.circular(15),
+                  Text(widget.data.name, style: titleStyle()),
+                  Container(height: 3),
+                  Text.rich(
+                    TextSpan(
+                      style: TextStyle(
+                        color: os_red,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.lineThrough,
                       ),
-                      child: Icon(
-                        Icons.remove,
-                        size: 18,
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_dark_white
-                            : os_black,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_back
-                            : os_grey,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Center(
-                        child: Text(
-                          purchase_num.toString(),
+                      text: widget.data.price.toString(),
+                      children: [
+                        TextSpan(
+                          text: " 水滴/张（原价）",
                           style: TextStyle(
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_dark_white
-                                : os_black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                                : Color(0xff575757),
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                  Bounce(
-                    onPressed: () {
-                      changeNum(1);
-                    },
-                    duration: Duration(milliseconds: 100),
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_back
-                            : os_grey,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Icon(
-                        Icons.add,
-                        size: 18,
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_dark_white
-                            : os_black,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(height: 20),
-              myInkWell(
-                tap: buyItem,
-                radius: 15,
-                color: os_deep_blue,
-                widget: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "确认",
+                  Container(height: 2),
+                  Text.rich(
+                    TextSpan(
                       style: TextStyle(
-                        color: os_white,
-                        fontSize: 16,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_white
+                            : os_red,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
+                      text: now_price.toString(),
+                      children: [
+                        TextSpan(
+                          text: " 水滴/张（折扣价）",
+                          style: TextStyle(
+                            color: Color(0xff575757),
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
+                  Container(height: 2),
+                  Text(
+                    "我目前有${total_water}水滴 -> ${total_water - purchase_num * now_price}水滴",
+                  ),
+                  Container(height: 12),
+                  Text("重量", style: titleStyle()),
+                  Container(height: 3),
+                  Text("${weight}"),
+                  Container(height: 12),
+                  Text("背包剩余容量", style: titleStyle()),
+                  Container(height: 3),
+                  Text(
+                    "${available_space} -> ${available_space - weight * purchase_num}",
+                  ),
+                  Container(height: 12),
+                  Text("库存", style: titleStyle()),
+                  Container(height: 3),
+                  Text(
+                    "${remain_num} -> ${remain_num - purchase_num}",
+                  ),
+                  Container(height: 12),
+                  remark == "" ? Container() : Text("备注", style: titleStyle()),
+                  remark == "" ? Container() : Container(height: 3),
+                  remark == ""
+                      ? Container()
+                      : Text(
+                          "${remark}",
+                        )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      Container(height: 10),
+      Row(
+        children: [
+          Bounce(
+            onPressed: () {
+              changeNum(-1);
+            },
+            duration: Duration(milliseconds: 100),
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_back
+                    : os_grey,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Icon(
+                Icons.remove,
+                size: 18,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : os_black,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              height: 60,
+              decoration: BoxDecoration(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_back
+                    : os_grey,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Center(
+                child: Text(
+                  purchase_num.toString(),
+                  style: TextStyle(
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : os_black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-            ],
-          );
+            ),
+          ),
+          Bounce(
+            onPressed: () {
+              changeNum(1);
+            },
+            duration: Duration(milliseconds: 100),
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_back
+                    : os_grey,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Icon(
+                Icons.add,
+                size: 18,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_dark_white
+                    : os_black,
+              ),
+            ),
+          ),
+        ],
+      ),
+      Container(height: 20),
+      myInkWell(
+        tap: buyItem,
+        radius: 15,
+        color: os_deep_blue,
+        widget: Container(
+          width: MediaQuery.of(context).size.width,
+          height: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Center(
+            child: Text(
+              "确认",
+              style: TextStyle(
+                color: os_white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ),
+      Container(height: 20),
+    ];
   }
 }
 
@@ -608,7 +642,11 @@ class _GoodCardState extends State<GoodCard> {
                                     TextSpan(
                                       text: "${widget.data.price}",
                                       style: TextStyle(
-                                        color: os_red,
+                                        color:
+                                            Provider.of<ColorProvider>(context)
+                                                    .isDark
+                                                ? os_dark_white
+                                                : os_red,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
@@ -636,12 +674,11 @@ class _GoodCardState extends State<GoodCard> {
                           ),
                         ],
                       ),
-                      SizedBox(width: 95),
+                      SizedBox(width: 93),
                       myInkWell(
                         radius: 15,
-                        color: widget.data.soldOut
-                            ? Color(0xffb1b1b1)
-                            : os_deep_blue,
+                        color:
+                            widget.data.soldOut ? os_white_opa : os_deep_blue,
                         tap: () {
                           if (!widget.data.soldOut) showChat();
                         },
@@ -660,7 +697,10 @@ class _GoodCardState extends State<GoodCard> {
                                 widget.data.soldOut ? "此道具缺货" : "购买",
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_white
+                                          : Colors.white,
                                   fontSize: 14,
                                   fontFamily: "PingFang SC",
                                   fontWeight: FontWeight.w600,

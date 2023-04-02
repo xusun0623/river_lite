@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
-import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -62,25 +61,36 @@ class _WaterTotalState extends State<WaterTotal> {
               title: "水滴答题",
               tip: "自动答题，水滴多多",
               url: "/question",
-              img: "lib/img/water_total/1.svg",
+              icon: Icons.question_answer,
+              color: os_wonderful_color[0],
+            ),
+            NavigatorCard(
+              title: "我的背包",
+              tip: "点击查看所有物品",
+              url: "/bag",
+              icon: Icons.padding_rounded,
+              color: os_wonderful_color[2],
             ),
             NavigatorCard(
               title: "道具商店",
-              tip: "自动答题，水滴多多",
+              tip: "购买道具",
               url: "/shop",
-              img: "lib/img/water_total/1.svg",
+              icon: Icons.shopping_cart_rounded,
+              color: os_wonderful_color[1],
             ),
             NavigatorCard(
               title: "水滴任务",
-              tip: "进度查看，领取任务",
+              tip: "领取、查看任务进度",
               url: "/water_task",
-              img: "lib/img/water_total/2.svg",
+              icon: Icons.task_rounded,
+              color: os_wonderful_color[3],
             ),
             NavigatorCard(
               title: "积分记录",
-              tip: "水滴明细，收支详情",
+              tip: "水滴收支详情",
               url: "/water_inout_detail",
-              img: "lib/img/water_total/3.svg",
+              icon: Icons.view_list_rounded,
+              color: os_wonderful_color[4],
             ),
           ],
         ),
@@ -93,13 +103,15 @@ class NavigatorCard extends StatefulWidget {
   String title;
   String tip;
   String url;
-  String img;
+  IconData icon;
+  Color color;
   NavigatorCard({
     Key key,
     this.title,
     this.tip,
     this.url,
-    this.img,
+    this.icon,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -116,12 +128,12 @@ class _NavigatorCardState extends State<NavigatorCard> {
         },
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
           decoration: BoxDecoration(
               color: Provider.of<ColorProvider>(context).isDark
-                  ? Color(0x33ffffff)
+                  ? os_light_dark_card
                   : os_white,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: BorderRadius.all(Radius.circular(20)),
               boxShadow: [
                 BoxShadow(
                   color: Color(0x07000000),
@@ -132,9 +144,14 @@ class _NavigatorCardState extends State<NavigatorCard> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
+                  Icon(
+                    widget.icon,
+                    size: 30,
+                    color: widget.color,
+                  ),
+                  Container(width: 10),
                   Text(
                     widget.title,
                     style: TextStyle(
@@ -145,7 +162,10 @@ class _NavigatorCardState extends State<NavigatorCard> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Container(height: 3),
+                ],
+              ),
+              Row(
+                children: [
                   Text(
                     widget.tip,
                     style: TextStyle(
@@ -156,13 +176,16 @@ class _NavigatorCardState extends State<NavigatorCard> {
                       // fontWeight: FontWeight.bold,
                     ),
                   ),
+                  Container(width: 5),
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    size: 16,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : os_deep_grey,
+                  ),
                 ],
               ),
-              os_svg(
-                path: widget.img,
-                // width: 80,
-                height: 80,
-              )
             ],
           ),
         ),
