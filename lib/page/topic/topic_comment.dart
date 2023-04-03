@@ -37,6 +37,7 @@ class Comment extends StatefulWidget {
   int index;
   Function tap;
   Function fresh;
+  bool isListView;
 
   Comment(
       {Key key,
@@ -48,6 +49,7 @@ class Comment extends StatefulWidget {
       this.tap,
       this.add_1,
       this.fresh,
+      this.isListView,
       this.index})
       : super(key: key);
 
@@ -112,16 +114,18 @@ class _CommentState extends State<Comment> {
     for (var i = 0; i < data.length; i++) {
       var e = data[i];
       int img_count = 0;
-      if (imgLists.length > 2 &&
+      if ((imgLists.length >
+              ((isDesktop() || (widget.isListView ?? false)) ? 0 : 2) &&
           e["type"] == 1 &&
           i < data.length - 1 &&
-          data[i + 1]["type"] == 1) {
+          data[i + 1]["type"] == 1)) {
         List<Widget> renderImg = [];
         while (e["type"] == 1 && i + img_count < data.length && true) {
           renderImg.add(DetailCont(
             data: data[i + img_count],
             imgLists: imgLists,
             isComment: true,
+            fade: widget.isListView,
           ));
           img_count++; //有多少张图片连续
         }
@@ -139,6 +143,7 @@ class _CommentState extends State<Comment> {
             data: e,
             removeSelectable: true,
             imgLists: imgLists,
+            fade: widget.isListView,
           ),
         ));
       }

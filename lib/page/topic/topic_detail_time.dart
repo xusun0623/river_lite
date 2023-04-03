@@ -18,10 +18,12 @@ class TopicDetailTime extends StatefulWidget {
   var data;
   Function refresh;
   Function capture;
+  bool isListView;
   TopicDetailTime({
     Key key,
     this.refresh,
     this.capture,
+    this.isListView,
     @required this.data,
   }) : super(key: key);
 
@@ -286,7 +288,7 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                   ]),
                 ),
                 radius: 10),
-            !(Platform.isIOS || Platform.isAndroid)
+            !(Platform.isIOS || Platform.isAndroid) || widget.isListView
                 ? Container()
                 : myInkWell(
                     color: Colors.transparent,

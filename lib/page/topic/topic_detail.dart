@@ -69,6 +69,7 @@ class _TopicDetailState extends State<TopicDetail> {
   bool isNoAccess = false; //帖子是否没有访问权限
   bool isDispose = false; //是否释放了页面
   bool sending = false; //是否正在发送
+  bool isListView = true; //改为listview版本
   String placeholder =
       (isMacOS() ? "请在此编辑回复，按住control键+空格键以切换中英文输入法" : "请在此编辑回复");
   List<Map> atUser = [];
@@ -295,12 +296,13 @@ class _TopicDetailState extends State<TopicDetail> {
   }
 
   Future _getData() async {
+    int limit = 35;
     var tmp = await Api().forum_postlist({
       "topicId": widget.topicID,
       "authorId": _select == 0 ? 0 : data["topic"]["user_id"],
       "order": _sort,
       "page": 1,
-      "pageSize": 20,
+      "pageSize": limit,
     });
     // await Future.delayed(Duration(seconds: 1000));
     if (tmp.toString().contains("您没有权限访问该版块")) {
@@ -319,13 +321,15 @@ class _TopicDetailState extends State<TopicDetail> {
       if (tmp["rs"] != 0) {
         comment = tmp["list"];
         data = tmp;
-        load_done = ((tmp["list"] ?? []).length < 20);
-        if (total_num == 0) {
-          setState(() {
-            total_num = data["total_num"];
-            stick_num = comment.length - 20; //置顶的评论数量
-          });
-        }
+        load_done = ((tmp["list"] ?? []).length < limit);
+        setState(() {
+          total_num = data["total_num"];
+          isListView = total_num > 100;
+          if (total_num == 0) {
+            //置顶的评论数量
+            stick_num = comment.length - limit;
+          }
+        });
       } else {
         load_done = true;
         data = null;
@@ -345,7 +349,7 @@ class _TopicDetailState extends State<TopicDetail> {
   void _getComment() async {
     if (loading || load_done) return; //控制因为网络过慢反复请求问题
     loading = true;
-    const nums = 20;
+    const nums = 2000;
     var tmp = await Api().forum_postlist({
       "topicId": widget.topicID,
       "authorId": _select == 0 ? 0 : data["topic"]["user_id"],
@@ -448,7 +452,7 @@ class _TopicDetailState extends State<TopicDetail> {
     for (var i = 0; i < data["topic"]["content"].length; i++) {
       var e = data["topic"]["content"][i];
       int img_count = 0;
-      if (imgLists.length > (isDesktop() ? 0 : 3) &&
+      if (imgLists.length > (isDesktop() || isListView ? 0 : 3) &&
           e["type"] == 1 &&
           i < data["topic"]["content"].length - 1 &&
           data["topic"]["content"][i + 1]["type"] == 1) {
@@ -461,6 +465,7 @@ class _TopicDetailState extends State<TopicDetail> {
             title: data["topic"]["title"],
             desc: s_tmp,
             imgLists: imgLists,
+            fade: isListView,
           ));
           img_count++; //有多少张图片连续
         }
@@ -547,6 +552,7 @@ class _TopicDetailState extends State<TopicDetail> {
                 imgLists: imgLists,
                 title: data["topic"]["title"],
                 desc: s_tmp,
+                fade: isListView,
               ),
             ),
           ));
@@ -687,6 +693,7 @@ class _TopicDetailState extends State<TopicDetail> {
       data["boardId"] != 61 ? Container() : _getSecondBuy(), //二手专区
       TopicDetailTime(
         data: data,
+        isListView: isListView,
         capture: () {
           _captureScreenshot();
         },
@@ -754,6 +761,7 @@ class _TopicDetailState extends State<TopicDetail> {
         : Container());
     for (var i = 0; i < comment.length; i++) {
       tmp.add(Comment(
+        isListView: isListView,
         fid: data["boardId"],
         fresh: () async {
           await _getData();
@@ -868,19 +876,7 @@ class _TopicDetailState extends State<TopicDetail> {
             : os_white,
         body: data == null || data["topic"] == null
             ? ((isInvalid || isNoAccess)
-                ? Center(
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 150),
-                      child: Text(
-                        isInvalid ? "抱歉，指定的主题不存在或已被删除或正在被审核" : "抱歉，您没有权限访问该版块",
-                        style: TextStyle(
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
-                              : os_black,
-                        ),
-                      ),
-                    ),
-                  )
+                ? DeletedTopic(isInvalid: isInvalid)
                 : Loading(
                     showRefresh: true,
                     showError: load_done,
@@ -908,25 +904,7 @@ class _TopicDetailState extends State<TopicDetail> {
                     },
                   ))
             : _isBlack() || isBlack
-                ? Container(
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_detail_back
-                        : os_white,
-                    padding: EdgeInsets.only(bottom: 150),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 80),
-                      child: Center(
-                        child: Text(
-                          "该帖子内容或用户已被你屏蔽，屏蔽关键词为：" + blackKeyWord,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Provider.of<ColorProvider>(context).isDark
-                                ? os_dark_white
-                                : os_black,
-                          ),
-                        ),
-                      ),
-                    ))
+                ? BlackedTopic(blackKeyWord: blackKeyWord)
                 : Container(
                     child: Stack(
                       children: [
@@ -948,30 +926,38 @@ class _TopicDetailState extends State<TopicDetail> {
                               show: showBackToTop,
                               animation: true,
                               controller: _scrollController,
-                              child: ListView(
-                                //physics: BouncingScrollPhysics(),
-                                controller: _scrollController,
-                                children: [
-                                  SingleChildScrollView(
-                                    child: Screenshot(
-                                      child: Container(
-                                        color:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? os_light_dark_card
-                                                : os_white,
-                                        child: ListView(
-                                          shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          children: _buildTotal(),
+                              child: isListView
+                                  ? ListView.builder(
+                                      controller: _scrollController,
+                                      itemCount: _buildTotal().length,
+                                      itemBuilder: (context, index) {
+                                        return _buildTotal()[index];
+                                      },
+                                    )
+                                  : ListView(
+                                      //physics: BouncingScrollPhysics(),
+                                      controller: _scrollController,
+                                      children: [
+                                        SingleChildScrollView(
+                                          child: Screenshot(
+                                            child: Container(
+                                              color: Provider.of<ColorProvider>(
+                                                          context)
+                                                      .isDark
+                                                  ? os_light_dark_card
+                                                  : os_white,
+                                              child: ListView(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                children: _buildTotal(),
+                                              ),
+                                            ),
+                                            controller: screenshotController,
+                                          ),
                                         ),
-                                      ),
-                                      controller: screenshotController,
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
                             ),
                           ),
                         ),
@@ -1117,6 +1103,64 @@ class _TopicDetailState extends State<TopicDetail> {
                       ],
                     ),
                   ),
+      ),
+    );
+  }
+}
+
+class BlackedTopic extends StatelessWidget {
+  const BlackedTopic({
+    Key key,
+    @required this.blackKeyWord,
+  }) : super(key: key);
+
+  final String blackKeyWord;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_detail_back
+            : os_white,
+        padding: EdgeInsets.only(bottom: 150),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 80),
+          child: Center(
+            child: Text(
+              "该帖子内容或用户已被你屏蔽，屏蔽关键词为：" + blackKeyWord,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
+              ),
+            ),
+          ),
+        ));
+  }
+}
+
+class DeletedTopic extends StatelessWidget {
+  const DeletedTopic({
+    Key key,
+    @required this.isInvalid,
+  }) : super(key: key);
+
+  final bool isInvalid;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        margin: EdgeInsets.only(bottom: 150),
+        child: Text(
+          isInvalid ? "抱歉，指定的主题不存在或已被删除或正在被审核" : "抱歉，您没有权限访问该版块",
+          style: TextStyle(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
+          ),
+        ),
       ),
     );
   }

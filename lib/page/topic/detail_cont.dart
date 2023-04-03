@@ -35,6 +35,7 @@ class DetailCont extends StatefulWidget {
   String title; //在图片上的描述标题
   bool isComment;
   bool removeSelectable; //  是否可以长按复制文字
+  bool fade;
   DetailCont({
     Key key,
     this.data,
@@ -42,6 +43,7 @@ class DetailCont extends StatefulWidget {
     this.isComment,
     this.desc,
     this.title,
+    this.fade,
     this.removeSelectable,
   }) : super(key: key);
 
@@ -352,7 +354,9 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                   ),
                 );
               },
-              child: widget.imgLists.length > 3 || isDesktop()
+              child: widget.imgLists.length > 3 ||
+                      isDesktop() ||
+                      (widget.fade ?? false)
                   ? (widget.imgLists.length > 20
                       ? Container(
                           color: os_grey,
@@ -409,13 +413,19 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                             progressIndicatorBuilder: (context, url, progress) {
                               return Padding(
                                 padding: const EdgeInsets.all(45.0),
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: Color.fromARGB(255, 172, 172, 172),
-                                  value: progress.progress,
-                                  backgroundColor:
-                                      Color.fromARGB(255, 223, 223, 223),
-                                ),
+                                child: widget.fade ?? false
+                                    ? Icon(
+                                        Icons.image,
+                                        color: os_middle_grey,
+                                      )
+                                    : CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        color:
+                                            Color.fromARGB(255, 172, 172, 172),
+                                        value: progress.progress,
+                                        backgroundColor:
+                                            Color.fromARGB(255, 223, 223, 223),
+                                      ),
                               );
                             },
                           ),
