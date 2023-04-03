@@ -357,7 +357,11 @@ class _TopicDetailState extends State<TopicDetail> {
       "page": ((comment.length - stick_num) / nums + 1).floor(),
       "pageSize": nums,
     });
-    if (tmp["list"] != null && tmp["list"].length != 0) {
+    if (tmp["list"] != null &&
+        tmp["list"].length != 0 &&
+        comment.length < 2000) {
+      comment = tmp["list"];
+    } else {
       comment.addAll(tmp["list"]);
     }
     load_done = ((tmp["list"] ?? []).length < nums);

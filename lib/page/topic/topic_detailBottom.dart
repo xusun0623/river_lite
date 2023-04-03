@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
@@ -160,7 +161,12 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
                     child: myInkWell(
                         tap: () {
                           if (liked == 1 || disliked == 1) return;
-                          _tapDisLike();
+                          showModal(
+                              context: context,
+                              cont: "是否对此帖子点踩？",
+                              confirm: () {
+                                _tapDisLike();
+                              });
                         },
                         color: Colors.transparent,
                         widget: Center(
