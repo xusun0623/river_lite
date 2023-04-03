@@ -15,6 +15,7 @@ import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/new/success_display.dart';
 import 'package:offer_show/page/topic/Your_emoji.dart';
+import 'package:offer_show/page/topic/topic_RichInput.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -317,160 +318,120 @@ class _PostNewMixState extends State<PostNewMix> {
     return Baaaar(
       color:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          backgroundColor: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_back
-              : os_white,
-          elevation: 0,
-          actions: successSent
-              ? []
-              : [
-                  GestureDetector(
-                    child: SelectColumn(
-                      column_id: column_id,
-                      column_child_id: column_child_id,
-                      txt: column_name,
-                      selectColumn: (s, id_1, id_2) {
-                        setState(() {
-                          column_name = s;
-                          column_id = id_1;
-                          column_child_id = id_2;
-                        });
-                      },
+      child: WillPopScope(
+        onWillPop: () async {
+          showModal(
+              context: context,
+              cont: "如果现在退出，你的草稿内容将不会被保存",
+              confirm: () {
+                Navigator.pop(context);
+              });
+          return false;
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            backgroundColor: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_back
+                : os_white,
+            elevation: 0,
+            actions: successSent
+                ? []
+                : [
+                    Transform.translate(
+                      offset: Offset(5, 0),
+                      child: SwitchHead(small: false),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      // 发布
-                      print(title);
-                      cont.forEach((element) {
-                        print("${element.cont}");
-                      });
-                      send();
-                    },
-                    child: ConfirmPost(),
-                  ),
-                  Container(width: 5),
-                ],
-          leading: IconButton(
-            icon: Icon(Icons.chevron_left_rounded,
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_dark_white
-                    : Color(0xFF2E2E2E)),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        body: successSent
-            ? Container(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_back
-                    : os_white,
-                child: SuccessDisplay(),
-              )
-            : Container(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_back
-                    : os_white,
-                child: Stack(
-                  children: [
-                    MixContSection(
-                      state: state,
-                      clickEmoji: clickEmoji,
-                      key: mixContSectionKey,
-                      emitTitle: (res) {
-                        setState(() {
-                          title = res;
-                        });
-                      },
-                      emit: (List<BodyCont> res) {
-                        cont = res;
-                      },
-                      setState: (i) {
-                        setState(() {
-                          state = i;
-                        });
-                      },
-                      focus: () {
-                        if (!isDesktop()) {
+                    // Container(width: 5),
+                    GestureDetector(
+                      child: SelectColumn(
+                        column_id: column_id,
+                        column_child_id: column_child_id,
+                        txt: column_name,
+                        selectColumn: (s, id_1, id_2) {
                           setState(() {
-                            state = 1;
+                            column_name = s;
+                            column_id = id_1;
+                            column_child_id = id_2;
                           });
-                        }
-                      },
+                        },
+                      ),
                     ),
-                    state == 1 && !isDesktop()
-                        ? Positioned(
-                            child: Container(
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_light_dark_card
-                                  : os_white,
-                              height: 50,
-                              width: MediaQuery.of(context).size.width,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        top: BorderSide(
-                                          color: Provider.of<ColorProvider>(
-                                                      context)
-                                                  .isDark
-                                              ? os_light_dark_card
-                                              : os_grey,
-                                        ),
-                                      ),
-                                    ),
-                                    width: MediaQuery.of(context).size.width,
-                                    child: ResponsiveWidget(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          IconButton(
-                                            icon: Icon(
-                                              Icons.emoji_emotions_outlined,
-                                              color: os_deep_grey,
-                                            ),
-                                            onPressed: clickEmoji,
-                                          ),
-                                          IconButton(
-                                            icon: Icon(
-                                              Icons.keyboard_hide_rounded,
-                                              color: os_deep_grey,
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                choosingEmoji = false;
-                                                state = 0;
-                                              });
-                                              FocusManager.instance.primaryFocus
-                                                  .unfocus(); //去除焦点
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            bottom: 0,
-                            left: 0,
-                          )
-                        : Container(),
-                    state == 2
-                        ? Positioned(
-                            child: Container(
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_light_dark_card
-                                  : os_white,
-                              height: 360,
-                              width: MediaQuery.of(context).size.width,
-                              child: ResponsiveWidget(
+                    GestureDetector(
+                      onTap: () {
+                        // 发布
+                        print(title);
+                        cont.forEach((element) {
+                          print("${element.cont}");
+                        });
+                        send();
+                      },
+                      child: ConfirmPost(),
+                    ),
+                    Container(width: 5),
+                  ],
+            leading: IconButton(
+              icon: Icon(Icons.chevron_left_rounded,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : Color(0xFF2E2E2E)),
+              onPressed: () {
+                showModal(
+                    context: context,
+                    cont: "如果现在退出，你的草稿内容将不会被保存",
+                    confirm: () {
+                      Navigator.pop(context);
+                    });
+              },
+            ),
+          ),
+          body: successSent
+              ? Container(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_back
+                      : os_white,
+                  child: SuccessDisplay(),
+                )
+              : Container(
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_back
+                      : os_white,
+                  child: Stack(
+                    children: [
+                      MixContSection(
+                        state: state,
+                        clickEmoji: clickEmoji,
+                        key: mixContSectionKey,
+                        emitTitle: (res) {
+                          setState(() {
+                            title = res;
+                          });
+                        },
+                        emit: (List<BodyCont> res) {
+                          cont = res;
+                        },
+                        setState: (i) {
+                          setState(() {
+                            state = i;
+                          });
+                        },
+                        focus: () {
+                          if (!isDesktop()) {
+                            setState(() {
+                              state = 1;
+                            });
+                          }
+                        },
+                      ),
+                      state == 1 && !isDesktop()
+                          ? Positioned(
+                              child: Container(
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_light_dark_card
+                                        : os_white,
+                                height: 50,
+                                width: MediaQuery.of(context).size.width,
                                 child: Column(
                                   children: [
                                     Container(
@@ -488,30 +449,16 @@ class _PostNewMixState extends State<PostNewMix> {
                                       width: MediaQuery.of(context).size.width,
                                       child: ResponsiveWidget(
                                         child: Row(
-                                          mainAxisAlignment: isDesktop()
-                                              ? MainAxisAlignment.center
-                                              : MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            ...(isDesktop()
-                                                ? []
-                                                : [
-                                                    IconButton(
-                                                      icon: Icon(
-                                                        Icons
-                                                            .emoji_emotions_outlined,
-                                                        color: os_deep_grey,
-                                                      ),
-                                                      onPressed: () {
-                                                        FocusManager.instance
-                                                            .primaryFocus
-                                                            .unfocus();
-                                                        setState(() {
-                                                          choosingEmoji = true;
-                                                          state = 2;
-                                                        });
-                                                      },
-                                                    )
-                                                  ]),
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.emoji_emotions_outlined,
+                                                color: os_deep_grey,
+                                              ),
+                                              onPressed: clickEmoji,
+                                            ),
                                             IconButton(
                                               icon: Icon(
                                                 Icons.keyboard_hide_rounded,
@@ -531,25 +478,106 @@ class _PostNewMixState extends State<PostNewMix> {
                                         ),
                                       ),
                                     ),
-                                    Expanded(
-                                      child: YourEmoji(
-                                        tap: (res) {
-                                          mixContSectionKey.currentState
-                                              .insertEmoji(res);
-                                        },
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),
-                            ),
-                            bottom: 0,
-                            left: 0,
-                          )
-                        : Container(),
-                  ],
+                              bottom: 0,
+                              left: 0,
+                            )
+                          : Container(),
+                      state == 2
+                          ? Positioned(
+                              child: Container(
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_light_dark_card
+                                        : os_white,
+                                height: 360,
+                                width: MediaQuery.of(context).size.width,
+                                child: ResponsiveWidget(
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            top: BorderSide(
+                                              color: Provider.of<ColorProvider>(
+                                                          context)
+                                                      .isDark
+                                                  ? os_light_dark_card
+                                                  : os_grey,
+                                            ),
+                                          ),
+                                        ),
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: ResponsiveWidget(
+                                          child: Row(
+                                            mainAxisAlignment: isDesktop()
+                                                ? MainAxisAlignment.center
+                                                : MainAxisAlignment
+                                                    .spaceBetween,
+                                            children: [
+                                              ...(isDesktop()
+                                                  ? []
+                                                  : [
+                                                      IconButton(
+                                                        icon: Icon(
+                                                          Icons
+                                                              .emoji_emotions_outlined,
+                                                          color: os_deep_grey,
+                                                        ),
+                                                        onPressed: () {
+                                                          FocusManager.instance
+                                                              .primaryFocus
+                                                              .unfocus();
+                                                          setState(() {
+                                                            choosingEmoji =
+                                                                true;
+                                                            state = 2;
+                                                          });
+                                                        },
+                                                      )
+                                                    ]),
+                                              IconButton(
+                                                icon: Icon(
+                                                  Icons.keyboard_hide_rounded,
+                                                  color: os_deep_grey,
+                                                ),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    choosingEmoji = false;
+                                                    state = 0;
+                                                  });
+                                                  FocusManager
+                                                      .instance.primaryFocus
+                                                      .unfocus(); //去除焦点
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: YourEmoji(
+                                          tap: (res) {
+                                            mixContSectionKey.currentState
+                                                .insertEmoji(res);
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              bottom: 0,
+                              left: 0,
+                            )
+                          : Container(),
+                    ],
+                  ),
                 ),
-              ),
+        ),
       ),
     );
   }

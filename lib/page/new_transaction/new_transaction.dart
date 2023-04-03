@@ -138,209 +138,227 @@ class _PostNewTransactionState extends State<PostNewTransaction> {
     return Baaaar(
       color:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_back
-              : os_back,
-          elevation: 0,
-          title: Text(
-            sendSuccess ? "" : "发闲置二手",
-            style: TextStyle(
-              fontSize: 16,
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_dark_white
-                  : Color(0xFF2E2E2E),
-            ),
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.chevron_left_rounded,
+      child: WillPopScope(
+        onWillPop: () async {
+          showModal(
+              context: context,
+              cont: "如果现在退出，你的草稿内容将不会被保存",
+              confirm: () {
+                Navigator.pop(context);
+              });
+          return false;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_back
+                : os_back,
+            elevation: 0,
+            title: Text(
+              sendSuccess ? "" : "发闲置二手",
+              style: TextStyle(
+                fontSize: 16,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_dark_white
-                    : Color(0xFF2E2E2E)),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+                    : Color(0xFF2E2E2E),
+              ),
+            ),
+            leading: IconButton(
+              icon: Icon(Icons.chevron_left_rounded,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : Color(0xFF2E2E2E)),
+              onPressed: () {
+                showModal(
+                    context: context,
+                    cont: "如果现在退出，你的草稿内容将不会被保存",
+                    confirm: () {
+                      Navigator.pop(context);
+                    });
+              },
+            ),
+            actions: sendSuccess
+                ? []
+                : [
+                    SaveDraftBtn(
+                      tip_controller: tip_controller,
+                      tip_focus: tip_focus,
+                    ),
+                    uploading ? Container(width: 10) : RightTopSend(tap: _send)
+                  ],
           ),
-          actions: sendSuccess
-              ? []
-              : [
-                  SaveDraftBtn(
-                    tip_controller: tip_controller,
-                    tip_focus: tip_focus,
-                  ),
-                  uploading ? Container(width: 10) : RightTopSend(tap: _send)
-                ],
-        ),
-        body: Container(
-          color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_back
-              : os_back,
-          child: sendSuccess
-              ? SuccessDisplay()
-              : Stack(
-                  children: [
-                    Positioned(
-                      child: ListView(
-                        controller: listview_controller,
-                        children: [
-                          TitleInput(
-                            title_controller: title_controller,
-                            title_focus: title_focus,
-                          ),
-                          ContInput(
-                            tip_controller: tip_controller,
-                            tip_focus: tip_focus,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      child: pop_section
-                          ? Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 250,
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_light_dark_card
-                                  : os_white,
-                              child: [
-                                ResponsiveWidget(
-                                  child: YourEmoji(
-                                    backgroundColor:
-                                        Provider.of<ColorProvider>(context)
-                                                .isDark
-                                            ? os_dark_back
-                                            : os_grey,
-                                    tap: (emoji) {
-                                      int tmp_offset = tip_controller_offset;
-                                      tip_controller.text = tip_controller.text
-                                              .substring(
-                                                  0, tip_controller_offset) +
-                                          emoji +
-                                          tip_controller.text.substring(
-                                              tip_controller_offset,
-                                              tip_controller.text.length);
-                                      tip_controller_offset =
-                                          tmp_offset + emoji.toString().length;
-                                    },
-                                  ),
-                                ),
-                                ResponsiveWidget(
-                                  child: AtSomeone(
-                                    hide: () {
-                                      setState(() {
-                                        pop_section = false;
-                                      });
-                                    },
-                                    backgroundColor:
-                                        Provider.of<ColorProvider>(context)
-                                                .isDark
-                                            ? os_dark_back
-                                            : os_grey,
-                                    tap: (uid, name) {
-                                      tip_controller.text =
-                                          tip_controller.text + " @${name} ";
-                                    },
-                                  ),
-                                ),
-                              ][pop_section_index],
-                            )
-                          : Container(),
-                      bottom: 0,
-                    ),
-                    Positioned(
-                      bottom: pop_section ? 250 : 0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_light_dark_card
-                              : os_white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(7),
-                            topRight: Radius.circular(7),
-                          ),
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        // height: tip_focus.hasFocus ? 110 : 150,
-                        padding: EdgeInsets.only(
-                          left: 15,
-                          right: 15,
-                          top: 10,
-                          bottom: 20,
-                        ),
-                        child: Column(
+          body: Container(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_back
+                : os_back,
+            child: sendSuccess
+                ? SuccessDisplay()
+                : Stack(
+                    children: [
+                      Positioned(
+                        child: ListView(
+                          controller: listview_controller,
                           children: [
-                            SectionSelect(
-                              hideSection: !tip_focus.hasFocus,
-                              tap: (column_id) {
-                                setState(() {
-                                  select_section_child_id = column_id;
-                                });
-                              },
+                            TitleInput(
+                              title_controller: title_controller,
+                              title_focus: title_focus,
                             ),
-                            ResponsiveWidget(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  LeftRowBtn(
-                                    title_focus: title_focus,
-                                    tip_focus: tip_focus,
-                                    pop_section_index: pop_section_index,
-                                    pop_section: pop_section,
-                                    uploading: uploading,
-                                    setPopSection: (setPopSection) {
-                                      setState(() {
-                                        pop_section = setPopSection;
-                                      });
-                                    },
-                                    setPopSectionIndex: (setPopSectionIndex) {
-                                      setState(() {
-                                        pop_section_index = setPopSectionIndex;
-                                      });
-                                    },
-                                    setUploading: (setUploading) {
-                                      setState(() {
-                                        uploading = setUploading;
-                                      });
-                                    },
-                                    setImgUrls: (setImgUrls) {
-                                      setState(() {
-                                        img_urls = setImgUrls;
-                                      });
-                                    },
-                                    img_urls: img_urls,
-                                  ),
-                                  RightRowBtn(
-                                    show_vote: show_vote,
-                                    changeVoteStatus: (changeVoteStatus) {
-                                      setState(() {
-                                        show_vote = changeVoteStatus;
-                                      });
-                                    },
-                                    changePopStatus: (changePopStatus) {
-                                      setState(() {
-                                        pop_section = changePopStatus;
-                                      });
-                                    },
-                                    select_section: select_section,
-                                    changeSecretSee: (changeSecretSee) {
-                                      setState(() {
-                                        secret_see = changeSecretSee;
-                                      });
-                                    },
-                                    secret_see: secret_see,
-                                    tip_focus: tip_focus,
-                                  ),
-                                ],
-                              ),
+                            ContInput(
+                              tip_controller: tip_controller,
+                              tip_focus: tip_focus,
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      Positioned(
+                        child: pop_section
+                            ? Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 250,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_light_dark_card
+                                        : os_white,
+                                child: [
+                                  ResponsiveWidget(
+                                    child: YourEmoji(
+                                      backgroundColor:
+                                          Provider.of<ColorProvider>(context)
+                                                  .isDark
+                                              ? os_dark_back
+                                              : os_grey,
+                                      tap: (emoji) {
+                                        int tmp_offset = tip_controller_offset;
+                                        tip_controller.text =
+                                            tip_controller.text.substring(
+                                                    0, tip_controller_offset) +
+                                                emoji +
+                                                tip_controller.text.substring(
+                                                    tip_controller_offset,
+                                                    tip_controller.text.length);
+                                        tip_controller_offset = tmp_offset +
+                                            emoji.toString().length;
+                                      },
+                                    ),
+                                  ),
+                                  ResponsiveWidget(
+                                    child: AtSomeone(
+                                      hide: () {
+                                        setState(() {
+                                          pop_section = false;
+                                        });
+                                      },
+                                      backgroundColor:
+                                          Provider.of<ColorProvider>(context)
+                                                  .isDark
+                                              ? os_dark_back
+                                              : os_grey,
+                                      tap: (uid, name) {
+                                        tip_controller.text =
+                                            tip_controller.text + " @${name} ";
+                                      },
+                                    ),
+                                  ),
+                                ][pop_section_index],
+                              )
+                            : Container(),
+                        bottom: 0,
+                      ),
+                      Positioned(
+                        bottom: pop_section ? 250 : 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_light_dark_card
+                                : os_white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(7),
+                              topRight: Radius.circular(7),
+                            ),
+                          ),
+                          width: MediaQuery.of(context).size.width,
+                          // height: tip_focus.hasFocus ? 110 : 150,
+                          padding: EdgeInsets.only(
+                            left: 15,
+                            right: 15,
+                            top: 10,
+                            bottom: 20,
+                          ),
+                          child: Column(
+                            children: [
+                              SectionSelect(
+                                hideSection: !tip_focus.hasFocus,
+                                tap: (column_id) {
+                                  setState(() {
+                                    select_section_child_id = column_id;
+                                  });
+                                },
+                              ),
+                              ResponsiveWidget(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    LeftRowBtn(
+                                      title_focus: title_focus,
+                                      tip_focus: tip_focus,
+                                      pop_section_index: pop_section_index,
+                                      pop_section: pop_section,
+                                      uploading: uploading,
+                                      setPopSection: (setPopSection) {
+                                        setState(() {
+                                          pop_section = setPopSection;
+                                        });
+                                      },
+                                      setPopSectionIndex: (setPopSectionIndex) {
+                                        setState(() {
+                                          pop_section_index =
+                                              setPopSectionIndex;
+                                        });
+                                      },
+                                      setUploading: (setUploading) {
+                                        setState(() {
+                                          uploading = setUploading;
+                                        });
+                                      },
+                                      setImgUrls: (setImgUrls) {
+                                        setState(() {
+                                          img_urls = setImgUrls;
+                                        });
+                                      },
+                                      img_urls: img_urls,
+                                    ),
+                                    RightRowBtn(
+                                      show_vote: show_vote,
+                                      changeVoteStatus: (changeVoteStatus) {
+                                        setState(() {
+                                          show_vote = changeVoteStatus;
+                                        });
+                                      },
+                                      changePopStatus: (changePopStatus) {
+                                        setState(() {
+                                          pop_section = changePopStatus;
+                                        });
+                                      },
+                                      select_section: select_section,
+                                      changeSecretSee: (changeSecretSee) {
+                                        setState(() {
+                                          secret_see = changeSecretSee;
+                                        });
+                                      },
+                                      secret_see: secret_see,
+                                      tip_focus: tip_focus,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
         ),
       ),
     );

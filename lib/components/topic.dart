@@ -16,7 +16,6 @@ import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
-import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/util/interface.dart';
@@ -36,6 +35,7 @@ class Topic extends StatefulWidget {
   bool hideColumn;
   bool isLeftNaviUI;
   bool removeMargin;
+  bool hidePicture;
   Color backgroundColor;
 
   Topic({
@@ -47,6 +47,7 @@ class Topic extends StatefulWidget {
     this.hideColumn,
     this.isLeftNaviUI,
     this.removeMargin,
+    this.hidePicture,
     this.backgroundColor,
   }) : super(key: key);
 
@@ -586,18 +587,26 @@ class _TopicState extends State<Topic> {
                     ),
                   ),
             Container(width: 16),
-            Padding(padding: EdgeInsets.all(1.5)),
-            Container(
-              height: widget.data != null &&
-                      widget.data["imageList"] != null &&
-                      widget.data["imageList"].length != 0
-                  ? ((MediaQuery.of(context).size.width - 55) / 3 - 3.3 > 150
-                      ? 150
-                      : (MediaQuery.of(context).size.width - 55) / 3 - 3.3)
-                  : 0,
-              child: _getTopicCardImg(),
-            ),
-            Padding(padding: EdgeInsets.all(1.5)),
+            widget.hidePicture ?? false
+                ? Container()
+                : Padding(padding: EdgeInsets.all(1.5)),
+            widget.hidePicture ?? false
+                ? Container()
+                : Container(
+                    height: widget.data != null &&
+                            widget.data["imageList"] != null &&
+                            widget.data["imageList"].length != 0
+                        ? ((MediaQuery.of(context).size.width - 55) / 3 - 3.3 >
+                                150
+                            ? 150
+                            : (MediaQuery.of(context).size.width - 55) / 3 -
+                                3.3)
+                        : 0,
+                    child: _getTopicCardImg(),
+                  ),
+            widget.hidePicture ?? false
+                ? Container()
+                : Padding(padding: EdgeInsets.all(1.5)),
             // 投票贴的Tag
             (widget.data["vote"] ?? 0) == 0
                 ? Container()

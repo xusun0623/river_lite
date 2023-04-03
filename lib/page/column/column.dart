@@ -236,6 +236,7 @@ class _TopicColumnState extends State<TopicColumn> {
     data["list"].forEach((e) {
       tmp.add(Topic(
         hideColumn: true,
+        hidePicture: true,
         data: e,
       ));
     });

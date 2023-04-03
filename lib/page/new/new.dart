@@ -265,358 +265,382 @@ class _PostNewState extends State<PostNew> {
     return Baaaar(
       color:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_back
-              : os_back,
-          elevation: 0,
-          title: Text(
-            sendSuccess ? "" : "发帖",
-            style: TextStyle(
-                fontSize: 16,
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_dark_white
-                    : Color(0xFF2E2E2E)),
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.chevron_left_rounded,
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_dark_white
-                    : Color(0xFF2E2E2E)),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: sendSuccess
-              ? []
-              : [
-                  SaveDraftBtn(
-                    tip_controller: tip_controller,
-                    tip_focus: tip_focus,
-                  ),
-                  uploading
-                      ? Container(width: 10)
-                      : RightTopSend(
-                          tap: () async {
-                            _send();
-                          },
-                        )
-                ],
-        ),
-        body: Container(
-          color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_back
-              : os_back,
-          child: sendSuccess
-              ? SuccessDisplay()
-              : Stack(
-                  children: [
-                    Positioned(
-                      child: ListView(
-                        //physics: BouncingScrollPhysics(),
-                        controller: listview_controller,
-                        children: [
-                          ColumnRule(select_section: select_section),
-                          TitleInput(
-                            title_controller: title_controller,
-                            title_focus: title_focus,
-                          ),
-                          select_section_id == 371 ? SecretTip() : Container(),
-                          ContInput(
-                            tip_controller: tip_controller,
-                            tip_focus: tip_focus,
-                          ),
-                          show_vote
-                              ? VoteMachine(
-                                  editVote: (options) {
-                                    List<String> tmp = [];
-                                    for (var item in options) {
-                                      tmp.add(item["txt"]);
-                                    }
-                                    vote_options = tmp;
-                                  },
-                                  focus: () async {
-                                    if (isDesktop()) return;
-                                    await Future.delayed(
-                                        Duration(milliseconds: 800));
-                                    listview_controller.animateTo(
-                                      listview_controller
-                                          .position.maxScrollExtent,
-                                      duration: Duration(milliseconds: 200),
-                                      curve: Curves.ease,
-                                    );
-                                  },
-                                  tap: () {
-                                    if (isDesktop()) return;
-                                    listview_controller.animateTo(
-                                        listview_controller
-                                                .position.maxScrollExtent +
-                                            50,
-                                        duration: Duration(milliseconds: 200),
-                                        curve: Curves.ease);
-                                  },
-                                )
-                              : Container(),
-                        ],
-                      ),
+      child: WillPopScope(
+        onWillPop: () async {
+          showModal(
+              context: context,
+              cont: "如果现在退出，你的草稿内容将不会被保存",
+              confirm: () {
+                Navigator.pop(context);
+              });
+          return false;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_back
+                : os_back,
+            elevation: 0,
+            title: Text(
+              sendSuccess ? "" : "发帖",
+              style: TextStyle(
+                  fontSize: 16,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : Color(0xFF2E2E2E)),
+            ),
+            leading: IconButton(
+              icon: Icon(Icons.chevron_left_rounded,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_dark_white
+                      : Color(0xFF2E2E2E)),
+              onPressed: () {
+                showModal(
+                    context: context,
+                    cont: "如果现在退出，你的草稿内容将不会被保存",
+                    confirm: () {
+                      Navigator.pop(context);
+                    });
+              },
+            ),
+            actions: sendSuccess
+                ? []
+                : [
+                    SaveDraftBtn(
+                      tip_controller: tip_controller,
+                      tip_focus: tip_focus,
                     ),
-                    Positioned(
-                      child: pop_section
-                          ? Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 250,
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_light_dark_card
-                                  : os_white,
-                              child: [
-                                ResponsiveWidget(
-                                  child: YourEmoji(
-                                    backgroundColor:
-                                        Provider.of<ColorProvider>(context)
-                                                .isDark
-                                            ? os_dark_back
-                                            : os_grey,
-                                    tap: (emoji) {
-                                      int tmp_offset = tip_controller_offset;
-                                      tip_controller.text = tip_controller.text
-                                              .substring(
-                                                  0, tip_controller_offset) +
-                                          emoji +
-                                          tip_controller.text.substring(
-                                              tip_controller_offset,
-                                              tip_controller.text.length);
-                                      tip_controller_offset =
-                                          tmp_offset + emoji.toString().length;
+                    uploading
+                        ? Container(width: 10)
+                        : RightTopSend(
+                            tap: () async {
+                              _send();
+                            },
+                          )
+                  ],
+          ),
+          body: Container(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_back
+                : os_back,
+            child: sendSuccess
+                ? SuccessDisplay()
+                : Stack(
+                    children: [
+                      Positioned(
+                        child: ListView(
+                          //physics: BouncingScrollPhysics(),
+                          controller: listview_controller,
+                          children: [
+                            ColumnRule(select_section: select_section),
+                            TitleInput(
+                              title_controller: title_controller,
+                              title_focus: title_focus,
+                            ),
+                            select_section_id == 371
+                                ? SecretTip()
+                                : Container(),
+                            ContInput(
+                              tip_controller: tip_controller,
+                              tip_focus: tip_focus,
+                            ),
+                            show_vote
+                                ? VoteMachine(
+                                    editVote: (options) {
+                                      List<String> tmp = [];
+                                      for (var item in options) {
+                                        tmp.add(item["txt"]);
+                                      }
+                                      vote_options = tmp;
                                     },
-                                  ),
-                                ),
-                                ResponsiveWidget(
-                                  child: AtSomeone(
-                                      hide: () {
-                                        setState(() {
-                                          pop_section = false;
-                                        });
-                                      },
+                                    focus: () async {
+                                      if (isDesktop()) return;
+                                      await Future.delayed(
+                                          Duration(milliseconds: 800));
+                                      listview_controller.animateTo(
+                                        listview_controller
+                                            .position.maxScrollExtent,
+                                        duration: Duration(milliseconds: 200),
+                                        curve: Curves.ease,
+                                      );
+                                    },
+                                    tap: () {
+                                      if (isDesktop()) return;
+                                      listview_controller.animateTo(
+                                          listview_controller
+                                                  .position.maxScrollExtent +
+                                              50,
+                                          duration: Duration(milliseconds: 200),
+                                          curve: Curves.ease);
+                                    },
+                                  )
+                                : Container(),
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        child: pop_section
+                            ? Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 250,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_light_dark_card
+                                        : os_white,
+                                child: [
+                                  ResponsiveWidget(
+                                    child: YourEmoji(
                                       backgroundColor:
                                           Provider.of<ColorProvider>(context)
                                                   .isDark
                                               ? os_dark_back
                                               : os_grey,
-                                      tap: (uid, name) {
+                                      tap: (emoji) {
+                                        int tmp_offset = tip_controller_offset;
                                         tip_controller.text =
-                                            tip_controller.text + " @${name} ";
-                                      }),
-                                ),
-                              ][pop_section_index],
-                            )
-                          : Container(),
-                      bottom: 0,
-                    ),
-                    Positioned(
-                      bottom: pop_section ? 250 : 0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_light_dark_card
-                              : os_white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(7),
-                            topRight: Radius.circular(7),
-                          ),
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        // height: tip_focus.hasFocus ? 110 : 150,
-                        padding: EdgeInsets.only(
-                          left: 15,
-                          right: 15,
-                          top: 10,
-                          bottom: 20,
-                        ),
-                        child: Column(
-                          children: [
-                            (tip_focus.hasFocus && !isDesktop()) ||
-                                    select_section_id == 371
-                                ? Container()
-                                : ResponsiveWidget(
-                                    child: isDesktop()
-                                        ? ConstrainedBox(
-                                            constraints: BoxConstraints(
-                                              minHeight: 40,
-                                            ),
-                                            child: Container(
-                                              margin:
-                                                  EdgeInsets.only(bottom: 10),
-                                              child: Wrap(
-                                                children: [
-                                                  ..._buildChildList(),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        : Container(
-                                            height: 40,
-                                            child: Center(
-                                              child: ListView(
-                                                physics:
-                                                    BouncingScrollPhysics(),
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                children: _buildChildList(),
-                                              ),
-                                            ),
-                                          ),
-                                  ),
-                            select_section_id == 371
-                                ? Container()
-                                : ResponsiveWidget(
-                                    child: Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            title_focus.unfocus();
-                                            tip_focus.unfocus();
-                                            showActionSheet(
-                                              context: context,
-                                              isScrollControlled: true,
-                                              actions: total.map((e) {
-                                                return ActionItem(
-                                                  title: e["board_name"],
-                                                  onPressed: () {
-                                                    if (e["board_name"] ==
-                                                            "鹊桥" &&
-                                                        tip_controller.text ==
-                                                            "") {
-                                                      setState(() {
-                                                        tip_controller.text =
-                                                            bridgeFormatTxt;
-                                                      });
-                                                    }
-                                                    select_section =
-                                                        e["board_name"];
-                                                    select_section_id =
-                                                        e["board_id"];
-                                                    _getChildColumnTip();
-                                                    Navigator.pop(context);
-                                                    setState(() {});
-                                                  },
-                                                );
-                                              }).toList(),
-                                              topActionItem: TopActionItem(
-                                                title: "已选择:${select_section}✅",
-                                                titleTextStyle: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              bottomActionItem:
-                                                  BottomActionItem(title: "取消"),
-                                            );
-                                          },
-                                          child: SelectColumn(
-                                              select_section: select_section),
-                                        ),
-                                        Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              select_section.length * 14 -
-                                              MinusSpace(context) -
-                                              70,
-                                          height: 30,
-                                          child: ListView(
-                                            //physics: BouncingScrollPhysics(),
-                                            scrollDirection: Axis.horizontal,
-                                            children: quick.map((e) {
-                                              return SelectTag(
-                                                selected: e["board_name"] ==
-                                                    select_section,
-                                                tap: (tap_board) {
-                                                  title_focus.unfocus();
-                                                  tip_focus.unfocus();
-                                                  setState(() {
-                                                    select_section =
-                                                        tap_board["board_name"];
-                                                    select_section_id =
-                                                        tap_board["board_id"];
-                                                    _getChildColumnTip();
-                                                  });
-                                                },
-                                                quick: e,
-                                              );
-                                            }).toList(),
-                                          ),
-                                        )
-                                      ],
+                                            tip_controller.text.substring(
+                                                    0, tip_controller_offset) +
+                                                emoji +
+                                                tip_controller.text.substring(
+                                                    tip_controller_offset,
+                                                    tip_controller.text.length);
+                                        tip_controller_offset = tmp_offset +
+                                            emoji.toString().length;
+                                      },
                                     ),
                                   ),
-                            select_section_id == 371
-                                ? Container()
-                                : ColumnSpace(),
-                            ResponsiveWidget(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  LeftRowBtn(
-                                    showAttach: select_section_id != 371,
-                                    title_focus: title_focus,
-                                    tip_focus: tip_focus,
-                                    pop_section_index: pop_section_index,
-                                    pop_section: pop_section,
-                                    uploading: uploading,
-                                    setPopSection: (setPopSection) {
-                                      setState(() {
-                                        pop_section = setPopSection;
-                                      });
-                                    },
-                                    setPopSectionIndex: (setPopSectionIndex) {
-                                      setState(() {
-                                        pop_section_index = setPopSectionIndex;
-                                      });
-                                    },
-                                    setUploading: (setUploading) {
-                                      setState(() {
-                                        uploading = setUploading;
-                                      });
-                                    },
-                                    setImgUrls: (setImgUrls) {
-                                      setState(() {
-                                        img_urls = setImgUrls;
-                                      });
-                                    },
-                                    img_urls: img_urls,
+                                  ResponsiveWidget(
+                                    child: AtSomeone(
+                                        hide: () {
+                                          setState(() {
+                                            pop_section = false;
+                                          });
+                                        },
+                                        backgroundColor:
+                                            Provider.of<ColorProvider>(context)
+                                                    .isDark
+                                                ? os_dark_back
+                                                : os_grey,
+                                        tap: (uid, name) {
+                                          tip_controller.text =
+                                              tip_controller.text +
+                                                  " @${name} ";
+                                        }),
                                   ),
-                                  RightRowBtn(
-                                    show_vote: show_vote,
-                                    changeVoteStatus: (changeVoteStatus) {
-                                      setState(() {
-                                        show_vote = changeVoteStatus;
-                                      });
-                                    },
-                                    changePopStatus: (changePopStatus) {
-                                      setState(() {
-                                        pop_section = changePopStatus;
-                                      });
-                                    },
-                                    select_section: select_section,
-                                    changeSecretSee: (changeSecretSee) {
-                                      setState(() {
-                                        secret_see = changeSecretSee;
-                                      });
-                                    },
-                                    secret_see: secret_see,
-                                    tip_focus: tip_focus,
-                                  ),
-                                ],
-                              ),
+                                ][pop_section_index],
+                              )
+                            : Container(),
+                        bottom: 0,
+                      ),
+                      Positioned(
+                        bottom: pop_section ? 250 : 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_light_dark_card
+                                : os_white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(7),
+                              topRight: Radius.circular(7),
                             ),
-                          ],
+                          ),
+                          width: MediaQuery.of(context).size.width,
+                          // height: tip_focus.hasFocus ? 110 : 150,
+                          padding: EdgeInsets.only(
+                            left: 15,
+                            right: 15,
+                            top: 10,
+                            bottom: 20,
+                          ),
+                          child: Column(
+                            children: [
+                              (tip_focus.hasFocus && !isDesktop()) ||
+                                      select_section_id == 371
+                                  ? Container()
+                                  : ResponsiveWidget(
+                                      child: isDesktop()
+                                          ? ConstrainedBox(
+                                              constraints: BoxConstraints(
+                                                minHeight: 40,
+                                              ),
+                                              child: Container(
+                                                margin:
+                                                    EdgeInsets.only(bottom: 10),
+                                                child: Wrap(
+                                                  children: [
+                                                    ..._buildChildList(),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          : Container(
+                                              height: 40,
+                                              child: Center(
+                                                child: ListView(
+                                                  physics:
+                                                      BouncingScrollPhysics(),
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  children: _buildChildList(),
+                                                ),
+                                              ),
+                                            ),
+                                    ),
+                              select_section_id == 371
+                                  ? Container()
+                                  : ResponsiveWidget(
+                                      child: Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              title_focus.unfocus();
+                                              tip_focus.unfocus();
+                                              showActionSheet(
+                                                context: context,
+                                                isScrollControlled: true,
+                                                actions: total.map((e) {
+                                                  return ActionItem(
+                                                    title: e["board_name"],
+                                                    onPressed: () {
+                                                      if (e["board_name"] ==
+                                                              "鹊桥" &&
+                                                          tip_controller.text ==
+                                                              "") {
+                                                        setState(() {
+                                                          tip_controller.text =
+                                                              bridgeFormatTxt;
+                                                        });
+                                                      }
+                                                      select_section =
+                                                          e["board_name"];
+                                                      select_section_id =
+                                                          e["board_id"];
+                                                      _getChildColumnTip();
+                                                      Navigator.pop(context);
+                                                      setState(() {});
+                                                    },
+                                                  );
+                                                }).toList(),
+                                                topActionItem: TopActionItem(
+                                                  title:
+                                                      "已选择:${select_section}✅",
+                                                  titleTextStyle: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                bottomActionItem:
+                                                    BottomActionItem(
+                                                        title: "取消"),
+                                              );
+                                            },
+                                            child: SelectColumn(
+                                                select_section: select_section),
+                                          ),
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                select_section.length * 14 -
+                                                MinusSpace(context) -
+                                                70,
+                                            height: 30,
+                                            child: ListView(
+                                              //physics: BouncingScrollPhysics(),
+                                              scrollDirection: Axis.horizontal,
+                                              children: quick.map((e) {
+                                                return SelectTag(
+                                                  selected: e["board_name"] ==
+                                                      select_section,
+                                                  tap: (tap_board) {
+                                                    title_focus.unfocus();
+                                                    tip_focus.unfocus();
+                                                    setState(() {
+                                                      select_section =
+                                                          tap_board[
+                                                              "board_name"];
+                                                      select_section_id =
+                                                          tap_board["board_id"];
+                                                      _getChildColumnTip();
+                                                    });
+                                                  },
+                                                  quick: e,
+                                                );
+                                              }).toList(),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                              select_section_id == 371
+                                  ? Container()
+                                  : ColumnSpace(),
+                              ResponsiveWidget(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    LeftRowBtn(
+                                      showAttach: select_section_id != 371,
+                                      title_focus: title_focus,
+                                      tip_focus: tip_focus,
+                                      pop_section_index: pop_section_index,
+                                      pop_section: pop_section,
+                                      uploading: uploading,
+                                      setPopSection: (setPopSection) {
+                                        setState(() {
+                                          pop_section = setPopSection;
+                                        });
+                                      },
+                                      setPopSectionIndex: (setPopSectionIndex) {
+                                        setState(() {
+                                          pop_section_index =
+                                              setPopSectionIndex;
+                                        });
+                                      },
+                                      setUploading: (setUploading) {
+                                        setState(() {
+                                          uploading = setUploading;
+                                        });
+                                      },
+                                      setImgUrls: (setImgUrls) {
+                                        setState(() {
+                                          img_urls = setImgUrls;
+                                        });
+                                      },
+                                      img_urls: img_urls,
+                                    ),
+                                    RightRowBtn(
+                                      show_vote: show_vote,
+                                      changeVoteStatus: (changeVoteStatus) {
+                                        setState(() {
+                                          show_vote = changeVoteStatus;
+                                        });
+                                      },
+                                      changePopStatus: (changePopStatus) {
+                                        setState(() {
+                                          pop_section = changePopStatus;
+                                        });
+                                      },
+                                      select_section: select_section,
+                                      changeSecretSee: (changeSecretSee) {
+                                        setState(() {
+                                          secret_see = changeSecretSee;
+                                        });
+                                      },
+                                      secret_see: secret_see,
+                                      tip_focus: tip_focus,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+          ),
         ),
       ),
     );

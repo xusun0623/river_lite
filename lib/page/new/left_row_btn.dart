@@ -10,6 +10,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/uploadAttachment.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
+import 'package:offer_show/page/topic/topic_RichInput.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -262,6 +263,8 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                 height: 29,
               )
             : Container(),
+        widget.showAttach ?? true ? Container(width: 12.5) : Container(),
+        SwitchHead(small: true),
       ],
     );
   }

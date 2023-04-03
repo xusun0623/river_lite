@@ -313,7 +313,7 @@ class _PopChatState extends State<PopChat> {
 
   List<Widget> getWidgets() {
     return [
-      Container(height: 50),
+      Container(height: 30),
       Text(
         "请确认你的订单",
         textAlign: TextAlign.center,
@@ -337,7 +337,7 @@ class _PopChatState extends State<PopChat> {
               : os_black,
         ),
       ),
-      Container(height: 40),
+      Container(height: 20),
       Container(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 25),
         decoration: BoxDecoration(
@@ -678,7 +678,7 @@ class _GoodCardState extends State<GoodCard> {
                       myInkWell(
                         radius: 15,
                         color:
-                            widget.data.soldOut ? os_white_opa : os_deep_blue,
+                            widget.data.soldOut ? os_black_opa : os_deep_blue,
                         tap: () {
                           if (!widget.data.soldOut) showChat();
                         },
@@ -700,7 +700,9 @@ class _GoodCardState extends State<GoodCard> {
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
                                           ? os_dark_white
-                                          : Colors.white,
+                                          : (widget.data.soldOut
+                                              ? os_light_dark_card
+                                              : os_white),
                                   fontSize: 14,
                                   fontFamily: "PingFang SC",
                                   fontWeight: FontWeight.w600,
@@ -737,7 +739,7 @@ class _GoodCardState extends State<GoodCard> {
                             widget.data.desc,
                             style: TextStyle(
                               color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_dark_white
+                                  ? os_white
                                   : Color(0xff646d80),
                               fontSize: 13,
                             ),

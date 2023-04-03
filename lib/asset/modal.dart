@@ -109,7 +109,7 @@ void showModal({
       padding: const EdgeInsets.all(5.0),
       child: Center(
         child: Text(
-          title ?? "标题",
+          title ?? "请确认",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,

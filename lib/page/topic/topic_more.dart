@@ -296,7 +296,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
           showModal(
             context: context,
             title: "请确认",
-            cont: "删除此回复需要一张【悔悟卡】道具，你可以在道具商店购买；并且，每天能删除的帖子数量是有限制的",
+            cont: "删除此回复需要一张【悔悟卡】道具，你可以在道具商店购买；24小时内最多可以删除3次",
             confirm: () {
               deleteComment();
             },
@@ -313,7 +313,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
     showToast(
       context: context,
       type: XSToast.loading,
-      txt: "请稍后…",
+      txt: "需要较长时间",
       duration: 5000,
     );
     String formhash = await getTopicFormHash(widget.data["topic"]["topic_id"]);
@@ -343,7 +343,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
     hideToast();
     if (tmp_txt.contains("抱歉，您选择的道具不存在")) {
       Fluttertoast.showToast(
-        msg: "抱歉，您选择的道具不存在",
+        msg: "抱歉，您选择的道具不存在，你可以联系版主或者站长删除",
         gravity: ToastGravity.CENTER,
       );
     } else if (tmp_txt.contains("已删除")) {
@@ -353,12 +353,12 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       );
     } else if (tmp_txt.contains("24 小时内您只能使用 3 次本道具")) {
       Fluttertoast.showToast(
-        msg: "24 小时内您只能使用 3 次本道具",
+        msg: "24 小时内您只能使用 3 次本道具，你可以联系版主或者站长删除",
         gravity: ToastGravity.CENTER,
       );
     } else {
       Fluttertoast.showToast(
-        msg: "出错了，你可以尝试在网页端删除此评论",
+        msg: "出错了，你可以尝试在网页端删除此评论，或者联系版主或者站长删除",
         gravity: ToastGravity.CENTER,
       );
     }

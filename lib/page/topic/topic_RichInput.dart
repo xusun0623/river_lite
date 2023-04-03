@@ -489,7 +489,11 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
 }
 
 class SwitchHead extends StatefulWidget {
-  const SwitchHead({Key key}) : super(key: key);
+  bool small;
+  SwitchHead({
+    Key key,
+    this.small,
+  }) : super(key: key);
 
   @override
   State<SwitchHead> createState() => _SwitchHeadState();
@@ -521,7 +525,7 @@ class _SwitchHeadState extends State<SwitchHead> {
               : myInkWell(
                   radius: 100,
                   widget: Padding(
-                    padding: const EdgeInsets.all(12.5),
+                    padding: EdgeInsets.all(widget.small ?? false ? 0 : 12.5),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: Container(
@@ -530,8 +534,8 @@ class _SwitchHeadState extends State<SwitchHead> {
                             : os_grey,
                         child: Image.network(
                           head_url,
-                          width: 26.5,
-                          height: 26.5,
+                          width: widget.small ?? false ? 23.5 : 26.5,
+                          height: widget.small ?? false ? 23.5 : 26.5,
                         ),
                       ),
                     ),

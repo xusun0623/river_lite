@@ -1280,11 +1280,9 @@ class TopicDetailTitle extends StatelessWidget {
           children: [
             WidgetSpan(
                 child: Transform.translate(
-              offset: Offset(5, 4),
+              offset: Offset(0, 4),
               child: myInkWell(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_white_opa
-                    : os_grey,
+                color: Colors.transparent,
                 radius: 100,
                 tap: () {
                   showModalBottomSheet(
