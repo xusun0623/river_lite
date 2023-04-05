@@ -338,7 +338,6 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         "id": widget.data["reply_posts_id"].toString() + ":" + tid.toString(),
       },
     );
-    Clipboard.setData(ClipboardData(text: tmp.data.toString()));
     String tmp_txt = tmp.data.toString();
     hideToast();
     if (tmp_txt.contains("抱歉，您选择的道具不存在")) {

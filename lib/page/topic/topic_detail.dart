@@ -354,12 +354,14 @@ class _TopicDetailState extends State<TopicDetail> {
       "topicId": widget.topicID,
       "authorId": _select == 0 ? 0 : data["topic"]["user_id"],
       "order": _sort,
-      "page": ((comment.length - stick_num) / nums + 1).floor(),
+      "page": total_num < nums
+          ? 1
+          : ((comment.length - stick_num) / nums + 1).floor(),
       "pageSize": nums,
     });
     if (tmp["list"] != null &&
         tmp["list"].length != 0 &&
-        comment.length < 2000) {
+        comment.length < nums) {
       comment = tmp["list"];
     } else {
       comment.addAll(tmp["list"]);

@@ -142,7 +142,7 @@ class _PostNewTransactionState extends State<PostNewTransaction> {
         onWillPop: () async {
           showModal(
               context: context,
-              cont: "如果现在退出，你的草稿内容将不会被保存",
+              cont: "如果现在退出，草稿内容将不会保存",
               confirm: () {
                 Navigator.pop(context);
               });
@@ -171,7 +171,7 @@ class _PostNewTransactionState extends State<PostNewTransaction> {
               onPressed: () {
                 showModal(
                     context: context,
-                    cont: "如果现在退出，你的草稿内容将不会被保存",
+                    cont: "如果现在退出，草稿内容将不会保存",
                     confirm: () {
                       Navigator.pop(context);
                     });

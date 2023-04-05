@@ -77,7 +77,7 @@ class _BilibiliPlayerState extends State<BilibiliPlayer> {
       children: [
         bvNumber == ""
             ? Container(
-                child: CupertinoActivityIndicator(
+                child: CircularProgressIndicator(
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_dark_white
                       : os_dark_back,
@@ -106,6 +106,9 @@ class _BilibiliPlayerState extends State<BilibiliPlayer> {
         Row(
           children: [
             myInkWell(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_light_dark_card
+                  : os_white,
               tap: () {
                 xsLanuch(url: widget.short_url, isExtern: true);
               },

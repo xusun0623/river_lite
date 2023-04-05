@@ -322,7 +322,7 @@ class _PostNewMixState extends State<PostNewMix> {
         onWillPop: () async {
           showModal(
               context: context,
-              cont: "如果现在退出，你的草稿内容将不会被保存",
+              cont: "如果现在退出，草稿内容将不会保存",
               confirm: () {
                 Navigator.pop(context);
               });
@@ -378,7 +378,7 @@ class _PostNewMixState extends State<PostNewMix> {
               onPressed: () {
                 showModal(
                     context: context,
-                    cont: "如果现在退出，你的草稿内容将不会被保存",
+                    cont: "如果现在退出，草稿内容将不会保存",
                     confirm: () {
                       Navigator.pop(context);
                     });

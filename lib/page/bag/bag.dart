@@ -10,8 +10,10 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/empty.dart';
+import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
+import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -130,16 +132,55 @@ class _MyBagState extends State<MyBag> {
                 : os_black,
           ),
         ),
+        actions: [
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 5,
+            ),
+            child: myInkWell(
+              tap: () {
+                Navigator.of(context).pushNamed("/shop");
+              },
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_white_opa
+                  : os_white,
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.store,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_white
+                          : os_black,
+                    ),
+                    Container(width: 5),
+                    Text(
+                      "道具商店",
+                      style: TextStyle(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_white
+                            : os_black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              radius: 100,
+            ),
+          ),
+        ],
       ),
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: loading
-          ? Center(
-              child: CupertinoActivityIndicator(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_dark_white
-                    : os_black,
-              ),
+          ? ListView(
+              children: [
+                BottomLoading(),
+              ],
             )
           : ListView(
               children: [

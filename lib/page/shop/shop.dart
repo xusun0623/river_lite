@@ -8,6 +8,7 @@ import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
+import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:html/dom.dart' as dom;
@@ -103,43 +104,25 @@ class _ShopState extends State<Shop> {
             Navigator.of(context).pop();
           },
         ),
-        actions: [
-          myInkWell(
-            tap: () {
-              Navigator.of(context).pushNamed("/bag");
-            },
-            color: Colors.transparent,
-            widget: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Text(
-                "我的背包",
-                style: TextStyle(
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : os_black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            radius: 10,
+        title: Text(
+          "道具商店",
+          style: TextStyle(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_black,
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
           ),
-        ],
+        ),
+        actions: [],
         backgroundColor:
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       ),
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       body: loading
-          ? Center(
-              child: Container(
-                margin: EdgeInsets.only(bottom: 100),
-                child: CupertinoActivityIndicator(
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_dark_white
-                      : os_dark_back,
-                ),
-              ),
+          ? ListView(
+              children: [BottomLoading()],
             )
           : ListView(
               children: [
@@ -294,7 +277,7 @@ class _PopChatState extends State<PopChat> {
         ? Container(
             padding: EdgeInsets.symmetric(vertical: 100),
             child: Center(
-              child: CupertinoActivityIndicator(
+              child: CircularProgressIndicator(
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_dark_white
                     : os_dark_back,

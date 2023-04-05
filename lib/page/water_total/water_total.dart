@@ -3,6 +3,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/components/newNaviBar.dart';
+import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -41,6 +42,28 @@ class _WaterTotalState extends State<WaterTotal> {
               fontSize: 16,
             ),
           ),
+          actions: [
+            myInkWell(
+              tap: () {
+                Navigator.of(context).pushNamed("/water_inout_detail");
+              },
+              color: Colors.transparent,
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Text(
+                  "积分记录",
+                  style: TextStyle(
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_white
+                        : os_black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              radius: 100,
+            ),
+          ],
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -71,27 +94,27 @@ class _WaterTotalState extends State<WaterTotal> {
               icon: Icons.padding_rounded,
               color: os_wonderful_color[2],
             ),
-            NavigatorCard(
-              title: "道具商店",
-              tip: "购买道具",
-              url: "/shop",
-              icon: Icons.shopping_cart_rounded,
-              color: os_wonderful_color[1],
-            ),
+            // NavigatorCard(
+            //   title: "道具商店",
+            //   tip: "购买道具",
+            //   url: "/shop",
+            //   icon: Icons.shopping_cart_rounded,
+            //   color: os_wonderful_color[1],
+            // ),
             NavigatorCard(
               title: "水滴任务",
               tip: "领取、查看任务进度",
               url: "/water_task",
               icon: Icons.task_rounded,
-              color: os_wonderful_color[3],
+              color: os_wonderful_color[1],
             ),
-            NavigatorCard(
-              title: "积分记录",
-              tip: "水滴收支详情",
-              url: "/water_inout_detail",
-              icon: Icons.view_list_rounded,
-              color: os_wonderful_color[4],
-            ),
+            // NavigatorCard(
+            //   title: "积分记录",
+            //   tip: "水滴收支详情",
+            //   url: "/water_inout_detail",
+            //   icon: Icons.view_list_rounded,
+            //   color: os_wonderful_color[4],
+            // ),
           ],
         ),
       ),
