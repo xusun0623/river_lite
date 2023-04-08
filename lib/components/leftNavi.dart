@@ -114,14 +114,14 @@ class _LeftNaviState extends State<LeftNavi> {
               children: [
                 Column(
                   children: [
-                    Container(
-                      height: MediaQuery.of(context).padding.top,
-                      color: Provider.of<ColorProvider>(context).isDark ||
-                              tabShowProvider.index == 2
-                          ? os_dark_back
-                          : os_white,
-                    ),
-                    Container(height: 20),
+                    // Container(
+                    //   height: MediaQuery.of(context).padding.top,
+                    //   color: Provider.of<ColorProvider>(context).isDark ||
+                    //           tabShowProvider.index == 2
+                    //       ? os_dark_back
+                    //       : os_white,
+                    // ),
+                    Container(height: MediaQuery.of(context).padding.top + 20),
                     GestureDetector(
                       onTap: () async {
                         _getNewMsg();

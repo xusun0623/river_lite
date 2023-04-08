@@ -411,20 +411,27 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                             filterQuality: FilterQuality.low,
                             fit: BoxFit.cover,
                             progressIndicatorBuilder: (context, url, progress) {
-                              return Padding(
-                                padding: const EdgeInsets.all(45.0),
+                              return Center(
                                 child: widget.fade ?? false
-                                    ? Icon(
-                                        Icons.image,
-                                        color: os_middle_grey,
+                                    ? Container(
+                                        width: 30,
+                                        height: 30,
+                                        child: Icon(
+                                          Icons.image,
+                                          color: os_middle_grey,
+                                        ),
                                       )
-                                    : CircularProgressIndicator(
-                                        strokeWidth: 2.5,
-                                        color:
-                                            Color.fromARGB(255, 172, 172, 172),
-                                        value: progress.progress,
-                                        backgroundColor:
-                                            Color.fromARGB(255, 223, 223, 223),
+                                    : Container(
+                                        width: 30,
+                                        height: 30,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.5,
+                                          color: Color.fromARGB(
+                                              255, 172, 172, 172),
+                                          value: progress.progress,
+                                          backgroundColor: Color.fromARGB(
+                                              255, 223, 223, 223),
+                                        ),
                                       ),
                               );
                             },
@@ -434,12 +441,18 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                       cacheManager: RiverListCacheManager.instance,
                       imageUrl: widget.data["infor"],
                       progressIndicatorBuilder: (context, url, progress) {
-                        return Padding(
-                          padding: const EdgeInsets.all(45.0),
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                            color: os_middle_grey,
-                            value: progress.progress,
+                        return Container(
+                          padding: EdgeInsets.symmetric(vertical: 30),
+                          child: Center(
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                color: os_middle_grey,
+                                value: progress.progress,
+                              ),
+                            ),
                           ),
                         );
                       },
