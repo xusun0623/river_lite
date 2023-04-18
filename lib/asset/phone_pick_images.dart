@@ -7,6 +7,23 @@ import 'package:images_picker/images_picker.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/util/storage.dart';
 
+Future<XFile> getSinglePhoneImage(BuildContext context) async {
+  if (Platform.isAndroid) {
+    final ImagePicker _picker = ImagePicker();
+    // final XFile images = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile images = await _picker.pickImage(source: ImageSource.gallery);
+    return images;
+  } else {
+    List<Media> res = await ImagesPicker.pick(
+      count: 1,
+      pickType: PickType.image,
+      quality: 0.7, //一半的质量
+      // maxSize: 2048, //1024KB
+    );
+    return XFile(res[0].path);
+  }
+}
+
 Future<List> getPhoneImages(BuildContext context) async {
   if (Platform.isAndroid) {
     Completer c = new Completer<List>();

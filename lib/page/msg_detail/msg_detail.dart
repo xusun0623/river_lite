@@ -9,6 +9,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/phone_pick_images.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/asset/showActionSheet.dart';
@@ -604,36 +605,44 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                     ))
                               : myInkWell(
                                   tap: () async {
-                                    _focusNode.unfocus();
-                                    XFile image;
-                                    setState(() {
-                                      selecting_emoji = false;
-                                      widget
-                                          .i_am_selectimg_img(selecting_emoji);
-                                    });
-                                    if (dont_send_flag) return;
-                                    if (isMacOS()) {
-                                      ///针对MacOS做适配
-                                      image = await pickeSingleImgFile(context);
-                                    } else {
-                                      final ImagePicker _picker = ImagePicker();
-                                      image = await _picker.pickImage(
-                                        source: ImageSource.gallery,
-                                        imageQuality: 50,
-                                      );
+                                    try {
+                                      _focusNode.unfocus();
+                                      XFile image;
                                       setState(() {
-                                        uploadingImgs = true;
+                                        selecting_emoji = false;
+                                        widget.i_am_selectimg_img(
+                                            selecting_emoji);
+                                      });
+                                      if (dont_send_flag) return;
+                                      if (isMacOS()) {
+                                        setState(() {
+                                          uploadingImgs = true;
+                                        });
+                                        image =
+                                            await pickeSingleImgFile(context);
+                                      } else {
+                                        setState(() {
+                                          uploadingImgs = true;
+                                        });
+                                        print("选择小屏图片");
+                                        image =
+                                            await getSinglePhoneImage(context);
+                                      }
+                                      if (image != null) {
+                                        img_urls = await Api().uploadImage(
+                                          imgs: [image],
+                                        );
+                                      }
+                                      setState(() {
+                                        uploadingImgs = false;
+                                      });
+                                      print("${img_urls}");
+                                    } catch (e) {
+                                      print(e);
+                                      setState(() {
+                                        uploadingImgs = false;
                                       });
                                     }
-                                    if (image != null) {
-                                      img_urls = await Api().uploadImage(
-                                        imgs: [image],
-                                      );
-                                    }
-                                    setState(() {
-                                      uploadingImgs = false;
-                                    });
-                                    print("${img_urls}");
                                   },
                                   color: Colors.transparent,
                                   widget: Badgee.Badge(
