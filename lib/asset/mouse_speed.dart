@@ -8,7 +8,8 @@ speedUp(ScrollController _scrollController) {
   if (Platform.isLinux || Platform.isWindows) {
     //对鼠标指针进行加速
     _scrollController.addListener(() {
-      const _extraScrollSpeed = 80;
+      const _extraScrollSpeed = 10;
+      // const _extraScrollSpeed = 80;
       ScrollDirection scrollDirection =
           _scrollController.position.userScrollDirection;
       if (scrollDirection != ScrollDirection.idle) {

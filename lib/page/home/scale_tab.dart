@@ -980,7 +980,10 @@ class _ScaleTabBarState extends State<ScaleTabBar> {
 
     final TabBarTheme tabBarTheme = TabBarTheme.of(context);
 
-    final List<Widget> wrappedTabs = List<Widget>(widget.tabs.length);
+    final List<Widget> wrappedTabs = [];
+    for (var i = 0; i < widget.tabs.length; i++) {
+      wrappedTabs.add(Container());
+    }
     for (int i = 0; i < widget.tabs.length; i += 1) {
       wrappedTabs[i] = Center(
         heightFactor: 1.0,

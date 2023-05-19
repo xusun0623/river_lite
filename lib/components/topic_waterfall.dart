@@ -659,22 +659,22 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
 
   _tapWidget() async {
     int tid = (widget.data["source_id"] ?? widget.data["topic_id"]);
-    if (Platform.isWindows &&
-        (widget.data["board_name"] == "视觉艺术" ||
-            widget.data["board_name"] == "镜头下的成电")) {
-      showModal(
-          context: context,
-          title: "请确认",
-          cont: "即将在浏览器中打开此帖子",
-          confirmTxt: "确认",
-          cancelTxt: "取消",
-          confirm: () {
-            xsLanuch(
-              url: "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=$tid",
-            );
-          });
-      return;
-    }
+    // if (Platform.isWindows &&
+    //     (widget.data["board_name"] == "视觉艺术" ||
+    //         widget.data["board_name"] == "镜头下的成电")) {
+    //   showModal(
+    //       context: context,
+    //       title: "请确认",
+    //       cont: "即将在浏览器中打开此帖子",
+    //       confirmTxt: "确认",
+    //       cancelTxt: "取消",
+    //       confirm: () {
+    //         xsLanuch(
+    //           url: "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=$tid",
+    //         );
+    //       });
+    //   return;
+    // }
     String info_txt = await getStorage(key: "myinfo", initData: "");
     _setHistory();
     if (info_txt == "") {
