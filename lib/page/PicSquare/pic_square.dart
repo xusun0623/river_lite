@@ -202,7 +202,7 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
               title: TabBar(
                 controller: _tabController,
                 indicatorSize: TabBarIndicatorSize.tab,
-                dividerColor: Colors.transparent,
+                // dividerColor: Colors.transparent,
                 onTap: ((value) async {
                   showToast(context: context, type: XSToast.loading);
                   setState(() {

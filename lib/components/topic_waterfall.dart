@@ -55,7 +55,9 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
 
   bool _isBlack() {
     bool flag = false;
-    Provider.of<BlackProvider>(context, listen: false).black!.forEach((element) {
+    Provider.of<BlackProvider>(context, listen: false)
+        .black!
+        .forEach((element) {
       if (widget.data!["title"].toString().contains(element) ||
           widget.data!["subject"].toString().contains(element) ||
           widget.data!["user_nick_name"].toString().contains(element)) {
@@ -70,8 +72,8 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
     String tmp = await getStorage(key: "topic_like", initData: "");
     String tmp1 = await getStorage(key: "topic_dis_like", initData: "");
     List<String> ids = tmp.split(",");
-    if (ids.indexOf(
-            (widget.data!["source_id"] ?? widget.data!["topic_id"]).toString()) >
+    if (ids.indexOf((widget.data!["source_id"] ?? widget.data!["topic_id"])
+            .toString()) >
         -1) {
       setState(() {
         _isRated = true;
@@ -550,12 +552,14 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                         ""
                     ? Container()
                     : Padding(padding: EdgeInsets.all(3)),
-                ((widget.data!["summary"] ?? widget.data!["subject"]) ?? "") == ""
+                ((widget.data!["summary"] ?? widget.data!["subject"]) ?? "") ==
+                        ""
                     ? Container()
                     : Container(
                         margin: EdgeInsets.only(right: 10),
                         child: Text(
-                          (widget.data!["summary"] ?? widget.data!["subject"]) ??
+                          (widget.data!["summary"] ??
+                                  widget.data!["subject"]) ??
                               "",
                           textAlign: TextAlign.start,
                           style: TextStyle(
@@ -658,23 +662,23 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
   }
 
   _tapWidget() async {
-    int? tid = (widget.data!["source_id"] ?? widget.data!["topic_id"]);
-    if (Platform.isWindows &&
-        (widget.data!["board_name"] == "视觉艺术" ||
-            widget.data!["board_name"] == "镜头下的成电")) {
-      showModal(
-          context: context,
-          title: "请确认",
-          cont: "即将在浏览器中打开此帖子",
-          confirmTxt: "确认",
-          cancelTxt: "取消",
-          confirm: () {
-            xsLanuch(
-              url: "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=$tid",
-            );
-          });
-      return;
-    }
+    int tid = (widget.data!["source_id"] ?? widget.data!["topic_id"]);
+    // if (Platform.isWindows &&
+    //     (widget.data["board_name"] == "视觉艺术" ||
+    //         widget.data["board_name"] == "镜头下的成电")) {
+    //   showModal(
+    //       context: context,
+    //       title: "请确认",
+    //       cont: "即将在浏览器中打开此帖子",
+    //       confirmTxt: "确认",
+    //       cancelTxt: "取消",
+    //       confirm: () {
+    //         xsLanuch(
+    //           url: "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=$tid",
+    //         );
+    //       });
+    //   return;
+    // }
     String info_txt = await getStorage(key: "myinfo", initData: "");
     _setHistory();
     if (info_txt == "") {
