@@ -19,9 +19,9 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Login extends StatefulWidget {
-  int index;
+  int? index;
   Login({
-    Key key,
+    Key? key,
     this.index,
   }) : super(key: key);
 
@@ -30,8 +30,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String username;
-  String password;
+  String? username;
+  String? password;
 
   bool showSuccess = false;
   SwiperController _swiperController = new SwiperController();
@@ -253,12 +253,12 @@ class _LoginState extends State<Login> {
 }
 
 class LoginSubmit extends StatefulWidget {
-  Function tap;
-  Color color;
-  Color fontColor;
-  String txt;
+  Function? tap;
+  Color? color;
+  Color? fontColor;
+  String? txt;
   LoginSubmit({
-    Key key,
+    Key? key,
     this.tap,
     this.txt,
     this.color,
@@ -275,7 +275,7 @@ class _LoginSubmitState extends State<LoginSubmit> {
     return Bounce(
       duration: Duration(milliseconds: 80),
       onPressed: () {
-        if (widget.tap != null) widget.tap();
+        if (widget.tap != null) widget.tap!();
       },
       child: Container(
         width: MediaQuery.of(context).size.width - 4 * os_edge,
@@ -300,7 +300,7 @@ class _LoginSubmitState extends State<LoginSubmit> {
 }
 
 class LoginHelp extends StatefulWidget {
-  LoginHelp({Key key}) : super(key: key);
+  LoginHelp({Key? key}) : super(key: key);
 
   @override
   State<LoginHelp> createState() => _LoginHelpState();
@@ -344,11 +344,11 @@ class _LoginHelpState extends State<LoginHelp> {
 }
 
 class LoginInput extends StatefulWidget {
-  Function change;
-  FocusNode u_focus;
-  FocusNode p_focus;
+  Function? change;
+  FocusNode? u_focus;
+  FocusNode? p_focus;
   LoginInput({
-    Key key,
+    Key? key,
     this.change,
     this.p_focus,
     this.u_focus,
@@ -396,7 +396,7 @@ class _LoginInputState extends State<LoginInput> {
                     : os_black,
               ),
               onChanged: (t) {
-                widget.change(u_controller.text, p_controller.text);
+                widget.change!(u_controller.text, p_controller.text);
               },
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
@@ -445,7 +445,7 @@ class _LoginInputState extends State<LoginInput> {
                     : os_black,
               ),
               onChanged: (t) {
-                widget.change(u_controller.text, p_controller.text);
+                widget.change!(u_controller.text, p_controller.text);
               },
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
@@ -486,7 +486,7 @@ class _LoginInputState extends State<LoginInput> {
 }
 
 class LoginHead extends StatefulWidget {
-  LoginHead({Key key}) : super(key: key);
+  LoginHead({Key? key}) : super(key: key);
 
   @override
   State<LoginHead> createState() => _LoginHeadState();

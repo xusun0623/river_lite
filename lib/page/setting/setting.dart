@@ -15,7 +15,7 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class Setting extends StatefulWidget {
-  Setting({Key key}) : super(key: key);
+  Setting({Key? key}) : super(key: key);
 
   @override
   _SettingState createState() => _SettingState();
@@ -317,7 +317,7 @@ class _SettingState extends State<Setting> {
 
 class SelectCard extends StatefulWidget {
   SelectCard({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

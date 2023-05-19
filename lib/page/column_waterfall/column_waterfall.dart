@@ -30,16 +30,16 @@ class ColumnWaterfall extends StatefulWidget {
 class _ColumnWaterfallState extends State<ColumnWaterfall>
     with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
-  List<String> theme = [];
-  var data = [];
+  List<String?> theme = [];
+  List<dynamic>? data = [];
   var loading = false;
   var init_loading = false;
   var load_done = false;
   bool showBackToTop = false;
   bool vibrate = false;
   int pageSize = 24;
-  int columnID = 61;
-  String columnName = "二手专区";
+  int? columnID = 61;
+  String? columnName = "二手专区";
   GlobalKey<RefreshIndicatorState> _indicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
@@ -51,9 +51,9 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
         "fid": 61,
       }),
     );
-    Map id_name_map = jsonDecode(id_name);
+    Map? id_name_map = jsonDecode(id_name);
     setState(() {
-      columnID = id_name_map["fid"];
+      columnID = id_name_map!["fid"];
       columnName = id_name_map["name"];
     });
     _getStorageData();
@@ -120,7 +120,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
         );
       } catch (e) {}
     }
-    if (data != null && data.length != 0)
+    if (data != null && data!.length != 0)
       setStorage(key: "home_left_column", value: jsonEncode(data));
     load_done = false;
     setState(() {});
@@ -142,7 +142,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
       }
     });
     var tmp = await Api().certain_forum_topiclist({
-      "page": data.length / pageSize + 1,
+      "page": data!.length / pageSize + 1,
       "pageSize": pageSize,
       "boardId": columnID, //columnID
       "filterType": "typeid",
@@ -165,7 +165,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
           theme.add(list[i]["classificationType_name"]);
         }
       }
-      data.addAll(tmp["list"]);
+      data!.addAll(tmp["list"]);
       setStorage(key: "home_left_column", value: jsonEncode(data));
     }
     load_done = tmp == null || ((tmp["list"] ?? []).length < pageSize);
@@ -175,8 +175,8 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
   Widget _buildComponents() {
     List<Widget> t = [];
     double w = MediaQuery.of(context).size.width;
-    if (data != null && data.length != 0) {
-      for (var i in data) {
+    if (data != null && data!.length != 0) {
+      for (var i in data!) {
         t.add(
           TopicWaterFall(
             isLeftNaviUI: isDesktop(),
@@ -185,14 +185,14 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
         );
       }
     }
-    if (data.length == 0) {
+    if (data!.length == 0) {
       t.add(Container(
         height: MediaQuery.of(context).size.height - 100,
       ));
     }
     if (w < 800) {
       t.add(
-        load_done || data.length == 0
+        load_done || data!.length == 0
             ? TapMore(
                 tap: () {
                   XSVibrate();
@@ -207,7 +207,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
       );
     }
     t.add(Padding(
-      padding: EdgeInsets.all(load_done || data.length == 0 ? 7.5 : 0),
+      padding: EdgeInsets.all(load_done || data!.length == 0 ? 7.5 : 0),
     ));
 
     int count = w > 1200 ? 5 : (w > 800 ? 4 : 2);
@@ -218,7 +218,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
           animation: true,
           bottom: 50,
           refresh: () {
-            _indicatorKey.currentState.show();
+            _indicatorKey.currentState!.show();
           },
           child: MasonryGridView.count(
             controller: _scrollController,
@@ -282,7 +282,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
           var data = await _getInitData();
           return data;
         },
-        child: data.length == 0 ? OccuLoading() : _buildComponents(), //11223344
+        child: data!.length == 0 ? OccuLoading() : _buildComponents(), //11223344
       ),
     );
   }

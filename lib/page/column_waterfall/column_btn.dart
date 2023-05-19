@@ -6,15 +6,15 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class ColumnBtn extends StatefulWidget {
-  String name;
-  int fid;
-  bool loading;
-  bool needPush;
-  bool hideArrow;
-  Function backData;
+  String? name;
+  int? fid;
+  bool? loading;
+  bool? needPush;
+  bool? hideArrow;
+  Function? backData;
 
   ColumnBtn({
-    Key key,
+    Key? key,
     this.name,
     this.fid,
     this.loading,
@@ -61,7 +61,7 @@ class _ColumnBtnState extends State<ColumnBtn> {
               ),
             ).then((value) {
               if (widget.backData != null) {
-                widget.backData(value);
+                widget.backData!(value);
               }
             });
           } else {
@@ -72,7 +72,7 @@ class _ColumnBtnState extends State<ColumnBtn> {
           }
         },
         child: Hero(
-          tag: (widget.name) + (widget.fid.toString()),
+          tag: widget.name! + (widget.fid.toString()),
           child: Container(
             width: 120,
             height: 40,
@@ -97,7 +97,7 @@ class _ColumnBtnState extends State<ColumnBtn> {
                 Material(
                   color: Colors.transparent,
                   child: Text(
-                    widget.name,
+                    widget.name!,
                     style: TextStyle(
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_dark_white

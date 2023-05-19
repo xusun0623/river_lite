@@ -73,10 +73,10 @@ class _HomeState extends State<Home> {
     var data = await Api().message_heart({});
     var count = 0;
     if (data != null && data["rs"] != 0 && data["body"] != null) {
-      count += data["body"]["replyInfo"]["count"];
-      count += data["body"]["atMeInfo"]["count"];
-      count += data["body"]["systemInfo"]["count"];
-      count += data["body"]["pmInfos"].length;
+      count += int.parse(data["body"]["replyInfo"]["count"].toString());
+      count += int.parse(data["body"]["atMeInfo"]["count"].toString());
+      count += int.parse(data["body"]["systemInfo"]["count"].toString());
+      count += int.parse(data["body"]["pmInfos"].length.toString());
       data = data["body"];
       if (count != 0) {
         setState(() {
@@ -96,7 +96,7 @@ class _HomeState extends State<Home> {
 
   _getBlackStatus() async {
     String black_info_txt = await getStorage(key: "black", initData: "[]");
-    List black_info_map = jsonDecode(black_info_txt);
+    List? black_info_map = jsonDecode(black_info_txt);
     Provider.of<BlackProvider>(context, listen: false).black = black_info_map;
   }
 
@@ -228,8 +228,8 @@ class _HomeState extends State<Home> {
 
     int getConvertIndex() {
       int idx = Provider.of<ShowPicProvider>(context).isShow
-          ? ([0, 1, 2, 3, 0][tabShowProvider.index])
-          : ([0, 1, 2, 0, 0][tabShowProvider.index]);
+          ? ([0, 1, 2, 3, 0][tabShowProvider.index!])
+          : ([0, 1, 2, 0, 0][tabShowProvider.index!]);
       return idx;
     }
 
@@ -256,7 +256,7 @@ class _HomeState extends State<Home> {
         : Scaffold(
             //移动端的UI布局
             body: WillPopScope(
-              onWillPop: () {
+              onWillPop: () async {
                 if (_firstBack) {
                   SystemChannels.platform.invokeMethod('SystemNavigator.pop');
                 } else {
@@ -266,7 +266,7 @@ class _HomeState extends State<Home> {
                     txt: "再次返回",
                   );
                 }
-                return;
+                return false;
               },
               child: IndexedStack(
                 children: homePages(),
@@ -288,9 +288,9 @@ class IosBottomNavigatorBar extends StatefulWidget {
   double barPadding;
 
   IosBottomNavigatorBar({
-    Key key,
-    @required this.barHeight,
-    @required this.barPadding,
+    Key? key,
+    required this.barHeight,
+    required this.barPadding,
   }) : super(key: key);
 
   @override
@@ -305,10 +305,10 @@ class _IosBottomNavigatorBarState extends State<IosBottomNavigatorBar> {
     var data = await Api().message_heart({});
     var count = 0;
     if (data != null && data["rs"] != 0 && data["body"] != null) {
-      count += data["body"]["replyInfo"]["count"];
-      count += data["body"]["atMeInfo"]["count"];
-      count += data["body"]["systemInfo"]["count"];
-      count += data["body"]["pmInfos"].length;
+      count += int.parse(data["body"]["replyInfo"]["count"].toString());
+      count += int.parse(data["body"]["atMeInfo"]["count"].toString());
+      count += int.parse(data["body"]["systemInfo"]["count"].toString());
+      count += int.parse(data["body"]["pmInfos"].length.toString());
       data = data["body"];
       if (count != 0) {
         setState(() {
@@ -448,7 +448,7 @@ class _IosBottomNavigatorBarState extends State<IosBottomNavigatorBar> {
 }
 
 class MaterialBottomNavigationBar extends StatefulWidget {
-  MaterialBottomNavigationBar({Key key}) : super(key: key);
+  MaterialBottomNavigationBar({Key? key}) : super(key: key);
 
   @override
   State<MaterialBottomNavigationBar> createState() =>
@@ -461,12 +461,12 @@ class _MaterialBottomNavigationBarState
 
   _getNewMsg() async {
     var data = await Api().message_heart({});
-    var count = 0;
+    int count = 0;
     if (data != null && data["rs"] != 0 && data["body"] != null) {
-      count += data["body"]["replyInfo"]["count"];
-      count += data["body"]["atMeInfo"]["count"];
-      count += data["body"]["systemInfo"]["count"];
-      count += data["body"]["pmInfos"].length;
+      count += int.parse(data["body"]["replyInfo"]["count"].toString());
+      count += int.parse(data["body"]["atMeInfo"]["count"].toString());
+      count += int.parse(data["body"]["systemInfo"]["count"].toString());
+      count += int.parse(data["body"]["pmInfos"].length);
       data = data["body"];
       if (count != 0) {
         setState(() {
@@ -548,14 +548,14 @@ class _MaterialBottomNavigationBarState
         _getNewMsg();
         tabShowProvider.changeIndex(value);
       },
-      currentIndex: tabShowProvider.index,
+      currentIndex: tabShowProvider.index!,
       items: bottomBar(),
     );
   }
 }
 
 class QueationProgress extends StatefulWidget {
-  const QueationProgress({Key key}) : super(key: key);
+  const QueationProgress({Key? key}) : super(key: key);
 
   @override
   State<QueationProgress> createState() => _QueationProgressState();

@@ -26,7 +26,7 @@ class Essence extends StatefulWidget {
 
 class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
-  var data = [];
+  List<dynamic>? data = [];
   var loading = false;
   var load_done = false;
   bool showBackToTop = false;
@@ -83,7 +83,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
     if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
       data = tmp["list"];
     }
-    if (data != null && data.length != 0)
+    if (data != null && data!.length != 0)
       setStorage(key: "essence_reply", value: jsonEncode(data));
     load_done = false;
     setState(() {});
@@ -102,12 +102,12 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
     setState(() {});
     int pageSize = 20;
     var tmp = await Api().forum_topiclist({
-      "page": (data.length / pageSize + 1).toInt(),
+      "page": (data!.length / pageSize + 1).toInt(),
       "pageSize": pageSize,
       "sortby": "essence"
     });
     Api().forum_topiclist({
-      "page": (data.length / pageSize + 1).toInt() + 1,
+      "page": (data!.length / pageSize + 1).toInt() + 1,
       "pageSize": pageSize,
       "sortby": "essence"
     });
@@ -115,7 +115,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
         tmp["rs"] != 0 &&
         tmp["list"] != null &&
         tmp["list"].length != 0) {
-      data.addAll(tmp["list"]);
+      data!.addAll(tmp["list"]);
       setStorage(key: "essence_reply", value: jsonEncode(data));
     }
     load_done = tmp == null || ((tmp["list"] ?? []).length < pageSize);
@@ -126,8 +126,8 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
   Widget _buildComponents() {
     List<Widget> t = [];
     double w = MediaQuery.of(context).size.width;
-    if (data != null && data.length != 0) {
-      for (var i in data) {
+    if (data != null && data!.length != 0) {
+      for (var i in data!) {
         t.add(
           Topic(
             isLeftNaviUI: isDesktop() && true,
@@ -138,14 +138,14 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
         );
       }
     }
-    if (data.length == 0) {
+    if (data!.length == 0) {
       t.add(Container(
         height: MediaQuery.of(context).size.height - 100,
       ));
     }
     if (w < 800) {
       t.add(
-        load_done || data.length == 0
+        load_done || data!.length == 0
             ? TapMore(
                 tap: () {
                   XSVibrate();
@@ -160,7 +160,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
       );
     }
     t.add(Padding(
-      padding: EdgeInsets.all(load_done || data.length == 0 ? 7.5 : 0),
+      padding: EdgeInsets.all(load_done || data!.length == 0 ? 7.5 : 0),
     ));
     return Stack(
       children: [
@@ -169,7 +169,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
           animation: true,
           bottom: 50,
           refresh: () {
-            _indicatorKey.currentState.show();
+            _indicatorKey.currentState!.show();
           },
           child: MasonryGridView.count(
             controller: _scrollController,
@@ -243,7 +243,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
           var data = await _getInitData();
           return data;
         },
-        child: data.length == 0 ? OccuLoading() : _buildComponents(),
+        child: data!.length == 0 ? OccuLoading() : _buildComponents(),
       ),
     );
   }

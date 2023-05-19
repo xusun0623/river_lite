@@ -42,8 +42,8 @@ import 'package:screenshot/screenshot.dart';
 import '../../outer/cached_network_image/cached_image_widget.dart';
 
 class TopicDetail extends StatefulWidget {
-  int topicID;
-  TopicDetail({Key key, this.topicID}) : super(key: key);
+  int? topicID;
+  TopicDetail({Key? key, this.topicID}) : super(key: key);
 
   @override
   _TopicDetailState createState() => _TopicDetailState();
@@ -51,14 +51,14 @@ class TopicDetail extends StatefulWidget {
 
 class _TopicDetailState extends State<TopicDetail> {
   var data;
-  var comment = [];
-  var load_done = false;
+  List<dynamic>? comment = [];
+  bool? load_done = false;
   var loading = false;
   var _select = 0; //0-全部回复 1-只看楼主
   var _sort = 0; //0-按时间正序 1-按时间倒序
   var showBackToTop = false;
   var uploadImgList = [];
-  var total_num = 0; //评论总数
+  int? total_num = 0; //评论总数
   String uploadFileAid = "";
   var replyId = 0;
   int stick_num = 0;
@@ -76,12 +76,12 @@ class _TopicDetailState extends State<TopicDetail> {
   List<int> listID = []; //淘贴ID
   List listData = []; //淘贴数据
 
-  String blackKeyWord = "";
+  String? blackKeyWord = "";
   ScrollController _scrollController = new ScrollController();
   TextEditingController _txtController = new TextEditingController();
   FocusNode _focusNode = new FocusNode();
 
-  Uint8List _imageFile;
+  Uint8List? _imageFile;
   ScreenshotController screenshotController = ScreenshotController();
 
   var dislike_count = 0;
@@ -209,12 +209,12 @@ class _TopicDetailState extends State<TopicDetail> {
               p
                   .getElementsByTagName("a")
                   .first
-                  .attributes["href"]
+                  .attributes["href"]!
                   .split("&uid=")[1];
           tmp["user_id"] = int.parse(p
               .getElementsByTagName("a")
               .first
-              .attributes["href"]
+              .attributes["href"]!
               .split("&uid=")[1]);
         }
       });
@@ -263,7 +263,7 @@ class _TopicDetailState extends State<TopicDetail> {
         .data
         .toString());
     try {
-      var dislike_txt = document.getElementById("recommendv_sub_digg");
+      var dislike_txt = document.getElementById("recommendv_sub_digg")!;
       dislike_count = int.parse(dislike_txt.innerHtml);
       var listArray = document.getElementsByClassName("cm");
       listArray.forEach((cm) {
@@ -273,7 +273,7 @@ class _TopicDetailState extends State<TopicDetail> {
             listID.add(int.parse(li
                 .getElementsByTagName("a")
                 .first
-                .attributes["href"]
+                .attributes["href"]!
                 .split("ctid=")[1]));
           });
         }
@@ -285,7 +285,7 @@ class _TopicDetailState extends State<TopicDetail> {
 
   bool _isBlack() {
     bool flag = false;
-    Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
+    Provider.of<BlackProvider>(context, listen: false).black!.forEach((element) {
       if (data["topic"]["title"].toString().contains(element) ||
           data["topic"]["user_nick_name"].toString().contains(element)) {
         flag = true;
@@ -324,10 +324,10 @@ class _TopicDetailState extends State<TopicDetail> {
         load_done = ((tmp["list"] ?? []).length < limit);
         setState(() {
           total_num = data["total_num"];
-          isListView = total_num > 100;
+          isListView = total_num! > 100;
           if (total_num == 0) {
             //置顶的评论数量
-            stick_num = comment.length - limit;
+            stick_num = comment!.length - limit;
           }
         });
       } else {
@@ -347,24 +347,24 @@ class _TopicDetailState extends State<TopicDetail> {
   }
 
   void _getComment() async {
-    if (loading || load_done) return; //控制因为网络过慢反复请求问题
+    if (loading || load_done!) return; //控制因为网络过慢反复请求问题
     loading = true;
     const nums = 2000;
     var tmp = await Api().forum_postlist({
       "topicId": widget.topicID,
       "authorId": _select == 0 ? 0 : data["topic"]["user_id"],
       "order": _sort,
-      "page": total_num < nums
+      "page": total_num! < nums
           ? 1
-          : ((comment.length - stick_num) / nums + 1).floor(),
+          : ((comment!.length - stick_num) / nums + 1).floor(),
       "pageSize": nums,
     });
     if (tmp["list"] != null &&
         tmp["list"].length != 0 &&
-        comment.length < nums) {
+        comment!.length < nums) {
       comment = tmp["list"];
     } else {
-      comment.addAll(tmp["list"]);
+      comment!.addAll(tmp["list"]);
     }
     load_done = ((tmp["list"] ?? []).length < nums);
     setState(() {});
@@ -416,9 +416,9 @@ class _TopicDetailState extends State<TopicDetail> {
 
   _captureScreenshot() {
     showToast(context: context, type: XSToast.loading, txt: "请稍后…");
-    screenshotController.capture(pixelRatio: 10).then((Uint8List image) async {
+    screenshotController.capture(pixelRatio: 10).then((Uint8List? image) async {
       final result = await ImageGallerySaver.saveImage(
-        image,
+        image!,
         quality: 100,
         name: "河畔-" + new DateTime.now().millisecondsSinceEpoch.toString(),
       );
@@ -670,7 +670,7 @@ class _TopicDetailState extends State<TopicDetail> {
           "tid": widget.topicID, // 回复时指定帖子
           "isQuote": 0, //"是否引用之前回复的内容
           "title": "",
-          "content": jsonEncode(comment[i]["reply_content"]),
+          "content": jsonEncode(comment![i]["reply_content"]),
         }
       }
     };
@@ -762,10 +762,10 @@ class _TopicDetailState extends State<TopicDetail> {
         topic_id: data["topic"]["topic_id"],
       ),
     ];
-    tmp.add(comment.length == 0
+    tmp.add(comment!.length == 0
         ? Empty(txt: _select == 0 ? "暂无评论, 快去抢沙发吧" : "楼主没有发表评论~")
         : Container());
-    for (var i = 0; i < comment.length; i++) {
+    for (var i = 0; i < comment!.length; i++) {
       tmp.add(Comment(
         isListView: isListView,
         fid: data["boardId"],
@@ -789,18 +789,18 @@ class _TopicDetailState extends State<TopicDetail> {
         },
         host_id: data["topic"]["user_id"],
         topic_id: data["topic"]["topic_id"],
-        data: comment[i],
-        is_last: i == (comment.length - 1),
+        data: comment![i],
+        is_last: i == (comment!.length - 1),
       ));
     }
     tmp.addAll([
-      load_done
+      load_done!
           ? NoMore()
           : BottomLoading(
               color: Colors.transparent,
-              txt: "加载剩余${total_num - comment.length}条评论…",
+              txt: "加载剩余${total_num! - comment!.length}条评论…",
             ),
-      load_done
+      load_done!
           ? Container()
           : Container(
               height: 30,
@@ -1116,11 +1116,11 @@ class _TopicDetailState extends State<TopicDetail> {
 
 class BlackedTopic extends StatelessWidget {
   const BlackedTopic({
-    Key key,
-    @required this.blackKeyWord,
+    Key? key,
+    required this.blackKeyWord,
   }) : super(key: key);
 
-  final String blackKeyWord;
+  final String? blackKeyWord;
 
   @override
   Widget build(BuildContext context) {
@@ -1133,7 +1133,7 @@ class BlackedTopic extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 80),
           child: Center(
             child: Text(
-              "该帖子内容或用户已被你屏蔽，屏蔽关键词为：" + blackKeyWord,
+              "该帖子内容或用户已被你屏蔽，屏蔽关键词为：" + blackKeyWord!,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Provider.of<ColorProvider>(context).isDark
@@ -1148,8 +1148,8 @@ class BlackedTopic extends StatelessWidget {
 
 class DeletedTopic extends StatelessWidget {
   const DeletedTopic({
-    Key key,
-    @required this.isInvalid,
+    Key? key,
+    required this.isInvalid,
   }) : super(key: key);
 
   final bool isInvalid;
@@ -1174,8 +1174,8 @@ class DeletedTopic extends StatelessWidget {
 
 class Divider extends StatelessWidget {
   const Divider({
-    Key key,
-    @required this.context,
+    Key? key,
+    required this.context,
   }) : super(key: key);
 
   final BuildContext context;
@@ -1197,10 +1197,10 @@ class Divider extends StatelessWidget {
 
 //加载动画
 class BottomLoading extends StatefulWidget {
-  Color color;
-  String txt;
+  Color? color;
+  String? txt;
   BottomLoading({
-    Key key,
+    Key? key,
     this.color,
     this.txt,
   }) : super(key: key);
@@ -1241,7 +1241,7 @@ class Tag extends StatefulWidget {
   var color;
   var color_opa;
   Tag({
-    Key key,
+    Key? key,
     this.txt,
     this.color,
     this.color_opa,
@@ -1270,7 +1270,7 @@ class _TagState extends State<Tag> {
 }
 
 class TopicBottom extends StatefulWidget {
-  TopicBottom({Key key, this.data}) : super(key: key);
+  TopicBottom({Key? key, this.data}) : super(key: key);
 
   final data;
 
@@ -1314,8 +1314,8 @@ class _TopicBottomState extends State<TopicBottom> {
 // 帖子标题
 class TopicDetailTitle extends StatelessWidget {
   const TopicDetailTitle({
-    Key key,
-    @required this.data,
+    Key? key,
+    required this.data,
   }) : super(key: key);
 
   final data;
@@ -1388,8 +1388,8 @@ class TopicDetailTitle extends StatelessWidget {
 // 楼主名字头像
 class TopicDetailHead extends StatelessWidget {
   const TopicDetailHead({
-    Key key,
-    @required this.data,
+    Key? key,
+    required this.data,
   }) : super(key: key);
 
   final data;

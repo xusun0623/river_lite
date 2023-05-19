@@ -17,14 +17,14 @@ class ImageLoader implements platform.ImageLoader {
   @override
   Stream<ui.Codec> loadAsync(
     String url,
-    String cacheKey,
+    String? cacheKey,
     StreamController<ImageChunkEvent> chunkEvents,
     DecoderCallback decode,
     BaseCacheManager cacheManager,
-    int maxHeight,
-    int maxWidth,
-    Map<String, String> headers,
-    Function() errorListener,
+    int? maxHeight,
+    int? maxWidth,
+    Map<String, String>? headers,
+    Function()? errorListener,
     ImageRenderMethodForWeb imageRenderMethodForWeb,
     Function() evictImage,
   ) async* {

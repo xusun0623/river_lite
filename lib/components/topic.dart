@@ -28,18 +28,18 @@ import 'package:route_transitions/route_transitions.dart';
 import '../outer/cached_network_image/cached_image_widget.dart';
 
 class Topic extends StatefulWidget {
-  Map data;
-  double top;
-  double bottom;
-  bool blackOccu;
-  bool hideColumn;
-  bool isLeftNaviUI;
-  bool removeMargin;
-  bool hidePicture;
-  Color backgroundColor;
+  Map? data;
+  double? top;
+  double? bottom;
+  bool? blackOccu;
+  bool? hideColumn;
+  bool? isLeftNaviUI;
+  bool? removeMargin;
+  bool? hidePicture;
+  Color? backgroundColor;
 
   Topic({
-    Key key,
+    Key? key,
     this.data,
     this.top,
     this.bottom,
@@ -58,14 +58,14 @@ class Topic extends StatefulWidget {
 class _TopicState extends State<Topic> {
   var _isRated = false;
   bool isBlack = false;
-  String blackKeyWord = "";
+  String? blackKeyWord = "";
 
   bool _isBlack() {
     bool flag = false;
-    Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
-      if (widget.data["title"].toString().contains(element) ||
-          widget.data["subject"].toString().contains(element) ||
-          widget.data["user_nick_name"].toString().contains(element)) {
+    Provider.of<BlackProvider>(context, listen: false).black!.forEach((element) {
+      if (widget.data!["title"].toString().contains(element) ||
+          widget.data!["subject"].toString().contains(element) ||
+          widget.data!["user_nick_name"].toString().contains(element)) {
         flag = true;
         blackKeyWord = element;
       }
@@ -78,7 +78,7 @@ class _TopicState extends State<Topic> {
     String tmp1 = await getStorage(key: "topic_dis_like", initData: "");
     List<String> ids = tmp.split(",");
     if (ids.indexOf(
-            (widget.data["source_id"] ?? widget.data["topic_id"]).toString()) >
+            (widget.data!["source_id"] ?? widget.data!["topic_id"]).toString()) >
         -1) {
       setState(() {
         _isRated = true;
@@ -193,7 +193,7 @@ class _TopicState extends State<Topic> {
                 await Api().user_report({
                   "idType": "thread",
                   "message": txt,
-                  "id": widget.data["topic_id"]
+                  "id": widget.data!["topic_id"]
                 });
                 Navigator.pop(context);
                 _feedbackSuccess();
@@ -243,7 +243,7 @@ class _TopicState extends State<Topic> {
       ],
       tap: (res) async {
         if (res == "屏蔽此贴") {
-          await setBlackWord(widget.data["title"], context);
+          await setBlackWord(widget.data!["title"], context);
           Navigator.pop(context);
           showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
           setState(() {
@@ -251,7 +251,7 @@ class _TopicState extends State<Topic> {
           });
         }
         if (res == "屏蔽此人") {
-          await setBlackWord(widget.data["user_nick_name"], context);
+          await setBlackWord(widget.data!["user_nick_name"], context);
           Navigator.pop(context);
           showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
           setState(() {
@@ -264,7 +264,7 @@ class _TopicState extends State<Topic> {
           await Api().user_userfavorite({
             "idType": "tid",
             "action": "favorite",
-            "id": widget.data["topic_id"],
+            "id": widget.data!["topic_id"],
           });
           hideToast();
           showToast(context: context, type: XSToast.success, txt: "收藏成功");
@@ -274,7 +274,7 @@ class _TopicState extends State<Topic> {
             ClipboardData(
                 text: base_url +
                     "forum.php?mod=viewthread&tid=" +
-                    widget.data["topic_id"].toString()),
+                    widget.data!["topic_id"].toString()),
           );
           Navigator.pop(context);
           showToast(context: context, type: XSToast.success, txt: "复制成功");
@@ -293,20 +293,20 @@ class _TopicState extends State<Topic> {
     bool flag = false;
     for (int i = 0; i < history_arr.length; i++) {
       var ele = history_arr[i];
-      if (ele["userAvatar"] == widget.data["userAvatar"] &&
-          ele["title"] == widget.data["title"] &&
+      if (ele["userAvatar"] == widget.data!["userAvatar"] &&
+          ele["title"] == widget.data!["title"] &&
           ele["subject"] ==
-              ((widget.data["summary"] ?? widget.data["subject"]) ?? "")) {
+              ((widget.data!["summary"] ?? widget.data!["subject"]) ?? "")) {
         history_arr.removeAt(i);
       }
     }
     List tmp_list_history = [
       {
-        "userAvatar": widget.data["userAvatar"],
-        "title": widget.data["title"],
-        "subject": (widget.data["summary"] ?? widget.data["subject"]) ?? "",
-        "time": widget.data["last_reply_date"],
-        "topic_id": (widget.data["source_id"] ?? widget.data["topic_id"]),
+        "userAvatar": widget.data!["userAvatar"],
+        "title": widget.data!["title"],
+        "subject": (widget.data!["summary"] ?? widget.data!["subject"]) ?? "",
+        "time": widget.data!["last_reply_date"],
+        "topic_id": (widget.data!["source_id"] ?? widget.data!["topic_id"]),
       }
     ];
     tmp_list_history.addAll(history_arr);
@@ -332,7 +332,7 @@ class _TopicState extends State<Topic> {
                 widget: Padding(
                   padding: const EdgeInsets.all(15),
                   child: Text(
-                    "此贴已被你屏蔽，屏蔽关键词为:" + blackKeyWord,
+                    "此贴已被你屏蔽，屏蔽关键词为:" + blackKeyWord!,
                     style: TextStyle(
                       color: os_deep_grey,
                     ),
@@ -350,16 +350,16 @@ class _TopicState extends State<Topic> {
     img_size = img_size > 150 ? 150 : img_size;
     // print(widget.data["imageList"]);
     if (widget.data != null &&
-        widget.data["imageList"] != null &&
-        widget.data["imageList"].length != 0) {
+        widget.data!["imageList"] != null &&
+        widget.data!["imageList"].length != 0) {
       int splitCount = isDesktop() ? 2 : 3;
-      if (widget.data["imageList"].length > splitCount)
-        widget.data["imageList"] =
-            widget.data["imageList"].sublist(0, splitCount);
-      List<Widget> _getImg(List a) {
+      if (widget.data!["imageList"].length > splitCount)
+        widget.data!["imageList"] =
+            widget.data!["imageList"].sublist(0, splitCount);
+      List<Widget> _getImg(List? a) {
         List<Widget> t = [];
-        for (int i = 0; i < widget.data["imageList"].length; i++) {
-          var url = widget.data["imageList"][i];
+        for (int i = 0; i < widget.data!["imageList"].length; i++) {
+          var url = widget.data!["imageList"][i];
           t.add(ConstrainedBox(
             constraints: BoxConstraints(
               maxHeight: img_size,
@@ -370,7 +370,7 @@ class _TopicState extends State<Topic> {
                 fadeWidget(
                   newPage: PhotoPreview(
                     isSmallPic: true,
-                    galleryItems: widget.data["imageList"],
+                    galleryItems: widget.data!["imageList"],
                     defaultImage: i,
                   ),
                   context: context,
@@ -427,7 +427,7 @@ class _TopicState extends State<Topic> {
         height: img_size,
         width: MediaQuery.of(context).size.width,
         child: Row(
-          children: _getImg(widget.data["imageList"]),
+          children: _getImg(widget.data!["imageList"]),
         ),
       );
     } else {
@@ -460,8 +460,8 @@ class _TopicState extends State<Topic> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        if (widget.data["user_nick_name"] != "匿名")
-                          toUserSpace(context, widget.data["user_id"]);
+                        if (widget.data!["user_nick_name"] != "匿名")
+                          toUserSpace(context, widget.data!["user_id"]);
                       },
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
@@ -469,7 +469,7 @@ class _TopicState extends State<Topic> {
                           width: 30,
                           height: 30,
                           fit: BoxFit.cover,
-                          imageUrl: widget.data["userAvatar"],
+                          imageUrl: widget.data!["userAvatar"],
                           placeholder: (context, url) => Container(
                               color: Provider.of<ColorProvider>(context).isDark
                                   ? os_dark_white
@@ -484,7 +484,7 @@ class _TopicState extends State<Topic> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.data["user_nick_name"],
+                          widget.data!["user_nick_name"],
                           style: TextStyle(
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? Color(0xffF1f1f1)
@@ -497,7 +497,7 @@ class _TopicState extends State<Topic> {
                         Text(
                           RelativeDateFormat.format(
                               DateTime.fromMillisecondsSinceEpoch(
-                                  int.parse(widget.data["last_reply_date"]))),
+                                  int.parse(widget.data!["last_reply_date"]))),
                           style: TextStyle(
                             color: Color(0xFFAAAAAA),
                             fontSize: 12.5,
@@ -549,7 +549,7 @@ class _TopicState extends State<Topic> {
               //     54,
               margin: EdgeInsets.only(right: 10),
               child: Text(
-                widget.data["title"],
+                widget.data!["title"],
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontSize: 17,
@@ -560,13 +560,13 @@ class _TopicState extends State<Topic> {
               ),
             ),
             //中部区域：正文
-            (widget.data["summary"] ?? widget.data["subject"])
+            (widget.data!["summary"] ?? widget.data!["subject"])
                         .toString()
                         .trim() ==
                     ""
                 ? Container()
                 : Padding(padding: EdgeInsets.all(3)),
-            ((widget.data["summary"] ?? widget.data["subject"]) ?? "") == ""
+            ((widget.data!["summary"] ?? widget.data!["subject"]) ?? "") == ""
                 ? Container()
                 : Container(
                     // width: MediaQuery.of(context).size.width -
@@ -577,7 +577,7 @@ class _TopicState extends State<Topic> {
                     //     54,
                     margin: EdgeInsets.only(right: 10),
                     child: Text(
-                      (widget.data["summary"] ?? widget.data["subject"]) ?? "",
+                      (widget.data!["summary"] ?? widget.data!["subject"]) ?? "",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 16,
@@ -594,8 +594,8 @@ class _TopicState extends State<Topic> {
                 ? Container()
                 : Container(
                     height: widget.data != null &&
-                            widget.data["imageList"] != null &&
-                            widget.data["imageList"].length != 0
+                            widget.data!["imageList"] != null &&
+                            widget.data!["imageList"].length != 0
                         ? ((MediaQuery.of(context).size.width - 55) / 3 - 3.3 >
                                 150
                             ? 150
@@ -608,7 +608,7 @@ class _TopicState extends State<Topic> {
                 ? Container()
                 : Padding(padding: EdgeInsets.all(1.5)),
             // 投票贴的Tag
-            (widget.data["vote"] ?? 0) == 0
+            (widget.data!["vote"] ?? 0) == 0
                 ? Container()
                 : Container(
                     width: MediaQuery.of(context).size.width,
@@ -667,7 +667,7 @@ class _TopicState extends State<Topic> {
                     ),
                     Container(width: 5),
                     Text(
-                      "${widget.data['hits']}",
+                      "${widget.data!['hits']}",
                       style: TextStyle(
                         color: Color(0xFF6B6B6B),
                         fontSize: 12,
@@ -681,7 +681,7 @@ class _TopicState extends State<Topic> {
                     ),
                     Container(width: 5),
                     Text(
-                      "${widget.data['replies']}",
+                      "${widget.data!['replies']}",
                       style: TextStyle(
                         color: Color(0xFF6B6B6B),
                         fontSize: 12,
@@ -695,7 +695,7 @@ class _TopicState extends State<Topic> {
                     ),
                     Container(width: 5),
                     Text(
-                      (widget.data["recommendAdd"] ?? 0).toString(),
+                      (widget.data!["recommendAdd"] ?? 0).toString(),
                       style: TextStyle(
                         color: Color(0xFF6B6B6B),
                         fontSize: 12,
@@ -709,7 +709,7 @@ class _TopicState extends State<Topic> {
                     Navigator.pushNamed(
                       context,
                       "/column",
-                      arguments: widget.data["board_id"],
+                      arguments: widget.data!["board_id"],
                     );
                   },
                   radius: 10,
@@ -723,7 +723,7 @@ class _TopicState extends State<Topic> {
                     child: Text(
                       (widget.hideColumn ?? false)
                           ? " "
-                          : widget.data["board_name"],
+                          : widget.data!["board_name"],
                       style: TextStyle(
                         color: os_color,
                         fontSize: 14,
@@ -740,10 +740,10 @@ class _TopicState extends State<Topic> {
   }
 
   _tapWidget() async {
-    int tid = (widget.data["source_id"] ?? widget.data["topic_id"]);
+    int? tid = (widget.data!["source_id"] ?? widget.data!["topic_id"]);
     if (Platform.isWindows &&
-        (widget.data["board_name"] == "视觉艺术" ||
-            widget.data["board_name"] == "镜头下的成电")) {
+        (widget.data!["board_name"] == "视觉艺术" ||
+            widget.data!["board_name"] == "镜头下的成电")) {
       showModal(
           context: context,
           title: "请确认",
@@ -765,7 +765,7 @@ class _TopicState extends State<Topic> {
       Navigator.pushNamed(
         context,
         "/topic_detail",
-        arguments: (widget.data["source_id"] ?? widget.data["topic_id"]),
+        arguments: (widget.data!["source_id"] ?? widget.data!["topic_id"]),
       );
     }
   }

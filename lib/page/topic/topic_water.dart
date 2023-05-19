@@ -5,9 +5,9 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class ToWaterTip extends StatefulWidget {
-  Function confirm;
+  Function? confirm;
   ToWaterTip({
-    Key key,
+    Key? key,
     this.confirm,
   }) : super(key: key);
 
@@ -88,7 +88,7 @@ class _ToWaterTipState extends State<ToWaterTip> {
                 child: myInkWell(
                   tap: () async {
                     Navigator.pop(context);
-                    widget.confirm();
+                    widget.confirm!();
                   },
                   color: os_deep_blue,
                   widget: Container(

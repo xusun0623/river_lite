@@ -23,13 +23,13 @@ import 'package:provider/provider.dart';
 final GlobalKey<MixContSectionState> mixContSectionKey = GlobalKey();
 
 class PostWithImagePopWidget extends StatefulWidget {
-  String title = "";
-  List<BodyCont> cont;
-  int column_id = 0;
-  int column_child_id = 0;
-  Function successSent;
+  String? title = "";
+  List<BodyCont>? cont;
+  int? column_id = 0;
+  int? column_child_id = 0;
+  Function? successSent;
   PostWithImagePopWidget({
-    Key key,
+    Key? key,
     this.title,
     this.cont,
     this.column_id,
@@ -51,7 +51,7 @@ class _PostWithImagePopWidgetState extends State<PostWithImagePopWidget> {
 
   countNum() {
     total_cnt = 0;
-    widget.cont.forEach((element) {
+    widget.cont!.forEach((element) {
       if (element.type == BodyContType.image) {
         total_cnt++;
       }
@@ -74,7 +74,7 @@ class _PostWithImagePopWidgetState extends State<PostWithImagePopWidget> {
       } else {
         // 图片
         List img_urls = await Api().uploadImage(
-          imgs: [XFile(cont_tmp[i].cont)],
+          imgs: [XFile(cont_tmp[i].cont!)],
         );
         setState(() {
           progress++;
@@ -122,7 +122,7 @@ class _PostWithImagePopWidgetState extends State<PostWithImagePopWidget> {
     });
     if (ret_tip["rs"] == 1) {
       if (widget.successSent != null) {
-        widget.successSent();
+        widget.successSent!();
       }
     } else {
       showToast(
@@ -183,10 +183,10 @@ class _PostWithImagePopWidgetState extends State<PostWithImagePopWidget> {
 }
 
 class PostNewMix extends StatefulWidget {
-  int board_id;
+  int? board_id;
 
   PostNewMix({
-    Key key,
+    Key? key,
     this.board_id,
   }) : super(key: key);
 
@@ -306,7 +306,7 @@ class _PostNewMixState extends State<PostNewMix> {
   }
 
   clickEmoji() {
-    FocusManager.instance.primaryFocus.unfocus();
+    FocusManager.instance.primaryFocus!.unfocus();
     setState(() {
       choosingEmoji = true;
       state = 2;
@@ -320,12 +320,16 @@ class _PostNewMixState extends State<PostNewMix> {
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
       child: WillPopScope(
         onWillPop: () async {
-          showModal(
-              context: context,
-              cont: "如果现在退出，草稿内容将不会保存",
-              confirm: () {
-                Navigator.pop(context);
-              });
+          if (successSent) {
+            Navigator.pop(context);
+          } else {
+            showModal(
+                context: context,
+                cont: "如果现在退出，草稿内容将不会保存",
+                confirm: () {
+                  Navigator.pop(context);
+                });
+          }
           return false;
         },
         child: Scaffold(
@@ -376,12 +380,16 @@ class _PostNewMixState extends State<PostNewMix> {
                       ? os_dark_dark_white
                       : Color(0xFF2E2E2E)),
               onPressed: () {
-                showModal(
-                    context: context,
-                    cont: "如果现在退出，草稿内容将不会保存",
-                    confirm: () {
-                      Navigator.pop(context);
-                    });
+                if (successSent) {
+                  Navigator.pop(context);
+                } else {
+                  showModal(
+                      context: context,
+                      cont: "如果现在退出，草稿内容将不会保存",
+                      confirm: () {
+                        Navigator.pop(context);
+                      });
+                }
               },
             ),
           ),
@@ -470,7 +478,7 @@ class _PostNewMixState extends State<PostNewMix> {
                                                   state = 0;
                                                 });
                                                 FocusManager
-                                                    .instance.primaryFocus
+                                                    .instance.primaryFocus!
                                                     .unfocus(); //去除焦点
                                               },
                                             ),
@@ -529,7 +537,7 @@ class _PostNewMixState extends State<PostNewMix> {
                                                         ),
                                                         onPressed: () {
                                                           FocusManager.instance
-                                                              .primaryFocus
+                                                              .primaryFocus!
                                                               .unfocus();
                                                           setState(() {
                                                             choosingEmoji =
@@ -550,7 +558,7 @@ class _PostNewMixState extends State<PostNewMix> {
                                                     state = 0;
                                                   });
                                                   FocusManager
-                                                      .instance.primaryFocus
+                                                      .instance.primaryFocus!
                                                       .unfocus(); //去除焦点
                                                 },
                                               ),
@@ -561,7 +569,7 @@ class _PostNewMixState extends State<PostNewMix> {
                                       Expanded(
                                         child: YourEmoji(
                                           tap: (res) {
-                                            mixContSectionKey.currentState
+                                            mixContSectionKey.currentState!
                                                 .insertEmoji(res);
                                           },
                                         ),
@@ -589,10 +597,10 @@ enum BodyContType {
 }
 
 class BodyCont {
-  BodyContType type; //类型
+  BodyContType? type; //类型
   //type==image，cont为path；
   //type==txt，cont为内容；
-  String cont; //内容
+  String? cont; //内容
   BodyCont(BodyContType t, String c) {
     this.type = t;
     this.cont = c;
@@ -600,14 +608,14 @@ class BodyCont {
 }
 
 class MixContSection extends StatefulWidget {
-  Function focus;
-  Function setState;
-  Function emit;
-  Function emitTitle;
-  Function clickEmoji;
-  int state;
+  Function? focus;
+  Function? setState;
+  Function? emit;
+  Function? emitTitle;
+  Function? clickEmoji;
+  int? state;
   MixContSection({
-    Key key,
+    Key? key,
     this.focus,
     this.setState,
     this.state,
@@ -631,7 +639,7 @@ class MixContSectionState extends State<MixContSection> {
 
   returnTotalCont() {
     if (widget.emit != null) {
-      widget.emit(body_cont);
+      widget.emit!(body_cont);
     }
   }
 
@@ -661,7 +669,7 @@ class MixContSectionState extends State<MixContSection> {
   }
 
   unFocus() {
-    FocusManager.instance.primaryFocus.unfocus(); //去除焦点
+    FocusManager.instance.primaryFocus!.unfocus(); //去除焦点
   }
 
   List<Widget> _buildCont() {
@@ -760,7 +768,7 @@ class MixContSectionState extends State<MixContSection> {
                       radius: 2.5,
                       tap: () {
                         if (widget.clickEmoji != null) {
-                          widget.clickEmoji();
+                          widget.clickEmoji!();
                         }
                       },
                       color: Provider.of<ColorProvider>(context).isDark
@@ -788,7 +796,10 @@ class MixContSectionState extends State<MixContSection> {
           body_cont[i].type == BodyContType.txt &&
           body_cont[i + 1].type == BodyContType.txt) {
         //合并两个相邻的Input
-        body_cont[i].cont += "\n" + body_cont[i + 1].cont;
+        String tmp = "\n" + body_cont[i + 1].cont!;
+        if (body_cont[i].cont != null) {
+          body_cont[i].cont = (body_cont[i].cont ?? "") + tmp;
+        }
         _textEditingController[i].text +=
             "\n" + _textEditingController[i + 1].text;
         body_cont.removeAt(i + 1);
@@ -801,9 +812,9 @@ class MixContSectionState extends State<MixContSection> {
 
   addCamera() async {
     unFocus();
-    final XFile photo = await ImagePicker().pickImage(
+    final XFile photo = (await ImagePicker().pickImage(
       source: ImageSource.camera,
-    );
+    ))!;
     body_cont.add(BodyCont(BodyContType.image, photo.path));
     body_cont.add(BodyCont(BodyContType.txt, ""));
     rebuildControlList();
@@ -829,7 +840,7 @@ class MixContSectionState extends State<MixContSection> {
       //   quality: 0.7, //一半的质量
       //   // maxSize: 2048, //1024KB
       // );
-      List res = await getPhoneImages(context);
+      List res = (await getPhoneImages(context))!;
       for (var i = 0; i < res.length; i++) {
         final XFile element = XFile(res[i].path);
         body_cont.add(BodyCont(BodyContType.image, element.path));
@@ -856,7 +867,7 @@ class MixContSectionState extends State<MixContSection> {
     for (var i = 0; i < _focusNode.length; i++) {
       _focusNode[i].addListener(() {
         if (_focusNode[i].hasFocus) {
-          if (widget.focus != null) widget.focus();
+          if (widget.focus != null) widget.focus!();
           setState(() {
             lastEditIndex = i;
             returnTotalCont();
@@ -883,7 +894,7 @@ class MixContSectionState extends State<MixContSection> {
               MixTitleInput(
                 emitTxt: (res) {
                   if (widget.emitTitle != null) {
-                    widget.emitTitle(res);
+                    widget.emitTitle!(res);
                   }
                 },
               ),
@@ -904,10 +915,10 @@ class MixContSectionState extends State<MixContSection> {
 }
 
 class MixPic extends StatefulWidget {
-  String path;
-  Function delete;
+  String? path;
+  Function? delete;
   MixPic({
-    Key key,
+    Key? key,
     this.path,
     this.delete,
   }) : super(key: key);
@@ -929,7 +940,7 @@ class _MixPicState extends State<MixPic> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(2.5),
-              child: Image.file(File(widget.path)),
+              child: Image.file(File(widget.path!)),
             ),
           ),
           Positioned(
@@ -937,7 +948,7 @@ class _MixPicState extends State<MixPic> {
             top: 10,
             child: myInkWell(
               tap: () {
-                if (widget.delete != null) widget.delete();
+                if (widget.delete != null) widget.delete!();
               },
               color: Color(0x44000000),
               widget: Padding(
@@ -958,11 +969,11 @@ class _MixPicState extends State<MixPic> {
 }
 
 class MixContInput extends StatefulWidget {
-  TextEditingController controller;
-  FocusNode focusNode;
-  String placeholder;
+  TextEditingController? controller;
+  FocusNode? focusNode;
+  String? placeholder;
   MixContInput({
-    Key key,
+    Key? key,
     this.controller,
     this.focusNode,
     this.placeholder,
@@ -1017,9 +1028,9 @@ class _MixContInputState extends State<MixContInput> {
 }
 
 class MixTitleInput extends StatefulWidget {
-  Function emitTxt;
+  Function? emitTxt;
   MixTitleInput({
-    Key key,
+    Key? key,
     this.emitTxt,
   }) : super(key: key);
 
@@ -1044,7 +1055,7 @@ class _MixTitleInputState extends State<MixTitleInput> {
               : os_deep_blue,
           onChanged: (value) {
             if (widget.emitTxt != null) {
-              widget.emitTxt(value);
+              widget.emitTxt!(value);
             }
           },
           style: TextStyle(
@@ -1085,7 +1096,7 @@ class _MixTitleInputState extends State<MixTitleInput> {
 
 class ConfirmPost extends StatelessWidget {
   const ConfirmPost({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -1118,12 +1129,12 @@ class ConfirmPost extends StatelessWidget {
 }
 
 class SelectColumn extends StatefulWidget {
-  String txt;
-  Function selectColumn;
-  int column_id;
-  int column_child_id;
+  String? txt;
+  Function? selectColumn;
+  int? column_id;
+  int? column_child_id;
   SelectColumn({
-    Key key,
+    Key? key,
     this.txt,
     this.selectColumn,
     this.column_id,
@@ -1164,7 +1175,7 @@ class _SelectColumnState extends State<SelectColumn> {
           ),
         ),
         child: Text(
-          widget.txt == "" ? "选择板块" : widget.txt,
+          widget.txt == "" ? "选择板块" : widget.txt!,
           style: TextStyle(
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_dark_white
@@ -1177,12 +1188,12 @@ class _SelectColumnState extends State<SelectColumn> {
 }
 
 class SelectSectionPopWidget extends StatefulWidget {
-  Function selectColumn;
-  int column_id;
-  int column_child_id;
+  Function? selectColumn;
+  int? column_id;
+  int? column_child_id;
 
   SelectSectionPopWidget({
-    Key key,
+    Key? key,
     this.column_id,
     this.column_child_id,
     this.selectColumn,
@@ -1193,15 +1204,15 @@ class SelectSectionPopWidget extends StatefulWidget {
 }
 
 class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
-  int column_id = 0;
-  int column_child_id = 0;
+  int? column_id = 0;
+  int? column_child_id = 0;
   bool loading_1 = false;
   bool loading_2 = false;
   List<Map> columns = []; // { "board_id": 1 , "board_name": "就业创业" }
   List<Map> column_children = []; // { "board_id": 1 , "board_name": "就业创业" }
 
   bool denyPost = false;
-  String column_title = "";
+  String? column_title = "";
 
   getColumn() async {
     setState(() {
@@ -1319,8 +1330,8 @@ class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
               column_child_id = element["board_id"];
               if (widget.selectColumn != null) {
                 // 子板块名字 板块ID 子板块ID
-                widget.selectColumn(
-                  column_title +
+                widget.selectColumn!(
+                  column_title! +
                       (column_title == "" ? "" : "-") +
                       element["board_name"],
                   column_id,

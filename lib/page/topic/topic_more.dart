@@ -22,12 +22,12 @@ import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TopicDetailMore extends StatefulWidget {
-  Map data;
-  Function block;
-  Function alterSend;
-  Function fresh;
+  Map? data;
+  Function? block;
+  Function? alterSend;
+  Function? fresh;
   TopicDetailMore({
-    Key key,
+    Key? key,
     this.data,
     this.block,
     this.alterSend,
@@ -140,7 +140,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                 await Api().user_report({
                   "idType": "thread",
                   "message": txt,
-                  "id": widget.data["topic"]["topic_id"]
+                  "id": widget.data!["topic"]["topic_id"]
                 });
                 Navigator.pop(context);
                 _feedbackSuccess();
@@ -194,7 +194,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       builder: (context) {
         return ToWaterTip(
           confirm: () {
-            widget.alterSend();
+            widget.alterSend!();
           },
         );
       },
@@ -217,7 +217,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       builder: (context) {
         return QrCode(
           url:
-              "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${widget.data["topic"]["topic_id"]}",
+              "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=${widget.data!["topic"]["topic_id"]}",
         );
       },
     );
@@ -231,9 +231,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         "复制帖子链接",
         "举报反馈",
         "屏蔽此贴",
-        ...(widget.data["topic"]["user_id"] == await getUid() ? ["编辑帖子"] : []),
-        ...(widget.data["topic"]["user_id"] == await getUid() ? ["补充内容"] : []),
-        ...(widget.data["topic"]["user_id"] == await getUid() ? ["删除帖子"] : []),
+        ...(widget.data!["topic"]["user_id"] == await getUid() ? ["编辑帖子"] : []),
+        ...(widget.data!["topic"]["user_id"] == await getUid() ? ["补充内容"] : []),
+        ...(widget.data!["topic"]["user_id"] == await getUid() ? ["删除帖子"] : []),
         // ...(widget.data["forumName"] == "水手之家" ? ["转帖到水区"] : []),
       ],
       icons: [
@@ -241,13 +241,13 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         Icons.copy,
         Icons.feedback_outlined,
         Icons.block,
-        ...(widget.data["topic"]["user_id"] == await getUid()
+        ...(widget.data!["topic"]["user_id"] == await getUid()
             ? [Icons.edit]
             : []),
-        ...(widget.data["topic"]["user_id"] == await getUid()
+        ...(widget.data!["topic"]["user_id"] == await getUid()
             ? [Icons.add_box_rounded]
             : []),
-        ...(widget.data["topic"]["user_id"] == await getUid()
+        ...(widget.data!["topic"]["user_id"] == await getUid()
             ? [Icons.delete_outline_rounded]
             : []),
         // ...(widget.data["forumName"] == "水手之家"
@@ -264,7 +264,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
             ClipboardData(
               text: base_url +
                   "forum.php?mod=viewthread&tid=" +
-                  widget.data["topic"]["topic_id"].toString(),
+                  widget.data!["topic"]["topic_id"].toString(),
             ),
           );
           showToast(
@@ -277,13 +277,13 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
           _feedback();
         }
         if (res == "屏蔽此贴") {
-          setBlackWord(widget.data["topic"]["title"], context);
-          widget.block();
+          setBlackWord(widget.data!["topic"]["title"], context);
+          widget.block!();
         }
         if (res == "编辑帖子") {
           Navigator.pushNamed(context, "/topic_edit", arguments: {
-            "tid": widget.data["topic"]["topic_id"],
-            "pid": int.parse(widget.data["topic"]["extraPanel"][0]["action"]
+            "tid": widget.data!["topic"]["topic_id"],
+            "pid": int.parse(widget.data!["topic"]["extraPanel"][0]["action"]
                 .toString()
                 .split("&pid=")[1]
                 .split("&")[0]),
@@ -316,9 +316,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       txt: "需要较长时间",
       duration: 5000,
     );
-    String formhash = await getTopicFormHash(widget.data["topic"]["topic_id"]);
-    String tid = widget.data["topic"]["topic_id"].toString();
-    int pid = int.parse(widget.data["topic"]["extraPanel"][0]["action"]
+    String formhash = await getTopicFormHash(widget.data!["topic"]["topic_id"]);
+    String tid = widget.data!["topic"]["topic_id"].toString();
+    int pid = int.parse(widget.data!["topic"]["extraPanel"][0]["action"]
         .toString()
         .split("&pid=")[1]
         .split("&")[0]);
@@ -335,7 +335,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         "ptid": tid,
         "usesubmit": "yes",
         "idtype": "pid",
-        "id": widget.data["reply_posts_id"].toString() + ":" + tid.toString(),
+        "id": widget.data!["reply_posts_id"].toString() + ":" + tid.toString(),
       },
     );
     String tmp_txt = tmp.data.toString();
@@ -461,8 +461,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
             child: myInkWell(
               tap: () async {
                 await Api().post_append(
-                  tid: widget.data["topic"]["topic_id"],
-                  pid: int.parse(widget.data["topic"]["extraPanel"][0]["action"]
+                  tid: widget.data!["topic"]["topic_id"],
+                  pid: int.parse(widget.data!["topic"]["extraPanel"][0]
+                          ["action"]
                       .toString()
                       .split("&pid=")[1]
                       .split("&")[0]),
@@ -471,7 +472,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                 Navigator.pop(context); //水水
                 await Future.delayed(Duration(milliseconds: 500));
                 if (widget.fresh != null) {
-                  widget.fresh();
+                  widget.fresh!();
                 }
               },
               color: os_deep_blue,
@@ -532,7 +533,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                   xsLanuch(
                     url: base_url +
                         "forum.php?mod=viewthread&tid=" +
-                        widget.data["topic"]["topic_id"].toString(),
+                        widget.data!["topic"]["topic_id"].toString(),
                     isExtern: true,
                   );
                 },
@@ -553,9 +554,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
 }
 
 class QrCode extends StatefulWidget {
-  String url;
+  String? url;
   QrCode({
-    Key key,
+    Key? key,
     this.url,
   }) : super(key: key);
 
@@ -565,12 +566,12 @@ class QrCode extends StatefulWidget {
 
 class _QrCodeState extends State<QrCode> {
   getBriefId() {
-    if (widget.url
+    if (widget.url!
         .contains("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")) {
-      return "t${widget.url.split("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")[1].split("&")[0]}";
-    } else if (widget.url
+      return "t${widget.url!.split("https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")[1].split("&")[0]}";
+    } else if (widget.url!
         .contains("https://bbs.uestc.edu.cn/home.php?mod=space&uid=")) {
-      return "u${widget.url.split("https://bbs.uestc.edu.cn/home.php?mod=space&uid=")[1].split("&")[0]}";
+      return "u${widget.url!.split("https://bbs.uestc.edu.cn/home.php?mod=space&uid=")[1].split("&")[0]}";
     }
   }
 
@@ -605,7 +606,7 @@ class _QrCodeState extends State<QrCode> {
               borderRadius: BorderRadius.all(Radius.circular(5)),
             ),
             // padding: EdgeInsets.all(5),
-            child: QrImage(
+            child: QrImageView(
               data: widget.url ?? "https://bbs.uestc.edu.cn",
               version: QrVersions.auto,
               size: 200.0,

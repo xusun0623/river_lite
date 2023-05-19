@@ -17,7 +17,7 @@ class Hot extends StatefulWidget {
 
 class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
-  var list = [];
+  List<dynamic>? list = [];
   bool vibrate = false;
 
   @override
@@ -62,10 +62,10 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
 
   List<Widget> _buildComponents() {
     List<Widget> t = [];
-    for (var i in list) {
+    for (var i in list!) {
       t.add(Topic(data: i));
     }
-    if (list.length == 0) {
+    if (list!.length == 0) {
       t.add(Container(
         height: MediaQuery.of(context).size.height - 100,
       ));
@@ -90,7 +90,7 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
         ),
         elevation: 0,
       ),
-      body: list.length == 0
+      body: list!.length == 0
           ? OccuLoading()
           : Container(
               color: os_back,

@@ -31,9 +31,9 @@ import 'package:provider/provider.dart';
 Color theme = Color(0xFF4577f6);
 
 class MsgDetail extends StatefulWidget {
-  Map usrInfo;
+  Map? usrInfo;
   MsgDetail({
-    Key key,
+    Key? key,
     this.usrInfo,
   }) : super(key: key);
 
@@ -42,8 +42,8 @@ class MsgDetail extends StatefulWidget {
 }
 
 class MsgDetailState extends State<MsgDetail> {
-  Map userInfo = {};
-  List pmList = [];
+  Map? userInfo = {};
+  List? pmList = [];
 
   bool vibrate = false;
   bool i_am_selectimg_img = false;
@@ -64,7 +64,7 @@ class MsgDetailState extends State<MsgDetail> {
               "startTime": 0,
               "cacheCount": space,
               "stopTime": 0,
-              "fromUid": widget.usrInfo["uid"],
+              "fromUid": widget.usrInfo!["uid"],
               "pmLimit": isDesktop() ? 1000000 : space
             }
           ]
@@ -88,7 +88,7 @@ class MsgDetailState extends State<MsgDetail> {
   }
 
   _getMore() async {
-    List msgList = pmList[0]["msgList"];
+    List msgList = pmList![0]["msgList"];
     if (msgList.length % space != 0) return;
     var data = await Api().message_pmlist({
       "pmlist": {
@@ -99,7 +99,7 @@ class MsgDetailState extends State<MsgDetail> {
               "startTime": 0,
               "cacheCount": space,
               "stopTime": msgList[0]["time"],
-              "fromUid": widget.usrInfo["uid"],
+              "fromUid": widget.usrInfo!["uid"],
               "pmLimit": space
             }
           ]
@@ -110,9 +110,9 @@ class MsgDetailState extends State<MsgDetail> {
         data["body"] != null &&
         data["body"]["userInfo"] != null &&
         data["body"]["pmList"] != null) {
-      data["body"]["pmList"][0]["msgList"].addAll(pmList[0]["msgList"]);
+      data["body"]["pmList"][0]["msgList"].addAll(pmList![0]["msgList"]);
       setState(() {
-        pmList[0]["msgList"] = data["body"]["pmList"][0]["msgList"];
+        pmList![0]["msgList"] = data["body"]["pmList"][0]["msgList"];
       });
     }
   }
@@ -120,20 +120,20 @@ class MsgDetailState extends State<MsgDetail> {
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
     tmp.add(Container(height: 130 + (i_am_selectimg_img ? 300.0 : 0.0)));
-    if (pmList.length != 0) {
-      List msgList = pmList[0]["msgList"];
+    if (pmList!.length != 0) {
+      List msgList = pmList![0]["msgList"];
       msgList = msgList.reversed.toList();
       msgList.forEach((element) {
         tmp.add(MsgCont(
           fromInfo: {
-            "fromUid": pmList[0]["fromUid"],
-            "name": pmList[0]["name"],
-            "avatar": pmList[0]["avatar"],
+            "fromUid": pmList![0]["fromUid"],
+            "name": pmList![0]["name"],
+            "avatar": pmList![0]["avatar"],
           },
           myInfo: {
-            "fromUid": userInfo["uid"],
-            "name": userInfo["name"],
-            "avatar": userInfo["avatar"],
+            "fromUid": userInfo!["uid"],
+            "name": userInfo!["name"],
+            "avatar": userInfo!["avatar"],
           },
           msg: element,
         ));
@@ -142,10 +142,10 @@ class MsgDetailState extends State<MsgDetail> {
     print("${pmList}");
     if (tmp.length % space == 1 &&
         pmList != null &&
-        pmList.length != 0 &&
-        pmList[0] != null &&
-        pmList[0]["msgList"] != null &&
-        pmList[0]["msgList"].length != 0 &&
+        pmList!.length != 0 &&
+        pmList![0] != null &&
+        pmList![0]["msgList"] != null &&
+        pmList![0]["msgList"].length != 0 &&
         tmp.length != 101) {
       tmp.add(Center(
         child: Container(
@@ -241,17 +241,17 @@ class MsgDetailState extends State<MsgDetail> {
         leading: BackButton(),
         centerTitle: true,
         actions: [
-          LookRoom(uid: widget.usrInfo["uid"]),
+          LookRoom(uid: widget.usrInfo!["uid"]),
           Container(width: 15),
         ],
         title: DetailHead(
-          uid: widget.usrInfo["uid"],
-          name: widget.usrInfo["name"],
+          uid: widget.usrInfo!["uid"],
+          name: widget.usrInfo!["name"],
         ),
       ),
       body: Stack(
         children: [
-          pmList.length == 0 && !load_done
+          pmList!.length == 0 && !load_done
               ? Loading()
               : Container(
                   color: Provider.of<ColorProvider>(context).isDark
@@ -282,7 +282,7 @@ class MsgDetailState extends State<MsgDetail> {
               });
             },
             pagecontroller: _controller,
-            uid: widget.usrInfo["uid"],
+            uid: widget.usrInfo!["uid"],
             sended: () {
               _getCont();
               _controller.animateTo(
@@ -300,13 +300,13 @@ class MsgDetailState extends State<MsgDetail> {
 }
 
 class BottomFuncBar extends StatefulWidget {
-  TextEditingController textEditingController;
-  Function sended;
-  Function i_am_selectimg_img;
-  ScrollController pagecontroller;
-  int uid;
+  TextEditingController? textEditingController;
+  Function? sended;
+  Function? i_am_selectimg_img;
+  ScrollController? pagecontroller;
+  int? uid;
   BottomFuncBar({
-    Key key,
+    Key? key,
     this.textEditingController,
     this.sended,
     this.uid,
@@ -338,10 +338,10 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
         if (_focusNode.hasFocus) {
           setState(() {
             selecting_emoji = false;
-            widget.i_am_selectimg_img(selecting_emoji);
+            widget.i_am_selectimg_img!(selecting_emoji);
           });
-          widget.pagecontroller.animateTo(
-            widget.pagecontroller.position.minScrollExtent,
+          widget.pagecontroller!.animateTo(
+            widget.pagecontroller!.position.minScrollExtent,
             duration: Duration(milliseconds: 500),
             curve: Curves.ease,
           );
@@ -373,7 +373,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
     });
     //可能需要延时一下再请求
     await Future.delayed(Duration(milliseconds: 750));
-    widget.sended();
+    widget.sended!();
     dont_send_clock = 10;
     time = Timer.periodic(Duration(milliseconds: 1000), (t) {
       setState(() {
@@ -387,7 +387,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
   }
 
   _send() async {
-    if (widget.textEditingController.text == "") {
+    if (widget.textEditingController!.text == "") {
       _focusNode.unfocus();
       setState(() {});
       return;
@@ -398,7 +398,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
     });
     await Api().message_pmadmin({
       "json":
-          '{"action": "send","msg": {"type": "text","content": "${widget.textEditingController.text}"},"toUid": ${widget.uid}}'
+          '{"action": "send","msg": {"type": "text","content": "${widget.textEditingController!.text}"},"toUid": ${widget.uid}}'
     });
     // showToast(
     //   context: context,
@@ -408,14 +408,14 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
     setState(() {
       dont_send_flag = true;
       dont_send_clock = 12;
-      widget.textEditingController.text = "";
+      widget.textEditingController!.text = "";
       sending = false;
       _focusNode.unfocus();
     });
     //可能需要延时一下再请求
     await Future.delayed(Duration(milliseconds: 750));
     dont_send_clock = 12;
-    widget.sended();
+    widget.sended!();
     time = Timer.periodic(Duration(milliseconds: 1000), (t) {
       setState(() {
         dont_send_clock--;
@@ -551,7 +551,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                     setState(() {
                                       selecting_emoji = !selecting_emoji;
                                     });
-                                    widget.i_am_selectimg_img(selecting_emoji);
+                                    widget.i_am_selectimg_img!(selecting_emoji);
                                     if (selecting_emoji) {
                                       _focusNode.unfocus();
                                     }
@@ -607,10 +607,10 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                   tap: () async {
                                     try {
                                       _focusNode.unfocus();
-                                      XFile image;
+                                      XFile? image;
                                       setState(() {
                                         selecting_emoji = false;
-                                        widget.i_am_selectimg_img(
+                                        widget.i_am_selectimg_img!(
                                             selecting_emoji);
                                       });
                                       if (dont_send_flag) return;
@@ -751,8 +751,8 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                 child: YourEmoji(
                                   size: 35,
                                   tap: (e) {
-                                    widget.textEditingController.text =
-                                        widget.textEditingController.text + e;
+                                    widget.textEditingController!.text =
+                                        widget.textEditingController!.text + e;
                                     setState(() {});
                                   },
                                 ),
@@ -768,11 +768,11 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
 }
 
 class MsgCont extends StatefulWidget {
-  Map fromInfo;
-  Map myInfo;
-  Map msg;
+  Map? fromInfo;
+  Map? myInfo;
+  Map? msg;
   MsgCont({
-    Key key,
+    Key? key,
     this.fromInfo,
     this.myInfo,
     this.msg,
@@ -785,33 +785,33 @@ class MsgCont extends StatefulWidget {
 class _MsgContState extends State<MsgCont> {
   @override
   Widget build(BuildContext context) {
-    return widget.fromInfo["fromUid"] == widget.msg["sender"]
+    return widget.fromInfo!["fromUid"] == widget.msg!["sender"]
         ? MsgContBodyWidget(
             index: 0,
-            isImage: widget.msg["type"] == "image",
-            cont: widget.msg["content"],
-            avatar: widget.fromInfo["avatar"],
-            time: int.parse(widget.msg["time"]),
+            isImage: widget.msg!["type"] == "image",
+            cont: widget.msg!["content"],
+            avatar: widget.fromInfo!["avatar"],
+            time: int.parse(widget.msg!["time"]),
           )
         : MsgContBodyWidget(
             index: 1,
-            isImage: widget.msg["type"] == "image",
-            cont: widget.msg["content"],
-            avatar: widget.myInfo["avatar"],
-            time: int.parse(widget.msg["time"]),
+            isImage: widget.msg!["type"] == "image",
+            cont: widget.msg!["content"],
+            avatar: widget.myInfo!["avatar"],
+            time: int.parse(widget.msg!["time"]),
           );
   }
 }
 
 class MsgContBodyWidget extends StatefulWidget {
-  int index;
-  String cont;
-  String avatar;
-  int time;
-  int mid;
-  bool isImage;
+  int? index;
+  String? cont;
+  String? avatar;
+  int? time;
+  int? mid;
+  bool? isImage;
   MsgContBodyWidget({
-    Key key,
+    Key? key,
     this.index, //0-他 1-我
     this.cont,
     this.avatar,
@@ -872,7 +872,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
       children: [
         myInkWell(
             longPress: () {
-              if (widget.isImage) {
+              if (widget.isImage!) {
                 saveImge(context, [widget.cont], 0);
               } else {
                 XSVibrate();
@@ -882,12 +882,12 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                   icons: [Icons.copy],
                   tap: (res) {
                     if (res == "复制文本") {
-                      Clipboard.setData(ClipboardData(text: widget.cont));
+                      Clipboard.setData(ClipboardData(text: widget.cont!));
                       Navigator.pop(context);
                       showToast(
                         context: context,
                         type: XSToast.success,
-                        txt: widget.isImage ? "复制链接成功" : "复制文本成功",
+                        txt: widget.isImage! ? "复制链接成功" : "复制文本成功",
                       );
                     }
                   },
@@ -970,7 +970,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                           ),
                           child: Text(
                             RelativeDateFormat.format(
-                              DateTime.fromMillisecondsSinceEpoch(widget.time),
+                              DateTime.fromMillisecondsSinceEpoch(widget.time!),
                             ),
                             style: TextStyle(
                               color: Color.fromRGBO(255, 255, 255, 0.9),
@@ -1007,13 +1007,13 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                                           : os_black)
                                       : (os_white),
                                 ),
-                                children: _getRichText(widget.cont),
+                                children: _getRichText(widget.cont!),
                               ),
                             ),
                           ),
                           Text(
                             RelativeDateFormat.format(
-                              DateTime.fromMillisecondsSinceEpoch(widget.time),
+                              DateTime.fromMillisecondsSinceEpoch(widget.time!),
                             ),
                             style: TextStyle(
                               color: widget.index == 0
@@ -1061,8 +1061,8 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
 }
 
 class LookRoom extends StatefulWidget {
-  int uid;
-  LookRoom({Key key, this.uid}) : super(key: key);
+  int? uid;
+  LookRoom({Key? key, this.uid}) : super(key: key);
 
   @override
   State<LookRoom> createState() => _LookRoomState();
@@ -1099,10 +1099,10 @@ class _LookRoomState extends State<LookRoom> {
 }
 
 class DetailHead extends StatefulWidget {
-  int uid;
-  String name;
+  int? uid;
+  String? name;
   DetailHead({
-    Key key,
+    Key? key,
     this.uid,
     this.name,
   }) : super(key: key);
@@ -1135,7 +1135,7 @@ class _DetailHeadState extends State<DetailHead> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          widget.name,
+          widget.name!,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 18,
@@ -1175,7 +1175,7 @@ class _DetailHeadState extends State<DetailHead> {
 
 class BackButton extends StatelessWidget {
   const BackButton({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

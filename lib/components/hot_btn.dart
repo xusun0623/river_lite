@@ -10,7 +10,7 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class HomeBtn extends StatefulWidget {
-  HomeBtn({Key key}) : super(key: key);
+  HomeBtn({Key? key}) : super(key: key);
 
   @override
   State<HomeBtn> createState() => _HomeBtnState();
@@ -113,12 +113,12 @@ class Btn extends StatefulWidget {
   String txt;
   String img;
   String url;
-  int board_id;
+  int? board_id;
   Btn({
-    Key key,
-    @required this.txt,
-    @required this.img,
-    @required this.url,
+    Key? key,
+    required this.txt,
+    required this.img,
+    required this.url,
     this.board_id,
   }) : super(key: key);
 

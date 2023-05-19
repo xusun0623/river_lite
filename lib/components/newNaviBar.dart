@@ -7,16 +7,16 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class Baaaar extends StatefulWidget {
-  bool isDark;
-  bool hideLogo;
+  bool? isDark;
+  bool? hideLogo;
   Widget child;
-  Color color;
+  Color? color;
   Baaaar({
-    Key key,
+    Key? key,
     this.isDark,
     this.color,
     this.hideLogo,
-    @required this.child,
+    required this.child,
   }) : super(key: key);
 
   @override

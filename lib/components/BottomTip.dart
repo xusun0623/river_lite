@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class BottomTip extends StatefulWidget {
-  String txt;
-  double top;
-  double bottom;
-  Color color;
+  String? txt;
+  double? top;
+  double? bottom;
+  Color? color;
   BottomTip({
-    Key key,
+    Key? key,
     this.txt,
     this.top,
     this.bottom,

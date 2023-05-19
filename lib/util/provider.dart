@@ -4,17 +4,13 @@
  * @Last Modified by:   xusun000 
  * @Last Modified time: 2022-08-03 10:38:43 
  */
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:offer_show/asset/bigScreen.dart';
-import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
 
 class SettingConfigProvider extends ChangeNotifier {
-  Map LiteConfig;
+  Map? LiteConfig;
 
   refresh() {
     notifyListeners();
@@ -29,8 +25,8 @@ class AutoQuestionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  refresh() {
-    setStorage(key: "auto", value: isAuto ? "1" : "");
+  refresh() async {
+    await setStorage(key: "auto", value: isAuto ? "1" : "");
     notifyListeners();
   }
 }
@@ -63,7 +59,7 @@ class ColorProvider extends ChangeNotifier {
 }
 
 class BlackProvider extends ChangeNotifier {
-  List black = [];
+  List? black = [];
 
   refresh() {
     notifyListeners();
@@ -71,7 +67,7 @@ class BlackProvider extends ChangeNotifier {
 }
 
 class AdShowProvider extends ChangeNotifier {
-  bool showAd;
+  bool? showAd;
 
   refresh() {
     notifyListeners();
@@ -79,10 +75,10 @@ class AdShowProvider extends ChangeNotifier {
 }
 
 class MsgProvider extends ChangeNotifier {
-  Map msg;
-  List pmMsgArr = [];
+  Map? msg;
+  List? pmMsgArr = [];
   ScrollController scrollController = new ScrollController();
-  bool load_done = false;
+  bool? load_done = false;
   bool loading = false;
 
   clearMsg() async {
@@ -129,19 +125,19 @@ class MsgProvider extends ChangeNotifier {
   }
 
   getMore() async {
-    if (load_done || loading) return;
+    if (load_done! || loading) return;
     loading = true;
     var tmp = await Api().message_pmsessionlist({
       "json": {
-        "page": (pmMsgArr.length / 10 + 1).toInt(),
+        "page": (pmMsgArr!.length / 10 + 1).toInt(),
         "pageSize": 10,
       }.toString()
     });
     if (tmp != null &&
         tmp["body"] != null &&
         int.parse(tmp["body"]["list"][0]["lastDateline"]) <
-            int.parse(pmMsgArr[pmMsgArr.length - 1]["lastDateline"])) {
-      pmMsgArr.addAll(tmp["body"]["list"]);
+            int.parse(pmMsgArr![pmMsgArr!.length - 1]["lastDateline"])) {
+      pmMsgArr!.addAll(tmp["body"]["list"]);
       load_done = tmp["body"]["list"].length < 10;
     } else {
       load_done = true;
@@ -156,7 +152,7 @@ class MsgProvider extends ChangeNotifier {
 }
 
 class TabShowProvider extends ChangeNotifier {
-  int index = 0;
+  int? index = 0;
 
   changeIndex(int idx) {
     index = idx;
@@ -169,7 +165,7 @@ class TabShowProvider extends ChangeNotifier {
 }
 
 class UserInfoProvider extends ChangeNotifier {
-  Map data;
+  Map? data;
 
   refresh() {
     notifyListeners();

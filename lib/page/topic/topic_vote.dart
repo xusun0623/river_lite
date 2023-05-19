@@ -8,14 +8,14 @@ import 'package:provider/provider.dart';
 class TopicVote extends StatefulWidget {
   var poll_info;
   var topic_id;
-  TopicVote({Key key, this.poll_info, this.topic_id}) : super(key: key);
+  TopicVote({Key? key, this.poll_info, this.topic_id}) : super(key: key);
 
   @override
   _TopicVoteState createState() => _TopicVoteState();
 }
 
 class _TopicVoteState extends State<TopicVote> {
-  int select = -1;
+  int? select = -1;
   bool selected = false;
 
   @override
@@ -42,7 +42,7 @@ class _TopicVoteState extends State<TopicVote> {
     setState(() {});
   }
 
-  void _vote(int side) async {
+  void _vote(int? side) async {
     if (selected) return;
     var poll_item_id = widget.poll_info["poll_item_list"][side]["poll_item_id"];
     await Api().forum_vote({
@@ -65,7 +65,7 @@ class _TopicVoteState extends State<TopicVote> {
   List<Widget> _buildVote() {
     List<Widget> tmp = [];
     widget.poll_info["poll_item_list"].forEach((element) {
-      int ele_idx = widget.poll_info["poll_item_list"].indexOf(element);
+      int? ele_idx = widget.poll_info["poll_item_list"].indexOf(element);
       tmp.add(GestureDetector(
         onTap: () {
           _vote(ele_idx);

@@ -11,9 +11,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class BilibiliPlayer extends StatefulWidget {
-  String short_url;
+  String? short_url;
   BilibiliPlayer({
-    Key key,
+    Key? key,
     this.short_url,
   }) : super(key: key);
 
@@ -27,7 +27,7 @@ class _BilibiliPlayerState extends State<BilibiliPlayer> {
   WebViewController controller = new WebViewController();
 
   _getBvNumber() async {
-    var response = (await Dio().get(widget.short_url)).toString();
+    var response = (await Dio().get(widget.short_url!)).toString();
     bvNumber = response
         .split(
           "https://www.bilibili.com/video/",
@@ -110,7 +110,7 @@ class _BilibiliPlayerState extends State<BilibiliPlayer> {
                   ? os_light_dark_card
                   : os_white,
               tap: () {
-                xsLanuch(url: widget.short_url, isExtern: true);
+                xsLanuch(url: widget.short_url!, isExtern: true);
               },
               radius: 5,
               widget: Container(

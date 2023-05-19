@@ -20,11 +20,11 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class RichInput extends StatefulWidget {
-  double bottom;
+  double? bottom;
   TextEditingController controller;
   FocusNode focusNode;
-  int tid;
-  int fid;
+  int? tid;
+  int? fid;
   Function cancel;
   Function send;
   Function uploadImg;
@@ -34,20 +34,20 @@ class RichInput extends StatefulWidget {
   bool sending;
   bool anonymous;
   RichInput({
-    Key key,
+    Key? key,
     this.bottom,
-    @required this.tid,
-    @required this.fid,
-    @required this.controller,
-    @required this.focusNode,
-    @required this.cancel,
-    @required this.send,
-    @required this.uploadImg,
-    @required this.atUser,
-    @required this.placeholder,
-    @required this.uploadFile,
-    @required this.sending,
-    @required this.anonymous,
+    required this.tid,
+    required this.fid,
+    required this.controller,
+    required this.focusNode,
+    required this.cancel,
+    required this.send,
+    required this.uploadImg,
+    required this.atUser,
+    required this.placeholder,
+    required this.uploadFile,
+    required this.sending,
+    required this.anonymous,
   }) : super(key: key);
 
   @override
@@ -65,8 +65,8 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
 
   double uploadProgress = 0; //上传进度
 
-  AnimationController controller; //动画控制器
-  Animation<double> animation;
+  late AnimationController controller; //动画控制器
+  late Animation<double> animation;
   double popHeight = 0;
 
   _foldPop() async {
@@ -186,7 +186,7 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                   image = await pickeImgFile(context);
                                 } else {
                                   print("选择小屏图片");
-                                  List res = await getPhoneImages(context);
+                                  List res = (await getPhoneImages(context))!;
                                   // List<Media> res = await ImagesPicker.pick(
                                   //   count: 50,
                                   //   // cropOpt: CropOption(),
@@ -489,9 +489,9 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
 }
 
 class SwitchHead extends StatefulWidget {
-  bool small;
+  bool? small;
   SwitchHead({
-    Key key,
+    Key? key,
     this.small,
   }) : super(key: key);
 
@@ -500,7 +500,7 @@ class SwitchHead extends StatefulWidget {
 }
 
 class _SwitchHeadState extends State<SwitchHead> {
-  String head_url = "";
+  String? head_url = "";
 
   getHead() async {
     String myinfo_txt = await getStorage(key: "myinfo", initData: "");
@@ -533,7 +533,7 @@ class _SwitchHeadState extends State<SwitchHead> {
                             ? os_light_dark_card
                             : os_grey,
                         child: Image.network(
-                          head_url,
+                          head_url!,
                           width: widget.small ?? false ? 23.5 : 26.5,
                           height: widget.small ?? false ? 23.5 : 26.5,
                         ),

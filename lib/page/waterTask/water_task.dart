@@ -16,14 +16,14 @@ import 'package:provider/provider.dart';
 import 'package:html/parser.dart' show parse;
 
 class WaterTask extends StatefulWidget {
-  WaterTask({Key key}) : super(key: key);
+  WaterTask({Key? key}) : super(key: key);
 
   @override
   _WaterTaskState createState() => _WaterTaskState();
 }
 
 class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
-  TabController tabController;
+  TabController? tabController;
   List<Map> newTask = [];
   List<Map> doingTask = [];
   List<Map> doneTask = [];
@@ -50,7 +50,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
         String name = "";
         String desc = "";
         String bouns = "";
-        String apply_link = "";
+        String? apply_link = "";
         element1.getElementsByClassName("pbm").forEach((element2) {
           element2.getElementsByClassName("xi2").forEach((element3) {
             element3.getElementsByTagName("a").forEach((element4) {
@@ -108,7 +108,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
         String desc = "";
         String bouns = "";
         String progress = "";
-        String apply_link = "";
+        String? apply_link = "";
         element1.getElementsByClassName("pbm").forEach((element2) {
           element2.getElementsByClassName("xi2").forEach((element3) {
             element3.getElementsByTagName("a").forEach((element4) {
@@ -324,14 +324,14 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
   @override
   void initState() {
     tabController = TabController(length: 5, vsync: this);
-    tabController.addListener(() {
-      if (tabController.index == 1) {
+    tabController!.addListener(() {
+      if (tabController!.index == 1) {
         _getDoing();
       }
-      if (tabController.index == 2) {
+      if (tabController!.index == 2) {
         _getDone();
       }
-      if (tabController.index == 3) {
+      if (tabController!.index == 3) {
         _getFail();
       }
     });
@@ -453,10 +453,10 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
 }
 
 class Card4 extends StatefulWidget {
-  Map data;
-  Function refresh;
+  Map? data;
+  Function? refresh;
   Card4({
-    Key key,
+    Key? key,
     this.data,
     this.refresh,
   }) : super(key: key);
@@ -484,7 +484,7 @@ class _Card4State extends State<Card4> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.data["name"],
+                widget.data!["name"],
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -495,7 +495,7 @@ class _Card4State extends State<Card4> {
               ),
               Container(height: 10),
               Text(
-                "水滴任务：" + widget.data["desc"],
+                "水滴任务：" + widget.data!["desc"],
                 style: TextStyle(
                   fontSize: 14,
                   color: os_deep_grey,
@@ -503,7 +503,7 @@ class _Card4State extends State<Card4> {
               ),
               Container(height: 7.5),
               Text(
-                "奖励：" + widget.data["bouns"],
+                "奖励：" + widget.data!["bouns"],
                 style: TextStyle(
                   color: Color(0xFF898989),
                   fontSize: 14,
@@ -519,10 +519,10 @@ class _Card4State extends State<Card4> {
 }
 
 class Card3 extends StatefulWidget {
-  Map data;
-  Function refresh;
+  Map? data;
+  Function? refresh;
   Card3({
-    Key key,
+    Key? key,
     this.data,
     this.refresh,
   }) : super(key: key);
@@ -550,7 +550,7 @@ class _Card3State extends State<Card3> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.data["name"],
+                widget.data!["name"],
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -561,7 +561,7 @@ class _Card3State extends State<Card3> {
               ),
               Container(height: 10),
               Text(
-                "水滴任务：" + widget.data["desc"],
+                "水滴任务：" + widget.data!["desc"],
                 style: TextStyle(
                   fontSize: 14,
                   color: os_deep_grey,
@@ -569,7 +569,7 @@ class _Card3State extends State<Card3> {
               ),
               Container(height: 7.5),
               Text(
-                "奖励：" + widget.data["bouns"],
+                "奖励：" + widget.data!["bouns"],
                 style: TextStyle(
                   color: Color(0xFF898989),
                   fontSize: 14,
@@ -585,10 +585,10 @@ class _Card3State extends State<Card3> {
 }
 
 class Card2 extends StatefulWidget {
-  Map data;
-  Function refresh;
+  Map? data;
+  Function? refresh;
   Card2({
-    Key key,
+    Key? key,
     this.data,
     this.refresh,
   }) : super(key: key);
@@ -609,15 +609,15 @@ class _Card2State extends State<Card2> {
             : os_white,
         tap: () async {
           // 申请链接
-          if (widget.data["progress"] == "1.0") {
+          if (widget.data!["progress"] == "1.0") {
             // print("申请链接：${widget.data["apply_link"]}");
             showToast(context: context, type: XSToast.loading, txt: "加载中…");
-            await XHttp().pureHttpWithCookie(url: widget.data["apply_link"]);
+            await XHttp().pureHttpWithCookie(url: widget.data!["apply_link"]);
             hideToast();
             if (widget.refresh != null) {
-              widget.refresh();
+              widget.refresh!();
             }
-          } else if (widget.data["desc"].toString().contains("新手导航")) {
+          } else if (widget.data!["desc"].toString().contains("新手导航")) {
             showToast(
                 context: context,
                 type: XSToast.none,
@@ -636,7 +636,7 @@ class _Card2State extends State<Card2> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.data["name"],
+                widget.data!["name"],
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -647,7 +647,7 @@ class _Card2State extends State<Card2> {
               ),
               Container(height: 10),
               Text(
-                "水滴任务：" + widget.data["desc"],
+                "水滴任务：" + widget.data!["desc"],
                 style: TextStyle(
                   fontSize: 14,
                   color: os_deep_grey,
@@ -655,7 +655,7 @@ class _Card2State extends State<Card2> {
               ),
               Container(height: 7.5),
               Text(
-                "奖励：" + widget.data["bouns"],
+                "奖励：" + widget.data!["bouns"],
                 style: TextStyle(
                   color: Color(0xFF898989),
                   fontSize: 14,
@@ -667,13 +667,13 @@ class _Card2State extends State<Card2> {
                 backgroundColor: os_grey,
                 progressColor: os_color,
                 percent: double.parse(
-                  double.parse(widget.data["progress"]).toStringAsFixed(2),
+                  double.parse(widget.data!["progress"]).toStringAsFixed(2),
                 ),
                 barRadius: Radius.circular(10),
                 trailing: Container(
                   margin: EdgeInsets.only(left: 10),
                   child: Text(
-                    (double.parse(widget.data["progress"]) * 100)
+                    (double.parse(widget.data!["progress"]) * 100)
                             .toStringAsFixed(0) +
                         "%",
                     style: TextStyle(
@@ -686,7 +686,7 @@ class _Card2State extends State<Card2> {
               Text(
                 "领取奖励",
                 style: TextStyle(
-                  color: widget.data["progress"] == "1.0"
+                  color: widget.data!["progress"] == "1.0"
                       ? os_color
                       : os_middle_grey,
                   fontSize: 14,
@@ -702,10 +702,10 @@ class _Card2State extends State<Card2> {
 }
 
 class Card1 extends StatefulWidget {
-  Map data;
-  Function refresh;
+  Map? data;
+  Function? refresh;
   Card1({
-    Key key,
+    Key? key,
     this.data,
     this.refresh,
   }) : super(key: key);
@@ -727,12 +727,12 @@ class _Card1State extends State<Card1> {
         tap: () async {
           showToast(context: context, type: XSToast.loading, txt: "加载中…");
           String html =
-              (await XHttp().pureHttpWithCookie(url: widget.data["apply_link"]))
+              (await XHttp().pureHttpWithCookie(url: widget.data!["apply_link"]))
                   .data
                   .toString();
           hideToast();
           if (widget.refresh != null && !html.contains("另一个任务")) {
-            widget.refresh();
+            widget.refresh!();
           } else {
             showToast(context: context, type: XSToast.none, txt: "领取失败");
           }
@@ -746,7 +746,7 @@ class _Card1State extends State<Card1> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.data["name"],
+                widget.data!["name"],
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -757,7 +757,7 @@ class _Card1State extends State<Card1> {
               ),
               Container(height: 10),
               Text(
-                "水滴任务：" + widget.data["desc"],
+                "水滴任务：" + widget.data!["desc"],
                 style: TextStyle(
                   fontSize: 14,
                   color: os_deep_grey,
@@ -765,7 +765,7 @@ class _Card1State extends State<Card1> {
               ),
               Container(height: 7.5),
               Text(
-                "奖励：" + widget.data["bouns"],
+                "奖励：" + widget.data!["bouns"],
                 style: TextStyle(
                   color: Color(0xFF898989),
                   fontSize: 14,

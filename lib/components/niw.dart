@@ -4,19 +4,19 @@ import 'package:offer_show/asset/size.dart';
 
 class myInkWell extends StatefulWidget {
   final Widget widget;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final double radius;
-  final Color highlightColor;
-  final Color splashColor;
-  final Color color;
-  final Function tap;
-  final Function longPress;
+  final Color? highlightColor;
+  final Color? splashColor;
+  final Color? color;
+  final Function? tap;
+  final Function? longPress;
 
   const myInkWell({
-    Key key,
-    @required this.widget,
-    @required this.radius,
+    Key? key,
+    required this.widget,
+    required this.radius,
     this.width,
     this.height,
     this.highlightColor,
@@ -48,7 +48,7 @@ class _myInkWellState extends State<myInkWell> {
                 splashColor: widget.splashColor ?? null,
                 onTap: () {
                   if (widget.tap != null) {
-                    widget.tap();
+                    widget.tap!();
                   }
                 },
                 borderRadius: BorderRadius.circular(widget.radius),
@@ -60,11 +60,11 @@ class _myInkWellState extends State<myInkWell> {
                 splashColor: widget.splashColor ?? null,
                 onTap: () {
                   if (widget.tap != null) {
-                    widget.tap();
+                    widget.tap!();
                   }
                 },
                 onLongPress: () {
-                  widget.longPress();
+                  widget.longPress!();
                 },
                 borderRadius: BorderRadius.circular(widget.radius),
                 child: widget.widget,

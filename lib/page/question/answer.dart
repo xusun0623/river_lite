@@ -1,8 +1,8 @@
-query_answer(String q) {
+query_answer(String? q) {
   print("查询：${q}");
   for (var i = 0; i < river_answer.length; i++) {
     Map tmp = river_answer[i];
-    if (q.contains(tmp["q"].toString())) {
+    if (q!.contains(tmp["q"].toString())) {
       print("返回：${tmp["a"]}");
       return tmp["a"];
     }

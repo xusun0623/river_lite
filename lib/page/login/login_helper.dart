@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginHelper extends StatefulWidget {
-  LoginHelper({Key key}) : super(key: key);
+  LoginHelper({Key? key}) : super(key: key);
 
   @override
   _LoginHelperState createState() => _LoginHelperState();
@@ -68,9 +68,9 @@ class _LoginHelperState extends State<LoginHelper> {
 }
 
 class Link extends StatefulWidget {
-  String txt;
+  String? txt;
   Link({
-    Key key,
+    Key? key,
     this.txt,
   }) : super(key: key);
 
@@ -99,7 +99,7 @@ class _LinkState extends State<Link> {
                       confirmTxt: "立即前往",
                       cancelTxt: "取消",
                       confirm: () {
-                        launch(widget.txt);
+                        launch(widget.txt!);
                       },
                     );
                   },
@@ -134,9 +134,9 @@ class _LinkState extends State<Link> {
 }
 
 class Tip extends StatefulWidget {
-  String txt;
+  String? txt;
   Tip({
-    Key key,
+    Key? key,
     this.txt,
   }) : super(key: key);
 
@@ -165,9 +165,9 @@ class _TipState extends State<Tip> {
 }
 
 class Title extends StatefulWidget {
-  String txt;
+  String? txt;
   Title({
-    Key key,
+    Key? key,
     this.txt,
   }) : super(key: key);
 

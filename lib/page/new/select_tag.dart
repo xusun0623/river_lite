@@ -5,11 +5,11 @@ import 'package:provider/provider.dart';
 
 class SelectTag extends StatefulWidget {
   Map quick;
-  Function tap;
-  bool selected;
+  Function? tap;
+  bool? selected;
   SelectTag({
-    Key key,
-    @required this.quick,
+    Key? key,
+    required this.quick,
     this.selected,
     this.tap,
   }) : super(key: key);
@@ -23,7 +23,7 @@ class _SelectTagState extends State<SelectTag> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.tap(widget.quick);
+        widget.tap!(widget.quick);
       },
       child: Container(
         height: 27,
@@ -60,8 +60,8 @@ class _SelectTagState extends State<SelectTag> {
 class RightTopSend extends StatefulWidget {
   Function tap;
   RightTopSend({
-    Key key,
-    @required this.tap,
+    Key? key,
+    required this.tap,
   }) : super(key: key);
 
   @override
@@ -102,7 +102,7 @@ class _RightTopSendState extends State<RightTopSend> {
 
 class ColumnSpace extends StatelessWidget {
   const ColumnSpace({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -120,11 +120,11 @@ class ColumnSpace extends StatelessWidget {
 
 class SelectColumn extends StatelessWidget {
   const SelectColumn({
-    Key key,
-    @required this.select_section,
+    Key? key,
+    required this.select_section,
   }) : super(key: key);
 
-  final String select_section;
+  final String? select_section;
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +145,7 @@ class SelectColumn extends StatelessWidget {
         children: [
           Container(width: 7.5),
           Text(
-            select_section,
+            select_section!,
             style: TextStyle(
               fontSize: 14,
               color: os_color,

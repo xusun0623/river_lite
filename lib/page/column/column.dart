@@ -29,9 +29,9 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class TopicColumn extends StatefulWidget {
-  int columnID;
+  int? columnID;
   TopicColumn({
-    Key key,
+    Key? key,
     this.columnID,
   }) : super(key: key);
 
@@ -42,13 +42,13 @@ class TopicColumn extends StatefulWidget {
 class _TopicColumnState extends State<TopicColumn> {
   ScrollController _controller = new ScrollController();
   ScrollController _tabController = new ScrollController();
-  List<String> theme = [];
-  List topData = []; //置顶信息
+  List<String?> theme = [];
+  List? topData = []; //置顶信息
   var select = 0;
   var data;
   bool loading = false;
   bool loading_more = false;
-  bool load_done = false;
+  bool? load_done = false;
   bool showBackToTop = false;
   bool fold = true;
   bool manualPull = false;
@@ -58,7 +58,7 @@ class _TopicColumnState extends State<TopicColumn> {
   int pageSize = 25;
 
   _getMore() async {
-    if (loading_more || load_done) return;
+    if (loading_more || load_done!) return;
     loading_more = true;
     var tmp = await Api().certain_forum_topiclist({
       "page": (data["list"].length / pageSize + 1).toInt(),
@@ -241,7 +241,7 @@ class _TopicColumnState extends State<TopicColumn> {
       ));
     });
     tmp.add(
-      load_done ? NoMore() : BottomLoading(color: Colors.transparent),
+      load_done! ? NoMore() : BottomLoading(color: Colors.transparent),
     );
     for (var i = 0; i < tmp.length; i++) {
       tmp[i] = ResponsiveWidget(child: tmp[i]);
@@ -440,9 +440,9 @@ class _TopicColumnState extends State<TopicColumn> {
 }
 
 class TopSection extends StatefulWidget {
-  List data;
+  List? data;
   TopSection({
-    Key key,
+    Key? key,
     this.data,
   }) : super(key: key);
 
@@ -465,7 +465,7 @@ class _TopSectionState extends State<TopSection> {
           loop: false,
           autoplay: true,
           autoplayDelay: 3000,
-          itemCount: widget.data.length,
+          itemCount: widget.data!.length,
           itemBuilder: (context, index) {
             return myInkWell(
               color: Provider.of<ColorProvider>(context).isDark
@@ -473,7 +473,7 @@ class _TopSectionState extends State<TopSection> {
                   : os_white,
               tap: () {
                 Navigator.pushNamed(context, "/topic_detail",
-                    arguments: widget.data[widget.data.length - 1 - index]
+                    arguments: widget.data![widget.data!.length - 1 - index]
                         ["id"]);
               },
               radius: 0,
@@ -494,7 +494,7 @@ class _TopSectionState extends State<TopSection> {
                           MinusSpace(context) -
                           80,
                       child: Text(
-                        widget.data[widget.data.length - 1 - index]["title"]
+                        widget.data![widget.data!.length - 1 - index]["title"]
                             .toString()
                             .split("")
                             .join("\u{200B}"),
@@ -517,17 +517,17 @@ class _TopSectionState extends State<TopSection> {
 
 class DefineTabBar extends StatefulWidget {
   int select;
-  List<String> themes;
+  List<String?> themes;
   Function tap;
   Function fold;
   ScrollController controller;
   DefineTabBar({
-    Key key,
-    @required this.select,
-    @required this.themes,
-    @required this.tap,
-    @required this.controller,
-    @required this.fold,
+    Key? key,
+    required this.select,
+    required this.themes,
+    required this.tap,
+    required this.controller,
+    required this.fold,
   }) : super(key: key);
 
   @override
@@ -567,7 +567,7 @@ class _DefineTabBarState extends State<DefineTabBar> {
                     MinusSpace(context) -
                     95,
                 child: Text(
-                  widget.themes[widget.select],
+                  widget.themes[widget.select]!,
                   style: TextStyle(
                     fontSize: 17,
                     color: Provider.of<ColorProvider>(context).isDark
@@ -599,10 +599,10 @@ class DefineTabBarTip extends StatefulWidget {
   String txt;
   Function tap;
   DefineTabBarTip({
-    Key key,
-    @required this.selected,
-    @required this.txt,
-    @required this.tap,
+    Key? key,
+    required this.selected,
+    required this.txt,
+    required this.tap,
   }) : super(key: key);
 
   @override

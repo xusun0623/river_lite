@@ -4,7 +4,7 @@ import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
-Widget _optionBar(String txt, IconData icon, BuildContext context) {
+Widget _optionBar(String txt, IconData? icon, BuildContext context) {
   return Container(
     height: 50,
     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
@@ -44,15 +44,15 @@ Widget _optionBar(String txt, IconData icon, BuildContext context) {
 }
 
 showAction({
-  List<String> options,
-  List<IconData> icons,
-  Function tap,
-  BuildContext context,
+  required List<String> options,
+  List<IconData>? icons,
+  Function? tap,
+  required BuildContext context,
 }) {
-  assert(((options ?? []).length == (icons ?? []).length) || icons.length == 0);
+  assert(((options ?? []).length == (icons ?? []).length) || icons!.length == 0);
   List<Widget> _buildOptions() {
     List<Widget> tmp = [];
-    if (icons.length != 0) {
+    if (icons!.length != 0) {
       for (var i = 0; i < options.length; i++) {
         String option = options[i];
         IconData icon = icons[i];

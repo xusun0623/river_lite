@@ -7,11 +7,11 @@ import Foundation
 
 import bitsdojo_window_macos
 import device_info_plus
-import path_provider_macos
+import path_provider_foundation
 import photo_manager
 import screen_retriever
 import share_plus_macos
-import shared_preferences_macos
+import shared_preferences_foundation
 import sqflite
 import url_launcher_macos
 import wakelock_macos

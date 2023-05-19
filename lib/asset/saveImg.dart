@@ -10,7 +10,7 @@ import 'package:offer_show/asset/vibrate.dart';
 saveImge(
   BuildContext context,
   List urls,
-  int index,
+  int? index,
 ) async {
   XSVibrate();
   showAction(
@@ -28,7 +28,7 @@ saveImge(
           txt: "保存中…",
         );
         var response = await Dio().get(
-          urls[index],
+          urls[index!],
           options: Options(responseType: ResponseType.bytes),
         );
         hideToast();

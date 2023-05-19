@@ -16,14 +16,14 @@ class RightRowBtn extends StatefulWidget {
   int secret_see;
   FocusNode tip_focus;
   RightRowBtn({
-    Key key,
-    @required this.show_vote,
-    @required this.changeVoteStatus,
-    @required this.changePopStatus,
-    @required this.select_section,
-    @required this.changeSecretSee,
-    @required this.secret_see,
-    @required this.tip_focus,
+    Key? key,
+    required this.show_vote,
+    required this.changeVoteStatus,
+    required this.changePopStatus,
+    required this.select_section,
+    required this.changeSecretSee,
+    required this.secret_see,
+    required this.tip_focus,
   }) : super(key: key);
 
   @override

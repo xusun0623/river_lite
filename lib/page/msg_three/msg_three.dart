@@ -19,9 +19,9 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class MsgThree extends StatefulWidget {
-  int type; //0-@我 1-回复 2-通知
+  int? type; //0-@我 1-回复 2-通知
   MsgThree({
-    Key key,
+    Key? key,
     this.type,
   }) : super(key: key);
 
@@ -36,18 +36,18 @@ class _MsgThreeState extends State<MsgThree> {
     Color(0xFFFF9F23)
   ];
   List<String> titles = ["@我", "回复", "通知"];
-  List datas = [];
-  List lists = [];
+  List? datas = [];
+  List? lists = [];
   ScrollController _scrollController = new ScrollController();
   bool vibrate = false;
-  bool load_done = false;
+  bool? load_done = false;
   bool loading = false;
   bool showBackToTop = false;
 
   _getData() async {
     if (widget.type == 0 || widget.type == 1) {
       var tmp = await Api().message_notifylist({
-        "type": ["at", "post"][widget.type],
+        "type": ["at", "post"][widget.type!],
         "page": 1,
         "pageSize": 10,
       });
@@ -59,8 +59,8 @@ class _MsgThreeState extends State<MsgThree> {
         setState(() {
           datas = tmp["body"]["data"];
           if (tmp["list"] != null) lists = tmp["list"];
-          if (datas != null && datas.length != 0) {
-            load_done = datas.length % 10 != 0 || datas.length == 0;
+          if (datas != null && datas!.length != 0) {
+            load_done = datas!.length % 10 != 0 || datas!.length == 0;
           } else {
             load_done = true;
           }
@@ -83,7 +83,7 @@ class _MsgThreeState extends State<MsgThree> {
           tmp["body"]["data"] != null) {
         setState(() {
           datas = tmp["body"]["data"];
-          load_done = datas.length % 10 != 0 || datas.length == 0;
+          load_done = datas!.length % 10 != 0 || datas!.length == 0;
         });
       } else {
         datas = [];
@@ -97,14 +97,14 @@ class _MsgThreeState extends State<MsgThree> {
   _getMore() async {
     if (widget.type == 0 || widget.type == 1) {
       var tmp = await Api().message_notifylist({
-        "type": ["at", "post"][widget.type],
-        "page": (datas.length / 10 + 1).ceil(),
+        "type": ["at", "post"][widget.type!],
+        "page": (datas!.length / 10 + 1).ceil(),
         "pageSize": 10,
       });
       if (tmp != null && tmp["body"] != null && tmp["body"]["data"] != null) {
         setState(() {
-          datas.addAll(tmp["body"]["data"]);
-          if (tmp["list"] != null) lists.addAll(tmp["list"]);
+          datas!.addAll(tmp["body"]["data"]);
+          if (tmp["list"] != null) lists!.addAll(tmp["list"]);
           load_done = tmp["body"]["data"].length < 10;
         });
       } else {
@@ -116,12 +116,12 @@ class _MsgThreeState extends State<MsgThree> {
     } else {
       var tmp = await Api().message_notifylistex({
         "type": "system",
-        "page": (datas.length / 10 + 1).ceil(),
+        "page": (datas!.length / 10 + 1).ceil(),
         "pageSize": 10,
       });
       if (tmp != null && tmp["body"] != null && tmp["body"]["data"] != null) {
         setState(() {
-          datas.addAll(tmp["body"]["data"]);
+          datas!.addAll(tmp["body"]["data"]);
           load_done = tmp["body"]["data"].length < 10;
         });
       } else {
@@ -138,13 +138,13 @@ class _MsgThreeState extends State<MsgThree> {
     tmp.add(Container(height: 10));
     if (widget.type == 0 || widget.type == 1) {
       //@我 回复
-      if (lists.length != 0) {
-        for (int i = 0; i < datas.length; i++) {
-          if (i < datas.length && i < lists.length) {
+      if (lists!.length != 0) {
+        for (int i = 0; i < datas!.length; i++) {
+          if (i < datas!.length && i < lists!.length) {
             tmp.add(Padding(
               padding: const EdgeInsets.all(8.0),
               child: ResponsiveWidget(
-                child: ForumCard(data: datas[i], forum: lists[i]),
+                child: ForumCard(data: datas![i], forum: lists![i]),
               ),
             ));
           }
@@ -152,19 +152,19 @@ class _MsgThreeState extends State<MsgThree> {
       }
     } else {
       //系统通知
-      for (int i = 0; i < datas.length; i++) {
-        tmp.add(ResponsiveWidget(child: SysNoti(data: datas[i])));
+      for (int i = 0; i < datas!.length; i++) {
+        tmp.add(ResponsiveWidget(child: SysNoti(data: datas![i])));
       }
     }
-    if (datas.length == 0 && load_done) {
+    if (datas!.length == 0 && load_done!) {
       tmp.add(Empty(
         txt: "这里是一颗空的星球",
       ));
     }
-    if (!load_done) tmp.add(BottomLoading(color: Colors.transparent));
-    if (datas.length < 6) {
+    if (!load_done!) tmp.add(BottomLoading(color: Colors.transparent));
+    if (datas!.length < 6) {
       tmp.add(Container(
-        height: (6 - datas.length) * 100.0,
+        height: (6 - datas!.length) * 100.0,
       ));
     }
     tmp.add(Container(height: 10));
@@ -208,15 +208,15 @@ class _MsgThreeState extends State<MsgThree> {
       hideLogo: true,
       color: Provider.of<ColorProvider>(context).isDark
           ? os_dark_back
-          : colors[widget.type],
+          : colors[widget.type!],
       child: Scaffold(
         appBar: AppBar(
           surfaceTintColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_back
-              : colors[widget.type],
+              : colors[widget.type!],
           backgroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_back
-              : colors[widget.type],
+              : colors[widget.type!],
           foregroundColor: os_white,
           systemOverlayStyle: SystemUiOverlayStyle.light,
           elevation: 0,
@@ -225,7 +225,7 @@ class _MsgThreeState extends State<MsgThree> {
         body: Container(
           color: Provider.of<ColorProvider>(context).isDark
               ? os_dark_back
-              : colors[widget.type],
+              : colors[widget.type!],
           height: MediaQuery.of(context).size.height,
           child: Stack(
             children: [
@@ -245,12 +245,12 @@ class _MsgThreeState extends State<MsgThree> {
                   ),
                   margin: EdgeInsets.symmetric(horizontal: os_edge),
                   child: RefreshIndicator(
-                    color: colors[widget.type],
+                    color: colors[widget.type!],
                     onRefresh: () async {
                       return await _getData();
                     },
                     child: BackToTop(
-                      color: colors[widget.type],
+                      color: colors[widget.type!],
                       show: showBackToTop,
                       bottom: 80,
                       controller: _scrollController,
@@ -273,9 +273,9 @@ class _MsgThreeState extends State<MsgThree> {
 }
 
 class SysNoti extends StatefulWidget {
-  Map data;
+  Map? data;
   SysNoti({
-    Key key,
+    Key? key,
     this.data,
   }) : super(key: key);
 
@@ -310,7 +310,7 @@ class _SysNotiState extends State<SysNoti> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          widget.data["user_name"],
+                          widget.data!["user_name"],
                           style: TextStyle(
                             fontSize: 16,
                             color: Provider.of<ColorProvider>(context).isDark
@@ -323,7 +323,7 @@ class _SysNotiState extends State<SysNoti> {
                             Text(
                               RelativeDateFormat.format(
                                 DateTime.fromMillisecondsSinceEpoch(
-                                  int.parse(widget.data["replied_date"]),
+                                  int.parse(widget.data!["replied_date"]),
                                 ),
                               ),
                               style: TextStyle(
@@ -343,7 +343,7 @@ class _SysNotiState extends State<SysNoti> {
                   Container(
                     width: MediaQuery.of(context).size.width - headImgSize - 90,
                     child: Text(
-                      widget.data["note"].toString().trim(),
+                      widget.data!["note"].toString().trim(),
                       style: TextStyle(
                         color: Color(0xFFA0A0A0),
                         fontSize: 14,
@@ -361,10 +361,10 @@ class _SysNotiState extends State<SysNoti> {
 }
 
 class ForumCard extends StatefulWidget {
-  Map data;
-  Map forum;
+  Map? data;
+  Map? forum;
   ForumCard({
-    Key key,
+    Key? key,
     this.data,
     this.forum,
   }) : super(key: key);
@@ -384,7 +384,7 @@ class _ForumCardState extends State<ForumCard> {
         Navigator.pushNamed(
           context,
           "/topic_detail",
-          arguments: widget.forum["topic_id"],
+          arguments: widget.forum!["topic_id"],
         );
       },
       color: Colors.transparent,
@@ -403,7 +403,7 @@ class _ForumCardState extends State<ForumCard> {
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
                 child: CachedNetworkImage(
-                  imageUrl: widget.data["authorAvatar"] ??
+                  imageUrl: widget.data!["authorAvatar"] ??
                       "https://t7.baidu.com/it/u=1595072465,3644073269&fm=193&f=GIF",
                   fit: BoxFit.cover,
                 ),
@@ -423,7 +423,7 @@ class _ForumCardState extends State<ForumCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        widget.data["author"] ?? "",
+                        widget.data!["author"] ?? "",
                         style: TextStyle(
                           fontSize: 16,
                           color: Provider.of<ColorProvider>(context).isDark
@@ -439,7 +439,7 @@ class _ForumCardState extends State<ForumCard> {
                     ],
                   ),
                   Container(height: 5),
-                  (widget.forum["topic_subject"] ?? "").toString().trim() == ""
+                  (widget.forum!["topic_subject"] ?? "").toString().trim() == ""
                       ? Container()
                       : Container(
                           decoration: BoxDecoration(
@@ -458,7 +458,7 @@ class _ForumCardState extends State<ForumCard> {
                                   (isDesktop() ? (MinusSpace(context)) : 0) -
                                   90,
                               child: Text(
-                                widget.forum["topic_subject"].toString().trim(),
+                                widget.forum!["topic_subject"].toString().trim(),
                                 style: TextStyle(
                                   color: Color(0xFFA0A0A0),
                                   fontSize: 14,
@@ -474,8 +474,8 @@ class _ForumCardState extends State<ForumCard> {
                         (isDesktop() ? (MinusSpace(context)) : 0) -
                         90,
                     child: Text(
-                      (widget.forum["reply_content"] ?? "").toString().trim() +
-                          ((widget.forum["reply_content"] ?? "")
+                      (widget.forum!["reply_content"] ?? "").toString().trim() +
+                          ((widget.forum!["reply_content"] ?? "")
                                       .toString()
                                       .trim()
                                       .length ==
@@ -485,7 +485,7 @@ class _ForumCardState extends State<ForumCard> {
                           " · " +
                           RelativeDateFormat.format(
                             DateTime.fromMillisecondsSinceEpoch(
-                              int.parse(widget.forum["replied_date"]),
+                              int.parse(widget.forum!["replied_date"]),
                             ),
                           ),
                       style: TextStyle(
@@ -508,7 +508,7 @@ class _ForumCardState extends State<ForumCard> {
 
 class BackIcon extends StatelessWidget {
   const BackIcon({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -528,9 +528,9 @@ class BackIcon extends StatelessWidget {
 
 class Head extends StatelessWidget {
   const Head({
-    Key key,
-    @required this.titles,
-    @required this.widget,
+    Key? key,
+    required this.titles,
+    required this.widget,
   }) : super(key: key);
 
   final List<String> titles;
@@ -547,13 +547,13 @@ class Head extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Hero(
-              tag: "${titles[widget.type]}",
+              tag: "${titles[widget.type!]}",
               child: Material(
                 color: Colors.transparent,
                 child: Container(
                   width: 100,
                   child: Text(
-                    "   ${titles[widget.type]}",
+                    "   ${titles[widget.type!]}",
                     style: TextStyle(
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_dark_white
@@ -568,7 +568,7 @@ class Head extends StatelessWidget {
             Opacity(
               opacity: Provider.of<ColorProvider>(context).isDark ? 0 : 1,
               child: os_svg(
-                path: "lib/page/msg_three/${widget.type + 1}.svg",
+                path: "lib/page/msg_three/${widget.type! + 1}.svg",
                 width: 80,
                 height: 80,
               ),

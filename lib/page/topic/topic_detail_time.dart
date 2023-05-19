@@ -16,15 +16,15 @@ import 'package:provider/provider.dart';
 
 class TopicDetailTime extends StatefulWidget {
   var data;
-  Function refresh;
-  Function capture;
-  bool isListView;
+  Function? refresh;
+  Function? capture;
+  bool? isListView;
   TopicDetailTime({
-    Key key,
+    Key? key,
     this.refresh,
     this.capture,
     this.isListView,
-    @required this.data,
+    required this.data,
   }) : super(key: key);
 
   @override
@@ -145,7 +145,7 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                           "sendreasonpm": "on",
                           "reason": "水滴操作",
                         });
-                    if (widget.refresh != null) widget.refresh();
+                    if (widget.refresh != null) widget.refresh!();
                     Navigator.pop(context);
                   }
                 } catch (e) {
@@ -288,7 +288,7 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                   ]),
                 ),
                 radius: 10),
-            !(Platform.isIOS || Platform.isAndroid) || widget.isListView
+            !(Platform.isIOS || Platform.isAndroid) || widget.isListView!
                 ? Container()
                 : myInkWell(
                     color: Colors.transparent,
@@ -299,7 +299,7 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                             title: "截图功能",
                             cont: "轻触确认以截取帖子和评论并保存到相册,如果长度过长可能会导致图片像素质量不佳",
                             confirm: () {
-                              widget.capture();
+                              widget.capture!();
                             });
                       }
                     },

@@ -1,11 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
-import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/newNaviBar.dart';
@@ -17,7 +13,7 @@ import 'package:provider/provider.dart';
 class PersonDetail extends StatefulWidget {
   var uid;
   PersonDetail({
-    Key key,
+    Key? key,
     this.uid,
   }) : super(key: key);
 
@@ -26,7 +22,7 @@ class PersonDetail extends StatefulWidget {
 }
 
 class _PersonDetailState extends State<PersonDetail> {
-  Map data;
+  Map? data;
   String online_time = "";
   String last_come = "";
   String sign_time = "";
@@ -68,10 +64,10 @@ class _PersonDetailState extends State<PersonDetail> {
     List<Widget> tmp = [];
     List<List<String>> txt = [
       ["UID", "${widget.uid}"],
-      ["用户状态", data["status"] == 2 ? "在线" : "离线"],
-      ["性别", data["gender"] == 1 ? "男" : (data["gender"] == 2 ? "女" : "未知")],
-      ["积分", "${data["score"]}"],
-      ["用户头衔", "${data["userTitle"]}"],
+      ["用户状态", data!["status"] == 2 ? "在线" : "离线"],
+      ["性别", data!["gender"] == 1 ? "男" : (data!["gender"] == 2 ? "女" : "未知")],
+      ["积分", "${data!["score"]}"],
+      ["用户头衔", "${data!["userTitle"]}"],
       ["在线时间", "${online_time}"],
       ["上次访问", "${last_come}"],
       ["注册时间", "${sign_time}"],
@@ -165,10 +161,10 @@ class _PersonDetailState extends State<PersonDetail> {
 }
 
 class DetailListTitle extends StatefulWidget {
-  String left;
-  String right;
+  String? left;
+  String? right;
   DetailListTitle({
-    Key key,
+    Key? key,
     this.left,
     this.right,
   }) : super(key: key);
@@ -187,7 +183,7 @@ class _DetailListTitleState extends State<DetailListTitle> {
                 ? null
                 : () {
                     XSVibrate();
-                    Clipboard.setData(ClipboardData(text: widget.right));
+                    Clipboard.setData(ClipboardData(text: widget.right!));
                     showToast(
                         context: context, type: XSToast.success, txt: "复制成功");
                   },

@@ -16,14 +16,14 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class ShopItem {
-  String url;
-  String img;
-  String name;
-  String desc;
-  int price;
-  bool soldOut;
+  String? url;
+  String? img;
+  late String name;
+  late String desc;
+  int? price;
+  late bool soldOut;
   ShopItem(
-    String tmp_url,
+    String? tmp_url,
     String tmp_img,
     String tmp_name,
     String tmp_desc,
@@ -40,7 +40,7 @@ class ShopItem {
 }
 
 class Shop extends StatefulWidget {
-  const Shop({Key key}) : super(key: key);
+  const Shop({Key? key}) : super(key: key);
 
   @override
   State<Shop> createState() => _ShopState();
@@ -62,14 +62,14 @@ class _ShopState extends State<Shop> {
     lists.forEach((element) {
       bool soldOut =
           element.getElementsByClassName("mtn")[0].innerHtml.contains("此道具缺货");
-      String url = soldOut
+      String? url = soldOut
           ? "此道具缺货"
           : element
               .getElementsByClassName("mtn")[0]
               .getElementsByTagName("a")[0]
               .attributes["href"];
       String img = "https://bbs.uestc.edu.cn/" +
-          element.getElementsByTagName("img")[0].attributes["src"];
+          element.getElementsByTagName("img")[0].attributes["src"]!;
       String name = element.getElementsByTagName("strong")[0].innerHtml;
       String desc = element.getElementsByClassName("tip_c")[0].innerHtml;
       int price = soldOut
@@ -136,9 +136,9 @@ class _ShopState extends State<Shop> {
 }
 
 class PopChat extends StatefulWidget {
-  ShopItem data;
+  ShopItem? data;
   PopChat({
-    Key key,
+    Key? key,
     this.data,
   }) : super(key: key);
 
@@ -154,7 +154,7 @@ class _PopChatState extends State<PopChat> {
   int available_space = 0;
   int remain_num = 0;
   String remark = "";
-  String formhash = "";
+  String? formhash = "";
   String item_sku = "";
   bool loading = true;
 
@@ -169,7 +169,7 @@ class _PopChatState extends State<PopChat> {
     Response tmp = await Api().buyItem(m);
     dom.Document doc = dom.Document.html(tmp.data.toString());
     var msg = await doc
-        .getElementById("messagetext")
+        .getElementById("messagetext")!
         .getElementsByTagName("p")[0]
         .innerHtml
         .split("<script")[0];
@@ -185,7 +185,7 @@ class _PopChatState extends State<PopChat> {
 
   getData() async {
     Response res = await XHttp().pureHttpWithCookie(
-      url: widget.data.url,
+      url: widget.data!.url!,
       hadCookie: true,
     );
     Response formhash_res = await XHttp().pureHttpWithCookie(
@@ -199,7 +199,7 @@ class _PopChatState extends State<PopChat> {
       dom.Document html_doc = dom.Document.html(html_txt);
       dom.Document formhash_res_doc = dom.Document.html(formhash_res_txt);
 
-      now_price = int.parse(html_doc.getElementById("discountprice").innerHtml);
+      now_price = int.parse(html_doc.getElementById("discountprice")!.innerHtml);
       total_water = int.parse(
         html_doc
             .getElementsByClassName("bbda")[0]
@@ -207,7 +207,7 @@ class _PopChatState extends State<PopChat> {
             .split("我目前有水滴 ")[1]
             .split(" 滴")[0],
       );
-      weight = int.parse(html_doc.getElementById("magicweight").innerHtml);
+      weight = int.parse(html_doc.getElementById("magicweight")!.innerHtml);
       available_space = int.parse(
         html_doc
             .getElementsByClassName("bbda")[0]
@@ -228,7 +228,7 @@ class _PopChatState extends State<PopChat> {
           formhash = element.attributes["value"];
         }
       });
-      item_sku = widget.data.img.split("magic/")[1].split(".gif")[0];
+      item_sku = widget.data!.img!.split("magic/")[1].split(".gif")[0];
     } catch (e) {}
     setState(() {
       loading = false;
@@ -333,7 +333,7 @@ class _PopChatState extends State<PopChat> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CachedNetworkImage(
-              imageUrl: widget.data.img,
+              imageUrl: widget.data!.img,
               width: 40,
               height: 40,
             ),
@@ -349,7 +349,7 @@ class _PopChatState extends State<PopChat> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.data.name, style: titleStyle()),
+                  Text(widget.data!.name, style: titleStyle()),
                   Container(height: 3),
                   Text.rich(
                     TextSpan(
@@ -359,7 +359,7 @@ class _PopChatState extends State<PopChat> {
                         fontWeight: FontWeight.bold,
                         decoration: TextDecoration.lineThrough,
                       ),
-                      text: widget.data.price.toString(),
+                      text: widget.data!.price.toString(),
                       children: [
                         TextSpan(
                           text: " 水滴/张（原价）",
@@ -535,9 +535,9 @@ class _PopChatState extends State<PopChat> {
 }
 
 class GoodCard extends StatefulWidget {
-  ShopItem data;
+  ShopItem? data;
   GoodCard({
-    Key key,
+    Key? key,
     this.data,
   }) : super(key: key);
 
@@ -592,7 +592,7 @@ class _GoodCardState extends State<GoodCard> {
                             width: 39.75,
                             height: 39.75,
                             child: CachedNetworkImage(
-                              imageUrl: widget.data.img,
+                              imageUrl: widget.data!.img,
                               placeholder: (context, url) => Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
@@ -608,7 +608,7 @@ class _GoodCardState extends State<GoodCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.data.name,
+                                widget.data!.name,
                                 style: TextStyle(
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
@@ -623,7 +623,7 @@ class _GoodCardState extends State<GoodCard> {
                                 TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: "${widget.data.price}",
+                                      text: "${widget.data!.price}",
                                       style: TextStyle(
                                         color:
                                             Provider.of<ColorProvider>(context)
@@ -661,9 +661,9 @@ class _GoodCardState extends State<GoodCard> {
                       myInkWell(
                         radius: 15,
                         color:
-                            widget.data.soldOut ? os_black_opa : os_deep_blue,
+                            widget.data!.soldOut ? os_black_opa : os_deep_blue,
                         tap: () {
-                          if (!widget.data.soldOut) showChat();
+                          if (!widget.data!.soldOut) showChat();
                         },
                         widget: Container(
                           padding: EdgeInsets.symmetric(horizontal: 20),
@@ -677,13 +677,13 @@ class _GoodCardState extends State<GoodCard> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                widget.data.soldOut ? "此道具缺货" : "购买",
+                                widget.data!.soldOut ? "此道具缺货" : "购买",
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
                                           ? os_dark_white
-                                          : (widget.data.soldOut
+                                          : (widget.data!.soldOut
                                               ? os_light_dark_card
                                               : os_white),
                                   fontSize: 14,
@@ -719,7 +719,7 @@ class _GoodCardState extends State<GoodCard> {
                       Expanded(
                         child: SizedBox(
                           child: Text(
-                            widget.data.desc,
+                            widget.data!.desc,
                             style: TextStyle(
                               color: Provider.of<ColorProvider>(context).isDark
                                   ? os_white

@@ -4,7 +4,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/outer/card_swiper/swiper.dart';
 
 class ImgBanner extends StatefulWidget {
-  const ImgBanner({Key key}) : super(key: key);
+  const ImgBanner({Key? key}) : super(key: key);
 
   @override
   State<ImgBanner> createState() => _ImgBannerState();

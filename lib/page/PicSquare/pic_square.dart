@@ -29,15 +29,15 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class PicSquare extends StatefulWidget {
-  PicSquare({Key key}) : super(key: key);
+  PicSquare({Key? key}) : super(key: key);
 
   @override
   State<PicSquare> createState() => _PicSquareState();
 }
 
 class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
-  TabController _tabController;
-  SwiperController _swiperController;
+  TabController? _tabController;
+  SwiperController? _swiperController;
   List<Map> photo = [];
   var data;
 
@@ -141,7 +141,7 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
         photo = tmp_list;
         swiper_index = 0;
       });
-      _swiperController.move(0);
+      _swiperController!.move(0);
     }
   }
 
@@ -164,7 +164,7 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
       length: 11,
       vsync: this,
     );
-    _tabController.index = 1;
+    _tabController!.index = 1;
     _swiperController = new SwiperController();
     _getData();
     super.initState();
@@ -272,12 +272,12 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
                       top: () {
                         print("上一个");
                         if (swiper_index != 0) {
-                          _swiperController.previous();
+                          _swiperController!.previous();
                         }
                       },
                       down: () {
                         if (swiper_index != photo.length) {
-                          _swiperController.next();
+                          _swiperController!.next();
                         }
                       },
                       data: photo[index],
@@ -292,13 +292,13 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
 }
 
 class PhotoCard extends StatefulWidget {
-  Map data;
-  int index;
-  Function refresh;
-  Function top;
-  Function down;
+  Map? data;
+  int? index;
+  Function? refresh;
+  Function? top;
+  Function? down;
   PhotoCard({
-    Key key,
+    Key? key,
     this.data,
     this.index,
     this.refresh,
@@ -314,7 +314,7 @@ class _PhotoCardState extends State<PhotoCard> {
   bool isLiked = false;
   bool isBlack = false;
   bool load_done = false;
-  String blackKeyWord = ""; //拉黑关键字
+  String? blackKeyWord = ""; //拉黑关键字
   int index = 0;
   SwiperController _swiperController = new SwiperController();
 
@@ -328,13 +328,13 @@ class _PhotoCardState extends State<PhotoCard> {
 
   _top() {
     if (widget.top != null) {
-      widget.top();
+      widget.top!();
     }
   }
 
   _down() {
     if (widget.down != null) {
-      widget.down();
+      widget.down!();
     }
   }
 
@@ -342,7 +342,7 @@ class _PhotoCardState extends State<PhotoCard> {
     //获取点赞状态
     String tmp = await getStorage(key: "topic_like", initData: "");
     List<String> ids = tmp.split(",");
-    if (ids.indexOf(widget.data["topic_id"].toString()) > -1) {
+    if (ids.indexOf(widget.data!["topic_id"].toString()) > -1) {
       setState(() {
         isLiked = true;
       });
@@ -356,14 +356,14 @@ class _PhotoCardState extends State<PhotoCard> {
         isLiked = true;
       });
       await Api().forum_support({
-        "tid": widget.data["topic_id"],
+        "tid": widget.data!["topic_id"],
         "type": "thread",
         "action": "support",
       });
       String tmp = await getStorage(
         key: "topic_like",
       );
-      tmp += ",${widget.data['topic_id']}";
+      tmp += ",${widget.data!['topic_id']}";
       setStorage(key: "topic_like", value: tmp);
     } else {
       print("在此点赞但是点过赞了");
@@ -372,10 +372,12 @@ class _PhotoCardState extends State<PhotoCard> {
 
   bool _isBlack() {
     bool flag = false;
-    Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
-      if (widget.data["title"].toString().contains(element) ||
-          widget.data["cont"].toString().contains(element) ||
-          widget.data["name"].toString().contains(element)) {
+    Provider.of<BlackProvider>(context, listen: false)
+        .black!
+        .forEach((element) {
+      if (widget.data!["title"].toString().contains(element) ||
+          widget.data!["cont"].toString().contains(element) ||
+          widget.data!["name"].toString().contains(element)) {
         flag = true;
         blackKeyWord = element;
       }
@@ -392,7 +394,7 @@ class _PhotoCardState extends State<PhotoCard> {
       backgroundColor: Color(0xFF2D2D2D),
       context: context,
       builder: (context) {
-        return PopComment(topic_id: widget.data["topic_id"]);
+        return PopComment(topic_id: widget.data!["topic_id"]);
       },
     );
   }
@@ -410,7 +412,7 @@ class _PhotoCardState extends State<PhotoCard> {
       ],
       tap: (res) async {
         if (res == "屏蔽此贴") {
-          await setBlackWord(widget.data["title"], context);
+          await setBlackWord(widget.data!["title"], context);
           Navigator.pop(context);
           showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
           setState(() {
@@ -418,7 +420,7 @@ class _PhotoCardState extends State<PhotoCard> {
           });
         }
         if (res == "屏蔽此人") {
-          await setBlackWord(widget.data["name"], context);
+          await setBlackWord(widget.data!["name"], context);
           Navigator.pop(context);
           showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
           setState(() {
@@ -431,7 +433,7 @@ class _PhotoCardState extends State<PhotoCard> {
           await Api().user_userfavorite({
             "idType": "tid",
             "action": "favorite",
-            "id": widget.data["topic_id"],
+            "id": widget.data!["topic_id"],
           });
           hideToast();
           showToast(context: context, type: XSToast.success, txt: "收藏成功");
@@ -441,7 +443,7 @@ class _PhotoCardState extends State<PhotoCard> {
             ClipboardData(
                 text: base_url +
                     "forum.php?mod=viewthread&tid=" +
-                    widget.data["topic_id"].toString()),
+                    widget.data!["topic_id"].toString()),
           );
           Navigator.pop(context);
           showToast(context: context, type: XSToast.success, txt: "复制成功");
@@ -469,21 +471,21 @@ class _PhotoCardState extends State<PhotoCard> {
 
   _getData() async {
     String photo_txt = await getStorage(
-        key: "photo_" + widget.data["topic_id"].toString(), initData: "");
+        key: "photo_" + widget.data!["topic_id"].toString(), initData: "");
     String photo_desc_txt = await getStorage(
-      key: "photo_desc_" + widget.data["topic_id"].toString(),
+      key: "photo_desc_" + widget.data!["topic_id"].toString(),
       initData: "",
     );
     if (photo_txt != "") {
       //从缓存中拿数据
-      widget.data["photo"] = jsonDecode(photo_txt);
+      widget.data!["photo"] = jsonDecode(photo_txt);
       // if (widget.data["photo"].length == 0) {
       _getForceData();
       // }
-      widget.data["cont"] = photo_desc_txt;
+      widget.data!["cont"] = photo_desc_txt;
     } else {
       var tmp = await Api().forum_postlist({
-        "topicId": widget.data["topic_id"],
+        "topicId": widget.data!["topic_id"],
         "authorId": 0,
         "order": 0,
         "page": 1,
@@ -492,7 +494,7 @@ class _PhotoCardState extends State<PhotoCard> {
       if (tmp["rs"] != 0) {
         var content_tmp = tmp["topic"]["content"];
         String photo_desc_tmp = "";
-        List<String> photo_tmp = [];
+        List<String?> photo_tmp = [];
         for (var i = 0; i < content_tmp.length; i++) {
           var cont_tmp = content_tmp[i];
           if (cont_tmp["type"] == 1) {
@@ -510,14 +512,14 @@ class _PhotoCardState extends State<PhotoCard> {
             }
           }
         }
-        widget.data["photo"] = photo_tmp;
-        widget.data["cont"] = photo_desc_tmp;
+        widget.data!["photo"] = photo_tmp;
+        widget.data!["cont"] = photo_desc_tmp;
         setStorage(
-          key: "photo_desc_" + widget.data["topic_id"].toString(),
+          key: "photo_desc_" + widget.data!["topic_id"].toString(),
           value: photo_desc_tmp,
         );
         setStorage(
-          key: "photo_" + widget.data["topic_id"].toString(),
+          key: "photo_" + widget.data!["topic_id"].toString(),
           value: jsonEncode(photo_tmp),
         );
       }
@@ -529,7 +531,7 @@ class _PhotoCardState extends State<PhotoCard> {
 
   _getForceData() async {
     var tmp = await Api().forum_postlist({
-      "topicId": widget.data["topic_id"],
+      "topicId": widget.data!["topic_id"],
       "authorId": 0,
       "order": 0,
       "page": 1,
@@ -538,7 +540,7 @@ class _PhotoCardState extends State<PhotoCard> {
     if (tmp["rs"] != 0) {
       var content_tmp = tmp["topic"]["content"];
       String photo_desc_tmp = "";
-      List<String> photo_tmp = [];
+      List<String?> photo_tmp = [];
       for (var i = 0; i < content_tmp.length; i++) {
         var cont_tmp = content_tmp[i];
         if (cont_tmp["type"] == 1) {
@@ -556,14 +558,14 @@ class _PhotoCardState extends State<PhotoCard> {
           }
         }
       }
-      widget.data["photo"] = photo_tmp;
-      widget.data["cont"] = photo_desc_tmp;
+      widget.data!["photo"] = photo_tmp;
+      widget.data!["cont"] = photo_desc_tmp;
       setStorage(
-        key: "photo_desc_" + widget.data["topic_id"].toString(),
+        key: "photo_desc_" + widget.data!["topic_id"].toString(),
         value: photo_desc_tmp,
       );
       setStorage(
-        key: "photo_" + widget.data["topic_id"].toString(),
+        key: "photo_" + widget.data!["topic_id"].toString(),
         value: jsonEncode(photo_tmp),
       );
     }
@@ -575,7 +577,7 @@ class _PhotoCardState extends State<PhotoCard> {
       context,
       MaterialPageRoute(
         builder: (_) => PhotoPreview(
-          galleryItems: widget.data["photo"],
+          galleryItems: widget.data!["photo"],
           defaultImage: index,
         ),
       ),
@@ -603,7 +605,7 @@ class _PhotoCardState extends State<PhotoCard> {
               child: Container(
                 width: 300,
                 child: Text(
-                  "已拉黑的内容，拉黑关键字为：" + blackKeyWord,
+                  "已拉黑的内容，拉黑关键字为：" + blackKeyWord!,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: os_dark_dark_white,
@@ -621,7 +623,7 @@ class _PhotoCardState extends State<PhotoCard> {
             ),
             child: Stack(
               children: [
-                widget.data["photo"].length == 0
+                widget.data!["photo"].length == 0
                     ? GestureDetector(
                         onTap: () {
                           _getForceData();
@@ -656,7 +658,7 @@ class _PhotoCardState extends State<PhotoCard> {
                         viewportFraction: 0.9,
                         // scale: 0.9,
                         // indicatorLayout: PageIndicatorLayout.WARM,
-                        itemCount: widget.data["photo"].length,
+                        itemCount: widget.data!["photo"].length,
                         loop: false,
                         onTap: (idx) {
                           _toBigThrough();
@@ -667,7 +669,7 @@ class _PhotoCardState extends State<PhotoCard> {
                             index = idx;
                           });
                         },
-                        pagination: widget.data["photo"].length == 1
+                        pagination: widget.data!["photo"].length == 1
                             ? null
                             : SwiperPagination(
                                 // alignment: Alignment.center,
@@ -698,7 +700,7 @@ class _PhotoCardState extends State<PhotoCard> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(5)),
                                     child: Hero(
-                                      tag: widget.data["photo"][index],
+                                      tag: widget.data!["photo"][index],
                                       child: CachedNetworkImage(
                                         progressIndicatorBuilder:
                                             (context, url, progress) => Center(
@@ -713,7 +715,7 @@ class _PhotoCardState extends State<PhotoCard> {
                                         ),
                                         cacheManager:
                                             RiverListCacheManager.instance,
-                                        imageUrl: widget.data["photo"][index],
+                                        imageUrl: widget.data!["photo"][index],
                                       ),
                                     ),
                                   ),
@@ -740,7 +742,7 @@ class _PhotoCardState extends State<PhotoCard> {
                   },
                   refresh: () {
                     if (widget.refresh != null) {
-                      widget.refresh();
+                      widget.refresh!();
                     }
                   },
                   tapDetail: () {
@@ -772,9 +774,9 @@ class _PhotoCardState extends State<PhotoCard> {
 }
 
 class PopComment extends StatefulWidget {
-  int topic_id;
+  int? topic_id;
   PopComment({
-    Key key,
+    Key? key,
     this.topic_id,
   }) : super(key: key);
 
@@ -785,9 +787,9 @@ class PopComment extends StatefulWidget {
 class _PopCommentState extends State<PopComment> {
   bool flag = false;
   ScrollController _scrollController = new ScrollController();
-  var comment = [];
-  var load_done = false;
-  var total_num = 0;
+  List<dynamic>? comment = [];
+  bool? load_done = false;
+  int? total_num = 0;
   var data;
   int pageSize = 20;
 
@@ -816,16 +818,16 @@ class _PopCommentState extends State<PopComment> {
   }
 
   _getMore() async {
-    if (load_done) return;
+    if (load_done!) return;
     var tmp = await Api().forum_postlist({
       "topicId": widget.topic_id,
       "authorId": 0,
       "order": 0,
-      "page": (comment.length / pageSize + 1).floor(),
+      "page": (comment!.length / pageSize + 1).floor(),
       "pageSize": pageSize,
     });
     if (tmp["rs"] != 0) {
-      comment.addAll(tmp["list"]);
+      comment!.addAll(tmp["list"]);
       load_done = ((tmp["list"] ?? []).length < 20);
     } else {
       load_done = true;
@@ -836,16 +838,16 @@ class _PopCommentState extends State<PopComment> {
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
     // tmp.add(Container(height: 5));
-    if (comment.length != 0) {
-      comment.forEach((element) {
+    if (comment!.length != 0) {
+      comment!.forEach((element) {
         tmp.add(PopCommentCont(data: element));
       });
     }
-    if (!load_done)
+    if (!load_done!)
       tmp.add(BottomLoading(
         color: Colors.transparent,
       ));
-    if (load_done && comment.length == 0) {
+    if (load_done! && comment!.length == 0) {
       tmp.add(Container(
         child: Column(
           children: [
@@ -992,7 +994,7 @@ class _PopCommentState extends State<PopComment> {
 class PopCommentCont extends StatefulWidget {
   var data;
   PopCommentCont({
-    Key key,
+    Key? key,
     this.data,
   }) : super(key: key);
 
@@ -1096,18 +1098,18 @@ class _PopCommentContState extends State<PopCommentCont> {
 
 class PicBottom extends StatefulWidget {
   var data;
-  bool isLiked;
-  Function tapLike;
-  Function tapMore;
-  Function tapDetail;
-  Function refresh;
-  Function last;
-  Function next;
-  Function top;
-  Function down;
-  int index;
+  bool? isLiked;
+  Function? tapLike;
+  Function? tapMore;
+  Function? tapDetail;
+  Function? refresh;
+  Function? last;
+  Function? next;
+  Function? top;
+  Function? down;
+  int? index;
   PicBottom({
-    Key key,
+    Key? key,
     this.data,
     this.isLiked,
     this.tapLike,
@@ -1128,7 +1130,7 @@ class PicBottom extends StatefulWidget {
 class _PicBottomState extends State<PicBottom> {
   _toDetail() {
     if (widget.tapDetail != null) {
-      widget.tapDetail();
+      widget.tapDetail!();
     }
   }
 
@@ -1206,7 +1208,7 @@ class _PicBottomState extends State<PicBottom> {
                           : GestureDetector(
                               onTap: () {
                                 if (widget.top != null) {
-                                  widget.top();
+                                  widget.top!();
                                 }
                               },
                               child: Container(
@@ -1237,7 +1239,7 @@ class _PicBottomState extends State<PicBottom> {
                           : GestureDetector(
                               onTap: () {
                                 if (widget.down != null) {
-                                  widget.down();
+                                  widget.down!();
                                 }
                               },
                               child: Container(
@@ -1268,7 +1270,7 @@ class _PicBottomState extends State<PicBottom> {
                           : GestureDetector(
                               onTap: () {
                                 if (widget.last != null) {
-                                  widget.last();
+                                  widget.last!();
                                 }
                               },
                               child: Container(
@@ -1295,7 +1297,7 @@ class _PicBottomState extends State<PicBottom> {
                           : GestureDetector(
                               onTap: () {
                                 if (widget.next != null) {
-                                  widget.next();
+                                  widget.next!();
                                 }
                               },
                               child: Container(
@@ -1320,7 +1322,7 @@ class _PicBottomState extends State<PicBottom> {
                       GestureDetector(
                         onTap: () {
                           if (widget.tapLike != null) {
-                            widget.tapLike();
+                            widget.tapLike!();
                           }
                         },
                         child: Container(
@@ -1359,7 +1361,7 @@ class _PicBottomState extends State<PicBottom> {
                       GestureDetector(
                         onTap: () {
                           if (widget.tapMore != null) {
-                            widget.tapMore();
+                            widget.tapMore!();
                           }
                         },
                         child: Container(
@@ -1442,7 +1444,7 @@ class _PicBottomState extends State<PicBottom> {
                     onTap: () {
                       XSVibrate();
                       if (widget.refresh != null) {
-                        widget.refresh();
+                        widget.refresh!();
                       }
                     },
                     child: Container(
@@ -1475,10 +1477,10 @@ class _PicBottomState extends State<PicBottom> {
 }
 
 class DefineSwiperPhySics extends ScrollPhysics {
-  const DefineSwiperPhySics({ScrollPhysics parent}) : super(parent: parent);
+  const DefineSwiperPhySics({ScrollPhysics? parent}) : super(parent: parent);
 
   @override
-  DefineSwiperPhySics applyTo(ScrollPhysics ancestor) {
+  DefineSwiperPhySics applyTo(ScrollPhysics? ancestor) {
     return DefineSwiperPhySics(parent: buildParent(ancestor));
   }
 
@@ -1493,11 +1495,11 @@ class DefineSwiperPhySics extends ScrollPhysics {
 class DetailCont extends StatefulWidget {
   var data;
   var imgLists;
-  String desc; //在图片上的描述
-  String title; //在图片上的描述标题
-  bool isComment;
+  String? desc; //在图片上的描述
+  String? title; //在图片上的描述标题
+  bool? isComment;
   DetailCont({
-    Key key,
+    Key? key,
     this.data,
     this.imgLists,
     this.isComment,
@@ -1590,7 +1592,8 @@ class _DetailContState extends State<DetailCont> {
                       ),
                     ),
                   ));
-        break;
+      default:
+        return Container();
     }
   }
 }

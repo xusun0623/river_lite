@@ -33,14 +33,14 @@ class Comment extends StatefulWidget {
   var topic_id;
   var host_id;
   var fid;
-  Function add_1;
-  int index;
-  Function tap;
-  Function fresh;
-  bool isListView;
+  Function? add_1;
+  int? index;
+  Function? tap;
+  Function? fresh;
+  bool? isListView;
 
   Comment(
-      {Key key,
+      {Key? key,
       this.data,
       this.is_last,
       this.topic_id,
@@ -61,7 +61,7 @@ class _CommentState extends State<Comment> {
   var liked = 0;
   bool is_me = false;
   bool is_my_comment = false;
-  String blackKeyWord;
+  String? blackKeyWord;
 
   _getLikedStatus() async {
     String tmp = await getStorage(
@@ -210,7 +210,7 @@ class _CommentState extends State<Comment> {
     String formhash = await getTopicFormHash(widget.topic_id);
     String fid = widget.fid.toString();
     String tid = widget.topic_id.toString();
-    String page = ((widget.index / 20) + 1).toString();
+    String page = ((widget.index! / 20) + 1).toString();
     String handlekey = "mods";
     String topiclist = widget.data["reply_posts_id"].toString(); //需要加一个[]
     String stickreply = widget.data["poststick"] == 1 ? "0" : "1";
@@ -244,7 +244,7 @@ class _CommentState extends State<Comment> {
       hideToast();
       Navigator.pop(context);
       showToast(context: context, type: XSToast.success, txt: "操作成功");
-      widget.fresh();
+      widget.fresh!();
     } else {
       print(response.reasonPhrase);
     }
@@ -565,7 +565,7 @@ class _CommentState extends State<Comment> {
                   message: txt,
                 );
                 if (widget.fresh != null) {
-                  widget.fresh();
+                  widget.fresh!();
                 }
                 Navigator.pop(context); //水水
               },
@@ -599,7 +599,7 @@ class _CommentState extends State<Comment> {
 
   _getIsMeTopic() async {
     //该帖子是不是这个用户的，用户方便用户置顶他人/自己评论
-    int uid = await getUid();
+    int? uid = await getUid();
     setState(() {
       is_me = widget.host_id == uid;
       is_my_comment = widget.data["reply_id"] == uid;
@@ -608,7 +608,7 @@ class _CommentState extends State<Comment> {
 
   bool _getBlack() {
     bool flag = false;
-    Provider.of<BlackProvider>(context, listen: false).black.forEach((element) {
+    Provider.of<BlackProvider>(context, listen: false).black!.forEach((element) {
       if (widget.data["reply_id"].toString().contains(element)) {
         flag = true;
         blackKeyWord = element;
@@ -830,7 +830,7 @@ class _CommentState extends State<Comment> {
                                               .contains("苹果")
                                           ? "iPhone客户端"
                                           : widget.data["mobileSign"]))) +
-                              " · #${widget.index + 1}楼",
+                              " · #${widget.index! + 1}楼",
                           style: TextStyle(
                             color: Color(0xFF9F9F9F),
                             fontSize: 12,
@@ -937,7 +937,7 @@ class _CommentState extends State<Comment> {
   }
 
   _tap() {
-    widget.tap(widget.data["reply_posts_id"], widget.data["reply_name"]);
+    widget.tap!(widget.data["reply_posts_id"], widget.data["reply_name"]);
   }
 
   _longPress() {

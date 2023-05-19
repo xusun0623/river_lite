@@ -3,9 +3,9 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class Empty extends StatefulWidget {
-  String txt;
+  String? txt;
   Empty({
-    Key key,
+    Key? key,
     this.txt,
   }) : super(key: key);
 

@@ -7,9 +7,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-getStorage({@required String key, String initData = ""}) async {
+getStorage({required String key, String initData = ""}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String s = await prefs.getString(key);
+  String? s = await prefs.getString(key);
   if (s == null) {
     await prefs.setString(key, initData);
     return initData;
@@ -18,8 +18,8 @@ getStorage({@required String key, String initData = ""}) async {
   }
 }
 
-setStorage({@required String key, @required String value}) async {
+setStorage({required String key, required String value}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String _ = await prefs.getString(key);
+  String? _ = await prefs.getString(key);
   return await prefs.setString(key, value);
 }

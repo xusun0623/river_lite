@@ -19,12 +19,12 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class BagItem {
-  String img;
-  String name;
-  String desc;
-  int count;
-  int weight;
-  String drop_url;
+  String? img;
+  String? name;
+  late String desc;
+  int? count;
+  int? weight;
+  String? drop_url;
 
   BagItem(
     String tmp_img,
@@ -32,7 +32,7 @@ class BagItem {
     String tmp_desc,
     int tmp_count,
     int tmp_weight,
-    String tmp_drop_url,
+    String? tmp_drop_url,
   ) {
     img = tmp_img;
     name = tmp_name;
@@ -44,7 +44,7 @@ class BagItem {
 }
 
 class MyBag extends StatefulWidget {
-  const MyBag({Key key}) : super(key: key);
+  const MyBag({Key? key}) : super(key: key);
 
   @override
   State<MyBag> createState() => _MyBagState();
@@ -52,7 +52,7 @@ class MyBag extends StatefulWidget {
 
 class _MyBagState extends State<MyBag> {
   List<BagItem> bagItems = [];
-  String formhash = "";
+  String? formhash = "";
   bool loading = true;
 
   getData() async {
@@ -79,7 +79,7 @@ class _MyBagState extends State<MyBag> {
         (element) {
           bagItems.add(BagItem(
             "https://bbs.uestc.edu.cn/" +
-                element.getElementsByTagName("img")[0].attributes["src"],
+                element.getElementsByTagName("img")[0].attributes["src"]!,
             element.getElementsByTagName("strong")[0].innerHtml,
             element.getElementsByClassName("tip_c")[0].innerHtml,
             int.parse(element.getElementsByTagName("font")[0].innerHtml),
@@ -207,11 +207,11 @@ class _MyBagState extends State<MyBag> {
 }
 
 class BagWidget extends StatefulWidget {
-  BagItem data;
-  String formhash;
-  Function refresh;
+  BagItem? data;
+  String? formhash;
+  Function? refresh;
   BagWidget({
-    Key key,
+    Key? key,
     this.data,
     this.formhash,
     this.refresh,
@@ -232,7 +232,7 @@ class _BagWidgetState extends State<BagWidget> {
   guagua() async {
     // showWaterNum(30);
     // return;
-    String magicid = widget.data.drop_url.split("magicid=")[1];
+    String magicid = widget.data!.drop_url!.split("magicid=")[1];
     showToast(context: context, type: XSToast.loading);
     Response tmp = await XHttp().pureHttpWithCookie(
       hadCookie: true,
@@ -268,7 +268,7 @@ class _BagWidgetState extends State<BagWidget> {
         int receive_water_num =
             int.parse(ret.split("恭喜您获得 水滴 ")[1].split(" 滴")[0]);
         showWaterNum(receive_water_num);
-        widget.refresh();
+        widget.refresh!();
       },
     );
   }
@@ -282,7 +282,7 @@ class _BagWidgetState extends State<BagWidget> {
         "formhash": widget.formhash,
         "handlekey": "magics",
         "operation": "drop",
-        "magicid": widget.data.drop_url.split("magicid=")[1],
+        "magicid": widget.data!.drop_url!.split("magicid=")[1],
         "magicnum": 1,
         "operatesubmit": "yes",
       },
@@ -291,7 +291,7 @@ class _BagWidgetState extends State<BagWidget> {
       msg: "操作成功",
       gravity: ToastGravity.CENTER,
     );
-    widget.refresh();
+    widget.refresh!();
   }
 
   @override
@@ -339,7 +339,7 @@ class _BagWidgetState extends State<BagWidget> {
                             width: 39.75,
                             height: 39.75,
                             child: CachedNetworkImage(
-                              imageUrl: widget.data.img,
+                              imageUrl: widget.data!.img,
                               placeholder: (context, url) => Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
@@ -355,7 +355,7 @@ class _BagWidgetState extends State<BagWidget> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.data.name,
+                                widget.data!.name!,
                                 style: TextStyle(
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
@@ -379,7 +379,7 @@ class _BagWidgetState extends State<BagWidget> {
                                   ),
                                   children: [
                                     TextSpan(
-                                      text: "${widget.data.count}",
+                                      text: "${widget.data!.count}",
                                       style: TextStyle(
                                         color:
                                             Provider.of<ColorProvider>(context)
@@ -402,7 +402,7 @@ class _BagWidgetState extends State<BagWidget> {
                                       ),
                                     ),
                                     TextSpan(
-                                      text: "${widget.data.weight}",
+                                      text: "${widget.data!.weight}",
                                       style: TextStyle(
                                         color:
                                             Provider.of<ColorProvider>(context)
@@ -468,10 +468,10 @@ class _BagWidgetState extends State<BagWidget> {
                               ),
                             ),
                           ),
-                          widget.data.name != "刮刮卡"
+                          widget.data!.name != "刮刮卡"
                               ? Container()
                               : Container(width: 10),
-                          widget.data.name != "刮刮卡"
+                          widget.data!.name != "刮刮卡"
                               ? Container()
                               : myInkWell(
                                   radius: 15,
@@ -531,8 +531,8 @@ class _BagWidgetState extends State<BagWidget> {
                       Expanded(
                         child: SizedBox(
                           child: Text(
-                            widget.data.desc +
-                                (widget.data.name == "刮刮卡"
+                            widget.data!.desc +
+                                (widget.data!.name == "刮刮卡"
                                     ? "\n你将获得的水滴数量最少为1，最高为购买价格的1.5倍"
                                     : ""),
                             style: TextStyle(
@@ -557,9 +557,9 @@ class _BagWidgetState extends State<BagWidget> {
 }
 
 class Celebration extends StatefulWidget {
-  int count;
+  int? count;
   Celebration({
-    Key key,
+    Key? key,
     this.count,
   }) : super(key: key);
 

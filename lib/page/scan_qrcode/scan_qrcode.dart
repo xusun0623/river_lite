@@ -8,7 +8,7 @@ import 'package:offer_show/asset/vibrate.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanQRCode extends StatefulWidget {
-  ScanQRCode({Key key}) : super(key: key);
+  ScanQRCode({Key? key}) : super(key: key);
 
   @override
   State<ScanQRCode> createState() => _ScanQRCodeState();
@@ -55,7 +55,7 @@ class _ScanQRCodeState extends State<ScanQRCode> {
 }
 
 class QRViewExample extends StatefulWidget {
-  QRViewExample({Key key}) : super(key: key);
+  QRViewExample({Key? key}) : super(key: key);
 
   @override
   State<QRViewExample> createState() => _QRViewExampleState();
@@ -63,8 +63,8 @@ class QRViewExample extends StatefulWidget {
 
 class _QRViewExampleState extends State<QRViewExample> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode result;
-  QRViewController controller;
+  Barcode? result;
+  QRViewController? controller;
   bool isReady = false;
 
   delay() async {
@@ -84,9 +84,9 @@ class _QRViewExampleState extends State<QRViewExample> {
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      controller.pauseCamera();
+      controller!.pauseCamera();
     } else if (Platform.isIOS) {
-      controller.resumeCamera();
+      controller!.resumeCamera();
     }
   }
 
@@ -158,7 +158,7 @@ class _QRViewExampleState extends State<QRViewExample> {
         setState(() {
           result = scanData;
         });
-        final code = result.code;
+        final code = result!.code!;
         if (code.contains(
             "https://bbs.uestc.edu.cn/forum.php?mod=viewthread&tid=")) {
           final id = int.parse(code.split(

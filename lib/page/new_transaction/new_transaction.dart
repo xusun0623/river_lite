@@ -20,7 +20,7 @@ import 'success_display.dart';
 
 class PostNewTransaction extends StatefulWidget {
   PostNewTransaction({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -140,12 +140,16 @@ class _PostNewTransactionState extends State<PostNewTransaction> {
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       child: WillPopScope(
         onWillPop: () async {
-          showModal(
-              context: context,
-              cont: "如果现在退出，草稿内容将不会保存",
-              confirm: () {
-                Navigator.pop(context);
-              });
+          if (sendSuccess) {
+            Navigator.pop(context);
+          } else {
+            showModal(
+                context: context,
+                cont: "如果现在退出，草稿内容将不会保存",
+                confirm: () {
+                  Navigator.pop(context);
+                });
+          }
           return false;
         },
         child: Scaffold(
@@ -169,12 +173,16 @@ class _PostNewTransactionState extends State<PostNewTransaction> {
                       ? os_dark_dark_white
                       : Color(0xFF2E2E2E)),
               onPressed: () {
-                showModal(
-                    context: context,
-                    cont: "如果现在退出，草稿内容将不会保存",
-                    confirm: () {
-                      Navigator.pop(context);
-                    });
+                if (sendSuccess) {
+                  Navigator.pop(context);
+                } else {
+                  showModal(
+                      context: context,
+                      cont: "如果现在退出，草稿内容将不会保存",
+                      confirm: () {
+                        Navigator.pop(context);
+                      });
+                }
               },
             ),
             actions: sendSuccess
@@ -366,10 +374,10 @@ class _PostNewTransactionState extends State<PostNewTransaction> {
 }
 
 class SectionSelect extends StatefulWidget {
-  Function tap;
-  bool hideSection;
+  Function? tap;
+  bool? hideSection;
   SectionSelect({
-    Key key,
+    Key? key,
     this.tap,
     this.hideSection,
   }) : super(key: key);
@@ -418,7 +426,7 @@ class _SectionSelectState extends State<SectionSelect> {
     String child_section =
         "${section_type[section_idx]}-${child_type[type_idx]}";
     if (widget.tap != null) {
-      widget.tap(child["$child_section"]);
+      widget.tap!(child["$child_section"]);
     }
   }
 
@@ -586,12 +594,12 @@ class _SectionSelectState extends State<SectionSelect> {
 }
 
 class ChildColumnTip extends StatefulWidget {
-  bool select;
-  String name;
-  int child_id;
-  Function tap;
+  bool? select;
+  String? name;
+  int? child_id;
+  Function? tap;
   ChildColumnTip({
-    Key key,
+    Key? key,
     this.select,
     this.name,
     this.child_id,
@@ -607,7 +615,7 @@ class _ChildColumnTipState extends State<ChildColumnTip> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.tap(widget.child_id);
+        widget.tap!(widget.child_id);
       },
       child: Container(
         padding: EdgeInsets.only(left: 0, right: 20, top: 5, bottom: 5),
@@ -615,9 +623,9 @@ class _ChildColumnTipState extends State<ChildColumnTip> {
             ? os_light_dark_card
             : os_white,
         child: Text(
-          widget.name,
+          widget.name!,
           style: TextStyle(
-            color: widget.select ? os_color : os_deep_grey,
+            color: widget.select! ? os_color : os_deep_grey,
           ),
         ),
       ),
@@ -629,9 +637,9 @@ class ContInput extends StatefulWidget {
   final TextEditingController tip_controller;
   final FocusNode tip_focus;
   ContInput({
-    Key key,
-    @required this.tip_controller,
-    @required this.tip_focus,
+    Key? key,
+    required this.tip_controller,
+    required this.tip_focus,
   }) : super(key: key);
 
   @override
@@ -679,9 +687,9 @@ class _ContInputState extends State<ContInput> {
 
 class TitleInput extends StatelessWidget {
   const TitleInput({
-    Key key,
-    @required this.title_controller,
-    @required this.title_focus,
+    Key? key,
+    required this.title_controller,
+    required this.title_focus,
   }) : super(key: key);
 
   final TextEditingController title_controller;

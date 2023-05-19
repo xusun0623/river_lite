@@ -14,7 +14,7 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class Question extends StatefulWidget {
-  Question({Key key}) : super(key: key);
+  Question({Key? key}) : super(key: key);
 
   @override
   _QuestionState createState() => _QuestionState();
@@ -22,24 +22,24 @@ class Question extends StatefulWidget {
 
 class _QuestionState extends State<Question> {
   int count = 0; //第几道题
-  int ret_value = 0; //勾选的答案value
+  int? ret_value = 0; //勾选的答案value
   bool isFinish = false;
   bool auto_machine = false; //是否机器自动接管
   bool no_answer = false; //没有匹配到答案
   bool load_done = false; //是否首次加载完成
   int status = 0; //0-正在答题 1-完成全部答题领取奖励 2-已参加答题 3-下一关 4-已领取奖励
-  String match_answer = "";
+  String? match_answer = "";
   String selected_option = "";
-  Map q_a = {};
+  Map? q_a = {};
 
   List<Widget> _buildOption() {
     List<String> carry = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
     List<Widget> tmp = [Container()];
-    if (q_a != null && q_a["a_list"] != null) {
+    if (q_a != null && q_a!["a_list"] != null) {
       bool hasAns = false; //是否有答案匹配
-      for (var i = 0; i < q_a["a_list"].length; i++) {
-        String option = q_a["a_list"][i];
-        if ("${option}" == "${match_answer}" || option.contains("屋大维")) {
+      for (var i = 0; i < q_a!["a_list"].length; i++) {
+        String? option = q_a!["a_list"][i];
+        if ("${option}" == "${match_answer}" || option!.contains("屋大维")) {
           hasAns = true;
         }
       }
@@ -50,11 +50,11 @@ class _QuestionState extends State<Question> {
           auto_machine = false;
         });
       }
-      for (var i = 0; i < q_a["a_list"].length; i++) {
-        String option = q_a["a_list"][i];
+      for (var i = 0; i < q_a!["a_list"].length; i++) {
+        String option = q_a!["a_list"][i];
         if ("${option}" == "${match_answer}" || option.contains("屋大维")) {
           print("${option}");
-          ret_value = q_a["v_list"][i];
+          ret_value = q_a!["v_list"][i];
           selected_option = "${carry[i]}. " + option;
         }
         tmp.add(
@@ -65,7 +65,7 @@ class _QuestionState extends State<Question> {
                 setState(() {
                   no_answer = true;
                   match_answer = option;
-                  ret_value = q_a["v_list"][i];
+                  ret_value = q_a!["v_list"][i];
                 });
                 print("更改勾选选项：${ret_value}");
                 print("更改答案：${match_answer}");
@@ -113,7 +113,7 @@ class _QuestionState extends State<Question> {
 
   _getQuestion() async {
     await getWebCookie();
-    String get_q_a;
+    String? get_q_a;
     try {
       get_q_a = await Api().get_question();
     } catch (e) {
@@ -138,8 +138,8 @@ class _QuestionState extends State<Question> {
     } else {
       print("$get_q_a");
       if (q_a == {}) return;
-      q_a = jsonDecode(get_q_a);
-      count = int.parse(q_a["progress"][0].toString());
+      q_a = jsonDecode(get_q_a!);
+      count = int.parse(q_a!["progress"][0].toString());
       _queryAns();
     }
     setState(() {
@@ -148,7 +148,7 @@ class _QuestionState extends State<Question> {
   }
 
   _queryAns() async {
-    match_answer = query_answer(q_a["q"]);
+    match_answer = query_answer(q_a!["q"]);
     setState(() {});
     if (match_answer != null && match_answer != "") {
       setState(() {
@@ -236,7 +236,7 @@ class _QuestionState extends State<Question> {
   }
 
   List<Widget> doing() {
-    return q_a == null || q_a["q"] == null
+    return q_a == null || q_a!["q"] == null
         ? []
         : [
             Padding(
@@ -244,7 +244,7 @@ class _QuestionState extends State<Question> {
               child: Row(
                 children: [
                   Text(
-                    q_a["progress"].toString().replaceAll(" ", ""),
+                    q_a!["progress"].toString().replaceAll(" ", ""),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -272,7 +272,7 @@ class _QuestionState extends State<Question> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Text(
-                q_a["q"],
+                q_a!["q"],
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,

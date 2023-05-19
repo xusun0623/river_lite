@@ -83,7 +83,7 @@ final routers = {
   "/msg_three": (data) => MsgThree(type: data),
   "/msg_detail": (data) => MsgDetail(usrInfo: data),
   "/user_list": (data) => UserList(data: data),
-  "/photo_view": ({data}) => PhotoPreview(
+  "/photo_view": ({required data}) => PhotoPreview(
         galleryItems: data.galleryItems,
         defaultImage: data.defaultImage,
         pageChanged: data.pageChanged,

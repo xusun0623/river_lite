@@ -18,7 +18,7 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class CropImg extends StatefulWidget {
-  CropImg({Key key}) : super(key: key);
+  CropImg({Key? key}) : super(key: key);
 
   @override
   _CropImgState createState() => _CropImgState();
@@ -26,12 +26,12 @@ class CropImg extends StatefulWidget {
 
 class _CropImgState extends State<CropImg> {
   final _controller = CropController();
-  Uint8List img;
+  Uint8List? img;
   bool edit_done = false;
 
   _pickImg() async {
     final ImagePicker _picker = ImagePicker();
-    final XFile image = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       img = await image.readAsBytes();
     }
@@ -118,15 +118,15 @@ class _CropImgState extends State<CropImg> {
                           child: Material(
                             child: Crop(
                               controller: _controller,
-                              image: img,
+                              image: img!,
                               onCropped: (image) async {
-                                IMG.Image img = IMG.decodeImage(image);
+                                IMG.Image img = IMG.decodeImage(image)!;
                                 Uint8List resizedData200 = IMG.encodeJpg(IMG
-                                    .copyResize(img, width: 200, height: 200));
+                                    .copyResize(img, width: 200, height: 200)) as Uint8List;
                                 Uint8List resizedData120 = IMG.encodeJpg(IMG
-                                    .copyResize(img, width: 120, height: 120));
+                                    .copyResize(img, width: 120, height: 120)) as Uint8List;
                                 Uint8List resizedData48 = IMG.encodeJpg(
-                                    IMG.copyResize(img, width: 48, height: 48));
+                                    IMG.copyResize(img, width: 48, height: 48)) as Uint8List;
                                 String base64_200 =
                                     base64Encode(resizedData200);
                                 String base64_120 =
@@ -137,7 +137,7 @@ class _CropImgState extends State<CropImg> {
                                   base64_2: base64_120,
                                   base64_3: base64_48,
                                 );
-                                int uid = await getUid();
+                                int? uid = await getUid();
                                 CachedNetworkImage.evictFromCache(
                                   //清除原有缓存
                                   base_url +
@@ -201,7 +201,7 @@ class _CropImgState extends State<CropImg> {
 
 class EditDoneDisplay extends StatelessWidget {
   const EditDoneDisplay({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -268,12 +268,12 @@ class EditDoneDisplay extends StatelessWidget {
 }
 
 class MyButton extends StatefulWidget {
-  Function tap;
-  String txt;
-  int index;
-  bool show;
+  Function? tap;
+  String? txt;
+  int? index;
+  bool? show;
   MyButton({
-    Key key,
+    Key? key,
     this.tap,
     this.txt,
     this.index,
@@ -287,13 +287,13 @@ class MyButton extends StatefulWidget {
 class _MyButtonState extends State<MyButton> {
   @override
   Widget build(BuildContext context) {
-    return !widget.show
+    return !widget.show!
         ? Container()
         : Container(
             margin: EdgeInsets.only(left: os_edge, right: os_edge, bottom: 10),
             child: myInkWell(
               tap: () {
-                widget.tap();
+                widget.tap!();
               },
               color: widget.index == 0 ? os_color : os_color_opa,
               radius: 20,
@@ -301,7 +301,7 @@ class _MyButtonState extends State<MyButton> {
                 padding: EdgeInsets.symmetric(vertical: 20),
                 child: Center(
                   child: Text(
-                    widget.txt,
+                    widget.txt!,
                     style: TextStyle(
                       fontSize: 15,
                       color: widget.index == 0 ? os_white : os_color,
@@ -315,7 +315,7 @@ class _MyButtonState extends State<MyButton> {
 }
 
 class InfoTip extends StatelessWidget {
-  const InfoTip({Key key}) : super(key: key);
+  const InfoTip({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

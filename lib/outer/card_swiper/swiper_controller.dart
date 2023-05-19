@@ -5,31 +5,31 @@ import 'transformer_page_view/index_controller.dart';
 
 class SwipeIndexControllerEvent extends IndexControllerEventBase {
   SwipeIndexControllerEvent({
-    @required this.pos,
-    @required bool animation,
+    required this.pos,
+    required bool animation,
   }) : super(animation: animation);
   final double pos;
 }
 
 class BuildIndexControllerEvent extends IndexControllerEventBase {
   BuildIndexControllerEvent({
-    @required bool animation,
-    @required this.config,
+    required bool animation,
+    required this.config,
   }) : super(animation: animation);
   final SwiperPluginConfig config;
 }
 
 class AutoPlaySwiperControllerEvent extends IndexControllerEventBase {
   AutoPlaySwiperControllerEvent({
-    @required bool animation,
-    @required this.autoplay,
+    required bool animation,
+    required this.autoplay,
   }) : super(animation: animation);
 
   AutoPlaySwiperControllerEvent.start({
-    @required bool animation,
+    required bool animation,
   }) : this(animation: animation, autoplay: true);
   AutoPlaySwiperControllerEvent.stop({
-    @required bool animation,
+    required bool animation,
   }) : this(animation: animation, autoplay: false);
   final bool autoplay;
 }

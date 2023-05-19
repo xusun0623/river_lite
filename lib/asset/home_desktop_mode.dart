@@ -15,9 +15,9 @@ double MinusSpace(BuildContext context) {
 
 ///主页适配大屏幕，主要是针对帖子专栏进行适配
 class ResponsiveWidget extends StatefulWidget {
-  Widget child;
+  Widget? child;
   ResponsiveWidget({
-    Key key,
+    Key? key,
     this.child,
   }) : super(key: key);
 
@@ -29,7 +29,7 @@ class _ResponsiveWidgetState extends State<ResponsiveWidget> {
   @override
   Widget build(BuildContext context) {
     if (!isDesktop() || MediaQuery.of(context).size.width < BigWidthScreen) {
-      return widget.child;
+      return widget.child!;
     } else {
       return Container(
         width: MediaQuery.of(context).size.width,

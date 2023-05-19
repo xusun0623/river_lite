@@ -15,14 +15,14 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class MyHome extends StatefulWidget {
-  const MyHome({Key key}) : super(key: key);
+  const MyHome({Key? key}) : super(key: key);
 
   @override
   _MyHomeState createState() => _MyHomeState();
 }
 
 class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
-  TabController tabController;
+  TabController? tabController;
   List<Tab> tabs = [
     Tab(text: "板块"),
     Tab(text: "最新"),
@@ -123,7 +123,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
     return ScaleTabBar(
       labelPadding: EdgeInsets.symmetric(horizontal: 8),
       isScrollable: true,
-      splashBorderRadius: BorderRadius.all(Radius.circular(5)),
+      // splashBorderRadius: BorderRadius.all(Radius.circular(5)),
       labelColor: Provider.of<ColorProvider>(context).isDark
           ? os_dark_white
           : Colors.black87,
@@ -265,11 +265,11 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
 }
 
 class CustomTabBarViewScrollPhysics extends ScrollPhysics {
-  const CustomTabBarViewScrollPhysics({ScrollPhysics parent})
+  const CustomTabBarViewScrollPhysics({ScrollPhysics? parent})
       : super(parent: parent);
 
   @override
-  CustomTabBarViewScrollPhysics applyTo(ScrollPhysics ancestor) {
+  CustomTabBarViewScrollPhysics applyTo(ScrollPhysics? ancestor) {
     return CustomTabBarViewScrollPhysics(parent: buildParent(ancestor));
   }
 

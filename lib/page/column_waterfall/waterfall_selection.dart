@@ -6,10 +6,10 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class ColumnWaterfallSelection extends StatefulWidget {
-  int fid;
-  String name;
+  int? fid;
+  String? name;
   ColumnWaterfallSelection({
-    Key key,
+    Key? key,
     this.fid,
     this.name,
   }) : super(key: key);

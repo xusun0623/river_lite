@@ -12,14 +12,14 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class BlackList extends StatefulWidget {
-  BlackList({Key key}) : super(key: key);
+  BlackList({Key? key}) : super(key: key);
 
   @override
   _BlackListState createState() => _BlackListState();
 }
 
 class _BlackListState extends State<BlackList> {
-  List data = [];
+  List? data = [];
 
   List<int> select = [];
   String tmp_txt = "";
@@ -29,12 +29,12 @@ class _BlackListState extends State<BlackList> {
       showToast(context: context, type: XSToast.none, txt: "关键词不能为空");
       return;
     }
-    if (data.indexOf(tmp_txt) > -1) {
+    if (data!.indexOf(tmp_txt) > -1) {
       showToast(context: context, type: XSToast.none, txt: "已有关键词");
       return;
     }
     setState(() {
-      data.add(tmp_txt);
+      data!.add(tmp_txt);
       tmp_txt = "";
     });
     _update();
@@ -162,7 +162,7 @@ class _BlackListState extends State<BlackList> {
   List<Widget> _buildWidget() {
     List<Widget> tmp = [];
     tmp.add(InfoTip());
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < data!.length; i++) {
       tmp.add(ListTile(
         onTap: () {
           if (select.indexOf(i) > -1) {
@@ -173,7 +173,7 @@ class _BlackListState extends State<BlackList> {
           setState(() {});
         },
         title: Text(
-          data[i],
+          data![i],
           style: TextStyle(
             color: Provider.of<ColorProvider>(context, listen: false).isDark
                 ? os_dark_white
@@ -241,7 +241,7 @@ class _BlackListState extends State<BlackList> {
               ? Container()
               : IconButton(
                   icon: Text(
-                    select.length == data.length ? "取消" : "全选",
+                    select.length == data!.length ? "取消" : "全选",
                     style: TextStyle(
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_dark_dark_white
@@ -249,9 +249,9 @@ class _BlackListState extends State<BlackList> {
                     ),
                   ),
                   onPressed: () {
-                    if (select.length != data.length) {
+                    if (select.length != data!.length) {
                       select = [];
-                      for (var i = 0; i < data.length; i++) {
+                      for (var i = 0; i < data!.length; i++) {
                         select.add(i);
                       }
                     } else {
@@ -272,7 +272,7 @@ class _BlackListState extends State<BlackList> {
                       select.sort();
                       select = select.reversed.toList();
                       select.forEach((element) {
-                        data.removeAt(element);
+                        data!.removeAt(element);
                       });
                       select = [];
                       _update();
@@ -299,7 +299,7 @@ class _BlackListState extends State<BlackList> {
 }
 
 class InfoTip extends StatelessWidget {
-  const InfoTip({Key key}) : super(key: key);
+  const InfoTip({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

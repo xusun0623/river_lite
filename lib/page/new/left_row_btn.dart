@@ -28,18 +28,18 @@ class LeftRowBtn extends StatefulWidget {
   Function setImgUrls;
   List img_urls;
   LeftRowBtn({
-    Key key,
-    @required this.title_focus,
-    @required this.tip_focus,
-    @required this.pop_section_index,
-    @required this.pop_section,
-    @required this.uploading,
-    @required this.showAttach,
-    @required this.setPopSection,
-    @required this.setPopSectionIndex,
-    @required this.setUploading,
-    @required this.setImgUrls,
-    @required this.img_urls,
+    Key? key,
+    required this.title_focus,
+    required this.tip_focus,
+    required this.pop_section_index,
+    required this.pop_section,
+    required this.uploading,
+    required this.showAttach,
+    required this.setPopSection,
+    required this.setPopSectionIndex,
+    required this.setUploading,
+    required this.setImgUrls,
+    required this.img_urls,
   }) : super(key: key);
 
   @override
@@ -135,7 +135,7 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                     //   pickType: PickType.image,
                     //   quality: 0.7, //图片质量
                     // );
-                    List res = await getPhoneImages(context);
+                    List res = (await getPhoneImages(context))!;
                     res.forEach((element) {
                       image.add(XFile(element.path));
                     });
@@ -271,9 +271,9 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
 }
 
 class BtnContainer extends StatelessWidget {
-  String svg_path;
-  String txt;
-  BtnContainer({Key key, this.svg_path, this.txt}) : super(key: key);
+  String? svg_path;
+  String? txt;
+  BtnContainer({Key? key, this.svg_path, this.txt}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -6,12 +6,12 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
 class VoteMachine extends StatefulWidget {
-  Function confirm; //返回投票选项的List<String>数组即可
-  Function tap;
-  Function focus;
-  Function editVote;
+  Function? confirm; //返回投票选项的List<String>数组即可
+  Function? tap;
+  Function? focus;
+  Function? editVote;
   VoteMachine({
-    Key key,
+    Key? key,
     this.confirm,
     this.tap,
     this.focus,
@@ -62,7 +62,7 @@ class _VoteMachineState extends State<VoteMachine> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    if (widget.tap != null) widget.tap();
+                    if (widget.tap != null) widget.tap!();
                     options.add({
                       "index": options.length - 1,
                       "txt": "",
@@ -105,7 +105,7 @@ class _VoteMachineState extends State<VoteMachine> {
                                   ? Brightness.dark
                                   : Brightness.light,
                           onTap: () {
-                            widget.focus();
+                            widget.focus!();
                           },
                           style: TextStyle(
                             color: Provider.of<ColorProvider>(context).isDark
@@ -115,7 +115,7 @@ class _VoteMachineState extends State<VoteMachine> {
                           onChanged: (value) {
                             options[e["index"]]["txt"] = value;
                             print("${options}");
-                            widget.editVote(options);
+                            widget.editVote!(options);
                           },
                           decoration: InputDecoration(
                             border: InputBorder.none,

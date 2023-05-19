@@ -25,7 +25,7 @@ class HotNoScaffold extends StatefulWidget {
 class _HotNoScaffoldState extends State<HotNoScaffold>
     with AutomaticKeepAliveClientMixin {
   ScrollController _scrollController = new ScrollController();
-  var list = [];
+  List<dynamic>? list = [];
   bool vibrate = false;
   GlobalKey<RefreshIndicatorState> _indicatorKey =
       GlobalKey<RefreshIndicatorState>();
@@ -75,13 +75,13 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
 
   List<Widget> _buildComponents() {
     List<Widget> t = [];
-    for (var i = 0; i < list.length; i++) {
+    for (var i = 0; i < list!.length; i++) {
       t.add(
         Stack(
           children: [
             Topic(
               isLeftNaviUI: isDesktop() && true,
-              data: list[i],
+              data: list![i],
               top: 0,
               removeMargin: true,
             ),
@@ -101,7 +101,7 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
         ),
       );
     }
-    if (list.length == 0) {
+    if (list!.length == 0) {
       t.add(Container(
         height: MediaQuery.of(context).size.height - 100,
       ));
@@ -120,7 +120,7 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
         show: false,
         controller: _scrollController,
         refresh: () {
-          _indicatorKey.currentState.show();
+          _indicatorKey.currentState!.show();
         },
         child: getMyRrefreshIndicator(
           context: context,
@@ -130,7 +130,7 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
             var data = await _getData();
             return data;
           },
-          child: list.length == 0
+          child: list!.length == 0
               ? OccuLoading()
               : MasonryGridView.count(
                   controller: _scrollController,

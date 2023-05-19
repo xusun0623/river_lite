@@ -28,9 +28,9 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
-  int type; //0:帖子 1:用户
+  int? type; //0:帖子 1:用户
   Search({
-    Key key,
+    Key? key,
     this.type,
   }) : super(key: key);
 
@@ -39,7 +39,7 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  int select = 0; //选择的类型 0:帖子 1:用户
+  int? select = 0; //选择的类型 0:帖子 1:用户
   var data = [];
   bool loading = false;
   bool load_done = false;
@@ -113,7 +113,7 @@ class _SearchState extends State<Search> {
         duration: Duration(milliseconds: 500),
         curve: Curves.ease,
       );
-      var tmp = await Api().forum_search(select, {
+      var tmp = await Api().forum_search(select!, {
         "keyword": _controller.text ?? "",
         "page": 1,
         "pageSize": 20,
@@ -149,7 +149,7 @@ class _SearchState extends State<Search> {
   _getMore() async {
     if (loading) return;
     loading = true;
-    var tmp = await Api().forum_search(select, {
+    var tmp = await Api().forum_search(select!, {
       "keyword": _controller.text,
       "page": (data.length / 20 + 1).ceil(),
       "pageSize": 20,
@@ -358,10 +358,10 @@ class _SearchState extends State<Search> {
 }
 
 class SwitchTypeTab extends StatefulWidget {
-  int index;
-  Function select;
+  int? index;
+  Function? select;
   SwitchTypeTab({
-    Key key,
+    Key? key,
     this.index,
     this.select,
   }) : super(key: key);
@@ -389,7 +389,7 @@ class _SwitchTypeTabState extends State<SwitchTypeTab> {
                 GestureDetector(
                   onTap: () {
                     if (widget.select != null) {
-                      widget.select(0);
+                      widget.select!(0);
                     }
                   },
                   child: Container(
@@ -419,7 +419,7 @@ class _SwitchTypeTabState extends State<SwitchTypeTab> {
                 GestureDetector(
                   onTap: () {
                     if (widget.select != null) {
-                      widget.select(1);
+                      widget.select!(1);
                     }
                   },
                   child: Container(
@@ -457,9 +457,9 @@ class _SwitchTypeTabState extends State<SwitchTypeTab> {
 }
 
 class History extends StatefulWidget {
-  Function confirm;
+  Function? confirm;
   History({
-    Key key,
+    Key? key,
     this.confirm,
   }) : super(key: key);
 
@@ -468,22 +468,22 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
-  List data = [];
+  List? data = [];
   List<Widget> _buildCont() {
     List<Widget> tmp = [];
-    if (data.length != 0) {
-      for (int i = 0; i < data.length; i++) {
+    if (data!.length != 0) {
+      for (int i = 0; i < data!.length; i++) {
         tmp.add(HistoryTag(
           refresh: () {
-            widget.confirm("");
+            widget.confirm!("");
             _getData();
           },
           tap: (txt) {
             if (widget.confirm != null) {
-              widget.confirm(txt);
+              widget.confirm!(txt);
             }
           },
-          txt: data[i],
+          txt: data![i],
         ));
       }
       tmp.add(Container(height: 10));
@@ -493,7 +493,7 @@ class _HistoryState extends State<History> {
 
   _getData() async {
     String tmp = await getStorage(key: "search-history", initData: "[]");
-    List tmp_arr = jsonDecode(tmp);
+    List? tmp_arr = jsonDecode(tmp);
     setState(() {
       data = tmp_arr;
     });
@@ -507,7 +507,7 @@ class _HistoryState extends State<History> {
 
   @override
   Widget build(BuildContext context) {
-    return data.length == 0
+    return data!.length == 0
         ? Container()
         : Container(
             margin: EdgeInsets.symmetric(horizontal: os_edge),
@@ -532,7 +532,7 @@ class _HistoryState extends State<History> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        widget.confirm("");
+                        widget.confirm!("");
                         showModal(
                           context: context,
                           title: "请确认",
@@ -575,11 +575,11 @@ class _HistoryState extends State<History> {
 }
 
 class HistoryTag extends StatefulWidget {
-  Function tap;
-  Function refresh;
-  String txt;
+  Function? tap;
+  Function? refresh;
+  String? txt;
   HistoryTag({
-    Key key,
+    Key? key,
     this.tap,
     this.txt,
     this.refresh,
@@ -613,12 +613,12 @@ class _HistoryTagState extends State<HistoryTag> {
                   key: "search-history",
                   value: jsonEncode(tmp_arr),
                 );
-                widget.refresh();
+                widget.refresh!();
               });
         },
         tap: () {
           if (widget.tap != null) {
-            widget.tap(widget.txt);
+            widget.tap!(widget.txt);
           }
         },
         color: Provider.of<ColorProvider>(context).isDark
@@ -640,9 +640,9 @@ class _HistoryTagState extends State<HistoryTag> {
 }
 
 class UserListCard extends StatefulWidget {
-  Map data;
+  Map? data;
   UserListCard({
-    Key key,
+    Key? key,
     this.data,
   }) : super(key: key);
 
@@ -661,13 +661,13 @@ class _UserListCardState extends State<UserListCard> {
               ? os_light_dark_card
               : os_white,
           tap: () async {
-            int uid = await getUid();
+            int? uid = await getUid();
             Navigator.pushNamed(
               context,
               "/person_center",
               arguments: {
-                "uid": widget.data["uid"],
-                "isMe": uid == widget.data["uid"],
+                "uid": widget.data!["uid"],
+                "isMe": uid == widget.data!["uid"],
               },
             );
           },
@@ -692,7 +692,7 @@ class _UserListCardState extends State<UserListCard> {
                     width: 35,
                     height: 35,
                     fit: BoxFit.cover,
-                    imageUrl: widget.data["icon"],
+                    imageUrl: widget.data!["icon"],
                   ),
                 ),
                 Container(width: 15),
@@ -706,7 +706,7 @@ class _UserListCardState extends State<UserListCard> {
                       Row(
                         children: [
                           Text(
-                            widget.data["name"],
+                            widget.data!["name"],
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -716,9 +716,9 @@ class _UserListCardState extends State<UserListCard> {
                                         : os_black),
                           ),
                           Container(width: 5),
-                          widget.data["userTitle"].toString().length < 6
+                          widget.data!["userTitle"].toString().length < 6
                               ? Tag(
-                                  txt: widget.data["userTitle"],
+                                  txt: widget.data!["userTitle"],
                                   color: os_white,
                                   color_opa: os_wonderful_color[1],
                                 )
@@ -727,9 +727,9 @@ class _UserListCardState extends State<UserListCard> {
                       ),
                       Container(height: 5),
                       Text(
-                        widget.data["signture"] == ""
+                        widget.data!["signture"] == ""
                             ? "这位畔友很懒，什么也没写"
-                            : widget.data["signture"],
+                            : widget.data!["signture"],
                         style: TextStyle(
                           fontSize: 14,
                           color: Color(0xFF9F9F9F),
@@ -750,7 +750,7 @@ class _UserListCardState extends State<UserListCard> {
                     onPressed: () async {
                       var tmp = await Api().user_useradmin({
                         "type": "follow",
-                        "uid": widget.data["uid"],
+                        "uid": widget.data!["uid"],
                       });
                       showToast(
                         context: context,
@@ -773,7 +773,7 @@ class _UserListCardState extends State<UserListCard> {
 
 class SearchBtn extends StatefulWidget {
   Function search;
-  SearchBtn({Key key, @required this.search}) : super(key: key);
+  SearchBtn({Key? key, required this.search}) : super(key: key);
 
   @override
   _SearchBtnState createState() => _SearchBtnState();
@@ -806,18 +806,18 @@ class _SearchBtnState extends State<SearchBtn> {
 class SearchLeft extends StatefulWidget {
   Function select;
   Function confirm;
-  TextEditingController controller;
+  TextEditingController? controller;
   FocusNode commentFocus;
-  Function focus;
-  int select_idx;
+  Function? focus;
+  int? select_idx;
   SearchLeft({
-    Key key,
-    @required this.select,
+    Key? key,
+    required this.select,
     this.controller,
     this.focus,
-    @required this.select_idx,
-    @required this.commentFocus,
-    @required this.confirm,
+    required this.select_idx,
+    required this.commentFocus,
+    required this.confirm,
   }) : super(key: key);
 
   @override
@@ -851,7 +851,7 @@ class _SearchLeftState extends State<SearchLeft> {
                 widget.confirm();
               },
               onTap: () {
-                if (widget.focus != null) widget.focus();
+                if (widget.focus != null) widget.focus!();
               },
               controller: widget.controller,
               cursorColor: Provider.of<ColorProvider>(context).isDark
@@ -869,13 +869,13 @@ class _SearchLeftState extends State<SearchLeft> {
                 suffixIcon: IconButton(
                   onPressed: () {
                     FocusScope.of(context).requestFocus(widget.commentFocus);
-                    if (widget.focus != null) widget.focus();
-                    widget.controller.clear();
+                    if (widget.focus != null) widget.focus!();
+                    widget.controller!.clear();
                   },
                   icon: Icon(
                     Icons.cancel,
                     color: Color(
-                      widget.controller.text.length > 0
+                      widget.controller!.text.length > 0
                           ? 0xFFCCCCCC
                           : 0X00CCCCCC,
                     ),
@@ -900,11 +900,11 @@ class _SearchLeftState extends State<SearchLeft> {
 }
 
 class SearchTopicCard extends StatefulWidget {
-  Map data;
-  int index;
+  Map? data;
+  int? index;
   Function tap;
 
-  SearchTopicCard({Key key, this.data, this.index, @required this.tap})
+  SearchTopicCard({Key? key, this.data, this.index, required this.tap})
       : super(key: key);
 
   @override
@@ -931,7 +931,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
             Navigator.pushNamed(
               context,
               "/topic_detail",
-              arguments: widget.data["topic_id"],
+              arguments: widget.data!["topic_id"],
             );
           },
           widget: Container(
@@ -954,17 +954,17 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                               height: 35,
                               color: Provider.of<ColorProvider>(context).isDark
                                   ? Color(0x19FFFFFF)
-                                  : os_wonderful_color_opa[widget.index % 7],
+                                  : os_wonderful_color_opa[widget.index! % 7],
                               child: Center(
                                 child: Text(
-                                  widget.data["user_nick_name"].length == 0
+                                  widget.data!["user_nick_name"].length == 0
                                       ? "X"
-                                      : widget.data["user_nick_name"][0],
+                                      : widget.data!["user_nick_name"][0],
                                   style: TextStyle(
                                     color: Provider.of<ColorProvider>(context)
                                             .isDark
                                         ? os_dark_white
-                                        : os_wonderful_color[widget.index % 7],
+                                        : os_wonderful_color[widget.index! % 7],
                                   ),
                                 ),
                               ),
@@ -975,7 +975,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.data["user_nick_name"],
+                                widget.data!["user_nick_name"],
                                 style: TextStyle(
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
@@ -987,7 +987,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                               Text(
                                 RelativeDateFormat.format(
                                   DateTime.fromMillisecondsSinceEpoch(
-                                    int.parse(widget.data["last_reply_date"]),
+                                    int.parse(widget.data!["last_reply_date"]),
                                   ),
                                 ),
                                 style: TextStyle(
@@ -1008,7 +1008,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                   Container(
                     width: MediaQuery.of(context).size.width - 60,
                     child: Text(
-                      widget.data["title"].replaceAll("&nbsp1", " "),
+                      widget.data!["title"].replaceAll("&nbsp1", " "),
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 17,
@@ -1023,7 +1023,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                   Container(
                     width: MediaQuery.of(context).size.width - 60,
                     child: Text(
-                      (widget.data["summary"] ?? widget.data["subject"]) ?? "",
+                      (widget.data!["summary"] ?? widget.data!["subject"]) ?? "",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 15,
@@ -1047,7 +1047,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                           ),
                           Padding(padding: EdgeInsets.all(2)),
                           Text(
-                            "评论 ${widget.data['replies']} · 浏览量 ${widget.data['hits']}",
+                            "评论 ${widget.data!['replies']} · 浏览量 ${widget.data!['hits']}",
                             style: TextStyle(
                               color: Color(0xFFC5C5C5),
                               fontSize: 14,
