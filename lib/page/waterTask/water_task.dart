@@ -354,7 +354,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               : os_black,
           elevation: 0,
           title: TabBar(
-            // dividerColor: Colors.transparent,
+            dividerColor: Colors.transparent,
             controller: tabController,
             unselectedLabelColor: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_dark_white
@@ -363,7 +363,6 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
                 ? os_dark_white
                 : os_black,
             indicatorColor: Colors.transparent,
-            // dividerColor: Colors.transparent,
             unselectedLabelStyle: TextStyle(
               fontWeight: FontWeight.normal,
               fontSize: 16,
@@ -726,10 +725,10 @@ class _Card1State extends State<Card1> {
             : os_white,
         tap: () async {
           showToast(context: context, type: XSToast.loading, txt: "加载中…");
-          String html =
-              (await XHttp().pureHttpWithCookie(url: widget.data!["apply_link"]))
-                  .data
-                  .toString();
+          String html = (await XHttp()
+                  .pureHttpWithCookie(url: widget.data!["apply_link"]))
+              .data
+              .toString();
           hideToast();
           if (widget.refresh != null && !html.contains("另一个任务")) {
             widget.refresh!();
