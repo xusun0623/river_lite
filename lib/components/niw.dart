@@ -32,43 +32,47 @@ class myInkWell extends StatefulWidget {
 class _myInkWellState extends State<myInkWell> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Ink(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(widget.radius),
-          color: widget.color ?? os_white,
+    return ClipRRect(
+      clipBehavior: Clip.hardEdge,
+      borderRadius: BorderRadius.circular(widget.radius),
+      child: Material(
+        color: Colors.transparent,
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(widget.radius),
+            color: widget.color ?? os_white,
+          ),
+          width: widget.width,
+          height: widget.height,
+          child: widget.longPress == null
+              ? InkWell(
+                  splashFactory: InkSparkle.splashFactory,
+                  highlightColor: widget.highlightColor ?? null,
+                  splashColor: widget.splashColor ?? null,
+                  onTap: () {
+                    if (widget.tap != null) {
+                      widget.tap!();
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(widget.radius),
+                  child: widget.widget,
+                )
+              : InkWell(
+                  splashFactory: InkSparkle.splashFactory,
+                  highlightColor: widget.highlightColor ?? null,
+                  splashColor: widget.splashColor ?? null,
+                  onTap: () {
+                    if (widget.tap != null) {
+                      widget.tap!();
+                    }
+                  },
+                  onLongPress: () {
+                    widget.longPress!();
+                  },
+                  borderRadius: BorderRadius.circular(widget.radius),
+                  child: widget.widget,
+                ),
         ),
-        width: widget.width,
-        height: widget.height,
-        child: widget.longPress == null
-            ? InkWell(
-                splashFactory: InkSparkle.splashFactory,
-                highlightColor: widget.highlightColor ?? null,
-                splashColor: widget.splashColor ?? null,
-                onTap: () {
-                  if (widget.tap != null) {
-                    widget.tap!();
-                  }
-                },
-                borderRadius: BorderRadius.circular(widget.radius),
-                child: widget.widget,
-              )
-            : InkWell(
-                splashFactory: InkSparkle.splashFactory,
-                highlightColor: widget.highlightColor ?? null,
-                splashColor: widget.splashColor ?? null,
-                onTap: () {
-                  if (widget.tap != null) {
-                    widget.tap!();
-                  }
-                },
-                onLongPress: () {
-                  widget.longPress!();
-                },
-                borderRadius: BorderRadius.circular(widget.radius),
-                child: widget.widget,
-              ),
       ),
     );
   }
