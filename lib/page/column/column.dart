@@ -205,14 +205,14 @@ class _TopicColumnState extends State<TopicColumn> {
         fold: () {
           showActionSheet(
             isScrollControlled: true,
-            topActionItem: TopActionItem(
-              showBottomLine: false,
-              title: "请选择分栏",
-              titleTextStyle: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            // topActionItem: TopActionItem(
+            //   showBottomLine: false,
+            //   title: "请选择分栏",
+            //   titleTextStyle: TextStyle(
+            //     fontSize: 18,
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
             actionSheetColor: os_white,
             enableDrag: true,
             context: context,

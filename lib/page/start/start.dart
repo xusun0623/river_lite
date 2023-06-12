@@ -60,11 +60,11 @@ class _StartState extends State<Start> {
 
   _autoQuestion() async {
     //获取首页是自动答题
-    // String tmp = await getStorage(key: "auto", initData: "");
-    // if (tmp != "") {
-    Provider.of<AutoQuestionProvider>(context, listen: false).isAuto = true;
-    Provider.of<AutoQuestionProvider>(context, listen: false).refresh();
-    // }
+    String tmp = await getStorage(key: "auto", initData: "");
+    if (tmp != "") {
+      Provider.of<AutoQuestionProvider>(context, listen: false).isAuto = true;
+      Provider.of<AutoQuestionProvider>(context, listen: false).refresh();
+    }
   }
 
   @override

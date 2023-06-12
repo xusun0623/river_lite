@@ -27,7 +27,7 @@ showPopWithHeightColor(
     builder: (context) {
       return Container(
         padding: EdgeInsets.symmetric(
-          horizontal: 15.0 + (isDesktop() ? MinusSpace(context) / 2 : 0),
+          horizontal: 15.0,
         ),
         height: height,
         width: MediaQuery.of(context).size.width,
@@ -66,7 +66,7 @@ showPopWithHeight(BuildContext context, List<Widget> widgets, double height) {
     builder: (context) {
       return Container(
         padding: EdgeInsets.symmetric(
-          horizontal: 15.0 + (isDesktop() ? MinusSpace(context) / 2 : 0),
+          horizontal: 15.0,
         ),
         height: height,
         width: MediaQuery.of(context).size.width,
@@ -106,7 +106,8 @@ showPop(BuildContext context, List<Widget> widgets) {
     builder: (context) {
       return Container(
         padding: EdgeInsets.symmetric(
-          horizontal: 30.0 + (isDesktop() ? MinusSpace(context) / 2 : 0),
+          horizontal: 30.0,
+          // horizontal: 30.0 + (isDesktop() ? MinusSpace(context) / 2 : 0),
         ),
         decoration: BoxDecoration(
           color: Provider.of<ColorProvider>(context, listen: false).isDark

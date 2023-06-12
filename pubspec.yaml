@@ -2,13 +2,14 @@ name: offer_show
 description: A new Flutter project.
 
 publish_to: "none"
-version: 1.0.11+2
+version: 1.0.12+2
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   wechat_camera_picker: ^3.7.0
+  flutter_socks_proxy: ^0.0.2
   flutter_staggered_grid_view: ^0.6.2
   # webview_flutter: ^4.0.6
   flutter_keyboard_visibility: ^5.4.0

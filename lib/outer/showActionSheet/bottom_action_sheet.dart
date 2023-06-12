@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -65,7 +66,7 @@ class _TopActionItemWidget extends StatelessWidget {
     final List<Widget> widgets = [];
     widgets.addAll([
       Container(
-        width: MediaQuery.of(context).size.width,
+        // width: MediaQuery.of(context).size.width - MinusSpace(context) - 160,
         padding: EdgeInsets.symmetric(vertical: 20),
         child: Center(
           child: Text(

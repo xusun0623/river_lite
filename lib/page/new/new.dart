@@ -529,14 +529,14 @@ class _PostNewState extends State<PostNew> {
                                                     },
                                                   );
                                                 }).toList(),
-                                                topActionItem: TopActionItem(
-                                                  title:
-                                                      "已选择:${select_section}✅",
-                                                  titleTextStyle: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
+                                                // topActionItem: TopActionItem(
+                                                //   title:
+                                                //       "已选择:${select_section}✅",
+                                                //   titleTextStyle: TextStyle(
+                                                //     fontSize: 18,
+                                                //     fontWeight: FontWeight.bold,
+                                                //   ),
+                                                // ),
                                                 bottomActionItem:
                                                     BottomActionItem(
                                                         title: "取消"),

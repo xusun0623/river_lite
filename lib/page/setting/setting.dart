@@ -65,70 +65,24 @@ class _SettingState extends State<Setting> {
           child: SelectCard()),
       Container(height: 20),
       ResponsiveWidget(
-        child: ListTile(
+        child: SwitchListTile(
+          inactiveTrackColor: Provider.of<ColorProvider>(context).isDark
+              ? Color(0x33FFFFFF)
+              : os_middle_grey,
           title: Text(
             "水滴自动答题",
             style: TextStyle(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_white
-                    : os_black),
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
           ),
-          trailing: Icon(
-            Icons.chevron_right_rounded,
-            color: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_dark_white
-                : os_deep_grey,
-          ),
-          onTap: () async {
-            showPop(context, [
-              Container(height: 70),
-              Center(
-                child: Icon(
-                  Icons.auto_awesome,
-                  size: 70,
-                  color: os_deep_blue,
-                ),
-              ),
-              Container(height: 40),
-              ResponsiveWidget(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  child: Center(
-                    child: Text(
-                      "水滴答题",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color:
-                            Provider.of<ColorProvider>(context, listen: false)
-                                    .isDark
-                                ? os_dark_white
-                                : os_black,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Container(height: 15),
-              Center(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    "河畔Lite在启动App时会自动触发答题，您无需操作即可每日收获10水滴（需要9水滴的启动资金）",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Provider.of<ColorProvider>(context, listen: false)
-                              .isDark
-                          ? os_dark_dark_white
-                          : os_deep_grey,
-                      // fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ]);
+          value: autoAnswer,
+          onChanged: (bool value) {
+            setStorage(key: "auto", value: value ? "1" : "");
+            setState(() {
+              autoAnswer = value;
+            });
           },
         ),
       ),
@@ -266,8 +220,18 @@ class _SettingState extends State<Setting> {
     return tmp;
   }
 
+  bool autoAnswer = true;
+
+  getAnsStatus() async {
+    String txt = await getStorage(key: "auto");
+    setState(() {
+      autoAnswer = txt != "";
+    });
+  }
+
   @override
   void initState() {
+    getAnsStatus();
     super.initState();
   }
 

@@ -97,86 +97,90 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
       Container(height: 10),
       Row(
         children: [
-          Container(
-            margin: EdgeInsets.only(right: 10),
-            child: myInkWell(
-              tap: () {
-                Navigator.pop(context);
-              },
-              color: Provider.of<ColorProvider>(context, listen: false).isDark
-                  ? os_white_opa
-                  : Color(0x16004DFF),
-              widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                height: 40,
-                child: Center(
-                  child: Text(
-                    "取消",
-                    style: TextStyle(
-                      color: Provider.of<ColorProvider>(context, listen: false)
-                              .isDark
-                          ? os_dark_dark_white
-                          : os_deep_blue,
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(right: 10),
+              child: myInkWell(
+                tap: () {
+                  Navigator.pop(context);
+                },
+                color: Provider.of<ColorProvider>(context, listen: false).isDark
+                    ? os_white_opa
+                    : Color(0x16004DFF),
+                widget: Container(
+                  height: 40,
+                  child: Center(
+                    child: Text(
+                      "取消",
+                      style: TextStyle(
+                        color:
+                            Provider.of<ColorProvider>(context, listen: false)
+                                    .isDark
+                                ? os_dark_dark_white
+                                : os_deep_blue,
+                      ),
                     ),
                   ),
                 ),
+                radius: 12.5,
               ),
-              radius: 12.5,
             ),
           ),
-          Container(
-            child: myInkWell(
-              tap: () async {
-                try {
-                  int val_int = int.parse(_value);
-                  if (val_int < -5 || val_int > 30) {
+          Expanded(
+            child: Container(
+              child: myInkWell(
+                tap: () async {
+                  try {
+                    int val_int = int.parse(_value);
+                    if (val_int < -5 || val_int > 30) {
+                      showToast(
+                        context: context,
+                        type: XSToast.none,
+                        txt: "请输入-5~30的整数",
+                      );
+                    } else {
+                      await XHttp().pureHttp(
+                          url: widget.data["topic"]["extraPanel"][0]["action"]
+                                  .toString() +
+                              "&modsubmit=确定",
+                          param: {
+                            "score2": "${val_int}",
+                            "sendreasonpm": "on",
+                            "reason": "水滴操作",
+                          });
+                      if (widget.refresh != null) widget.refresh!();
+                      Navigator.pop(context);
+                    }
+                  } catch (e) {
                     showToast(
                       context: context,
                       type: XSToast.none,
-                      txt: "请输入-5~30的整数",
+                      txt: "请输入整数",
                     );
-                  } else {
-                    await XHttp().pureHttp(
-                        url: widget.data["topic"]["extraPanel"][0]["action"]
-                                .toString() +
-                            "&modsubmit=确定",
-                        param: {
-                          "score2": "${val_int}",
-                          "sendreasonpm": "on",
-                          "reason": "水滴操作",
-                        });
-                    if (widget.refresh != null) widget.refresh!();
-                    Navigator.pop(context);
                   }
-                } catch (e) {
-                  showToast(
-                    context: context,
-                    type: XSToast.none,
-                    txt: "请输入整数",
-                  );
-                }
-              },
-              color: os_deep_blue,
-              widget: Container(
-                width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
-                height: 40,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.done, color: os_white, size: 18),
-                      Container(width: 5),
-                      Text(
-                        "完成",
-                        style: TextStyle(
-                          color: os_white,
+                },
+                color: os_deep_blue,
+                widget: Container(
+                  // width: (MediaQuery.of(context).size.width - 60) / 2 - 5,
+                  height: 40,
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.done, color: os_white, size: 18),
+                        Container(width: 5),
+                        Text(
+                          "完成",
+                          style: TextStyle(
+                            color: os_white,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
+                radius: 12.5,
               ),
-              radius: 12.5,
             ),
           ),
         ],
