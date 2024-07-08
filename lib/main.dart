@@ -9,7 +9,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_socks_proxy/socks_proxy.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/router/router.dart';
 import 'package:offer_show/util/provider.dart';

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:badges/badges.dart' as Badgee;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,7 +22,6 @@ import 'package:offer_show/asset/uploadAttachment.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
-import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/Your_emoji.dart';
 import 'package:offer_show/util/interface.dart';
@@ -654,7 +654,10 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                         fontSize: 10,
                                       ),
                                     ),
-                                    badgeColor: os_deep_blue,
+                                    // badgeColor: os_deep_blue,
+                                    badgeStyle: Badgee.BadgeStyle(
+                                      badgeColor: os_deep_blue,
+                                    ),
                                     position: Badgee.BadgePosition.topEnd(
                                         top: 0, end: 0),
                                     child: Padding(
@@ -952,7 +955,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                                       : os_deep_blue,
                                 ),
                               ),
-                              imageUrl: widget.cont,
+                              imageUrl: widget.cont!,
                             ),
                           ),
                         ),
@@ -1041,7 +1044,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
             color: os_grey,
           ),
         ),
-        imageUrl: widget.avatar,
+        imageUrl: widget.avatar!,
         width: 36,
         height: 36,
       ),

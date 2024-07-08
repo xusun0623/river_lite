@@ -1,8 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/to_user.dart';
-import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 

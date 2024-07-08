@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +18,6 @@ import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/topic_formhash.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/niw.dart';
-import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
@@ -608,7 +608,9 @@ class _CommentState extends State<Comment> {
 
   bool _getBlack() {
     bool flag = false;
-    Provider.of<BlackProvider>(context, listen: false).black!.forEach((element) {
+    Provider.of<BlackProvider>(context, listen: false)
+        .black!
+        .forEach((element) {
       if (widget.data["reply_id"].toString().contains(element)) {
         flag = true;
         blackKeyWord = element;

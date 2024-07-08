@@ -1,11 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart'; // Import package
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/components/newNaviBar.dart';
-import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
-import 'package:offer_show/outer/cached_network_image/image_provider/cached_network_image_provider.dart';
 import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:photo_view/photo_view.dart';
@@ -140,8 +138,8 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                   },
                   scrollDirection: widget.direction!,
                   itemCount: widget.galleryItems.length,
-                  backgroundDecoration:
-                      widget.decoration as BoxDecoration? ?? BoxDecoration(color: Colors.black),
+                  backgroundDecoration: widget.decoration as BoxDecoration? ??
+                      BoxDecoration(color: Colors.black),
                   pageController: _pageController,
                   onPageChanged: (index) => setState(
                     () {

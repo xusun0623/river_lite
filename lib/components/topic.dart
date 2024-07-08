@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/bigScreen.dart';
@@ -24,8 +25,6 @@ import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 import 'package:route_transitions/route_transitions.dart';
-
-import '../outer/cached_network_image/cached_image_widget.dart';
 
 class Topic extends StatefulWidget {
   Map? data;

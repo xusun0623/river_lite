@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
@@ -38,8 +39,6 @@ import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
-
-import '../../outer/cached_network_image/cached_image_widget.dart';
 
 class TopicDetail extends StatefulWidget {
   int? topicID;
@@ -285,7 +284,9 @@ class _TopicDetailState extends State<TopicDetail> {
 
   bool _isBlack() {
     bool flag = false;
-    Provider.of<BlackProvider>(context, listen: false).black!.forEach((element) {
+    Provider.of<BlackProvider>(context, listen: false)
+        .black!
+        .forEach((element) {
       if (data["topic"]["title"].toString().contains(element) ||
           data["topic"]["user_nick_name"].toString().contains(element)) {
         flag = true;

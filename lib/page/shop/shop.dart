@@ -1,5 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,7 +7,6 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/components/niw.dart';
-import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
@@ -199,7 +198,8 @@ class _PopChatState extends State<PopChat> {
       dom.Document html_doc = dom.Document.html(html_txt);
       dom.Document formhash_res_doc = dom.Document.html(formhash_res_txt);
 
-      now_price = int.parse(html_doc.getElementById("discountprice")!.innerHtml);
+      now_price =
+          int.parse(html_doc.getElementById("discountprice")!.innerHtml);
       total_water = int.parse(
         html_doc
             .getElementsByClassName("bbda")[0]
@@ -333,7 +333,7 @@ class _PopChatState extends State<PopChat> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CachedNetworkImage(
-              imageUrl: widget.data!.img,
+              imageUrl: widget.data!.img!,
               width: 40,
               height: 40,
             ),
@@ -592,7 +592,7 @@ class _GoodCardState extends State<GoodCard> {
                             width: 39.75,
                             height: 39.75,
                             child: CachedNetworkImage(
-                              imageUrl: widget.data!.img,
+                              imageUrl: widget.data!.img!,
                               placeholder: (context, url) => Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),

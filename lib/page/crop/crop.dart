@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crop_your_image/crop_your_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
@@ -11,7 +12,6 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/components/niw.dart';
-import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
@@ -121,12 +121,15 @@ class _CropImgState extends State<CropImg> {
                               image: img!,
                               onCropped: (image) async {
                                 IMG.Image img = IMG.decodeImage(image)!;
-                                Uint8List resizedData200 = IMG.encodeJpg(IMG
-                                    .copyResize(img, width: 200, height: 200)) as Uint8List;
-                                Uint8List resizedData120 = IMG.encodeJpg(IMG
-                                    .copyResize(img, width: 120, height: 120)) as Uint8List;
-                                Uint8List resizedData48 = IMG.encodeJpg(
-                                    IMG.copyResize(img, width: 48, height: 48)) as Uint8List;
+                                Uint8List resizedData200 = IMG.encodeJpg(
+                                    IMG.copyResize(img,
+                                        width: 200, height: 200)) as Uint8List;
+                                Uint8List resizedData120 = IMG.encodeJpg(
+                                    IMG.copyResize(img,
+                                        width: 120, height: 120)) as Uint8List;
+                                Uint8List resizedData48 = IMG.encodeJpg(IMG
+                                        .copyResize(img, width: 48, height: 48))
+                                    as Uint8List;
                                 String base64_200 =
                                     base64Encode(resizedData200);
                                 String base64_120 =

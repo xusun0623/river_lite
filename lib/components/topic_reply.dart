@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/black.dart';
@@ -18,8 +19,6 @@ import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
-
-import '../outer/cached_network_image/cached_image_widget.dart';
 
 class TopicReply extends StatefulWidget {
   Map? data;
@@ -48,7 +47,9 @@ class _TopicReplyState extends State<TopicReply> {
 
   bool _isBlack() {
     bool flag = false;
-    Provider.of<BlackProvider>(context, listen: false).black!.forEach((element) {
+    Provider.of<BlackProvider>(context, listen: false)
+        .black!
+        .forEach((element) {
       if (widget.data!["title"].toString().contains(element) ||
           widget.data!["subject"].toString().contains(element) ||
           widget.data!["user_nick_name"].toString().contains(element)) {
@@ -64,8 +65,8 @@ class _TopicReplyState extends State<TopicReply> {
       key: "topic_like",
     );
     List<String> ids = tmp.split(",");
-    if (ids.indexOf(
-            (widget.data!["source_id"] ?? widget.data!["topic_id"]).toString()) >
+    if (ids.indexOf((widget.data!["source_id"] ?? widget.data!["topic_id"])
+            .toString()) >
         -1) {
       setState(() {
         _isRated = true;
@@ -584,8 +585,8 @@ class _TopicReplyState extends State<TopicReply> {
                           ),
                           Text(
                             RelativeDateFormat.format(
-                                DateTime.fromMillisecondsSinceEpoch(
-                                    int.parse(widget.data!["last_reply_date"]))),
+                                DateTime.fromMillisecondsSinceEpoch(int.parse(
+                                    widget.data!["last_reply_date"]))),
                             style: TextStyle(
                               color: Color(0xFF9C9C9C),
                               fontSize: 14,

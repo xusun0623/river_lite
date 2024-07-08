@@ -197,10 +197,14 @@ class _HomeState extends State<Home> {
             height: barHeight,
             color: Color(0x01FFFFFF),
             child: badgee.Badge(
-              position: badgee.BadgePosition(
+              position: badgee.BadgePosition.topEnd(
                 end: 35,
                 top: 20,
               ),
+              // position: badgee.BadgePosition(
+              //   end: 35,
+              //   top: 20,
+              // ),
               showBadge: (i ==
                       (!Provider.of<ShowPicProvider>(context).isShow ? 1 : 2) &&
                   _isNewMsg),
@@ -370,10 +374,14 @@ class _IosBottomNavigatorBarState extends State<IosBottomNavigatorBar> {
           height: widget.barHeight,
           color: Color(0x01FFFFFF),
           child: badgee.Badge(
-            position: badgee.BadgePosition(
+            position: badgee.BadgePosition.topEnd(
               end: 35,
               top: 20,
             ),
+            // position: badgee.BadgePosition(
+            //   end: 35,
+            //   top: 20,
+            // ),
             showBadge:
                 (i == (!Provider.of<ShowPicProvider>(context).isShow ? 1 : 2) &&
                     _isNewMsg),

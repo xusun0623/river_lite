@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -8,7 +9,6 @@ import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
-import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';

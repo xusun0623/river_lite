@@ -1,11 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
@@ -15,7 +13,6 @@ import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/emoji/emoji.dart';
-import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/outer/card_swiper/swiper.dart';
 import 'package:offer_show/outer/card_swiper/swiper_controller.dart';
 import 'package:offer_show/outer/card_swiper/swiper_pagination.dart';

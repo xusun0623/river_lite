@@ -20,7 +20,10 @@ bool isLog = true; //控制是否打印网络输出日志
 
 class XHttp {
   pureHttpWithCookie(
-      {required String url, Map? param, bool hadCookie = false, String? method}) async {
+      {required String url,
+      Map? param,
+      bool hadCookie = false,
+      String? method}) async {
     var dio = Dio();
     String cookie = "";
     if (hadCookie) {
@@ -30,8 +33,8 @@ class XHttp {
     }
     dio.options.contentType = Headers.formUrlEncodedContentType;
     dio.options.responseType = ResponseType.plain;
-    dio.options.connectTimeout = 10000;
-    dio.options.receiveTimeout = 10000;
+    dio.options.connectTimeout = Duration(milliseconds: 10000);
+    dio.options.receiveTimeout = Duration(milliseconds: 10000);
     Response response = await dio
         .request(url,
             data: param,
@@ -59,8 +62,8 @@ class XHttp {
     var dio = Dio();
     dio.options.contentType = Headers.formUrlEncodedContentType;
     dio.options.responseType = ResponseType.plain;
-    dio.options.connectTimeout = 10000;
-    dio.options.receiveTimeout = 10000;
+    dio.options.connectTimeout = Duration(milliseconds: 10000);
+    dio.options.receiveTimeout = Duration(milliseconds: 10000);
     if (isLog) print("地址:$url入参:$param");
     Response response = await dio
         .request(url, data: param, options: Options(method: method ?? "POST"))
@@ -90,8 +93,10 @@ class XHttp {
     dio.options.baseUrl = ServerConfig().url;
     dio.options.contentType = Headers.formUrlEncodedContentType;
     dio.options.responseType = ResponseType.plain;
-    dio.options.connectTimeout = noTimeOut ?? false ? 10000000 : 10000;
-    dio.options.receiveTimeout = noTimeOut ?? false ? 10000000 : 10000;
+    dio.options.connectTimeout =
+        Duration(milliseconds: noTimeOut ?? false ? 10000000 : 10000);
+    dio.options.receiveTimeout =
+        Duration(milliseconds: noTimeOut ?? false ? 10000000 : 10000);
     if (isLog) print("地址:$url入参:$param");
     Response response = await dio
         .request(url, data: param, options: Options(method: "POST"))

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -20,7 +21,6 @@ import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
-import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -1023,7 +1023,8 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                   Container(
                     width: MediaQuery.of(context).size.width - 60,
                     child: Text(
-                      (widget.data!["summary"] ?? widget.data!["subject"]) ?? "",
+                      (widget.data!["summary"] ?? widget.data!["subject"]) ??
+                          "",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 15,

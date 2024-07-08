@@ -1,6 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -12,7 +12,6 @@ import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/totop.dart';
-import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -458,7 +457,9 @@ class _ForumCardState extends State<ForumCard> {
                                   (isDesktop() ? (MinusSpace(context)) : 0) -
                                   90,
                               child: Text(
-                                widget.forum!["topic_subject"].toString().trim(),
+                                widget.forum!["topic_subject"]
+                                    .toString()
+                                    .trim(),
                                 style: TextStyle(
                                   color: Color(0xFFA0A0A0),
                                   fontSize: 14,

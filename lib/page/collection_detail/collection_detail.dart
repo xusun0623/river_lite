@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
@@ -12,7 +13,6 @@ import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/totop.dart';
-import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';

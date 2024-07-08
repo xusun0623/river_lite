@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart' as badgee;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
@@ -13,8 +14,6 @@ import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
-
-import '../../outer/cached_network_image/cached_image_widget.dart';
 
 class Msg extends StatefulWidget {
   Function? refresh;
@@ -250,7 +249,8 @@ class _ColorBtnState extends State<ColorBtn> {
               top: 14,
               left: 20,
               child: badgee.Badge(
-                position: badgee.BadgePosition(top: -10, end: 50),
+                position: badgee.BadgePosition.topEnd(top: -10, end: 50),
+                // position: badgee.BadgePosition(top: -10, end: 50),
                 showBadge: widget.count != 0,
                 badgeContent: Text(
                   widget.count.toString(),

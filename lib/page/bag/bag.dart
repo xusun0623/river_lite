@@ -1,6 +1,6 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/dom.dart' as dom;
@@ -10,9 +10,7 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/components/empty.dart';
-import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
-import 'package:offer_show/outer/cached_network_image/cached_image_widget.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
@@ -339,7 +337,7 @@ class _BagWidgetState extends State<BagWidget> {
                             width: 39.75,
                             height: 39.75,
                             child: CachedNetworkImage(
-                              imageUrl: widget.data!.img,
+                              imageUrl: widget.data!.img!,
                               placeholder: (context, url) => Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),

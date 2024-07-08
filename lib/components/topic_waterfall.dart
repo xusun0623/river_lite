@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -13,7 +12,6 @@ import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
-import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/leftNavi.dart';
@@ -25,8 +23,6 @@ import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 import 'package:route_transitions/route_transitions.dart';
-
-import '../outer/cached_network_image/cached_image_widget.dart';
 
 class TopicWaterFall extends StatefulWidget {
   Map? data;
@@ -367,7 +363,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(2.5),
             child: CachedNetworkImage(
-              imageUrl: img_url,
+              imageUrl: img_url!,
               maxHeightDiskCache: 800,
               maxWidthDiskCache: 800,
               memCacheWidth: 800,
