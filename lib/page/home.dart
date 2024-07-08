@@ -385,20 +385,22 @@ class _IosBottomNavigatorBarState extends State<IosBottomNavigatorBar> {
             showBadge:
                 (i == (!Provider.of<ShowPicProvider>(context).isShow ? 1 : 2) &&
                     _isNewMsg),
-            child: Icon(
-              tabShowProvider.index == i ? select_icons[i] : icons[i],
-              size: 26,
-              color: tabShowProvider.index == i
-                  ? (Provider.of<ColorProvider>(context).isDark ||
-                          (Provider.of<ShowPicProvider>(context).isShow &&
-                              tabShowProvider.index == 1)
-                      ? os_dark_white
-                      : Color(0xFF222222))
-                  : (Provider.of<ColorProvider>(context).isDark ||
-                          (Provider.of<ShowPicProvider>(context).isShow &&
-                              tabShowProvider.index == 1)
-                      ? os_deep_grey
-                      : Color(0xFFa4a4a6)),
+            child: Center(
+              child: Icon(
+                tabShowProvider.index == i ? select_icons[i] : icons[i],
+                size: 26,
+                color: tabShowProvider.index == i
+                    ? (Provider.of<ColorProvider>(context).isDark ||
+                            (Provider.of<ShowPicProvider>(context).isShow &&
+                                tabShowProvider.index == 1)
+                        ? os_dark_white
+                        : Color(0xFF222222))
+                    : (Provider.of<ColorProvider>(context).isDark ||
+                            (Provider.of<ShowPicProvider>(context).isShow &&
+                                tabShowProvider.index == 1)
+                        ? os_deep_grey
+                        : Color(0xFFa4a4a6)),
+              ),
             ),
           ),
         ),

@@ -223,10 +223,10 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
           child: MasonryGridView.count(
             controller: _scrollController,
             itemCount: t.length,
-            padding: EdgeInsets.all(os_edge),
+            padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 5),
             crossAxisCount: count,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
+            mainAxisSpacing: 6.5,
+            crossAxisSpacing: 6.5,
             itemBuilder: (BuildContext context, int index) {
               return t[index];
             },
@@ -282,7 +282,8 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
           var data = await _getInitData();
           return data;
         },
-        child: data!.length == 0 ? OccuLoading() : _buildComponents(), //11223344
+        child:
+            data!.length == 0 ? OccuLoading() : _buildComponents(), //11223344
       ),
     );
   }

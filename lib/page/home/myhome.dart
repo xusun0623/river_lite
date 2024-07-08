@@ -236,6 +236,8 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
         width: isDesktop() ? 600 : 300,
         height: 60,
         child: isDesktop() ? _getMyDesktopTabBar() : _getMyTabBar(),
+        color:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       ),
     );
   }

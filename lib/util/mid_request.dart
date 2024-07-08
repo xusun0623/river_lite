@@ -21,7 +21,7 @@ bool isLog = true; //控制是否打印网络输出日志
 class XHttp {
   pureHttpWithCookie(
       {required String url,
-      Map? param,
+      Map<String, dynamic>? param,
       bool hadCookie = false,
       String? method}) async {
     var dio = Dio();
@@ -58,7 +58,10 @@ class XHttp {
     }
   }
 
-  pureHttp({required String url, Map? param, String? method}) async {
+  pureHttp(
+      {required String url,
+      Map<String, dynamic>? param,
+      String? method}) async {
     var dio = Dio();
     dio.options.contentType = Headers.formUrlEncodedContentType;
     dio.options.responseType = ResponseType.plain;
@@ -86,8 +89,8 @@ class XHttp {
   netWorkRequest({
     bool? noTimeOut, //是否有超时
     String url = "",
-    Map? header,
-    Map? param, //参数
+    Map<String, dynamic>? header,
+    Map<String, dynamic>? param, //参数
   }) async {
     var dio = Dio();
     dio.options.baseUrl = ServerConfig().url;
@@ -117,7 +120,7 @@ class XHttp {
 
   postWithGlobalToken({
     bool? noTimeOut,
-    Map? param,
+    Map<String, dynamic>? param,
     required String url,
   }) async {
     String myinfo_txt = await getStorage(key: "myinfo", initData: "");
@@ -140,8 +143,8 @@ class XHttp {
   //发起POST请求
   post({
     required String url,
-    Map? header,
-    Map? param,
+    Map<String, dynamic>? header,
+    Map<String, dynamic>? param,
   }) async {
     return netWorkRequest(
       url: url,

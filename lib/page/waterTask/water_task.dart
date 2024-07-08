@@ -354,6 +354,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               : os_black,
           elevation: 0,
           title: TabBar(
+            tabAlignment: TabAlignment.start,
             dividerColor: Colors.transparent,
             controller: tabController,
             unselectedLabelColor: Provider.of<ColorProvider>(context).isDark

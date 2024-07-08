@@ -47,7 +47,7 @@ class _StartState extends State<Start> {
 
   _pic() async {
     //获取首页是否展示图区
-    String tmp = await getStorage(key: "pic", initData: "1");
+    String tmp = await getStorage(key: "pic", initData: "");
     if (tmp != "") {
       Provider.of<ShowPicProvider>(context, listen: false).isShow = true;
       Provider.of<ShowPicProvider>(context, listen: false).refresh();

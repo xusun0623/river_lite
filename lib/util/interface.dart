@@ -18,7 +18,7 @@ import 'package:offer_show/util/storage.dart';
 
 /// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 class Api {
-  buyItem(Map m) async {
+  buyItem(Map<String, dynamic> m) async {
     /**
      * formhash: aa6ff688
      * operation: buy
@@ -179,7 +179,7 @@ class Api {
                 .toString(),
           );
         }
-        Map q_a = {
+        Map<String, dynamic> q_a = {
           "q": tmp_q, //题目
           "a_list": tmp_a, //题目的答案
           "v_list": tmp_value, //题目答案的值
@@ -233,8 +233,8 @@ class Api {
     }
   }
 
-  user_login(Map m) async {
-    Map tmp = {
+  user_login(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "user/login",
     };
     setStorage(key: "name", value: m["username"]);
@@ -246,8 +246,8 @@ class Api {
     );
   }
 
-  user_report(Map m) async {
-    Map tmp = {
+  user_report(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "user/report",
     };
     tmp.addAll(m);
@@ -257,8 +257,8 @@ class Api {
     );
   }
 
-  user_userfavorite(Map m) async {
-    Map tmp = {
+  user_userfavorite(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "user/userfavorite",
     };
     tmp.addAll(m);
@@ -268,8 +268,8 @@ class Api {
     );
   }
 
-  user_useradmin(Map m) async {
-    Map tmp = {
+  user_useradmin(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "user/useradmin",
     };
     tmp.addAll(m);
@@ -279,8 +279,8 @@ class Api {
     );
   }
 
-  user_userlist(Map m) async {
-    Map tmp = {
+  user_userlist(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "user/userlist",
     };
     tmp.addAll(m);
@@ -290,8 +290,8 @@ class Api {
     );
   }
 
-  user_updateuserinfo(Map m) async {
-    Map tmp = {
+  user_updateuserinfo(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "user/updateuserinfo",
     };
     tmp.addAll(m);
@@ -301,8 +301,8 @@ class Api {
     );
   }
 
-  user_topiclist(Map m) async {
-    Map tmp = {
+  user_topiclist(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "user/topiclist",
     };
     tmp.addAll(m);
@@ -312,8 +312,8 @@ class Api {
     );
   }
 
-  message_pmadmin(Map m) async {
-    Map tmp = {
+  message_pmadmin(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "message/pmadmin",
     };
     tmp.addAll(m);
@@ -323,8 +323,8 @@ class Api {
     );
   }
 
-  user_userinfo(Map m) async {
-    Map tmp = {
+  user_userinfo(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "user/userinfo",
     };
     tmp.addAll(m);
@@ -334,8 +334,8 @@ class Api {
     );
   }
 
-  message_pmlist(Map m) async {
-    Map tmp = {
+  message_pmlist(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "message/pmlist",
     };
     tmp.addAll(m);
@@ -345,8 +345,8 @@ class Api {
     );
   }
 
-  message_notifylistex(Map m) async {
-    Map tmp = {
+  message_notifylistex(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "message/notifylistex",
     };
     tmp.addAll(m);
@@ -356,8 +356,8 @@ class Api {
     );
   }
 
-  message_notifylist(Map m) async {
-    Map tmp = {
+  message_notifylist(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "message/notifylist",
     };
     tmp.addAll(m);
@@ -367,8 +367,8 @@ class Api {
     );
   }
 
-  message_pmsessionlist(Map m) async {
-    Map tmp = {
+  message_pmsessionlist(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "message/pmsessionlist",
     };
     tmp.addAll(m);
@@ -378,8 +378,8 @@ class Api {
     );
   }
 
-  message_heart(Map m) async {
-    Map tmp = {
+  message_heart(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "message/heart",
       "sdkVersion": "2.4.2",
     };
@@ -390,8 +390,8 @@ class Api {
     );
   }
 
-  forum_atuserlist(Map m) async {
-    Map tmp = {
+  forum_atuserlist(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "forum/atuserlist",
     };
     tmp.addAll(m);
@@ -406,7 +406,7 @@ class Api {
     print("上传图片 ${imgs}");
     String myinfo_txt = await getStorage(key: "myinfo", initData: "");
     if (myinfo_txt != "") {
-      Map myinfo = jsonDecode(myinfo_txt);
+      Map<String, dynamic> myinfo = jsonDecode(myinfo_txt);
       var request = http.MultipartRequest(
         'POST',
         Uri.parse(
@@ -442,8 +442,8 @@ class Api {
   }
 
   //获取板块列表
-  forum_forumlist(Map m) async {
-    Map tmp = {
+  forum_forumlist(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "forum/forumlist",
     };
     tmp.addAll(m);
@@ -454,8 +454,8 @@ class Api {
   }
 
   //获得某一板块的帖子
-  certain_forum_topiclist(Map m) async {
-    Map tmp = {
+  certain_forum_topiclist(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "forum/topiclist",
       "isImageList": 1,
     };
@@ -467,8 +467,8 @@ class Api {
   }
 
   //回复
-  forum_topicadmin(Map m) async {
-    Map tmp = {
+  forum_topicadmin(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "forum/topicadmin",
     };
     tmp.addAll(m);
@@ -479,8 +479,8 @@ class Api {
   }
 
   //搜索
-  forum_search(int select, Map m) async {
-    Map tmp = {
+  forum_search(int select, Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": ["forum/search", "user/searchuser"][select], //0-搜索帖子 1-搜索用户
     };
     tmp.addAll(m);
@@ -492,8 +492,8 @@ class Api {
   }
 
   // 最新回复
-  forum_topiclist(Map m) async {
-    Map tmp = {
+  forum_topiclist(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "forum/topiclist",
       "isImageList": 1,
     };
@@ -505,8 +505,8 @@ class Api {
     );
   }
 
-  forum_postlist(Map m) async {
-    Map tmp = {
+  forum_postlist(Map<String, dynamic> m) async {
+    Map<String, dynamic> tmp = {
       "r": "forum/postlist",
     };
     tmp.addAll(m);
@@ -528,7 +528,7 @@ class Api {
   }
 
   // 帖子投票
-  forum_vote(Map m) async {
+  forum_vote(Map<String, dynamic> m) async {
     m.addAll({"r": "forum/vote"});
     return await XHttp().postWithGlobalToken(
       url: "",
@@ -537,7 +537,7 @@ class Api {
   }
 
   // 点赞
-  forum_support(Map m) async {
+  forum_support(Map<String, dynamic> m) async {
     m.addAll({"r": "forum/support"});
     return await XHttp().postWithGlobalToken(
       url: "",

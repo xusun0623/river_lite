@@ -265,7 +265,7 @@ class _SearchState extends State<Search> {
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 80,
+          // toolbarHeight: 80,
           systemOverlayStyle: Provider.of<ColorProvider>(context).isDark
               ? SystemUiOverlayStyle.light
               : SystemUiOverlayStyle.dark,
@@ -284,7 +284,7 @@ class _SearchState extends State<Search> {
               },
             )
           ],
-          leadingWidth: 30,
+          // leadingWidth: 30,
           leading: IconButton(
             icon: Icon(
               Icons.chevron_left_rounded,
@@ -336,6 +336,7 @@ class _SearchState extends State<Search> {
               controller: _scrollController,
               //physics: BouncingScrollPhysics(),
               children: [
+                Container(height: 10),
                 SwitchTypeTab(
                   index: select,
                   select: (idx) {
@@ -829,6 +830,7 @@ class _SearchLeftState extends State<SearchLeft> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width - 105,
+      padding: EdgeInsets.only(left: 15),
       height: 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -841,7 +843,7 @@ class _SearchLeftState extends State<SearchLeft> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: MediaQuery.of(context).size.width - 130,
+            width: MediaQuery.of(context).size.width - 145,
             child: TextField(
               keyboardAppearance:
                   Provider.of<ColorProvider>(context, listen: false).isDark
@@ -866,22 +868,22 @@ class _SearchLeftState extends State<SearchLeft> {
                     : os_black,
               ),
               decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    FocusScope.of(context).requestFocus(widget.commentFocus);
-                    if (widget.focus != null) widget.focus!();
-                    widget.controller!.clear();
-                  },
-                  icon: Icon(
-                    Icons.cancel,
-                    color: Color(
-                      widget.controller!.text.length > 0
-                          ? 0xFFCCCCCC
-                          : 0X00CCCCCC,
-                    ),
-                    size: 20,
-                  ),
-                ),
+                // suffixIcon: IconButton(
+                //   onPressed: () {
+                //     FocusScope.of(context).requestFocus(widget.commentFocus);
+                //     if (widget.focus != null) widget.focus!();
+                //     widget.controller!.clear();
+                //   },
+                //   icon: Icon(
+                //     Icons.cancel,
+                //     color: Color(
+                //       widget.controller!.text.length > 0
+                //           ? 0xFFCCCCCC
+                //           : 0X00CCCCCC,
+                //     ),
+                //     size: 20,
+                //   ),
+                // ),
                 hintStyle: TextStyle(
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_deep_grey

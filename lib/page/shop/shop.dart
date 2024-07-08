@@ -158,7 +158,7 @@ class _PopChatState extends State<PopChat> {
   bool loading = true;
 
   buyItem() async {
-    Map m = {
+    Map<String, dynamic> m = {
       "formhash": formhash,
       "operation": "buy",
       "mid": item_sku,

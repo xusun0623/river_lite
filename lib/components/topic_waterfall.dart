@@ -339,7 +339,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
   Widget _getTopicCardImg() {
     double w = MediaQuery.of(context).size.width;
     int count = w > 1200 ? 5 : (w > 800 ? 4 : 2);
-    double img_size = (w - (count + 1) * 10) / count;
+    double img_size = (w - (count + 1) * 5) / count;
     if (widget.data != null &&
         widget.data!["imageList"] != null &&
         widget.data!["imageList"].length != 0) {
@@ -427,7 +427,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
           _getTopicCardImg(),
           Padding(
             // padding: EdgeInsets.fromLTRB(16, 18, 16, 18),
-            padding: EdgeInsets.fromLTRB(16, 18, 0, 10),
+            padding: EdgeInsets.fromLTRB(12, 12.5, 0, 12.5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -445,8 +445,8 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: CachedNetworkImage(
-                              width: 30,
-                              height: 30,
+                              width: 25,
+                              height: 25,
                               fit: BoxFit.cover,
                               imageUrl: widget.data!["userAvatar"],
                               placeholder: (context, url) => Container(
@@ -473,7 +473,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                                           ? Color(0xffF1f1f1)
                                           : os_black,
                                   overflow: TextOverflow.ellipsis,
-                                  fontSize: 14,
+                                  fontSize: 12,
                                   // fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -485,7 +485,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                                       widget.data!["last_reply_date"]))),
                               style: TextStyle(
                                 color: Color(0xFFAAAAAA),
-                                fontSize: 12.5,
+                                fontSize: 11,
                               ),
                             ),
                           ],
@@ -521,7 +521,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                           ),
                           radius: 100,
                         ),
-                        Container(width: 16),
+                        Container(width: 10),
                       ],
                     ),
                   ],
@@ -534,8 +534,8 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                     widget.data!["title"],
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                        fontSize: 17,
-                        letterSpacing: 0.5,
+                        fontSize: 16,
+                        letterSpacing: 0,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_white
                             : os_black),
@@ -559,7 +559,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                               "",
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                             height: 1.5,
                             color: Color(0xFF999999),
                           ),
@@ -704,7 +704,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
               color: _widgetBackgroundColor(),
               tap: () => _tapWidget(),
               widget: _topicCont(),
-              radius: 10,
+              radius: 5,
             ),
           );
   }
