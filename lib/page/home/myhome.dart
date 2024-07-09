@@ -165,20 +165,22 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
 
   TabBar _getMyDesktopTabBar() {
     return TabBar(
-      overlayColor: MaterialStateProperty.all(Colors.transparent),
+      overlayColor: WidgetStateProperty.all(Colors.transparent),
       labelPadding: EdgeInsets.symmetric(horizontal: 18),
       isScrollable: true,
       labelColor: Provider.of<ColorProvider>(context).isDark
           ? os_dark_white
           : os_deep_blue,
+      tabAlignment: TabAlignment.start,
       unselectedLabelColor: Color.fromARGB(255, 106, 114, 133),
+      dividerColor: Colors.transparent,
       indicator: TabSizeIndicator(
         wantWidth: 90,
         borderSide: BorderSide(
           width: 37,
           color: Provider.of<ColorProvider>(context).isDark
-              ? os_light_dark_card
-              : os_white,
+              ? Colors.transparent
+              : Colors.transparent,
         ),
       ),
       unselectedLabelStyle: TextStyle(
@@ -234,7 +236,7 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       centerTitle: isDesktop() ? true : null,
       title: Container(
         width: isDesktop() ? 600 : 300,
-        height: 60,
+        height: isDesktop() ? null : 60,
         child: isDesktop() ? _getMyDesktopTabBar() : _getMyTabBar(),
         color:
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
