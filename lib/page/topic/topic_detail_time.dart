@@ -292,35 +292,35 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                   ]),
                 ),
                 radius: 10),
-            !(Platform.isIOS || Platform.isAndroid) || widget.isListView!
-                ? Container()
-                : myInkWell(
-                    color: Colors.transparent,
-                    tap: () async {
-                      if (widget.capture != null) {
-                        showModal(
-                            context: context,
-                            title: "截图功能",
-                            cont: "轻触确认以截取帖子和评论并保存到相册,如果长度过长可能会导致图片像素质量不佳",
-                            confirm: () {
-                              widget.capture!();
-                            });
-                      }
-                    },
-                    widget: Padding(
-                      padding: EdgeInsets.only(
-                          left: 8.0, right: 8, top: 9, bottom: 7),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            os_svg(
-                              path: "lib/img/topic_capture.svg",
-                              width: 17,
-                              height: 17,
-                            ),
-                          ]),
-                    ),
-                    radius: 10),
+            // !(Platform.isIOS || Platform.isAndroid) || widget.isListView!
+            //     ? Container()
+            //     : myInkWell(
+            //         color: Colors.transparent,
+            //         tap: () async {
+            //           if (widget.capture != null) {
+            //             showModal(
+            //                 context: context,
+            //                 title: "截图功能",
+            //                 cont: "轻触确认以截取帖子和评论并保存到相册,如果长度过长可能会导致图片像素质量不佳",
+            //                 confirm: () {
+            //                   widget.capture!();
+            //                 });
+            //           }
+            //         },
+            //         widget: Padding(
+            //           padding: EdgeInsets.only(
+            //               left: 8.0, right: 8, top: 9, bottom: 7),
+            //           child: Row(
+            //               mainAxisAlignment: MainAxisAlignment.center,
+            //               children: [
+            //                 os_svg(
+            //                   path: "lib/img/topic_capture.svg",
+            //                   width: 17,
+            //                   height: 17,
+            //                 ),
+            //               ]),
+            //         ),
+            //         radius: 10),
           ])
         ],
       ),

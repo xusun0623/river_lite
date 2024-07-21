@@ -793,36 +793,37 @@ class _PersonCardState extends State<PersonCard> {
               ),
             ],
           ),
+          // https://bbs.uestc.edu.cn/home.php?mod=space&uid=125446
           Positioned(
             right: 20,
             child: GestureDetector(
               onTap: () {
-                if (widget.isMe!) {
-                  showAction(
-                    context: context,
-                    options: ["我是男生", "我是女生"],
-                    icons: [Icons.male, Icons.female],
-                    tap: (res) async {
-                      if (res == "我是男生" || res == "我是女生") {
-                        showToast(
-                          context: context,
-                          type: XSToast.loading,
-                          txt: "请稍后…",
-                        );
-                        await Api().user_updateuserinfo({
-                          "type": "info",
-                          "gender": res + 1,
-                          "sign": widget.data!["sign"],
-                        });
-                        hideToast();
-                        widget.data!["gender"] = res + 1;
-                        setState(() {});
-                        Navigator.pop(context);
-                      }
-                      if (res == 1) {}
-                    },
-                  );
-                }
+                // if (widget.isMe!) {
+                //   showAction(
+                //     context: context,
+                //     options: ["我是男生", "我是女生"],
+                //     icons: [Icons.male, Icons.female],
+                //     tap: (res) async {
+                //       if (res == "我是男生" || res == "我是女生") {
+                //         showToast(
+                //           context: context,
+                //           type: XSToast.loading,
+                //           txt: "请稍后…",
+                //         );
+                //         await Api().user_updateuserinfo({
+                //           "type": "info",
+                //           "gender": res + 1,
+                //           "sign": widget.data!["sign"],
+                //         });
+                //         hideToast();
+                //         widget.data!["gender"] = res + 1;
+                //         setState(() {});
+                //         Navigator.pop(context);
+                //       }
+                //       if (res == 1) {}
+                //     },
+                //   );
+                // }
               },
               child: Opacity(
                 opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,

@@ -69,7 +69,7 @@ class _DetailContState extends State<DetailCont> {
       case 3: //未知
         return Container();
       case 4: //网页链接
-        return WidgetBilibiliPlayer();
+        return WidgetLink();
       case 5: //附件下载
         return WidgetLinkUrl(); //图片链接就不用下载了
       default:
@@ -81,7 +81,7 @@ class _DetailContState extends State<DetailCont> {
     return MediaQuery.of(context).size.shortestSide > 550;
   }
 
-  Widget WidgetBilibiliPlayer() {
+  Widget WidgetLink() {
     String short_url = widget.data['url'].toString();
     if (!isIpad() &&
         short_url.startsWith("https://b23.tv/") &&
@@ -101,25 +101,61 @@ class _DetailContState extends State<DetailCont> {
         );
       },
       tap: () {
+        print(widget.data);
+        // return;
         try {
           if (widget.data['url']
                   .toString()
                   .indexOf(base_url + "forum.php?mod=viewthread&tid=") >
               -1) {
+            String tmp_suffix = widget.data["url"].toString().split("tid=")[1];
             Navigator.pushNamed(
               context,
               "/topic_detail",
               arguments: int.parse(
-                  widget.data["url"].toString().split("tid=")[1].split("&")[0]),
+                tmp_suffix.contains("&")
+                    ? tmp_suffix.split("&")[0]
+                    : tmp_suffix,
+              ),
             );
           } else if (widget.data['url']
                   .toString()
                   .indexOf(base_url + "home.php?mod=space&uid=") >
               -1) {
+            String tmp_suffix = widget.data["url"].toString().split("uid=")[1];
             toUserSpace(
               context,
               int.parse(
-                  widget.data["url"].toString().split("uid=")[1].split("&")[1]),
+                tmp_suffix.contains("&")
+                    ? tmp_suffix.split("&")[1]
+                    : tmp_suffix,
+              ),
+            );
+          } else if (widget.data['url'].toString().indexOf(base_url + "at:") >
+              -1) {
+            String tmp_suffix = widget.data["url"].toString().split("at:")[1];
+            toUserSpace(
+              context,
+              int.parse(
+                tmp_suffix.contains("/")
+                    ? tmp_suffix.split("/")[1]
+                    : tmp_suffix,
+              ),
+            );
+          } else if (widget.data['url']
+                  .toString()
+                  .indexOf(base_url + "thread/") >
+              -1) {
+            String tmp_suffix =
+                widget.data["url"].toString().split("thread/")[1];
+            Navigator.pushNamed(
+              context,
+              "/topic_detail",
+              arguments: int.parse(
+                tmp_suffix.contains("/")
+                    ? tmp_suffix.split("/")[0]
+                    : tmp_suffix,
+              ),
             );
           } else
             showModal(
@@ -152,6 +188,7 @@ class _DetailContState extends State<DetailCont> {
                   return;
                 } else if (text.contains(
                     "https://bbs.uestc.edu.cn/home.php?mod=space&uid=")) {
+                  // https://bbs.uestc.edu.cn/home.php?mod=space&uid=125446
                   int uid_tmp = int.parse(
                     text.split("mod=space&uid=")[1].split("&")[0],
                   );
@@ -223,6 +260,7 @@ class _DetailContState extends State<DetailCont> {
               },
             );
         } catch (e) {
+          print(e);
           showModal(
             context: context,
             title: "请确认",
@@ -271,15 +309,16 @@ class _DetailContState extends State<DetailCont> {
       },
       tap: () {
         showModal(
-            context: context,
-            title: "请确认",
-            cont: "即将调用外部浏览器下载此附件，河畔App不保证此链接的安全性",
-            confirmTxt: "立即前往",
-            cancelTxt: "取消",
-            confirm: () {
-              xsLanuch(url: widget.data['url'], isExtern: true);
-            },
-            cancel: () {});
+          context: context,
+          title: "请确认",
+          cont: "即将调用外部浏览器下载此附件，河畔App不保证此链接的安全性",
+          confirmTxt: "立即前往",
+          cancelTxt: "取消",
+          confirm: () {
+            xsLanuch(url: widget.data['url'], isExtern: true);
+          },
+          cancel: () {},
+        );
       },
       radius: 10,
       widget: Container(
