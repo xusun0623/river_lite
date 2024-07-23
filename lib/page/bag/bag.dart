@@ -182,21 +182,15 @@ class _MyBagState extends State<MyBag> {
             )
           : ListView(
               children: [
-                bagItems.length == 0
-                    ? Empty(
-                        txt: "这里是一颗空的星球",
-                      )
-                    : Container(),
+                bagItems.length == 0 ? Empty(txt: "这里是一颗空的星球") : Container(),
                 ...(bagItems
-                    .map(
-                      (e) => BagWidget(
-                        data: e,
-                        formhash: formhash,
-                        refresh: () {
-                          getData();
-                        },
-                      ),
-                    )
+                    .map((e) => BagWidget(
+                          data: e,
+                          formhash: formhash,
+                          refresh: () {
+                            getData();
+                          },
+                        ))
                     .toList()),
               ],
             ),

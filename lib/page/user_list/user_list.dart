@@ -130,6 +130,9 @@ class _UserListState extends State<UserList> {
           onRefresh: () async {
             return await _getData();
           },
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_white
+              : os_color,
           child: ListView(
             controller: _controller,
             //physics: BouncingScrollPhysics(),
@@ -155,6 +158,8 @@ class UserListCard extends StatefulWidget {
 class _UserListCardState extends State<UserListCard> {
   @override
   Widget build(BuildContext context) {
+    if (widget.data!["name"] == null || widget.data!["name"].toString().isEmpty)
+      return Container();
     return Container(
       margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
       child: myInkWell(
@@ -218,8 +223,14 @@ class _UserListCardState extends State<UserListCard> {
                         widget.data!["userTitle"].toString().length < 6
                             ? Tag(
                                 txt: widget.data!["userTitle"],
-                                color: os_white,
-                                color_opa: os_wonderful_color[1],
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_dark_white
+                                        : os_white,
+                                color_opa:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_white_opa
+                                        : os_wonderful_color[1],
                               )
                             : Container(),
                       ],

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/nowMode.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/size.dart';
@@ -39,6 +41,17 @@ import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
+
+List<String> addWaterMarkColumnsName = [
+  "密语",
+  "就业创业",
+  "公考选调",
+  "成电锐评",
+  "军事国防",
+  "时政要闻",
+  "后勤保障部",
+  "藏经阁",
+];
 
 class TopicDetail extends StatefulWidget {
   int? topicID;
@@ -387,6 +400,7 @@ class _TopicDetailState extends State<TopicDetail> {
     _getData();
     _getLikeCount();
     super.initState();
+    getMyUID();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
@@ -595,6 +609,37 @@ class _TopicDetailState extends State<TopicDetail> {
     return tmp;
   }
 
+  _getForbiddenCaptureCont() {
+    //获取精华内容提示的Banner
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        color: os_color_opa,
+      ),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.info,
+              color: os_color,
+            ),
+            Container(width: 5),
+            Text(
+              "该板块已添加水印，禁止截图外传",
+              style: TextStyle(
+                color: os_color,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   _getEssenceCont() {
     //获取精华内容提示的Banner
     return Container(
@@ -698,6 +743,7 @@ class _TopicDetailState extends State<TopicDetail> {
       TopicDetailTitle(data: data), //渲染顶部标题
       data["topic"]["essence"] == 0 ? Container() : _getEssenceCont(),
       data["boardId"] != 61 ? Container() : _getSecondBuy(), //二手专区
+      getIsForbiddenCapture() ? _getForbiddenCaptureCont() : Container(),
       TopicDetailTime(
         data: data,
         isListView: isListView,
@@ -817,6 +863,20 @@ class _TopicDetailState extends State<TopicDetail> {
       tmp[i] = ResponsiveWidget(child: tmp[i]);
     }
     return tmp;
+  }
+
+  int myUid = 0;
+
+  getMyUID() async {
+    var tmp = await getUid();
+    if (tmp != null) {
+      myUid = tmp;
+    }
+    setState(() {});
+  }
+
+  bool getIsForbiddenCapture() {
+    return addWaterMarkColumnsName.contains(data["forumName"]);
   }
 
   @override
@@ -968,6 +1028,41 @@ class _TopicDetailState extends State<TopicDetail> {
                             ),
                           ),
                         ),
+                        if (getIsForbiddenCapture())
+                          Positioned(
+                            child: IgnorePointer(
+                              child: Wrap(
+                                children: [
+                                  ...List.generate(100, (idx) {
+                                    return Transform.rotate(
+                                      angle: -pi / 6,
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                          vertical: 40,
+                                        ),
+                                        child: Opacity(
+                                          opacity: 0.08,
+                                          child: Text(
+                                            myUid.toString(),
+                                            style: TextStyle(
+                                              color: Provider.of<ColorProvider>(
+                                                          context)
+                                                      .isDark
+                                                  ? os_dark_white
+                                                  : os_black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                ],
+                              ),
+                            ),
+                          ),
                         editing //编辑回复框
                             ? RichInput(
                                 anonymous:

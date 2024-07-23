@@ -79,20 +79,20 @@ class _MeState extends State<Me> {
             : os_black,
         elevation: 0,
         actions: [
-          isDesktop()
-              ? Container()
-              : IconButton(
-                  icon: os_svg(
-                    path: Provider.of<ColorProvider>(context).isDark
-                        ? "lib/img/qrcode_light.svg"
-                        : "lib/img/qrcode_dark.svg",
-                    width: 20,
-                    height: 20,
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/scan_qrcode");
-                  },
-                ),
+          // isDesktop()
+          //     ? Container()
+          //     : IconButton(
+          //         icon: os_svg(
+          //           path: Provider.of<ColorProvider>(context).isDark
+          //               ? "lib/img/qrcode_light.svg"
+          //               : "lib/img/qrcode_dark.svg",
+          //           width: 20,
+          //           height: 20,
+          //         ),
+          //         onPressed: () {
+          //           Navigator.pushNamed(context, "/scan_qrcode");
+          //         },
+          //       ),
         ],
       ),
       backgroundColor:
@@ -106,6 +106,7 @@ class _MeState extends State<Me> {
         child: ListView(
           controller: _scrollController,
           //physics: BouncingScrollPhysics(),
+          physics: AlwaysScrollableScrollPhysics(),
           children: [
             provider.data == null
                 ? MeInfoHead(
@@ -121,7 +122,7 @@ class _MeState extends State<Me> {
             MeFiveBtns(),
             Container(height: 17.5),
             MeListGroup(),
-            Container(height: MediaQuery.of(context).size.height / 2),
+            // Container(height: MediaQuery.of(context).size.height / 2),
           ],
         ),
       ),
@@ -184,11 +185,11 @@ class _MeListGroupState extends State<MeListGroup> {
         MeList(txt: "应用设置", index: 0, icon: Icons.settings_outlined),
         MeList(txt: "账号管理", index: 1, icon: Icons.person_outline),
         MeList(
-          txt: "意见&Bug反馈",
+          txt: "意见反馈",
           index: 2,
           icon: Icons.feedback_outlined,
         ),
-        MeList(txt: "关于", index: 3, icon: Icons.info_outline),
+        MeList(txt: "关于Lite", index: 3, icon: Icons.info_outline),
       ],
     );
   }

@@ -112,6 +112,7 @@ class _MsgState extends State<Msg> {
           },
           child: ListView(
             //physics: BouncingScrollPhysics(),
+            physics: AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             children: [
               Padding(
@@ -188,13 +189,13 @@ class _MsgState extends State<Msg> {
                   children: _buildPMMsg(_msgProvider.pmMsgArr!),
                 ),
               ),
-              _msgProvider.pmMsgArr!.length < 8
-                  ? Container(
-                      height: MediaQuery.of(context).size.height -
-                          51 -
-                          74 * _msgProvider.pmMsgArr!.length,
-                    )
-                  : Container(),
+              // _msgProvider.pmMsgArr!.length < 8
+              //     ? Container(
+              //         height: MediaQuery.of(context).size.height -
+              //             51 -
+              //             74 * _msgProvider.pmMsgArr!.length,
+              //       )
+              //     : Container(),
               (_msgProvider.load_done! || _msgProvider.pmMsgArr!.length == 0)
                   ? Container()
                   : Container(

@@ -868,22 +868,7 @@ class _SearchLeftState extends State<SearchLeft> {
                     : os_black,
               ),
               decoration: InputDecoration(
-                // suffixIcon: IconButton(
-                //   onPressed: () {
-                //     FocusScope.of(context).requestFocus(widget.commentFocus);
-                //     if (widget.focus != null) widget.focus!();
-                //     widget.controller!.clear();
-                //   },
-                //   icon: Icon(
-                //     Icons.cancel,
-                //     color: Color(
-                //       widget.controller!.text.length > 0
-                //           ? 0xFFCCCCCC
-                //           : 0X00CCCCCC,
-                //     ),
-                //     size: 20,
-                //   ),
-                // ),
+                contentPadding: EdgeInsets.only(right: 15),
                 hintStyle: TextStyle(
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_deep_grey

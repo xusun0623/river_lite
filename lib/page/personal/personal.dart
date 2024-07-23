@@ -154,7 +154,7 @@ class _PersonCenterState extends State<PersonCenter> {
       ),
     ];
     if (data!.length == 0 && load_done) {
-      tmp.add(Empty());
+      tmp.add(Empty(txt: "这里是一颗空的星球"));
     }
     data!.forEach((element) {
       tmp.add(ResponsiveWidget(
