@@ -136,7 +136,11 @@ class _TopicEditState extends State<TopicEdit> {
             'forum.php?mod=post&action=edit&extra=&editsubmit=yes&mobile=2&geoloc=&handlekey=postform&inajax=1',
       ),
     );
-    request.fields.addAll(ret_param as Map<String, String>);
+    ret_param.forEach((k, v) {
+      if (v != null) {
+        request.fields[k] = v;
+      }
+    });
     request.headers.addAll({'Cookie': await getStorage(key: "cookie")});
 
     http.StreamedResponse response = await request.send();
