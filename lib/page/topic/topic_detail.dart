@@ -1033,7 +1033,8 @@ class _TopicDetailState extends State<TopicDetail> {
                             child: IgnorePointer(
                               child: Wrap(
                                 children: [
-                                  ...List.generate(100, (idx) {
+                                  ...List.generate(isDesktop() ? 300 : 200,
+                                      (idx) {
                                     return Transform.rotate(
                                       angle: -pi / 6,
                                       child: Container(
