@@ -24,7 +24,7 @@ class _HomeBtnState extends State<HomeBtn> {
         color: Provider.of<ColorProvider>(context).isDark
             ? os_light_dark_card
             : os_white,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       // margin: EdgeInsets.only(left: os_edge, right: os_edge),
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -34,7 +34,7 @@ class _HomeBtnState extends State<HomeBtn> {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Btn(
                 txt: "视觉艺术",
@@ -69,7 +69,7 @@ class _HomeBtnState extends State<HomeBtn> {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Btn(
                 txt: "水手之家",

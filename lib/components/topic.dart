@@ -436,6 +436,28 @@ class _TopicState extends State<Topic> {
     }
   }
 
+  String removeTitleSubColumn(String txt) {
+    if (!(txt.contains("[") && txt.contains("]"))) {
+      return txt;
+    }
+
+    String strStack = ""; // 使用栈对专栏英文括号进行去重
+    if (txt.startsWith("[")) {
+      strStack += "[";
+    }
+    int index = 1;
+    while (strStack.isNotEmpty) {
+      if (txt[index] == "]") {
+        strStack = strStack.substring(0, strStack.length - 1);
+      }
+      if (txt[index] == "[") {
+        strStack += "[";
+      }
+      index++;
+    }
+    return txt.substring(index);
+  }
+
   Widget _topicCont() {
     //帖子卡片正文内容
     return Container(
@@ -449,7 +471,7 @@ class _TopicState extends State<Topic> {
       ),
       child: Padding(
         // padding: EdgeInsets.fromLTRB(16, 18, 16, 18),
-        padding: EdgeInsets.fromLTRB(16, 18, 0, 10),
+        padding: EdgeInsets.fromLTRB(16, 16, 0, 9),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -550,7 +572,7 @@ class _TopicState extends State<Topic> {
               //     54,
               margin: EdgeInsets.only(right: 10),
               child: Text(
-                widget.data!["title"],
+                removeTitleSubColumn(widget.data!["title"].toString()),
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontSize: 17,
@@ -716,20 +738,38 @@ class _TopicState extends State<Topic> {
                   },
                   radius: 10,
                   widget: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
+                    padding: EdgeInsets.only(
+                      left: 16,
+                      right: 12,
+                      top: 8,
+                      bottom: 8,
                     ),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Text(
-                      (widget.hideColumn ?? false)
-                          ? " "
-                          : widget.data!["board_name"],
-                      style: TextStyle(
-                        color: os_color,
-                        fontSize: 14,
-                      ),
+                    child: Row(
+                      children: [
+                        // Icon(
+                        //   Icons.extension_outlined,
+                        //   size: 16,
+                        //   color: os_color,
+                        // ),
+                        // Container(width: 2),
+                        Text(
+                          (widget.hideColumn ?? false)
+                              ? " "
+                              : widget.data!["board_name"],
+                          style: TextStyle(
+                            color: os_color,
+                            fontSize: 14,
+                          ),
+                        ),
+                        // Container(width: 2),
+                        Icon(
+                          Icons.chevron_right,
+                          size: 16,
+                          color: os_color,
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -793,7 +833,7 @@ class _TopicState extends State<Topic> {
               color: _widgetBackgroundColor(),
               tap: () => _tapWidget(),
               widget: _topicCont(),
-              radius: 10,
+              radius: 15,
             ),
           );
   }

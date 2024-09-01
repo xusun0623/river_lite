@@ -503,44 +503,69 @@ class _PostNewState extends State<PostNew> {
                                             onTap: () {
                                               title_focus.unfocus();
                                               tip_focus.unfocus();
-                                              showActionSheet(
+                                              showOSActionSheet(
                                                 context: context,
-                                                isScrollControlled: true,
-                                                actions: total.map((e) {
-                                                  return ActionItem(
-                                                    title: e["board_name"],
-                                                    onPressed: () {
-                                                      if (e["board_name"] ==
-                                                              "鹊桥" &&
-                                                          tip_controller.text ==
-                                                              "") {
-                                                        setState(() {
-                                                          tip_controller.text =
-                                                              bridgeFormatTxt;
-                                                        });
-                                                      }
-                                                      select_section =
-                                                          e["board_name"];
-                                                      select_section_id =
-                                                          e["board_id"];
-                                                      _getChildColumnTip();
-                                                      Navigator.pop(context);
-                                                      setState(() {});
-                                                    },
-                                                  );
+                                                optionHeight: 45,
+                                                clipLength:
+                                                    MediaQuery.of(context)
+                                                                .size
+                                                                .height <
+                                                            800
+                                                        ? 8
+                                                        : 12,
+                                                list: total.map((e) {
+                                                  return e["board_name"]
+                                                      .toString();
                                                 }).toList(),
-                                                // topActionItem: TopActionItem(
-                                                //   title:
-                                                //       "已选择:${select_section}✅",
-                                                //   titleTextStyle: TextStyle(
-                                                //     fontSize: 18,
-                                                //     fontWeight: FontWeight.bold,
-                                                //   ),
-                                                // ),
-                                                bottomActionItem:
-                                                    BottomActionItem(
-                                                        title: "取消"),
+                                                title: "- 请选择你想发帖的分区 -",
+                                                onChange: (index, title) {
+                                                  var e = total[index];
+                                                  if (e["board_name"] == "鹊桥" &&
+                                                      tip_controller.text ==
+                                                          "") {
+                                                    setState(() {
+                                                      tip_controller.text =
+                                                          bridgeFormatTxt;
+                                                    });
+                                                  }
+                                                  select_section =
+                                                      e["board_name"];
+                                                  select_section_id =
+                                                      e["board_id"];
+                                                  _getChildColumnTip();
+                                                  setState(() {});
+                                                },
                                               );
+                                              // showActionSheet(
+                                              //   context: context,
+                                              //   isScrollControlled: true,
+                                              //   actions: total.map((e) {
+                                              //     return ActionItem(
+                                              //       title: e["board_name"],
+                                              //       onPressed: () {
+                                              //         if (e["board_name"] ==
+                                              //                 "鹊桥" &&
+                                              //             tip_controller.text ==
+                                              //                 "") {
+                                              //           setState(() {
+                                              //             tip_controller.text =
+                                              //                 bridgeFormatTxt;
+                                              //           });
+                                              //         }
+                                              //         select_section =
+                                              //             e["board_name"];
+                                              //         select_section_id =
+                                              //             e["board_id"];
+                                              //         _getChildColumnTip();
+                                              //         Navigator.pop(context);
+                                              //         setState(() {});
+                                              //       },
+                                              //     );
+                                              //   }).toList(),
+                                              //   bottomActionItem:
+                                              //       BottomActionItem(
+                                              //           title: "取消"),
+                                              // );
                                             },
                                             child: SelectColumn(
                                                 select_section: select_section),

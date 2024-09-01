@@ -203,27 +203,31 @@ class _TopicColumnState extends State<TopicColumn> {
         themes: theme,
         controller: _tabController,
         fold: () {
-          showActionSheet(
-            isScrollControlled: true,
-            // topActionItem: TopActionItem(
-            //   showBottomLine: false,
-            //   title: "请选择分栏",
-            //   titleTextStyle: TextStyle(
-            //     fontSize: 18,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
-            actionSheetColor: os_white,
-            enableDrag: true,
+          showOSActionSheet(
             context: context,
-            actions: _buildSheet(),
-            bottomActionItem: BottomActionItem(
-              title: "取消",
-              titleTextStyle: TextStyle(
-                fontSize: 18,
-              ),
-            ),
+            title: "- 请选择子分区 -",
+            list: theme.map((ele) {
+              return ele.toString();
+            }).toList(),
+            onChange: (index, title) {
+              select = index;
+              setState(() {});
+              _getData();
+            },
           );
+          // showActionSheet(
+          //   isScrollControlled: true,
+          //   actionSheetColor: os_white,
+          //   enableDrag: true,
+          //   context: context,
+          //   actions: _buildSheet(),
+          //   bottomActionItem: BottomActionItem(
+          //     title: "取消",
+          //     titleTextStyle: TextStyle(
+          //       fontSize: 18,
+          //     ),
+          //   ),
+          // );
         },
         tap: (idx) {
           select = idx;

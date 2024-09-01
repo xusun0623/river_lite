@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/home_desktop_mode.dart';
+import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +11,283 @@ import 'bottom_action_item.dart';
 import 'choice_config.dart';
 import 'choice_item.dart';
 import 'top_action_item.dart';
+
+showOSActionSheet({
+  required BuildContext context,
+  required List<String> list,
+  String? title,
+  int? clipLength, // 切断的高度
+  double? optionHeight, // 最高高度
+  required Function(int index, String title) onChange,
+}) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
+        ? os_dark_back
+        : os_white,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(19),
+        topRight: Radius.circular(19),
+      ),
+    ),
+    context: context,
+    builder: (context) {
+      return ActionSheetBackGround(
+        list: list,
+        title: title,
+        onChange: onChange,
+        optionHeight: optionHeight,
+        clipLength: clipLength,
+      );
+    },
+  );
+}
+
+class ActionSheetBackGround extends StatefulWidget {
+  List<String> list;
+  String? title;
+  Function(int index, String title) onChange;
+  int? clipLength;
+  double? optionHeight;
+  ActionSheetBackGround({
+    required this.list,
+    required this.onChange,
+    this.optionHeight,
+    this.clipLength,
+    this.title,
+    super.key,
+  });
+
+  @override
+  State<ActionSheetBackGround> createState() => _ActionSheetBackGroundState();
+}
+
+class _ActionSheetBackGroundState extends State<ActionSheetBackGround> {
+  @override
+  Widget build(BuildContext context) {
+    int clipLength = widget.clipLength ?? 8;
+    double optionHeight = widget.optionHeight ?? 55;
+    return Container(
+      height: (widget.title == null ? 20 : 60) +
+          55 +
+          20 +
+          optionHeight *
+              (widget.list.length > clipLength
+                  ? clipLength
+                  : widget.list.length) +
+          MediaQuery.of(context).padding.bottom,
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(18),
+          topRight: Radius.circular(18),
+        ),
+        color: Provider.of<ColorProvider>(context, listen: false).isDark
+            ? os_dark_back
+            : Color(0xFFeeeeee),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (widget.title == null) Container(height: 20),
+          if (widget.title != null)
+            Container(
+              height: 60,
+              width: MediaQuery.of(context).size.width,
+              child: Center(
+                child: Text(
+                  widget.title ?? "",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: os_deep_grey,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ),
+          if (widget.list.length > clipLength)
+            Container(
+              height: optionHeight * clipLength,
+              child: ListView(
+                padding: EdgeInsets.only(bottom: 20),
+                children: [
+                  ...List.generate(widget.list.length, (index) {
+                    var e = widget.list[index];
+                    return Container(
+                      margin: EdgeInsets.only(left: 15, right: 15),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(index == 0 ? 15 : 0),
+                          topRight: Radius.circular(index == 0 ? 15 : 0),
+                          bottomLeft: Radius.circular(
+                              index == widget.list.length - 1 ? 15 : 0),
+                          bottomRight: Radius.circular(
+                              index == widget.list.length - 1 ? 15 : 0),
+                        ),
+                        child: myInkWell(
+                          color:
+                              Provider.of<ColorProvider>(context, listen: false)
+                                      .isDark
+                                  ? os_light_light_dark_card
+                                  : os_white,
+                          tap: () {
+                            Navigator.of(context).pop();
+                            widget.onChange(index, e);
+                          },
+                          widget: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(index == 0 ? 15 : 0),
+                                topRight: Radius.circular(index == 0 ? 15 : 0),
+                                bottomLeft: Radius.circular(
+                                    index == widget.list.length - 1 ? 15 : 0),
+                                bottomRight: Radius.circular(
+                                    index == widget.list.length - 1 ? 15 : 0),
+                              ),
+                              border: Border(
+                                bottom: index == widget.list.length - 1
+                                    ? BorderSide.none
+                                    : BorderSide(
+                                        color: Provider.of<ColorProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .isDark
+                                            ? Color(0x08ffffff)
+                                            : Color(0x08000000),
+                                      ),
+                              ),
+                            ),
+                            height: optionHeight,
+                            padding: EdgeInsets.symmetric(horizontal: 25),
+                            child: Center(
+                              child: Text(
+                                e,
+                                style: TextStyle(
+                                  overflow: TextOverflow.ellipsis,
+                                  color: Provider.of<ColorProvider>(context,
+                                              listen: false)
+                                          .isDark
+                                      ? os_dark_white
+                                      : os_black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                          ),
+                          radius: 0,
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+          if (widget.list.length <= clipLength)
+            ...List.generate(widget.list.length, (index) {
+              var e = widget.list[index];
+              return Container(
+                margin: EdgeInsets.only(left: 15, right: 15),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(index == 0 ? 15 : 0),
+                    topRight: Radius.circular(index == 0 ? 15 : 0),
+                    bottomLeft: Radius.circular(
+                        index == widget.list.length - 1 ? 15 : 0),
+                    bottomRight: Radius.circular(
+                        index == widget.list.length - 1 ? 15 : 0),
+                  ),
+                  child: myInkWell(
+                    color: Provider.of<ColorProvider>(context, listen: false)
+                            .isDark
+                        ? os_light_light_dark_card
+                        : os_white,
+                    tap: () {
+                      Navigator.of(context).pop();
+                      widget.onChange(index, e);
+                    },
+                    widget: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(index == 0 ? 15 : 0),
+                          topRight: Radius.circular(index == 0 ? 15 : 0),
+                          bottomLeft: Radius.circular(
+                              index == widget.list.length - 1 ? 15 : 0),
+                          bottomRight: Radius.circular(
+                              index == widget.list.length - 1 ? 15 : 0),
+                        ),
+                        border: Border(
+                          bottom: index == widget.list.length - 1
+                              ? BorderSide.none
+                              : BorderSide(
+                                  color: Provider.of<ColorProvider>(context,
+                                              listen: false)
+                                          .isDark
+                                      ? Color(0x11ffffff)
+                                      : Color(0xfff6f6f6),
+                                ),
+                        ),
+                      ),
+                      height: optionHeight,
+                      padding: EdgeInsets.symmetric(horizontal: 25),
+                      child: Center(
+                        child: Text(
+                          e,
+                          style: TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            color: Provider.of<ColorProvider>(context,
+                                        listen: false)
+                                    .isDark
+                                ? os_dark_white
+                                : os_black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ),
+                    ),
+                    radius: 0,
+                  ),
+                ),
+              );
+            }),
+          Container(height: 10),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Container(
+              height: 55,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Provider.of<ColorProvider>(context, listen: false).isDark
+                    ? os_white_opa
+                    : os_white,
+              ),
+              margin: EdgeInsets.only(left: 15, right: 15),
+              child: Center(
+                child: Text(
+                  "取消",
+                  style: TextStyle(
+                    color: Provider.of<ColorProvider>(context, listen: false)
+                            .isDark
+                        ? os_dark_white
+                        : os_light_dark_card,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(height: 10),
+        ],
+      ),
+    );
+  }
+}
 
 Future<T?> showActionSheet<T>({
   required BuildContext context,

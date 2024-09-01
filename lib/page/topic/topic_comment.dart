@@ -242,7 +242,7 @@ class _CommentState extends State<Comment> {
 
     if (response.statusCode == 200) {
       hideToast();
-      Navigator.pop(context);
+      // Navigator.pop(context);
       showToast(context: context, type: XSToast.success, txt: "操作成功");
       widget.fresh!();
     } else {

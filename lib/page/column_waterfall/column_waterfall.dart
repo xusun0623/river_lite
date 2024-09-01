@@ -137,9 +137,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
     if (loading || load_done) return;
     loading = true;
     setState(() {
-      if (isDesktop()) {
-        init_loading = true;
-      }
+      init_loading = true;
     });
     var tmp = await Api().certain_forum_topiclist({
       "page": data!.length / pageSize + 1,
@@ -203,7 +201,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
                   });
                 },
               )
-            : BottomLoading(color: Colors.transparent, txt: "努力加载中…"),
+            : Container(),
       );
     }
     t.add(Padding(

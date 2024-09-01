@@ -86,8 +86,8 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
               removeMargin: true,
             ),
             Positioned(
-              right: os_edge + 80,
-              top: 5,
+              right: os_edge + 40,
+              top: 0,
               child: Opacity(
                 opacity: 0.7,
                 child: os_svg(
@@ -106,7 +106,6 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
         height: MediaQuery.of(context).size.height - 100,
       ));
     }
-    t.add(Padding(padding: EdgeInsets.all(7.5)));
     return t;
   }
 

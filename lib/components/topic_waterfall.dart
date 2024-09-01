@@ -405,6 +405,28 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
     }
   }
 
+  String removeTitleSubColumn(String txt) {
+    if (!(txt.contains("[") && txt.contains("]"))) {
+      return txt;
+    }
+
+    String strStack = ""; // 使用栈对专栏英文括号进行去重
+    if (txt.startsWith("[")) {
+      strStack += "[";
+    }
+    int index = 1;
+    while (strStack.isNotEmpty) {
+      if (txt[index] == "]") {
+        strStack = strStack.substring(0, strStack.length - 1);
+      }
+      if (txt[index] == "[") {
+        strStack += "[";
+      }
+      index++;
+    }
+    return txt.substring(index);
+  }
+
   Widget _topicCont() {
     double w = MediaQuery.of(context).size.width;
     int count = w > 1200 ? 5 : (w > 800 ? 4 : 2);
@@ -531,10 +553,10 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                 Container(
                   margin: EdgeInsets.only(right: 10),
                   child: Text(
-                    widget.data!["title"],
+                    removeTitleSubColumn(widget.data!["title"].toString()),
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 17,
                         letterSpacing: 0,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_white
@@ -704,7 +726,7 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
               color: _widgetBackgroundColor(),
               tap: () => _tapWidget(),
               widget: _topicCont(),
-              radius: 5,
+              radius: 10,
             ),
           );
   }
