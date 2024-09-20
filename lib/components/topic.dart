@@ -730,11 +730,13 @@ class _TopicState extends State<Topic> {
                 myInkWell(
                   color: Colors.transparent,
                   tap: () {
-                    Navigator.pushNamed(
-                      context,
-                      "/column",
-                      arguments: widget.data!["board_id"],
-                    );
+                    if (!(widget.hideColumn ?? false)) {
+                      Navigator.pushNamed(
+                        context,
+                        "/column",
+                        arguments: widget.data!["board_id"],
+                      );
+                    }
                   },
                   radius: 10,
                   widget: Container(
@@ -764,11 +766,12 @@ class _TopicState extends State<Topic> {
                           ),
                         ),
                         // Container(width: 2),
-                        Icon(
-                          Icons.chevron_right,
-                          size: 16,
-                          color: os_color,
-                        ),
+                        if (!(widget.hideColumn ?? false))
+                          Icon(
+                            Icons.chevron_right,
+                            size: 16,
+                            color: os_color,
+                          ),
                       ],
                     ),
                   ),

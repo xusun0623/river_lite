@@ -1,4 +1,3 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/page/column_waterfall/waterfall_selection.dart';
@@ -30,8 +29,8 @@ class ColumnBtn extends StatefulWidget {
 class _ColumnBtnState extends State<ColumnBtn> {
   @override
   Widget build(BuildContext context) {
+    bool loading = widget.loading ?? false;
     return Container(
-      // duration: Duration(milliseconds: 300),
       child: GestureDetector(
         onTap: () {
           if (widget.needPush ?? false) {
@@ -73,9 +72,11 @@ class _ColumnBtnState extends State<ColumnBtn> {
         },
         child: Hero(
           tag: widget.name! + (widget.fid.toString()),
-          child: Container(
-            width: 120,
-            height: 40,
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 500),
+            curve: Curves.ease,
+            width: loading ? 180 : 120,
+            height: loading ? 60 : 40,
             decoration: BoxDecoration(
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_light_dark_card
@@ -113,17 +114,18 @@ class _ColumnBtnState extends State<ColumnBtn> {
                     child: AnimatedOpacity(
                       duration: Duration(milliseconds: 100),
                       opacity: widget.hideArrow ?? false ? 0 : 1,
-                      child: widget.loading ?? true
-                          ? Container(
+                      child: loading
+                          ? AnimatedContainer(
+                              duration: Duration(milliseconds: 500),
                               width: 16,
                               height: 16,
-                              margin: EdgeInsets.only(left: 5),
+                              margin: EdgeInsets.only(left: 10),
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
                                 color:
                                     Provider.of<ColorProvider>(context).isDark
                                         ? os_dark_white
-                                        : os_deep_blue,
+                                        : os_black,
                               ),
                             )
                           : Icon(

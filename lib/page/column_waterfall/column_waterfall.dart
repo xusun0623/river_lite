@@ -1,4 +1,3 @@
-// ColumnWaterfall
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -8,9 +7,9 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
-import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/leftNavi.dart';
+import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic_waterfall.dart';
 import 'package:offer_show/components/totop.dart';
@@ -28,9 +27,9 @@ class ColumnWaterfall extends StatefulWidget {
 }
 
 class _ColumnWaterfallState extends State<ColumnWaterfall>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   ScrollController _scrollController = new ScrollController();
-  List<String?> theme = [];
+  List theme = [];
   List<dynamic>? data = [];
   var loading = false;
   var init_loading = false;
@@ -40,6 +39,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
   int pageSize = 24;
   int? columnID = 61;
   String? columnName = "二手专区";
+  int? subColumnID = -1;
   GlobalKey<RefreshIndicatorState> _indicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
@@ -64,6 +64,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
   void initState() {
     prepareData();
     super.initState();
+    _tabController = TabController(length: 0, vsync: this);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
@@ -92,13 +93,21 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
     speedUp(_scrollController);
   }
 
+  bool dontRePullTab = false;
+
   _getInitData() async {
+    if (dontRePullTab) {
+      init_loading = true;
+    } else {
+      subColumnID = -1;
+    }
+    setState(() {});
     var tmp = await Api().certain_forum_topiclist({
       "page": 1,
       "pageSize": pageSize,
       "boardId": columnID,
       "filterType": "typeid",
-      "filterId": "",
+      "filterId": subColumnID == -1 ? "" : subColumnID,
       "sortby": "all",
       "topOrder": 1,
     });
@@ -106,6 +115,16 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
       init_loading = false;
     });
     if (tmp != null && tmp["list"] != null && tmp["list"].length != 0) {
+      var list = tmp["classificationType_list"];
+      theme = [];
+      if (list != null && list.length != 0) {
+        for (var i = 0; i < list.length; i++) {
+          theme.add(list[i]);
+        }
+      }
+      if (!dontRePullTab) {
+        _tabController = TabController(length: theme.length + 1, vsync: this);
+      }
       data = tmp["list"];
     } else {
       try {
@@ -123,6 +142,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
     if (data != null && data!.length != 0)
       setStorage(key: "home_left_column", value: jsonEncode(data));
     load_done = false;
+    dontRePullTab = false;
     setState(() {});
   }
 
@@ -137,7 +157,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
     if (loading || load_done) return;
     loading = true;
     setState(() {
-      init_loading = true;
+      // init_loading = true;
     });
     var tmp = await Api().certain_forum_topiclist({
       "page": data!.length / pageSize + 1,
@@ -156,19 +176,14 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
         tmp["rs"] != 0 &&
         tmp["list"] != null &&
         tmp["list"].length != 0) {
-      var list = tmp["classificationType_list"];
-      theme = ["全部分栏"];
-      if (list != null && list.length != 0) {
-        for (var i = 0; i < list.length; i++) {
-          theme.add(list[i]["classificationType_name"]);
-        }
-      }
       data!.addAll(tmp["list"]);
       setStorage(key: "home_left_column", value: jsonEncode(data));
     }
     load_done = tmp == null || ((tmp["list"] ?? []).length < pageSize);
     setState(() {});
   }
+
+  late TabController _tabController;
 
   Widget _buildComponents() {
     List<Widget> t = [];
@@ -188,22 +203,22 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
         height: MediaQuery.of(context).size.height - 100,
       ));
     }
-    if (w < 800) {
-      t.add(
-        load_done || data!.length == 0
-            ? TapMore(
-                tap: () {
-                  XSVibrate();
-                  setState(() {
-                    loading = false;
-                    load_done = false;
-                    _getData();
-                  });
-                },
-              )
-            : Container(),
-      );
-    }
+    // if (w < 800) {
+    t.add(
+      load_done || data!.length == 0
+          ? TapMore(
+              tap: () {
+                XSVibrate();
+                setState(() {
+                  loading = false;
+                  load_done = false;
+                  _getData();
+                });
+              },
+            )
+          : BottomLoading(),
+    );
+    // }
     t.add(Padding(
       padding: EdgeInsets.all(load_done || data!.length == 0 ? 7.5 : 0),
     ));
@@ -211,39 +226,117 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
     int count = w > 1200 ? 5 : (w > 800 ? 4 : 2);
     return Stack(
       children: [
-        BackToTop(
-          show: showBackToTop,
-          animation: true,
-          bottom: 50,
-          refresh: () {
-            _indicatorKey.currentState!.show();
-          },
-          child: MasonryGridView.count(
-            controller: _scrollController,
-            itemCount: t.length,
-            padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 5),
-            crossAxisCount: count,
-            mainAxisSpacing: 6.5,
-            crossAxisSpacing: 6.5,
-            itemBuilder: (BuildContext context, int index) {
-              return t[index];
-            },
-          ),
-          controller: _scrollController,
+        Column(
+          children: [
+            if (theme.length != 1 && theme.length != 0)
+              Container(
+                height: 30,
+                margin: EdgeInsets.only(bottom: 3.5),
+                padding: EdgeInsets.only(top: 2.5),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_back
+                            : os_back,
+                        child: TabBar(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          controller: _tabController,
+                          isScrollable: true,
+                          dividerColor: Colors.transparent,
+                          tabAlignment: TabAlignment.start,
+                          indicatorColor:
+                              const Color.fromARGB(0, 194, 181, 181),
+                          labelPadding: EdgeInsets.symmetric(horizontal: 10),
+                          unselectedLabelStyle: TextStyle(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_deep_grey
+                                : Color(0xff777777),
+                          ),
+                          labelStyle: TextStyle(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : os_black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                          onTap: (res) {
+                            var tmpId = [
+                              {
+                                "classificationType_name": "全部",
+                                "classificationType_id": -1
+                              },
+                              ...theme
+                            ][res]["classificationType_id"];
+                            dontRePullTab = true;
+                            subColumnID = tmpId;
+                            setState(() {});
+                            _getInitData();
+                          },
+                          tabs: [
+                            {
+                              "classificationType_name": "全部",
+                              "classificationType_id": -1
+                            },
+                            ...theme
+                          ].map((ele) {
+                            // classificationType_id
+                            return Tab(text: ele["classificationType_name"]);
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            Expanded(
+              child: BackToTop(
+                show: showBackToTop,
+                animation: true,
+                bottom: 50,
+                refresh: () {
+                  _indicatorKey.currentState!.show();
+                },
+                child: MasonryGridView.count(
+                  controller: _scrollController,
+                  itemCount: t.length,
+                  padding:
+                      EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 5),
+                  crossAxisCount: count,
+                  mainAxisSpacing: 6.5,
+                  crossAxisSpacing: 6.5,
+                  itemBuilder: (BuildContext context, int index) {
+                    return t[index];
+                  },
+                ),
+                controller: _scrollController,
+              ),
+            ),
+          ],
         ),
-        Positioned(
-          bottom: 20,
-          left: (MediaQuery.of(context).size.width - LeftNaviWidth) / 2 - 30,
+        AnimatedPositioned(
+          duration: Duration(milliseconds: 500),
+          curve: Curves.ease,
+          bottom:
+              init_loading ? (MediaQuery.of(context).size.height / 2 - 60) : 20,
+          left: (MediaQuery.of(context).size.width -
+                      (isDesktop() ? LeftNaviWidth : 0)) /
+                  2 -
+              (init_loading ? 180 / 2 : 120 / 2),
           child: ColumnBtn(
             needPush: true,
             loading: init_loading,
             name: columnName,
             fid: columnID,
-            backData: (res) {
+            backData: (res) async {
+              setState(() {
+                columnName = res["name"];
+                columnID = res["fid"];
+              });
+              await Future.delayed(Duration(milliseconds: 400));
               if (res != null) {
                 setState(() {
-                  columnName = res["name"];
-                  columnID = res["fid"];
                   init_loading = true;
                 });
                 setStorage(
@@ -277,8 +370,9 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
         color: os_color,
         key: _indicatorKey,
         onRefresh: () async {
-          var data = await _getInitData();
-          return data;
+          // dontRePullTab = true;
+          await _getInitData();
+          return;
         },
         child:
             data!.length == 0 ? OccuLoading() : _buildComponents(), //11223344
