@@ -6,8 +6,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/parser.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -28,6 +30,7 @@ import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/nomore.dart';
 import 'package:offer_show/components/totop.dart';
+import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/page/topic/topic_RichInput.dart';
 import 'package:offer_show/page/topic/topic_comment.dart';
@@ -405,7 +408,7 @@ class _TopicDetailState extends State<TopicDetail> {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          XSVibrate();
+          XSVibrate().impact();
         }
       }
       if (_scrollController.position.pixels >= 0) {
@@ -432,7 +435,7 @@ class _TopicDetailState extends State<TopicDetail> {
   _captureScreenshot() {
     showToast(context: context, type: XSToast.loading, txt: "请稍后…");
     screenshotController.capture(pixelRatio: 10).then((Uint8List? image) async {
-      final result = await ImageGallerySaver.saveImage(
+      final result = await ImageGallerySaverPlus.saveImage(
         image!,
         quality: 100,
         name: "河畔-" + new DateTime.now().millisecondsSinceEpoch.toString(),
@@ -558,18 +561,21 @@ class _TopicDetailState extends State<TopicDetail> {
         } else {
           tmp.add(GestureDetector(
             onLongPress: () {
-              Clipboard.setData(ClipboardData(text: s_tmp));
-              XSVibrate();
-              showToast(
+              showOSActionSheet(
                 context: context,
-                type: XSToast.success,
-                txt: "复制文本成功",
+                list: ["复制文本内容"],
+                onChange: (index, title) {
+                  if (title == "复制文本内容") {
+                    copyCont();
+                  }
+                },
               );
             },
             child: Container(
               padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
               child: DetailCont(
                 data: e,
+                removeSelectable: true,
                 imgLists: imgLists,
                 title: data["topic"]["title"],
                 desc: s_tmp,
@@ -734,6 +740,19 @@ class _TopicDetailState extends State<TopicDetail> {
     await _getData();
     Navigator.pop(context);
     hideToast();
+  }
+
+  copyCont() {
+    String s_tmp = "";
+    data["topic"]["content"].forEach((e) {
+      //构建图片List和全文内容
+      if (e["type"] == 0) {
+        s_tmp += e["infor"] + "\n";
+      }
+    });
+    Clipboard.setData(ClipboardData(
+        text: s_tmp.replaceAll(RegExp(r'\[mobcent_phiz=[^\]]+\]'), '')));
+    Fluttertoast.showToast(msg: "复制成功");
   }
 
   List<Widget> _buildTotal() {
@@ -927,6 +946,7 @@ class _TopicDetailState extends State<TopicDetail> {
                         TopicDetailMore(
                           data: data,
                           fresh: _getData,
+                          copyCont: copyCont,
                           alterSend: () {
                             _alterSend();
                           },
@@ -941,271 +961,288 @@ class _TopicDetailState extends State<TopicDetail> {
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_detail_back
             : os_white,
-        body: data == null || data["topic"] == null
-            ? ((isInvalid || isNoAccess)
-                ? DeletedTopic(isInvalid: isInvalid)
-                : Loading(
-                    showRefresh: true,
-                    showError: load_done,
-                    msg: "河畔Lite客户端没有权限访问或者帖子被删除，可以尝试网页端是否能访问",
-                    tapTxt: "访问网页版>",
-                    refresh: () async {
-                      showToast(context: context, type: XSToast.loading);
-                      await _getData();
-                      hideToast();
-                    },
-                    cancel: () {
-                      // print("11111");
-                      setState(() {
-                        isDispose = true;
-                      });
-                      Navigator.of(context).pop();
-                    },
-                    tap: () async {
-                      xsLanuch(
-                          url: base_url +
-                              "forum.php?mod=viewthread&tid=" +
-                              widget.topicID.toString() +
-                              (isDesktop() ? "" : "&mobile=2"),
-                          isExtern: false);
-                    },
-                  ))
-            : _isBlack() || isBlack
-                ? BlackedTopic(blackKeyWord: blackKeyWord)
-                : Container(
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Provider.of<ColorProvider>(context).isDark
-                                ? os_detail_back
-                                : os_white,
-                          ),
-                          child: getMyRrefreshIndicator(
-                            context: context,
-                            onRefresh: () async {
-                              await _getData();
-                              vibrate = false;
-                              return;
-                            },
-                            child: BackToTop(
-                              bottom: 115,
-                              show: showBackToTop,
-                              animation: true,
-                              controller: _scrollController,
-                              child: isListView
-                                  ? ListView.builder(
-                                      controller: _scrollController,
-                                      itemCount: _buildTotal().length,
-                                      itemBuilder: (context, index) {
-                                        return _buildTotal()[index];
-                                      },
-                                    )
-                                  : ListView(
-                                      //physics: BouncingScrollPhysics(),
-                                      controller: _scrollController,
-                                      children: [
-                                        SingleChildScrollView(
-                                          child: Screenshot(
-                                            child: Container(
-                                              color: Provider.of<ColorProvider>(
-                                                          context)
-                                                      .isDark
-                                                  ? os_light_dark_card
-                                                  : os_white,
-                                              child: ListView(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    NeverScrollableScrollPhysics(),
-                                                children: _buildTotal(),
+        body: DismissiblePage(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_light_dark_card
+              : os_white,
+          direction: DismissiblePageDismissDirection.startToEnd,
+          onDismissed: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            child: data == null || data["topic"] == null
+                ? ((isInvalid || isNoAccess)
+                    ? DeletedTopic(isInvalid: isInvalid)
+                    : Loading(
+                        showRefresh: true,
+                        showError: load_done,
+                        msg: "河畔Lite客户端没有权限访问或者帖子被删除，可以尝试网页端是否能访问",
+                        tapTxt: "访问网页版>",
+                        refresh: () async {
+                          showToast(context: context, type: XSToast.loading);
+                          await _getData();
+                          hideToast();
+                        },
+                        cancel: () {
+                          // print("11111");
+                          setState(() {
+                            isDispose = true;
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        tap: () async {
+                          xsLanuch(
+                              url: base_url +
+                                  "forum.php?mod=viewthread&tid=" +
+                                  widget.topicID.toString() +
+                                  (isDesktop() ? "" : "&mobile=2"),
+                              isExtern: false);
+                        },
+                      ))
+                : _isBlack() || isBlack
+                    ? BlackedTopic(blackKeyWord: blackKeyWord)
+                    : Container(
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_detail_back
+                                        : os_white,
+                              ),
+                              child: getMyRrefreshIndicator(
+                                context: context,
+                                onRefresh: () async {
+                                  await _getData();
+                                  vibrate = false;
+                                  return;
+                                },
+                                child: BackToTop(
+                                  bottom: 115,
+                                  show: showBackToTop,
+                                  animation: true,
+                                  controller: _scrollController,
+                                  child: isListView
+                                      ? ListView.builder(
+                                          controller: _scrollController,
+                                          itemCount: _buildTotal().length,
+                                          itemBuilder: (context, index) {
+                                            return _buildTotal()[index];
+                                          },
+                                        )
+                                      : ListView(
+                                          //physics: BouncingScrollPhysics(),
+                                          controller: _scrollController,
+                                          children: [
+                                            SingleChildScrollView(
+                                              child: Screenshot(
+                                                child: Container(
+                                                  color:
+                                                      Provider.of<ColorProvider>(
+                                                                  context)
+                                                              .isDark
+                                                          ? os_light_dark_card
+                                                          : os_white,
+                                                  child: ListView(
+                                                    shrinkWrap: true,
+                                                    physics:
+                                                        NeverScrollableScrollPhysics(),
+                                                    children: _buildTotal(),
+                                                  ),
+                                                ),
+                                                controller:
+                                                    screenshotController,
                                               ),
                                             ),
-                                            controller: screenshotController,
-                                          ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                            ),
-                          ),
-                        ),
-                        if (getIsForbiddenCapture())
-                          Positioned(
-                            child: IgnorePointer(
-                              child: Wrap(
-                                children: [
-                                  ...List.generate(isDesktop() ? 300 : 200,
-                                      (idx) {
-                                    return Transform.rotate(
-                                      angle: -pi / 6,
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 40,
-                                        ),
-                                        child: Opacity(
-                                          opacity: 0.08,
-                                          child: Text(
-                                            myUid.toString(),
-                                            style: TextStyle(
-                                              color: Provider.of<ColorProvider>(
-                                                          context)
-                                                      .isDark
-                                                  ? os_dark_white
-                                                  : os_black,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                                ],
+                                ),
                               ),
                             ),
-                          ),
-                        editing //编辑回复框
-                            ? RichInput(
-                                anonymous:
-                                    data["topic"]["user_nick_name"] == "匿名",
-                                sending: sending,
-                                fid: data["topic"]["boardId"],
-                                tid: widget.topicID,
-                                uploadFile: (aid) {
-                                  uploadFileAid = aid;
-                                },
-                                uploadImg: (img_urls) {
-                                  if (img_urls != null &&
-                                      img_urls.length != 0) {
-                                    uploadImgList = [];
-                                    for (var i = 0; i < img_urls.length; i++) {
-                                      uploadImgList.add(img_urls[i]);
-                                    }
-                                  }
-                                },
-                                atUser: (List<Map> map) {
-                                  atUser = map;
-                                },
-                                placeholder: placeholder,
-                                controller: _txtController,
-                                focusNode: _focusNode,
-                                cancel: () {
-                                  _focusNode.unfocus();
-                                  _txtController.clear();
-                                  placeholder = (isMacOS()
-                                      ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
-                                      : "请在此编辑回复");
-                                  uploadFileAid = "";
-                                  uploadImgList = [];
-                                  editing = false;
-                                  setState(() {});
-                                },
-                                send: (bool isAnonymous) async {
-                                  var contents = [
-                                    {
-                                      "type":
-                                          0, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
-                                      "infor": uploadFileAid == ""
-                                          ? _txtController.text
-                                          : (_txtController.text == ""
-                                              ? "上传附件"
-                                              : _txtController.text),
+                            if (getIsForbiddenCapture())
+                              Positioned(
+                                child: IgnorePointer(
+                                  child: Wrap(
+                                    children: [
+                                      ...List.generate(isDesktop() ? 300 : 200,
+                                          (idx) {
+                                        return Transform.rotate(
+                                          angle: -pi / 6,
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 20,
+                                              vertical: 40,
+                                            ),
+                                            child: Opacity(
+                                              opacity: 0.08,
+                                              child: Text(
+                                                myUid.toString(),
+                                                style: TextStyle(
+                                                  color:
+                                                      Provider.of<ColorProvider>(
+                                                                  context)
+                                                              .isDark
+                                                          ? os_dark_white
+                                                          : os_black,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.normal,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            editing //编辑回复框
+                                ? RichInput(
+                                    anonymous:
+                                        data["topic"]["user_nick_name"] == "匿名",
+                                    sending: sending,
+                                    fid: data["topic"]["boardId"],
+                                    tid: widget.topicID,
+                                    uploadFile: (aid) {
+                                      uploadFileAid = aid;
                                     },
-                                  ];
-                                  for (var i = 0;
-                                      i < uploadImgList.length;
-                                      i++) {
-                                    contents.add({
-                                      "type":
-                                          1, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
-                                      "infor": uploadImgList[i]["urlName"],
-                                    });
-                                  }
-                                  var aids = uploadImgList
-                                      .map((attachment) => attachment["id"]);
-                                  if (uploadFileAid != "") {
-                                    aids = aids.followedBy([uploadFileAid]);
-                                  }
-                                  Map json = {
-                                    "body": {
-                                      "json": {
-                                        "isAnonymous":
-                                            isAnonymous ?? false ? 1 : 0,
-                                        "isOnlyAuthor": 0,
-                                        "typeId": "",
-                                        "aid": aids.join(","),
-                                        "fid": "",
-                                        "replyId": replyId,
-                                        "tid": widget.topicID, // 回复时指定帖子
-                                        "isQuote": placeholder ==
-                                                (isMacOS()
-                                                    ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
-                                                    : "请在此编辑回复")
-                                            ? 0
-                                            : 1, //"是否引用之前回复的内容
-                                        "title": "",
-                                        "content": jsonEncode(contents),
+                                    uploadImg: (img_urls) {
+                                      if (img_urls != null &&
+                                          img_urls.length != 0) {
+                                        uploadImgList = [];
+                                        for (var i = 0;
+                                            i < img_urls.length;
+                                            i++) {
+                                          uploadImgList.add(img_urls[i]);
+                                        }
                                       }
-                                    }
-                                  };
-                                  //发表评论
-                                  // showToast(
-                                  //   context: context,
-                                  //   type: XSToast.loading,
-                                  //   txt: "发表中…",
-                                  //   duration: 100000,
-                                  // );
-                                  setState(() {
-                                    sending = true;
-                                  });
-                                  await Api().forum_topicadmin(
-                                    {
-                                      "act": "reply",
-                                      "json": jsonEncode(json),
                                     },
-                                  );
-                                  setState(() {
-                                    sending = false;
-                                  });
-                                  showToast(
-                                    context: context,
-                                    type: XSToast.success,
-                                    duration: 200,
-                                    txt: "发表成功!",
-                                  );
-                                  //完成发表评论
-                                  setState(() {
-                                    uploadImgList = [];
-                                    uploadFileAid = "";
-                                    editing = false;
-                                    _focusNode.unfocus();
-                                    _txtController.clear();
-                                    placeholder = (isMacOS()
-                                        ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
-                                        : "请在此编辑回复");
-                                  });
-                                  await Future.delayed(
-                                      Duration(milliseconds: 30));
-                                  await _getData();
-                                },
-                              )
-                            : DetailFixBottom(
-                                dislike_count: dislike_count,
-                                bottom: (Platform.isIOS
-                                    ? bottom_safeArea
-                                    : getBottomSafeArea()),
-                                tapEdit: () {
-                                  _focusNode.requestFocus();
-                                  editing = true;
-                                  setState(() {});
-                                },
-                                topic_id: data["topic"]["topic_id"],
-                                count: data["topic"]["extraPanel"][1]
-                                    ["extParams"]["recommendAdd"],
-                              )
-                      ],
-                    ),
-                  ),
+                                    atUser: (List<Map> map) {
+                                      atUser = map;
+                                    },
+                                    placeholder: placeholder,
+                                    controller: _txtController,
+                                    focusNode: _focusNode,
+                                    cancel: () {
+                                      _focusNode.unfocus();
+                                      _txtController.clear();
+                                      placeholder = (isMacOS()
+                                          ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
+                                          : "请在此编辑回复");
+                                      uploadFileAid = "";
+                                      uploadImgList = [];
+                                      editing = false;
+                                      setState(() {});
+                                    },
+                                    send: (bool isAnonymous) async {
+                                      var contents = [
+                                        {
+                                          "type":
+                                              0, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
+                                          "infor": uploadFileAid == ""
+                                              ? _txtController.text
+                                              : (_txtController.text == ""
+                                                  ? "上传附件"
+                                                  : _txtController.text),
+                                        },
+                                      ];
+                                      for (var i = 0;
+                                          i < uploadImgList.length;
+                                          i++) {
+                                        contents.add({
+                                          "type":
+                                              1, // 0：文本（解析链接）；1：图片；3：音频;4:链接;5：附件
+                                          "infor": uploadImgList[i]["urlName"],
+                                        });
+                                      }
+                                      var aids = uploadImgList.map(
+                                          (attachment) => attachment["id"]);
+                                      if (uploadFileAid != "") {
+                                        aids = aids.followedBy([uploadFileAid]);
+                                      }
+                                      Map json = {
+                                        "body": {
+                                          "json": {
+                                            "isAnonymous":
+                                                isAnonymous ?? false ? 1 : 0,
+                                            "isOnlyAuthor": 0,
+                                            "typeId": "",
+                                            "aid": aids.join(","),
+                                            "fid": "",
+                                            "replyId": replyId,
+                                            "tid": widget.topicID, // 回复时指定帖子
+                                            "isQuote": placeholder ==
+                                                    (isMacOS()
+                                                        ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
+                                                        : "请在此编辑回复")
+                                                ? 0
+                                                : 1, //"是否引用之前回复的内容
+                                            "title": "",
+                                            "content": jsonEncode(contents),
+                                          }
+                                        }
+                                      };
+                                      //发表评论
+                                      // showToast(
+                                      //   context: context,
+                                      //   type: XSToast.loading,
+                                      //   txt: "发表中…",
+                                      //   duration: 100000,
+                                      // );
+                                      setState(() {
+                                        sending = true;
+                                      });
+                                      await Api().forum_topicadmin(
+                                        {
+                                          "act": "reply",
+                                          "json": jsonEncode(json),
+                                        },
+                                      );
+                                      setState(() {
+                                        sending = false;
+                                      });
+                                      showToast(
+                                        context: context,
+                                        type: XSToast.success,
+                                        duration: 200,
+                                        txt: "发表成功!",
+                                      );
+                                      //完成发表评论
+                                      setState(() {
+                                        uploadImgList = [];
+                                        uploadFileAid = "";
+                                        editing = false;
+                                        _focusNode.unfocus();
+                                        _txtController.clear();
+                                        placeholder = (isMacOS()
+                                            ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
+                                            : "请在此编辑回复");
+                                      });
+                                      await Future.delayed(
+                                          Duration(milliseconds: 30));
+                                      await _getData();
+                                    },
+                                  )
+                                : DetailFixBottom(
+                                    dislike_count: dislike_count,
+                                    bottom: (Platform.isIOS
+                                        ? bottom_safeArea
+                                        : getBottomSafeArea()),
+                                    tapEdit: () {
+                                      _focusNode.requestFocus();
+                                      editing = true;
+                                      setState(() {});
+                                    },
+                                    topic_id: data["topic"]["topic_id"],
+                                    count: data["topic"]["extraPanel"][1]
+                                        ["extParams"]["recommendAdd"],
+                                  )
+                          ],
+                        ),
+                      ),
+          ),
+        ),
       ),
     );
   }

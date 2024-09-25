@@ -127,7 +127,9 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       labelColor: Provider.of<ColorProvider>(context).isDark
           ? os_dark_white
           : Colors.black87,
-      unselectedLabelColor: Color(0xFF7A7A7A),
+      unselectedLabelColor: Provider.of<ColorProvider>(context).isDark
+          ? Color(0xFF7A7A7A)
+          : os_dark_back,
       indicator: TabSizeIndicator(
         wantWidth: 10,
         borderSide: BorderSide(
@@ -170,9 +172,9 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
       isScrollable: true,
       labelColor: Provider.of<ColorProvider>(context).isDark
           ? os_dark_white
-          : os_deep_blue,
+          : os_dark_back,
       tabAlignment: TabAlignment.start,
-      unselectedLabelColor: Color.fromARGB(255, 106, 114, 133),
+      unselectedLabelColor: Color(0xff666666),
       dividerColor: Colors.transparent,
       indicator: TabSizeIndicator(
         wantWidth: 90,

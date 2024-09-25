@@ -179,7 +179,7 @@ class _HomeState extends State<Home> {
                   if (_isNewMsg) {
                     Provider.of<MsgProvider>(context, listen: false).getMsg();
                   }
-                  if (Platform.isIOS) XSVibrate();
+                  if (Platform.isIOS) XSVibrate().impact();
                   setState(() {
                     tabShowProvider.index = i;
                   });
@@ -189,7 +189,7 @@ class _HomeState extends State<Home> {
           //         _getNewMsg();
           //         Provider.of<HomeRefrshProvider>(context, listen: false)
           //             .totop();
-          //         // XSVibrate();
+          //         // XSVibrate().impact();
           //       }
           //     : null,
           child: Container(
@@ -241,6 +241,10 @@ class _HomeState extends State<Home> {
         ? Baaaar(
             child: Scaffold(
               //桌面端的UI布局
+
+              backgroundColor: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_back
+                  : os_back,
               body: Row(
                 children: [
                   LeftNavi(),
@@ -259,6 +263,10 @@ class _HomeState extends State<Home> {
           )
         : Scaffold(
             //移动端的UI布局
+
+            backgroundColor: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_back
+                : os_back,
             body: WillPopScope(
               onWillPop: () async {
                 if (_firstBack) {
@@ -363,7 +371,7 @@ class _IosBottomNavigatorBarState extends State<IosBottomNavigatorBar> {
                 if (_isNewMsg) {
                   Provider.of<MsgProvider>(context, listen: false).getMsg();
                 }
-                if (Platform.isIOS) XSVibrate();
+                if (Platform.isIOS) XSVibrate().impact();
                 setState(() {
                   tabShowProvider.index = i;
                   tabShowProvider.changeIndex(i);

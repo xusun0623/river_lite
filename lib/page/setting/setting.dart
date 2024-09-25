@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -270,9 +271,18 @@ class _SettingState extends State<Setting> {
             ),
           ),
         ),
-        body: ListView(
-          //physics: BouncingScrollPhysics(),
-          children: _buildWidget(),
+        body: DismissiblePage(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_white,
+          direction: DismissiblePageDismissDirection.startToEnd,
+          onDismissed: () {
+            Navigator.of(context).pop();
+          },
+          child: ListView(
+            //physics: BouncingScrollPhysics(),
+            children: _buildWidget(),
+          ),
         ),
       ),
     );

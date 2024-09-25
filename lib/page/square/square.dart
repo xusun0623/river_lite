@@ -41,7 +41,8 @@ class _SquareState extends State<Square> {
     if (data != null && data!.length != 0) {
       for (var i = 0; i < data!.length; i++) {
         tmp.add(
-            ResponsiveWidget(child: SquareCard(data: data![i], index: i + 1)));
+          ResponsiveWidget(child: SquareCard(data: data![i], index: i + 1)),
+        );
       }
     }
     return tmp;
@@ -213,7 +214,7 @@ class _SquareCardState extends State<SquareCard> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width - 30,
-      margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+      margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       decoration: BoxDecoration(
         color: Provider.of<ColorProvider>(context).isDark

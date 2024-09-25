@@ -48,7 +48,7 @@ class _HomeNewReplyState extends State<HomeNewReply>
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          XSVibrate();
+          XSVibrate().impact();
         }
       }
       if (_scrollController.position.pixels >= 0) {
@@ -150,7 +150,7 @@ class _HomeNewReplyState extends State<HomeNewReply>
         load_done || data!.length == 0
             ? TapMore(
                 tap: () {
-                  XSVibrate();
+                  XSVibrate().impact();
                   setState(() {
                     loading = false;
                     load_done = false;
@@ -174,6 +174,7 @@ class _HomeNewReplyState extends State<HomeNewReply>
             _indicatorKey.currentState!.show();
           },
           child: MasonryGridView.count(
+            physics: AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             itemCount: t.length,
             padding: EdgeInsets.all(os_edge),
@@ -249,7 +250,8 @@ class _HomeNewReplyState extends State<HomeNewReply>
           var data = await _getInitData();
           return data;
         },
-        child: data!.length == 0 ? OccuLoading() : _buildComponents(), //11223344
+        child:
+            data!.length == 0 ? OccuLoading() : _buildComponents(), //11223344
       ),
     );
   }

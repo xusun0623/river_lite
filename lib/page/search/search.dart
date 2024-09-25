@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -325,31 +325,47 @@ class _SearchState extends State<Search> {
             select_idx: select,
           ),
         ),
-        body: Center(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            color: Provider.of<ColorProvider>(context).isDark
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        body: Container(
+          color: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          child: DismissiblePage(
+            backgroundColor: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_back
                 : os_back,
-            child: ListView(
-              controller: _scrollController,
-              //physics: BouncingScrollPhysics(),
-              children: [
-                Container(height: 10),
-                SwitchTypeTab(
-                  index: select,
-                  select: (idx) {
-                    Vibrate.feedback(FeedbackType.impact);
-                    setState(() {
-                      data = [];
-                      load_done = false;
-                      select = idx;
-                    });
-                  },
+            direction: DismissiblePageDismissDirection.startToEnd,
+            onDismissed: () {
+              Navigator.of(context).pop();
+            },
+            child: Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_back
+                    : os_back,
+                child: ListView(
+                  controller: _scrollController,
+                  //physics: BouncingScrollPhysics(),
+                  children: [
+                    Container(height: 10),
+                    SwitchTypeTab(
+                      index: select,
+                      select: (idx) {
+                        XSVibrate().impact();
+                        setState(() {
+                          data = [];
+                          load_done = false;
+                          select = idx;
+                        });
+                      },
+                    ),
+                    ..._buildTopic(),
+                  ],
                 ),
-                ..._buildTopic(),
-              ],
+              ),
             ),
           ),
         ),
@@ -598,7 +614,7 @@ class _HistoryTagState extends State<HistoryTag> {
       child: myInkWell(
         radius: 15,
         longPress: () {
-          XSVibrate();
+          XSVibrate().impact();
           showModal(
               context: context,
               title: "请确认",

@@ -534,7 +534,7 @@ class _TopicState extends State<Topic> {
                   children: [
                     myInkWell(
                       tap: () {
-                        XSVibrate();
+                        XSVibrate().impact();
                         _moreAction();
                       },
                       color: Colors.transparent,

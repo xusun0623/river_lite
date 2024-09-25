@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:badges/badges.dart' as Badgee;
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -209,7 +210,7 @@ class MsgDetailState extends State<MsgDetail> {
           100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          XSVibrate();
+          XSVibrate().impact();
         }
       }
       if (_controller.position.pixels - _controller.position.maxScrollExtent <=
@@ -249,51 +250,65 @@ class MsgDetailState extends State<MsgDetail> {
           name: widget.usrInfo!["name"],
         ),
       ),
-      body: Stack(
-        children: [
-          pmList!.length == 0 && !load_done
-              ? Loading()
-              : Container(
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_back
-                      : os_white,
-                  height: MediaQuery.of(context).size.height -
-                      MediaQuery.of(context).padding.top,
-                  child: getMyRrefreshIndicator(
-                    context: context,
-                    color: theme,
-                    onRefresh: () async {
-                      await _getMore();
-                      return;
-                    },
-                    child: ListView(
-                      //physics: BouncingScrollPhysics(),
-                      controller: _controller,
-                      shrinkWrap: true,
-                      reverse: true,
-                      children: _buildCont(),
+      body: Container(
+        color: Provider.of<ColorProvider>(context).isDark
+            ? os_dark_back
+            : os_white,
+        child: DismissiblePage(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_white,
+          direction: DismissiblePageDismissDirection.startToEnd,
+          onDismissed: () {
+            Navigator.of(context).pop();
+          },
+          child: Stack(
+            children: [
+              pmList!.length == 0 && !load_done
+                  ? Loading()
+                  : Container(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_back
+                          : os_white,
+                      height: MediaQuery.of(context).size.height -
+                          MediaQuery.of(context).padding.top,
+                      child: getMyRrefreshIndicator(
+                        context: context,
+                        color: theme,
+                        onRefresh: () async {
+                          await _getMore();
+                          return;
+                        },
+                        child: ListView(
+                          //physics: BouncingScrollPhysics(),
+                          controller: _controller,
+                          shrinkWrap: true,
+                          reverse: true,
+                          children: _buildCont(),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-          BottomFuncBar(
-            i_am_selectimg_img: (flag) {
-              setState(() {
-                i_am_selectimg_img = flag;
-              });
-            },
-            pagecontroller: _controller,
-            uid: widget.usrInfo!["uid"],
-            sended: () {
-              _getCont();
-              _controller.animateTo(
-                0,
-                duration: Duration(milliseconds: 500),
-                curve: Curves.ease,
-              );
-            },
-            textEditingController: _textEditingController,
+              BottomFuncBar(
+                i_am_selectimg_img: (flag) {
+                  setState(() {
+                    i_am_selectimg_img = flag;
+                  });
+                },
+                pagecontroller: _controller,
+                uid: widget.usrInfo!["uid"],
+                sended: () {
+                  _getCont();
+                  _controller.animateTo(
+                    0,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  );
+                },
+                textEditingController: _textEditingController,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -878,7 +893,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
               if (widget.isImage!) {
                 saveImge(context, [widget.cont], 0);
               } else {
-                XSVibrate();
+                XSVibrate().impact();
                 showAction(
                   context: context,
                   options: ["复制文本"],

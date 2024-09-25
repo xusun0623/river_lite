@@ -93,152 +93,143 @@ class _LeftNaviState extends State<LeftNavi> {
       child: Container(
         width: LeftNaviWidth,
         decoration: BoxDecoration(
-          border: Border(
-            right: BorderSide(
-              color: Provider.of<ColorProvider>(context).isDark ||
-                      tabShowProvider.index == 2
-                  ? os_light_dark_card
-                  : os_grey,
-            ),
-          ),
+          // border: Border(
+          //   right: BorderSide(
+          //     color: Provider.of<ColorProvider>(context).isDark ||
+          //             tabShowProvider.index == 2
+          //         ? os_light_dark_card
+          //         : os_grey,
+          //   ),
+          // ),
           color: Provider.of<ColorProvider>(context).isDark ||
                   tabShowProvider.index == 2
               ? Color(0xFF323232)
               : os_white,
         ),
-        child: ListView(
-          scrollDirection: Axis.vertical,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    // Container(
-                    //   height: MediaQuery.of(context).padding.top,
-                    //   color: Provider.of<ColorProvider>(context).isDark ||
-                    //           tabShowProvider.index == 2
-                    //       ? os_dark_back
-                    //       : os_white,
-                    // ),
-                    Container(height: MediaQuery.of(context).padding.top + 20),
-                    GestureDetector(
-                      onTap: () async {
-                        _getNewMsg();
-                        String myinfo_txt =
-                            await getStorage(key: "myinfo", initData: "");
-                        Map myinfo = jsonDecode(myinfo_txt);
-                        Navigator.pushNamed(
-                          context,
-                          "/person_center",
-                          arguments: {"uid": myinfo["uid"], "isMe": true},
-                        );
-                      },
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
-                          child: Provider.of<TabShowProvider>(context).index ==
-                                  4
-                              ? Container(
-                                  color: Provider.of<ColorProvider>(context)
-                                              .isDark ||
-                                          tabShowProvider.index == 2
-                                      ? Color(0x33FFFFFF)
-                                      : os_grey,
-                                  child: Center(
-                                    child: Text(
-                                      (provider.data == null
-                                              ? "X"
-                                              : provider.data!["name"] ??
-                                                  provider.data!["userName"])[0]
-                                          .toString(),
-                                      style: TextStyle(
-                                        color:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? os_white
-                                                : os_dark_back,
-                                        fontSize: 20,
-                                      ),
+            Expanded(
+              child: ListView(
+                physics: AlwaysScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                children: [
+                  Container(height: MediaQuery.of(context).padding.top + 20),
+                  GestureDetector(
+                    onTap: () async {
+                      _getNewMsg();
+                      String myinfo_txt =
+                          await getStorage(key: "myinfo", initData: "");
+                      Map myinfo = jsonDecode(myinfo_txt);
+                      Navigator.pushNamed(
+                        context,
+                        "/person_center",
+                        arguments: {"uid": myinfo["uid"], "isMe": true},
+                      );
+                    },
+                    child: Container(
+                      // width: 50,
+                      height: 50,
+                      margin: EdgeInsets.symmetric(horizontal: 15),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                        child: Provider.of<TabShowProvider>(context).index == 4
+                            ? Container(
+                                color: Provider.of<ColorProvider>(context)
+                                            .isDark ||
+                                        tabShowProvider.index == 2
+                                    ? Color(0x33FFFFFF)
+                                    : os_grey,
+                                child: Center(
+                                  child: Text(
+                                    (provider.data == null
+                                            ? "X"
+                                            : provider.data!["name"] ??
+                                                provider.data!["userName"])[0]
+                                        .toString(),
+                                    style: TextStyle(
+                                      color: Provider.of<ColorProvider>(context)
+                                              .isDark
+                                          ? os_white
+                                          : os_dark_back,
+                                      fontSize: 20,
                                     ),
                                   ),
-                                )
-                              : CachedNetworkImage(
-                                  imageUrl: provider.data == null
-                                      ? ""
-                                      : (provider.data!["icon"] ??
-                                          provider.data!["avatar"]),
-                                  placeholder: (BuildContext, String) {
-                                    return Container(
-                                      color: Provider.of<ColorProvider>(context)
-                                                  .isDark ||
-                                              tabShowProvider.index == 2
-                                          ? Color(0x33FFFFFF)
-                                          : os_grey,
-                                    );
-                                  },
                                 ),
-                        ),
+                              )
+                            : CachedNetworkImage(
+                                imageUrl: provider.data == null
+                                    ? ""
+                                    : (provider.data!["icon"] ??
+                                        provider.data!["avatar"]),
+                                placeholder: (BuildContext, String) {
+                                  return Container(
+                                    color: Provider.of<ColorProvider>(context)
+                                                .isDark ||
+                                            tabShowProvider.index == 2
+                                        ? Color(0x33FFFFFF)
+                                        : os_grey,
+                                  );
+                                },
+                              ),
                       ),
                     ),
-                    Container(height: 5),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: QueationProgress(),
-                    ),
-                    Container(height: 30),
-                    NaviBtn(
-                      index: 0,
+                  ),
+                  // Container(height: 5),
+                  // Container(
+                  //   margin: EdgeInsets.symmetric(horizontal: 10),
+                  //   child: QueationProgress(),
+                  // ),
+                  Container(height: 20),
+                  NaviBtn(
+                    index: 0,
+                    tap: () {
+                      _getNewMsg();
+                    },
+                  ),
+                  Container(height: 20),
+                  Container(
+                    child: NaviBtn(
+                      isNewMsg: _isNewMsg,
+                      index: 1,
                       tap: () {
                         _getNewMsg();
                       },
                     ),
-                    Container(height: 20),
-                    Container(
-                      child: NaviBtn(
-                        isNewMsg: _isNewMsg,
-                        index: 1,
-                        tap: () {
-                          _getNewMsg();
-                        },
-                      ),
-                    ),
-                    Container(height: 20),
-                    Container(
-                      child: NaviBtn(
-                        isNewMsg: _isNewMsg,
-                        index: 2,
-                        tap: () {
-                          _getNewMsg();
-                        },
-                      ),
-                    ),
-                    Container(height: 20),
-                    Container(
-                      child: NaviBtn(
-                        isNewMsg: _isNewMsg,
-                        index: 3,
-                        tap: () {
-                          _getNewMsg();
-                        },
-                      ),
-                    ),
-                    Container(height: 20),
-                  ],
-                ),
-                Column(
-                  children: [
-                    NaviBtn(
-                      index: 4,
+                  ),
+                  Container(height: 20),
+                  Container(
+                    child: NaviBtn(
+                      isNewMsg: _isNewMsg,
+                      index: 2,
                       tap: () {
                         _getNewMsg();
                       },
                     ),
-                    Container(height: 20),
-                  ],
+                  ),
+                  Container(height: 20),
+                  Container(
+                    child: NaviBtn(
+                      isNewMsg: _isNewMsg,
+                      index: 3,
+                      tap: () {
+                        _getNewMsg();
+                      },
+                    ),
+                  ),
+                  // Container(height: 10),
+                ],
+              ),
+            ),
+            Column(
+              children: [
+                NaviBtn(
+                  index: 4,
+                  tap: () {
+                    _getNewMsg();
+                  },
                 ),
+                Container(height: 20),
               ],
             ),
           ],

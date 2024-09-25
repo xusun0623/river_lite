@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/bigScreen.dart';
@@ -334,54 +335,66 @@ class _PersonCenterState extends State<PersonCenter> {
         ),
         backgroundColor:
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        body: userInfo == null
-            ? Loading(
-                backgroundColor: Color(0xFFF3F3F3),
-              )
-            : _isBlack()
-                ? Container(
-                    margin: EdgeInsets.only(bottom: 150),
-                    child: Center(
-                      child: Text(
-                        "该用户已被你拉黑",
-                        style: TextStyle(
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_dark_white
-                              : os_black,
-                        ),
-                      ),
-                    ),
+        body: DismissiblePage(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          direction: DismissiblePageDismissDirection.startToEnd,
+          onDismissed: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            child: userInfo == null
+                ? Loading(
+                    backgroundColor: Color(0xFFF3F3F3),
                   )
-                : (isNotAvail
-                    ? Center(
-                        child: Container(
-                        margin: EdgeInsets.only(bottom: 100),
-                        child: Text(
-                          "抱歉，您指定的用户空间不存在",
-                          style: TextStyle(
-                            color: Provider.of<ColorProvider>(context).isDark
-                                ? os_dark_white
-                                : os_black,
+                : _isBlack()
+                    ? Container(
+                        margin: EdgeInsets.only(bottom: 150),
+                        child: Center(
+                          child: Text(
+                            "该用户已被你拉黑",
+                            style: TextStyle(
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_dark_white
+                                  : os_black,
+                            ),
                           ),
                         ),
-                      ))
-                    : BackToTop(
-                        show: showBackToTop,
-                        controller: _controller,
-                        bottom: 100,
-                        child: getMyRrefreshIndicator(
-                          context: context,
-                          color: os_deep_blue,
-                          onRefresh: () async {
-                            return await _getInfo();
-                          },
-                          child: ListView(
-                            //physics: BouncingScrollPhysics(),
+                      )
+                    : (isNotAvail
+                        ? Center(
+                            child: Container(
+                            margin: EdgeInsets.only(bottom: 100),
+                            child: Text(
+                              "抱歉，您指定的用户空间不存在",
+                              style: TextStyle(
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_white
+                                        : os_black,
+                              ),
+                            ),
+                          ))
+                        : BackToTop(
+                            show: showBackToTop,
                             controller: _controller,
-                            children: _buildCont(),
-                          ),
-                        ),
-                      )),
+                            bottom: 100,
+                            child: getMyRrefreshIndicator(
+                              context: context,
+                              color: os_deep_blue,
+                              onRefresh: () async {
+                                return await _getInfo();
+                              },
+                              child: ListView(
+                                //physics: BouncingScrollPhysics(),
+                                controller: _controller,
+                                children: _buildCont(),
+                              ),
+                            ),
+                          )),
+          ),
+        ),
       ),
     );
   }
@@ -881,7 +894,7 @@ class _PersonCardState extends State<PersonCard> {
                 borderRadius: BorderRadius.all(Radius.circular(100)),
                 child: GestureDetector(
                   onLongPress: () {
-                    XSVibrate();
+                    XSVibrate().impact();
                     CachedNetworkImage.evictFromCache("url");
                     int uid = int.parse(widget.data!["icon"]
                         .toString()

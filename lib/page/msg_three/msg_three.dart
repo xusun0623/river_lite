@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/bigScreen.dart';
@@ -191,7 +192,7 @@ class _MsgThreeState extends State<MsgThree> {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          XSVibrate();
+          XSVibrate().impact();
         }
       }
       if (_scrollController.position.pixels >= 0) {
@@ -226,44 +227,53 @@ class _MsgThreeState extends State<MsgThree> {
               ? os_dark_back
               : colors[widget.type!],
           height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              Head(titles: titles, widget: widget),
-              Positioned(
-                top: 60,
-                child: Container(
-                  width: MediaQuery.of(context).size.width - 2 * os_edge,
-                  height: MediaQuery.of(context).size.height -
-                      MediaQuery.of(context).padding.top -
-                      125,
-                  decoration: BoxDecoration(
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_light_dark_card
-                        : os_white,
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  margin: EdgeInsets.symmetric(horizontal: os_edge),
-                  child: RefreshIndicator(
-                    color: colors[widget.type!],
-                    onRefresh: () async {
-                      return await _getData();
-                    },
-                    child: BackToTop(
+          child: DismissiblePage(
+            backgroundColor: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_back
+                : colors[widget.type!],
+            direction: DismissiblePageDismissDirection.startToEnd,
+            onDismissed: () {
+              Navigator.of(context).pop();
+            },
+            child: Stack(
+              children: [
+                Head(titles: titles, widget: widget),
+                Positioned(
+                  top: 60,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 2 * os_edge,
+                    height: MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).padding.top -
+                        125,
+                    decoration: BoxDecoration(
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_light_dark_card
+                          : os_white,
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    margin: EdgeInsets.symmetric(horizontal: os_edge),
+                    child: RefreshIndicator(
                       color: colors[widget.type!],
-                      show: showBackToTop,
-                      bottom: 80,
-                      controller: _scrollController,
-                      animation: true,
-                      child: ListView(
+                      onRefresh: () async {
+                        return await _getData();
+                      },
+                      child: BackToTop(
+                        color: colors[widget.type!],
+                        show: showBackToTop,
+                        bottom: 80,
                         controller: _scrollController,
-                        //physics: BouncingScrollPhysics(),
-                        children: _buildCont(),
+                        animation: true,
+                        child: ListView(
+                          controller: _scrollController,
+                          //physics: BouncingScrollPhysics(),
+                          children: _buildCont(),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

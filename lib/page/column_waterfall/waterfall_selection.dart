@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
-import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/page/column_waterfall/column_btn.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';

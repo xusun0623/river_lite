@@ -364,7 +364,7 @@ class _TopicReplyState extends State<TopicReply> {
                   ? os_light_dark_card
                   : (widget.backgroundColor ?? os_white),
               longPress: () {
-                XSVibrate();
+                XSVibrate().impact();
                 _moreAction();
               },
               tap: () async {

@@ -350,7 +350,7 @@ class _UploadImgState extends State<UploadImg> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        XSVibrate();
+        XSVibrate().impact();
         Clipboard.setData(
             ClipboardData(text: "[img]${widget.data["urlName"]}[/img]"));
         showToast(

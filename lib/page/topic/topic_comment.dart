@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
@@ -76,7 +75,8 @@ class _CommentState extends State<Comment> {
   }
 
   _tapLike() async {
-    Vibrate.feedback(FeedbackType.impact);
+    // Vibrate.feedback(FeedbackType.impact);
+    XSVibrate().impact();
     if (liked == 1) return;
     liked = 1;
     widget.data["extraPanel"][0]["extParams"]["recommendAdd"]++;
@@ -404,7 +404,7 @@ class _CommentState extends State<Comment> {
         copy_txt += e["infor"].toString();
       }
     });
-    XSVibrate();
+    XSVibrate().impact();
     showAction(
       context: context,
       options: [

@@ -236,7 +236,7 @@ class _SquareCardState extends State<SquareCard> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width - 30,
-      margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+      margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       decoration: BoxDecoration(
         color: Provider.of<ColorProvider>(context).isDark

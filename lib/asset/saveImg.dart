@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/vibrate.dart';
@@ -12,7 +12,7 @@ saveImge(
   List urls,
   int? index,
 ) async {
-  XSVibrate();
+  XSVibrate().impact();
   showAction(
     context: context,
     options: urls.length > 1 ? ["保存原图", "一键保存所有原图"] : ["保存原图"],
@@ -32,7 +32,7 @@ saveImge(
           options: Options(responseType: ResponseType.bytes),
         );
         hideToast();
-        final result = await ImageGallerySaver.saveImage(
+        final result = await ImageGallerySaverPlus.saveImage(
           Uint8List.fromList(response.data),
           quality: 100,
           name: "河畔-" + new DateTime.now().millisecondsSinceEpoch.toString(),
@@ -54,7 +54,7 @@ saveImge(
             urls[i],
             options: Options(responseType: ResponseType.bytes),
           );
-          await ImageGallerySaver.saveImage(
+          await ImageGallerySaverPlus.saveImage(
             Uint8List.fromList(response.data),
             quality: 100,
             name: "河畔-" + new DateTime.now().millisecondsSinceEpoch.toString(),

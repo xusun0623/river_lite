@@ -53,7 +53,7 @@ class _MeState extends State<Me> {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          XSVibrate();
+          XSVibrate().impact();
         }
       }
       if (_scrollController.position.pixels >= 0) {

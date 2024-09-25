@@ -303,7 +303,7 @@ class _DetailContState extends State<DetailCont> {
           ? Color(0x0AFFFFFF)
           : Color(0xFFF6F6F6),
       longPress: () {
-        XSVibrate();
+        XSVibrate().impact();
         Clipboard.setData(ClipboardData(text: widget.data['url']));
         showToast(context: context, type: XSToast.success, txt: "复制链接成功");
       },

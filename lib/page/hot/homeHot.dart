@@ -31,7 +31,7 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          XSVibrate();
+          XSVibrate().impact();
         }
       }
       if (_scrollController.position.pixels >= 0) {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
@@ -220,18 +221,27 @@ class _MeFuncState extends State<MeFunc> {
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : Color(0xFFF3F3F3),
-        body: BackToTop(
-          bottom: 100,
-          controller: _scrollController,
-          show: _showBackToTop,
-          child: RefreshIndicator(
-            onRefresh: () async {
-              return await _getData();
-            },
-            child: ListView(
-              controller: _scrollController,
-              //physics: BouncingScrollPhysics(),
-              children: _buildCont(),
+        body: DismissiblePage(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          direction: DismissiblePageDismissDirection.startToEnd,
+          onDismissed: () {
+            Navigator.of(context).pop();
+          },
+          child: BackToTop(
+            bottom: 100,
+            controller: _scrollController,
+            show: _showBackToTop,
+            child: RefreshIndicator(
+              onRefresh: () async {
+                return await _getData();
+              },
+              child: ListView(
+                controller: _scrollController,
+                //physics: BouncingScrollPhysics(),
+                children: _buildCont(),
+              ),
             ),
           ),
         ),

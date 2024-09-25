@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
@@ -223,7 +224,8 @@ class _AccountState extends State<Account> {
           ),
           onTap: () {
             if (i == logined) return;
-            _switchLogin(accountData![i]["name"], accountData![i]["password"], i);
+            _switchLogin(
+                accountData![i]["name"], accountData![i]["password"], i);
           },
           trailing: Container(
             width: 100,
@@ -234,8 +236,8 @@ class _AccountState extends State<Account> {
                 IconButton(
                   onPressed: () {
                     if (i == logined) return;
-                    _switchLogin(
-                        accountData![i]["name"], accountData![i]["password"], i);
+                    _switchLogin(accountData![i]["name"],
+                        accountData![i]["password"], i);
                   },
                   icon: Icon(
                     logined == i
@@ -340,9 +342,18 @@ class _AccountState extends State<Account> {
             ),
           ),
         ),
-        body: ListView(
-          //physics: BouncingScrollPhysics(),
-          children: _buildWidget(),
+        body: DismissiblePage(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_white,
+          direction: DismissiblePageDismissDirection.startToEnd,
+          onDismissed: () {
+            Navigator.of(context).pop();
+          },
+          child: ListView(
+            //physics: BouncingScrollPhysics(),
+            children: _buildWidget(),
+          ),
         ),
       ),
     );

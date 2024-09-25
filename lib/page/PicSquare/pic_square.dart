@@ -173,7 +173,7 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
         ? Scaffold(
             body: GestureDetector(
               onTap: () {
-                XSVibrate();
+                XSVibrate().impact();
                 _getValid();
               },
               child: Container(
@@ -346,7 +346,7 @@ class _PhotoCardState extends State<PhotoCard> {
   }
 
   _tapLike() async {
-    XSVibrate();
+    XSVibrate().impact();
     if (!isLiked) {
       setState(() {
         isLiked = true;
@@ -396,7 +396,7 @@ class _PhotoCardState extends State<PhotoCard> {
   }
 
   _tapMore() async {
-    XSVibrate();
+    XSVibrate().impact();
     showAction(
       context: context,
       options: ["屏蔽此贴", "屏蔽此人", "收藏", "复制帖子链接"],
@@ -906,7 +906,7 @@ class _PopCommentState extends State<PopComment> {
                     GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
-                        XSVibrate();
+                        XSVibrate().impact();
                         Navigator.pushNamed(
                           context,
                           "/topic_detail",
@@ -1387,7 +1387,7 @@ class _PicBottomState extends State<PicBottom> {
             Container(height: 5),
             GestureDetector(
               onTap: () {
-                XSVibrate();
+                XSVibrate().impact();
                 Navigator.pushNamed(
                   context,
                   "/topic_detail",
@@ -1438,7 +1438,7 @@ class _PicBottomState extends State<PicBottom> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      XSVibrate();
+                      XSVibrate().impact();
                       if (widget.refresh != null) {
                         widget.refresh!();
                       }

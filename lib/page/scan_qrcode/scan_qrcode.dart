@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -154,7 +153,7 @@ class _QRViewExampleState extends State<QRViewExample> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       if (scanData.code != result?.code) {
-        XSVibrate(type: FeedbackType.success);
+        XSVibrate().success();
         setState(() {
           result = scanData;
         });

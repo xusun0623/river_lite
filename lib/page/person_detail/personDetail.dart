@@ -1,3 +1,4 @@
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
@@ -121,40 +122,51 @@ class _PersonDetailState extends State<PersonDetail> {
         ),
         backgroundColor:
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        body: data == null
-            ? Loading(
-                backgroundColor: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_back
-                    : os_back,
-              )
-            : Container(
-                margin: EdgeInsets.only(
-                  left: 12.5,
-                  right: 12.5,
-                  top: 10,
-                  bottom: 10,
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_light_dark_card
-                      : os_white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.05),
-                      offset: Offset(2, 2),
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                    )
-                  ],
-                ),
-                child: ListView(
-                  shrinkWrap: true,
-                  //physics: BouncingScrollPhysics(),
-                  children: _buildList(),
-                ),
-              ),
+        body: DismissiblePage(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          direction: DismissiblePageDismissDirection.startToEnd,
+          onDismissed: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            child: data == null
+                ? Loading(
+                    backgroundColor: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_back
+                        : os_back,
+                  )
+                : Container(
+                    margin: EdgeInsets.only(
+                      left: 12.5,
+                      right: 12.5,
+                      top: 10,
+                      bottom: 10,
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_light_dark_card
+                          : os_white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.05),
+                          offset: Offset(2, 2),
+                          blurRadius: 10,
+                          spreadRadius: 2,
+                        )
+                      ],
+                    ),
+                    child: ListView(
+                      shrinkWrap: true,
+                      //physics: BouncingScrollPhysics(),
+                      children: _buildList(),
+                    ),
+                  ),
+          ),
+        ),
       ),
     );
   }
@@ -182,7 +194,7 @@ class _DetailListTitleState extends State<DetailListTitle> {
             onLongPress: widget.left != "UID"
                 ? null
                 : () {
-                    XSVibrate();
+                    XSVibrate().impact();
                     Clipboard.setData(ClipboardData(text: widget.right!));
                     showToast(
                         context: context, type: XSToast.success, txt: "复制成功");

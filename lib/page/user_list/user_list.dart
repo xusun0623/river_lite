@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
@@ -126,17 +127,26 @@ class _UserListState extends State<UserList> {
         ),
         backgroundColor:
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        body: RefreshIndicator(
-          onRefresh: () async {
-            return await _getData();
+        body: DismissiblePage(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          direction: DismissiblePageDismissDirection.startToEnd,
+          onDismissed: () {
+            Navigator.of(context).pop();
           },
-          color: Provider.of<ColorProvider>(context).isDark
-              ? os_dark_white
-              : os_color,
-          child: ListView(
-            controller: _controller,
-            //physics: BouncingScrollPhysics(),
-            children: _buildCont(),
+          child: RefreshIndicator(
+            onRefresh: () async {
+              return await _getData();
+            },
+            color: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_white
+                : os_color,
+            child: ListView(
+              controller: _controller,
+              //physics: BouncingScrollPhysics(),
+              children: _buildCont(),
+            ),
           ),
         ),
       ),

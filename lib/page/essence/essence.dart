@@ -45,7 +45,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          XSVibrate();
+          XSVibrate().impact();
         }
       }
       if (_scrollController.position.pixels >= 0) {
@@ -148,7 +148,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
         load_done || data!.length == 0
             ? TapMore(
                 tap: () {
-                  XSVibrate();
+                  XSVibrate().impact();
                   setState(() {
                     loading = false;
                     load_done = false;
@@ -172,6 +172,7 @@ class _EssenceState extends State<Essence> with AutomaticKeepAliveClientMixin {
             _indicatorKey.currentState!.show();
           },
           child: MasonryGridView.count(
+            physics: AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             itemCount: t.length,
             padding: EdgeInsets.all(os_edge),

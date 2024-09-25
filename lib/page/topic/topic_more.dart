@@ -25,12 +25,14 @@ class TopicDetailMore extends StatefulWidget {
   Map? data;
   Function? block;
   Function? alterSend;
+  Function? copyCont;
   Function? fresh;
   TopicDetailMore({
     Key? key,
     this.data,
     this.block,
     this.alterSend,
+    this.copyCont,
     this.fresh,
   }) : super(key: key);
 
@@ -229,6 +231,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       options: [
         // "展示二维码",
         "复制帖子链接",
+        "复制帖子内容",
         "举报反馈",
         "屏蔽此贴",
         ...(widget.data!["topic"]["user_id"] == await getUid() ? ["编辑帖子"] : []),
@@ -238,7 +241,8 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       ],
       icons: [
         // Icons.qr_code,
-        Icons.copy,
+        Icons.content_copy_rounded,
+        Icons.file_copy_outlined,
         Icons.feedback_outlined,
         Icons.block,
         ...(widget.data!["topic"]["user_id"] == await getUid()
@@ -258,6 +262,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         Navigator.pop(context);
         if (res == "展示二维码") {
           _showQrCode();
+        }
+        if (res == "复制帖子内容") {
+          widget.copyCont!();
         }
         if (res == "复制帖子链接") {
           Clipboard.setData(

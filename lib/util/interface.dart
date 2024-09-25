@@ -6,15 +6,16 @@
  */
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:html/dom.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/util/mid_request.dart';
-import 'package:heic_to_jpg/heic_to_jpg.dart';
 import 'package:http/http.dart' as http;
 import 'package:offer_show/util/storage.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// 接口文档：https://github.com/UESTC-BBS/API-Docs/wiki/Mobcent-API
 class Api {
@@ -401,6 +402,27 @@ class Api {
     );
   }
 
+  Future<String> convertHeicToJpg(String heicPath) async {
+    // 定义输出文件的路径，这里将文件存储在临时目录
+    var tempDir = await getTemporaryDirectory();
+    String jpgPath = '${tempDir.path}/output.jpg';
+
+    // 使用flutter_image_compress来压缩并转换图片格式
+    var result = await FlutterImageCompress.compressAndGetFile(
+      heicPath,
+      jpgPath,
+      quality: 100, // 可以调整输出质量
+      format: CompressFormat.jpeg,
+    );
+
+    if (result != null) {
+      print('图片转换成功: $jpgPath');
+      return jpgPath;
+    } else {
+      throw Exception("图片转换失败");
+    }
+  }
+
   //此处有
   uploadImage({List<XFile>? imgs}) async {
     print("上传图片 ${imgs}");
@@ -418,7 +440,7 @@ class Api {
         String? tmp_jpg_path = imgs[i].path;
         if (imgs[i].path.split(".")[1] == "heic") {
           //支持苹果拍照格式
-          tmp_jpg_path = await HeicToJpg.convert(imgs[i].path);
+          tmp_jpg_path = await convertHeicToJpg(imgs[i].path);
         }
         request.files.add(
           await http.MultipartFile.fromPath(

@@ -41,7 +41,7 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          XSVibrate();
+          XSVibrate().impact();
         }
       }
       if (_scrollController.position.pixels >= 0) {
@@ -132,6 +132,7 @@ class _HotNoScaffoldState extends State<HotNoScaffold>
           child: list!.length == 0
               ? OccuLoading()
               : MasonryGridView.count(
+                  physics: AlwaysScrollableScrollPhysics(),
                   controller: _scrollController,
                   itemCount: _buildComponents().length,
                   padding: EdgeInsets.all(os_edge),

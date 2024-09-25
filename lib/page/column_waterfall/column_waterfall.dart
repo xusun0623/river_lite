@@ -8,8 +8,9 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/components/expansion_custom.dart';
 import 'package:offer_show/components/leftNavi.dart';
-import 'package:offer_show/components/loading.dart';
+import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic_waterfall.dart';
 import 'package:offer_show/components/totop.dart';
@@ -30,6 +31,8 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   ScrollController _scrollController = new ScrollController();
   List theme = [];
+  int lastThemeIndex = 0;
+
   List<dynamic>? data = [];
   var loading = false;
   var init_loading = false;
@@ -56,20 +59,27 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
       columnID = id_name_map!["fid"];
       columnName = id_name_map["name"];
     });
-    _getStorageData();
-    _getInitData();
+    await _getStorageData();
+    await _getThemeData();
+    await _getInitData();
   }
+
+  bool showTabbar = true;
 
   @override
   void initState() {
     prepareData();
     super.initState();
-    _tabController = TabController(length: 0, vsync: this);
+    _tabController = TabController(
+      length: 0,
+      vsync: this,
+      initialIndex: lastThemeIndex,
+    );
     _scrollController.addListener(() {
       if (_scrollController.position.pixels < -100) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          XSVibrate();
+          XSVibrate().impact();
         }
       }
       if (_scrollController.position.pixels >= 0) {
@@ -89,19 +99,66 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
           showBackToTop = false;
         });
       }
+      if (_scrollController.position.pixels > 400 &&
+          showTabbar &&
+          !isDesktop()) {
+        setState(() {
+          showTabbar = false;
+        });
+      }
+      if (_scrollController.position.pixels < 400 &&
+          !showTabbar &&
+          !isDesktop()) {
+        setState(() {
+          showTabbar = true;
+        });
+      }
     });
     speedUp(_scrollController);
   }
 
   bool dontRePullTab = false;
 
-  _getInitData() async {
-    if (dontRePullTab) {
-      init_loading = true;
-    } else {
-      subColumnID = -1;
+  _setThemeIndex() async {
+    await setStorage(key: "themeIndex", value: lastThemeIndex.toString());
+  }
+
+  _getThemeIndex() async {
+    var tmp = await getStorage(key: "themeIndex", initData: "0");
+    setState(() {
+      lastThemeIndex = int.parse(tmp);
+    });
+  }
+
+  _getThemeData() async {
+    await _getThemeIndex();
+    var tmp = await getStorage(key: "themeData", initData: "[]");
+    theme = jsonDecode(tmp);
+    setState(() {});
+    if (lastThemeIndex > 0) {
+      subColumnID = theme[lastThemeIndex - 1]["classificationType_id"];
+    }
+    print("初始化themeID:${subColumnID}");
+    if (!dontRePullTab) {
+      _tabController = TabController(
+        length: theme.length + 1,
+        vsync: this,
+        initialIndex: lastThemeIndex,
+      );
     }
     setState(() {});
+  }
+
+  setThemeData() async {
+    await setStorage(key: "themeData", value: jsonEncode(theme));
+  }
+
+  _getInitData() async {
+    if (dontRePullTab) {
+      setState(() {
+        init_loading = true;
+      });
+    }
     var tmp = await Api().certain_forum_topiclist({
       "page": 1,
       "pageSize": pageSize,
@@ -122,8 +179,13 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
           theme.add(list[i]);
         }
       }
+      setThemeData();
       if (!dontRePullTab) {
-        _tabController = TabController(length: theme.length + 1, vsync: this);
+        _tabController = TabController(
+          length: theme.length + 1,
+          vsync: this,
+          initialIndex: lastThemeIndex,
+        );
       }
       data = tmp["list"];
     } else {
@@ -164,7 +226,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
       "pageSize": pageSize,
       "boardId": columnID, //columnID
       "filterType": "typeid",
-      "filterId": "",
+      "filterId": subColumnID == -1 ? "" : subColumnID,
       "sortby": "all",
       "topOrder": 1,
     });
@@ -208,7 +270,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
       load_done || data!.length == 0
           ? TapMore(
               tap: () {
-                XSVibrate();
+                XSVibrate().impact();
                 setState(() {
                   loading = false;
                   load_done = false;
@@ -228,68 +290,6 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
       children: [
         Column(
           children: [
-            if (theme.length != 1 && theme.length != 0)
-              Container(
-                height: 30,
-                margin: EdgeInsets.only(bottom: 3.5),
-                padding: EdgeInsets.only(top: 2.5),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_back
-                            : os_back,
-                        child: TabBar(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          controller: _tabController,
-                          isScrollable: true,
-                          dividerColor: Colors.transparent,
-                          tabAlignment: TabAlignment.start,
-                          indicatorColor:
-                              const Color.fromARGB(0, 194, 181, 181),
-                          labelPadding: EdgeInsets.symmetric(horizontal: 10),
-                          unselectedLabelStyle: TextStyle(
-                            color: Provider.of<ColorProvider>(context).isDark
-                                ? os_deep_grey
-                                : Color(0xff777777),
-                          ),
-                          labelStyle: TextStyle(
-                            color: Provider.of<ColorProvider>(context).isDark
-                                ? os_dark_white
-                                : os_black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                          onTap: (res) {
-                            var tmpId = [
-                              {
-                                "classificationType_name": "全部",
-                                "classificationType_id": -1
-                              },
-                              ...theme
-                            ][res]["classificationType_id"];
-                            dontRePullTab = true;
-                            subColumnID = tmpId;
-                            setState(() {});
-                            _getInitData();
-                          },
-                          tabs: [
-                            {
-                              "classificationType_name": "全部",
-                              "classificationType_id": -1
-                            },
-                            ...theme
-                          ].map((ele) {
-                            // classificationType_id
-                            return Tab(text: ele["classificationType_name"]);
-                          }).toList(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             Expanded(
               child: BackToTop(
                 show: showBackToTop,
@@ -299,10 +299,14 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
                   _indicatorKey.currentState!.show();
                 },
                 child: MasonryGridView.count(
+                  physics: AlwaysScrollableScrollPhysics(),
                   controller: _scrollController,
                   itemCount: t.length,
-                  padding:
-                      EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 5),
+                  padding: EdgeInsets.only(
+                      left: isDesktop() ? 10 : 5,
+                      right: isDesktop() ? 10 : 5,
+                      top: 10,
+                      bottom: isDesktop() ? 10 : 5),
                   crossAxisCount: count,
                   mainAxisSpacing: 6.5,
                   crossAxisSpacing: 6.5,
@@ -333,18 +337,26 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
               setState(() {
                 columnName = res["name"];
                 columnID = res["fid"];
+                subColumnID = -1;
               });
+              setState(() {
+                lastThemeIndex = 0;
+                init_loading = true;
+              });
+              _setThemeIndex();
               await Future.delayed(Duration(milliseconds: 400));
               if (res != null) {
-                setState(() {
-                  init_loading = true;
-                });
                 setStorage(
                   key: "left_column",
                   value: jsonEncode({
                     "name": columnName,
                     "fid": columnID,
                   }),
+                );
+                _scrollController.animateTo(
+                  0,
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.ease,
                 );
                 _getInitData();
               }
@@ -365,17 +377,103 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
         toolbarHeight: 0,
         elevation: 0,
       ),
-      body: getMyRrefreshIndicator(
-        context: context,
-        color: os_color,
-        key: _indicatorKey,
-        onRefresh: () async {
-          // dontRePullTab = true;
-          await _getInitData();
-          return;
-        },
-        child:
-            data!.length == 0 ? OccuLoading() : _buildComponents(), //11223344
+      body: Column(
+        children: [
+          if (theme.length != 1 && theme.length != 0)
+            ExpansionCustom(
+              padding: EdgeInsets.only(top: 0, bottom: 0),
+              title: Container(),
+              onExpansionChanged: (res) {},
+              isExpanded: showTabbar,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_back
+                            : os_back,
+                        child: TabBar(
+                          padding: EdgeInsets.only(left: 10, right: 15),
+                          controller: _tabController,
+                          isScrollable: true,
+                          dividerColor: Colors.transparent,
+                          tabAlignment: TabAlignment.start,
+                          labelPadding: EdgeInsets.symmetric(horizontal: 14.5),
+                          indicator: BubbleTabIndicator(
+                            indicatorColor:
+                                Provider.of<ColorProvider>(context).isDark
+                                    ? os_white_opa
+                                    : os_dark_back,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 15.5,
+                              vertical: 7.5,
+                            ),
+                          ),
+                          // indicatorColor:
+                          //     const Color.fromARGB(0, 194, 181, 181),
+                          // labelPadding: EdgeInsets.symmetric(horizontal: 10),
+                          unselectedLabelStyle: TextStyle(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_deep_grey
+                                : (isDesktop()
+                                    ? Color(0xff666666)
+                                    : os_dark_back),
+                          ),
+                          labelStyle: TextStyle(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_white
+                                : os_white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                          onTap: (res) {
+                            var tmpId = [
+                              {
+                                "classificationType_name": "全部",
+                                "classificationType_id": -1
+                              },
+                              ...theme
+                            ][res]["classificationType_id"];
+                            dontRePullTab = true;
+                            subColumnID = tmpId;
+                            lastThemeIndex = res;
+                            setState(() {});
+                            _setThemeIndex();
+                            _getInitData();
+                          },
+                          tabs: [
+                            {
+                              "classificationType_name": "全部",
+                              "classificationType_id": -1
+                            },
+                            ...theme
+                          ].map((ele) {
+                            // classificationType_id
+                            return Tab(text: ele["classificationType_name"]);
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          Expanded(
+            child: getMyRrefreshIndicator(
+              context: context,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_dark_white
+                  : os_dark_back,
+              key: _indicatorKey,
+              onRefresh: () async {
+                await _getInitData();
+                return;
+              },
+              child: data!.length == 0 ? OccuLoading() : _buildComponents(),
+            ),
+          ),
+        ],
       ),
     );
   }

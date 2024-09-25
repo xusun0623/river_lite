@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
@@ -236,7 +237,7 @@ class _CollectionDetailState extends State<CollectionDetail> {
       if (_scrollController.position.pixels < -120) {
         if (!vibrate) {
           vibrate = true; //不允许再震动
-          XSVibrate();
+          XSVibrate().impact();
           Navigator.pop(context);
         }
       }
@@ -356,43 +357,53 @@ class _CollectionDetailState extends State<CollectionDetail> {
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : Color(0xFFF1F4F8),
-        body: BackToTop(
-          color: Provider.of<ColorProvider>(context).isDark
-              ? Color(0x33FFFFFF)
-              : [
-                  Color(0xFF282d38),
-                  Color(0xFFe9775d),
-                  Color(0xFF282d38),
-                ][widget.data!["type"]],
-          controller: _scrollController,
-          show: showBackToTop,
-          bottom: 100,
-          child: ListView(
-            //physics: BouncingScrollPhysics(),
+        body: DismissiblePage(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : Color(0xFFF1F4F8),
+          direction: DismissiblePageDismissDirection.startToEnd,
+          onDismissed: () {
+            Navigator.of(context).pop();
+          },
+          child: BackToTop(
+            color: Provider.of<ColorProvider>(context).isDark
+                ? Color(0x33FFFFFF)
+                : [
+                    Color(0xFF282d38),
+                    Color(0xFFe9775d),
+                    Color(0xFF282d38),
+                  ][widget.data!["type"]],
             controller: _scrollController,
-            children: [
-              ResponsiveWidget(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Collection(data: widget.data),
+            show: showBackToTop,
+            bottom: 100,
+            child: ListView(
+              //physics: BouncingScrollPhysics(),
+              physics: AlwaysScrollableScrollPhysics(),
+              controller: _scrollController,
+              children: [
+                ResponsiveWidget(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Collection(data: widget.data),
+                  ),
                 ),
-              ),
-              Container(height: 20),
-              data.length == 0 && !load_done
-                  ? Container()
-                  : Center(
-                      child: Text(
-                        "- 本专辑收录的帖子 -",
-                        style: TextStyle(
-                          color: Color(0xFFA3A3A3),
+                Container(height: 20),
+                data.length == 0 && !load_done
+                    ? Container()
+                    : Center(
+                        child: Text(
+                          "- 本专辑收录的帖子 -",
+                          style: TextStyle(
+                            color: Color(0xFFA3A3A3),
+                          ),
                         ),
                       ),
-                    ),
-              data.length == 0 && !load_done
-                  ? Container()
-                  : Container(height: 15),
-              ..._buildCont(),
-            ],
+                data.length == 0 && !load_done
+                    ? Container()
+                    : Container(height: 15),
+                ..._buildCont(),
+              ],
+            ),
           ),
         ),
       ),
