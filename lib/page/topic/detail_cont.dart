@@ -349,6 +349,11 @@ class _DetailContState extends State<DetailCont> {
 }
 
 Widget WidgetImage(BuildContext context, DetailCont widget) {
+  double threeImgsWidth = (MediaQuery.of(context).size.width -
+          (widget.isComment ?? false ? 50 : 0) -
+          42) /
+      3;
+
   return GestureDetector(
     onLongPress: () {
       saveImge(
@@ -396,18 +401,8 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                   ? (widget.imgLists.length > 20
                       ? Container(
                           color: os_grey,
-                          width: isDesktop()
-                              ? 200
-                              : (MediaQuery.of(context).size.width -
-                                      (widget.isComment ?? false ? 50 : 0) -
-                                      42) /
-                                  3,
-                          height: isDesktop()
-                              ? 200
-                              : (MediaQuery.of(context).size.width -
-                                      (widget.isComment ?? false ? 50 : 0) -
-                                      42) /
-                                  3,
+                          width: isDesktop() ? 200 : threeImgsWidth,
+                          height: isDesktop() ? 200 : threeImgsWidth,
                           child: CachedNetworkImage(
                             imageUrl: widget.data["infor"],
                             fit: BoxFit.cover,
@@ -419,77 +414,25 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                                 ),
                               );
                             },
-                            // memCacheHeight: (isDesktop()
-                            //             ? 200
-                            //             : (MediaQuery.of(context).size.width -
-                            //                     (widget.isComment ?? false
-                            //                         ? 50
-                            //                         : 0) -
-                            //                     42) /
-                            //                 3)
-                            //         .toInt() *
-                            //     3,
-                            memCacheWidth: (isDesktop()
-                                        ? 200
-                                        : (MediaQuery.of(context).size.width -
-                                                (widget.isComment ?? false
-                                                    ? 50
-                                                    : 0) -
-                                                42) /
-                                            3)
-                                    .toInt() *
-                                2,
-                            width: isDesktop()
-                                ? 200
-                                : (MediaQuery.of(context).size.width -
-                                        (widget.isComment ?? false ? 50 : 0) -
-                                        42) /
-                                    3,
-                            height: isDesktop()
-                                ? 200
-                                : (MediaQuery.of(context).size.width -
-                                        (widget.isComment ?? false ? 50 : 0) -
-                                        42) /
-                                    3,
+                            memCacheWidth:
+                                (isDesktop() ? 200 : threeImgsWidth).toInt() *
+                                    2,
+                            width: isDesktop() ? 200 : threeImgsWidth,
+                            height: isDesktop() ? 200 : threeImgsWidth,
                           ),
                         )
                       : Container(
                           child: CachedNetworkImage(
                             imageUrl: widget.data["infor"],
-                            width: isDesktop()
-                                ? 200
-                                : (MediaQuery.of(context).size.width -
-                                        (widget.isComment ?? false ? 50 : 0) -
-                                        42) /
-                                    2,
-                            height: isDesktop()
-                                ? 200
-                                : (MediaQuery.of(context).size.width -
-                                        (widget.isComment ?? false ? 50 : 0) -
-                                        42) /
-                                    2,
-                            // maxHeightDiskCache: 800,
-                            // maxWidthDiskCache: 800,
-                            memCacheWidth: (isDesktop()
-                                        ? 200
-                                        : (MediaQuery.of(context).size.width -
-                                                (widget.isComment ?? false
-                                                    ? 50
-                                                    : 0) -
-                                                42) /
-                                            3)
-                                    .toInt() *
-                                2,
-                            // memCacheHeight: (isDesktop()
-                            //             ? 200
-                            //             : (MediaQuery.of(context).size.width -
-                            //                     (widget.isComment ?? false
-                            //                         ? 50
-                            //                         : 0) -
-                            //                     42) /
-                            //                 3)
-                            //         .toInt() *
-                            //     3,
+                            width: isDesktop() ? 200 : threeImgsWidth,
+                            height: isDesktop() ? 200 : threeImgsWidth,
+                            memCacheWidth:
+                                (isDesktop() ? 200 : threeImgsWidth).toInt() *
+                                    (widget.imgLists.length < 5
+                                        ? 5
+                                        : widget.imgLists.length < 10
+                                            ? 4
+                                            : 3),
                             filterQuality: FilterQuality.low,
                             fit: BoxFit.cover,
                             progressIndicatorBuilder: (context, url, progress) {

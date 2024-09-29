@@ -164,6 +164,7 @@ class _BtnState extends State<Btn> {
             Container(height: 7.5),
             Text(
               widget.txt,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 13,
                 color: Provider.of<ColorProvider>(context).isDark

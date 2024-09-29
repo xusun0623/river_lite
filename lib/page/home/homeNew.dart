@@ -248,6 +248,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
                 child: Text(
                   element,
                   textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Provider.of<ColorProvider>(context, listen: false)
                             .isDark
