@@ -106,7 +106,7 @@ class _ColumnBtnState extends State<ColumnBtn> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Transform.translate(
-                  offset: Offset(!loading ? 3 : 0, 0),
+                  offset: Offset(!loading ? 1 : 0, 0),
                   child: Material(
                     color: Colors.transparent,
                     child: Text(
@@ -116,7 +116,8 @@ class _ColumnBtnState extends State<ColumnBtn> {
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_white
                             : os_black,
-                        // fontSize: 13.5,
+                        fontSize: 13.5,
+                        height: 1,
                       ),
                     ),
                   ),
