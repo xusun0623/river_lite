@@ -9,6 +9,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
@@ -320,7 +321,8 @@ class _SysNotiState extends State<SysNoti> {
                       children: [
                         Text(
                           widget.data!["user_name"],
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             fontSize: 16,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_dark_white
@@ -335,7 +337,8 @@ class _SysNotiState extends State<SysNoti> {
                                   int.parse(widget.data!["replied_date"]),
                                 ),
                               ),
-                              style: TextStyle(
+                              style: XSTextStyle(
+                                context: context,
                                 color:
                                     Provider.of<ColorProvider>(context).isDark
                                         ? os_deep_grey
@@ -353,7 +356,8 @@ class _SysNotiState extends State<SysNoti> {
                     width: MediaQuery.of(context).size.width - headImgSize - 90,
                     child: Text(
                       widget.data!["note"].toString().trim(),
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Color(0xFFA0A0A0),
                         fontSize: 14,
                       ),
@@ -433,7 +437,8 @@ class _ForumCardState extends State<ForumCard> {
                     children: [
                       Text(
                         widget.data!["author"] ?? "",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           fontSize: 16,
                           color: Provider.of<ColorProvider>(context).isDark
                               ? os_dark_dark_white
@@ -470,7 +475,8 @@ class _ForumCardState extends State<ForumCard> {
                                 widget.forum!["topic_subject"]
                                     .toString()
                                     .trim(),
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color: Color(0xFFA0A0A0),
                                   fontSize: 14,
                                 ),
@@ -499,7 +505,8 @@ class _ForumCardState extends State<ForumCard> {
                               int.parse(widget.forum!["replied_date"]),
                             ),
                           ),
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_dark_white
                             : Color.fromARGB(255, 57, 57, 57),
@@ -565,7 +572,8 @@ class Head extends StatelessWidget {
                   width: 100,
                   child: Text(
                     "   ${titles[widget.type!]}",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_dark_white
                           : os_white,

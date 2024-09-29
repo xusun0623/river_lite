@@ -4,6 +4,7 @@ import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -147,7 +148,11 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
                         Container(width: 5),
                         Text(
                           "我一出口就是神回复",
-                          style: TextStyle(color: os_deep_grey),
+                          style: XSTextStyle(
+                            context: context,
+                            fontSize: 15,
+                            color: os_deep_grey,
+                          ),
                         ),
                       ],
                     ),
@@ -191,7 +196,8 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
                                 widget.dislike_count.toString() == "0"
                                     ? ""
                                     : widget.dislike_count.toString(),
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color: disliked == 1
                                       ? os_color
                                       : Color(0xFFB1B1B1),
@@ -228,7 +234,9 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
                               Padding(padding: EdgeInsets.all(1)),
                               Text(
                                 (widget.count ?? 0).toString(),
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
+                                  fontSize: 14,
                                   color:
                                       liked == 1 ? os_color : Color(0xFFB1B1B1),
                                 ),

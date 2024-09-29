@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -74,7 +75,8 @@ class _LoadingState extends State<Loading> {
                 child: Text(
                   widget.showError ?? false ? widget.msg ?? "未知错误" : "加载中…",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: Color(0xFFBBBBBB),
                     fontSize: 14,
                     height: 1.8,
@@ -103,7 +105,8 @@ class _LoadingState extends State<Loading> {
                       ),
                       child: Text(
                         "取消",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           color: Color(0xFFBBBBBB),
                         ),
                       ),
@@ -130,7 +133,8 @@ class _LoadingState extends State<Loading> {
                         child: Text(
                           widget.tapTxt ?? "查看帖子",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             fontSize: 14,
                             color: Color(0xFFAAAAAA),
                           ),
@@ -155,7 +159,8 @@ class _LoadingState extends State<Loading> {
                         child: Text(
                           widget.tapTxt1 ?? "刷新",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             fontSize: 14,
                             color: Color(0xFFAAAAAA),
                           ),
@@ -188,7 +193,8 @@ class _LoadingState extends State<Loading> {
                       ),
                       child: Text(
                         "重新加载",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           color: Provider.of<ColorProvider>(context).isDark
                               ? os_dark_white
                               : os_deep_blue,

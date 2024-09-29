@@ -4,6 +4,7 @@ import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
@@ -364,7 +365,8 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
                 ? os_dark_white
                 : os_black,
             indicatorColor: Colors.transparent,
-            unselectedLabelStyle: TextStyle(
+            unselectedLabelStyle: XSTextStyle(
+              context: context,
               fontWeight: FontWeight.normal,
               fontSize: 16,
               color: Provider.of<ColorProvider>(context).isDark
@@ -373,7 +375,8 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               fontFamily: "微软雅黑",
             ),
             isScrollable: true,
-            labelStyle: TextStyle(
+            labelStyle: XSTextStyle(
+              context: context,
               fontWeight: FontWeight.bold,
               fontSize: 16,
               color: Provider.of<ColorProvider>(context).isDark
@@ -485,7 +488,8 @@ class _Card4State extends State<Card4> {
             children: [
               Text(
                 widget.data!["name"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
@@ -496,7 +500,8 @@ class _Card4State extends State<Card4> {
               Container(height: 10),
               Text(
                 "水滴任务：" + widget.data!["desc"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 14,
                   color: os_deep_grey,
                 ),
@@ -504,7 +509,8 @@ class _Card4State extends State<Card4> {
               Container(height: 7.5),
               Text(
                 "奖励：" + widget.data!["bouns"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: Color(0xFF898989),
                   fontSize: 14,
                 ),
@@ -551,7 +557,8 @@ class _Card3State extends State<Card3> {
             children: [
               Text(
                 widget.data!["name"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
@@ -562,7 +569,8 @@ class _Card3State extends State<Card3> {
               Container(height: 10),
               Text(
                 "水滴任务：" + widget.data!["desc"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 14,
                   color: os_deep_grey,
                 ),
@@ -570,7 +578,8 @@ class _Card3State extends State<Card3> {
               Container(height: 7.5),
               Text(
                 "奖励：" + widget.data!["bouns"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: Color(0xFF898989),
                   fontSize: 14,
                 ),
@@ -637,7 +646,8 @@ class _Card2State extends State<Card2> {
             children: [
               Text(
                 widget.data!["name"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
@@ -648,7 +658,8 @@ class _Card2State extends State<Card2> {
               Container(height: 10),
               Text(
                 "水滴任务：" + widget.data!["desc"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 14,
                   color: os_deep_grey,
                 ),
@@ -656,7 +667,8 @@ class _Card2State extends State<Card2> {
               Container(height: 7.5),
               Text(
                 "奖励：" + widget.data!["bouns"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: Color(0xFF898989),
                   fontSize: 14,
                 ),
@@ -676,7 +688,8 @@ class _Card2State extends State<Card2> {
                     (double.parse(widget.data!["progress"]) * 100)
                             .toStringAsFixed(0) +
                         "%",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: os_deep_grey,
                     ),
                   ),
@@ -685,7 +698,8 @@ class _Card2State extends State<Card2> {
               Container(height: 10),
               Text(
                 "领取奖励",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: widget.data!["progress"] == "1.0"
                       ? os_color
                       : os_middle_grey,
@@ -750,7 +764,8 @@ class _Card1State extends State<Card1> {
                 children: [
                   Text(
                     widget.data!["name"],
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Provider.of<ColorProvider>(context).isDark
@@ -767,7 +782,8 @@ class _Card1State extends State<Card1> {
                     ),
                     child: Text(
                       "立即申请",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: os_color,
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -779,7 +795,8 @@ class _Card1State extends State<Card1> {
               Container(height: 10),
               Text(
                 "水滴任务：" + widget.data!["desc"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 14,
                   color: os_deep_grey,
                 ),
@@ -787,7 +804,8 @@ class _Card1State extends State<Card1> {
               Container(height: 7.5),
               Text(
                 "奖励：" + widget.data!["bouns"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: Color(0xFF898989),
                   fontSize: 14,
                 ),

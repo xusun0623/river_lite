@@ -11,6 +11,7 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/phone_pick_images.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/uploadAttachment.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/new/success_display.dart';
@@ -158,7 +159,8 @@ class _PostWithImagePopWidgetState extends State<PostWithImagePopWidget> {
             Container(height: 5),
             Text(
               "${progress}/${total_cnt}",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Provider.of<ColorProvider>(context).isDark
@@ -169,7 +171,8 @@ class _PostWithImagePopWidgetState extends State<PostWithImagePopWidget> {
             Container(height: 10),
             Text(
               "上传图片中",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_dark_white
                     : os_black,
@@ -1001,7 +1004,9 @@ class _MixContInputState extends State<MixContInput> {
               ? os_dark_dark_white
               : os_deep_blue,
           maxLines: null,
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
+            fontSize: 15,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_white
                 : os_black,
@@ -1015,7 +1020,8 @@ class _MixContInputState extends State<MixContInput> {
               borderSide: BorderSide.none,
             ),
             hintText: widget.placeholder ?? "点击输入内容",
-            hintStyle: TextStyle(
+            hintStyle: XSTextStyle(
+              context: context,
               color: Provider.of<ColorProvider>(context).isDark
                   ? Color(0x55ffffff)
                   : os_deep_grey,
@@ -1058,7 +1064,9 @@ class _MixTitleInputState extends State<MixTitleInput> {
               widget.emitTxt!(value);
             }
           },
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
+            fontSize: 15,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_white
                 : os_black,
@@ -1082,7 +1090,8 @@ class _MixTitleInputState extends State<MixTitleInput> {
               ),
             ),
             hintText: "标题",
-            hintStyle: TextStyle(
+            hintStyle: XSTextStyle(
+              context: context,
               color: Provider.of<ColorProvider>(context).isDark
                   ? Color(0x55ffffff)
                   : os_deep_grey,
@@ -1118,7 +1127,8 @@ class ConfirmPost extends StatelessWidget {
       ),
       child: Text(
         "发布",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           color: Provider.of<ColorProvider>(context).isDark
               ? os_dark_back
               : os_white,
@@ -1176,7 +1186,8 @@ class _SelectColumnState extends State<SelectColumn> {
         ),
         child: Text(
           widget.txt == "" ? "选择板块" : widget.txt!,
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_dark_white
                 : os_deep_blue,
@@ -1301,7 +1312,8 @@ class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
             ),
             child: Text(
               element["board_name"],
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: column_id == element["board_id"]
                     ? (Provider.of<ColorProvider>(context).isDark
                         ? os_dark_back
@@ -1355,7 +1367,8 @@ class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
             ),
             child: Text(
               element["board_name"],
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: column_child_id == element["board_id"]
                     ? (Provider.of<ColorProvider>(context).isDark
                         ? os_dark_back
@@ -1447,7 +1460,8 @@ class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
           child: Center(
             child: Text(
               "$index",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_back
                     : os_white,
@@ -1459,7 +1473,8 @@ class _SelectSectionPopWidgetState extends State<SelectSectionPopWidget> {
         Container(width: 10),
         Text(
           "$txt",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             fontSize: 16,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_white

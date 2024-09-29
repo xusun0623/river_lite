@@ -10,6 +10,7 @@ import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -112,7 +113,8 @@ class _MyBagState extends State<MyBag> {
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
         title: Text(
           "我的背包",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_white
                 : os_black,
@@ -131,47 +133,7 @@ class _MyBagState extends State<MyBag> {
                 : os_black,
           ),
         ),
-        actions: [
-          // Container(
-          //   padding: EdgeInsets.symmetric(
-          //     horizontal: 10,
-          //     vertical: 5,
-          //   ),
-          //   child: myInkWell(
-          //     tap: () {
-          //       Navigator.of(context).pushNamed("/shop");
-          //     },
-          //     color: Provider.of<ColorProvider>(context).isDark
-          //         ? os_white_opa
-          //         : os_white,
-          //     widget: Container(
-          //       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          //       child: Row(
-          //         children: [
-          //           Icon(
-          //             Icons.store,
-          //             color: Provider.of<ColorProvider>(context).isDark
-          //                 ? os_dark_white
-          //                 : os_black,
-          //           ),
-          //           Container(width: 5),
-          //           Text(
-          //             "道具商店",
-          //             style: TextStyle(
-          //               color: Provider.of<ColorProvider>(context).isDark
-          //                   ? os_dark_white
-          //                   : os_black,
-          //               fontSize: 14,
-          //               fontWeight: FontWeight.bold,
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //     radius: 100,
-          //   ),
-          // ),
-        ],
+        actions: [],
       ),
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
@@ -361,7 +323,8 @@ class _BagWidgetState extends State<BagWidget> {
                             children: [
                               Text(
                                 widget.data!.name!,
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
                                           ? os_dark_white
@@ -374,7 +337,8 @@ class _BagWidgetState extends State<BagWidget> {
                               Text.rich(
                                 TextSpan(
                                   text: "数量",
-                                  style: TextStyle(
+                                  style: XSTextStyle(
+                                    context: context,
                                     color: Provider.of<ColorProvider>(context)
                                             .isDark
                                         ? os_dark_dark_white
@@ -385,7 +349,8 @@ class _BagWidgetState extends State<BagWidget> {
                                   children: [
                                     TextSpan(
                                       text: "${widget.data!.count}",
-                                      style: TextStyle(
+                                      style: XSTextStyle(
+                                        context: context,
                                         color:
                                             Provider.of<ColorProvider>(context)
                                                     .isDark
@@ -396,7 +361,8 @@ class _BagWidgetState extends State<BagWidget> {
                                     ),
                                     TextSpan(
                                       text: "张，总重量",
-                                      style: TextStyle(
+                                      style: XSTextStyle(
+                                        context: context,
                                         color:
                                             Provider.of<ColorProvider>(context)
                                                     .isDark
@@ -408,7 +374,8 @@ class _BagWidgetState extends State<BagWidget> {
                                     ),
                                     TextSpan(
                                       text: "${widget.data!.weight}",
-                                      style: TextStyle(
+                                      style: XSTextStyle(
+                                        context: context,
                                         color:
                                             Provider.of<ColorProvider>(context)
                                                     .isDark
@@ -419,7 +386,8 @@ class _BagWidgetState extends State<BagWidget> {
                                     ),
                                   ],
                                 ),
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color: os_black,
                                   fontSize: 14,
                                   fontWeight: FontWeight.normal,
@@ -459,7 +427,8 @@ class _BagWidgetState extends State<BagWidget> {
                                   Text(
                                     "丢弃",
                                     textAlign: TextAlign.right,
-                                    style: TextStyle(
+                                    style: XSTextStyle(
+                                      context: context,
                                       color: Provider.of<ColorProvider>(context)
                                               .isDark
                                           ? os_dark_dark_white
@@ -499,7 +468,8 @@ class _BagWidgetState extends State<BagWidget> {
                                         Text(
                                           "刮一刮",
                                           textAlign: TextAlign.right,
-                                          style: TextStyle(
+                                          style: XSTextStyle(
+                                            context: context,
                                             color: Color(0xff571F11),
                                             fontSize: 14,
                                             fontFamily: "PingFang SC",
@@ -540,7 +510,8 @@ class _BagWidgetState extends State<BagWidget> {
                                 (widget.data!.name == "刮刮卡"
                                     ? "\n你将获得的水滴数量最少为1，最高为购买价格的1.5倍"
                                     : ""),
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: Provider.of<ColorProvider>(context).isDark
                                   ? os_dark_dark_white
                                   : Color(0xff646d80),
@@ -656,7 +627,8 @@ class _CelebrationState extends State<Celebration> {
               Container(height: 50),
               Text(
                 "恭喜你获得水滴数",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_white
                       : os_black,
@@ -667,7 +639,8 @@ class _CelebrationState extends State<Celebration> {
               Container(height: 100),
               Text(
                 widget.count.toString(),
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_white
                       : os_black,

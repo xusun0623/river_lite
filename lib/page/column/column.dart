@@ -13,6 +13,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
@@ -172,7 +173,8 @@ class _TopicColumnState extends State<TopicColumn> {
           children: [
             Text(
               data["forumInfo"]["title"],
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 29,
                 fontWeight: FontWeight.bold,
                 color: Provider.of<ColorProvider>(context).isDark
@@ -217,19 +219,6 @@ class _TopicColumnState extends State<TopicColumn> {
               _getData();
             },
           );
-          // showActionSheet(
-          //   isScrollControlled: true,
-          //   actionSheetColor: os_white,
-          //   enableDrag: true,
-          //   context: context,
-          //   actions: _buildSheet(),
-          //   bottomActionItem: BottomActionItem(
-          //     title: "取消",
-          //     titleTextStyle: TextStyle(
-          //       fontSize: 18,
-          //     ),
-          //   ),
-          // );
         },
         tap: (idx) {
           select = idx;
@@ -343,7 +332,8 @@ class _TopicColumnState extends State<TopicColumn> {
                           ),
                           Text(
                             "前往网页端发帖",
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: os_deep_grey,
                             ),
                           ),
@@ -368,7 +358,8 @@ class _TopicColumnState extends State<TopicColumn> {
           ],
           title: Text(
             showTopTitle ? data["forumInfo"]["title"] : "",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_dark_dark_white
                   : os_black,
@@ -518,7 +509,9 @@ class _TopSectionState extends State<TopSection> {
                             .toString()
                             .split("")
                             .join("\u{200B}"),
-                        style: TextStyle(
+                        style: XSTextStyle(
+                            context: context,
+                            fontSize: 14,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
                                 : os_black),
@@ -588,7 +581,8 @@ class _DefineTabBarState extends State<DefineTabBar> {
                     95,
                 child: Text(
                   widget.themes[widget.select]!,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 17,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
@@ -645,7 +639,8 @@ class _DefineTabBarTipState extends State<DefineTabBarTip> {
           children: [
             Text(
               widget.txt,
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 16,
                 fontWeight:
                     widget.selected ? FontWeight.bold : FontWeight.normal,

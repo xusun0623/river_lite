@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -117,7 +118,8 @@ class _BilibiliPlayerState extends State<BilibiliPlayer> {
                 padding: EdgeInsets.symmetric(vertical: 5),
                 child: Text(
                   "在浏览器中打开",
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_dark_white
                         : os_color,

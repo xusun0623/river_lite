@@ -10,6 +10,7 @@ import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/maxwidth.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_sheet.dart';
@@ -48,7 +49,8 @@ class _AboutState extends State<About> {
           centerTitle: true,
           title: Text(
             "关于",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               fontSize: 16,
             ),
           ),
@@ -86,7 +88,7 @@ class _AboutState extends State<About> {
                 ),
                 title: "UESTC官方论坛",
                 cont:
-                    "清水河畔是电子科技大学官方论坛（bbs.uestc.edu.cn），由电子科技大学网络文化建设工作办公室指导，星辰工作室开发并提供技术支持。\n2007年11月13日正式开放注册。欢迎你加入到清水河畔大家庭。",
+                    "清水河畔是电子科技大学官方论坛（bbs.uestc.edu.cn），由电子科技大学网络文化建设工作办公室指导，网页版由星辰工作室开发并提供技术支持。\n2007年11月13日正式开放注册。欢迎你加入到清水河畔大家庭。",
               ),
               AboutCard(
                 head: Icon(
@@ -153,7 +155,8 @@ class _AboutState extends State<About> {
                 child: Center(
                   child: Text(
                     "@UESTC 河畔Lite",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: os_deep_grey,
                     ),
                   ),
@@ -255,7 +258,8 @@ class _AboutCardState extends State<AboutCard> {
                     child: Text(
                       widget.title,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_white
                             : os_black,
@@ -278,7 +282,8 @@ class _AboutCardState extends State<AboutCard> {
                         child: Text(
                           widget.cont,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_dark_white
                                 : os_light_dark_card,

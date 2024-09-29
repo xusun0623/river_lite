@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +36,8 @@ class _EmptyState extends State<Empty> {
               : Container(),
           Text(
             widget.txt ?? "暂无评论, 快去抢沙发吧",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               fontSize: 14,
               color: Color(0xFFBBBBBB),
             ),

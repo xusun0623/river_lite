@@ -8,6 +8,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
@@ -161,7 +162,8 @@ class _MeBottomState extends State<MeBottom> {
                 EdgeInsets.only(left: 17.5, right: 17.5, top: 13, bottom: 15),
             child: Text(
               "退出登录 >",
-              style: TextStyle(color: Color(0xFFCCCCCC), fontSize: 15),
+              style: XSTextStyle(
+                  context: context, color: Color(0xFFCCCCCC), fontSize: 15),
             ),
           ),
         ),
@@ -259,11 +261,12 @@ class _MeListState extends State<MeList> {
                 Container(width: 10),
                 Text(
                   widget.txt ?? "水滴相关",
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_dark_white
                         : Color(0xFF5C5C5C),
-                    fontSize: 16,
+                    fontSize: 15,
                   ),
                 ),
               ],
@@ -413,7 +416,8 @@ class _MeBtnHeroState extends State<MeBtnHero> {
                   color: Colors.transparent,
                   child: Text(
                     widget.txt!,
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       fontSize: 15,
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_dark_white
@@ -551,7 +555,8 @@ class MeInfo_HeadState extends State<MeInfoHead> {
               children: [
                 Text(
                   widget.name!,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Provider.of<ColorProvider>(context).isDark
@@ -563,7 +568,8 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                 Row(
                   children: [
                     Text("Lv.${_getLevel()}",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                            context: context,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
                                 : Color(0xFF707070))),
@@ -600,7 +606,8 @@ class MeInfo_HeadState extends State<MeInfoHead> {
                     Container(width: 10),
                     Text(
                       "${widget.score}/${score_total}",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: os_deep_grey,
                         fontSize: 11,
                       ),

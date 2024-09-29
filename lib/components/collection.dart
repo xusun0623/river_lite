@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/to_user.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +56,8 @@ class _CollectionState extends State<Collection> {
         ),
         child: Text(
           element,
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             color: widget.data!["type"] == 2
                 ? (Provider.of<ColorProvider>(context).isDark
                     ? os_dark_dark_white
@@ -134,7 +136,8 @@ class _CollectionState extends State<Collection> {
                       Container(
                         child: Text(
                           widget.data!["name"].toString(),
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: widget.data!["type"] == 2
                                 ? (Provider.of<ColorProvider>(context).isDark
                                     ? os_dark_white
@@ -159,7 +162,8 @@ class _CollectionState extends State<Collection> {
                         ),
                         child: Text(
                           "${widget.data!["subs_txt"] ?? "主题数"}: ${widget.data!["subs_num"]}",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: widget.data!["type"] == 2
                                 ? (Provider.of<ColorProvider>(context).isDark
                                     ? os_dark_white
@@ -180,7 +184,8 @@ class _CollectionState extends State<Collection> {
                             width: MediaQuery.of(context).size.width,
                             child: Text(
                               widget.data!["desc"],
-                              style: TextStyle(
+                              style: XSTextStyle(
+                                context: context,
                                 color: widget.data!["type"] == 2
                                     ? (Provider.of<ColorProvider>(context)
                                             .isDark
@@ -235,7 +240,8 @@ class _CollectionState extends State<Collection> {
                             Container(width: 7.5),
                             Text(
                               widget.data!["user"],
-                              style: TextStyle(
+                              style: XSTextStyle(
+                                context: context,
                                 color: widget.data!["type"] == 2
                                     ? (Provider.of<ColorProvider>(context)
                                             .isDark
@@ -257,7 +263,9 @@ class _CollectionState extends State<Collection> {
                               children: [
                                 Text(
                                   "个人首页",
-                                  style: TextStyle(
+                                  style: XSTextStyle(
+                                    context: context,
+                                    fontSize: 14,
                                     color: widget.data!["type"] == 2
                                         ? Color(0xFF9a9a9a)
                                         : Color.fromRGBO(255, 255, 255, 0.5),

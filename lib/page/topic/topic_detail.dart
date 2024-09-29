@@ -24,6 +24,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/loading.dart';
@@ -538,7 +539,8 @@ class _TopicDetailState extends State<TopicDetail> {
                   ),
                   Text(
                     "由河畔Lite App一键转发",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: os_color,
                       fontSize: 16,
                     ),
@@ -638,7 +640,9 @@ class _TopicDetailState extends State<TopicDetail> {
             Container(width: 5),
             Text(
               "该板块已添加水印，禁止截图外传",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
+                fontSize: 14,
                 color: os_color,
               ),
             ),
@@ -674,7 +678,9 @@ class _TopicDetailState extends State<TopicDetail> {
             Container(width: 5),
             Text(
               "您现在浏览的是本版块的精选内容",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
+                fontSize: 14,
                 color: os_color,
               ),
             ),
@@ -705,7 +711,8 @@ class _TopicDetailState extends State<TopicDetail> {
             Container(width: 5),
             Text(
               "愉快交易，坦诚相待",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: os_wonderful_color[2],
               ),
             ),
@@ -798,7 +805,7 @@ class _TopicDetailState extends State<TopicDetail> {
               child: Center(
                 child: Text(
                   "- 本帖被以下淘专辑推荐 -",
-                  style: TextStyle(color: os_deep_grey),
+                  style: XSTextStyle(context: context, color: os_deep_grey),
                 ),
               ),
             ),
@@ -1091,7 +1098,8 @@ class _TopicDetailState extends State<TopicDetail> {
                                               opacity: 0.08,
                                               child: Text(
                                                 myUid.toString(),
-                                                style: TextStyle(
+                                                style: XSTextStyle(
+                                                  context: context,
                                                   color:
                                                       Provider.of<ColorProvider>(
                                                                   context)
@@ -1282,7 +1290,8 @@ class BlackedTopic extends StatelessWidget {
             child: Text(
               "该帖子内容或用户已被你屏蔽，屏蔽关键词为：" + blackKeyWord!,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
                     : os_black,
@@ -1308,7 +1317,8 @@ class DeletedTopic extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 150),
         child: Text(
           isInvalid ? "抱歉，指定的主题不存在或已被删除或正在被审核" : "抱歉，您没有权限访问该版块",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_white
                 : os_black,
@@ -1375,7 +1385,14 @@ class _BottomLoadingState extends State<BottomLoading> {
               ),
             ),
             Container(width: 10),
-            Text(widget.txt ?? "加载中…", style: TextStyle(color: os_deep_grey)),
+            Text(
+              widget.txt ?? "加载中…",
+              style: XSTextStyle(
+                context: context,
+                fontSize: 14,
+                color: os_deep_grey,
+              ),
+            ),
           ],
         ),
       ),
@@ -1408,7 +1425,8 @@ class _TagState extends State<Tag> {
         borderRadius: BorderRadius.all(Radius.circular(5)),
       ),
       child: Text(widget.txt,
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             color: widget.color,
             fontSize: 12,
           )),
@@ -1454,7 +1472,11 @@ class _TopicBottomState extends State<TopicBottom> {
                 children: [
                   Text(
                     widget.data["forumName"],
-                    style: TextStyle(color: os_color),
+                    style: XSTextStyle(
+                      context: context,
+                      fontSize: 14,
+                      color: os_color,
+                    ),
                   ),
                   Icon(
                     Icons.chevron_right,
@@ -1532,7 +1554,8 @@ class TopicDetailTitle extends StatelessWidget {
             )),
           ],
         ),
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           fontSize: 18,
           fontWeight: Provider.of<ColorProvider>(context).isDark
               ? FontWeight.normal
@@ -1595,7 +1618,9 @@ class TopicDetailHead extends StatelessWidget {
               Padding(padding: EdgeInsets.all(3)),
               Text(
                 data["topic"]["user_nick_name"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
+                  fontSize: 14,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_white
                       : Color(0xFF6D6D6D),

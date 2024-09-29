@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -93,7 +94,8 @@ class _CommentTabState extends State<CommentTab> {
                       widget.total_num == 0
                           ? "评论区"
                           : "评论区(${widget.total_num})",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_dark_white
                             : Color(0xFF454545),
@@ -123,7 +125,8 @@ class _CommentTabState extends State<CommentTab> {
                   child: Column(children: [
                     Text(
                       "只看楼主",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_dark_white
                             : Color(0xFF454545),
@@ -173,7 +176,9 @@ class _CommentTabState extends State<CommentTab> {
                     ),
                     child: Text(
                       "正序",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
+                        fontSize: 15,
                         color: widget.sort == 0
                             ? (Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
@@ -199,7 +204,9 @@ class _CommentTabState extends State<CommentTab> {
                     ),
                     child: Text(
                       "倒序",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
+                        fontSize: 15,
                         color: widget.sort == 1
                             ? (Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white

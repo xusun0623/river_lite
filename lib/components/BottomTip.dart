@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 
 class BottomTip extends StatefulWidget {
   String? txt;
@@ -26,7 +27,8 @@ class _BottomTipState extends State<BottomTip> {
             EdgeInsets.only(top: widget.top ?? 10, bottom: widget.bottom ?? 10),
         child: Text(
           widget.txt ?? "分割线",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             color: widget.color ?? Color(0xFFDBDBDB),
           ),
         ),

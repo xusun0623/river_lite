@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/page/new/rules.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +39,8 @@ class _RulePageState extends State<RulePage> {
         ),
         title: Text(
           (widget.name ?? "") + "版规",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             fontSize: 16,
           ),
         ),
@@ -51,7 +53,8 @@ class _RulePageState extends State<RulePage> {
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: SelectableText(
               rules[widget.name ?? "none"] ?? "无",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_white
                     : os_black,

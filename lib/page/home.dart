@@ -12,6 +12,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/page/PicSquare/pic_square.dart';
@@ -162,10 +163,15 @@ class _HomeState extends State<Home> {
     }
   }
 
+  _getFontFrac() async {
+    Provider.of<FontSizeProvider>(context, listen: false).getFontScaleFrac();
+  }
+
   @override
   void initState() {
     // _getPath();
     _firstBack = true;
+    _getFontFrac();
     _getNewMsg();
     _getDarkMode();
     _getBlackStatus();
@@ -590,10 +596,12 @@ class _MaterialBottomNavigationBarState
               Provider.of<ColorProvider>(context).isDark
           ? os_dark_back
           : os_white,
-      unselectedLabelStyle: const TextStyle(
+      unselectedLabelStyle: XSTextStyle(
+        context: context,
         fontWeight: FontWeight.bold,
       ),
-      selectedLabelStyle: const TextStyle(
+      selectedLabelStyle: XSTextStyle(
+        context: context,
         fontWeight: FontWeight.bold,
       ),
       onTap: (value) {

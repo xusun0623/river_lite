@@ -13,6 +13,7 @@ import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
@@ -109,7 +110,9 @@ class _TopicReplyState extends State<TopicReply> {
       Container(height: 30),
       Text(
         "请输入举报内容",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
+          listenProvider: false,
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -138,7 +141,8 @@ class _TopicReplyState extends State<TopicReply> {
             onChanged: (e) {
               txt = e;
             },
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
@@ -147,7 +151,9 @@ class _TopicReplyState extends State<TopicReply> {
             decoration: InputDecoration(
                 hintText: "请输入",
                 border: InputBorder.none,
-                hintStyle: TextStyle(
+                hintStyle: XSTextStyle(
+                  context: context,
+                  fontSize: 15,
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
                           ? os_dark_dark_white
@@ -178,7 +184,8 @@ class _TopicReplyState extends State<TopicReply> {
                 child: Center(
                   child: Text(
                     "取消",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
                           ? os_dark_dark_white
@@ -217,7 +224,8 @@ class _TopicReplyState extends State<TopicReply> {
                       Container(width: 5),
                       Text(
                         "完成",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           color: os_white,
                         ),
                       ),
@@ -343,7 +351,8 @@ class _TopicReplyState extends State<TopicReply> {
                         padding: const EdgeInsets.all(15),
                         child: Text(
                           "此贴已被你屏蔽，屏蔽关键词为:" + blackKeyWord!,
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: os_deep_grey,
                           ),
                         ),
@@ -397,89 +406,6 @@ class _TopicReplyState extends State<TopicReply> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     Row(
-                      //       children: [
-                      //         GestureDetector(
-                      //           onTap: () async {
-                      //             if (widget.data["user_nick_name"] != "匿名")
-                      //               toUserSpace(
-                      //                   context, widget.data["user_id"]);
-                      //           },
-                      //           child: ClipRRect(
-                      //             borderRadius: BorderRadius.circular(20),
-                      //             child: CachedNetworkImage(
-                      //               width: 27,
-                      //               height: 27,
-                      //               fit: BoxFit.cover,
-                      //               imageUrl: widget.data["userAvatar"],
-                      //               placeholder: (context, url) => Container(
-                      //                   color:
-                      //                       Provider.of<ColorProvider>(context)
-                      //                               .isDark
-                      //                           ? os_dark_white
-                      //                           : os_grey),
-                      //               errorWidget: (context, url, error) =>
-                      //                   Icon(Icons.error),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //         Padding(padding: EdgeInsets.all(5)),
-                      //         Column(
-                      //           crossAxisAlignment: CrossAxisAlignment.start,
-                      //           children: [
-                      //             Text(
-                      //               widget.data["user_nick_name"],
-                      //               style: TextStyle(
-                      //                 color: Provider.of<ColorProvider>(context)
-                      //                         .isDark
-                      //                     ? Color(0xffF1f1f1)
-                      //                     : os_black,
-                      //                 fontSize: 14,
-                      //                 // fontWeight: FontWeight.bold,
-                      //               ),
-                      //             ),
-                      //           ],
-                      //         )
-                      //       ],
-                      //     ),
-                      //     Row(
-                      //       children: [
-                      //         myInkWell(
-                      //           tap: () {
-                      //             Vibrate.feedback(FeedbackType.impact);
-                      //             _moreAction();
-                      //           },
-                      //           color: Colors.transparent,
-                      //           widget: Padding(
-                      //             padding: const EdgeInsets.symmetric(
-                      //               vertical: 10,
-                      //               horizontal: 5,
-                      //             ),
-                      //             child: Row(
-                      //               mainAxisAlignment: MainAxisAlignment.center,
-                      //               children: [
-                      //                 Icon(
-                      //                   Icons.more_horiz_sharp,
-                      //                   size: 18,
-                      //                   color:
-                      //                       Provider.of<ColorProvider>(context)
-                      //                               .isDark
-                      //                           ? os_deep_grey
-                      //                           : Color(0xFF585858),
-                      //                 ),
-                      //               ],
-                      //             ),
-                      //           ),
-                      //           radius: 100,
-                      //         ),
-                      //       ],
-                      //     )
-                      //   ],
-                      // ),
-                      // Padding(padding: EdgeInsets.all(3)),
                       Row(
                         children: [
                           ClipRRect(
@@ -504,7 +430,8 @@ class _TopicReplyState extends State<TopicReply> {
                             child: Text(
                               widget.data!["title"],
                               textAlign: TextAlign.start,
-                              style: TextStyle(
+                              style: XSTextStyle(
+                                  context: context,
                                   fontSize: 17,
                                   letterSpacing: 0.5,
                                   color:
@@ -527,7 +454,8 @@ class _TopicReplyState extends State<TopicReply> {
                                         widget.data!["subject"]) ??
                                     "",
                                 textAlign: TextAlign.start,
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   fontSize: 16,
                                   height: 1.5,
                                   color: Color(0xFF999999),
@@ -548,7 +476,8 @@ class _TopicReplyState extends State<TopicReply> {
                               Container(width: 5),
                               Text(
                                 "${widget.data!['hits']}",
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color: Color(0xFF6B6B6B),
                                   fontSize: 12,
                                 ),
@@ -562,32 +491,20 @@ class _TopicReplyState extends State<TopicReply> {
                               Container(width: 5),
                               Text(
                                 "${widget.data!['replies']}",
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color: Color(0xFF6B6B6B),
                                   fontSize: 12,
                                 ),
                               ),
-                              // Container(width: 20),
-                              // os_svg(
-                              //   path: "lib/img/topic_component_like.svg",
-                              //   width: 20,
-                              //   height: 20,
-                              // ),
-                              // Container(width: 5),
-                              // Text(
-                              //   (widget.data["recommendAdd"] ?? 0).toString(),
-                              //   style: TextStyle(
-                              //     color: Color(0xFF6B6B6B),
-                              //     fontSize: 12,
-                              //   ),
-                              // ),
                             ],
                           ),
                           Text(
                             RelativeDateFormat.format(
                                 DateTime.fromMillisecondsSinceEpoch(int.parse(
                                     widget.data!["last_reply_date"]))),
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: Color(0xFF9C9C9C),
                               fontSize: 14,
                             ),

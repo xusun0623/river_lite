@@ -7,6 +7,7 @@ import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/BottomTip.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/leftNavi.dart';
@@ -94,7 +95,7 @@ class _MsgState extends State<Msg> {
         elevation: 0,
         title: Text(
           "消息",
-          style: TextStyle(fontSize: 16),
+          style: XSTextStyle(context: context, fontSize: 16),
         ),
         centerTitle: true,
       ),
@@ -256,7 +257,8 @@ class _ColorBtnState extends State<ColorBtn> {
                 showBadge: widget.count != 0,
                 badgeContent: Text(
                   widget.count.toString(),
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
                         : os_white,
@@ -272,7 +274,8 @@ class _ColorBtnState extends State<ColorBtn> {
                         width: 100,
                         child: Text(
                           widget.title!,
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
                                 : os_white,
@@ -359,7 +362,8 @@ class _MsgCardState extends State<MsgCard> {
                     children: [
                       Text(
                         widget.data!["toUserName"],
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           fontSize: 16,
                           color: Provider.of<ColorProvider>(context).isDark
                               ? os_dark_white
@@ -384,7 +388,8 @@ class _MsgCardState extends State<MsgCard> {
                             int.parse(widget.data!["lastDateline"]),
                           ),
                         ).toString(),
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_deep_grey
                           : Color(0xFFA0A0A0),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
@@ -39,32 +40,12 @@ class _WaterTotalState extends State<WaterTotal> {
           centerTitle: true,
           title: Text(
             "水滴",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               fontSize: 16,
             ),
           ),
-          actions: [
-            // myInkWell(
-            //   tap: () {
-            //     Navigator.of(context).pushNamed("/water_inout_detail");
-            //   },
-            //   color: Colors.transparent,
-            //   widget: Container(
-            //     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            //     child: Text(
-            //       "积分记录",
-            //       style: TextStyle(
-            //         color: Provider.of<ColorProvider>(context).isDark
-            //             ? os_dark_white
-            //             : os_black,
-            //         fontSize: 14,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //     ),
-            //   ),
-            //   radius: 100,
-            // ),
-          ],
+          actions: [],
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -192,7 +173,8 @@ class _NavigatorCardState extends State<NavigatorCard> {
                     children: [
                       Text(
                         widget.title!,
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           fontSize: 16,
                           color: Provider.of<ColorProvider>(context).isDark
                               ? os_dark_white
@@ -203,7 +185,8 @@ class _NavigatorCardState extends State<NavigatorCard> {
                       Container(height: 5),
                       Text(
                         widget.tip!,
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           fontSize: 14,
                           color: Provider.of<ColorProvider>(context).isDark
                               ? os_dark_dark_white

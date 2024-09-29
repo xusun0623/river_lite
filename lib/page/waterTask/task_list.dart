@@ -6,6 +6,7 @@ import 'package:html/parser.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -189,7 +190,8 @@ class _ListCardState extends State<ListCard> {
                 children: [
                   Text(
                     widget.data!["type"] ?? "帖子评分",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: Color.fromRGBO(255, 255, 255, 0.8),
                       fontSize: 14,
                     ),
@@ -197,7 +199,8 @@ class _ListCardState extends State<ListCard> {
                   Container(height: 5),
                   Text(
                     widget.data!["change"] ?? "水滴+6",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: os_white,
@@ -207,7 +210,8 @@ class _ListCardState extends State<ListCard> {
                   Text(
                     widget.data!["detail"] ??
                         "给 4月22日天府绿道100km环骑经验分享 的帖子评分扣除的积分",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: Color.fromRGBO(255, 255, 255, 0.8),
                       fontSize: 15,
                       letterSpacing: 0.5,
@@ -216,7 +220,8 @@ class _ListCardState extends State<ListCard> {
                   Container(height: 7.5),
                   Text(
                     widget.data!["time"] ?? "2022-05-02 18:07",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: Color.fromRGBO(255, 255, 255, 0.4),
                       fontSize: 14,
                     ),

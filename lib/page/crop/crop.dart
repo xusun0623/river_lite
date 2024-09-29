@@ -11,6 +11,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
@@ -54,7 +55,8 @@ class _CropImgState extends State<CropImg> {
         foregroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_white
             : os_black,
-        title: Text(edit_done ? "" : "上传新头像", style: TextStyle(fontSize: 16)),
+        title: Text(edit_done ? "" : "上传新头像",
+            style: XSTextStyle(context: context, fontSize: 16)),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
@@ -100,7 +102,8 @@ class _CropImgState extends State<CropImg> {
                                 Container(width: 10),
                                 Text(
                                   "点此选择您的新头像",
-                                  style: TextStyle(
+                                  style: XSTextStyle(
+                                    context: context,
                                     color: Provider.of<ColorProvider>(context)
                                             .isDark
                                         ? os_dark_white
@@ -223,7 +226,8 @@ class EditDoneDisplay extends StatelessWidget {
           Container(height: 10),
           Text(
             "上传头像成功",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               fontWeight: FontWeight.bold,
               fontSize: 24,
             ),
@@ -234,28 +238,30 @@ class EditDoneDisplay extends StatelessWidget {
             child: Text(
               "您已成功上传新的头像，在其它具有缓存的客户端可能有延时，你可以尝试清除缓存后查看新头像",
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 16,
               ),
             ),
           ),
-          Container(height: 300),
+          Container(height: 260),
           GestureDetector(
             onTap: () {
               Navigator.pop(context);
             },
             child: Container(
-              width: 150,
-              height: 45,
+              width: 170,
+              height: 55,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
+                borderRadius: BorderRadius.all(Radius.circular(100)),
                 color: Color.fromRGBO(0, 77, 255, 1),
               ),
               child: Center(
                 child: Text(
                   "返回",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: os_white,
@@ -306,7 +312,8 @@ class _MyButtonState extends State<MyButton> {
                 child: Center(
                   child: Text(
                     widget.txt!,
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       fontSize: 15,
                       color: widget.index == 0 ? os_white : os_color,
                     ),
@@ -337,7 +344,8 @@ class InfoTip extends StatelessWidget {
           Container(width: 5),
           Text(
             "请移动顶角滑柄以裁切图像",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               color: os_deep_grey,
             ),
           ),

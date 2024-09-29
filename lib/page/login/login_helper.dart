@@ -3,6 +3,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
@@ -29,7 +30,7 @@ class _LoginHelperState extends State<LoginHelper> {
             : os_black,
         title: Text(
           "登录帮助",
-          style: TextStyle(fontWeight: FontWeight.w100),
+          style: XSTextStyle(context: context, fontWeight: FontWeight.w100),
         ),
         elevation: 0,
       ),
@@ -115,7 +116,8 @@ class _LinkState extends State<Link> {
                               20,
                           child: Text(
                             (widget.txt ?? "标题").split("").join("\u{200B}"),
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: os_color,
                             ),
                           ),
@@ -152,7 +154,8 @@ class _TipState extends State<Tip> {
         margin: EdgeInsets.only(bottom: 10),
         child: Text(
           widget.txt ?? "标题",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             fontSize: 17,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_white
@@ -183,7 +186,8 @@ class _TitleState extends State<Title> {
         margin: EdgeInsets.only(bottom: 10, top: 10),
         child: Text(
           widget.txt ?? "标题",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Provider.of<ColorProvider>(context).isDark

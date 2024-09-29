@@ -8,6 +8,7 @@ import 'package:offer_show/asset/phone_pick_images.dart';
 import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/uploadAttachment.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/page/topic/topic_RichInput.dart';
@@ -214,7 +215,8 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                         child: Center(
                           child: Text(
                             widget.img_urls.length.toString(),
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: os_white,
                               fontSize: 10,
                             ),
@@ -283,7 +285,8 @@ class BtnContainer extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 2),
                   child: Text(
                     txt ?? "表情",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: Color(0xFF707070),
                     ),
                   ),

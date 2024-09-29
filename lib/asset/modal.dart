@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,9 @@ void showMidActionSheet({
               child: Center(
                 child: Text(
                   list[i],
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
+                    listenProvider: false,
                     fontSize: 16,
                     color: Provider.of<ColorProvider>(context, listen: false)
                             .isDark
@@ -59,7 +62,9 @@ void showMidActionSheet({
       child: Center(
         child: Text(
           title ?? "搜索类型",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
+            listenProvider: false,
             fontWeight: FontWeight.bold,
             fontSize: 16,
             color: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -110,7 +115,9 @@ void showModal({
       child: Center(
         child: Text(
           title ?? "请确认",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
+            listenProvider: false,
             fontWeight: FontWeight.bold,
             fontSize: 20,
             color: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -123,7 +130,9 @@ void showModal({
     content: Text(
       cont ?? "内容",
       textAlign: TextAlign.center,
-      style: TextStyle(
+      style: XSTextStyle(
+        context: context,
+        listenProvider: false,
         color: Provider.of<ColorProvider>(context, listen: false).isDark
             ? os_dark_dark_white
             : os_black,
@@ -146,7 +155,9 @@ void showModal({
                       child: Center(
                         child: Text(
                           cancelTxt ?? "取消",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
+                            listenProvider: false,
                             fontWeight: FontWeight.w500,
                             color: Provider.of<ColorProvider>(context,
                                         listen: false)
@@ -175,7 +186,9 @@ void showModal({
                 child: Center(
                   child: Text(
                     confirmTxt ?? "确认",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
+                      listenProvider: false,
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
                           ? os_dark_white
@@ -248,7 +261,12 @@ void showToast({
               child: Text(
                 txt ?? "加载中…",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: os_white),
+                style: XSTextStyle(
+                  context: context,
+                  fontSize: 15,
+                  listenProvider: false,
+                  color: os_white,
+                ),
               ),
             ),
           ],
@@ -274,7 +292,15 @@ void showToast({
             CircularProgressIndicator(color: os_white, strokeWidth: 4),
             Container(height: 20),
             Container(
-              child: Text(txt ?? "加载中…", style: TextStyle(color: os_white)),
+              child: Text(
+                txt ?? "加载中…",
+                style: XSTextStyle(
+                  context: context,
+                  fontSize: 15,
+                  listenProvider: false,
+                  color: os_white,
+                ),
+              ),
             ),
           ],
         ),
@@ -302,7 +328,15 @@ void showToast({
               size: 50,
             ),
             Container(height: 20),
-            Text(txt ?? "完成", style: TextStyle(color: os_white)),
+            Text(
+              txt ?? "完成",
+              style: XSTextStyle(
+                context: context,
+                fontSize: 15,
+                listenProvider: false,
+                color: os_white,
+              ),
+            ),
           ],
         ),
       ),

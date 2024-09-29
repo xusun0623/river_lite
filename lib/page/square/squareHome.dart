@@ -7,6 +7,7 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/square/square.dart';
@@ -95,7 +96,7 @@ class _SquareHomeState extends State<SquareHome> {
         foregroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_white
             : os_black,
-        title: Text("全部板块", style: TextStyle(fontSize: 16)),
+        title: Text("全部板块", style: XSTextStyle(context: context, fontSize: 16)),
         leading: Container(),
         leadingWidth: 0,
         elevation: 0,
@@ -144,7 +145,8 @@ class _SquareHomeState extends State<SquareHome> {
                   width: MediaQuery.of(context).size.width - 105,
                   child: Text(
                     "搜一搜",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: os_deep_grey,
                       fontSize: 16,
                     ),
@@ -209,7 +211,8 @@ class _SquareCardState extends State<SquareCard> {
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 17),
               child: Text(
                 e["board_name"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 14,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_white
@@ -267,7 +270,8 @@ class _SquareCardState extends State<SquareCard> {
               Container(width: 3),
               Text(
                 widget.data["board_category_name"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark

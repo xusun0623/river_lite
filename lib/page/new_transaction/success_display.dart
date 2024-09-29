@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,8 @@ class SuccessDisplay extends StatelessWidget {
           Container(height: 10),
           Text(
             "发表成功",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               fontWeight: FontWeight.bold,
               fontSize: 24,
               color: Provider.of<ColorProvider>(context).isDark
@@ -42,7 +44,8 @@ class SuccessDisplay extends StatelessWidget {
             child: Text(
               "你已成功发送该帖子，帖子显示在首页会有延时，你可以点击下方按钮查看",
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 16,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_dark_white
@@ -74,7 +77,8 @@ class SuccessDisplay extends StatelessWidget {
                 child: Text(
                   "查看帖子",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Provider.of<ColorProvider>(context).isDark

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -123,7 +124,8 @@ class _TopicVoteState extends State<TopicVote> {
                       (selected && select == (ele_idx) ? "【已选】" : "") +
                           (element["name"].toString()),
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: selected
                             ? (Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
@@ -145,7 +147,8 @@ class _TopicVoteState extends State<TopicVote> {
                               .toStringAsFixed(2) +
                           "%"
                       : "投票",
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: selected
                         ? (Provider.of<ColorProvider>(context).isDark
                             ? os_dark_white
@@ -169,7 +172,8 @@ class _TopicVoteState extends State<TopicVote> {
       padding: EdgeInsets.symmetric(vertical: 3),
       child: Text(
         " 已有 ${widget.poll_info['voters']} 人参与投票",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           color: os_deep_grey,
           fontSize: 12,
         ),

@@ -7,6 +7,7 @@ import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
@@ -109,7 +110,8 @@ class _UserListState extends State<UserList> {
           elevation: 0,
           title: Text(
             widget.data!["type"] == 0 ? "粉丝" : "关注",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               fontSize: 16,
             ),
           ),
@@ -221,7 +223,8 @@ class _UserListCardState extends State<UserListCard> {
                       children: [
                         Text(
                           widget.data!["name"],
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Provider.of<ColorProvider>(context).isDark
@@ -250,7 +253,8 @@ class _UserListCardState extends State<UserListCard> {
                       widget.data!["signature"] == ""
                           ? "这位畔友很懒，什么也没写"
                           : widget.data!["signature"],
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         fontSize: 16,
                         color: Color(0xFF9F9F9F),
                       ),
@@ -263,7 +267,8 @@ class _UserListCardState extends State<UserListCard> {
                             ),
                           ) +
                           "在线",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         fontSize: 12,
                         color: Color(0xFFBBBBBB),
                       ),

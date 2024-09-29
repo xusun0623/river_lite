@@ -10,6 +10,7 @@ import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
@@ -285,7 +286,7 @@ class _CollectionDetailState extends State<CollectionDetail> {
                   duration: Duration(milliseconds: 100),
                   child: Text(
                     widget.data!["name"],
-                    style: TextStyle(fontSize: 16),
+                    style: XSTextStyle(context: context, fontSize: 16),
                   ),
                 )
               : Container(),
@@ -317,7 +318,9 @@ class _CollectionDetailState extends State<CollectionDetail> {
                         children: [
                           Text(
                             is_subscribed ? "取消订阅" : "订阅",
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: is_subscribed
                                   ? (Provider.of<ColorProvider>(context).isDark
@@ -393,7 +396,9 @@ class _CollectionDetailState extends State<CollectionDetail> {
                     : Center(
                         child: Text(
                           "- 本专辑收录的帖子 -",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
+                            fontSize: 14,
                             color: Color(0xFFA3A3A3),
                           ),
                         ),
@@ -487,7 +492,9 @@ class _ListCardState extends State<ListCard> {
                       children: [
                         Text(
                           "${widget.data!["user_name"]}",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
+                            fontSize: 14,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_dark_white
                                 : Color(0xFF444444),
@@ -517,7 +524,8 @@ class _ListCardState extends State<ListCard> {
                             170,
                         child: Text(
                           widget.data!["name"] ?? "淘贴名称",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             fontSize: 16,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
@@ -546,7 +554,8 @@ class _ListCardState extends State<ListCard> {
                               Container(width: 2.5),
                               Text(
                                 "精华",
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color: os_color,
                                 ),
                               ),
@@ -559,14 +568,18 @@ class _ListCardState extends State<ListCard> {
                     children: [
                       Text(
                         "${widget.data!["reply"]}回复 · ${widget.data!["view"]}查看",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
+                          fontSize: 14,
                           color: Color(0xFF9C9C9C),
                         ),
                       ),
                       Container(width: 5),
                       Text(
                         "/",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
+                          fontSize: 14,
                           color: Provider.of<ColorProvider>(context).isDark
                               ? Color(0x44FFFFFF)
                               : Color(0xFFDCDCDC),
@@ -575,7 +588,9 @@ class _ListCardState extends State<ListCard> {
                       Container(width: 5),
                       Text(
                         widget.data!["time"].toString(),
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
+                          fontSize: 14,
                           color: Color(0xFF9C9C9C),
                         ),
                       ),

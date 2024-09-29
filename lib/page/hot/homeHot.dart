@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic.dart';
 import 'package:offer_show/util/interface.dart';
@@ -81,7 +82,7 @@ class _HotState extends State<Hot> with AutomaticKeepAliveClientMixin {
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: os_back,
         foregroundColor: os_black,
-        title: Text("十大热门", style: TextStyle(fontSize: 16)),
+        title: Text("十大热门", style: XSTextStyle(context: context, fontSize: 16)),
         leading: IconButton(
           icon: Icon(Icons.chevron_left_rounded),
           onPressed: () {

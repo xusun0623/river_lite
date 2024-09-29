@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
@@ -319,7 +320,8 @@ class _TopicEditState extends State<TopicEdit> {
                                   width: MediaQuery.of(context).size.width - 55,
                                   child: Text(
                                     "请点击图片以获取富文本链接（注意：此图片链接是临时的，请勿在网页端删除此图片的附件）",
-                                    style: TextStyle(color: os_deep_grey),
+                                    style: XSTextStyle(
+                                        context: context, color: os_deep_grey),
                                   ),
                                 ),
                               ],
@@ -414,7 +416,8 @@ class EditTipInput extends StatelessWidget {
         controller: _tipTextEditingController,
         focusNode: _tipFocusNode,
         maxLines: null,
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           color: Provider.of<ColorProvider>(context).isDark
               ? os_dark_white
               : os_black,
@@ -427,7 +430,9 @@ class EditTipInput extends StatelessWidget {
           fillColor: os_white,
           border: InputBorder.none,
           hintText: "请输入帖子的内容",
-          hintStyle: TextStyle(
+          hintStyle: XSTextStyle(
+            context: context,
+            fontSize: 15,
             color: os_deep_grey,
           ),
         ),
@@ -465,7 +470,8 @@ class EditTitleInput extends StatelessWidget {
                 : Brightness.light,
         controller: _titleTextEditingController,
         focusNode: _titleFocusNode,
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           color: Provider.of<ColorProvider>(context).isDark
               ? os_dark_white
               : os_black,
@@ -491,7 +497,9 @@ class EditTitleInput extends StatelessWidget {
             ),
           ),
           hintText: "请输入帖子的标题",
-          hintStyle: TextStyle(
+          hintStyle: XSTextStyle(
+            context: context,
+            fontSize: 15,
             color: os_deep_grey,
           ),
         ),
@@ -515,7 +523,8 @@ class InfoTip extends StatelessWidget {
           Center(
               child: Text(
             "1.水区的帖子不允许编辑",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_dark_white
                   : os_black,
@@ -525,7 +534,8 @@ class InfoTip extends StatelessWidget {
           Center(
             child: Text(
               "2.15天前的帖子不允许编辑",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
                     : os_black,
@@ -557,7 +567,8 @@ class EditDoneBtn extends StatelessWidget {
           child: Container(
             child: Text(
               "编辑完成",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: os_color,
                 fontWeight: FontWeight.bold,
               ),
@@ -590,7 +601,8 @@ class EditSendBtn extends StatelessWidget {
           child: Container(
             child: Text(
               "提交",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: os_white,
                 fontWeight: FontWeight.bold,
               ),

@@ -11,6 +11,7 @@ import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
@@ -182,7 +183,9 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
             children: [
               Text(
                 "推荐板块",
-                style: TextStyle(
+                style: XSTextStyle(
+                  listenProvider: false,
+                  context: context,
                   fontSize: 16,
                   color: Color(0xFFA9A9A9),
                 ),
@@ -249,7 +252,9 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
                   element,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
+                    listenProvider: false,
                     color: Provider.of<ColorProvider>(context, listen: false)
                             .isDark
                         ? os_dark_dark_white
@@ -403,7 +408,9 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
                       Container(width: 10),
                       Text(
                         "加载中…",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
+                          fontSize: 14,
                           color: os_black,
                         ),
                       ),
@@ -471,7 +478,7 @@ class _TapMoreState extends State<TapMore> {
             children: [
               Text(
                 "加载更多",
-                style: TextStyle(color: os_deep_grey),
+                style: XSTextStyle(context: context, color: os_deep_grey),
               ),
               Icon(
                 Icons.keyboard_double_arrow_down_rounded,
@@ -530,7 +537,8 @@ class _ToSearchState extends State<ToSearch> {
             children: [
               Text(
                 "搜一搜",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 16,
                   color: Color.fromARGB(255, 171, 171, 171),
                 ),

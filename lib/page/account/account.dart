@@ -6,6 +6,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -52,6 +53,9 @@ class _AccountState extends State<Account> {
 
   _switchLogin(String? username, String? password, int index) async {
     showToast(context: context, type: XSToast.loading, txt: "加载中…");
+    Future.delayed(Duration(milliseconds: 2000)).then((_) {
+      hideToast();
+    });
     var data = await Api().user_login({
       "type": "login",
       "username": username,
@@ -109,14 +113,19 @@ class _AccountState extends State<Account> {
         child: ListTile(
           title: Text(
             "登录修复",
-            style: TextStyle(
-                color: Provider.of<ColorProvider>(context).isDark
-                    ? os_dark_white
-                    : os_black),
+            style: XSTextStyle(
+              context: context,
+              fontSize: 15,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
           ),
           subtitle: Text(
             "当获取水滴任务、自动答题、更换头像、上传附件、获取专辑等需要手动抓取网页的操作失效时，你可以点此尝试手动获取网页Cookie",
-            style: TextStyle(
+            style: XSTextStyle(
+                context: context,
+                fontSize: 13,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_dark_white
                     : os_deep_grey),
@@ -162,7 +171,9 @@ class _AccountState extends State<Account> {
               Container(width: 5),
               Text(
                 "退出登录",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
+                  fontSize: 15,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_white
                       : os_black,
@@ -172,7 +183,9 @@ class _AccountState extends State<Account> {
           ),
           subtitle: Text(
             "即将退出登录，并删除你在本地的所有个人信息和收藏，请确认",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
+              fontSize: 13,
               color: os_deep_grey,
             ),
           ),
@@ -186,7 +199,9 @@ class _AccountState extends State<Account> {
             children: [
               Text(
                 "快速切换账号",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
+                  fontSize: 14,
                   color: os_deep_grey,
                 ),
               ),
@@ -216,7 +231,9 @@ class _AccountState extends State<Account> {
         child: ListTile(
           title: Text(
             accountData![i]["name"],
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
+              fontSize: 14,
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_dark_white
                   : os_black,
@@ -298,7 +315,17 @@ class _AccountState extends State<Account> {
             children: [
               Icon(Icons.add, size: 20),
               Container(width: 5),
-              Text("新增账号"),
+              Text(
+                "新增账号",
+                style: XSTextStyle(
+                  context: context,
+                  color: Provider.of<ColorProvider>(context).isDark
+                      ? os_dark_white
+                      : os_black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
             ],
           ),
         ),
@@ -326,7 +353,10 @@ class _AccountState extends State<Account> {
               ? os_dark_back
               : os_white,
           elevation: 0,
-          title: Text("账号管理", style: TextStyle(fontSize: 16)),
+          title: Text(
+            "账号管理",
+            style: XSTextStyle(context: context, fontSize: 16),
+          ),
           foregroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_white
               : os_black,

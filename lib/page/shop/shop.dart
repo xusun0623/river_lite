@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/showPop.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
@@ -107,7 +108,8 @@ class _ShopState extends State<Shop> {
         centerTitle: true,
         title: Text(
           "道具商店",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_white
                 : os_black,
@@ -249,7 +251,8 @@ class _PopChatState extends State<PopChat> {
   }
 
   TextStyle titleStyle() {
-    return TextStyle(
+    return XSTextStyle(
+      context: context,
       color: Provider.of<ColorProvider>(context).isDark
           ? os_dark_dark_white
           : os_black,
@@ -312,7 +315,8 @@ class _PopChatState extends State<PopChat> {
       Text(
         "请确认你的订单",
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           color: Provider.of<ColorProvider>(context).isDark
               ? os_dark_white
               : os_black,
@@ -324,7 +328,8 @@ class _PopChatState extends State<PopChat> {
       Text(
         "水滴并非实体/数字货币，仅能在本论坛内流通，不能与任何实体/数字货币兑换",
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           fontSize: 14,
           fontWeight: FontWeight.normal,
           color: Provider.of<ColorProvider>(context).isDark
@@ -351,7 +356,8 @@ class _PopChatState extends State<PopChat> {
             ),
             Container(width: 10),
             DefaultTextStyle(
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_dark_white
                     : Color(0xff575757),
@@ -365,7 +371,8 @@ class _PopChatState extends State<PopChat> {
                   Container(height: 3),
                   Text.rich(
                     TextSpan(
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: os_red,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -375,7 +382,8 @@ class _PopChatState extends State<PopChat> {
                       children: [
                         TextSpan(
                           text: " 水滴/张（原价）",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_dark_white
                                 : Color(0xff575757),
@@ -389,7 +397,8 @@ class _PopChatState extends State<PopChat> {
                   Container(height: 2),
                   Text.rich(
                     TextSpan(
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_white
                             : os_red,
@@ -400,7 +409,8 @@ class _PopChatState extends State<PopChat> {
                       children: [
                         TextSpan(
                           text: " 水滴/张（折扣价）",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: Color(0xff575757),
                             fontSize: 14,
                             fontWeight: FontWeight.normal,
@@ -482,7 +492,8 @@ class _PopChatState extends State<PopChat> {
               child: Center(
                 child: Text(
                   purchase_num.toString(),
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_dark_white
                         : os_black,
@@ -532,7 +543,8 @@ class _PopChatState extends State<PopChat> {
           child: Center(
             child: Text(
               "确认",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: os_white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -621,7 +633,8 @@ class _GoodCardState extends State<GoodCard> {
                             children: [
                               Text(
                                 widget.data!.name,
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
                                           ? os_dark_white
@@ -636,7 +649,8 @@ class _GoodCardState extends State<GoodCard> {
                                   children: [
                                     TextSpan(
                                       text: "${widget.data!.price}",
-                                      style: TextStyle(
+                                      style: XSTextStyle(
+                                        context: context,
                                         color:
                                             Provider.of<ColorProvider>(context)
                                                     .isDark
@@ -647,7 +661,8 @@ class _GoodCardState extends State<GoodCard> {
                                     ),
                                     TextSpan(
                                       text: " 水滴/张",
-                                      style: TextStyle(
+                                      style: XSTextStyle(
+                                        context: context,
                                         color:
                                             Provider.of<ColorProvider>(context)
                                                     .isDark
@@ -659,7 +674,8 @@ class _GoodCardState extends State<GoodCard> {
                                     )
                                   ],
                                 ),
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color: os_black,
                                   fontSize: 14,
                                   fontWeight: FontWeight.normal,
@@ -691,7 +707,8 @@ class _GoodCardState extends State<GoodCard> {
                               Text(
                                 widget.data!.soldOut ? "此道具缺货" : "购买",
                                 textAlign: TextAlign.right,
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
                                           ? os_dark_white
@@ -732,7 +749,8 @@ class _GoodCardState extends State<GoodCard> {
                         child: SizedBox(
                           child: Text(
                             widget.data!.desc,
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: Provider.of<ColorProvider>(context).isDark
                                   ? os_white
                                   : Color(0xff646d80),

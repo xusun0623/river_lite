@@ -4,6 +4,7 @@ import 'package:badges/badges.dart' as badgee;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/home.dart';
 import 'package:offer_show/util/interface.dart';
@@ -147,7 +148,8 @@ class _LeftNaviState extends State<LeftNavi> {
                                             : provider.data!["name"] ??
                                                 provider.data!["userName"])[0]
                                         .toString(),
-                                    style: TextStyle(
+                                    style: XSTextStyle(
+                                      context: context,
                                       color: Provider.of<ColorProvider>(context)
                                               .isDark
                                           ? os_white
@@ -316,7 +318,8 @@ class _NaviBtnState extends State<NaviBtn> {
                 Container(height: 5),
                 Text(
                   icon_desc[widget.index!],
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                     color: provider.index == widget.index

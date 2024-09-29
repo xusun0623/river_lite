@@ -54,6 +54,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => BlackProvider()),
         ChangeNotifierProvider(create: (context) => ShowPicProvider()),
         ChangeNotifierProvider(create: (context) => AutoQuestionProvider()),
+        ChangeNotifierProvider(create: (context) => FontSizeProvider()),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
         // if (Platform.isAndroid) {

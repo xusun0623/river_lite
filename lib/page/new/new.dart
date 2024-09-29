@@ -5,6 +5,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/outer/showActionSheet/action_item.dart';
 import 'package:offer_show/outer/showActionSheet/bottom_action_item.dart';
@@ -225,7 +226,8 @@ class _PostNewState extends State<PostNew> {
         padding: const EdgeInsets.only(right: 20, top: 5, bottom: 5),
         child: Text(
           child.length == 0 && child_load_done ? "你不可以在此板块发布信息" : "选择子板块:",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_dark_white
                 : os_dark_back,
@@ -239,7 +241,9 @@ class _PostNewState extends State<PostNew> {
         padding: const EdgeInsets.symmetric(vertical: 5),
         child: Text(
           "加载中…",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
+            fontSize: 14,
             color: os_deep_grey,
           ),
         ),
@@ -287,7 +291,8 @@ class _PostNewState extends State<PostNew> {
             elevation: 0,
             title: Text(
               sendSuccess ? "" : "发帖",
-              style: TextStyle(
+              style: XSTextStyle(
+                  context: context,
                   fontSize: 16,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_dark_white
@@ -694,7 +699,8 @@ class SecretTip extends StatelessWidget {
           },
           child: RichText(
             text: TextSpan(
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: os_deep_grey,
                 fontSize: 14,
               ),
@@ -702,7 +708,8 @@ class SecretTip extends StatelessWidget {
                 TextSpan(text: "密语区需要扣除您的10水滴，且需要您有密语区的访问权限，请确保你此前"),
                 TextSpan(
                   text: "访问过密语区>",
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     decoration: TextDecoration.underline,
                     color: os_deep_grey,
                   ),
@@ -751,7 +758,8 @@ class _ColumnRuleState extends State<ColumnRule> {
                   Container(width: 2),
                   Text(
                     "查看${widget.select_section}版规",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_dark_dark_white
                           : os_deep_grey,
@@ -795,7 +803,8 @@ class _ChildColumnTipState extends State<ChildColumnTip> {
             : os_white,
         child: Text(
           widget.name!,
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             color: widget.select! ? os_color : os_deep_grey,
           ),
         ),
@@ -833,8 +842,10 @@ class _ContInputState extends State<ContInput> {
           keyboardType: TextInputType.multiline,
           maxLines: null,
           cursorColor: os_color,
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             height: 1.8,
+            fontSize: 15,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_dark_white
                 : os_black,
@@ -842,7 +853,8 @@ class _ContInputState extends State<ContInput> {
           decoration: InputDecoration(
             contentPadding: EdgeInsets.only(bottom: 200, top: 10),
             border: InputBorder.none,
-            hintStyle: TextStyle(
+            hintStyle: XSTextStyle(
+              context: context,
               height: 1.8,
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_deep_grey
@@ -884,7 +896,8 @@ class TitleInput extends StatelessWidget {
                   : Brightness.light,
           controller: title_controller,
           focusNode: title_focus,
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             fontSize: 17,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_white
@@ -914,7 +927,8 @@ class TitleInput extends StatelessWidget {
                 style: BorderStyle.solid,
               ),
             ),
-            hintStyle: TextStyle(
+            hintStyle: XSTextStyle(
+              context: context,
               fontSize: 17,
               color: Color(0xFFA3A3A3),
             ),

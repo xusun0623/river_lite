@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 
 class HomeBtnCollect extends StatefulWidget {
@@ -60,7 +61,8 @@ class _BtnAllState extends State<BtnAll> {
             Container(width: 3),
             Text(
               "全部分类",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: Color(0xFF676767),
                 fontSize: 16,
               ),
@@ -114,7 +116,8 @@ class _BtnState extends State<Btn> {
             Container(width: 3),
             Text(
               "${widget.txt}",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: Color(0xFF676767),
                 fontSize: 16,
               ),

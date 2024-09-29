@@ -9,6 +9,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/totop.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -149,7 +150,8 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
           ],
           elevation: 0,
           centerTitle: true,
-          title: Text("积分记录", style: TextStyle(fontSize: 16)),
+          title:
+              Text("积分记录", style: XSTextStyle(context: context, fontSize: 16)),
           foregroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_white
               : os_black,
@@ -248,7 +250,8 @@ class _ListCardState extends State<ListCard> {
                   widget.fold!
                       ? Text(
                           widget.data!["change"] ?? "",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: os_white,
@@ -256,7 +259,8 @@ class _ListCardState extends State<ListCard> {
                         )
                       : Text(
                           widget.data!["type"] ?? "",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: Color.fromRGBO(255, 255, 255, 0.8),
                             fontSize: 14,
                           ),
@@ -266,7 +270,8 @@ class _ListCardState extends State<ListCard> {
                       ? Container()
                       : Text(
                           widget.data!["change"] ?? "",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: os_white,
@@ -277,7 +282,8 @@ class _ListCardState extends State<ListCard> {
                       ? Container()
                       : Text(
                           widget.data!["time"] ?? "",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: Color.fromRGBO(255, 255, 255, 0.4),
                             fontSize: 14,
                           ),
@@ -291,7 +297,8 @@ class _ListCardState extends State<ListCard> {
               child: widget.fold!
                   ? Text(
                       widget.data!["type"] ?? "",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Color.fromRGBO(255, 255, 255, 0.8),
                         fontSize: 14,
                       ),

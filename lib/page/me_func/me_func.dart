@@ -12,6 +12,7 @@ import 'package:offer_show/asset/nowMode.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
@@ -178,7 +179,8 @@ class _MeFuncState extends State<MeFunc> {
             _showTopTitle
                 ? ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type!]
                 : "",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               fontSize: 16,
             ),
           ),
@@ -292,7 +294,8 @@ class _MeFuncHeadState extends State<MeFuncHead> {
                 width: 200,
                 child: Text(
                   ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type!],
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 22,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
@@ -354,7 +357,7 @@ class _DraftCardState extends State<DraftCard> {
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: myInkWell(
-        radius: 10,
+        radius: 17.5,
         color: Provider.of<ColorProvider>(context).isDark
             ? os_light_dark_card
             : os_white,
@@ -374,7 +377,9 @@ class _DraftCardState extends State<DraftCard> {
               Container(
                 child: Text(
                   widget.data!,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
+                    fontSize: 14,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
                         : os_black,
@@ -383,7 +388,9 @@ class _DraftCardState extends State<DraftCard> {
               ),
               Text(
                 "复制",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
+                  fontSize: 14,
                   color: os_color,
                   fontWeight: FontWeight.bold,
                 ),
@@ -437,7 +444,7 @@ class _HistoryCardState extends State<HistoryCard> {
     return Container(
       margin: EdgeInsets.only(left: os_edge, right: os_edge, bottom: 10),
       child: myInkWell(
-        radius: 10,
+        radius: 17.5,
         color: Provider.of<ColorProvider>(context).isDark
             ? os_light_dark_card
             : os_white,
@@ -475,7 +482,8 @@ class _HistoryCardState extends State<HistoryCard> {
                       width: MediaQuery.of(context).size.width - 120,
                       child: Text(
                         widget.data!["title"],
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           fontSize: 16,
                           color: Provider.of<ColorProvider>(context).isDark
                               ? os_dark_white
@@ -490,7 +498,8 @@ class _HistoryCardState extends State<HistoryCard> {
                           int.parse(widget.data!["time"]),
                         ),
                       ),
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         fontSize: 12,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_deep_grey
@@ -504,7 +513,8 @@ class _HistoryCardState extends State<HistoryCard> {
                         widget.data!["subject"] == ""
                             ? "无"
                             : widget.data!["subject"],
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           fontSize: 14,
                           color: Color(0xFFA3A3A3),
                         ),

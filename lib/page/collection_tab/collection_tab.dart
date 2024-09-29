@@ -10,6 +10,7 @@ import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/collection.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/totop.dart';
@@ -369,7 +370,8 @@ class _ListTabState extends State<ListTab> {
             ),
             child: Text(
               ["订阅数", "评论数", "主题数"][i],
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontWeight:
                     widget.index == i ? FontWeight.bold : FontWeight.normal,
                 color: (Provider.of<ColorProvider>(context).isDark
@@ -389,16 +391,6 @@ class _ListTabState extends State<ListTab> {
     return Container(
       child: Row(
         children: [
-          // Container(width: 20),
-          // Text(
-          //   "排序",
-          //   style: TextStyle(
-          //     color: Provider.of<ColorProvider>(context).isDark
-          //         ? os_dark_white
-          //         : os_black,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
           Container(width: 10),
           ..._buildCont(),
           Container(width: (widget.loading ?? false) ? 5 : 0),

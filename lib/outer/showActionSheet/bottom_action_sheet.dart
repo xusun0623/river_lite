@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -100,7 +101,8 @@ class _ActionSheetBackGroundState extends State<ActionSheetBackGround> {
                 child: Text(
                   widget.title ?? "",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: os_deep_grey,
                     fontSize: 14,
                   ),
@@ -164,7 +166,8 @@ class _ActionSheetBackGroundState extends State<ActionSheetBackGround> {
                             child: Center(
                               child: Text(
                                 e,
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   overflow: TextOverflow.ellipsis,
                                   color: Provider.of<ColorProvider>(context,
                                               listen: false)
@@ -235,7 +238,8 @@ class _ActionSheetBackGroundState extends State<ActionSheetBackGround> {
                       child: Center(
                         child: Text(
                           e,
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             overflow: TextOverflow.ellipsis,
                             color: Provider.of<ColorProvider>(context,
                                         listen: false)
@@ -270,7 +274,8 @@ class _ActionSheetBackGroundState extends State<ActionSheetBackGround> {
               child: Center(
                 child: Text(
                   "取消",
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: Provider.of<ColorProvider>(context, listen: false)
                             .isDark
                         ? os_dark_white
@@ -348,9 +353,9 @@ class _TopActionItemWidget extends StatelessWidget {
         child: Center(
           child: Text(
             topActionItem!.title!,
-            style: const TextStyle()
-                .merge(topActionItem!.titleTextStyle)
-                .merge(TextStyle(
+            style: XSTextStyle(
+              context: context,
+            ).merge(topActionItem!.titleTextStyle).merge(TextStyle(
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_white
                       : os_black,
@@ -368,7 +373,8 @@ class _TopActionItemWidget extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 topActionItem!.desc!,
-                style: const TextStyle(color: Colors.black45, fontSize: 12)
+                style: XSTextStyle(
+                        context: context, color: Colors.black45, fontSize: 12)
                     .merge(topActionItem!.titleTextStyle),
                 textAlign: TextAlign.center,
               ))));
@@ -430,7 +436,8 @@ class _BottomActionItemWidget extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 bottomActionItem!.title,
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
@@ -508,7 +515,8 @@ class _ActionSheetState extends State<_ActionSheet> {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   action.title!,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 16,
                   ).merge(action.titleTextStyle).merge(TextStyle(
                         color:
@@ -699,7 +707,8 @@ class _ChoiceItemWidgetState extends State<__ChoiceItemWidget> {
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Text(
                 widget.title!,
-                style: const TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 12,
                 ).merge(widget.titleTextStyle),
               ),

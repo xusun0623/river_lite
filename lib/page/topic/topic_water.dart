@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +33,8 @@ class _ToWaterTipState extends State<ToWaterTip> {
           Center(
             child: Text(
               "请确认",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Provider.of<ColorProvider>(context).isDark
@@ -46,7 +48,8 @@ class _ToWaterTipState extends State<ToWaterTip> {
             child: Text(
               "此功能为无权限访问的成电校友开发，在使用此功能时请确保所搬运的内容不得包含任何未经审核的具有舆论矛盾的校园热点、成电锐评、情感专区等校内专属内容。违规时由管理员或者版主进行禁言、封禁等处理。",
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 16,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
@@ -73,7 +76,8 @@ class _ToWaterTipState extends State<ToWaterTip> {
                     child: Center(
                       child: Text(
                         "取消",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           color: Provider.of<ColorProvider>(context).isDark
                               ? os_dark_dark_white
                               : os_deep_blue,
@@ -100,7 +104,8 @@ class _ToWaterTipState extends State<ToWaterTip> {
                         children: [
                           Text(
                             "确认搬运",
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: os_white,
                             ),
                           ),

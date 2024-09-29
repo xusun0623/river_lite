@@ -17,6 +17,7 @@ import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/topic_formhash.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/detail_cont.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -265,7 +266,9 @@ class _CommentState extends State<Comment> {
       Container(height: 30),
       Text(
         "请输入举报内容",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
+          listenProvider: false,
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -294,7 +297,9 @@ class _CommentState extends State<Comment> {
             onChanged: (e) {
               txt = e;
             },
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
+              listenProvider: false,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
@@ -303,7 +308,10 @@ class _CommentState extends State<Comment> {
             decoration: InputDecoration(
                 hintText: "请输入",
                 border: InputBorder.none,
-                hintStyle: TextStyle(
+                hintStyle: XSTextStyle(
+                  context: context,
+                  fontSize: 15,
+                  listenProvider: false,
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
                           ? os_dark_dark_white
@@ -334,7 +342,9 @@ class _CommentState extends State<Comment> {
                 child: Center(
                   child: Text(
                     "取消",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
+                      listenProvider: false,
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
                           ? os_dark_dark_white
@@ -373,7 +383,9 @@ class _CommentState extends State<Comment> {
                       Container(width: 5),
                       Text(
                         "完成",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
+                          listenProvider: false,
                           color: os_white,
                         ),
                       ),
@@ -470,7 +482,8 @@ class _CommentState extends State<Comment> {
       Container(height: 30),
       Text(
         "请输入补充内容",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -481,7 +494,8 @@ class _CommentState extends State<Comment> {
       Container(height: 10),
       Text(
         "补充内容显示在客户端可能有延时，可以尝试稍后刷新一下或者在网页端查看",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           fontSize: 14,
           color: Provider.of<ColorProvider>(context, listen: false).isDark
               ? os_dark_dark_white
@@ -509,7 +523,8 @@ class _CommentState extends State<Comment> {
             onChanged: (e) {
               txt = e;
             },
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
@@ -518,7 +533,9 @@ class _CommentState extends State<Comment> {
             decoration: InputDecoration(
                 hintText: "请输入",
                 border: InputBorder.none,
-                hintStyle: TextStyle(
+                hintStyle: XSTextStyle(
+                  context: context,
+                  fontSize: 15,
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
                           ? os_dark_dark_white
@@ -545,7 +562,8 @@ class _CommentState extends State<Comment> {
                 child: Center(
                   child: Text(
                     "取消",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
                           ? os_dark_dark_white
@@ -582,7 +600,8 @@ class _CommentState extends State<Comment> {
                       Container(width: 5),
                       Text(
                         "完成",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           color: os_white,
                         ),
                       ),
@@ -685,7 +704,8 @@ class _CommentState extends State<Comment> {
                             children: [
                               Text(
                                 widget.data["reply_name"],
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
                                           ? os_dark_white
@@ -768,7 +788,8 @@ class _CommentState extends State<Comment> {
                                           widget.data["extraPanel"][0]
                                                   ["extParams"]["recommendAdd"]
                                               .toString(),
-                                          style: TextStyle(
+                                          style: XSTextStyle(
+                                            context: context,
                                             fontSize: 12,
                                             color: liked == 1
                                                 ? os_color
@@ -834,7 +855,8 @@ class _CommentState extends State<Comment> {
                                           ? "iPhone客户端"
                                           : widget.data["mobileSign"]))) +
                               " · #${widget.index! + 1}楼",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: Color(0xFF9F9F9F),
                             fontSize: 12,
                           ),
@@ -863,14 +885,16 @@ class _CommentState extends State<Comment> {
                                 ),
                                 child: RichText(
                                   text: TextSpan(
-                                      style: TextStyle(fontSize: 14),
+                                      style: XSTextStyle(
+                                          context: context, fontSize: 14),
                                       children: [
                                         TextSpan(
                                           text: "回复@" +
                                               widget.data["quote_content"]
                                                   .split(" 发表于")[0] +
                                               ": ",
-                                          style: TextStyle(
+                                          style: XSTextStyle(
+                                            context: context,
                                             color: Provider.of<ColorProvider>(
                                                         context)
                                                     .isDark
@@ -882,7 +906,8 @@ class _CommentState extends State<Comment> {
                                           text: widget.data["quote_content"]
                                               .split("发表于")[1]
                                               .split("\n")[1],
-                                          style: TextStyle(
+                                          style: XSTextStyle(
+                                              context: context,
                                               color: Provider.of<ColorProvider>(
                                                           context)
                                                       .isDark

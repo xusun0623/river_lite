@@ -16,6 +16,7 @@ import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/bilibili_player.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/video_player.dart';
@@ -281,7 +282,7 @@ class _DetailContState extends State<DetailCont> {
         width: MediaQuery.of(context).size.width - 30,
         child: Text(
           widget.data["infor"],
-          style: TextStyle(color: os_color, fontSize: 16),
+          style: XSTextStyle(context: context, color: os_color, fontSize: 16),
         ),
       ),
     );
@@ -332,11 +333,12 @@ class _DetailContState extends State<DetailCont> {
           children: [
             Text(
               "附件" + widget.data["desc"],
-              style: TextStyle(color: os_deep_grey),
+              style: XSTextStyle(context: context, color: os_deep_grey),
             ),
             Text(
               "点击下载",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontWeight: FontWeight.bold,
                 color: os_color,
               ),
@@ -504,7 +506,8 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
               child: widget.removeSelectable ?? false
                   ? Text.rich(
                       TextSpan(
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           fontSize: 60,
                           height: 1.6,
                           color: Provider.of<ColorProvider>(context).isDark
@@ -516,7 +519,8 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
                     )
                   : SelectableText.rich(
                       TextSpan(
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           fontSize: 60,
                           height: 1.6,
                           color: Provider.of<ColorProvider>(context).isDark
@@ -532,8 +536,9 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
               child: widget.removeSelectable ?? false
                   ? Text.rich(
                       TextSpan(
-                        style: TextStyle(
-                          fontSize: 16,
+                        style: XSTextStyle(
+                          context: context,
+                          fontSize: 15.5,
                           height: 1.6,
                           color: Provider.of<ColorProvider>(context).isDark
                               ? os_dark_white
@@ -553,7 +558,8 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
                     )
                   : SelectableText.rich(
                       TextSpan(
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           fontSize: 16,
                           height: 1.6,
                           color: Provider.of<ColorProvider>(context).isDark
