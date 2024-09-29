@@ -384,7 +384,7 @@ class _TopicState extends State<Topic> {
                   maxHeightDiskCache: 800,
                   maxWidthDiskCache: 800,
                   memCacheWidth: 800,
-                  memCacheHeight: 800,
+                  // memCacheHeight: 800,
                   width: img_size,
                   height: img_size,
                   filterQuality: FilterQuality.low,

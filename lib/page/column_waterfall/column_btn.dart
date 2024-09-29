@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/page/column_waterfall/waterfall_selection.dart';
@@ -10,16 +11,20 @@ class ColumnBtn extends StatefulWidget {
   bool? loading;
   bool? needPush;
   bool? hideArrow;
+  bool? showBackToTop;
   Function? backData;
+  Function? clickBackToTop;
 
   ColumnBtn({
     Key? key,
     this.name,
     this.fid,
     this.loading,
+    this.showBackToTop,
     this.hideArrow,
     this.needPush,
     this.backData,
+    this.clickBackToTop,
   }) : super(key: key);
 
   @override
@@ -33,6 +38,10 @@ class _ColumnBtnState extends State<ColumnBtn> {
     return Container(
       child: GestureDetector(
         onTap: () {
+          if (widget.showBackToTop ?? false) {
+            widget.clickBackToTop!();
+            return;
+          }
           if (widget.needPush ?? false) {
             Navigator.push(
               context,
@@ -75,7 +84,7 @@ class _ColumnBtnState extends State<ColumnBtn> {
           child: AnimatedContainer(
             duration: Duration(milliseconds: 500),
             curve: Curves.ease,
-            width: loading ? 180 : 120,
+            width: loading ? 180 : 110,
             height: loading ? 60 : 40,
             decoration: BoxDecoration(
               color: Provider.of<ColorProvider>(context).isDark
@@ -86,23 +95,27 @@ class _ColumnBtnState extends State<ColumnBtn> {
                   ? []
                   : [
                       BoxShadow(
-                        color: Color(0x33000000),
+                        color: loading ? Color(0x16000000) : Color(0x33000000),
                         blurRadius: 20,
-                        offset: Offset(3, 3),
+                        offset: loading ? Offset(3, 30) : Offset(3, 3),
                       ),
                     ],
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Material(
-                  color: Colors.transparent,
-                  child: Text(
-                    widget.name!,
-                    style: TextStyle(
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_dark_white
-                          : os_black,
+                Transform.translate(
+                  offset: Offset(!loading ? 3 : 0, 0),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Text(
+                      widget.name!,
+                      style: TextStyle(
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_white
+                            : os_black,
+                        // fontSize: 13.5,
+                      ),
                     ),
                   ),
                 ),
@@ -128,12 +141,29 @@ class _ColumnBtnState extends State<ColumnBtn> {
                                         : os_black,
                               ),
                             )
-                          : Icon(
-                              Icons.arrow_drop_up_outlined,
-                              color: Provider.of<ColorProvider>(context).isDark
-                                  ? os_dark_white
-                                  : os_black,
-                            ),
+                          : widget.showBackToTop ?? false
+                              ? FadeInUp(
+                                  from: 30,
+                                  duration: Duration(milliseconds: 200),
+                                  child: Icon(
+                                    Icons.vertical_align_top_outlined,
+                                    size: 18,
+                                    color: Provider.of<ColorProvider>(context)
+                                            .isDark
+                                        ? os_dark_white
+                                        : os_black,
+                                  ),
+                                )
+                              : Transform.translate(
+                                  offset: Offset(2, 0),
+                                  child: Icon(
+                                    Icons.arrow_drop_up_outlined,
+                                    color: Provider.of<ColorProvider>(context)
+                                            .isDark
+                                        ? os_dark_white
+                                        : os_black,
+                                  ),
+                                ),
                     ),
                   ),
                 ),

@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/dom.dart' as dom;
@@ -131,69 +132,81 @@ class _MyBagState extends State<MyBag> {
           ),
         ),
         actions: [
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 5,
-            ),
-            child: myInkWell(
-              tap: () {
-                Navigator.of(context).pushNamed("/shop");
-              },
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_white_opa
-                  : os_white,
-              widget: Container(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.store,
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_dark_white
-                          : os_black,
-                    ),
-                    Container(width: 5),
-                    Text(
-                      "道具商店",
-                      style: TextStyle(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_white
-                            : os_black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              radius: 100,
-            ),
-          ),
+          // Container(
+          //   padding: EdgeInsets.symmetric(
+          //     horizontal: 10,
+          //     vertical: 5,
+          //   ),
+          //   child: myInkWell(
+          //     tap: () {
+          //       Navigator.of(context).pushNamed("/shop");
+          //     },
+          //     color: Provider.of<ColorProvider>(context).isDark
+          //         ? os_white_opa
+          //         : os_white,
+          //     widget: Container(
+          //       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          //       child: Row(
+          //         children: [
+          //           Icon(
+          //             Icons.store,
+          //             color: Provider.of<ColorProvider>(context).isDark
+          //                 ? os_dark_white
+          //                 : os_black,
+          //           ),
+          //           Container(width: 5),
+          //           Text(
+          //             "道具商店",
+          //             style: TextStyle(
+          //               color: Provider.of<ColorProvider>(context).isDark
+          //                   ? os_dark_white
+          //                   : os_black,
+          //               fontSize: 14,
+          //               fontWeight: FontWeight.bold,
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //     radius: 100,
+          //   ),
+          // ),
         ],
       ),
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      body: loading
-          ? ListView(
-              children: [
-                BottomLoading(),
-              ],
-            )
-          : ListView(
-              children: [
-                bagItems.length == 0 ? Empty(txt: "这里是一颗空的星球") : Container(),
-                ...(bagItems
-                    .map((e) => BagWidget(
-                          data: e,
-                          formhash: formhash,
-                          refresh: () {
-                            getData();
-                          },
-                        ))
-                    .toList()),
-              ],
-            ),
+      body: DismissiblePage(
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        direction: DismissiblePageDismissDirection.startToEnd,
+        onDismissed: () {
+          Navigator.of(context).pop();
+        },
+        child: Container(
+          child: loading
+              ? ListView(
+                  children: [
+                    BottomLoading(),
+                  ],
+                )
+              : ListView(
+                  children: [
+                    bagItems.length == 0
+                        ? Empty(txt: "这里是一颗空的星球")
+                        : Container(),
+                    ...(bagItems
+                        .map((e) => BagWidget(
+                              data: e,
+                              formhash: formhash,
+                              refresh: () {
+                                getData();
+                              },
+                            ))
+                        .toList()),
+                  ],
+                ),
+        ),
+      ),
     );
   }
 }

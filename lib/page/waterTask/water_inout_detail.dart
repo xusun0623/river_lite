@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:html/parser.dart';
@@ -147,6 +148,7 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
             Container(width: 5),
           ],
           elevation: 0,
+          centerTitle: true,
           title: Text("积分记录", style: TextStyle(fontSize: 16)),
           foregroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_white
@@ -161,29 +163,38 @@ class _WaterInoutDetailState extends State<WaterInoutDetail> {
         backgroundColor: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : os_white,
-        body: getMyRrefreshIndicator(
-          context: context,
-          onRefresh: () async {
-            data = [];
-            return await _getData(true);
+        body: DismissiblePage(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_white,
+          direction: DismissiblePageDismissDirection.startToEnd,
+          onDismissed: () {
+            Navigator.of(context).pop();
           },
-          child: BackToTop(
-            show: showBackToTop,
-            bottom: 100,
-            color: isDesktop() ? os_black : Color(0x88FFFFFF),
-            widget: Icon(
-              Icons.arrow_drop_up,
-              size: 25,
-              color: os_white,
-            ),
-            controller: _scrollController,
-            child: ListView(
+          child: getMyRrefreshIndicator(
+            context: context,
+            onRefresh: () async {
+              data = [];
+              return await _getData(true);
+            },
+            child: BackToTop(
+              show: showBackToTop,
+              bottom: 100,
+              color: isDesktop() ? os_black : Color(0x88FFFFFF),
+              widget: Icon(
+                Icons.arrow_drop_up,
+                size: 25,
+                color: os_white,
+              ),
               controller: _scrollController,
-              children: [
-                ..._buildCont(),
-                load_done ? Container() : BottomLoading(),
-              ],
-              //physics: BouncingScrollPhysics(),
+              child: ListView(
+                controller: _scrollController,
+                children: [
+                  ..._buildCont(),
+                  load_done ? Container() : BottomLoading(),
+                ],
+                //physics: BouncingScrollPhysics(),
+              ),
             ),
           ),
         ),

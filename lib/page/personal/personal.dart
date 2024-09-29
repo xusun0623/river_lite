@@ -808,7 +808,8 @@ class _PersonCardState extends State<PersonCard> {
           ),
           // https://bbs.uestc.edu.cn/home.php?mod=space&uid=125446
           Positioned(
-            right: 20,
+            right: 30,
+            top: -10,
             child: GestureDetector(
               onTap: () {
                 // if (widget.isMe!) {
@@ -841,8 +842,7 @@ class _PersonCardState extends State<PersonCard> {
               child: Opacity(
                 opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
                 child: os_svg(
-                  path:
-                      "lib/img/person/${widget.data!["gender"] == 0 ? 1 : widget.data!["gender"]}.svg",
+                  path: "lib/img/person/1.svg",
                   width: 143,
                   height: 166,
                 ),

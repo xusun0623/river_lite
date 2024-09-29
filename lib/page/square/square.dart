@@ -1,3 +1,4 @@
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
@@ -99,12 +100,23 @@ class _SquareState extends State<Square> {
           ),
           elevation: 0,
         ),
-        body: !get_done
-            ? Loading(backgroundColor: os_back)
-            : ListView(
-                //physics: BouncingScrollPhysics(),
-                children: _buildCont(),
-              ),
+        body: DismissiblePage(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          direction: DismissiblePageDismissDirection.startToEnd,
+          onDismissed: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            child: !get_done
+                ? Loading(backgroundColor: os_back)
+                : ListView(
+                    //physics: BouncingScrollPhysics(),
+                    children: _buildCont(),
+                  ),
+          ),
+        ),
       ),
     );
   }
@@ -220,7 +232,7 @@ class _SquareCardState extends State<SquareCard> {
         color: Provider.of<ColorProvider>(context).isDark
             ? os_light_dark_card
             : os_white,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(17.5)),
       ),
       child: Column(
         children: [

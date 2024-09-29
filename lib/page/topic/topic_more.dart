@@ -231,7 +231,6 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       options: [
         // "展示二维码",
         "复制帖子链接",
-        "复制帖子内容",
         "举报反馈",
         "屏蔽此贴",
         ...(widget.data!["topic"]["user_id"] == await getUid() ? ["编辑帖子"] : []),
@@ -242,7 +241,6 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       icons: [
         // Icons.qr_code,
         Icons.content_copy_rounded,
-        Icons.file_copy_outlined,
         Icons.feedback_outlined,
         Icons.block,
         ...(widget.data!["topic"]["user_id"] == await getUid()

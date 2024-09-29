@@ -363,7 +363,9 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
         borderRadius: BorderRadius.all(Radius.circular(
             widget.imgLists.length > 3 || isDesktop() ? 2.5 : 5)),
         child: Hero(
-          tag: widget.imgLists.length > 10 ? "不显示Hero动画" : widget.data["infor"],
+          tag: widget.imgLists.length > 10
+              ? widget.data["infor"]
+              : widget.data["infor"],
           child: Container(
             decoration: BoxDecoration(
               color: os_grey,
@@ -406,9 +408,37 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                                       (widget.isComment ?? false ? 50 : 0) -
                                       42) /
                                   3,
-                          child: Image.network(
-                            widget.data["infor"],
+                          child: CachedNetworkImage(
+                            imageUrl: widget.data["infor"],
                             fit: BoxFit.cover,
+                            placeholder: (context, url) {
+                              return Center(
+                                child: Icon(
+                                  Icons.image,
+                                  color: os_middle_grey,
+                                ),
+                              );
+                            },
+                            // memCacheHeight: (isDesktop()
+                            //             ? 200
+                            //             : (MediaQuery.of(context).size.width -
+                            //                     (widget.isComment ?? false
+                            //                         ? 50
+                            //                         : 0) -
+                            //                     42) /
+                            //                 3)
+                            //         .toInt() *
+                            //     3,
+                            memCacheWidth: (isDesktop()
+                                        ? 200
+                                        : (MediaQuery.of(context).size.width -
+                                                (widget.isComment ?? false
+                                                    ? 50
+                                                    : 0) -
+                                                42) /
+                                            3)
+                                    .toInt() *
+                                2,
                             width: isDesktop()
                                 ? 200
                                 : (MediaQuery.of(context).size.width -
@@ -431,17 +461,35 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                                 : (MediaQuery.of(context).size.width -
                                         (widget.isComment ?? false ? 50 : 0) -
                                         42) /
-                                    3,
+                                    2,
                             height: isDesktop()
                                 ? 200
                                 : (MediaQuery.of(context).size.width -
                                         (widget.isComment ?? false ? 50 : 0) -
                                         42) /
-                                    3,
-                            maxHeightDiskCache: 800,
-                            maxWidthDiskCache: 800,
-                            memCacheWidth: 800,
-                            memCacheHeight: 800,
+                                    2,
+                            // maxHeightDiskCache: 800,
+                            // maxWidthDiskCache: 800,
+                            memCacheWidth: (isDesktop()
+                                        ? 200
+                                        : (MediaQuery.of(context).size.width -
+                                                (widget.isComment ?? false
+                                                    ? 50
+                                                    : 0) -
+                                                42) /
+                                            3)
+                                    .toInt() *
+                                2,
+                            // memCacheHeight: (isDesktop()
+                            //             ? 200
+                            //             : (MediaQuery.of(context).size.width -
+                            //                     (widget.isComment ?? false
+                            //                         ? 50
+                            //                         : 0) -
+                            //                     42) /
+                            //                 3)
+                            //         .toInt() *
+                            //     3,
                             filterQuality: FilterQuality.low,
                             fit: BoxFit.cover,
                             progressIndicatorBuilder: (context, url, progress) {
@@ -472,6 +520,7 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                           ),
                         ))
                   : CachedNetworkImage(
+                      fit: BoxFit.cover,
                       cacheManager: RiverListCacheManager.instance,
                       imageUrl: widget.data["infor"],
                       progressIndicatorBuilder: (context, url, progress) {

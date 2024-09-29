@@ -1,3 +1,4 @@
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
@@ -43,26 +44,26 @@ class _WaterTotalState extends State<WaterTotal> {
             ),
           ),
           actions: [
-            myInkWell(
-              tap: () {
-                Navigator.of(context).pushNamed("/water_inout_detail");
-              },
-              color: Colors.transparent,
-              widget: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Text(
-                  "积分记录",
-                  style: TextStyle(
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_white
-                        : os_black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              radius: 100,
-            ),
+            // myInkWell(
+            //   tap: () {
+            //     Navigator.of(context).pushNamed("/water_inout_detail");
+            //   },
+            //   color: Colors.transparent,
+            //   widget: Container(
+            //     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            //     child: Text(
+            //       "积分记录",
+            //       style: TextStyle(
+            //         color: Provider.of<ColorProvider>(context).isDark
+            //             ? os_dark_white
+            //             : os_black,
+            //         fontSize: 14,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //     ),
+            //   ),
+            //   radius: 100,
+            // ),
           ],
           leading: IconButton(
             onPressed: () {
@@ -78,44 +79,54 @@ class _WaterTotalState extends State<WaterTotal> {
         ),
         backgroundColor:
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-        body: ListView(
-          children: [
-            NavigatorCard(
-              title: "水滴答题",
-              tip: "自动答题，水滴多多",
-              url: "/question",
-              icon: Icons.question_answer,
-              color: os_wonderful_color[0],
-            ),
-            NavigatorCard(
-              title: "我的背包",
-              tip: "点击查看所有物品",
-              url: "/bag",
-              icon: Icons.padding_rounded,
-              color: os_wonderful_color[2],
-            ),
-            // NavigatorCard(
-            //   title: "道具商店",
-            //   tip: "购买道具",
-            //   url: "/shop",
-            //   icon: Icons.shopping_cart_rounded,
-            //   color: os_wonderful_color[1],
-            // ),
-            NavigatorCard(
-              title: "水滴任务",
-              tip: "领取、查看任务进度",
-              url: "/water_task",
-              icon: Icons.task_rounded,
-              color: os_wonderful_color[1],
-            ),
-            // NavigatorCard(
-            //   title: "积分记录",
-            //   tip: "水滴收支详情",
-            //   url: "/water_inout_detail",
-            //   icon: Icons.view_list_rounded,
-            //   color: os_wonderful_color[4],
-            // ),
-          ],
+        body: DismissiblePage(
+          backgroundColor: Provider.of<ColorProvider>(context).isDark
+              ? os_dark_back
+              : os_back,
+          direction: DismissiblePageDismissDirection.startToEnd,
+          onDismissed: () {
+            Navigator.of(context).pop();
+          },
+          child: ListView(
+            children: [
+              NavigatorCard(
+                title: "水滴答题",
+                tip: "自动答题，水滴多多",
+                url: "/question",
+                icon: Icons.question_answer_outlined,
+                color: os_wonderful_color[0],
+              ),
+              NavigatorCard(
+                title: "水滴任务",
+                tip: "领取、查看任务进度",
+                url: "/water_task",
+                icon: Icons.task_alt_outlined,
+                color: os_wonderful_color[1],
+              ),
+              NavigatorCard(
+                title: "积分记录",
+                tip: "水滴收支详情",
+                url: "/water_inout_detail",
+                icon: Icons.format_list_bulleted_sharp,
+                color: os_wonderful_color[4],
+              ),
+              Container(height: 20),
+              NavigatorCard(
+                title: "我的背包",
+                tip: "点击查看所有物品",
+                url: "/bag",
+                icon: Icons.shopping_bag_outlined,
+                color: os_wonderful_color[2],
+              ),
+              NavigatorCard(
+                title: "道具商店",
+                tip: "购买道具",
+                url: "/shop",
+                icon: Icons.shopping_cart_outlined,
+                color: os_wonderful_color[1],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -168,44 +179,51 @@ class _NavigatorCardState extends State<NavigatorCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(
                     widget.icon,
                     size: 30,
                     color: widget.color,
                   ),
-                  Container(width: 10),
-                  Text(
-                    widget.title!,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_dark_white
-                          : Color(0xFF333344),
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Container(width: 15),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.title!,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : Color(0xFF333344),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Container(height: 5),
+                      Text(
+                        widget.tip!,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_dark_white
+                              : os_deep_grey,
+                          // fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
               Row(
                 children: [
-                  Text(
-                    widget.tip!,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_dark_dark_white
-                          : os_deep_grey,
-                      // fontWeight: FontWeight.bold,
-                    ),
-                  ),
                   Container(width: 5),
                   Icon(
-                    Icons.chevron_right_rounded,
-                    size: 16,
+                    Icons.chevron_right,
+                    size: 24,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_dark_white
-                        : os_deep_grey,
+                        : os_light_light_dark_card,
                   ),
                 ],
               ),

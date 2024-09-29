@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:badges/badges.dart' as badgee;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:offer_show/asset/autoQuestion.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
@@ -129,6 +130,38 @@ class _HomeState extends State<Home> {
     // print("\n\n\n\n\n\n\n\\n当前的工作目录${tempPath}\n\n\n\n\n\n\n\n");
   }
 
+  // 弹出评价框
+  popReviewDialog() async {
+    if (Platform.isIOS) {
+      print("评价评价评价");
+      int startCount = int.parse(
+        await getStorage(key: "startCount", initData: "3"), //启动5次App之后才能弹窗
+      );
+      bool isRated = (await getStorage(key: "isRated")).isNotEmpty;
+      if (!isRated) {
+        if (startCount < 0) {
+          showModal(
+            context: context,
+            title: "给个好评吧~",
+            cont: "河畔Lite App在不断优化您的体验和使用流程，您的鼓励对它很重要！",
+            confirmTxt: "好的！",
+            cancelTxt: "残忍拒绝~",
+            confirm: () {
+              final InAppReview inAppReview = InAppReview.instance;
+              inAppReview.openStoreListing(
+                appStoreId: '1620829749',
+              );
+            },
+          );
+          setStorage(key: "isRated", value: "1");
+        } else {
+          startCount--;
+          setStorage(key: "startCount", value: startCount.toString());
+        }
+      }
+    }
+  }
+
   @override
   void initState() {
     // _getPath();
@@ -136,6 +169,7 @@ class _HomeState extends State<Home> {
     _getNewMsg();
     _getDarkMode();
     _getBlackStatus();
+    popReviewDialog();
     super.initState();
   }
 

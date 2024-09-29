@@ -315,9 +315,9 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
             (load_done4 && index == 3 && failTask.length == 0)
         ? Empty(txt: "这里是一颗空的星球")
         : Container());
-    tmp.add(Container(
-      height: MediaQuery.of(context).size.height,
-    ));
+    // tmp.add(Container(
+    //   height: MediaQuery.of(context).size.height,
+    // ));
     return tmp;
   }
 
@@ -409,7 +409,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               },
               child: ListView(
                 children: _buildCont(0),
-                //physics: BouncingScrollPhysics(),
+                physics: AlwaysScrollableScrollPhysics(),
               ),
             ),
             getMyRrefreshIndicator(
@@ -420,7 +420,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               },
               child: ListView(
                 children: _buildCont(1),
-                //physics: BouncingScrollPhysics(),
+                physics: AlwaysScrollableScrollPhysics(),
               ),
             ),
             getMyRrefreshIndicator(
@@ -431,7 +431,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               },
               child: ListView(
                 children: _buildCont(2),
-                //physics: BouncingScrollPhysics(),
+                physics: AlwaysScrollableScrollPhysics(),
               ),
             ),
             getMyRrefreshIndicator(
@@ -442,7 +442,7 @@ class _WaterTaskState extends State<WaterTask> with TickerProviderStateMixin {
               },
               child: ListView(
                 children: _buildCont(3),
-                //physics: BouncingScrollPhysics(),
+                physics: AlwaysScrollableScrollPhysics(),
               ),
             ),
           ],
@@ -471,12 +471,12 @@ class _Card4State extends State<Card4> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
       child: myInkWell(
-        radius: 10,
+        radius: 15,
         color: Provider.of<ColorProvider>(context).isDark
             ? os_light_dark_card
             : os_white,
         widget: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 17.5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
@@ -537,12 +537,12 @@ class _Card3State extends State<Card3> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
       child: myInkWell(
-        radius: 10,
+        radius: 15,
         color: Provider.of<ColorProvider>(context).isDark
             ? os_light_dark_card
             : os_white,
         widget: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 17.5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
@@ -603,7 +603,7 @@ class _Card2State extends State<Card2> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
       child: myInkWell(
-        radius: 10,
+        radius: 15,
         color: Provider.of<ColorProvider>(context).isDark
             ? os_light_dark_card
             : os_white,
@@ -628,7 +628,7 @@ class _Card2State extends State<Card2> {
           // await XHttp().pureHttpWithCookie(url: widget.data["apply_link"]);
         },
         widget: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 17.5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
@@ -720,7 +720,7 @@ class _Card1State extends State<Card1> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 5),
       child: myInkWell(
-        radius: 10,
+        radius: 15,
         color: Provider.of<ColorProvider>(context).isDark
             ? os_light_dark_card
             : os_white,
@@ -738,22 +738,43 @@ class _Card1State extends State<Card1> {
           }
         },
         widget: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.data!["name"],
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Provider.of<ColorProvider>(context).isDark
-                      ? os_dark_white
-                      : os_black,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.data!["name"],
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_white
+                          : os_black,
+                    ),
+                  ),
+                  Container(width: 10),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 2.5, vertical: 0),
+                    decoration: BoxDecoration(
+                      // color: os_color,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Text(
+                      "立即申请",
+                      style: TextStyle(
+                        color: os_color,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Container(height: 10),
               Text(
@@ -771,30 +792,14 @@ class _Card1State extends State<Card1> {
                   fontSize: 14,
                 ),
               ),
-              Container(height: 10),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                child: Row(
-                  children: [
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: os_color,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Text(
-                        "立即申请",
-                        style: TextStyle(
-                          color: os_white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(height: 10),
+              // Container(
+              //   width: MediaQuery.of(context).size.width,
+              //   child: Row(
+              //     children: [
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),

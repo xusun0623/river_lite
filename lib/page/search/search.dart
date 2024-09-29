@@ -809,9 +809,12 @@ class _SearchBtnState extends State<SearchBtn> {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         widget: Center(
-          child: Icon(
-            Icons.search,
-            color: Color(0xFFA3A3A3),
+          child: os_svg(
+            path: Provider.of<ColorProvider>(context).isDark
+                ? "lib/img/search_white.svg"
+                : "lib/img/search.svg",
+            width: 24,
+            height: 24,
           ),
         ),
         radius: 100,

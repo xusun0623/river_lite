@@ -10,6 +10,7 @@ import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/nowMode.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/components/loading.dart';
@@ -352,13 +353,17 @@ class _TopicColumnState extends State<TopicColumn> {
                   ]
                 : []),
             IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, "/search", arguments: 0);
-                },
-                icon: Icon(
-                  Icons.search,
-                  color: os_deep_grey,
-                )),
+              onPressed: () {
+                Navigator.pushNamed(context, "/search", arguments: 0);
+              },
+              icon: os_svg(
+                path: Provider.of<ColorProvider>(context).isDark
+                    ? "lib/img/search_white.svg"
+                    : "lib/img/search.svg",
+                width: 24,
+                height: 24,
+              ),
+            ),
             Container(width: 5),
           ],
           title: Text(

@@ -18,6 +18,7 @@ import 'package:offer_show/page/column_waterfall/column_btn.dart';
 import 'package:offer_show/page/home/homeNew.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
+import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
@@ -62,13 +63,16 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
     await _getStorageData();
     await _getThemeData();
     await _getInitData();
+    setState(() {
+      hasToken = true;
+    });
   }
 
   bool showTabbar = true;
 
   @override
   void initState() {
-    prepareData();
+    _getValid();
     super.initState();
     _tabController = TabController(
       length: 0,
@@ -292,7 +296,7 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
           children: [
             Expanded(
               child: BackToTop(
-                show: showBackToTop,
+                show: false,
                 animation: true,
                 bottom: 50,
                 refresh: () {
@@ -330,6 +334,14 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
               (init_loading ? 180 / 2 : 120 / 2),
           child: ColumnBtn(
             needPush: true,
+            clickBackToTop: () {
+              _scrollController.animateTo(
+                0,
+                duration: Duration(milliseconds: 300),
+                curve: Curves.ease,
+              );
+            },
+            showBackToTop: showBackToTop,
             loading: init_loading,
             name: columnName,
             fid: columnID,
@@ -341,10 +353,11 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
               });
               setState(() {
                 lastThemeIndex = 0;
-                init_loading = true;
               });
               _setThemeIndex();
               await Future.delayed(Duration(milliseconds: 400));
+              init_loading = true;
+              setState(() {});
               if (res != null) {
                 setStorage(
                   key: "left_column",
@@ -368,6 +381,19 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
     );
   }
 
+  bool hasToken = false;
+  _getValid() async {
+    String tmp_txt = await getStorage(key: "myinfo", initData: "");
+    // print("${tmp_txt}");
+    if (tmp_txt == "") {
+      hasToken = false;
+    } else {
+      hasToken = true;
+      prepareData();
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -377,104 +403,170 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
         toolbarHeight: 0,
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          if (theme.length != 1 && theme.length != 0)
-            ExpansionCustom(
-              padding: EdgeInsets.only(top: 0, bottom: 0),
-              title: Container(),
-              onExpansionChanged: (res) {},
-              isExpanded: showTabbar,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        color: Provider.of<ColorProvider>(context).isDark
-                            ? os_dark_back
-                            : os_back,
-                        child: TabBar(
-                          padding: EdgeInsets.only(left: 10, right: 15),
-                          controller: _tabController,
-                          isScrollable: true,
-                          dividerColor: Colors.transparent,
-                          tabAlignment: TabAlignment.start,
-                          labelPadding: EdgeInsets.symmetric(horizontal: 14.5),
-                          indicator: BubbleTabIndicator(
-                            indicatorColor:
-                                Provider.of<ColorProvider>(context).isDark
-                                    ? os_white_opa
-                                    : os_dark_back,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 15.5,
-                              vertical: 7.5,
-                            ),
-                          ),
-                          // indicatorColor:
-                          //     const Color.fromARGB(0, 194, 181, 181),
-                          // labelPadding: EdgeInsets.symmetric(horizontal: 10),
-                          unselectedLabelStyle: TextStyle(
-                            color: Provider.of<ColorProvider>(context).isDark
-                                ? os_deep_grey
-                                : (isDesktop()
-                                    ? Color(0xff666666)
-                                    : os_dark_back),
-                          ),
-                          labelStyle: TextStyle(
+      body: !hasToken
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushNamed("/login", arguments: 0);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.chevron_right,
+                          color: Color(0x01ffffff),
+                          size: 16,
+                        ),
+                        Text(
+                          "请登录",
+                          style: TextStyle(
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
-                                : os_white,
+                                : os_black,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
                           ),
-                          onTap: (res) {
-                            var tmpId = [
-                              {
-                                "classificationType_name": "全部",
-                                "classificationType_id": -1
-                              },
-                              ...theme
-                            ][res]["classificationType_id"];
-                            dontRePullTab = true;
-                            subColumnID = tmpId;
-                            lastThemeIndex = res;
-                            setState(() {});
-                            _setThemeIndex();
-                            _getInitData();
-                          },
-                          tabs: [
-                            {
-                              "classificationType_name": "全部",
-                              "classificationType_id": -1
-                            },
-                            ...theme
-                          ].map((ele) {
-                            // classificationType_id
-                            return Tab(text: ele["classificationType_name"]);
-                          }).toList(),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
+                          size: 22,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      print("123");
+                      prepareData();
+                    },
+                    child: Container(
+                      color: Color(0x01ffffff),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      child: Text(
+                        "登录后请点此刷新",
+                        style: TextStyle(
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
                     ),
-                  ],
-                )
+                  ),
+                  Container(height: 60),
+                ],
+              ),
+            )
+          : Column(
+              children: [
+                if (theme.length != 1 && theme.length != 0)
+                  ExpansionCustom(
+                    padding: EdgeInsets.only(top: 0, bottom: 0),
+                    title: Container(),
+                    onExpansionChanged: (res) {},
+                    isExpanded: showTabbar,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_dark_back
+                                  : os_back,
+                              child: TabBar(
+                                padding: EdgeInsets.only(left: 10, right: 15),
+                                controller: _tabController,
+                                isScrollable: true,
+                                dividerColor: Colors.transparent,
+                                tabAlignment: TabAlignment.center,
+                                labelPadding:
+                                    EdgeInsets.symmetric(horizontal: 14.5),
+                                indicator: BubbleTabIndicator(
+                                  indicatorColor:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_white_opa
+                                          : Color(0x0c000000),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 15.5,
+                                    vertical: 7.5,
+                                  ),
+                                ),
+                                unselectedLabelStyle: TextStyle(
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_deep_grey
+                                          : (isDesktop()
+                                              ? Color(0xff666666)
+                                              : Color(0xff555555)),
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                labelStyle: TextStyle(
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_white
+                                          : os_dark_back,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                                onTap: (res) {
+                                  var tmpId = [
+                                    {
+                                      "classificationType_name": "全部",
+                                      "classificationType_id": -1
+                                    },
+                                    ...theme
+                                  ][res]["classificationType_id"];
+                                  dontRePullTab = true;
+                                  subColumnID = tmpId;
+                                  lastThemeIndex = res;
+                                  setState(() {});
+                                  _setThemeIndex();
+                                  _getInitData();
+                                },
+                                tabs: [
+                                  {
+                                    "classificationType_name": "全部",
+                                    "classificationType_id": -1
+                                  },
+                                  ...theme
+                                ].map((ele) {
+                                  // classificationType_id
+                                  return Tab(
+                                      text: ele["classificationType_name"]);
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                Expanded(
+                  child: getMyRrefreshIndicator(
+                    context: context,
+                    color: Provider.of<ColorProvider>(context).isDark
+                        ? os_dark_dark_white
+                        : os_dark_back,
+                    key: _indicatorKey,
+                    onRefresh: () async {
+                      await _getInitData();
+                      return;
+                    },
+                    child:
+                        data!.length == 0 ? OccuLoading() : _buildComponents(),
+                  ),
+                ),
               ],
             ),
-          Expanded(
-            child: getMyRrefreshIndicator(
-              context: context,
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_dark_white
-                  : os_dark_back,
-              key: _indicatorKey,
-              onRefresh: () async {
-                await _getInitData();
-                return;
-              },
-              child: data!.length == 0 ? OccuLoading() : _buildComponents(),
-            ),
-          ),
-        ],
-      ),
     );
   }
 

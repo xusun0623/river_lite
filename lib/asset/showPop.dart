@@ -58,8 +58,8 @@ showPopWithHeight(BuildContext context, List<Widget> widgets, double height) {
         : os_white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20),
-        topRight: Radius.circular(20),
+        topLeft: Radius.circular(22),
+        topRight: Radius.circular(22),
       ),
     ),
     context: context,
@@ -72,8 +72,8 @@ showPopWithHeight(BuildContext context, List<Widget> widgets, double height) {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+            topLeft: Radius.circular(18),
+            topRight: Radius.circular(18),
           ),
           color: Provider.of<ColorProvider>(context).isDark
               ? os_dark_back
@@ -98,8 +98,8 @@ showPop(BuildContext context, List<Widget> widgets) {
         : os_white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20),
-        topRight: Radius.circular(20),
+        topLeft: Radius.circular(19),
+        topRight: Radius.circular(19),
       ),
     ),
     context: context,

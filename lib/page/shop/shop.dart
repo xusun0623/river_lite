@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -103,6 +104,7 @@ class _ShopState extends State<Shop> {
             Navigator.of(context).pop();
           },
         ),
+        centerTitle: true,
         title: Text(
           "道具商店",
           style: TextStyle(
@@ -119,17 +121,27 @@ class _ShopState extends State<Shop> {
       ),
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
-      body: loading
-          ? ListView(
-              children: [BottomLoading()],
-            )
-          : ListView(
-              children: [
-                ...(list_item.map((e) {
-                  return GoodCard(data: e);
-                }).toList()),
-              ],
-            ),
+      body: DismissiblePage(
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        direction: DismissiblePageDismissDirection.startToEnd,
+        onDismissed: () {
+          Navigator.of(context).pop();
+        },
+        child: Container(
+          child: loading
+              ? ListView(
+                  children: [BottomLoading()],
+                )
+              : ListView(
+                  children: [
+                    ...(list_item.map((e) {
+                      return GoodCard(data: e);
+                    }).toList()),
+                  ],
+                ),
+        ),
+      ),
     );
   }
 }
@@ -304,13 +316,13 @@ class _PopChatState extends State<PopChat> {
           color: Provider.of<ColorProvider>(context).isDark
               ? os_dark_white
               : os_black,
-          fontSize: 30,
+          fontSize: 20,
           fontWeight: FontWeight.w900,
         ),
       ),
       Container(height: 15),
       Text(
-        "水滴并非实体/数字货币，仅能在本论坛内流通，不能与实体/数字货币兑换",
+        "水滴并非实体/数字货币，仅能在本论坛内流通，不能与任何实体/数字货币兑换",
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 14,

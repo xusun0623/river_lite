@@ -502,7 +502,16 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                           ),
                         ),
                         Container(width: 10),
-                        Text("上传图片中…")
+                        Text(
+                          "上传图片中…",
+                          style: TextStyle(
+                            color: Provider.of<ColorProvider>(context).isDark
+                                ? os_dark_dark_white
+                                : os_black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        )
                       ],
                     ),
                   )
@@ -516,7 +525,7 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                               : Container(
                                   width:
                                       MediaQuery.of(context).size.width - 120,
-                                  height: 53,
+                                  // height: 53,
                                   child: TextField(
                                     keyboardAppearance:
                                         Provider.of<ColorProvider>(context,
@@ -923,7 +932,7 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                 widget.index == 0 ? Color(0x44707070) : Color(0x44002873),
             highlightColor:
                 widget.index == 0 ? Color(0x88C8C8C8) : Color(0x88135CE2),
-            radius: 5,
+            radius: 10,
             widget: widget.isImage ?? false
                 ? Stack(
                     children: [
@@ -942,35 +951,40 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                             );
                           },
                           child: ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            child: CachedNetworkImage(
-                              filterQuality: FilterQuality.low,
-                              width: 125,
-                              height: 180,
-                              fit: BoxFit.cover,
-                              placeholderFadeInDuration:
-                                  Duration(milliseconds: 500),
-                              placeholder: (context, url) => Container(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            child: Hero(
+                              tag: widget.cont!,
+                              child: CachedNetworkImage(
+                                filterQuality: FilterQuality.low,
                                 width: 125,
                                 height: 180,
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 50,
-                                  vertical: 77.5,
+                                fit: BoxFit.cover,
+                                placeholderFadeInDuration:
+                                    Duration(milliseconds: 500),
+                                // memCacheHeight: 540,
+                                memCacheWidth: 375,
+                                placeholder: (context, url) => Container(
+                                  width: 125,
+                                  height: 180,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 50,
+                                    vertical: 77.5,
+                                  ),
+                                  child: CircularProgressIndicator(
+                                    color: widget.index == 0
+                                        ? os_deep_grey
+                                        : os_white,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    color: widget.index == 0
+                                        ? os_grey
+                                        : os_deep_blue,
+                                  ),
                                 ),
-                                child: CircularProgressIndicator(
-                                  color: widget.index == 0
-                                      ? os_deep_grey
-                                      : os_white,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
-                                  color: widget.index == 0
-                                      ? os_grey
-                                      : os_deep_blue,
-                                ),
+                                imageUrl: widget.cont!,
                               ),
-                              imageUrl: widget.cont!,
                             ),
                           ),
                         ),
@@ -1001,9 +1015,9 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                   )
                 : Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
                         maxWidth: MediaQuery.of(context).size.width - 130,

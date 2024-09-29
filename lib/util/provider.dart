@@ -35,12 +35,12 @@ class ShowPicProvider extends ChangeNotifier {
   bool isShow = false;
 
   switchMode() async {
-    isShow = !isShow;
+    // isShow = !isShow;
     notifyListeners();
   }
 
   refresh() {
-    setStorage(key: "pic", value: isShow ? "1" : "");
+    // setStorage(key: "pic", value: isShow ? "1" : "");
     notifyListeners();
   }
 }

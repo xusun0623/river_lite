@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/page/column_waterfall/column_btn.dart';
 import 'package:offer_show/util/provider.dart';
@@ -145,7 +146,46 @@ class _ColumnWaterfallSelectionState extends State<ColumnWaterfallSelection> {
                     ),
                   ],
                 ),
-                Container(height: 50),
+                Container(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Bounce(
+                      duration: Duration(milliseconds: 100),
+                      onPressed: () {
+                        Navigator.of(context).pushNamed("/square");
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        color: Color(0x01ffffff),
+                        child: Row(
+                          children: [
+                            Container(width: 18),
+                            Text(
+                              "查看全部板块",
+                              style: TextStyle(
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_deep_grey
+                                        : os_deep_grey,
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right,
+                              size: 18,
+                              color: Provider.of<ColorProvider>(context).isDark
+                                  ? os_deep_grey
+                                  : os_deep_grey,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Container(height: 20),
                 Container(
                   width: 60,
                   height: 60,

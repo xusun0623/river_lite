@@ -12,6 +12,7 @@ import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/copy_sheet.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
@@ -561,6 +562,7 @@ class _TopicDetailState extends State<TopicDetail> {
         } else {
           tmp.add(GestureDetector(
             onLongPress: () {
+              XSVibrate().impact();
               showOSActionSheet(
                 context: context,
                 list: ["复制文本内容"],
@@ -650,7 +652,12 @@ class _TopicDetailState extends State<TopicDetail> {
     //获取精华内容提示的Banner
     return Container(
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.symmetric(horizontal: os_edge, vertical: 10),
+      margin: EdgeInsets.only(
+        left: os_edge,
+        right: os_edge,
+        top: 10,
+        bottom: getIsForbiddenCapture() ? 0 : 10,
+      ),
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -750,9 +757,10 @@ class _TopicDetailState extends State<TopicDetail> {
         s_tmp += e["infor"] + "\n";
       }
     });
-    Clipboard.setData(ClipboardData(
-        text: s_tmp.replaceAll(RegExp(r'\[mobcent_phiz=[^\]]+\]'), '')));
-    Fluttertoast.showToast(msg: "复制成功");
+    showOSCopySheet(
+      context,
+      s_tmp.replaceAll(RegExp(r'\[mobcent_phiz=[^\]]+\]'), ''),
+    );
   }
 
   List<Widget> _buildTotal() {
@@ -1064,15 +1072,20 @@ class _TopicDetailState extends State<TopicDetail> {
                               Positioned(
                                 child: IgnorePointer(
                                   child: Wrap(
+                                    alignment: WrapAlignment.center,
+                                    runAlignment: WrapAlignment.center,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
                                     children: [
-                                      ...List.generate(isDesktop() ? 300 : 200,
+                                      ...List.generate(isDesktop() ? 50 : 100,
                                           (idx) {
                                         return Transform.rotate(
                                           angle: -pi / 6,
                                           child: Container(
                                             padding: EdgeInsets.symmetric(
-                                              horizontal: 20,
-                                              vertical: 40,
+                                              horizontal:
+                                                  isDesktop() ? 100 : 70,
+                                              vertical: isDesktop() ? 80 : 60,
                                             ),
                                             child: Opacity(
                                               opacity: 0.08,
@@ -1427,14 +1440,28 @@ class _TopicBottomState extends State<TopicBottom> {
                   arguments: widget.data['boardId']);
             },
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 7.5, vertical: 3),
+              padding: EdgeInsets.only(
+                left: 9.5,
+                top: 4,
+                bottom: 4,
+                right: 2.5,
+              ),
               decoration: BoxDecoration(
                 color: os_color_opa,
                 borderRadius: BorderRadius.all(Radius.circular(5)),
               ),
-              child: Text(
-                "收录自专栏: " + widget.data["forumName"] + " >",
-                style: TextStyle(color: os_color),
+              child: Row(
+                children: [
+                  Text(
+                    widget.data["forumName"],
+                    style: TextStyle(color: os_color),
+                  ),
+                  Icon(
+                    Icons.chevron_right,
+                    color: os_color,
+                    size: 18,
+                  ),
+                ],
               ),
             ),
           ),

@@ -130,19 +130,10 @@ class _LeftRowBtnState extends State<LeftRowBtn> {
                     image = await pickeImgFile(context);
                   } else {
                     print("选择小屏图片");
-                    // List<Media> res = await ImagesPicker.pick(
-                    //   count: 50,
-                    //   pickType: PickType.image,
-                    //   quality: 0.7, //图片质量
-                    // );
                     List res = (await getPhoneImages(context))!;
                     res.forEach((element) {
                       image.add(XFile(element.path));
                     });
-                    // final ImagePicker _picker = ImagePicker();
-                    // image = await _picker.pickMultiImage(
-                    //   imageQuality: 50,
-                    // );
                   }
                   print("${image}");
                   if (image == null || image.length == 0) {

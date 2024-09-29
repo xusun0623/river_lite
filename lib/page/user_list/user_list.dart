@@ -274,7 +274,7 @@ class _UserListCardState extends State<UserListCard> {
             ],
           ),
         ),
-        radius: 10,
+        radius: 17.5,
       ),
     );
   }

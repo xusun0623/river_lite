@@ -200,7 +200,8 @@ class _MsgState extends State<Msg> {
                   ? Container()
                   : Container(
                       margin: EdgeInsets.only(bottom: 20),
-                      child: BottomLoading(color: os_white)),
+                      child: BottomLoading(color: Color(0x01ffffff)),
+                    ),
             ],
           ),
         ),

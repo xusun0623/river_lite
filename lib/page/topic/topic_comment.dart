@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/copy_sheet.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/myinfo.dart';
@@ -432,10 +433,10 @@ class _CommentState extends State<Comment> {
       tap: (res) async {
         Navigator.pop(context);
         if (res == "复制文本内容") {
-          Clipboard.setData(
-            ClipboardData(text: copy_txt),
+          showOSCopySheet(
+            context,
+            copy_txt,
           );
-          showToast(context: context, type: XSToast.success, txt: "复制成功！");
         }
         if (res == "举报反馈") {
           _feedback();

@@ -26,45 +26,45 @@ class _SettingState extends State<Setting> {
   List<Widget> _buildWidget() {
     List<Widget> tmp = [];
     tmp.addAll([
-      ResponsiveWidget(
-        child: SwitchListTile(
-          inactiveTrackColor: Provider.of<ColorProvider>(context).isDark
-              ? Color(0x33FFFFFF)
-              : os_middle_grey,
-          onChanged: (change_val) {
-            Provider.of<ShowPicProvider>(context, listen: false).isShow =
-                change_val;
-            Provider.of<ShowPicProvider>(context, listen: false).refresh();
-            Provider.of<TabShowProvider>(context, listen: false).index = 0;
-            Provider.of<TabShowProvider>(context, listen: false).refresh();
-          },
-          value: Provider.of<ShowPicProvider>(context).isShow,
-          title: Row(
-            children: [
-              Text(
-                "展示图区",
-                style: TextStyle(
-                    color: Provider.of<ColorProvider>(context).isDark
-                        ? os_dark_white
-                        : os_black),
-              ),
-            ],
-          ),
-          subtitle: Text(
-            "手动切换是否展示图区（仅针对手机端生效）",
-            style: TextStyle(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_dark_white
-                  : os_deep_grey,
-            ),
-          ),
-        ),
-      ),
-      Container(height: 15),
-      Opacity(
-          opacity: Provider.of<ColorProvider>(context).isDark ? 0.6 : 1,
-          child: SelectCard()),
-      Container(height: 20),
+      // ResponsiveWidget(
+      //   child: SwitchListTile(
+      //     inactiveTrackColor: Provider.of<ColorProvider>(context).isDark
+      //         ? Color(0x33FFFFFF)
+      //         : os_middle_grey,
+      //     onChanged: (change_val) {
+      //       Provider.of<ShowPicProvider>(context, listen: false).isShow =
+      //           change_val;
+      //       Provider.of<ShowPicProvider>(context, listen: false).refresh();
+      //       Provider.of<TabShowProvider>(context, listen: false).index = 0;
+      //       Provider.of<TabShowProvider>(context, listen: false).refresh();
+      //     },
+      //     value: Provider.of<ShowPicProvider>(context).isShow,
+      //     title: Row(
+      //       children: [
+      //         Text(
+      //           "展示图区",
+      //           style: TextStyle(
+      //               color: Provider.of<ColorProvider>(context).isDark
+      //                   ? os_dark_white
+      //                   : os_black),
+      //         ),
+      //       ],
+      //     ),
+      //     subtitle: Text(
+      //       "手动切换是否展示图区（仅针对手机端生效）",
+      //       style: TextStyle(
+      //         color: Provider.of<ColorProvider>(context).isDark
+      //             ? os_dark_dark_white
+      //             : os_deep_grey,
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      // Container(height: 15),
+      // Opacity(
+      //     opacity: Provider.of<ColorProvider>(context).isDark ? 0.6 : 1,
+      //     child: SelectCard()),
+      Container(height: 5),
       ResponsiveWidget(
         child: SwitchListTile(
           inactiveTrackColor: Provider.of<ColorProvider>(context).isDark
