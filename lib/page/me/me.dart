@@ -79,22 +79,7 @@ class _MeState extends State<Me> {
             ? os_dark_white
             : os_black,
         elevation: 0,
-        actions: [
-          // isDesktop()
-          //     ? Container()
-          //     : IconButton(
-          //         icon: os_svg(
-          //           path: Provider.of<ColorProvider>(context).isDark
-          //               ? "lib/img/qrcode_light.svg"
-          //               : "lib/img/qrcode_dark.svg",
-          //           width: 20,
-          //           height: 20,
-          //         ),
-          //         onPressed: () {
-          //           Navigator.pushNamed(context, "/scan_qrcode");
-          //         },
-          //       ),
-        ],
+        actions: [],
       ),
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
@@ -120,8 +105,9 @@ class _MeState extends State<Me> {
                     name: provider.data!["name"] ?? provider.data!["userName"],
                     score: provider.data!["score"],
                   ),
+            Container(height: 15),
             MeFiveBtns(),
-            Container(height: 17.5),
+            Container(height: 15),
             MeListGroup(),
             // Container(height: MediaQuery.of(context).size.height / 2),
           ],
@@ -296,11 +282,15 @@ class _MeFiveBtnsState extends State<MeFiveBtns> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 5),
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color:
+            Provider.of<ColorProvider>(context).isDark ? os_white_opa : os_back,
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Wrap(
         alignment: WrapAlignment.spaceEvenly,
-        // runAlignment: WrapAlignment.center,
-        // alignment: WrapAlignment.spaceAround,
         children: [
           MeBtnHero(
             img: "lib/img/me/btn1.svg",
@@ -309,25 +299,24 @@ class _MeFiveBtnsState extends State<MeFiveBtns> {
           ),
           MeBtnHero(
             img: "lib/img/me/btn2.svg",
-            txt: "我的发表",
+            txt: "发表",
             type: 2,
           ),
           MeBtnHero(
             img: "lib/img/me/btn3.svg",
-            txt: "我的回复",
+            txt: "回复",
             type: 3,
           ),
           MeBtnHero(
             img: "lib/img/me/btn4.svg",
-            txt: "浏览历史",
+            txt: "足迹",
             type: 4,
           ),
           MeBtnHero(
             img: "lib/img/me/btn5.svg",
-            txt: "草稿箱",
+            txt: "草稿",
             type: 5,
           ),
-          Container(width: 110),
         ],
       ),
     );
@@ -353,18 +342,13 @@ class MeBtnHero extends StatefulWidget {
 class _MeBtnHeroState extends State<MeBtnHero> {
   @override
   Widget build(BuildContext context) {
+    double mW = MediaQuery.of(context).size.width;
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+      width: (mW - 30 - (isDesktop() ? LeftNaviWidth : 0)) / 5,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.05),
-              blurRadius: 3,
-              spreadRadius: 1,
-              offset: Offset(1.5, 1.5),
-            ),
-          ]),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        boxShadow: [],
+      ),
       child: myInkWell(
         tap: () async {
           String myinfo_txt = await getStorage(key: "myinfo", initData: "");
@@ -380,36 +364,29 @@ class _MeBtnHeroState extends State<MeBtnHero> {
             });
         },
         radius: 20,
-        color: Provider.of<ColorProvider>(context).isDark
-            ? os_light_dark_card
-            : os_white,
+        color: Colors.transparent,
         widget: Container(
-          width: 60 + (widget.txt ?? "收藏").length * 14.0,
           padding: EdgeInsets.symmetric(vertical: 12.5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
-            border: Border.all(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? Color(0x11FFFFFF)
-                  : os_white,
-            ),
           ),
-          child: Row(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(height: 2),
               Hero(
-                tag:
-                    "lib/img/${Provider.of<ColorProvider>(context).isDark ? "me_dark" : "me"}/btn${widget.type}.svg",
+                tag: "me_btn_${widget.type}",
                 child: Material(
                   color: Colors.transparent,
                   child: os_svg(
                     path:
                         "lib/img/${Provider.of<ColorProvider>(context).isDark ? "me_dark" : "me"}/btn${widget.type}.svg",
-                    width: 32,
-                    height: 32,
+                    width: 38,
+                    height: 38,
                   ),
                 ),
               ),
+              Container(height: 3),
               Hero(
                 tag: widget.txt!,
                 child: Material(
@@ -418,7 +395,7 @@ class _MeBtnHeroState extends State<MeBtnHero> {
                     widget.txt!,
                     style: XSTextStyle(
                       context: context,
-                      fontSize: 15,
+                      fontSize: 14,
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_dark_white
                           : Color(0xFF505050),
@@ -426,7 +403,7 @@ class _MeBtnHeroState extends State<MeBtnHero> {
                   ),
                 ),
               ),
-              Container(width: 5),
+              Container(height: 5),
             ],
           ),
         ),
@@ -508,7 +485,7 @@ class MeInfo_HeadState extends State<MeInfoHead> {
         color: Provider.of<ColorProvider>(context).isDark
             ? os_dark_back
             : os_white,
-        padding: EdgeInsets.only(left: 25, right: 25, bottom: 40, top: 0),
+        padding: EdgeInsets.only(left: 25, right: 25, bottom: 20, top: 0),
         child: Row(
           children: [
             Container(

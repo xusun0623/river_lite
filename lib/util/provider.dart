@@ -177,9 +177,15 @@ class MsgProvider extends ChangeNotifier {
 }
 
 class TabShowProvider extends ChangeNotifier {
-  int? index = 0;
+  int index = 0;
+  int desktopIndex = 0;
 
   changeIndex(int idx) {
+    index = idx;
+    notifyListeners();
+  }
+
+  changeDesktopIndex(int idx) {
     index = idx;
     notifyListeners();
   }

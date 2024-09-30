@@ -36,6 +36,8 @@ class _ColumnBtnState extends State<ColumnBtn> {
   @override
   Widget build(BuildContext context) {
     bool loading = widget.loading ?? false;
+    bool smallScreen = MediaQuery.of(context).size.width <= 350;
+    double mW = MediaQuery.of(context).size.width;
     return Container(
       child: GestureDetector(
         onTap: () {
@@ -85,7 +87,7 @@ class _ColumnBtnState extends State<ColumnBtn> {
           child: AnimatedContainer(
             duration: Duration(milliseconds: 500),
             curve: Curves.ease,
-            width: loading ? 180 : 110,
+            width: loading ? 180 : (smallScreen ? (mW - 40) / 3 : 110),
             height: loading ? 60 : 40,
             decoration: BoxDecoration(
               color: Provider.of<ColorProvider>(context).isDark
@@ -116,7 +118,7 @@ class _ColumnBtnState extends State<ColumnBtn> {
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_white
                             : os_black,
-                        fontSize: 13.5,
+                        fontSize: smallScreen ? 13 : 13.5,
                         height: 1,
                       ),
                     ),

@@ -342,7 +342,9 @@ class _TopicDetailState extends State<TopicDetail> {
         data = tmp;
         load_done = ((tmp["list"] ?? []).length < limit);
         setState(() {
-          total_num = data["total_num"];
+          if (_select == 0) {
+            total_num = data["total_num"];
+          }
           isListView = total_num! > 100;
           if (total_num == 0) {
             //置顶的评论数量
@@ -638,12 +640,17 @@ class _TopicDetailState extends State<TopicDetail> {
               color: os_color,
             ),
             Container(width: 5),
-            Text(
-              "该板块已添加水印，禁止截图外传",
-              style: XSTextStyle(
-                context: context,
-                fontSize: 14,
-                color: os_color,
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width - 80),
+              child: Text(
+                "该板块已添加水印，禁止截图外传",
+                overflow: TextOverflow.ellipsis,
+                style: XSTextStyle(
+                  context: context,
+                  fontSize: 14,
+                  color: os_color,
+                ),
               ),
             ),
           ],
@@ -676,12 +683,17 @@ class _TopicDetailState extends State<TopicDetail> {
               color: os_color,
             ),
             Container(width: 5),
-            Text(
-              "您现在浏览的是本版块的精选内容",
-              style: XSTextStyle(
-                context: context,
-                fontSize: 14,
-                color: os_color,
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width - 80),
+              child: Text(
+                "您现在浏览的是本版块的精选内容",
+                overflow: TextOverflow.ellipsis,
+                style: XSTextStyle(
+                  context: context,
+                  fontSize: 14,
+                  color: os_color,
+                ),
               ),
             ),
           ],

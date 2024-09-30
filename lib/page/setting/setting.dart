@@ -6,13 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
-import 'package:offer_show/asset/showPop.dart';
-import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/newNaviBar.dart';
-import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -261,7 +258,6 @@ class _SettingState extends State<Setting> {
 
   @override
   Widget build(BuildContext context) {
-    TabShowProvider provider = Provider.of<TabShowProvider>(context);
     return Baaaar(
       child: Scaffold(
         backgroundColor: Provider.of<ColorProvider>(context).isDark
@@ -309,58 +305,6 @@ class _SettingState extends State<Setting> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class SelectCard extends StatefulWidget {
-  SelectCard({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<SelectCard> createState() => _SelectCardState();
-}
-
-class _SelectCardState extends State<SelectCard> {
-  @override
-  Widget build(BuildContext context) {
-    ShowPicProvider provider = Provider.of<ShowPicProvider>(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Provider.of<ShowPicProvider>(context, listen: false).isShow = false;
-            Provider.of<ShowPicProvider>(context, listen: false).refresh();
-            Provider.of<TabShowProvider>(context, listen: false).index = 0;
-            Provider.of<TabShowProvider>(context, listen: false).refresh();
-          },
-          child: os_svg(
-            width: 150,
-            height: 250,
-            path: !provider.isShow
-                ? "lib/img/setting/2-se.svg"
-                : "lib/img/setting/2.svg",
-          ),
-        ),
-        Container(width: 15),
-        GestureDetector(
-          onTap: () {
-            Provider.of<ShowPicProvider>(context, listen: false).isShow = true;
-            Provider.of<ShowPicProvider>(context, listen: false).refresh();
-            Provider.of<TabShowProvider>(context, listen: false).index = 0;
-            Provider.of<TabShowProvider>(context, listen: false).refresh();
-          },
-          child: os_svg(
-            width: 150,
-            height: 250,
-            path: provider.isShow
-                ? "lib/img/setting/1-se.svg"
-                : "lib/img/setting/1.svg",
-          ),
-        ),
-      ],
     );
   }
 }

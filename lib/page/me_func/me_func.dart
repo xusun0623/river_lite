@@ -25,11 +25,11 @@ import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
 
 class MeFunc extends StatefulWidget {
-  int? type;
+  int type;
   int? uid;
   MeFunc({
     Key? key,
-    this.type,
+    required this.type,
     this.uid,
   }) : super(key: key);
 
@@ -170,14 +170,14 @@ class _MeFuncState extends State<MeFunc> {
         appBar: AppBar(
           backgroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_back
-              : Color(0xFFF3F3F3),
+              : os_back,
           foregroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_white
               : Color(0xFF505050),
           elevation: 0,
           title: Text(
             _showTopTitle
-                ? ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type!]
+                ? ["", "收藏", "发表", "回复", "足迹", "草稿"][widget.type]
                 : "",
             style: XSTextStyle(
               context: context,
@@ -253,10 +253,10 @@ class _MeFuncState extends State<MeFunc> {
 }
 
 class MeFuncHead extends StatefulWidget {
-  int? type;
+  int type;
   MeFuncHead({
     Key? key,
-    this.type,
+    required this.type,
   }) : super(key: key);
 
   @override
@@ -271,9 +271,7 @@ class _MeFuncHeadState extends State<MeFuncHead> {
       child: Row(
         children: [
           Hero(
-            tag: Provider.of<ColorProvider>(context).isDark
-                ? "lib/img/me_dark/btn${widget.type}.svg"
-                : "lib/img/me/btn${widget.type}.svg",
+            tag: "me_btn_${widget.type}",
             child: Material(
               color: Colors.transparent,
               child: os_svg(
@@ -287,13 +285,13 @@ class _MeFuncHeadState extends State<MeFuncHead> {
           ),
           Container(width: 10),
           Hero(
-            tag: ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type!],
+            tag: ["", "收藏", "发表", "回复", "足迹", "草稿"][widget.type],
             child: Material(
               color: Colors.transparent,
               child: Container(
                 width: 200,
                 child: Text(
-                  ["", "收藏", "我的发表", "我的回复", "浏览历史", "草稿箱"][widget.type!],
+                  ["", "收藏", "发表", "回复", "足迹", "草稿"][widget.type],
                   style: XSTextStyle(
                     context: context,
                     fontSize: 22,

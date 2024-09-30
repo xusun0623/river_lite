@@ -231,6 +231,8 @@ class ColorBtn extends StatefulWidget {
 class _ColorBtnState extends State<ColorBtn> {
   @override
   Widget build(BuildContext context) {
+    bool isSmall = MediaQuery.of(context).size.width < 330;
+    double mW = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         if (widget.tap != null) {
@@ -244,12 +246,12 @@ class _ColorBtnState extends State<ColorBtn> {
               opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
               child: os_svg(
                 path: widget.path,
-                width: 108,
-                height: 51,
+                width: isSmall ? mW / 3 * 0.9 : 108,
+                height: isSmall ? mW / 3 * 51 / 108 * 0.9 : 51,
               ),
             ),
             Positioned(
-              top: 14,
+              top: isSmall ? 10 : 14,
               left: 20,
               child: badgee.Badge(
                 position: badgee.BadgePosition.topEnd(top: -10, end: 50),
@@ -279,7 +281,7 @@ class _ColorBtnState extends State<ColorBtn> {
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
                                 : os_white,
-                            fontSize: 16,
+                            fontSize: isSmall ? 14 : 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

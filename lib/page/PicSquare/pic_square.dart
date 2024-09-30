@@ -173,8 +173,14 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
     return !hasToken
         ? Scaffold(
             body: GestureDetector(
-              onTap: () {
+              onTap: () async {
+                print("12345");
+                if ((await getStorage(key: "myinfo", initData: "")) == "") {
+                  return;
+                }
                 XSVibrate().impact();
+                showToast(
+                    context: context, type: XSToast.loading, duration: 500);
                 _getValid();
               },
               child: Container(
@@ -185,7 +191,9 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
                   child: Text(
                     "登录后请点此刷新",
                     style: XSTextStyle(
-                        context: context, color: os_dark_dark_white),
+                      context: context,
+                      color: os_dark_dark_white,
+                    ),
                   ),
                 ),
               ),

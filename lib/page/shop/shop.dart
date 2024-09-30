@@ -600,132 +600,127 @@ class _GoodCardState extends State<GoodCard> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 39.75,
-                            height: 39.75,
-                            child: CachedNetworkImage(
-                              imageUrl: widget.data!.img!,
-                              placeholder: (context, url) => Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Color(0x11000000),
-                                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 39.75,
+                          height: 39.75,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.data!.img!,
+                            placeholder: (context, url) => Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(0x11000000),
                               ),
                             ),
                           ),
-                          SizedBox(width: 12),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.data!.name,
-                                style: XSTextStyle(
-                                  context: context,
-                                  color:
-                                      Provider.of<ColorProvider>(context).isDark
-                                          ? os_dark_white
-                                          : Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                        ),
+                        SizedBox(width: 12),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.data!.name,
+                              style: XSTextStyle(
+                                context: context,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_white
+                                        : Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
                               ),
-                              SizedBox(height: 3),
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "${widget.data!.price}",
-                                      style: XSTextStyle(
-                                        context: context,
-                                        color:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? os_dark_white
-                                                : os_red,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                            ),
+                            SizedBox(height: 3),
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "${widget.data!.price}",
+                                    style: XSTextStyle(
+                                      context: context,
+                                      color: Provider.of<ColorProvider>(context)
+                                              .isDark
+                                          ? os_dark_white
+                                          : os_red,
+                                      fontWeight: FontWeight.w600,
                                     ),
-                                    TextSpan(
-                                      text: " 水滴/张",
-                                      style: XSTextStyle(
-                                        context: context,
-                                        color:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? os_dark_dark_white
-                                                : os_black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                style: XSTextStyle(
-                                  context: context,
-                                  color: os_black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                ),
+                                  ),
+                                  TextSpan(
+                                    text: " 水滴/张",
+                                    style: XSTextStyle(
+                                      context: context,
+                                      color: Provider.of<ColorProvider>(context)
+                                              .isDark
+                                          ? os_dark_dark_white
+                                          : os_black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                                ],
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(width: 93),
-                      myInkWell(
-                        radius: 15,
-                        color:
-                            widget.data!.soldOut ? os_black_opa : os_deep_blue,
-                        tap: () {
-                          if (!widget.data!.soldOut) showChat();
-                        },
-                        widget: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          height: 37,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                widget.data!.soldOut ? "此道具缺货" : "购买",
-                                textAlign: TextAlign.right,
-                                style: XSTextStyle(
-                                  context: context,
-                                  color:
-                                      Provider.of<ColorProvider>(context).isDark
-                                          ? os_dark_white
-                                          : (widget.data!.soldOut
-                                              ? os_light_dark_card
-                                              : os_white),
-                                  fontSize: 14,
-                                  fontFamily: "PingFang SC",
-                                  fontWeight: FontWeight.w600,
-                                ),
+                              style: XSTextStyle(
+                                context: context,
+                                color: os_black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Expanded(child: Container()),
+                    // SizedBox(width: 93),
+                    myInkWell(
+                      radius: 15,
+                      color: widget.data!.soldOut ? os_black_opa : os_deep_blue,
+                      tap: () {
+                        if (!widget.data!.soldOut) showChat();
+                      },
+                      widget: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        height: 37,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.data!.soldOut ? "此道具缺货" : "购买",
+                              textAlign: TextAlign.right,
+                              style: XSTextStyle(
+                                context: context,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_white
+                                        : (widget.data!.soldOut
+                                            ? os_light_dark_card
+                                            : os_white),
+                                fontSize: 14,
+                                fontFamily: "PingFang SC",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 10),
                 Container(

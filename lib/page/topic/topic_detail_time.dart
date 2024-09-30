@@ -209,28 +209,27 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Text(
-                (RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                                int.parse(widget.data["topic"]["create_date"])))
-                            .contains(" ")
-                        ? RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                                int.parse(widget.data["topic"]["create_date"])))
-                            .split(" ")[0]
-                        : RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                            int.parse(widget.data["topic"]["create_date"])))) +
-                    " · 浏览量${widget.data['topic']['hits'].toString()} · " +
-                    (widget.data["topic"]["mobileSign"].toString().contains("苹果")
-                        ? "iPhone客户端"
-                        : (widget.data["topic"]["mobileSign"].toString().contains("安卓") ? "安卓客户端" : "网页版")),
-                style: XSTextStyle(
-                  context: context,
-                  fontSize: 13.5,
-                  color: Color(0xFFAAAAAA),
-                ),
+          Expanded(
+            child: Text(
+              (RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(widget.data["topic"]["create_date"])))
+                          .contains(" ")
+                      ? RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(widget.data["topic"]["create_date"])))
+                          .split(" ")[0]
+                      : RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                          int.parse(widget.data["topic"]["create_date"])))) +
+                  " · 浏览量${widget.data['topic']['hits'].toString()} · " +
+                  (widget.data["topic"]["mobileSign"].toString().contains("苹果")
+                      ? "iPhone客户端"
+                      : (widget.data["topic"]["mobileSign"].toString().contains("安卓") ? "安卓客户端" : "网页版")),
+              overflow: TextOverflow.ellipsis,
+              style: XSTextStyle(
+                context: context,
+                fontSize: 13.5,
+                color: Color(0xFFAAAAAA),
               ),
-            ],
+            ),
           ),
           Row(children: [
             myInkWell(

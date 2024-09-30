@@ -602,12 +602,6 @@ class _TopicState extends State<Topic> {
             ((widget.data!["summary"] ?? widget.data!["subject"]) ?? "") == ""
                 ? Container()
                 : Container(
-                    // width: MediaQuery.of(context).size.width -
-                    //     ((widget.isLeftNaviUI ?? false) ? LeftNaviWidth : 0) -
-                    //     ((widget.hideColumn ?? false)
-                    //         ? MinusSpace(context)
-                    //         : 0) -
-                    //     54,
                     margin: EdgeInsets.only(right: 10),
                     child: Text(
                       (widget.data!["summary"] ?? widget.data!["subject"]) ??
@@ -692,14 +686,13 @@ class _TopicState extends State<Topic> {
                   ),
             //浏览量 评论数 点赞数 - 专栏按钮
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
                     os_svg(
                       path: "lib/img/topic_component_view.svg",
-                      width: 20,
-                      height: 20,
+                      width: 19,
+                      height: 19,
                     ),
                     Container(width: 5),
                     Text(
@@ -710,11 +703,11 @@ class _TopicState extends State<Topic> {
                         fontSize: 12,
                       ),
                     ),
-                    Container(width: 20),
+                    Container(width: 17),
                     os_svg(
                       path: "lib/img/topic_component_comment.svg",
-                      width: 20,
-                      height: 20,
+                      width: 19,
+                      height: 19,
                     ),
                     Container(width: 5),
                     Text(
@@ -725,11 +718,11 @@ class _TopicState extends State<Topic> {
                         fontSize: 12,
                       ),
                     ),
-                    Container(width: 20),
+                    Container(width: 17),
                     os_svg(
                       path: "lib/img/topic_component_like.svg",
-                      width: 20,
-                      height: 20,
+                      width: 19,
+                      height: 19,
                     ),
                     Container(width: 5),
                     Text(
@@ -742,53 +735,55 @@ class _TopicState extends State<Topic> {
                     ),
                   ],
                 ),
-                myInkWell(
-                  color: Colors.transparent,
-                  tap: () {
-                    if (!(widget.hideColumn ?? false)) {
-                      Navigator.pushNamed(
-                        context,
-                        "/column",
-                        arguments: widget.data!["board_id"],
-                      );
-                    }
-                  },
-                  radius: 10,
-                  widget: Container(
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 12,
-                      top: 8,
-                      bottom: 8,
-                    ),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Row(
-                      children: [
-                        // Icon(
-                        //   Icons.extension_outlined,
-                        //   size: 16,
-                        //   color: os_color,
-                        // ),
-                        // Container(width: 2),
-                        Text(
-                          (widget.hideColumn ?? false)
-                              ? " "
-                              : widget.data!["board_name"],
-                          style: XSTextStyle(
-                            context: context,
-                            color: os_color,
-                            fontSize: 14,
-                          ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      if (!(widget.hideColumn ?? false)) {
+                        Navigator.pushNamed(
+                          context,
+                          "/column",
+                          arguments: widget.data!["board_id"],
+                        );
+                      }
+                    },
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        padding: EdgeInsets.only(
+                          left: 16,
+                          right: 12,
+                          top: 8,
+                          bottom: 8,
                         ),
-                        // Container(width: 2),
-                        if (!(widget.hideColumn ?? false))
-                          Icon(
-                            Icons.chevron_right,
-                            size: 16,
-                            color: os_color,
-                          ),
-                      ],
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                (widget.hideColumn ?? false)
+                                    ? " "
+                                    : widget.data!["board_name"],
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.end,
+                                style: XSTextStyle(
+                                  context: context,
+                                  color: os_color,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                            // Container(width: 2),
+                            if (!(widget.hideColumn ?? false))
+                              Icon(
+                                Icons.chevron_right,
+                                size: 16,
+                                color: os_color,
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),

@@ -147,7 +147,7 @@ class _DetailFixBottomState extends State<DetailFixBottom> {
                         ),
                         Container(width: 5),
                         Text(
-                          "我一出口就是神回复",
+                          "说点什么...",
                           style: XSTextStyle(
                             context: context,
                             fontSize: 15,

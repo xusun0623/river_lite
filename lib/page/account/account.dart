@@ -96,15 +96,6 @@ class _AccountState extends State<Account> {
     _setManage();
   }
 
-  void setExplore(bool isShow) {
-    setStorage(key: "showExplore", value: isShow ? "1" : "");
-    Provider.of<TabShowProvider>(context, listen: false).index = 0;
-    Provider.of<TabShowProvider>(context, listen: false).refresh();
-    setState(() {
-      showExplore = isShow;
-    });
-  }
-
   List<Widget> _buildWidget() {
     List<Widget> tmp = [];
     tmp.addAll([

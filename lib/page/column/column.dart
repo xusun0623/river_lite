@@ -509,6 +509,7 @@ class _TopSectionState extends State<TopSection> {
                             .toString()
                             .split("")
                             .join("\u{200B}"),
+                        overflow: TextOverflow.ellipsis,
                         style: XSTextStyle(
                             context: context,
                             fontSize: 14,

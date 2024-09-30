@@ -133,18 +133,21 @@ class _CollectionState extends State<Collection> {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        child: Text(
-                          widget.data!["name"].toString(),
-                          style: XSTextStyle(
-                            context: context,
-                            color: widget.data!["type"] == 2
-                                ? (Provider.of<ColorProvider>(context).isDark
-                                    ? os_dark_white
-                                    : Color(0xFF272C38))
-                                : os_white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Container(
+                          child: Text(
+                            widget.data!["name"].toString(),
+                            overflow: TextOverflow.ellipsis,
+                            style: XSTextStyle(
+                              context: context,
+                              color: widget.data!["type"] == 2
+                                  ? (Provider.of<ColorProvider>(context).isDark
+                                      ? os_dark_white
+                                      : Color(0xFF272C38))
+                                  : os_white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),

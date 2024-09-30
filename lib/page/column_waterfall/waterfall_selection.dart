@@ -77,7 +77,7 @@ class _ColumnWaterfallSelectionState extends State<ColumnWaterfallSelection> {
                     ),
                     ColumnBtn(
                       hideArrow: true,
-                      name: "研究生交流",
+                      name: "研究生",
                       fid: 124,
                     ),
                     ColumnBtn(
@@ -87,7 +87,7 @@ class _ColumnWaterfallSelectionState extends State<ColumnWaterfallSelection> {
                     ),
                     ColumnBtn(
                       hideArrow: true,
-                      name: "程序员之家",
+                      name: "程序员",
                       fid: 70,
                     ),
                     ColumnBtn(
@@ -148,6 +148,7 @@ class _ColumnWaterfallSelectionState extends State<ColumnWaterfallSelection> {
                   ],
                 ),
                 Container(height: 20),
+                // Text(MediaQuery.of(context).size.width.toString()),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

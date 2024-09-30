@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/vibrate.dart';
@@ -444,8 +445,18 @@ class _ColumnWaterfallState extends State<ColumnWaterfall>
                   ),
                   Container(height: 10),
                   GestureDetector(
-                    onTap: () {
-                      print("123");
+                    onTap: () async {
+                      if ((await getStorage(key: "myinfo", initData: "")) ==
+                          "") {
+                        return;
+                      }
+                      showToast(
+                        context: context,
+                        type: XSToast.loading,
+                      );
+                      Future.delayed(Duration(milliseconds: 500)).then((res) {
+                        hideToast();
+                      });
                       prepareData();
                     },
                     child: Container(

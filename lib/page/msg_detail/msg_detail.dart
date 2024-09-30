@@ -1126,18 +1126,10 @@ class _LookRoomState extends State<LookRoom> {
             ? os_light_dark_card
             : Color(0xFFEEEEEE),
         widget: Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.5),
+          padding: EdgeInsets.symmetric(horizontal: 7.5),
           child: Center(
-              child: Text(
-            "查看空间",
-            style: XSTextStyle(
-              context: context,
-              fontSize: 14,
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_dark_white
-                  : os_black,
-            ),
-          )),
+            child: Icon(Icons.person_outline),
+          ),
         ),
         radius: 100,
       ),
@@ -1205,14 +1197,20 @@ class _DetailHeadState extends State<DetailHead> {
               ),
             ),
             Container(width: 5),
-            Text(
-              data["rs"] == null
-                  ? "该用户当前网页不在线"
-                  : (data["status"] == 0 ? "该用户当前网页不在线" : "该用户当前在线"),
-              style: XSTextStyle(
-                context: context,
-                fontSize: 12,
-                color: Color(0xFFADADAD),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: 130,
+              ),
+              child: Text(
+                data["rs"] == null
+                    ? "该用户当前网页不在线"
+                    : (data["status"] == 0 ? "该用户当前网页不在线" : "该用户当前在线"),
+                overflow: TextOverflow.ellipsis,
+                style: XSTextStyle(
+                  context: context,
+                  fontSize: 12,
+                  color: Color(0xFFADADAD),
+                ),
               ),
             ),
           ],

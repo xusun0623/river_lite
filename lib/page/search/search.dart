@@ -695,7 +695,7 @@ class _UserListCardState extends State<UserListCard> {
             );
           },
           widget: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            padding: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 15),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -719,77 +719,70 @@ class _UserListCardState extends State<UserListCard> {
                   ),
                 ),
                 Container(width: 15),
-                Container(
-                  width: MediaQuery.of(context).size.width -
-                      MinusSpace(context) -
-                      160,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            widget.data!["name"],
-                            style: XSTextStyle(
-                                context: context,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color:
-                                    Provider.of<ColorProvider>(context).isDark
-                                        ? os_dark_white
-                                        : os_black),
-                          ),
-                          Container(width: 5),
-                          widget.data!["userTitle"].toString().length < 6
-                              ? Tag(
-                                  txt: widget.data!["userTitle"],
-                                  color: os_white,
-                                  color_opa: os_wonderful_color[1],
-                                )
-                              : Container(),
-                        ],
-                      ),
-                      Container(height: 5),
-                      Text(
-                        widget.data!["signture"] == ""
-                            ? "这位畔友很懒，什么也没写"
-                            : widget.data!["signture"],
-                        style: XSTextStyle(
-                          context: context,
-                          fontSize: 14,
-                          color: Color(0xFF9F9F9F),
+                Expanded(
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              widget.data!["name"],
+                              style: XSTextStyle(
+                                  context: context,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_white
+                                          : os_black),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        Container(height: 5),
+                        Text(
+                          widget.data!["signture"] == ""
+                              ? "这位畔友很懒，什么也没写"
+                              : widget.data!["signture"],
+                          style: XSTextStyle(
+                            context: context,
+                            fontSize: 14,
+                            color: Color(0xFF9F9F9F),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
-                  width: 40,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.person_add_rounded,
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_dark_dark_white
-                          : os_deep_grey,
+                  child: Transform.translate(
+                    offset: Offset(0, -8),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.person_add_rounded,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_dark_white
+                            : os_deep_grey,
+                      ),
+                      onPressed: () async {
+                        var tmp = await Api().user_useradmin({
+                          "type": "follow",
+                          "uid": widget.data!["uid"],
+                        });
+                        showToast(
+                          context: context,
+                          txt: tmp["errcode"],
+                          duration: 500,
+                          type: XSToast.none,
+                        );
+                      },
                     ),
-                    onPressed: () async {
-                      var tmp = await Api().user_useradmin({
-                        "type": "follow",
-                        "uid": widget.data!["uid"],
-                      });
-                      showToast(
-                        context: context,
-                        txt: tmp["errcode"],
-                        duration: 500,
-                        type: XSToast.none,
-                      );
-                    },
                   ),
                 ),
               ],
             ),
           ),
-          radius: 10,
+          radius: 15,
         ),
       ),
     );
@@ -939,6 +932,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
       child: Padding(
         padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
         child: myInkWell(
+          radius: 15,
           color: Provider.of<ColorProvider>(context).isDark
               ? os_light_dark_card
               : os_white,
@@ -1086,7 +1080,6 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
           ),
           // width: width,
           // height: height,
-          radius: 10,
         ),
       ),
     );

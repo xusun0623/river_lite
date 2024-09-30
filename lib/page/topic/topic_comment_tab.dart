@@ -91,9 +91,7 @@ class _CommentTabState extends State<CommentTab> {
                   padding: const EdgeInsets.all(10),
                   child: Column(children: [
                     Text(
-                      widget.total_num == 0
-                          ? "评论区"
-                          : "评论区(${widget.total_num})",
+                      widget.total_num == 0 ? "评论" : "评论(${widget.total_num})",
                       style: XSTextStyle(
                         context: context,
                         color: Provider.of<ColorProvider>(context).isDark
@@ -124,7 +122,7 @@ class _CommentTabState extends State<CommentTab> {
                   padding: const EdgeInsets.all(10),
                   child: Column(children: [
                     Text(
-                      "只看楼主",
+                      "楼主",
                       style: XSTextStyle(
                         context: context,
                         color: Provider.of<ColorProvider>(context).isDark

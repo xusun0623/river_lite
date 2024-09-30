@@ -48,27 +48,15 @@ class _HomeState extends State<Home> {
             ),
             Me(),
           ]
-        : Provider.of<ShowPicProvider>(context).isShow
-            ? [
-                //展示图区
-                MyHome(),
-                PicSquare(),
-                Msg(
-                  refresh: () {
-                    _getNewMsg();
-                  },
-                ),
-                Me(),
-              ]
-            : [
-                MyHome(),
-                Msg(
-                  refresh: () {
-                    _getNewMsg();
-                  },
-                ),
-                Me(),
-              ];
+        : [
+            MyHome(),
+            Msg(
+              refresh: () {
+                _getNewMsg();
+              },
+            ),
+            Me(),
+          ];
   }
 
   _getNewMsg() async {
@@ -123,12 +111,6 @@ class _HomeState extends State<Home> {
       Provider.of<ColorProvider>(context, listen: false).switchMode();
       Provider.of<ColorProvider>(context, listen: false).refresh();
     }
-  }
-
-  _getPath() async {
-    // Directory tempDir = await getTemporaryDirectory();
-    // String tempPath = tempDir.path;
-    // print("\n\n\n\n\n\n\n\\n当前的工作目录${tempPath}\n\n\n\n\n\n\n\n");
   }
 
   // 弹出评价框
@@ -224,14 +206,6 @@ class _HomeState extends State<Home> {
                     tabShowProvider.index = i;
                   });
                 },
-          // onDoubleTap: tabShowProvider.index == i
-          //     ? () {
-          //         _getNewMsg();
-          //         Provider.of<HomeRefrshProvider>(context, listen: false)
-          //             .totop();
-          //         // XSVibrate().impact();
-          //       }
-          //     : null,
           child: Container(
             width: MediaQuery.of(context).size.width / icons.length,
             height: barHeight,
@@ -241,10 +215,6 @@ class _HomeState extends State<Home> {
                 end: 35,
                 top: 20,
               ),
-              // position: badgee.BadgePosition(
-              //   end: 35,
-              //   top: 20,
-              // ),
               showBadge: (i ==
                       (!Provider.of<ShowPicProvider>(context).isShow ? 1 : 2) &&
                   _isNewMsg),
@@ -270,45 +240,11 @@ class _HomeState extends State<Home> {
       return tmp;
     }
 
-    int getConvertIndex() {
-      int idx = Provider.of<ShowPicProvider>(context).isShow
-          ? ([0, 1, 2, 3, 0][tabShowProvider.index!])
-          : ([0, 1, 2, 0, 0][tabShowProvider.index!]);
-      return idx;
-    }
-
     return isDesktop()
         ? Baaaar(
-            child: Scaffold(
-              //桌面端的UI布局
-
-              backgroundColor: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_back
-                  : os_back,
-              body: Row(
-                children: [
-                  LeftNavi(),
-                  Expanded(
-                      flex: 1,
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(),
-                        child: IndexedStack(
-                          children: homePages(),
-                          index: Provider.of<TabShowProvider>(context).index,
-                        ),
-                      )),
-                ],
-              ),
-            ),
-          )
-        : Scaffold(
-            //移动端的UI布局
-
-            backgroundColor: Provider.of<ColorProvider>(context).isDark
-                ? os_dark_back
-                : os_back,
-            body: WillPopScope(
-              onWillPop: () async {
+            child: PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (_, __) async {
                 if (_firstBack) {
                   SystemChannels.platform.invokeMethod('SystemNavigator.pop');
                 } else {
@@ -318,11 +254,52 @@ class _HomeState extends State<Home> {
                     txt: "再次返回",
                   );
                 }
-                return false;
+              },
+              child: Scaffold(
+                //桌面端的UI布局
+                backgroundColor: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_back
+                    : os_back,
+                body: Row(
+                  children: [
+                    LeftNavi(),
+                    Expanded(
+                      flex: 1,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(),
+                        child: IndexedStack(
+                          children: homePages(),
+                          index: Provider.of<TabShowProvider>(context)
+                              .desktopIndex,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+        : Scaffold(
+            //移动端的UI布局
+            backgroundColor: Provider.of<ColorProvider>(context).isDark
+                ? os_dark_back
+                : os_back,
+            body: PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (_, __) async {
+                if (_firstBack) {
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                } else {
+                  showToast(
+                    context: context,
+                    type: XSToast.none,
+                    txt: "再次返回",
+                  );
+                }
               },
               child: IndexedStack(
                 children: homePages(),
-                index: getConvertIndex(),
+                index: tabShowProvider.index,
               ),
             ),
             bottomNavigationBar: Platform.isAndroid
@@ -380,7 +357,6 @@ class _IosBottomNavigatorBarState extends State<IosBottomNavigatorBar> {
 
   List<Widget> _buildWidget(List<int> _loadIndex) {
     TabShowProvider tabShowProvider = Provider.of<TabShowProvider>(context);
-    ShowPicProvider showPicProvider = Provider.of<ShowPicProvider>(context);
 
     loadIndex = _loadIndex;
     List<Widget> tmp = [];
@@ -426,10 +402,6 @@ class _IosBottomNavigatorBarState extends State<IosBottomNavigatorBar> {
               end: 35,
               top: 20,
             ),
-            // position: badgee.BadgePosition(
-            //   end: 35,
-            //   top: 20,
-            // ),
             showBadge:
                 (i == (!Provider.of<ShowPicProvider>(context).isShow ? 1 : 2) &&
                     _isNewMsg),
@@ -439,13 +411,11 @@ class _IosBottomNavigatorBarState extends State<IosBottomNavigatorBar> {
                 size: 26,
                 color: tabShowProvider.index == i
                     ? (Provider.of<ColorProvider>(context).isDark ||
-                            (Provider.of<ShowPicProvider>(context).isShow &&
-                                tabShowProvider.index == 1)
+                            (tabShowProvider.index == 1)
                         ? os_dark_white
                         : Color(0xFF222222))
                     : (Provider.of<ColorProvider>(context).isDark ||
-                            (Provider.of<ShowPicProvider>(context).isShow &&
-                                tabShowProvider.index == 1)
+                            (tabShowProvider.index == 1)
                         ? os_deep_grey
                         : Color(0xFFa4a4a6)),
               ),
@@ -460,7 +430,6 @@ class _IosBottomNavigatorBarState extends State<IosBottomNavigatorBar> {
   @override
   Widget build(BuildContext context) {
     TabShowProvider tabShowProvider = Provider.of<TabShowProvider>(context);
-    ShowPicProvider showPicProvider = Provider.of<ShowPicProvider>(context);
 
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -551,14 +520,6 @@ class _MaterialBottomNavigationBarState
         label: "首页",
         icon: Icon(Icons.home_rounded),
       ),
-      ...(Provider.of<ShowPicProvider>(context).isShow
-          ? [
-              BottomNavigationBarItem(
-                label: "图区",
-                icon: Icon(Icons.image),
-              )
-            ]
-          : []),
       BottomNavigationBarItem(
         label: "消息",
         icon: badgee.Badge(
@@ -576,7 +537,6 @@ class _MaterialBottomNavigationBarState
   @override
   Widget build(BuildContext context) {
     TabShowProvider tabShowProvider = Provider.of<TabShowProvider>(context);
-    ShowPicProvider showPicProvider = Provider.of<ShowPicProvider>(context);
 
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
@@ -586,16 +546,12 @@ class _MaterialBottomNavigationBarState
       selectedFontSize: 10,
       unselectedFontSize: 10,
       iconSize: 24,
-      selectedItemColor:
-          (showPicProvider.isShow && tabShowProvider.index == 1) ||
-                  Provider.of<ColorProvider>(context).isDark
-              ? os_dark_white
-              : os_deep_blue,
+      selectedItemColor: Provider.of<ColorProvider>(context).isDark
+          ? os_dark_white
+          : os_deep_blue,
       unselectedItemColor: os_deep_grey,
-      backgroundColor: (showPicProvider.isShow && tabShowProvider.index == 1) ||
-              Provider.of<ColorProvider>(context).isDark
-          ? os_dark_back
-          : os_white,
+      backgroundColor:
+          Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_white,
       unselectedLabelStyle: XSTextStyle(
         context: context,
         fontWeight: FontWeight.bold,
@@ -608,7 +564,7 @@ class _MaterialBottomNavigationBarState
         _getNewMsg();
         tabShowProvider.changeIndex(value);
       },
-      currentIndex: tabShowProvider.index!,
+      currentIndex: tabShowProvider.index,
       items: bottomBar(),
     );
   }
