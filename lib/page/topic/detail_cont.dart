@@ -583,7 +583,10 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
       ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes,
     ],
   );
-
+  TextStyle commonHeadingStyle = TextStyle(
+    color: isDark ? os_dark_white : os_black,
+    fontWeight: FontWeight.bold,
+  );
   return Container(
     width: MediaQuery.of(context).size.width - 30,
     child: MarkdownBody(
@@ -599,6 +602,27 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
           fontSize: 16,
           height: 1.6,
           color: isDark ? os_dark_white : os_black,
+        ),
+        h1: commonHeadingStyle,
+        h2: commonHeadingStyle,
+        h3: commonHeadingStyle,
+        h4: commonHeadingStyle,
+        h5: commonHeadingStyle,
+        h6: commonHeadingStyle,
+        listBullet: commonHeadingStyle, // 设置无序列表编号的Text样式
+        blockquote: TextStyle(
+          color: Colors.green, // 设置引用文本的颜色
+          fontStyle: FontStyle.italic,
+        ),
+        blockquoteDecoration: BoxDecoration(
+          color: isDark ? os_light_light_dark_card : os_back, // 设置引用块的背景颜色
+          borderRadius: BorderRadius.circular(4),
+          border: Border(
+            left: BorderSide(
+              color: Colors.green, // 设置引用块左侧边框的颜色
+              width: 4,
+            ),
+          ),
         ),
       ),
     ),
