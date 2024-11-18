@@ -73,6 +73,7 @@ dependencies:
   webview_flutter: ^4.2.0
   dismissible_page: ^1.0.2
   in_app_review: ^2.0.9
+  flutter_markdown: ^0.7.4+1
 
 dev_dependencies:
   flutter_test:
