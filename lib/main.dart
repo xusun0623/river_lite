@@ -9,6 +9,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/router/router.dart';
 import 'package:offer_show/util/provider.dart';
@@ -33,16 +34,12 @@ void main() async {
       await windowManager.focus();
     });
   }
-  // SocksProxy.initProxy(proxy: 'SOCKS5 124.223.62.14:1080');
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // SystemUiOverlayStyle systemUiOverlayStyle =
-    //     SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-    // SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ColorProvider()),
@@ -57,17 +54,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => FontSizeProvider()),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
-        // if (Platform.isAndroid) {
-        //   SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
-        //     statusBarColor: Colors.transparent,
-        //     systemNavigationBarColor: Provider.of<ColorProvider>(context).isDark
-        //         ? os_dark_back
-        //         : os_white,
-        //     systemNavigationBarContrastEnforced: true,
-        //   );
-        //   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-        //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-        // }
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: SystemUiOverlayStyle(
             statusBarColor: Colors.transparent,

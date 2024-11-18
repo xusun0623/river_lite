@@ -244,7 +244,7 @@ class _HomeState extends State<Home> {
         ? Baaaar(
             child: PopScope(
               canPop: false,
-              onPopInvokedWithResult: (_, __) async {
+              onPopInvoked: (_) {
                 if (_firstBack) {
                   SystemChannels.platform.invokeMethod('SystemNavigator.pop');
                 } else {
@@ -286,7 +286,7 @@ class _HomeState extends State<Home> {
                 : os_back,
             body: PopScope(
               canPop: false,
-              onPopInvokedWithResult: (_, __) async {
+              onPopInvoked: (_) async {
                 if (_firstBack) {
                   SystemChannels.platform.invokeMethod('SystemNavigator.pop');
                 } else {
@@ -365,13 +365,11 @@ class _IosBottomNavigatorBarState extends State<IosBottomNavigatorBar> {
     loadIndex.forEach((element) {
       icons.add([
         Icons.home_rounded,
-        Icons.image_rounded,
         Icons.notifications_rounded,
         Icons.person_rounded
       ][element]);
       select_icons.add([
         Icons.home_rounded,
-        Icons.image_rounded,
         Icons.notifications_rounded,
         Icons.person_rounded
       ][element]);
@@ -402,20 +400,16 @@ class _IosBottomNavigatorBarState extends State<IosBottomNavigatorBar> {
               end: 35,
               top: 20,
             ),
-            showBadge:
-                (i == (!Provider.of<ShowPicProvider>(context).isShow ? 1 : 2) &&
-                    _isNewMsg),
+            showBadge: i == 1 && _isNewMsg,
             child: Center(
               child: Icon(
                 tabShowProvider.index == i ? select_icons[i] : icons[i],
                 size: 26,
                 color: tabShowProvider.index == i
-                    ? (Provider.of<ColorProvider>(context).isDark ||
-                            (tabShowProvider.index == 1)
+                    ? (Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
                         : Color(0xFF222222))
-                    : (Provider.of<ColorProvider>(context).isDark ||
-                            (tabShowProvider.index == 1)
+                    : (Provider.of<ColorProvider>(context).isDark
                         ? os_deep_grey
                         : Color(0xFFa4a4a6)),
               ),
@@ -462,11 +456,7 @@ class _IosBottomNavigatorBarState extends State<IosBottomNavigatorBar> {
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: _buildWidget(
-              !Provider.of<ShowPicProvider>(context).isShow
-                  ? [0, 2, 3]
-                  : [0, 1, 2, 3],
-            ),
+            children: _buildWidget([0, 1, 2]),
           ),
         ],
       ),

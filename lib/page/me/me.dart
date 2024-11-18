@@ -11,6 +11,7 @@ import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
+import 'package:offer_show/page/webview/webview.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -105,10 +106,30 @@ class _MeState extends State<Me> {
                     name: provider.data!["name"] ?? provider.data!["userName"],
                     score: provider.data!["score"],
                   ),
-            Container(height: 15),
+            Container(height: 6.5),
             MeFiveBtns(),
-            Container(height: 15),
+            Container(height: 10),
+            Container(
+              height: 1,
+              margin: EdgeInsets.only(
+                left: 30,
+                right: 30,
+              ),
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_white_opa
+                  : os_grey,
+            ),
+            Container(height: 12.5),
             MeListGroup(),
+            // ElevatedButton(
+            //     onPressed: () {
+            //       Navigator.of(context).push(MaterialPageRoute(
+            //         builder: (context) {
+            //           return OSWebViewPage(url: "http://bbs.uestc.edu.cn/new");
+            //         },
+            //       ));
+            //     },
+            //     child: Text("测试")),
             // Container(height: MediaQuery.of(context).size.height / 2),
           ],
         ),
@@ -282,13 +303,8 @@ class _MeFiveBtnsState extends State<MeFiveBtns> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 5),
+      margin: EdgeInsets.symmetric(horizontal: 0),
       padding: EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        color:
-            Provider.of<ColorProvider>(context).isDark ? os_white_opa : os_back,
-        borderRadius: BorderRadius.circular(20),
-      ),
       child: Wrap(
         alignment: WrapAlignment.spaceEvenly,
         children: [
@@ -381,8 +397,8 @@ class _MeBtnHeroState extends State<MeBtnHero> {
                   child: os_svg(
                     path:
                         "lib/img/${Provider.of<ColorProvider>(context).isDark ? "me_dark" : "me"}/btn${widget.type}.svg",
-                    width: 38,
-                    height: 38,
+                    width: 36,
+                    height: 36,
                   ),
                 ),
               ),

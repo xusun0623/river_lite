@@ -585,7 +585,7 @@ class _TopicState extends State<Topic> {
                 textAlign: TextAlign.start,
                 style: XSTextStyle(
                     context: context,
-                    fontSize: 16,
+                    fontSize: 16.5,
                     letterSpacing: 0.5,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
