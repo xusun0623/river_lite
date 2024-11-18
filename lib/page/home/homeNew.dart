@@ -11,6 +11,7 @@ import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/hot_btn.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
@@ -121,19 +122,25 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
 
   showPopNew() {
     Widget getImgCard(String path) {
-      return Image.asset(
-        path,
-        width: MediaQuery.of(context).size.width > 500
-            ? 160
-            : (MediaQuery.of(context).size.width - 80 - MinusSpace(context)) /
-                2,
-        height: MediaQuery.of(context).size.width > 500
-            ? 160 * 88 / 160
-            : (MediaQuery.of(context).size.width - 80 - MinusSpace(context)) /
-                2 *
-                88 /
-                160,
-      );
+      return isDesktop()
+          ? Image.asset(
+              path,
+              width: MediaQuery.of(context).size.width > 500
+                  ? 160
+                  : (MediaQuery.of(context).size.width -
+                          80 -
+                          MinusSpace(context)) /
+                      2,
+              height: MediaQuery.of(context).size.width > 500
+                  ? 160 * 88 / 160
+                  : (MediaQuery.of(context).size.width -
+                          80 -
+                          MinusSpace(context)) /
+                      2 *
+                      88 /
+                      160,
+            )
+          : Image.asset(path);
     }
 
     showPopWithHeightColor(
@@ -155,35 +162,57 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
         Container(height: 15),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            GestureDetector(
-              onTap: () async {
-                Navigator.of(context).pop();
-                Navigator.pushNamed(context, "/new", arguments: 25);
-              },
-              child: getImgCard("lib/img/home/new_topic.png"),
-            ),
-            ...(MediaQuery.of(context).size.width > 500
-                ? [Container(width: 10)]
-                : []),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.pushNamed(context, "/new_mix", arguments: 25);
-              },
-              child: getImgCard("lib/img/home/new_pic_topic.png"),
-            ),
-          ],
+          children: isDesktop()
+              ? [
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      Navigator.pushNamed(context, "/new", arguments: 25);
+                    },
+                    child: getImgCard("lib/img/home/new_topic.png"),
+                  ),
+                  Container(width: 10),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.pushNamed(context, "/new_mix", arguments: 25);
+                    },
+                    child: getImgCard("lib/img/home/new_pic_topic.png"),
+                  ),
+                ]
+              : [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () async {
+                        Navigator.of(context).pop();
+                        Navigator.pushNamed(context, "/new", arguments: 25);
+                      },
+                      child: getImgCard("lib/img/home/new_topic.png"),
+                    ),
+                  ),
+                  Container(width: 10),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.pushNamed(context, "/new_mix", arguments: 25);
+                      },
+                      child: getImgCard("lib/img/home/new_pic_topic.png"),
+                    ),
+                  ),
+                ],
         ),
-        Container(height: 50),
+        Container(height: 28),
         Padding(
-          padding: EdgeInsets.only(left: 20),
+          padding: EdgeInsets.only(left: 5),
           child: Row(
             children: [
               Text(
                 "推荐板块",
-                style: TextStyle(
-                  fontSize: 16,
+                style: XSTextStyle(
+                  listenProvider: false,
+                  context: context,
+                  fontSize: 15,
                   color: Color(0xFFA9A9A9),
                 ),
               ),
@@ -191,10 +220,7 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
           ),
         ),
         Container(height: 10),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: wrapNew(),
-        ),
+        wrapNew(),
       ],
       550,
       os_white,
@@ -207,54 +233,54 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       List<Widget> tmp = [];
       columnString.forEach((element) {
         tmp.add(
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-              if (element == "二手专区") {
-                Navigator.of(context).pushNamed("/new_transaction");
-              }
-              if (element == "情感专区") {
-                Navigator.of(context).pushNamed("/new", arguments: 45);
-              }
-              if (element == "鹊桥") {
-                Navigator.of(context).pushNamed("/new", arguments: 313);
-              }
-              if (element == "密语区") {
-                Navigator.of(context).pushNamed("/new", arguments: 371);
-              }
-              if (element == "吃喝玩乐") {
-                Navigator.of(context).pushNamed("/new", arguments: 370);
-              }
-              if (element == "水手之家") {
-                Navigator.of(context).pushNamed("/new", arguments: 25);
-              }
-            },
-            child: Container(
-              width: isDesktop()
-                  ? element.length * 16.0 + 50
-                  : (MediaQuery.of(context).size.width -
-                          MinusSpace(context) -
-                          90) /
-                      3,
-              margin: EdgeInsets.only(left: 5, right: 5, bottom: 10),
-              padding: EdgeInsets.symmetric(horizontal: 17.5, vertical: 12.5),
-              decoration: BoxDecoration(
-                color: Provider.of<ColorProvider>(context, listen: false).isDark
-                    ? os_light_dark_card
-                    : Color(0xFFF1F4F8),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Center(
-                child: Text(
-                  element,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Provider.of<ColorProvider>(context, listen: false)
-                            .isDark
-                        ? os_dark_dark_white
-                        : Color(0xFF42546B),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+                if (element == "二手专区") {
+                  Navigator.of(context).pushNamed("/new_transaction");
+                }
+                if (element == "情感专区") {
+                  Navigator.of(context).pushNamed("/new", arguments: 45);
+                }
+                if (element == "鹊桥") {
+                  Navigator.of(context).pushNamed("/new", arguments: 313);
+                }
+                if (element == "密语区") {
+                  Navigator.of(context).pushNamed("/new", arguments: 371);
+                }
+                if (element == "吃喝玩乐") {
+                  Navigator.of(context).pushNamed("/new", arguments: 370);
+                }
+                if (element == "水手之家") {
+                  Navigator.of(context).pushNamed("/new", arguments: 25);
+                }
+              },
+              child: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                padding: EdgeInsets.symmetric(vertical: 12.5),
+                decoration: BoxDecoration(
+                  color:
+                      Provider.of<ColorProvider>(context, listen: false).isDark
+                          ? os_light_dark_card
+                          : Color(0xFFF1F4F8),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Center(
+                  child: Text(
+                    element,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: XSTextStyle(
+                      context: context,
+                      listenProvider: false,
+                      color: Provider.of<ColorProvider>(context, listen: false)
+                              .isDark
+                          ? os_dark_dark_white
+                          : Color(0xFF42546B),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -265,8 +291,27 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
       return tmp;
     }
 
-    return Wrap(
-      children: tapBtn(),
+    return Column(
+      children: [
+        Row(
+          children: [
+            tapBtn()[0],
+            Container(width: 7.5),
+            tapBtn()[1],
+            Container(width: 7.5),
+            tapBtn()[2],
+          ],
+        ),
+        Row(
+          children: [
+            tapBtn()[3],
+            Container(width: 7.5),
+            tapBtn()[4],
+            Container(width: 7.5),
+            tapBtn()[5],
+          ],
+        ),
+      ],
     );
   }
 
@@ -338,9 +383,6 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
               ),
       );
     }
-    // t.add(Padding(
-    //   padding: EdgeInsets.all(load_done || data.length == 0 ? 7.5 : 0),
-    // ));
     return Stack(
       children: [
         BackToTop(
@@ -402,7 +444,9 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
                       Container(width: 10),
                       Text(
                         "加载中…",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
+                          fontSize: 14,
                           color: os_black,
                         ),
                       ),
@@ -470,7 +514,7 @@ class _TapMoreState extends State<TapMore> {
             children: [
               Text(
                 "加载更多",
-                style: TextStyle(color: os_deep_grey),
+                style: XSTextStyle(context: context, color: os_deep_grey),
               ),
               Icon(
                 Icons.keyboard_double_arrow_down_rounded,
@@ -529,7 +573,8 @@ class _ToSearchState extends State<ToSearch> {
             children: [
               Text(
                 "搜一搜",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 16,
                   color: Color.fromARGB(255, 171, 171, 171),
                 ),

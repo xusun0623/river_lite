@@ -3,6 +3,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
@@ -164,7 +165,9 @@ class _BtnState extends State<Btn> {
             Container(height: 7.5),
             Text(
               widget.txt,
-              style: TextStyle(
+              overflow: TextOverflow.ellipsis,
+              style: XSTextStyle(
+                context: context,
                 fontSize: 13,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white

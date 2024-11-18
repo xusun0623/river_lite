@@ -6,6 +6,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -46,7 +47,9 @@ class _BlackListState extends State<BlackList> {
       Container(height: 30),
       Text(
         "请输入关键词",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
+          listenProvider: false,
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -78,7 +81,9 @@ class _BlackListState extends State<BlackList> {
             onSubmitted: (e) {
               _confirm();
             },
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
+              listenProvider: false,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
@@ -87,7 +92,10 @@ class _BlackListState extends State<BlackList> {
             decoration: InputDecoration(
                 hintText: "请输入",
                 border: InputBorder.none,
-                hintStyle: TextStyle(
+                hintStyle: XSTextStyle(
+                  context: context,
+                  listenProvider: false,
+                  fontSize: 15,
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
                           ? os_dark_dark_white
@@ -114,7 +122,9 @@ class _BlackListState extends State<BlackList> {
                 child: Center(
                   child: Text(
                     "取消",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
+                      listenProvider: false,
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
                           ? os_dark_dark_white
@@ -143,7 +153,9 @@ class _BlackListState extends State<BlackList> {
                       Container(width: 5),
                       Text(
                         "完成",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
+                          listenProvider: false,
                           color: os_white,
                         ),
                       ),
@@ -174,7 +186,8 @@ class _BlackListState extends State<BlackList> {
         },
         title: Text(
           data![i],
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             color: Provider.of<ColorProvider>(context, listen: false).isDark
                 ? os_dark_white
                 : os_black,
@@ -234,7 +247,7 @@ class _BlackListState extends State<BlackList> {
             : os_black,
         title: Text(
           "黑名单关键词",
-          style: TextStyle(fontSize: 16),
+          style: XSTextStyle(context: context, fontSize: 16),
         ),
         actions: [
           isDesktop()
@@ -242,7 +255,8 @@ class _BlackListState extends State<BlackList> {
               : IconButton(
                   icon: Text(
                     select.length == data!.length ? "取消" : "全选",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_dark_dark_white
                           : os_black,
@@ -265,19 +279,20 @@ class _BlackListState extends State<BlackList> {
             onPressed: () {
               if (select.length != 0)
                 showModal(
-                    context: context,
-                    title: "请确认",
-                    cont: "是否删除选中的黑名单关键词？此操作不可逆",
-                    confirm: () {
-                      select.sort();
-                      select = select.reversed.toList();
-                      select.forEach((element) {
-                        data!.removeAt(element);
-                      });
-                      select = [];
-                      _update();
-                      setState(() {});
+                  context: context,
+                  title: "请确认",
+                  cont: "是否删除选中的黑名单关键词？此操作不可逆",
+                  confirm: () {
+                    select.sort();
+                    select = select.reversed.toList();
+                    select.forEach((element) {
+                      data!.removeAt(element);
                     });
+                    select = [];
+                    _update();
+                    setState(() {});
+                  },
+                );
             },
           ),
         ],
@@ -319,7 +334,8 @@ class InfoTip extends StatelessWidget {
           Container(width: 5),
           Text(
             "你可以在此添加/删除黑名单关键词",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               color: os_color,
             ),
           ),

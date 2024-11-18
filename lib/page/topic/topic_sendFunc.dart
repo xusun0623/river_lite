@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -56,7 +57,8 @@ class _SendFuncState extends State<SendFunc> {
                     child: Center(
                       child: Text(
                         widget.nums.toString(),
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           color: Provider.of<ColorProvider>(context).isDark
                               ? os_dark_back
                               : Color(0xFF004DFF),

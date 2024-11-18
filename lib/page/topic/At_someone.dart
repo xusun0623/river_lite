@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
@@ -70,7 +71,8 @@ class _AtSomeoneState extends State<AtSomeone> {
             children: [
               Text(
                 "可以@的人",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
@@ -115,7 +117,8 @@ class _AtSomeoneState extends State<AtSomeone> {
                 Container(width: 10),
                 Text(
                   element["name"],
-                  style: TextStyle(
+                  style: XSTextStyle(
+                      context: context,
                       fontSize: 16,
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_dark_dark_white
@@ -132,7 +135,14 @@ class _AtSomeoneState extends State<AtSomeone> {
       tmp.add(Container(
         padding: EdgeInsets.only(top: 15, bottom: 25),
         child: Center(
-          child: Text("加载中…", style: TextStyle(color: os_deep_grey)),
+          child: Text(
+            "加载中…",
+            style: XSTextStyle(
+              context: context,
+              fontSize: 14,
+              color: os_deep_grey,
+            ),
+          ),
         ),
       ));
     }
@@ -147,7 +157,8 @@ class _AtSomeoneState extends State<AtSomeone> {
           child: Center(
             child: Text(
               "暂无可以@的人,你可以关注ta,点击搜索>",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 14,
                 color: os_deep_grey,
               ),
@@ -162,7 +173,8 @@ class _AtSomeoneState extends State<AtSomeone> {
         child: Center(
           child: Text(
             "加载中…",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               fontSize: 14,
               color: os_deep_grey,
             ),

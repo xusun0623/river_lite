@@ -9,6 +9,7 @@ import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/outer/card_swiper/swiper.dart';
 import 'package:offer_show/outer/card_swiper/swiper_controller.dart';
@@ -120,7 +121,8 @@ class _LoginState extends State<Login> {
                     Container(height: 10),
                     Text(
                       "登录成功",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                         color: Provider.of<ColorProvider>(context).isDark
@@ -134,7 +136,8 @@ class _LoginState extends State<Login> {
                       child: Text(
                         "你已成功登录清水河畔，请敬请享受来自河畔的体验吧",
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           fontSize: 16,
                           color: Provider.of<ColorProvider>(context).isDark
                               ? os_dark_dark_white
@@ -160,7 +163,8 @@ class _LoginState extends State<Login> {
                           child: Text(
                             "确定",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Provider.of<ColorProvider>(context).isDark
@@ -288,7 +292,8 @@ class _LoginSubmitState extends State<LoginSubmit> {
         child: Center(
           child: Text(
             widget.txt ?? "登录",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               color: widget.fontColor ?? os_white,
               fontSize: 16,
             ),
@@ -331,7 +336,8 @@ class _LoginHelpState extends State<LoginHelp> {
             Container(width: 3),
             Text(
               "无法登录？",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: Color.fromARGB(255, 129, 129, 129),
                 fontSize: 14,
               ),
@@ -389,7 +395,8 @@ class _LoginInputState extends State<LoginInput> {
                       : Brightness.light,
               controller: u_controller,
               focusNode: widget.u_focus,
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 letterSpacing: 0.5,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
@@ -408,7 +415,11 @@ class _LoginInputState extends State<LoginInput> {
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
                 hintText: "请输入用户名",
-                hintStyle: TextStyle(color: Colors.grey[600]),
+                hintStyle: XSTextStyle(
+                  context: context,
+                  fontSize: 15,
+                  color: Colors.grey[600],
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
@@ -438,7 +449,9 @@ class _LoginInputState extends State<LoginInput> {
               controller: p_controller,
               focusNode: widget.p_focus,
               obscureText: isHide,
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
+                fontSize: 15,
                 letterSpacing: 0.5,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
@@ -471,7 +484,8 @@ class _LoginInputState extends State<LoginInput> {
                   ),
                 ),
                 hintText: "请输入密码",
-                hintStyle: TextStyle(color: Colors.grey[600]),
+                hintStyle:
+                    XSTextStyle(context: context, color: Colors.grey[600]),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                 ),
@@ -514,7 +528,8 @@ class _LoginHeadState extends State<LoginHead> {
           ResponsiveWidget(
             child: Text(
               ["早安", "午安", "晚安"][time],
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 30,
                 fontWeight: FontWeight.w900,
                 color: Provider.of<ColorProvider>(context).isDark
@@ -527,7 +542,8 @@ class _LoginHeadState extends State<LoginHead> {
           ResponsiveWidget(
             child: Text(
               "欢迎来到清水河畔",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 16,
                 color: Color(0xFF999999),
                 letterSpacing: 2,

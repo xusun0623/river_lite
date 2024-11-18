@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 
 class RightRowBtn extends StatefulWidget {
   bool show_vote;
@@ -74,14 +75,16 @@ class _RightRowBtnState extends State<RightRowBtn> {
                     widget.show_vote
                         ? Text(
                             "删除投票",
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               fontSize: 12,
                               color: Colors.red,
                             ),
                           )
                         : Text(
                             "插入投票",
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               fontSize: 12,
                               color: Color(0xFF9D9D9D),
                             ),
@@ -115,13 +118,6 @@ class _RightRowBtnState extends State<RightRowBtn> {
                           Icons.keyboard_arrow_down,
                           color: os_white,
                         ),
-                        // Text(
-                        //   "完成",
-                        //   style: TextStyle(
-                        //     fontSize: 12,
-                        //     color: os_white,
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),

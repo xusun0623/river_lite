@@ -10,6 +10,7 @@ import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
@@ -110,9 +111,11 @@ class _MyBagState extends State<MyBag> {
       appBar: AppBar(
         backgroundColor:
             Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        centerTitle: true,
         title: Text(
           "我的背包",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_white
                 : os_black,
@@ -131,47 +134,7 @@ class _MyBagState extends State<MyBag> {
                 : os_black,
           ),
         ),
-        actions: [
-          // Container(
-          //   padding: EdgeInsets.symmetric(
-          //     horizontal: 10,
-          //     vertical: 5,
-          //   ),
-          //   child: myInkWell(
-          //     tap: () {
-          //       Navigator.of(context).pushNamed("/shop");
-          //     },
-          //     color: Provider.of<ColorProvider>(context).isDark
-          //         ? os_white_opa
-          //         : os_white,
-          //     widget: Container(
-          //       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          //       child: Row(
-          //         children: [
-          //           Icon(
-          //             Icons.store,
-          //             color: Provider.of<ColorProvider>(context).isDark
-          //                 ? os_dark_white
-          //                 : os_black,
-          //           ),
-          //           Container(width: 5),
-          //           Text(
-          //             "道具商店",
-          //             style: TextStyle(
-          //               color: Provider.of<ColorProvider>(context).isDark
-          //                   ? os_dark_white
-          //                   : os_black,
-          //               fontSize: 14,
-          //               fontWeight: FontWeight.bold,
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //     radius: 100,
-          //   ),
-          // ),
-        ],
+        actions: [],
       ),
       backgroundColor:
           Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
@@ -328,123 +291,155 @@ class _BagWidgetState extends State<BagWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 39.75,
-                            height: 39.75,
-                            child: CachedNetworkImage(
-                              imageUrl: widget.data!.img!,
-                              placeholder: (context, url) => Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Color(0x11000000),
-                                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 39.75,
+                          height: 39.75,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.data!.img!,
+                            placeholder: (context, url) => Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(0x11000000),
                               ),
                             ),
                           ),
-                          SizedBox(width: 12),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.data!.name!,
-                                style: TextStyle(
+                        ),
+                        SizedBox(width: 12),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.data!.name!,
+                              style: XSTextStyle(
+                                context: context,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_white
+                                        : Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(height: 3),
+                            Text.rich(
+                              TextSpan(
+                                text: "数量",
+                                style: XSTextStyle(
+                                  context: context,
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
-                                          ? os_dark_white
-                                          : Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(height: 3),
-                              Text.rich(
-                                TextSpan(
-                                  text: "数量",
-                                  style: TextStyle(
-                                    color: Provider.of<ColorProvider>(context)
-                                            .isDark
-                                        ? os_dark_dark_white
-                                        : os_black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: "${widget.data!.count}",
-                                      style: TextStyle(
-                                        color:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? os_white
-                                                : os_red,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: "张，总重量",
-                                      style: TextStyle(
-                                        color:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? os_dark_dark_white
-                                                : os_black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: "${widget.data!.weight}",
-                                      style: TextStyle(
-                                        color:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? os_white
-                                                : os_red,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                style: TextStyle(
-                                  color: os_black,
-                                  fontSize: 14,
+                                          ? os_dark_dark_white
+                                          : os_black,
                                   fontWeight: FontWeight.normal,
                                 ),
+                                children: [
+                                  TextSpan(
+                                    text: "${widget.data!.count}",
+                                    style: XSTextStyle(
+                                      context: context,
+                                      color: Provider.of<ColorProvider>(context)
+                                              .isDark
+                                          ? os_white
+                                          : os_red,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "张，总重量",
+                                    style: XSTextStyle(
+                                      context: context,
+                                      color: Provider.of<ColorProvider>(context)
+                                              .isDark
+                                          ? os_dark_dark_white
+                                          : os_black,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "${widget.data!.weight}",
+                                    style: XSTextStyle(
+                                      context: context,
+                                      color: Provider.of<ColorProvider>(context)
+                                              .isDark
+                                          ? os_white
+                                          : os_red,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          myInkWell(
-                            radius: 15,
-                            color: Provider.of<ColorProvider>(context).isDark
-                                ? os_white_opa
-                                : os_grey,
-                            tap: () {
-                              showModal(
-                                confirm: dropItem,
+                              style: XSTextStyle(
                                 context: context,
-                                title: "请确认",
-                                cont: "你是否要丢弃一张该道具，此操作不可逆，请谨慎操作（免得水货两空）",
-                              );
-                            },
+                                color: os_black,
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    myInkWell(
+                      radius: 15,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_white_opa
+                          : os_grey,
+                      tap: () {
+                        showModal(
+                          confirm: dropItem,
+                          context: context,
+                          title: "请确认",
+                          cont: "你是否要丢弃一张该道具，此操作不可逆，请谨慎操作（免得水货两空）",
+                        );
+                      },
+                      widget: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        height: 37,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "丢弃",
+                              textAlign: TextAlign.right,
+                              style: XSTextStyle(
+                                context: context,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_dark_white
+                                        : os_dark_back,
+                                fontSize: 14,
+                                fontFamily: "PingFang SC",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    widget.data!.name != "刮刮卡"
+                        ? Container()
+                        : Container(width: 10),
+                    widget.data!.name != "刮刮卡"
+                        ? Container()
+                        : myInkWell(
+                            radius: 15,
+                            color: Color(0xfff1bf65),
+                            tap: guagua,
                             widget: Container(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               height: 37,
@@ -457,13 +452,11 @@ class _BagWidgetState extends State<BagWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "丢弃",
+                                    "刮一刮",
                                     textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                      color: Provider.of<ColorProvider>(context)
-                                              .isDark
-                                          ? os_dark_dark_white
-                                          : os_dark_back,
+                                    style: XSTextStyle(
+                                      context: context,
+                                      color: Color(0xff571F11),
                                       fontSize: 14,
                                       fontFamily: "PingFang SC",
                                       fontWeight: FontWeight.w600,
@@ -473,47 +466,7 @@ class _BagWidgetState extends State<BagWidget> {
                               ),
                             ),
                           ),
-                          widget.data!.name != "刮刮卡"
-                              ? Container()
-                              : Container(width: 10),
-                          widget.data!.name != "刮刮卡"
-                              ? Container()
-                              : myInkWell(
-                                  radius: 15,
-                                  color: Color(0xfff1bf65),
-                                  tap: guagua,
-                                  widget: Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 20),
-                                    height: 37,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "刮一刮",
-                                          textAlign: TextAlign.right,
-                                          style: TextStyle(
-                                            color: Color(0xff571F11),
-                                            fontSize: 14,
-                                            fontFamily: "PingFang SC",
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  ],
                 ),
                 SizedBox(height: 10),
                 Container(
@@ -540,7 +493,8 @@ class _BagWidgetState extends State<BagWidget> {
                                 (widget.data!.name == "刮刮卡"
                                     ? "\n你将获得的水滴数量最少为1，最高为购买价格的1.5倍"
                                     : ""),
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: Provider.of<ColorProvider>(context).isDark
                                   ? os_dark_dark_white
                                   : Color(0xff646d80),
@@ -656,7 +610,8 @@ class _CelebrationState extends State<Celebration> {
               Container(height: 50),
               Text(
                 "恭喜你获得水滴数",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_white
                       : os_black,
@@ -667,7 +622,8 @@ class _CelebrationState extends State<Celebration> {
               Container(height: 100),
               Text(
                 widget.count.toString(),
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_white
                       : os_black,

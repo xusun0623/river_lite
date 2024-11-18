@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -47,7 +48,8 @@ class _SelectTagState extends State<SelectTag> {
         child: Center(
           child: Text(
             "#" + (widget.quick["board_name"] ?? "测试Tag"),
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               color: widget.selected ?? false ? os_color : Color(0xFF9D9D9D),
             ),
           ),
@@ -88,7 +90,8 @@ class _RightTopSendState extends State<RightTopSend> {
             child: Container(
               child: Text(
                 "发布",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: os_white,
                 ),
               ),
@@ -146,7 +149,8 @@ class SelectColumn extends StatelessWidget {
           Container(width: 7.5),
           Text(
             select_section!,
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               fontSize: 14,
               color: os_color,
             ),

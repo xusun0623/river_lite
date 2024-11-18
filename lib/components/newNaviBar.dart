@@ -42,7 +42,7 @@ class _BaaaarState extends State<Baaaar> {
                         decoration: BoxDecoration(
                           color: widget.color ??
                               (Provider.of<ColorProvider>(context).isDark ||
-                                      tabShowProvider.index == 2 ||
+                                      tabShowProvider.desktopIndex == 2 ||
                                       (widget.isDark ?? false)
                                   ? os_light_dark_card
                                   : Colors.white),
@@ -50,7 +50,7 @@ class _BaaaarState extends State<Baaaar> {
                             bottom: BorderSide(
                               color:
                                   Provider.of<ColorProvider>(context).isDark ||
-                                          tabShowProvider.index == 2 ||
+                                          tabShowProvider.desktopIndex == 2 ||
                                           (widget.isDark ?? false)
                                       ? Color(0x11FFFFFF)
                                       : Color(0x11000000),
@@ -67,7 +67,7 @@ class _BaaaarState extends State<Baaaar> {
                                 child: Opacity(
                                   opacity: Provider.of<ColorProvider>(context)
                                               .isDark ||
-                                          tabShowProvider.index == 2 ||
+                                          tabShowProvider.desktopIndex == 2 ||
                                           (widget.isDark ?? false) ||
                                           (widget.hideLogo ?? false)
                                       ? 0
@@ -90,7 +90,9 @@ class _BaaaarState extends State<Baaaar> {
                                       iconNormal:
                                           Provider.of<ColorProvider>(context)
                                                       .isDark ||
-                                                  tabShowProvider.index == 2 ||
+                                                  tabShowProvider
+                                                          .desktopIndex ==
+                                                      2 ||
                                                   (widget.isDark ?? false)
                                               ? os_dark_dark_white
                                               : os_dark_card,
@@ -101,7 +103,9 @@ class _BaaaarState extends State<Baaaar> {
                                       iconNormal:
                                           Provider.of<ColorProvider>(context)
                                                       .isDark ||
-                                                  tabShowProvider.index == 2 ||
+                                                  tabShowProvider
+                                                          .desktopIndex ==
+                                                      2 ||
                                                   (widget.isDark ?? false)
                                               ? os_dark_dark_white
                                               : os_dark_card,
@@ -112,7 +116,9 @@ class _BaaaarState extends State<Baaaar> {
                                       iconNormal:
                                           Provider.of<ColorProvider>(context)
                                                       .isDark ||
-                                                  tabShowProvider.index == 2 ||
+                                                  tabShowProvider
+                                                          .desktopIndex ==
+                                                      2 ||
                                                   (widget.isDark ?? false)
                                               ? os_dark_dark_white
                                               : os_dark_card,

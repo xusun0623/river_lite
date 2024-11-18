@@ -4,6 +4,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanQRCode extends StatefulWidget {
@@ -20,7 +21,7 @@ class _ScanQRCodeState extends State<ScanQRCode> {
       appBar: AppBar(
         title: Text(
           '扫码',
-          style: TextStyle(fontSize: 16),
+          style: XSTextStyle(context: context, fontSize: 16),
         ),
         elevation: 0,
         foregroundColor: os_white,

@@ -4,10 +4,35 @@
  * @Last Modified by:   xusun000 
  * @Last Modified time: 2022-08-03 10:38:43 
  */
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
+
+class FontSizeProvider extends ChangeNotifier {
+  double fraction = 1;
+
+  getFontScaleFrac() async {
+    var tmp = await getStorage(
+      key: "font_frac",
+      initData: Platform.isAndroid ? "1.0" : "1.0",
+    );
+    fraction = double.parse(tmp);
+    refresh();
+  }
+
+  setFontScaleFrac(double frac) async {
+    fraction = frac;
+    refresh();
+    await setStorage(key: "font_frac", value: frac.toString());
+  }
+
+  refresh() {
+    notifyListeners();
+  }
+}
 
 class SettingConfigProvider extends ChangeNotifier {
   Map? LiteConfig;
@@ -152,9 +177,15 @@ class MsgProvider extends ChangeNotifier {
 }
 
 class TabShowProvider extends ChangeNotifier {
-  int? index = 0;
+  int index = 0;
+  int desktopIndex = 0;
 
   changeIndex(int idx) {
+    index = idx;
+    notifyListeners();
+  }
+
+  changeDesktopIndex(int idx) {
     index = idx;
     notifyListeners();
   }

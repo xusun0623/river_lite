@@ -5,6 +5,7 @@ import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/page/topic/At_someone.dart';
 import 'package:offer_show/page/topic/Your_emoji.dart';
@@ -160,7 +161,8 @@ class _PostNewTransactionState extends State<PostNewTransaction> {
             elevation: 0,
             title: Text(
               sendSuccess ? "" : "发闲置二手",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 16,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_dark_white
@@ -436,7 +438,8 @@ class _SectionSelectState extends State<SectionSelect> {
       padding: const EdgeInsets.only(right: 10, top: 7.5, bottom: 7.5),
       child: Text(
         "选择校区:",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           color: Provider.of<ColorProvider>(context).isDark
               ? os_dark_dark_white
               : os_dark_back,
@@ -463,7 +466,8 @@ class _SectionSelectState extends State<SectionSelect> {
           ),
           child: Text(
             section_type[i],
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               color: i == section_idx ? os_color : os_deep_grey,
               fontWeight:
                   i == section_idx ? FontWeight.bold : FontWeight.normal,
@@ -481,7 +485,8 @@ class _SectionSelectState extends State<SectionSelect> {
       padding: const EdgeInsets.only(right: 10, top: 7.5, bottom: 7.5),
       child: Text(
         "选择类型:",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           color: Provider.of<ColorProvider>(context).isDark
               ? os_dark_dark_white
               : os_dark_back,
@@ -508,7 +513,8 @@ class _SectionSelectState extends State<SectionSelect> {
           ),
           child: Text(
             child_type[i],
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               color: i == type_idx ? os_color : os_deep_grey,
               fontWeight: i == type_idx ? FontWeight.bold : FontWeight.normal,
             ),
@@ -558,7 +564,8 @@ class _SectionSelectState extends State<SectionSelect> {
                                   right: 10, top: 7.5, bottom: 7.5),
                               child: Text(
                                 "已选类型:",
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
                                           ? os_dark_dark_white
@@ -575,7 +582,8 @@ class _SectionSelectState extends State<SectionSelect> {
                               ),
                               child: Text(
                                 child_type[type_idx],
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color: os_color,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -624,7 +632,8 @@ class _ChildColumnTipState extends State<ChildColumnTip> {
             : os_white,
         child: Text(
           widget.name!,
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             color: widget.select! ? os_color : os_deep_grey,
           ),
         ),
@@ -662,8 +671,10 @@ class _ContInputState extends State<ContInput> {
           keyboardType: TextInputType.multiline,
           maxLines: null,
           cursorColor: os_color,
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             height: 1.8,
+            fontSize: 15,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_dark_white
                 : os_black,
@@ -671,7 +682,8 @@ class _ContInputState extends State<ContInput> {
           decoration: InputDecoration(
             contentPadding: EdgeInsets.only(bottom: 500, top: 10),
             border: InputBorder.none,
-            hintStyle: TextStyle(
+            hintStyle: XSTextStyle(
+              context: context,
               height: 1.8,
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_deep_grey
@@ -713,7 +725,8 @@ class TitleInput extends StatelessWidget {
                   : Brightness.light,
           controller: title_controller,
           focusNode: title_focus,
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             fontSize: 17,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_white
@@ -740,7 +753,8 @@ class TitleInput extends StatelessWidget {
                 style: BorderStyle.solid,
               ),
             ),
-            hintStyle: TextStyle(
+            hintStyle: XSTextStyle(
+              context: context,
               fontSize: 17,
               color: Color(0xFFA3A3A3),
             ),

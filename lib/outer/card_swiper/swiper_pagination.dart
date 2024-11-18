@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/outer/card_swiper/flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:offer_show/outer/card_swiper/swiper.dart';
 import 'package:offer_show/outer/card_swiper/swiper_plugin.dart';
@@ -41,15 +42,18 @@ class FractionPaginationBuilder extends SwiperPlugin {
         children: <Widget>[
           Text(
             '${config.activeIndex! + 1}',
-            style: TextStyle(color: activeColor, fontSize: activeFontSize),
+            style: XSTextStyle(
+                context: context, color: activeColor, fontSize: activeFontSize),
           ),
           Text(
             '/',
-            style: TextStyle(color: color, fontSize: fontSize),
+            style:
+                XSTextStyle(context: context, color: color, fontSize: fontSize),
           ),
           Text(
             '${config.itemCount}',
-            style: TextStyle(color: color, fontSize: fontSize),
+            style:
+                XSTextStyle(context: context, color: color, fontSize: fontSize),
           )
         ],
       );
@@ -60,11 +64,13 @@ class FractionPaginationBuilder extends SwiperPlugin {
         children: <Widget>[
           Text(
             '${config.activeIndex! + 1}',
-            style: TextStyle(color: activeColor, fontSize: activeFontSize),
+            style: XSTextStyle(
+                context: context, color: activeColor, fontSize: activeFontSize),
           ),
           Text(
             ' / ${config.itemCount}',
-            style: TextStyle(color: color, fontSize: fontSize),
+            style:
+                XSTextStyle(context: context, color: color, fontSize: fontSize),
           )
         ],
       );

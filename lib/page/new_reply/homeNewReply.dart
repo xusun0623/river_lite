@@ -9,6 +9,7 @@ import 'package:offer_show/asset/mouse_speed.dart';
 import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/occu_loading.dart';
 import 'package:offer_show/components/topic.dart';
@@ -220,7 +221,9 @@ class _HomeNewReplyState extends State<HomeNewReply>
                       Container(width: 10),
                       Text(
                         "加载中…",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
+                          fontSize: 14,
                           color: os_black,
                         ),
                       ),

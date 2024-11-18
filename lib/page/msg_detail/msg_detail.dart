@@ -21,6 +21,7 @@ import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/uploadAttachment.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
@@ -189,7 +190,8 @@ class MsgDetailState extends State<MsgDetail> {
               width: MediaQuery.of(context).size.width - 96,
               child: Text(
                 "客户端仅能显示最近100条信息，如有更多请前往网页版查看",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: os_wonderful_color[0],
                 ),
               ),
@@ -504,7 +506,8 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                         Container(width: 10),
                         Text(
                           "上传图片中…",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_dark_white
                                 : os_black,
@@ -540,7 +543,9 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                     onSubmitted: (e) {
                                       _send();
                                     },
-                                    style: TextStyle(
+                                    style: XSTextStyle(
+                                      context: context,
+                                      fontSize: 15,
                                       color: Provider.of<ColorProvider>(context)
                                               .isDark
                                           ? os_dark_white
@@ -549,7 +554,8 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.only(left: 15),
                                       border: InputBorder.none,
-                                      hintStyle: TextStyle(
+                                      hintStyle: XSTextStyle(
+                                        context: context,
                                         height: 1.8,
                                         color:
                                             Provider.of<ColorProvider>(context)
@@ -673,7 +679,8 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                     showBadge: img_urls.length != 0,
                                     badgeContent: Text(
                                       img_urls.length.toString(),
-                                      style: TextStyle(
+                                      style: XSTextStyle(
+                                        context: context,
                                         color: os_white,
                                         fontSize: 10,
                                       ),
@@ -728,7 +735,9 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                           Container(width: 5),
                                           Text(
                                             "发送这张 图片",
-                                            style: TextStyle(color: os_white),
+                                            style: XSTextStyle(
+                                                context: context,
+                                                color: os_white),
                                           ),
                                         ],
                                       ),
@@ -760,8 +769,9 @@ class _BottomFuncBarState extends State<BottomFuncBar> {
                                         children: [
                                           Text(
                                             "取消发送",
-                                            style:
-                                                TextStyle(color: os_deep_grey),
+                                            style: XSTextStyle(
+                                                context: context,
+                                                color: os_deep_grey),
                                           ),
                                         ],
                                       ),
@@ -1004,7 +1014,8 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                             RelativeDateFormat.format(
                               DateTime.fromMillisecondsSinceEpoch(widget.time!),
                             ),
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: Color.fromRGBO(255, 255, 255, 0.9),
                               fontSize: 12,
                             ),
@@ -1029,7 +1040,8 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                             margin: EdgeInsets.only(bottom: 3),
                             child: Text.rich(
                               TextSpan(
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   fontSize: 16,
                                   height: 1.6,
                                   color: widget.index == 0
@@ -1047,7 +1059,8 @@ class _MsgContBodyWidgetState extends State<MsgContBodyWidget> {
                             RelativeDateFormat.format(
                               DateTime.fromMillisecondsSinceEpoch(widget.time!),
                             ),
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: widget.index == 0
                                   ? (Provider.of<ColorProvider>(context).isDark
                                       ? os_dark_dark_white
@@ -1113,16 +1126,10 @@ class _LookRoomState extends State<LookRoom> {
             ? os_light_dark_card
             : Color(0xFFEEEEEE),
         widget: Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.5),
+          padding: EdgeInsets.symmetric(horizontal: 7.5),
           child: Center(
-              child: Text(
-            "查看空间",
-            style: TextStyle(
-              color: Provider.of<ColorProvider>(context).isDark
-                  ? os_dark_dark_white
-                  : os_black,
-            ),
-          )),
+            child: Icon(Icons.person_outline),
+          ),
         ),
         radius: 100,
       ),
@@ -1169,7 +1176,8 @@ class _DetailHeadState extends State<DetailHead> {
         Text(
           widget.name!,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             fontSize: 18,
           ),
         ),
@@ -1189,13 +1197,20 @@ class _DetailHeadState extends State<DetailHead> {
               ),
             ),
             Container(width: 5),
-            Text(
-              data["rs"] == null
-                  ? "该用户当前网页不在线"
-                  : (data["status"] == 0 ? "该用户当前网页不在线" : "该用户当前在线"),
-              style: TextStyle(
-                fontSize: 12,
-                color: Color(0xFFADADAD),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: 130,
+              ),
+              child: Text(
+                data["rs"] == null
+                    ? "该用户当前网页不在线"
+                    : (data["status"] == 0 ? "该用户当前网页不在线" : "该用户当前在线"),
+                overflow: TextOverflow.ellipsis,
+                style: XSTextStyle(
+                  context: context,
+                  fontSize: 12,
+                  color: Color(0xFFADADAD),
+                ),
               ),
             ),
           ],

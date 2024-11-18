@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
@@ -56,7 +57,7 @@ class SaveDraft extends StatelessWidget {
           child: Container(
             child: Text(
               "保存草稿",
-              style: TextStyle(color: os_color),
+              style: XSTextStyle(context: context, color: os_color),
             ),
           ),
         ),

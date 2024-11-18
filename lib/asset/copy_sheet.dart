@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/showPop.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +29,9 @@ class _CopySheetWidgetState extends State<CopySheetWidget> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Scaffold(
-        backgroundColor:
-            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        backgroundColor: Provider.of<ColorProvider>(context).isDark
+            ? Colors.transparent
+            : Colors.transparent,
         body: Column(
           children: [
             Container(
@@ -49,7 +51,8 @@ class _CopySheetWidgetState extends State<CopySheetWidget> {
                   ),
                   Text(
                     "选词复制",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_dark_white
                           : os_black,
@@ -86,7 +89,8 @@ class _CopySheetWidgetState extends State<CopySheetWidget> {
                   children: [
                     SelectableText(
                       widget.cont,
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_white
                             : os_black,
@@ -116,7 +120,8 @@ class _CopySheetWidgetState extends State<CopySheetWidget> {
                         child: Center(
                           child: Text(
                             "取消",
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: Provider.of<ColorProvider>(context).isDark
                                   ? os_dark_dark_white
                                   : os_color,
@@ -143,7 +148,8 @@ class _CopySheetWidgetState extends State<CopySheetWidget> {
                         child: Center(
                             child: Text(
                           "全部复制",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: os_white,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

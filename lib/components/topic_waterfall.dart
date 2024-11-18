@@ -14,6 +14,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
@@ -97,8 +98,10 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
       Container(height: 30),
       Text(
         "请输入举报内容",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           fontSize: 20,
+          listenProvider: false,
           fontWeight: FontWeight.bold,
           color: Provider.of<ColorProvider>(context, listen: false).isDark
               ? os_dark_white
@@ -126,7 +129,9 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
             onChanged: (e) {
               txt = e;
             },
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
+              listenProvider: false,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
@@ -135,7 +140,10 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
             decoration: InputDecoration(
                 hintText: "请输入",
                 border: InputBorder.none,
-                hintStyle: TextStyle(
+                hintStyle: XSTextStyle(
+                  context: context,
+                  listenProvider: false,
+                  fontSize: 15,
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
                           ? os_dark_dark_white
@@ -166,7 +174,10 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                 child: Center(
                   child: Text(
                     "取消",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
+                      listenProvider: false,
+                      fontSize: 15,
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
                           ? os_dark_dark_white
@@ -205,7 +216,10 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                       Container(width: 5),
                       Text(
                         "完成",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
+                          listenProvider: false,
+                          fontSize: 14,
                           color: os_white,
                         ),
                       ),
@@ -224,14 +238,8 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
   _moreAction() async {
     showAction(
       context: context,
-      options: ["屏蔽此贴", "屏蔽此人", "收藏", "复制帖子链接", "举报反馈"],
-      icons: [
-        Icons.block,
-        Icons.person_off_outlined,
-        Icons.collections_bookmark_outlined,
-        Icons.copy,
-        Icons.feedback_outlined
-      ],
+      options: ["屏蔽此贴", "复制帖子链接", "举报反馈"],
+      icons: [Icons.block, Icons.copy, Icons.feedback_outlined],
       tap: (res) async {
         if (res == "屏蔽此贴") {
           await setBlackWord(widget.data!["title"], context);
@@ -324,7 +332,8 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                   padding: const EdgeInsets.all(15),
                   child: Text(
                     "此贴已被你屏蔽，屏蔽关键词为:" + blackKeyWord!,
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: os_deep_grey,
                     ),
                   ),
@@ -489,7 +498,8 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                               width: img_size - 98,
                               child: Text(
                                 widget.data!["user_nick_name"],
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
                                           ? Color(0xffF1f1f1)
@@ -505,7 +515,8 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                               RelativeDateFormat.format(
                                   DateTime.fromMillisecondsSinceEpoch(int.parse(
                                       widget.data!["last_reply_date"]))),
-                              style: TextStyle(
+                              style: XSTextStyle(
+                                context: context,
                                 color: Color(0xFFAAAAAA),
                                 fontSize: 11,
                               ),
@@ -555,7 +566,8 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                   child: Text(
                     removeTitleSubColumn(widget.data!["title"].toString()),
                     textAlign: TextAlign.start,
-                    style: TextStyle(
+                    style: XSTextStyle(
+                        context: context,
                         fontSize: 17,
                         letterSpacing: 0,
                         color: Provider.of<ColorProvider>(context).isDark
@@ -580,7 +592,8 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                                   widget.data!["subject"]) ??
                               "",
                           textAlign: TextAlign.start,
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             fontSize: 15,
                             height: 1.5,
                             color: Color(0xFF999999),
@@ -625,7 +638,8 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                                   ),
                                   Text(
                                     "投票帖",
-                                    style: TextStyle(
+                                    style: XSTextStyle(
+                                      context: context,
                                       color: Provider.of<ColorProvider>(context)
                                               .isDark
                                           ? os_dark_dark_white
@@ -650,7 +664,8 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                     Container(width: 5),
                     Text(
                       "${widget.data!['hits']}",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Color(0xFF6B6B6B),
                         fontSize: 12,
                       ),
@@ -664,7 +679,8 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
                     Container(width: 5),
                     Text(
                       "${widget.data!['replies']}",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Color(0xFF6B6B6B),
                         fontSize: 12,
                       ),

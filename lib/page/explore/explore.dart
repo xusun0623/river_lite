@@ -5,6 +5,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/util/mid_request.dart';
 
 class Explore extends StatefulWidget {
@@ -61,7 +62,8 @@ class _BottomBtnsState extends State<BottomBtns> {
               ),
               Text(
                 ["校园地图", "校园VPN", "学校官网", "合成大河畔", "河畔Web版"][i - 1],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: Color(0xFF5E5E5E),
                   fontSize: 14,
                 ),

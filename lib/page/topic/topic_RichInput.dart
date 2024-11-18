@@ -10,6 +10,7 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/phone_pick_images.dart';
 import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/uploadAttachment.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/At_someone.dart';
 import 'package:offer_show/page/topic/Your_emoji.dart';
@@ -304,8 +305,10 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                 maxLines: null,
                                 focusNode: widget.focusNode,
                                 controller: widget.controller,
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   height: 1.8,
+                                  fontSize: 15,
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
                                           ? os_dark_white
@@ -318,7 +321,8 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                       (isMacOS()
                                           ? "请在此编辑回复，按住control键+空格键以切换中英文输入法"
                                           : "请在此编辑回复"),
-                                  hintStyle: TextStyle(
+                                  hintStyle: XSTextStyle(
+                                    context: context,
                                     height: 1.8,
                                     color: Provider.of<ColorProvider>(context)
                                             .isDark
@@ -359,7 +363,8 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                           },
                                           child: Text(
                                             "是否匿名",
-                                            style: TextStyle(
+                                            style: XSTextStyle(
+                                              context: context,
                                               color: os_deep_grey,
                                               fontSize: 15,
                                             ),
@@ -390,7 +395,8 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                           child: Center(
                             child: Text(
                               "取消",
-                              style: TextStyle(
+                              style: XSTextStyle(
+                                context: context,
                                 fontSize: 16,
                                 color:
                                     Provider.of<ColorProvider>(context).isDark
@@ -427,7 +433,8 @@ class _RichInputState extends State<RichInput> with TickerProviderStateMixin {
                                     )
                                   : Text(
                                       "发\n送",
-                                      style: TextStyle(
+                                      style: XSTextStyle(
+                                        context: context,
                                         color: os_white,
                                         fontSize: 16,
                                       ),

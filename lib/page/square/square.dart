@@ -5,6 +5,7 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
@@ -86,7 +87,8 @@ class _SquareState extends State<Square> {
           foregroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_white
               : os_black,
-          title: Text("全部板块", style: TextStyle(fontSize: 16)),
+          title:
+              Text("全部板块", style: XSTextStyle(context: context, fontSize: 16)),
           leading: IconButton(
             icon: Icon(
               Icons.chevron_left_rounded,
@@ -198,7 +200,8 @@ class _SquareCardState extends State<SquareCard> {
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 17),
               child: Text(
                 e["board_name"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 14,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_white
@@ -257,7 +260,8 @@ class _SquareCardState extends State<SquareCard> {
               Container(width: 3),
               Text(
                 widget.data["board_category_name"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark

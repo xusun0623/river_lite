@@ -4,6 +4,7 @@ import 'package:badges/badges.dart' as badgee;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/home.dart';
 import 'package:offer_show/util/interface.dart';
@@ -93,16 +94,8 @@ class _LeftNaviState extends State<LeftNavi> {
       child: Container(
         width: LeftNaviWidth,
         decoration: BoxDecoration(
-          // border: Border(
-          //   right: BorderSide(
-          //     color: Provider.of<ColorProvider>(context).isDark ||
-          //             tabShowProvider.index == 2
-          //         ? os_light_dark_card
-          //         : os_grey,
-          //   ),
-          // ),
           color: Provider.of<ColorProvider>(context).isDark ||
-                  tabShowProvider.index == 2
+                  tabShowProvider.desktopIndex == 2
               ? Color(0xFF323232)
               : os_white,
         ),
@@ -128,16 +121,17 @@ class _LeftNaviState extends State<LeftNavi> {
                       );
                     },
                     child: Container(
-                      // width: 50,
                       height: 50,
                       margin: EdgeInsets.symmetric(horizontal: 15),
                       child: ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(100)),
-                        child: Provider.of<TabShowProvider>(context).index == 4
+                        child: Provider.of<TabShowProvider>(context)
+                                    .desktopIndex ==
+                                4
                             ? Container(
                                 color: Provider.of<ColorProvider>(context)
                                             .isDark ||
-                                        tabShowProvider.index == 2
+                                        tabShowProvider.desktopIndex == 2
                                     ? Color(0x33FFFFFF)
                                     : os_grey,
                                 child: Center(
@@ -147,7 +141,8 @@ class _LeftNaviState extends State<LeftNavi> {
                                             : provider.data!["name"] ??
                                                 provider.data!["userName"])[0]
                                         .toString(),
-                                    style: TextStyle(
+                                    style: XSTextStyle(
+                                      context: context,
                                       color: Provider.of<ColorProvider>(context)
                                               .isDark
                                           ? os_white
@@ -166,7 +161,7 @@ class _LeftNaviState extends State<LeftNavi> {
                                   return Container(
                                     color: Provider.of<ColorProvider>(context)
                                                 .isDark ||
-                                            tabShowProvider.index == 2
+                                            tabShowProvider.desktopIndex == 2
                                         ? Color(0x33FFFFFF)
                                         : os_grey,
                                   );
@@ -175,11 +170,6 @@ class _LeftNaviState extends State<LeftNavi> {
                       ),
                     ),
                   ),
-                  // Container(height: 5),
-                  // Container(
-                  //   margin: EdgeInsets.symmetric(horizontal: 10),
-                  //   child: QueationProgress(),
-                  // ),
                   Container(height: 20),
                   NaviBtn(
                     index: 0,
@@ -240,12 +230,12 @@ class _LeftNaviState extends State<LeftNavi> {
 }
 
 class NaviBtn extends StatefulWidget {
-  int? index;
+  int index;
   bool? isNewMsg;
   Function tap;
   NaviBtn({
     Key? key,
-    this.index,
+    required this.index,
     this.isNewMsg,
     required this.tap,
   }) : super(key: key);
@@ -282,15 +272,17 @@ class _NaviBtnState extends State<NaviBtn> {
     return Container(
       child: myInkWell(
         tap: () {
-          provider.index = widget.index;
+          provider.desktopIndex = widget.index;
           provider.refresh();
           widget.tap();
         },
-        color: provider.index == widget.index
-            ? (Provider.of<ColorProvider>(context).isDark || provider.index == 2
+        color: provider.desktopIndex == widget.index
+            ? (Provider.of<ColorProvider>(context).isDark ||
+                    provider.desktopIndex == 2
                 ? Color(0xFF464646)
                 : Colors.transparent)
-            : (Provider.of<ColorProvider>(context).isDark || provider.index == 2
+            : (Provider.of<ColorProvider>(context).isDark ||
+                    provider.desktopIndex == 2
                 ? Color(0xFF323232)
                 : Colors.transparent),
         radius: 7.5,
@@ -301,31 +293,32 @@ class _NaviBtnState extends State<NaviBtn> {
             child: Column(
               children: [
                 Icon(
-                  icons[widget.index!],
+                  icons[widget.index],
                   size: 30,
-                  color: provider.index == widget.index
+                  color: provider.desktopIndex == widget.index
                       ? (Provider.of<ColorProvider>(context).isDark ||
-                              provider.index == 2
+                              provider.desktopIndex == 2
                           ? os_white
                           : os_deep_blue)
                       : (Provider.of<ColorProvider>(context).isDark ||
-                              provider.index == 2
+                              provider.desktopIndex == 2
                           ? Color(0xFF919191)
                           : Color(0x55002266)),
                 ),
                 Container(height: 5),
                 Text(
-                  icon_desc[widget.index!],
-                  style: TextStyle(
+                  icon_desc[widget.index],
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: provider.index == widget.index
+                    color: provider.desktopIndex == widget.index
                         ? (Provider.of<ColorProvider>(context).isDark ||
-                                provider.index == 2
+                                provider.desktopIndex == 2
                             ? os_white
                             : os_deep_blue)
                         : (Provider.of<ColorProvider>(context).isDark ||
-                                provider.index == 2
+                                provider.desktopIndex == 2
                             ? Color(0xFF919191)
                             : Color(0x55002266)),
                   ),

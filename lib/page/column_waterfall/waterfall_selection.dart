@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/page/column_waterfall/column_btn.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -76,7 +77,7 @@ class _ColumnWaterfallSelectionState extends State<ColumnWaterfallSelection> {
                     ),
                     ColumnBtn(
                       hideArrow: true,
-                      name: "研究生交流",
+                      name: "研究生",
                       fid: 124,
                     ),
                     ColumnBtn(
@@ -86,7 +87,7 @@ class _ColumnWaterfallSelectionState extends State<ColumnWaterfallSelection> {
                     ),
                     ColumnBtn(
                       hideArrow: true,
-                      name: "程序员之家",
+                      name: "程序员",
                       fid: 70,
                     ),
                     ColumnBtn(
@@ -147,6 +148,7 @@ class _ColumnWaterfallSelectionState extends State<ColumnWaterfallSelection> {
                   ],
                 ),
                 Container(height: 20),
+                // Text(MediaQuery.of(context).size.width.toString()),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -163,7 +165,8 @@ class _ColumnWaterfallSelectionState extends State<ColumnWaterfallSelection> {
                             Container(width: 18),
                             Text(
                               "查看全部板块",
-                              style: TextStyle(
+                              style: XSTextStyle(
+                                context: context,
                                 color:
                                     Provider.of<ColorProvider>(context).isDark
                                         ? os_deep_grey

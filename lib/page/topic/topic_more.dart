@@ -13,6 +13,7 @@ import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/topic_formhash.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/topic_water.dart';
 import 'package:offer_show/util/interface.dart';
@@ -55,7 +56,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       Container(height: 30),
       Text(
         "请输入举报内容",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
+          listenProvider: false,
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -84,7 +87,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
             onChanged: (e) {
               txt = e;
             },
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
+              listenProvider: false,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
@@ -93,7 +98,10 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
             decoration: InputDecoration(
                 hintText: "请输入",
                 border: InputBorder.none,
-                hintStyle: TextStyle(
+                hintStyle: XSTextStyle(
+                  listenProvider: false,
+                  context: context,
+                  fontSize: 15,
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
                           ? os_dark_dark_white
@@ -124,7 +132,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                 child: Center(
                   child: Text(
                     "取消",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
+                      listenProvider: false,
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
                           ? os_dark_dark_white
@@ -163,7 +173,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                       Container(width: 5),
                       Text(
                         "完成",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          listenProvider: false,
+                          context: context,
                           color: os_white,
                         ),
                       ),
@@ -375,7 +387,8 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       Container(height: 30),
       Text(
         "请输入补充内容",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -386,7 +399,8 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
       Container(height: 10),
       Text(
         "补充内容显示在客户端可能有延时，可以尝试稍后刷新一下或者在网页端查看",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           fontSize: 14,
           color: Provider.of<ColorProvider>(context, listen: false).isDark
               ? os_dark_dark_white
@@ -414,7 +428,8 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
             onChanged: (e) {
               txt = e;
             },
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
@@ -423,7 +438,9 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
             decoration: InputDecoration(
                 hintText: "请输入",
                 border: InputBorder.none,
-                hintStyle: TextStyle(
+                hintStyle: XSTextStyle(
+                  context: context,
+                  fontSize: 15,
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
                           ? os_dark_dark_white
@@ -450,7 +467,8 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                 child: Center(
                   child: Text(
                     "取消",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
                           ? os_dark_dark_white
@@ -492,7 +510,8 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
                       Container(width: 5),
                       Text(
                         "完成",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           color: os_white,
                         ),
                       ),
@@ -593,7 +612,8 @@ class _QrCodeState extends State<QrCode> {
             child: SelectableText(
               "请扫码或在河畔Lite App搜索框输入${getBriefId()}在手机上查看",
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Provider.of<ColorProvider>(context).isDark

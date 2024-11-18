@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/util/interface.dart';
@@ -111,7 +112,7 @@ class _PersonDetailState extends State<PersonDetail> {
           centerTitle: true,
           title: Text(
             "用户详情",
-            style: TextStyle(fontSize: 16),
+            style: XSTextStyle(context: context, fontSize: 16),
           ),
           backgroundColor: Provider.of<ColorProvider>(context).isDark
               ? os_dark_back
@@ -204,7 +205,8 @@ class _DetailListTitleState extends State<DetailListTitle> {
                 : os_black,
             title: Text(
               "${widget.left}",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               ),
@@ -214,7 +216,8 @@ class _DetailListTitleState extends State<DetailListTitle> {
               child: Text(
                 "${widget.right}",
                 textAlign: TextAlign.right,
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_dark_white
                       : os_dark_back,

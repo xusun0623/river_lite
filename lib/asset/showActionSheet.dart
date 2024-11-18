@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/showPop.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +31,9 @@ Widget _optionBar(String txt, IconData? icon, BuildContext context) {
         txt == null
             ? Container()
             : Text(txt,
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
+                  listenProvider: false,
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
                   color:
@@ -49,7 +52,8 @@ showAction({
   Function? tap,
   required BuildContext context,
 }) {
-  assert(((options ?? []).length == (icons ?? []).length) || icons!.length == 0);
+  assert(
+      ((options ?? []).length == (icons ?? []).length) || icons!.length == 0);
   List<Widget> _buildOptions() {
     List<Widget> tmp = [];
     if (icons!.length != 0) {

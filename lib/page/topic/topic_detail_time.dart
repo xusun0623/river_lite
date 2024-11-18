@@ -8,6 +8,7 @@ import 'package:offer_show/asset/myinfo.dart';
 import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
@@ -39,7 +40,9 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
       Container(height: 30),
       Text(
         "请给楼主加水",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
+          listenProvider: false,
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -50,7 +53,9 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
       Container(height: 10),
       Text(
         "注意：会扣除你等量的水（扣水额外收税10%）",
-        style: TextStyle(
+        style: XSTextStyle(
+          listenProvider: false,
+          context: context,
           fontSize: 14,
           color: os_deep_grey,
         ),
@@ -77,7 +82,9 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
             onChanged: (ele) {
               _value = ele;
             },
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
+              listenProvider: false,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
@@ -85,7 +92,10 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
             decoration: InputDecoration(
                 hintText: "请输入水滴数，从-5~30",
                 border: InputBorder.none,
-                hintStyle: TextStyle(
+                hintStyle: XSTextStyle(
+                  listenProvider: false,
+                            fontSize: 15,
+                  context: context,
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
                           ? os_dark_dark_white
@@ -112,7 +122,9 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                   child: Center(
                     child: Text(
                       "取消",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
+                        listenProvider: false,
                         color:
                             Provider.of<ColorProvider>(context, listen: false)
                                     .isDark
@@ -171,7 +183,9 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                         Container(width: 5),
                         Text(
                           "完成",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            listenProvider: false,
+                            context: context,
                             color: os_white,
                           ),
                         ),
@@ -195,27 +209,27 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Text(
-                (RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                                int.parse(widget.data["topic"]["create_date"])))
-                            .contains(" ")
-                        ? RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                                int.parse(widget.data["topic"]["create_date"])))
-                            .split(" ")[0]
-                        : RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                            int.parse(widget.data["topic"]["create_date"])))) +
-                    " · 浏览量${widget.data['topic']['hits'].toString()} · " +
-                    (widget.data["topic"]["mobileSign"].toString().contains("苹果")
-                        ? "iPhone客户端"
-                        : (widget.data["topic"]["mobileSign"].toString().contains("安卓") ? "安卓客户端" : "网页版")),
-                style: TextStyle(
-                  fontSize: 13.5,
-                  color: Color(0xFFAAAAAA),
-                ),
+          Expanded(
+            child: Text(
+              (RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(widget.data["topic"]["create_date"])))
+                          .contains(" ")
+                      ? RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(widget.data["topic"]["create_date"])))
+                          .split(" ")[0]
+                      : RelativeDateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                          int.parse(widget.data["topic"]["create_date"])))) +
+                  " · 浏览量${widget.data['topic']['hits'].toString()} · " +
+                  (widget.data["topic"]["mobileSign"].toString().contains("苹果")
+                      ? "iPhone客户端"
+                      : (widget.data["topic"]["mobileSign"].toString().contains("安卓") ? "安卓客户端" : "网页版")),
+              overflow: TextOverflow.ellipsis,
+              style: XSTextStyle(
+                context: context,
+                fontSize: 13.5,
+                color: Color(0xFFAAAAAA),
               ),
-            ],
+            ),
           ),
           Row(children: [
             myInkWell(
@@ -245,7 +259,11 @@ class _TopicDetailTimeState extends State<TopicDetailTime> {
                                 widget.data["topic"]["reward"]["score"][0]
                                         ["value"]
                                     .toString(),
-                                style: TextStyle(color: os_deep_grey),
+                                style: XSTextStyle(
+                                    fontSize: 14,
+                                    context: context, 
+                                    color: os_deep_grey,
+                                ),
                               )
                             : Container()
                       ]),

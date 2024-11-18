@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -51,7 +52,8 @@ class _VoteMachineState extends State<VoteMachine> {
                     Container(width: 2),
                     Text(
                       "投票",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         fontSize: 15,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_white
@@ -74,7 +76,10 @@ class _VoteMachineState extends State<VoteMachine> {
                   },
                   child: Text(
                     "+新增选项",
-                    style: TextStyle(fontSize: 15, color: Color(0xFFB9B9B9)),
+                    style: XSTextStyle(
+                        context: context,
+                        fontSize: 15,
+                        color: Color(0xFFB9B9B9)),
                   ),
                 ),
               ],
@@ -107,7 +112,9 @@ class _VoteMachineState extends State<VoteMachine> {
                           onTap: () {
                             widget.focus!();
                           },
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
+                            fontSize: 15,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
                                 : os_black,
@@ -120,7 +127,8 @@ class _VoteMachineState extends State<VoteMachine> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: "请输入选项",
-                            hintStyle: TextStyle(
+                            hintStyle: XSTextStyle(
+                              context: context,
                               fontSize: 16,
                               color: Provider.of<ColorProvider>(context).isDark
                                   ? os_dark_dark_white
@@ -141,7 +149,8 @@ class _VoteMachineState extends State<VoteMachine> {
                               },
                               child: Text(
                                 "删除",
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color: os_color,
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,

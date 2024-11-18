@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/full_screen_player.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/util/provider.dart';
@@ -306,7 +307,9 @@ class _VideoPlayContainerState extends State<VideoPlayContainer> {
                                 Container(height: 20),
                                 Text(
                                   "视频加载中",
-                                  style: TextStyle(
+                                  style: XSTextStyle(
+                                    context: context,
+                                    fontSize: 14,
                                     color: Provider.of<ColorProvider>(context)
                                             .isDark
                                         ? os_dark_dark_white

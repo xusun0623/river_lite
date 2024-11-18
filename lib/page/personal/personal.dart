@@ -14,6 +14,7 @@ import 'package:offer_show/asset/showPop.dart';
 import 'package:offer_show/asset/size.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/loading.dart';
 import 'package:offer_show/components/newNaviBar.dart';
@@ -252,7 +253,8 @@ class _PersonCenterState extends State<PersonCenter> {
               : os_black,
           title: Text(
             showTopTitle ? userInfo!["name"] : "",
-            style: TextStyle(
+            style: XSTextStyle(
+                context: context,
                 fontSize: 16,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
@@ -354,7 +356,8 @@ class _PersonCenterState extends State<PersonCenter> {
                         child: Center(
                           child: Text(
                             "该用户已被你拉黑",
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: Provider.of<ColorProvider>(context).isDark
                                   ? os_dark_dark_white
                                   : os_black,
@@ -368,7 +371,8 @@ class _PersonCenterState extends State<PersonCenter> {
                             margin: EdgeInsets.only(bottom: 100),
                             child: Text(
                               "抱歉，您指定的用户空间不存在",
-                              style: TextStyle(
+                              style: XSTextStyle(
+                                context: context,
                                 color:
                                     Provider.of<ColorProvider>(context).isDark
                                         ? os_dark_white
@@ -432,7 +436,8 @@ class _ActionButtonState extends State<ActionButton> {
           child: Center(
               child: Text(
             widget.txt ?? "私信",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               color: widget.color ?? os_black,
             ),
           )),
@@ -549,7 +554,9 @@ class _PersonIndexTabState extends State<PersonIndexTab> {
                     (widget.countNum == 0 || widget.index == 2
                         ? ""
                         : "(${widget.countNum})"),
-                style: TextStyle(
+                textAlign: TextAlign.center,
+                style: XSTextStyle(
+                  context: context,
                   color: widget.select!
                       ? (Provider.of<ColorProvider>(context).isDark
                           ? os_dark_white
@@ -618,7 +625,9 @@ class _PersonCardState extends State<PersonCard> {
       Container(height: 30),
       Text(
         "请输入新的签名",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
+          listenProvider: false,
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -646,7 +655,9 @@ class _PersonCardState extends State<PersonCard> {
                     : Brightness.light,
             controller: _sign_controller,
             cursorColor: os_deep_blue,
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
+              listenProvider: false,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
@@ -654,7 +665,10 @@ class _PersonCardState extends State<PersonCard> {
             decoration: InputDecoration(
                 hintText: "请输入",
                 border: InputBorder.none,
-                hintStyle: TextStyle(
+                hintStyle: XSTextStyle(
+                  context: context,
+                  fontSize: 15,
+                  listenProvider: false,
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
                           ? os_dark_white
@@ -681,7 +695,9 @@ class _PersonCardState extends State<PersonCard> {
                   child: Center(
                     child: Text(
                       "取消",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
+                        listenProvider: false,
                         color:
                             Provider.of<ColorProvider>(context, listen: false)
                                     .isDark
@@ -720,7 +736,9 @@ class _PersonCardState extends State<PersonCard> {
                         Container(width: 5),
                         Text(
                           "完成",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            listenProvider: false,
+                            context: context,
                             color: os_white,
                           ),
                         ),
@@ -769,7 +787,11 @@ class _PersonCardState extends State<PersonCard> {
                           "水滴 " +
                               widget.data!["body"]["creditShowList"][1]["data"]
                                   .toString(),
-                          style: TextStyle(color: os_deep_grey),
+                          style: XSTextStyle(
+                            fontSize: 14,
+                            context: context,
+                            color: os_deep_grey,
+                          ),
                         ),
                       ],
                     ),
@@ -809,42 +831,15 @@ class _PersonCardState extends State<PersonCard> {
           // https://bbs.uestc.edu.cn/home.php?mod=space&uid=125446
           Positioned(
             right: 30,
-            top: -10,
+            top: 10,
             child: GestureDetector(
-              onTap: () {
-                // if (widget.isMe!) {
-                //   showAction(
-                //     context: context,
-                //     options: ["我是男生", "我是女生"],
-                //     icons: [Icons.male, Icons.female],
-                //     tap: (res) async {
-                //       if (res == "我是男生" || res == "我是女生") {
-                //         showToast(
-                //           context: context,
-                //           type: XSToast.loading,
-                //           txt: "请稍后…",
-                //         );
-                //         await Api().user_updateuserinfo({
-                //           "type": "info",
-                //           "gender": res + 1,
-                //           "sign": widget.data!["sign"],
-                //         });
-                //         hideToast();
-                //         widget.data!["gender"] = res + 1;
-                //         setState(() {});
-                //         Navigator.pop(context);
-                //       }
-                //       if (res == 1) {}
-                //     },
-                //   );
-                // }
-              },
+              onTap: () {},
               child: Opacity(
                 opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
                 child: os_svg(
                   path: "lib/img/person/1.svg",
-                  width: 143,
-                  height: 166,
+                  width: 130 * 143 / 166,
+                  height: 130,
                 ),
               ),
             ),
@@ -990,7 +985,8 @@ class _SignState extends State<Sign> {
                   widget.data["sign"].toString().trim() == ""
                       ? "点我编辑签名"
                       : widget.data["sign"],
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 13,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
@@ -1124,7 +1120,8 @@ class _PersonColumnState extends State<PersonColumn> {
           children: [
             Text(
               ["粉丝", "关注", "积分"][widget.index!],
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
                     : Color(0xFF939393),
@@ -1151,7 +1148,8 @@ class _PersonColumnState extends State<PersonColumn> {
                     : Container(),
                 Text(
                   (widget.count ?? 0).toString(),
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                     color: Provider.of<ColorProvider>(context).isDark
@@ -1232,8 +1230,14 @@ class PersonScoreState extends State<PersonScore> {
         Container(
           child: Row(
             children: [
-              Text("Lv.${_getLevel()}",
-                  style: TextStyle(color: Color(0xFF707070))),
+              Text(
+                "Lv.${_getLevel()}",
+                style: XSTextStyle(
+                  context: context,
+                  fontSize: 14,
+                  color: Color(0xFF707070),
+                ),
+              ),
               Container(width: 5),
               Stack(
                 children: [
@@ -1265,7 +1269,8 @@ class PersonScoreState extends State<PersonScore> {
               Container(width: 10),
               Text(
                 "${widget.score}/${now_score_total}",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 12,
                   color: os_deep_grey,
                 ),
@@ -1299,7 +1304,8 @@ class _PersonNameState extends State<PersonName> {
         children: [
           Text(
             widget.name!,
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               fontSize: 22,
               fontWeight: FontWeight.bold,
               color: Provider.of<ColorProvider>(context).isDark

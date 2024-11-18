@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/page/home.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -102,7 +103,8 @@ class _StartState extends State<Start> {
                   Container(height: 20),
                   Text(
                     "河畔Lite",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Provider.of<ColorProvider>(context).isDark

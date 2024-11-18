@@ -9,6 +9,8 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -16,6 +18,7 @@ import 'package:offer_show/asset/saveImg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/bilibili_player.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/video_player.dart';
@@ -281,7 +284,7 @@ class _DetailContState extends State<DetailCont> {
         width: MediaQuery.of(context).size.width - 30,
         child: Text(
           widget.data["infor"],
-          style: TextStyle(color: os_color, fontSize: 16),
+          style: XSTextStyle(context: context, color: os_color, fontSize: 16),
         ),
       ),
     );
@@ -332,11 +335,12 @@ class _DetailContState extends State<DetailCont> {
           children: [
             Text(
               "附件" + widget.data["desc"],
-              style: TextStyle(color: os_deep_grey),
+              style: XSTextStyle(context: context, color: os_deep_grey),
             ),
             Text(
               "点击下载",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontWeight: FontWeight.bold,
                 color: os_color,
               ),
@@ -349,6 +353,11 @@ class _DetailContState extends State<DetailCont> {
 }
 
 Widget WidgetImage(BuildContext context, DetailCont widget) {
+  double threeImgsWidth = (MediaQuery.of(context).size.width -
+          (widget.isComment ?? false ? 50 : 0) -
+          42) /
+      3;
+
   return GestureDetector(
     onLongPress: () {
       saveImge(
@@ -396,18 +405,8 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                   ? (widget.imgLists.length > 20
                       ? Container(
                           color: os_grey,
-                          width: isDesktop()
-                              ? 200
-                              : (MediaQuery.of(context).size.width -
-                                      (widget.isComment ?? false ? 50 : 0) -
-                                      42) /
-                                  3,
-                          height: isDesktop()
-                              ? 200
-                              : (MediaQuery.of(context).size.width -
-                                      (widget.isComment ?? false ? 50 : 0) -
-                                      42) /
-                                  3,
+                          width: isDesktop() ? 200 : threeImgsWidth,
+                          height: isDesktop() ? 200 : threeImgsWidth,
                           child: CachedNetworkImage(
                             imageUrl: widget.data["infor"],
                             fit: BoxFit.cover,
@@ -419,77 +418,25 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
                                 ),
                               );
                             },
-                            // memCacheHeight: (isDesktop()
-                            //             ? 200
-                            //             : (MediaQuery.of(context).size.width -
-                            //                     (widget.isComment ?? false
-                            //                         ? 50
-                            //                         : 0) -
-                            //                     42) /
-                            //                 3)
-                            //         .toInt() *
-                            //     3,
-                            memCacheWidth: (isDesktop()
-                                        ? 200
-                                        : (MediaQuery.of(context).size.width -
-                                                (widget.isComment ?? false
-                                                    ? 50
-                                                    : 0) -
-                                                42) /
-                                            3)
-                                    .toInt() *
-                                2,
-                            width: isDesktop()
-                                ? 200
-                                : (MediaQuery.of(context).size.width -
-                                        (widget.isComment ?? false ? 50 : 0) -
-                                        42) /
-                                    3,
-                            height: isDesktop()
-                                ? 200
-                                : (MediaQuery.of(context).size.width -
-                                        (widget.isComment ?? false ? 50 : 0) -
-                                        42) /
-                                    3,
+                            memCacheWidth:
+                                (isDesktop() ? 200 : threeImgsWidth).toInt() *
+                                    2,
+                            width: isDesktop() ? 200 : threeImgsWidth,
+                            height: isDesktop() ? 200 : threeImgsWidth,
                           ),
                         )
                       : Container(
                           child: CachedNetworkImage(
                             imageUrl: widget.data["infor"],
-                            width: isDesktop()
-                                ? 200
-                                : (MediaQuery.of(context).size.width -
-                                        (widget.isComment ?? false ? 50 : 0) -
-                                        42) /
-                                    2,
-                            height: isDesktop()
-                                ? 200
-                                : (MediaQuery.of(context).size.width -
-                                        (widget.isComment ?? false ? 50 : 0) -
-                                        42) /
-                                    2,
-                            // maxHeightDiskCache: 800,
-                            // maxWidthDiskCache: 800,
-                            memCacheWidth: (isDesktop()
-                                        ? 200
-                                        : (MediaQuery.of(context).size.width -
-                                                (widget.isComment ?? false
-                                                    ? 50
-                                                    : 0) -
-                                                42) /
-                                            3)
-                                    .toInt() *
-                                2,
-                            // memCacheHeight: (isDesktop()
-                            //             ? 200
-                            //             : (MediaQuery.of(context).size.width -
-                            //                     (widget.isComment ?? false
-                            //                         ? 50
-                            //                         : 0) -
-                            //                     42) /
-                            //                 3)
-                            //         .toInt() *
-                            //     3,
+                            width: isDesktop() ? 200 : threeImgsWidth,
+                            height: isDesktop() ? 200 : threeImgsWidth,
+                            memCacheWidth:
+                                (isDesktop() ? 200 : threeImgsWidth).toInt() *
+                                    (widget.imgLists.length < 5
+                                        ? 5
+                                        : widget.imgLists.length < 10
+                                            ? 4
+                                            : 3),
                             filterQuality: FilterQuality.low,
                             fit: BoxFit.cover,
                             progressIndicatorBuilder: (context, url, progress) {
@@ -548,118 +495,112 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
   );
 }
 
-Widget WidgetTxt(BuildContext context, DetailCont widget) {
-  return widget.data["infor"].toString().trim() == ""
-      ? Container()
-      : (widget.data["infor"].toString().characters.length == 1 &&
-              emoji
-                  .toString()
-                  .characters
-                  .contains(widget.data["infor"].toString().trim())
-          ? Container(
-              width: MediaQuery.of(context).size.width - 30,
-              child: widget.removeSelectable ?? false
-                  ? Text.rich(
-                      TextSpan(
-                        style: TextStyle(
-                          fontSize: 60,
-                          height: 1.6,
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
-                              : os_black,
-                        ),
-                        text: widget.data["infor"].toString().trim(),
-                      ),
-                    )
-                  : SelectableText.rich(
-                      TextSpan(
-                        style: TextStyle(
-                          fontSize: 60,
-                          height: 1.6,
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
-                              : os_black,
-                        ),
-                        text: widget.data["infor"].toString().trim(),
-                      ),
-                    ),
-            )
-          : Container(
-              width: MediaQuery.of(context).size.width - 30,
-              child: widget.removeSelectable ?? false
-                  ? Text.rich(
-                      TextSpan(
-                        style: TextStyle(
-                          fontSize: 16,
-                          height: 1.6,
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
-                              : os_black,
-                        ),
-                        children: _getRichText(
-                          context,
-                          widget.data["infor"].indexOf("本帖最后由") > -1
-                              ? widget.data["infor"].substring(
-                                  (widget.data["infor"].indexOf("编辑") + 7) >=
-                                          widget.data["infor"].length
-                                      ? widget.data["infor"].length - 1
-                                      : widget.data["infor"].indexOf("编辑") + 7)
-                              : widget.data["infor"],
-                        ),
-                      ),
-                    )
-                  : SelectableText.rich(
-                      TextSpan(
-                        style: TextStyle(
-                          fontSize: 16,
-                          height: 1.6,
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? os_dark_white
-                              : os_black,
-                        ),
-                        children: _getRichText(
-                          context,
-                          widget.data["infor"].indexOf("本帖最后由") > -1
-                              ? widget.data["infor"].substring(
-                                  (widget.data["infor"].indexOf("编辑") + 7) >=
-                                          widget.data["infor"].length
-                                      ? widget.data["infor"].length - 1
-                                      : widget.data["infor"].indexOf("编辑") + 7)
-                              : widget.data["infor"],
-                        ),
-                      ),
-                    ),
-            ));
+// 自定义的 MobcentPhizSyntax
+class MobcentPhizSyntax extends md.InlineSyntax {
+  MobcentPhizSyntax() : super(r'\[mobcent_phiz=(.*?)\]');
+
+  @override
+  bool onMatch(md.InlineParser parser, Match match) {
+    final String url = match.group(1)!;
+    final md.Element image = md.Element.empty('mobcent_phiz');
+    image.attributes['src'] = url;
+    parser.addNode(image);
+    return true;
+  }
 }
 
-List<InlineSpan> _getRichText(BuildContext context, String t) {
-  List<InlineSpan> ret = [];
-  t = t.replaceAll("&nbsp;", " ");
-  List<String> tmp = t.split("[mobcent_phiz=");
-  ret.add(TextSpan(text: tmp[0]));
-  for (var i = 1; i < tmp.length; i++) {
-    var first_idx = tmp[i].indexOf(']');
-    if (first_idx != -1) {
-      ret.add(WidgetSpan(
-        child: SizedBox(
-          width: 30,
-          height: 30,
-          child: Opacity(
-            opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
-            child: CachedNetworkImage(
-              placeholder: (context, url) => Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: os_grey,
-                ),
-              ),
-              imageUrl: tmp[i].substring(0, first_idx),
+// 自定义的 MobcentPhizBuilder
+class MobcentPhizBuilder extends MarkdownElementBuilder {
+  final bool isDark;
+
+  MobcentPhizBuilder({required this.isDark});
+
+  @override
+  Widget? visitElementAfter(md.Element element, TextStyle? preferredStyle) {
+    final String? src = element.attributes['src'];
+    if (src == null) return null;
+
+    return SizedBox(
+      width: 30,
+      height: 30,
+      child: Opacity(
+        opacity: isDark ? 0.8 : 1,
+        child: CachedNetworkImage(
+          placeholder: (context, url) => Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              color: Colors.grey,
             ),
           ),
+          imageUrl: src,
         ),
-      ));
-      ret.add(TextSpan(text: tmp[i].substring(first_idx + 1)));
-    }
+      ),
+    );
   }
-  return ret;
+}
+
+// 更新的 WidgetTxt 方法
+Widget WidgetTxt(BuildContext context, DetailCont widget) {
+  if (widget.data["infor"].toString().trim() == "") {
+    return Container();
+  }
+
+  // 预处理文本
+  String markdownText = widget.data["infor"].replaceAll("&nbsp;", " ");
+  if (markdownText.indexOf("本帖最后由") > -1) {
+    int editIndex = markdownText.indexOf("编辑") + 7;
+    if (editIndex >= markdownText.length) {
+      editIndex = markdownText.length - 1;
+    }
+    markdownText = markdownText.substring(editIndex);
+  }
+
+  // 获取 isDark 值
+  final bool isDark = Provider.of<ColorProvider>(context, listen: false).isDark;
+
+  // 检查是否为单个表情符号
+  if (markdownText.characters.length == 1 &&
+      emoji.toString().characters.contains(markdownText.trim())) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 30,
+      child: Text(
+        markdownText.trim(),
+        style: XSTextStyle(
+          context: context,
+          fontSize: 60,
+          height: 1.6,
+          color: isDark ? os_dark_white : os_black,
+        ),
+      ),
+    );
+  }
+
+  // 创建自定义的扩展集
+  final md.ExtensionSet customExtensionSet = md.ExtensionSet(
+    md.ExtensionSet.gitHubFlavored.blockSyntaxes,
+    [
+      MobcentPhizSyntax(),
+      ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes,
+    ],
+  );
+
+  return Container(
+    width: MediaQuery.of(context).size.width - 30,
+    child: MarkdownBody(
+      softLineBreak: true,
+      data: markdownText,
+      extensionSet: customExtensionSet,
+      builders: {
+        'mobcent_phiz': MobcentPhizBuilder(isDark: isDark),
+      },
+      styleSheet: MarkdownStyleSheet(
+        p: XSTextStyle(
+          context: context,
+          fontSize: 16,
+          height: 1.6,
+          color: isDark ? os_dark_white : os_black,
+        ),
+      ),
+    ),
+  );
 }

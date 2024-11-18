@@ -7,6 +7,7 @@ import 'package:offer_show/asset/refreshIndicator.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/BottomTip.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/leftNavi.dart';
@@ -94,7 +95,7 @@ class _MsgState extends State<Msg> {
         elevation: 0,
         title: Text(
           "消息",
-          style: TextStyle(fontSize: 16),
+          style: XSTextStyle(context: context, fontSize: 16),
         ),
         centerTitle: true,
       ),
@@ -230,6 +231,8 @@ class ColorBtn extends StatefulWidget {
 class _ColorBtnState extends State<ColorBtn> {
   @override
   Widget build(BuildContext context) {
+    bool isSmall = MediaQuery.of(context).size.width < 330;
+    double mW = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         if (widget.tap != null) {
@@ -243,12 +246,12 @@ class _ColorBtnState extends State<ColorBtn> {
               opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
               child: os_svg(
                 path: widget.path,
-                width: 108,
-                height: 51,
+                width: isSmall ? mW / 3 * 0.9 : 108,
+                height: isSmall ? mW / 3 * 51 / 108 * 0.9 : 51,
               ),
             ),
             Positioned(
-              top: 14,
+              top: isSmall ? 10 : 14,
               left: 20,
               child: badgee.Badge(
                 position: badgee.BadgePosition.topEnd(top: -10, end: 50),
@@ -256,7 +259,8 @@ class _ColorBtnState extends State<ColorBtn> {
                 showBadge: widget.count != 0,
                 badgeContent: Text(
                   widget.count.toString(),
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
                         : os_white,
@@ -272,11 +276,12 @@ class _ColorBtnState extends State<ColorBtn> {
                         width: 100,
                         child: Text(
                           widget.title!,
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_white
                                 : os_white,
-                            fontSize: 16,
+                            fontSize: isSmall ? 14 : 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -359,7 +364,8 @@ class _MsgCardState extends State<MsgCard> {
                     children: [
                       Text(
                         widget.data!["toUserName"],
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           fontSize: 16,
                           color: Provider.of<ColorProvider>(context).isDark
                               ? os_dark_white
@@ -384,7 +390,8 @@ class _MsgCardState extends State<MsgCard> {
                             int.parse(widget.data!["lastDateline"]),
                           ),
                         ).toString(),
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: Provider.of<ColorProvider>(context).isDark
                           ? os_deep_grey
                           : Color(0xFFA0A0A0),

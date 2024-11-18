@@ -17,6 +17,7 @@ import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/photo_view/photo_view.dart';
 import 'package:offer_show/util/interface.dart';
@@ -107,7 +108,9 @@ class _TopicState extends State<Topic> {
       Container(height: 30),
       Text(
         "请输入举报内容",
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
+          listenProvider: false,
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Provider.of<ColorProvider>(context, listen: false).isDark
@@ -136,7 +139,9 @@ class _TopicState extends State<Topic> {
             onChanged: (e) {
               txt = e;
             },
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
+              listenProvider: false,
               color: Provider.of<ColorProvider>(context, listen: false).isDark
                   ? os_dark_white
                   : os_black,
@@ -145,7 +150,10 @@ class _TopicState extends State<Topic> {
             decoration: InputDecoration(
                 hintText: "请输入",
                 border: InputBorder.none,
-                hintStyle: TextStyle(
+                hintStyle: XSTextStyle(
+                  context: context,
+                  fontSize: 15,
+                  listenProvider: false,
                   color:
                       Provider.of<ColorProvider>(context, listen: false).isDark
                           ? os_dark_dark_white
@@ -176,7 +184,9 @@ class _TopicState extends State<Topic> {
                 child: Center(
                   child: Text(
                     "取消",
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
+                      listenProvider: false,
                       color: Provider.of<ColorProvider>(context, listen: false)
                               .isDark
                           ? os_dark_dark_white
@@ -215,7 +225,9 @@ class _TopicState extends State<Topic> {
                       Container(width: 5),
                       Text(
                         "完成",
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          listenProvider: false,
+                          context: context,
                           color: os_white,
                         ),
                       ),
@@ -234,14 +246,8 @@ class _TopicState extends State<Topic> {
   _moreAction() async {
     showAction(
       context: context,
-      options: ["屏蔽此贴", "屏蔽此人", "收藏", "复制帖子链接", "举报反馈"],
-      icons: [
-        Icons.block,
-        Icons.person_off_outlined,
-        Icons.collections_bookmark_outlined,
-        Icons.copy,
-        Icons.feedback_outlined
-      ],
+      options: ["复制帖子链接", "举报反馈"],
+      icons: [Icons.copy, Icons.feedback_outlined],
       tap: (res) async {
         if (res == "屏蔽此贴") {
           await setBlackWord(widget.data!["title"], context);
@@ -334,7 +340,8 @@ class _TopicState extends State<Topic> {
                   padding: const EdgeInsets.all(15),
                   child: Text(
                     "此贴已被你屏蔽，屏蔽关键词为:" + blackKeyWord!,
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       color: os_deep_grey,
                     ),
                   ),
@@ -508,7 +515,8 @@ class _TopicState extends State<Topic> {
                       children: [
                         Text(
                           widget.data!["user_nick_name"],
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? Color(0xffF1f1f1)
                                 : os_black,
@@ -521,7 +529,8 @@ class _TopicState extends State<Topic> {
                           RelativeDateFormat.format(
                               DateTime.fromMillisecondsSinceEpoch(
                                   int.parse(widget.data!["last_reply_date"]))),
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: Color(0xFFAAAAAA),
                             fontSize: 12.5,
                           ),
@@ -574,8 +583,9 @@ class _TopicState extends State<Topic> {
               child: Text(
                 removeTitleSubColumn(widget.data!["title"].toString()),
                 textAlign: TextAlign.start,
-                style: TextStyle(
-                    fontSize: 17,
+                style: XSTextStyle(
+                    context: context,
+                    fontSize: 16,
                     letterSpacing: 0.5,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
@@ -592,18 +602,13 @@ class _TopicState extends State<Topic> {
             ((widget.data!["summary"] ?? widget.data!["subject"]) ?? "") == ""
                 ? Container()
                 : Container(
-                    // width: MediaQuery.of(context).size.width -
-                    //     ((widget.isLeftNaviUI ?? false) ? LeftNaviWidth : 0) -
-                    //     ((widget.hideColumn ?? false)
-                    //         ? MinusSpace(context)
-                    //         : 0) -
-                    //     54,
                     margin: EdgeInsets.only(right: 10),
                     child: Text(
                       (widget.data!["summary"] ?? widget.data!["subject"]) ??
                           "",
                       textAlign: TextAlign.start,
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         fontSize: 16,
                         height: 1.5,
                         color: Color(0xFF999999),
@@ -665,7 +670,8 @@ class _TopicState extends State<Topic> {
                               ),
                               Text(
                                 "投票帖",
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
                                           ? os_dark_dark_white
@@ -680,99 +686,104 @@ class _TopicState extends State<Topic> {
                   ),
             //浏览量 评论数 点赞数 - 专栏按钮
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
                     os_svg(
                       path: "lib/img/topic_component_view.svg",
-                      width: 20,
-                      height: 20,
+                      width: 19,
+                      height: 19,
                     ),
                     Container(width: 5),
                     Text(
                       "${widget.data!['hits']}",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Color(0xFF6B6B6B),
                         fontSize: 12,
                       ),
                     ),
-                    Container(width: 20),
+                    Container(width: 17),
                     os_svg(
                       path: "lib/img/topic_component_comment.svg",
-                      width: 20,
-                      height: 20,
+                      width: 19,
+                      height: 19,
                     ),
                     Container(width: 5),
                     Text(
                       "${widget.data!['replies']}",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Color(0xFF6B6B6B),
                         fontSize: 12,
                       ),
                     ),
-                    Container(width: 20),
+                    Container(width: 17),
                     os_svg(
                       path: "lib/img/topic_component_like.svg",
-                      width: 20,
-                      height: 20,
+                      width: 19,
+                      height: 19,
                     ),
                     Container(width: 5),
                     Text(
                       (widget.data!["recommendAdd"] ?? 0).toString(),
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Color(0xFF6B6B6B),
                         fontSize: 12,
                       ),
                     ),
                   ],
                 ),
-                myInkWell(
-                  color: Colors.transparent,
-                  tap: () {
-                    if (!(widget.hideColumn ?? false)) {
-                      Navigator.pushNamed(
-                        context,
-                        "/column",
-                        arguments: widget.data!["board_id"],
-                      );
-                    }
-                  },
-                  radius: 10,
-                  widget: Container(
-                    padding: EdgeInsets.only(
-                      left: 16,
-                      right: 12,
-                      top: 8,
-                      bottom: 8,
-                    ),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Row(
-                      children: [
-                        // Icon(
-                        //   Icons.extension_outlined,
-                        //   size: 16,
-                        //   color: os_color,
-                        // ),
-                        // Container(width: 2),
-                        Text(
-                          (widget.hideColumn ?? false)
-                              ? " "
-                              : widget.data!["board_name"],
-                          style: TextStyle(
-                            color: os_color,
-                            fontSize: 14,
-                          ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      if (!(widget.hideColumn ?? false)) {
+                        Navigator.pushNamed(
+                          context,
+                          "/column",
+                          arguments: widget.data!["board_id"],
+                        );
+                      }
+                    },
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        padding: EdgeInsets.only(
+                          left: 16,
+                          right: 12,
+                          top: 8,
+                          bottom: 8,
                         ),
-                        // Container(width: 2),
-                        if (!(widget.hideColumn ?? false))
-                          Icon(
-                            Icons.chevron_right,
-                            size: 16,
-                            color: os_color,
-                          ),
-                      ],
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                (widget.hideColumn ?? false)
+                                    ? " "
+                                    : widget.data!["board_name"],
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.end,
+                                style: XSTextStyle(
+                                  context: context,
+                                  color: os_color,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                            // Container(width: 2),
+                            if (!(widget.hideColumn ?? false))
+                              Icon(
+                                Icons.chevron_right,
+                                size: 16,
+                                color: os_color,
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),

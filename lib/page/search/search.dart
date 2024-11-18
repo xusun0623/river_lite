@@ -17,6 +17,7 @@ import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/time.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/empty.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
@@ -421,7 +422,8 @@ class _SwitchTypeTabState extends State<SwitchTypeTab> {
                     ),
                     child: Text(
                       "搜帖子",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: widget.index == 0
@@ -451,7 +453,8 @@ class _SwitchTypeTabState extends State<SwitchTypeTab> {
                     ),
                     child: Text(
                       "搜用户",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: widget.index == 1
@@ -542,7 +545,8 @@ class _HistoryState extends State<History> {
                   children: [
                     Text(
                       "搜索历史",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         fontSize: 14,
                         color: Color(0xFFBBBBBB),
                       ),
@@ -571,7 +575,8 @@ class _HistoryState extends State<History> {
                           ),
                           Text(
                             "清除全部",
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               fontSize: 14,
                               color: Color(0xFFBBBBBB),
                             ),
@@ -645,7 +650,8 @@ class _HistoryTagState extends State<HistoryTag> {
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7.5),
           child: Text(
             widget.txt ?? "历史记录",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               fontSize: 14,
               color: os_deep_grey,
             ),
@@ -689,7 +695,7 @@ class _UserListCardState extends State<UserListCard> {
             );
           },
           widget: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            padding: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 15),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -713,75 +719,70 @@ class _UserListCardState extends State<UserListCard> {
                   ),
                 ),
                 Container(width: 15),
-                Container(
-                  width: MediaQuery.of(context).size.width -
-                      MinusSpace(context) -
-                      160,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            widget.data!["name"],
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color:
-                                    Provider.of<ColorProvider>(context).isDark
-                                        ? os_dark_white
-                                        : os_black),
-                          ),
-                          Container(width: 5),
-                          widget.data!["userTitle"].toString().length < 6
-                              ? Tag(
-                                  txt: widget.data!["userTitle"],
-                                  color: os_white,
-                                  color_opa: os_wonderful_color[1],
-                                )
-                              : Container(),
-                        ],
-                      ),
-                      Container(height: 5),
-                      Text(
-                        widget.data!["signture"] == ""
-                            ? "这位畔友很懒，什么也没写"
-                            : widget.data!["signture"],
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF9F9F9F),
+                Expanded(
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              widget.data!["name"],
+                              style: XSTextStyle(
+                                  context: context,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      Provider.of<ColorProvider>(context).isDark
+                                          ? os_dark_white
+                                          : os_black),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        Container(height: 5),
+                        Text(
+                          widget.data!["signture"] == ""
+                              ? "这位畔友很懒，什么也没写"
+                              : widget.data!["signture"],
+                          style: XSTextStyle(
+                            context: context,
+                            fontSize: 14,
+                            color: Color(0xFF9F9F9F),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
-                  width: 40,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.person_add_rounded,
-                      color: Provider.of<ColorProvider>(context).isDark
-                          ? os_dark_dark_white
-                          : os_deep_grey,
+                  child: Transform.translate(
+                    offset: Offset(0, -8),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.person_add_rounded,
+                        color: Provider.of<ColorProvider>(context).isDark
+                            ? os_dark_dark_white
+                            : os_deep_grey,
+                      ),
+                      onPressed: () async {
+                        var tmp = await Api().user_useradmin({
+                          "type": "follow",
+                          "uid": widget.data!["uid"],
+                        });
+                        showToast(
+                          context: context,
+                          txt: tmp["errcode"],
+                          duration: 500,
+                          type: XSToast.none,
+                        );
+                      },
                     ),
-                    onPressed: () async {
-                      var tmp = await Api().user_useradmin({
-                        "type": "follow",
-                        "uid": widget.data!["uid"],
-                      });
-                      showToast(
-                        context: context,
-                        txt: tmp["errcode"],
-                        duration: 500,
-                        type: XSToast.none,
-                      );
-                    },
                   ),
                 ),
               ],
             ),
           ),
-          radius: 10,
+          radius: 15,
         ),
       ),
     );
@@ -880,7 +881,8 @@ class _SearchLeftState extends State<SearchLeft> {
                   : os_black,
               cursorWidth: 1.5,
               focusNode: widget.commentFocus,
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 16,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_dark_white
@@ -888,7 +890,8 @@ class _SearchLeftState extends State<SearchLeft> {
               ),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(right: 15),
-                hintStyle: TextStyle(
+                hintStyle: XSTextStyle(
+                  context: context,
                   color: Provider.of<ColorProvider>(context).isDark
                       ? os_deep_grey
                       : os_middle_grey,
@@ -929,6 +932,7 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
       child: Padding(
         padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
         child: myInkWell(
+          radius: 15,
           color: Provider.of<ColorProvider>(context).isDark
               ? os_light_dark_card
               : os_white,
@@ -966,7 +970,8 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                                   widget.data!["user_nick_name"].length == 0
                                       ? "X"
                                       : widget.data!["user_nick_name"][0],
-                                  style: TextStyle(
+                                  style: XSTextStyle(
+                                    context: context,
                                     color: Provider.of<ColorProvider>(context)
                                             .isDark
                                         ? os_dark_white
@@ -982,7 +987,8 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                             children: [
                               Text(
                                 widget.data!["user_nick_name"],
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
                                           ? os_dark_white
@@ -996,7 +1002,8 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                                     int.parse(widget.data!["last_reply_date"]),
                                   ),
                                 ),
-                                style: TextStyle(
+                                style: XSTextStyle(
+                                  context: context,
                                   color:
                                       Provider.of<ColorProvider>(context).isDark
                                           ? os_deep_grey
@@ -1016,7 +1023,8 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                     child: Text(
                       widget.data!["title"].replaceAll("&nbsp1", " "),
                       textAlign: TextAlign.start,
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         fontSize: 17,
                         fontWeight: FontWeight.w500,
                         color: Provider.of<ColorProvider>(context).isDark
@@ -1032,7 +1040,8 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                       (widget.data!["summary"] ?? widget.data!["subject"]) ??
                           "",
                       textAlign: TextAlign.start,
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                         color: Provider.of<ColorProvider>(context).isDark
@@ -1055,7 +1064,8 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
                           Padding(padding: EdgeInsets.all(2)),
                           Text(
                             "评论 ${widget.data!['replies']} · 浏览量 ${widget.data!['hits']}",
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: Color(0xFFC5C5C5),
                               fontSize: 14,
                             ),
@@ -1070,7 +1080,6 @@ class _SearchTopicCardState extends State<SearchTopicCard> {
           ),
           // width: width,
           // height: height,
-          radius: 10,
         ),
       ),
     );

@@ -11,6 +11,7 @@ import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/asset/showActionSheet.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/leftNavi.dart';
 import 'package:offer_show/emoji/emoji.dart';
 import 'package:offer_show/outer/card_swiper/swiper.dart';
@@ -172,8 +173,14 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
     return !hasToken
         ? Scaffold(
             body: GestureDetector(
-              onTap: () {
+              onTap: () async {
+                print("12345");
+                if ((await getStorage(key: "myinfo", initData: "")) == "") {
+                  return;
+                }
                 XSVibrate().impact();
+                showToast(
+                    context: context, type: XSToast.loading, duration: 500);
                 _getValid();
               },
               child: Container(
@@ -183,7 +190,10 @@ class _PicSquareState extends State<PicSquare> with TickerProviderStateMixin {
                 child: Center(
                   child: Text(
                     "登录后请点此刷新",
-                    style: TextStyle(color: os_dark_dark_white),
+                    style: XSTextStyle(
+                      context: context,
+                      color: os_dark_dark_white,
+                    ),
                   ),
                 ),
               ),
@@ -603,7 +613,8 @@ class _PhotoCardState extends State<PhotoCard> {
                 child: Text(
                   "已拉黑的内容，拉黑关键字为：" + blackKeyWord!,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: os_dark_dark_white,
                   ),
                 ),
@@ -642,7 +653,9 @@ class _PhotoCardState extends State<PhotoCard> {
                                   Container(height: 10),
                                   Text(
                                     load_done ? "此贴未包含图片" : "请求中…",
-                                    style: TextStyle(color: os_dark_dark_white),
+                                    style: XSTextStyle(
+                                        context: context,
+                                        color: os_dark_dark_white),
                                   ),
                                 ],
                               ),
@@ -856,7 +869,8 @@ class _PopCommentState extends State<PopComment> {
             Container(height: 10),
             Text(
               "这里是一颗空的星球",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: os_dark_dark_white,
               ),
             ),
@@ -895,7 +909,8 @@ class _PopCommentState extends State<PopComment> {
               children: [
                 Text(
                   total_num == 0 ? "评论" : "评论(${total_num})",
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: Color.fromRGBO(255, 255, 255, 1),
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -929,7 +944,8 @@ class _PopCommentState extends State<PopComment> {
                           ),
                           child: Text(
                             "前往详情页",
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: Color.fromRGBO(255, 255, 255, 0.7),
                               fontSize: 15,
                             ),
@@ -1025,19 +1041,25 @@ class _PopCommentContState extends State<PopCommentCont> {
           borderRadius: BorderRadius.all(Radius.circular(13)),
         ),
         child: RichText(
-          text: TextSpan(style: TextStyle(fontSize: 14), children: [
-            TextSpan(
-              text:
-                  "回复@" + widget.data["quote_content"].split(" 发表于")[0] + ": ",
-              style: TextStyle(
-                color: Color(0xFF64BDFF),
-              ),
-            ),
-            TextSpan(
-              text: widget.data["quote_content"].split("发表于")[1].split("\n")[1],
-              style: TextStyle(color: os_dark_white),
-            ),
-          ]),
+          text: TextSpan(
+              style: XSTextStyle(context: context, fontSize: 14),
+              children: [
+                TextSpan(
+                  text: "回复@" +
+                      widget.data["quote_content"].split(" 发表于")[0] +
+                      ": ",
+                  style: XSTextStyle(
+                    context: context,
+                    color: Color(0xFF64BDFF),
+                  ),
+                ),
+                TextSpan(
+                  text: widget.data["quote_content"]
+                      .split("发表于")[1]
+                      .split("\n")[1],
+                  style: XSTextStyle(context: context, color: os_dark_white),
+                ),
+              ]),
         ),
       ),
     );
@@ -1075,7 +1097,8 @@ class _PopCommentContState extends State<PopCommentCont> {
               Container(width: 10),
               Text(
                 widget.data["reply_name"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   color: os_white,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -1184,7 +1207,8 @@ class _PicBottomState extends State<PicBottom> {
                           child: Text(
                             widget.data["title"],
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: os_white,
                               fontSize: 15,
                             ),
@@ -1218,7 +1242,10 @@ class _PicBottomState extends State<PicBottom> {
                                     children: [
                                       Text(
                                         "上一镜",
-                                        style: TextStyle(color: Colors.white),
+                                        style: XSTextStyle(
+                                            context: context,
+                                            fontSize: 14,
+                                            color: Colors.white),
                                       ),
                                       Icon(
                                         Icons.arrow_upward,
@@ -1249,7 +1276,10 @@ class _PicBottomState extends State<PicBottom> {
                                     children: [
                                       Text(
                                         "下一镜",
-                                        style: TextStyle(color: Colors.white),
+                                        style: XSTextStyle(
+                                            context: context,
+                                            fontSize: 14,
+                                            color: Colors.white),
                                       ),
                                       Icon(
                                         Icons.arrow_downward,
@@ -1334,7 +1364,8 @@ class _PicBottomState extends State<PicBottom> {
                                   (widget.data["like"] +
                                           (widget.isLiked ?? false ? 1 : 0))
                                       .toString(),
-                                  style: TextStyle(
+                                  style: XSTextStyle(
+                                    context: context,
                                     color: widget.isLiked ?? false
                                         ? os_color
                                         : os_white,
@@ -1405,7 +1436,8 @@ class _PicBottomState extends State<PicBottom> {
                       : widget.data["cont"].toString().trim(),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: Color(0xDDFFFFFF),
                     fontSize: 14,
                   ),
@@ -1427,7 +1459,8 @@ class _PicBottomState extends State<PicBottom> {
                         Container(width: 15),
                         Text(
                           "第${widget.index.toString()}镜 / 摄影者 ${widget.data["name"]}",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             letterSpacing: 1,
                             color: Color(0x88FFFFFF),
                             fontSize: 12,
@@ -1451,7 +1484,8 @@ class _PicBottomState extends State<PicBottom> {
                           Container(width: 15),
                           Text(
                             "返回顶部",
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               letterSpacing: 1,
                               color: Color(0x88FFFFFF),
                               fontSize: 12,
@@ -1558,7 +1592,8 @@ class _DetailContState extends State<DetailCont> {
                     width: MediaQuery.of(context).size.width - 30,
                     child: Text.rich(
                       TextSpan(
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           fontSize: 60,
                           height: 1.6,
                           color: os_dark_white,
@@ -1571,7 +1606,8 @@ class _DetailContState extends State<DetailCont> {
                     width: MediaQuery.of(context).size.width - 30,
                     child: Text.rich(
                       TextSpan(
-                        style: TextStyle(
+                        style: XSTextStyle(
+                          context: context,
                           fontSize: 16,
                           height: 1.6,
                           color: os_dark_white,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart'; // Import package
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/saveImg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/provider.dart';
@@ -114,7 +115,8 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                             Container(width: 10),
                             Text(
                               "加载图片中…",
-                              style: TextStyle(color: os_white),
+                              style: XSTextStyle(
+                                  context: context, color: os_white),
                             ),
                           ],
                         ),
@@ -175,7 +177,8 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                         children: [
                           Text.rich(
                             TextSpan(
-                              style: TextStyle(
+                              style: XSTextStyle(
+                                context: context,
                                 fontSize: 16,
                                 color: os_dark_white,
                               ),
@@ -185,7 +188,8 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                           Container(height: 5),
                           Text.rich(
                             TextSpan(
-                              style: TextStyle(
+                              style: XSTextStyle(
+                                context: context,
                                 fontSize: 13,
                                 color: Colors.white70,
                               ),
@@ -210,7 +214,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                 child: Text(
                   "图片预览 $tempSelect / ${widget.galleryItems.length}",
-                  style: TextStyle(color: Colors.white),
+                  style: XSTextStyle(context: context, color: Colors.white),
                 ),
               ),
             ),
@@ -301,7 +305,8 @@ class FuncButton extends StatelessWidget {
                           ),
                           Text(
                             "上一张",
-                            style: TextStyle(color: os_white),
+                            style:
+                                XSTextStyle(context: context, color: os_white),
                           ),
                         ],
                       ),
@@ -324,7 +329,8 @@ class FuncButton extends StatelessWidget {
                         children: [
                           Text(
                             "下一张",
-                            style: TextStyle(color: os_white),
+                            style:
+                                XSTextStyle(context: context, color: os_white),
                           ),
                           Icon(
                             Icons.chevron_right_outlined,
@@ -346,7 +352,8 @@ class FuncButton extends StatelessWidget {
                     Container(width: 5),
                     Text(
                       "保存图片",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Colors.white70,
                       ),
                     ),

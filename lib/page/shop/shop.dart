@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/showPop.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/topic_detail.dart';
 import 'package:offer_show/util/interface.dart';
@@ -107,7 +108,8 @@ class _ShopState extends State<Shop> {
         centerTitle: true,
         title: Text(
           "道具商店",
-          style: TextStyle(
+          style: XSTextStyle(
+            context: context,
             color: Provider.of<ColorProvider>(context).isDark
                 ? os_dark_white
                 : os_black,
@@ -249,7 +251,8 @@ class _PopChatState extends State<PopChat> {
   }
 
   TextStyle titleStyle() {
-    return TextStyle(
+    return XSTextStyle(
+      context: context,
       color: Provider.of<ColorProvider>(context).isDark
           ? os_dark_dark_white
           : os_black,
@@ -312,7 +315,8 @@ class _PopChatState extends State<PopChat> {
       Text(
         "请确认你的订单",
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           color: Provider.of<ColorProvider>(context).isDark
               ? os_dark_white
               : os_black,
@@ -324,7 +328,8 @@ class _PopChatState extends State<PopChat> {
       Text(
         "水滴并非实体/数字货币，仅能在本论坛内流通，不能与任何实体/数字货币兑换",
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: XSTextStyle(
+          context: context,
           fontSize: 14,
           fontWeight: FontWeight.normal,
           color: Provider.of<ColorProvider>(context).isDark
@@ -351,7 +356,8 @@ class _PopChatState extends State<PopChat> {
             ),
             Container(width: 10),
             DefaultTextStyle(
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_dark_white
                     : Color(0xff575757),
@@ -365,7 +371,8 @@ class _PopChatState extends State<PopChat> {
                   Container(height: 3),
                   Text.rich(
                     TextSpan(
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: os_red,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -375,7 +382,8 @@ class _PopChatState extends State<PopChat> {
                       children: [
                         TextSpan(
                           text: " 水滴/张（原价）",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: Provider.of<ColorProvider>(context).isDark
                                 ? os_dark_dark_white
                                 : Color(0xff575757),
@@ -389,7 +397,8 @@ class _PopChatState extends State<PopChat> {
                   Container(height: 2),
                   Text.rich(
                     TextSpan(
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_white
                             : os_red,
@@ -400,7 +409,8 @@ class _PopChatState extends State<PopChat> {
                       children: [
                         TextSpan(
                           text: " 水滴/张（折扣价）",
-                          style: TextStyle(
+                          style: XSTextStyle(
+                            context: context,
                             color: Color(0xff575757),
                             fontSize: 14,
                             fontWeight: FontWeight.normal,
@@ -482,7 +492,8 @@ class _PopChatState extends State<PopChat> {
               child: Center(
                 child: Text(
                   purchase_num.toString(),
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_dark_white
                         : os_black,
@@ -532,7 +543,8 @@ class _PopChatState extends State<PopChat> {
           child: Center(
             child: Text(
               "确认",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: os_white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -588,127 +600,127 @@ class _GoodCardState extends State<GoodCard> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 39.75,
-                            height: 39.75,
-                            child: CachedNetworkImage(
-                              imageUrl: widget.data!.img!,
-                              placeholder: (context, url) => Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Color(0x11000000),
-                                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 39.75,
+                          height: 39.75,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.data!.img!,
+                            placeholder: (context, url) => Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(0x11000000),
                               ),
                             ),
                           ),
-                          SizedBox(width: 12),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.data!.name,
-                                style: TextStyle(
-                                  color:
-                                      Provider.of<ColorProvider>(context).isDark
-                                          ? os_dark_white
-                                          : Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                        ),
+                        SizedBox(width: 12),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.data!.name,
+                              style: XSTextStyle(
+                                context: context,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_white
+                                        : Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
                               ),
-                              SizedBox(height: 3),
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "${widget.data!.price}",
-                                      style: TextStyle(
-                                        color:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? os_dark_white
-                                                : os_red,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                            ),
+                            SizedBox(height: 3),
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "${widget.data!.price}",
+                                    style: XSTextStyle(
+                                      context: context,
+                                      color: Provider.of<ColorProvider>(context)
+                                              .isDark
+                                          ? os_dark_white
+                                          : os_red,
+                                      fontWeight: FontWeight.w600,
                                     ),
-                                    TextSpan(
-                                      text: " 水滴/张",
-                                      style: TextStyle(
-                                        color:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? os_dark_dark_white
-                                                : os_black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                style: TextStyle(
-                                  color: os_black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                ),
+                                  ),
+                                  TextSpan(
+                                    text: " 水滴/张",
+                                    style: XSTextStyle(
+                                      context: context,
+                                      color: Provider.of<ColorProvider>(context)
+                                              .isDark
+                                          ? os_dark_dark_white
+                                          : os_black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                                ],
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(width: 93),
-                      myInkWell(
-                        radius: 15,
-                        color:
-                            widget.data!.soldOut ? os_black_opa : os_deep_blue,
-                        tap: () {
-                          if (!widget.data!.soldOut) showChat();
-                        },
-                        widget: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          height: 37,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                widget.data!.soldOut ? "此道具缺货" : "购买",
-                                textAlign: TextAlign.right,
-                                style: TextStyle(
-                                  color:
-                                      Provider.of<ColorProvider>(context).isDark
-                                          ? os_dark_white
-                                          : (widget.data!.soldOut
-                                              ? os_light_dark_card
-                                              : os_white),
-                                  fontSize: 14,
-                                  fontFamily: "PingFang SC",
-                                  fontWeight: FontWeight.w600,
-                                ),
+                              style: XSTextStyle(
+                                context: context,
+                                color: os_black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Expanded(child: Container()),
+                    // SizedBox(width: 93),
+                    myInkWell(
+                      radius: 15,
+                      color: widget.data!.soldOut ? os_black_opa : os_deep_blue,
+                      tap: () {
+                        if (!widget.data!.soldOut) showChat();
+                      },
+                      widget: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        height: 37,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.data!.soldOut ? "此道具缺货" : "购买",
+                              textAlign: TextAlign.right,
+                              style: XSTextStyle(
+                                context: context,
+                                color:
+                                    Provider.of<ColorProvider>(context).isDark
+                                        ? os_dark_white
+                                        : (widget.data!.soldOut
+                                            ? os_light_dark_card
+                                            : os_white),
+                                fontSize: 14,
+                                fontFamily: "PingFang SC",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 10),
                 Container(
@@ -732,7 +744,8 @@ class _GoodCardState extends State<GoodCard> {
                         child: SizedBox(
                           child: Text(
                             widget.data!.desc,
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: Provider.of<ColorProvider>(context).isDark
                                   ? os_white
                                   : Color(0xff646d80),

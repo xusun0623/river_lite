@@ -6,6 +6,7 @@ import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/question/answer.dart';
@@ -91,7 +92,8 @@ class _QuestionState extends State<Question> {
                 ),
                 child: Text(
                   "${carry[i]}. " + option,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     color: match_answer == option || option.contains("屋大维")
                         ? os_color
                         : (Provider.of<ColorProvider>(context).isDark
@@ -246,7 +248,8 @@ class _QuestionState extends State<Question> {
                 children: [
                   Text(
                     q_a!["progress"].toString().replaceAll(" ", ""),
-                    style: TextStyle(
+                    style: XSTextStyle(
+                      context: context,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Provider.of<ColorProvider>(context).isDark
@@ -274,7 +277,8 @@ class _QuestionState extends State<Question> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Text(
                 q_a!["q"],
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
@@ -308,7 +312,8 @@ class _QuestionState extends State<Question> {
                         children: [
                           Text(
                             "已匹配到答案，已自动勾选",
-                            style: TextStyle(
+                            style: XSTextStyle(
+                                context: context,
                                 color:
                                     Provider.of<ColorProvider>(context).isDark
                                         ? os_dark_dark_white
@@ -317,7 +322,8 @@ class _QuestionState extends State<Question> {
                           Container(height: 5),
                           Text(
                             selected_option,
-                            style: TextStyle(
+                            style: XSTextStyle(
+                              context: context,
                               color: Provider.of<ColorProvider>(context).isDark
                                   ? os_dark_dark_white
                                   : Color(0xFF677D9B),
@@ -346,7 +352,8 @@ class _QuestionState extends State<Question> {
               Container(height: 10),
               Text(
                 "任务完成",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
@@ -360,7 +367,8 @@ class _QuestionState extends State<Question> {
                 child: Text(
                   "您已完成今日水滴答题,点击下方按钮领取今日奖励吧",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 16,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
@@ -386,7 +394,8 @@ class _QuestionState extends State<Question> {
                   child: Center(
                     child: Text(
                       "领取奖励",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_dark_white
                             : os_deep_blue,
@@ -419,7 +428,8 @@ class _QuestionState extends State<Question> {
               Container(height: 10),
               Text(
                 "已完成今日答题",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
@@ -433,7 +443,8 @@ class _QuestionState extends State<Question> {
                 child: Text(
                   "您已完成今日水滴答题,明天再来吧",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 16,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
@@ -459,7 +470,8 @@ class _QuestionState extends State<Question> {
                   child: Center(
                     child: Text(
                       "返回",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_dark_white
                             : os_deep_grey,
@@ -492,7 +504,8 @@ class _QuestionState extends State<Question> {
               Container(height: 10),
               Text(
                 "开启下一关",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                 ),
@@ -503,7 +516,8 @@ class _QuestionState extends State<Question> {
                 child: Text(
                   "您尚未完成所有关卡,是否立即开启下一关",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 16,
                   ),
                 ),
@@ -527,7 +541,8 @@ class _QuestionState extends State<Question> {
                   child: Center(
                     child: Text(
                       "下一关",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: os_deep_grey,
                         fontSize: 16,
                         // fontWeight: FontWeight.bold,
@@ -558,7 +573,8 @@ class _QuestionState extends State<Question> {
               Container(height: 10),
               Text(
                 "答题系统无法使用",
-                style: TextStyle(
+                style: XSTextStyle(
+                  context: context,
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                   color: Provider.of<ColorProvider>(context).isDark
@@ -572,7 +588,8 @@ class _QuestionState extends State<Question> {
                 child: Text(
                   "请检查你的水滴是否>=9,您也可以登陆网页端查看错误详情",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 16,
                     color: Provider.of<ColorProvider>(context).isDark
                         ? os_dark_white
@@ -598,7 +615,8 @@ class _QuestionState extends State<Question> {
                   child: Center(
                     child: Text(
                       "知道了",
-                      style: TextStyle(
+                      style: XSTextStyle(
+                        context: context,
                         color: Provider.of<ColorProvider>(context).isDark
                             ? os_dark_dark_white
                             : os_dark_back,
@@ -652,7 +670,8 @@ class _QuestionState extends State<Question> {
               children: [
                 Text(
                   auto_machine ? "接管中…" : "机器接管",
-                  style: TextStyle(
+                  style: XSTextStyle(
+                    context: context,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Provider.of<ColorProvider>(context).isDark
@@ -683,7 +702,8 @@ class _QuestionState extends State<Question> {
           child: Center(
             child: Text(
               "下一题",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 color: os_white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -717,7 +737,8 @@ class _QuestionState extends State<Question> {
           ),
           title: Text(
             "水滴答题",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_dark_white
                   : os_black,

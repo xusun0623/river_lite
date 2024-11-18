@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
-import 'package:offer_show/asset/showPop.dart';
-import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/toWebUrl.dart';
+import 'package:offer_show/asset/vibrate.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/newNaviBar.dart';
 import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/provider.dart';
@@ -24,46 +24,52 @@ class Setting extends StatefulWidget {
 
 class _SettingState extends State<Setting> {
   List<Widget> _buildWidget() {
+    FontSizeProvider provider = Provider.of<FontSizeProvider>(context);
+    int divisions = ((1.2 - 0.8) / 0.05).round(); // 计算刻度数量
     List<Widget> tmp = [];
     tmp.addAll([
-      // ResponsiveWidget(
-      //   child: SwitchListTile(
-      //     inactiveTrackColor: Provider.of<ColorProvider>(context).isDark
-      //         ? Color(0x33FFFFFF)
-      //         : os_middle_grey,
-      //     onChanged: (change_val) {
-      //       Provider.of<ShowPicProvider>(context, listen: false).isShow =
-      //           change_val;
-      //       Provider.of<ShowPicProvider>(context, listen: false).refresh();
-      //       Provider.of<TabShowProvider>(context, listen: false).index = 0;
-      //       Provider.of<TabShowProvider>(context, listen: false).refresh();
-      //     },
-      //     value: Provider.of<ShowPicProvider>(context).isShow,
-      //     title: Row(
-      //       children: [
-      //         Text(
-      //           "展示图区",
-      //           style: TextStyle(
-      //               color: Provider.of<ColorProvider>(context).isDark
-      //                   ? os_dark_white
-      //                   : os_black),
-      //         ),
-      //       ],
-      //     ),
-      //     subtitle: Text(
-      //       "手动切换是否展示图区（仅针对手机端生效）",
-      //       style: TextStyle(
-      //         color: Provider.of<ColorProvider>(context).isDark
-      //             ? os_dark_dark_white
-      //             : os_deep_grey,
-      //       ),
-      //     ),
-      //   ),
-      // ),
-      // Container(height: 15),
-      // Opacity(
-      //     opacity: Provider.of<ColorProvider>(context).isDark ? 0.6 : 1,
-      //     child: SelectCard()),
+      ResponsiveWidget(
+        child: ListTile(
+          title: Text(
+            "字体大小",
+            style: XSTextStyle(
+              context: context,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
+              fontSize: 15,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+          trailing: Transform.translate(
+            offset: Offset(15, 0),
+            child: Container(
+              width: 180,
+              child: Slider(
+                thumbColor: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
+                activeColor: Provider.of<ColorProvider>(context).isDark
+                    ? os_color
+                    : os_dark_back,
+                inactiveColor: Provider.of<ColorProvider>(context).isDark
+                    ? os_white_opa
+                    : os_black_opa,
+                value: provider.fraction,
+                min: 0.8,
+                max: 1.2,
+                divisions: divisions,
+                label: provider.fraction.toStringAsFixed(2), // 显示两位小数的字符串
+                onChanged: (double value) {
+                  XSVibrate().light();
+                  provider.setFontScaleFrac(value);
+                  setState(() {});
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
       Container(height: 5),
       ResponsiveWidget(
         child: SwitchListTile(
@@ -72,7 +78,9 @@ class _SettingState extends State<Setting> {
               : os_middle_grey,
           title: Text(
             "水滴自动答题",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
+              fontSize: 15,
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_dark_white
                   : os_black,
@@ -91,7 +99,9 @@ class _SettingState extends State<Setting> {
         child: ListTile(
           title: Text(
             "拉黑/黑名单",
-            style: TextStyle(
+            style: XSTextStyle(
+                context: context,
+                fontSize: 15,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
                     : os_black),
@@ -111,14 +121,18 @@ class _SettingState extends State<Setting> {
         child: ListTile(
           title: Text(
             "清除所有图片缓存",
-            style: TextStyle(
+            style: XSTextStyle(
+                context: context,
+                fontSize: 15,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
                     : os_black),
           ),
           subtitle: Text(
             "清除缓存可以释放占用空间，但在需要对应图片时，须重新请求",
-            style: TextStyle(
+            style: XSTextStyle(
+                context: context,
+                fontSize: 13,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
                     : os_deep_grey),
@@ -150,14 +164,18 @@ class _SettingState extends State<Setting> {
         child: ListTile(
           title: Text(
             "清除所有视频缓存",
-            style: TextStyle(
+            style: XSTextStyle(
+                context: context,
+                fontSize: 15,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
                     : os_black),
           ),
           subtitle: Text(
             "清除缓存可以释放占用空间，但在需要对应视频时，须重新请求",
-            style: TextStyle(
+            style: XSTextStyle(
+                context: context,
+                fontSize: 13,
                 color: Provider.of<ColorProvider>(context).isDark
                     ? os_dark_white
                     : os_deep_grey),
@@ -201,7 +219,9 @@ class _SettingState extends State<Setting> {
         child: ListTile(
           title: Text(
             "删除河畔账号",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
+              fontSize: 15,
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_dark_white
                   : os_black,
@@ -238,7 +258,6 @@ class _SettingState extends State<Setting> {
 
   @override
   Widget build(BuildContext context) {
-    TabShowProvider provider = Provider.of<TabShowProvider>(context);
     return Baaaar(
       child: Scaffold(
         backgroundColor: Provider.of<ColorProvider>(context).isDark
@@ -251,7 +270,8 @@ class _SettingState extends State<Setting> {
           elevation: 0,
           title: Text(
             "应用设置",
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               fontSize: 16,
               color: Provider.of<ColorProvider>(context).isDark
                   ? os_dark_white
@@ -285,58 +305,6 @@ class _SettingState extends State<Setting> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class SelectCard extends StatefulWidget {
-  SelectCard({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<SelectCard> createState() => _SelectCardState();
-}
-
-class _SelectCardState extends State<SelectCard> {
-  @override
-  Widget build(BuildContext context) {
-    ShowPicProvider provider = Provider.of<ShowPicProvider>(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Provider.of<ShowPicProvider>(context, listen: false).isShow = false;
-            Provider.of<ShowPicProvider>(context, listen: false).refresh();
-            Provider.of<TabShowProvider>(context, listen: false).index = 0;
-            Provider.of<TabShowProvider>(context, listen: false).refresh();
-          },
-          child: os_svg(
-            width: 150,
-            height: 250,
-            path: !provider.isShow
-                ? "lib/img/setting/2-se.svg"
-                : "lib/img/setting/2.svg",
-          ),
-        ),
-        Container(width: 15),
-        GestureDetector(
-          onTap: () {
-            Provider.of<ShowPicProvider>(context, listen: false).isShow = true;
-            Provider.of<ShowPicProvider>(context, listen: false).refresh();
-            Provider.of<TabShowProvider>(context, listen: false).index = 0;
-            Provider.of<TabShowProvider>(context, listen: false).refresh();
-          },
-          child: os_svg(
-            width: 150,
-            height: 250,
-            path: provider.isShow
-                ? "lib/img/setting/1-se.svg"
-                : "lib/img/setting/1.svg",
-          ),
-        ),
-      ],
     );
   }
 }

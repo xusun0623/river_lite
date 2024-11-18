@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/page/collection_tab/collection_tab.dart';
 import 'package:offer_show/page/column_waterfall/column_waterfall.dart';
 import 'package:offer_show/page/essence/essence.dart';
@@ -139,11 +140,13 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
               : os_dark_back,
         ),
       ),
-      unselectedLabelStyle: TextStyle(
+      unselectedLabelStyle: XSTextStyle(
+        context: context,
         fontSize: 16,
         fontFamily: "微软雅黑",
       ),
-      labelStyle: TextStyle(
+      labelStyle: XSTextStyle(
+        context: context,
         fontWeight: FontWeight.bold,
         fontSize: 18,
         fontFamily: "微软雅黑",
@@ -185,11 +188,13 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
               : Colors.transparent,
         ),
       ),
-      unselectedLabelStyle: TextStyle(
+      unselectedLabelStyle: XSTextStyle(
+        context: context,
         fontSize: 16,
         fontFamily: "微软雅黑",
       ),
-      labelStyle: TextStyle(
+      labelStyle: XSTextStyle(
+        context: context,
         fontWeight: FontWeight.bold,
         fontSize: 16,
         fontFamily: "微软雅黑",

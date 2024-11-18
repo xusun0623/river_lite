@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/mouse_speed.dart';
+import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/topic/emoji.dart';
 import 'package:offer_show/util/provider.dart';
@@ -155,7 +156,8 @@ class _YourEmojiState extends State<YourEmoji> {
           padding: const EdgeInsets.all(5),
           child: Text(
             emoji[index].characters.elementAt(i),
-            style: TextStyle(
+            style: XSTextStyle(
+              context: context,
               fontSize: widget.size == null ? 30 : widget.size! - 5,
             ),
           ),
@@ -192,7 +194,8 @@ class _YourEmojiState extends State<YourEmoji> {
             padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
             child: Text(
               "阿鲁",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Provider.of<ColorProvider>(context).isDark
@@ -211,7 +214,8 @@ class _YourEmojiState extends State<YourEmoji> {
             padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Text(
               "兔斯基",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Provider.of<ColorProvider>(context).isDark
@@ -230,7 +234,8 @@ class _YourEmojiState extends State<YourEmoji> {
             padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Text(
               "黄豆",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Provider.of<ColorProvider>(context).isDark
@@ -249,7 +254,8 @@ class _YourEmojiState extends State<YourEmoji> {
             padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Text(
               "贱驴",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Provider.of<ColorProvider>(context).isDark
@@ -268,7 +274,8 @@ class _YourEmojiState extends State<YourEmoji> {
             padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Text(
               "Emoji",
-              style: TextStyle(
+              style: XSTextStyle(
+                context: context,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Provider.of<ColorProvider>(context).isDark
