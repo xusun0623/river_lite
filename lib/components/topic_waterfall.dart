@@ -286,31 +286,6 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
     );
   }
 
-  _setHistory() async {
-    var history_data = await getStorage(key: "history", initData: "[]");
-    List history_arr = jsonDecode(history_data);
-    bool flag = false;
-    for (int i = 0; i < history_arr.length; i++) {
-      var ele = history_arr[i];
-      if (ele["userAvatar"] == widget.data!["userAvatar"] &&
-          ele["title"] == widget.data!["title"] &&
-          ele["subject"] ==
-              ((widget.data!["summary"] ?? widget.data!["subject"]) ?? "")) {
-        history_arr.removeAt(i);
-      }
-    }
-    List tmp_list_history = [
-      {
-        "userAvatar": widget.data!["userAvatar"],
-        "title": widget.data!["title"],
-        "subject": (widget.data!["summary"] ?? widget.data!["subject"]) ?? "",
-        "time": widget.data!["last_reply_date"],
-        "topic_id": (widget.data!["source_id"] ?? widget.data!["topic_id"]),
-      }
-    ];
-    tmp_list_history.addAll(history_arr);
-    setStorage(key: "history", value: jsonEncode(tmp_list_history));
-  }
 
   Widget _blackCont() {
     //拉黑的状态
@@ -714,7 +689,6 @@ class _TopicWaterFallState extends State<TopicWaterFall> {
     //   return;
     // }
     String info_txt = await getStorage(key: "myinfo", initData: "");
-    _setHistory();
     if (info_txt == "") {
       Navigator.pushNamed(context, "/login", arguments: 0);
     } else {

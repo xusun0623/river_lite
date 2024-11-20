@@ -46,6 +46,7 @@ import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:offer_show/util/storage.dart';
 
 List<String> addWaterMarkColumnsName = [
   "密语",
@@ -404,7 +405,11 @@ class _TopicDetailState extends State<TopicDetail> {
 
   @override
   void initState() {
-    _getData();
+    _getData().then((_) {
+      if (data != null) {
+        _setHistoryData();
+      }
+    });
     _getLikeCount();
     super.initState();
     getMyUID();
@@ -434,6 +439,33 @@ class _TopicDetailState extends State<TopicDetail> {
       }
     });
     speedUp(_scrollController);
+  }
+
+  _setHistoryData() async {
+    var history_data = await getStorage(key: "history", initData: "[]");
+    List history_arr = jsonDecode(history_data);
+    var userAvatar = data!["topic"]["icon"];
+    var title = data!["topic"]["title"];
+    var subject = data!['topic']['content'][0]
+        ['infor']; //(data!["summary"] ?? data!["subject"]) ?? "";
+    subject = subject.replaceAll(RegExp(r'\[mobcent_phiz=[^\]]+\]'), '[表情]');
+    if (subject.length > 30) {
+      subject = subject.substring(0, 30) + "...";
+    }
+    var time = data!["topic"]["create_date"];
+    var topic_id = data!['topic']["topic_id"];
+    history_arr.removeWhere((ele) => ele["topic_id"] == topic_id);
+    List tmp_list_history = [
+      {
+        "userAvatar": userAvatar,
+        "title": title,
+        "subject": subject,
+        "time": time,
+        "topic_id": topic_id,
+      }
+    ];
+    tmp_list_history.addAll(history_arr);
+    setStorage(key: "history", value: jsonEncode(tmp_list_history));
   }
 
   _captureScreenshot() {
