@@ -413,29 +413,6 @@ class HistoryCard extends StatefulWidget {
 }
 
 class _HistoryCardState extends State<HistoryCard> {
-  _setHistory() async {
-    var history_data = await getStorage(key: "history", initData: "[]");
-    List history_arr = jsonDecode(history_data);
-    for (int i = 0; i < history_arr.length; i++) {
-      var ele = history_arr[i];
-      if (ele["userAvatar"] == widget.data!["userAvatar"] &&
-          ele["title"] == widget.data!["title"] &&
-          ele["subject"] == widget.data!["subject"]) {
-        history_arr.removeAt(i);
-      }
-    }
-    List tmp_list_history = [
-      {
-        "userAvatar": widget.data!["userAvatar"],
-        "title": widget.data!["title"],
-        "subject": widget.data!["subject"],
-        "time": widget.data!["time"],
-        "topic_id": widget.data!["topic_id"],
-      }
-    ];
-    tmp_list_history.addAll(history_arr);
-    setStorage(key: "history", value: jsonEncode(tmp_list_history));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -447,7 +424,6 @@ class _HistoryCardState extends State<HistoryCard> {
             ? os_light_dark_card
             : os_white,
         tap: () {
-          _setHistory();
           Navigator.pushNamed(
             context,
             "/topic_detail",
