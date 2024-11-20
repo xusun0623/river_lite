@@ -890,7 +890,66 @@ class _TopicDetailState extends State<TopicDetail> {
     tmp.add(comment!.length == 0
         ? Empty(txt: _select == 0 ? "暂无评论, 快去抢沙发吧" : "楼主没有发表评论~")
         : Container());
+    Map<int, int> pid_map = {};
     for (var i = 0; i < comment!.length; i++) {
+      var c = comment![i];
+      int pid = c['reply_posts_id'];
+
+      int quote_pid = 0;
+      bool is_old = false;
+      if (c['quote_pid'] != "" && c['quote_pid'] != 0) {
+        quote_pid = int.parse(c['quote_pid']); //"",0,"3234323"
+      } else if (c["reply_content"].length > 1) { //old 引用格式
+
+        var old_reply_content = c["reply_content"][0];
+
+        if (old_reply_content["type"] == 4 &&
+            old_reply_content['url'].contains(//这里是用 startsWith 还是 contains更好？
+                "https://bbs.uestc.edu.cn/forum.php?mod=redirect&goto=findpost&pid=")) {
+          var url_str = old_reply_content["url"].toString();
+          //提前读取pid帖子的内容
+          String pid_tmp_str =
+              url_str.split("mod=redirect&goto=findpost&pid=")[1].split("&")[0];
+          quote_pid = int.parse(pid_tmp_str);
+
+          print("quote_pid:${quote_pid}");
+          c["quote_pid"] = pid_tmp_str;
+          is_old = true;
+        }
+      }
+
+      if (pid_map.containsKey(quote_pid)) {
+        int index_quote_pid = pid_map[quote_pid]!;
+        var data_quote = comment![index_quote_pid];
+        if (is_old) {
+          c["reply_content"].removeAt(0);//需要移除一条 reply_content 否则会重复
+        }
+
+        var quote_user_name = data_quote["reply_name"];
+
+        String copy_txt = "";
+        data_quote["reply_content"].forEach((e) {
+          if (e["type"] == 0) {
+            copy_txt += e["infor"].toString();
+          } else if (e["type"] == 1) {
+            copy_txt += "[图片]";
+          } else if (e["type"] == 4) {
+            copy_txt += "[链接]";
+          }
+        });
+        copy_txt =
+            copy_txt.replaceAll(RegExp(r'\[mobcent_phiz=[^\]]+\]'), '[表情]');
+        if (copy_txt.length > 100) {
+          copy_txt = copy_txt.substring(0, 100) + "...";
+        }
+        c['quote_content'] = copy_txt;
+        c['quote_content_all'] = data_quote;
+        c['quote_user_name'] = quote_user_name;
+        c['quote_pid'] = quote_pid.toString();
+      }
+
+      pid_map[pid] = i; // 该回复的postsid加入Map
+
       tmp.add(Comment(
         isListView: isListView,
         fid: data["boardId"],
