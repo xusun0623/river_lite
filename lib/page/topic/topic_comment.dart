@@ -647,7 +647,7 @@ class _CommentState extends State<Comment> {
     _getLikedStatus();
   }
 
-  _buildPureCont() {
+  _buildPureCont(reply_data) {
     return Padding(
       padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
       child: Stack(
@@ -658,10 +658,10 @@ class _CommentState extends State<Comment> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    if (widget.data["reply_name"] != "匿名")
+                    if (reply_data["reply_name"] != "匿名")
                       toUserSpace(
                         context,
-                        int.parse(widget.data["icon"]
+                        int.parse(reply_data["icon"]
                             .toString()
                             .split("uid=")[1]
                             .split("&size=")[0]),
@@ -671,13 +671,18 @@ class _CommentState extends State<Comment> {
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                     child: Opacity(
                       opacity:
-                          Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
+                          Provider.of<ColorProvider>(context, listen: false)
+                                  .isDark
+                              ? 0.8
+                              : 1,
                       child: CachedNetworkImage(
-                        imageUrl: widget.data["icon"],
+                        imageUrl: reply_data["icon"],
                         placeholder: (context, url) => Container(
-                          color: Provider.of<ColorProvider>(context).isDark
-                              ? Color(0x22FFFFFF)
-                              : os_grey,
+                          color:
+                              Provider.of<ColorProvider>(context, listen: false)
+                                      .isDark
+                                  ? Color(0x22FFFFFF)
+                                  : os_grey,
                           width: 35,
                           height: 35,
                         ),
@@ -701,62 +706,66 @@ class _CommentState extends State<Comment> {
                               runSpacing: 6,
                               children: [
                                 Text(
-                                  widget.data["reply_name"],
+                                  reply_data["reply_name"],
                                   style: XSTextStyle(
+                                    listenProvider: false,
                                     context: context,
-                                    color: Provider.of<ColorProvider>(context)
+                                    color: Provider.of<ColorProvider>(context,
+                                                listen: false)
                                             .isDark
                                         ? os_dark_white
                                         : Color(0xFF333333),
-                                    fontWeight:
-                                        Provider.of<ColorProvider>(context)
-                                                .isDark
-                                            ? FontWeight.normal
-                                            : FontWeight.bold,
+                                    fontWeight: Provider.of<ColorProvider>(
+                                                context,
+                                                listen: false)
+                                            .isDark
+                                        ? FontWeight.normal
+                                        : FontWeight.bold,
                                     fontSize: 14,
                                   ),
                                 ),
-                                widget.data["userTitle"] == null ||
-                                        widget.data["userTitle"].length == 0
+                                reply_data["userTitle"] == null ||
+                                        reply_data["userTitle"].length == 0
                                     ? Container()
                                     : Tag(
-                                        txt: widget.data["poststick"] == 1
+                                        txt: reply_data["poststick"] == 1
                                             ? "置顶"
-                                            : "" + widget.data["userTitle"],
-                                        color: widget.data["userTitle"]
+                                            : "" + reply_data["userTitle"],
+                                        color: reply_data["userTitle"]
                                                     .toString() ==
                                                 "成电校友"
                                             ? Color(0xFF0092FF)
-                                            : widget.data["userTitle"]
+                                            : reply_data["userTitle"]
                                                         .toString()
                                                         .length <
                                                     7
                                                 ? Color(0xFFFE6F61)
-                                                : (widget.data["poststick"] == 1
+                                                : (reply_data["poststick"] == 1
                                                     ? os_white
                                                     : Color(0xFF0092FF)),
-                                        color_opa: widget.data["userTitle"]
+                                        color_opa: reply_data["userTitle"]
                                                     .toString() ==
                                                 "成电校友"
                                             ? Color(0x100092FF)
-                                            : widget.data["userTitle"]
+                                            : reply_data["userTitle"]
                                                         .toString()
                                                         .length <
                                                     7
                                                 ? Color(0x10FE6F61)
-                                                : (widget.data["poststick"] == 1
+                                                : (reply_data["poststick"] == 1
                                                     ? os_wonderful_color[3]
                                                     : Color(0x100092FF)),
                                       ),
                                 Container(width: 5),
-                                widget.data["reply_id"] == widget.host_id &&
-                                        widget.data["reply_name"] != "匿名"
+                                reply_data["reply_id"] == widget.host_id &&
+                                        reply_data["reply_name"] != "匿名"
                                     ? Opacity(
-                                        opacity:
-                                            Provider.of<ColorProvider>(context)
-                                                    .isDark
-                                                ? 0.8
-                                                : 1,
+                                        opacity: Provider.of<ColorProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .isDark
+                                            ? 0.8
+                                            : 1,
                                         child: Tag(
                                           txt: "楼主",
                                           color: os_white,
@@ -786,11 +795,12 @@ class _CommentState extends State<Comment> {
                                         Container(
                                           margin: EdgeInsets.only(top: 4),
                                           child: Text(
-                                            widget.data["extraPanel"][0]
-                                                    ["extParams"]
+                                            reply_data["extraPanel"][0]
+                                                        ["extParams"]
                                                     ["recommendAdd"]
                                                 .toString(),
                                             style: XSTextStyle(
+                                              listenProvider: false,
                                               context: context,
                                               fontSize: 12,
                                               color: liked == 1
@@ -843,81 +853,113 @@ class _CommentState extends State<Comment> {
                         child: Text(
                           RelativeDateFormat.format(
                                 DateTime.fromMillisecondsSinceEpoch(
-                                    int.parse(widget.data["posts_date"])),
+                                    int.parse(reply_data["posts_date"])),
                               ) +
                               " · " +
-                              (widget.data["mobileSign"] == ""
+                              (reply_data["mobileSign"] == ""
                                   ? "网页版"
-                                  : (widget.data["mobileSign"]
+                                  : (reply_data["mobileSign"]
                                           .toString()
                                           .contains("安卓")
                                       ? "安卓客户端"
-                                      : (widget.data["mobileSign"]
+                                      : (reply_data["mobileSign"]
                                               .toString()
                                               .contains("苹果")
                                           ? "iPhone客户端"
-                                          : widget.data["mobileSign"]))) +
-                              " · #${widget.index! + 1}楼",
+                                          : reply_data["mobileSign"]))) +
+                              " · #${reply_data['position']! + 1}楼",
                           style: XSTextStyle(
+                            listenProvider: false,
                             context: context,
                             color: Color(0xFF9F9F9F),
                             fontSize: 12,
                           ),
                         ),
                       ),
-                      widget.data["quote_content"] != ""
+                      reply_data["quote_content"] != ""
                           ? Transform.translate(
                               offset: Offset(-7, 0),
                               child: Container(
-                                width: MediaQuery.of(context).size.width -
-                                    (MediaQuery.of(context).size.width >
-                                            BigWidthScreen
-                                        ? (MediaQuery.of(context).size.width -
-                                            BigWidthScreen)
-                                        : 0) -
-                                    75,
-                                padding: EdgeInsets.fromLTRB(15, 13, 15, 13),
-                                margin: EdgeInsets.only(top: 10),
-                                decoration: BoxDecoration(
-                                  color:
-                                      Provider.of<ColorProvider>(context).isDark
+                                child: myInkWell(
+                                  color: Colors.transparent,
+                                  tap: () {
+                                    List<Widget> listwidgt = [];
+                                    var inside_quote_content_all =
+                                        reply_data["quote_content_all"];
+                                    Padding quote_padding = _buildPureCont(
+                                        inside_quote_content_all);
+                                    listwidgt.add(quote_padding);
+
+                                    //高度是bbb Padding的高度
+                                    showPopWithHeight2(
+                                        context,
+                                        listwidgt,
+                                        MediaQuery.of(context).size.height *
+                                            0.5);
+                                  },
+                                  radius: 0,
+                                  widget: Container(
+                                    width: MediaQuery.of(context).size.width -
+                                        (MediaQuery.of(context).size.width >
+                                                BigWidthScreen
+                                            ? (MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                BigWidthScreen)
+                                            : 0) -
+                                        75,
+                                    padding:
+                                        EdgeInsets.fromLTRB(15, 13, 15, 13),
+                                    margin: EdgeInsets.only(top: 10),
+                                    decoration: BoxDecoration(
+                                      color: Provider.of<ColorProvider>(context,
+                                                  listen: false)
+                                              .isDark
                                           ? Color(0x11FFFFFF)
                                           : Color(0x09000000),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(13)),
-                                ),
-                                child: RichText(
-                                  text: TextSpan(
-                                      style: XSTextStyle(
-                                          context: context, fontSize: 14),
-                                      children: [
-                                        TextSpan(
-                                          text: "回复@" +
-                                              widget.data["quote_content"]
-                                                  .split(" 发表于")[0] +
-                                              ": ",
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(13)),
+                                    ),
+                                    child: RichText(
+                                      text: TextSpan(
                                           style: XSTextStyle(
-                                            context: context,
-                                            color: Provider.of<ColorProvider>(
-                                                        context)
-                                                    .isDark
-                                                ? Color(0xFF64BDFF)
-                                                : os_color,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: widget.data["quote_content"]
-                                              .split("发表于")[1]
-                                              .split("\n")[1],
-                                          style: XSTextStyle(
+                                              listenProvider: false,
                                               context: context,
-                                              color: Provider.of<ColorProvider>(
-                                                          context)
-                                                      .isDark
-                                                  ? os_dark_white
-                                                  : Color(0xFF464646)),
-                                        ),
-                                      ]),
+                                              fontSize: 14),
+                                          children: [
+                                            TextSpan(
+                                              text: "回复@" +
+                                                  reply_data[
+                                                      "quote_user_name"] +
+                                                  ":",
+                                              style: XSTextStyle(
+                                                listenProvider: false,
+                                                context: context,
+                                                color:
+                                                    Provider.of<ColorProvider>(
+                                                                context,
+                                                                listen: false)
+                                                            .isDark
+                                                        ? Color(0xFF64BDFF)
+                                                        : os_color,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: reply_data["quote_content"],
+                                              style: XSTextStyle(
+                                                  listenProvider: false,
+                                                  context: context,
+                                                  color:
+                                                      Provider.of<ColorProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .isDark
+                                                          ? os_dark_white
+                                                          : Color(0xFF464646)),
+                                            ),
+                                          ]),
+                                    ),
+                                  ),
                                 ),
                               ),
                             )
@@ -935,7 +977,7 @@ class _CommentState extends State<Comment> {
                                       : 0) -
                                   75,
                               child:
-                                  _buildContBody(widget.data["reply_content"])),
+                                  _buildContBody(reply_data["reply_content"])),
                       widget.is_last
                           ? Container(
                               margin: EdgeInsets.only(top: 20),
@@ -958,7 +1000,7 @@ class _CommentState extends State<Comment> {
               ],
             ),
           ),
-          widget.data["extraPanel"][0]["extParams"]["recommendAdd"] < 5
+          reply_data["extraPanel"][0]["extParams"]["recommendAdd"] < 5
               ? Container()
               : Positioned(
                   right: 4,
@@ -966,7 +1008,8 @@ class _CommentState extends State<Comment> {
                   child: Icon(
                     Icons.thumb_up,
                     size: 50,
-                    color: Provider.of<ColorProvider>(context).isDark
+                    color: Provider.of<ColorProvider>(context, listen: false)
+                            .isDark
                         ? Color(0x22FFFFFF)
                         : Color(0x11FF0000),
                   ),
@@ -993,14 +1036,14 @@ class _CommentState extends State<Comment> {
             color: Colors.transparent,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            widget: _buildPureCont(),
+            widget: _buildPureCont(widget.data),
             radius: 0,
           )
         : myInkWell(
             longPress: () => _longPress(),
             tap: () => _tap(),
             color: Colors.transparent,
-            widget: _buildPureCont(),
+            widget: _buildPureCont(widget.data),
             radius: 0,
           );
   }

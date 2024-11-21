@@ -90,6 +90,46 @@ showPopWithHeight(BuildContext context, List<Widget> widgets, double height) {
   );
 }
 
+showPopWithHeight2(BuildContext context, List<Widget> widgets, double height) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    backgroundColor: Provider.of<ColorProvider>(context, listen: false).isDark
+        ? os_light_dark_card
+        : os_white,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(22),
+        topRight: Radius.circular(22),
+      ),
+    ),
+    context: context,
+    builder: (context) {
+      return DraggableScrollableSheet(
+        expand: false,
+        builder: (context, scrollController) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 15.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(18),
+                topRight: Radius.circular(18),
+              ),
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_back
+                  : Color(0xFFF6F6F6),
+            ),
+            child: ListView(
+              controller: scrollController,
+              padding: EdgeInsets.zero,
+              children: widgets,
+            ),
+          );
+        },
+      );
+    },
+  );
+}
+
 showPop(BuildContext context, List<Widget> widgets) {
   showModalBottomSheet(
     isScrollControlled: true,
