@@ -123,6 +123,21 @@ class _DetailContState extends State<DetailCont> {
             );
           } else if (widget.data['url']
                   .toString()
+                  .indexOf(base_url + "user/") !=
+              -1) {
+            //适配https://bbs.uestc.edu.cn/user/123456
+            //目前测试似乎没遇到问题
+            String tmp_suffix = widget.data["url"].toString().split("user/")[1];
+            toUserSpace(
+              context,
+              int.parse(
+                tmp_suffix.contains("/")
+                    ? tmp_suffix.split("/")[0]
+                    : tmp_suffix,
+              ),
+            );
+          } else if (widget.data['url']
+                  .toString()
                   .indexOf(base_url + "home.php?mod=space&uid=") >
               -1) {
             String tmp_suffix = widget.data["url"].toString().split("uid=")[1];
