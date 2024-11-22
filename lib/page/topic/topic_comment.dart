@@ -867,7 +867,7 @@ class _CommentState extends State<Comment> {
                                               .contains("苹果")
                                           ? "iPhone客户端"
                                           : reply_data["mobileSign"]))) +
-                              " · #${reply_data['position']! + 1}楼",
+                              " · #${reply_data['position']!}楼",
                           style: XSTextStyle(
                             listenProvider: false,
                             context: context,
