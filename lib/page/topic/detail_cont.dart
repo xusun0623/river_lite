@@ -9,8 +9,10 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:markdown/markdown.dart' as md;
+import 'package:offer_show/outer/flutter_markdown/flutter_markdown.dart';
+import 'package:offer_show/outer/markdown/markdown.dart' as md;
+import 'package:offer_show/outer/flutter_markdown_latex/flutter_markdown_latex.dart';
+
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -592,10 +594,14 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
 
   // 创建自定义的扩展集
   final md.ExtensionSet customExtensionSet = md.ExtensionSet(
-    md.ExtensionSet.gitHubFlavored.blockSyntaxes,
+    [
+      ...md.ExtensionSet.gitHubFlavored.blockSyntaxes, // 移除 4空格的代码块解析  RegExp(r'^(?:    | {0,3}\t)(.*)$');
+      LatexBlockSyntax(),
+    ],
     [
       MobcentPhizSyntax(),
       ...md.ExtensionSet.gitHubFlavored.inlineSyntaxes,
+      LatexInlineSyntax(),
     ],
   );
   TextStyle commonHeadingStyle = TextStyle(
@@ -610,6 +616,12 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
       extensionSet: customExtensionSet,
       builders: {
         'mobcent_phiz': MobcentPhizBuilder(isDark: isDark),
+        'latex': LatexElementBuilder(
+          textStyle: TextStyle(
+            color: isDark ? os_dark_white : os_black,
+          ),
+         textScaleFactor: 1.2,
+        ),
       },
       styleSheet: MarkdownStyleSheet(
         p: XSTextStyle(
@@ -638,6 +650,15 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
               width: 4,
             ),
           ),
+        ),
+        code: TextStyle(
+          fontSize: 14,
+          color: isDark ? os_dark_white : os_black,
+        ),
+        codeblockDecoration: BoxDecoration(
+          color: isDark ? os_light_light_dark_card : os_back,
+          borderRadius: BorderRadius.circular(4),
+
         ),
       ),
     ),

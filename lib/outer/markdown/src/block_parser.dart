@@ -5,7 +5,7 @@
 import 'ast.dart';
 import 'block_syntaxes/block_syntax.dart';
 import 'block_syntaxes/blockquote_syntax.dart';
-import 'block_syntaxes/code_block_syntax.dart';
+//import 'block_syntaxes/code_block_syntax.dart';
 import 'block_syntaxes/dummy_block_syntax.dart';
 import 'block_syntaxes/empty_block_syntax.dart';
 import 'block_syntaxes/header_syntax.dart';
@@ -58,7 +58,7 @@ class BlockParser {
     const HtmlBlockSyntax(),
     const SetextHeaderSyntax(),
     const HeaderSyntax(),
-    const CodeBlockSyntax(),
+    //const CodeBlockSyntax(),
     const BlockquoteSyntax(),
     const HorizontalRuleSyntax(),
     const UnorderedListSyntax(),
