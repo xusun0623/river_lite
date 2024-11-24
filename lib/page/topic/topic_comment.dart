@@ -76,23 +76,37 @@ class _CommentState extends State<Comment> {
     }
   }
 
-  _tapLike() async {
+  _tapLike(reply_data) async {
     // Vibrate.feedback(FeedbackType.impact);
     XSVibrate().impact();
     if (liked == 1) return;
     liked = 1;
-    widget.data["extraPanel"][0]["extParams"]["recommendAdd"]++;
+    reply_data["extraPanel"][0]["extParams"]["recommendAdd"]++;
     setState(() {});
-    await Api().forum_support({
+    var ans = await Api().forum_support({
       "tid": widget.topic_id,
-      "pid": widget.data["reply_posts_id"],
+      "pid": reply_data["reply_posts_id"],
       "type": "post",
       "action": "support",
     });
+    var ans_errcode = ans["errcode"]!;
+    if (ans_errcode == "赞 +1") {
+      showToast(
+        context: context,
+        type: XSToast.success,
+        txt: "点赞成功",
+      );
+    } else if (ans_errcode.contains("投过票了")) {
+      showToast(
+        context: context,
+        type: XSToast.success,
+        txt: "你已经点过赞了",
+      );
+    }
     String tmp = await getStorage(
       key: "comment_like",
     );
-    tmp += ",${widget.data["reply_posts_id"]}";
+    tmp += ",${reply_data["reply_posts_id"]}";
     setStorage(key: "comment_like", value: tmp);
   }
 
@@ -647,7 +661,8 @@ class _CommentState extends State<Comment> {
     _getLikedStatus();
   }
 
-  _buildPureCont(reply_data) {
+  _buildPureCont(Map reply_data, bool isquote) {
+    //isquote 这条回复是否是被嵌套的引用
     return Padding(
       padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
       child: Stack(
@@ -776,70 +791,73 @@ class _CommentState extends State<Comment> {
                               ],
                             ),
                           ),
-                          Transform.translate(
-                            offset: Offset(0, -2),
-                            child: Row(
-                              children: [
-                                myInkWell(
-                                  tap: () {
-                                    _tapLike();
-                                  },
-                                  color: Colors.transparent,
-                                  widget: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 2,
-                                      horizontal: 5,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(top: 4),
-                                          child: Text(
-                                            reply_data["extraPanel"][0]
-                                                        ["extParams"]
-                                                    ["recommendAdd"]
-                                                .toString(),
-                                            style: XSTextStyle(
-                                              listenProvider: false,
-                                              context: context,
-                                              fontSize: 12,
-                                              color: liked == 1
-                                                  ? os_color
-                                                  : Color(0xFFB1B1B1),
-                                            ),
+                          !isquote
+                              ? Transform.translate(
+                                  offset: Offset(0, -2),
+                                  child: Row(
+                                    children: [
+                                      myInkWell(
+                                        tap: () {
+                                          _tapLike(reply_data);
+                                        },
+                                        color: Colors.transparent,
+                                        widget: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 2,
+                                            horizontal: 5,
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                margin: EdgeInsets.only(top: 4),
+                                                child: Text(
+                                                  reply_data["extraPanel"][0]
+                                                              ["extParams"]
+                                                          ["recommendAdd"]
+                                                      .toString(),
+                                                  style: XSTextStyle(
+                                                    listenProvider: false,
+                                                    context: context,
+                                                    fontSize: 12,
+                                                    color: liked == 1
+                                                        ? os_color
+                                                        : Color(0xFFB1B1B1),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(width: 3),
+                                              os_svg(
+                                                path: liked == 1
+                                                    ? "lib/img/detail_like_blue.svg"
+                                                    : "lib/img/detail_like.svg",
+                                                width: 24,
+                                                height: 24,
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        Container(width: 3),
-                                        os_svg(
-                                          path: liked == 1
-                                              ? "lib/img/detail_like_blue.svg"
-                                              : "lib/img/detail_like.svg",
-                                          width: 24,
-                                          height: 24,
+                                        radius: 7.5,
+                                      ),
+                                      myInkWell(
+                                        tap: () {
+                                          _showMore();
+                                        },
+                                        color: Colors.transparent,
+                                        widget: Container(
+                                          padding: EdgeInsets.all(5),
+                                          child: os_svg(
+                                            path:
+                                                "lib/img/detail_comment_more.svg",
+                                            width: 17,
+                                            height: 17,
+                                          ),
                                         ),
-                                      ],
-                                    ),
+                                        radius: 7.5,
+                                      )
+                                    ],
                                   ),
-                                  radius: 7.5,
-                                ),
-                                myInkWell(
-                                  tap: () {
-                                    _showMore();
-                                  },
-                                  color: Colors.transparent,
-                                  widget: Container(
-                                    padding: EdgeInsets.all(5),
-                                    child: os_svg(
-                                      path: "lib/img/detail_comment_more.svg",
-                                      width: 17,
-                                      height: 17,
-                                    ),
-                                  ),
-                                  radius: 7.5,
                                 )
-                              ],
-                            ),
-                          ),
+                              : Container(),
                         ],
                       ),
                       Container(
@@ -887,7 +905,7 @@ class _CommentState extends State<Comment> {
                                     var inside_quote_content_all =
                                         reply_data["quote_content_all"];
                                     Padding quote_padding = _buildPureCont(
-                                        inside_quote_content_all);
+                                        inside_quote_content_all, true);
                                     listwidgt.add(quote_padding);
 
                                     //高度是bbb Padding的高度
@@ -1036,14 +1054,14 @@ class _CommentState extends State<Comment> {
             color: Colors.transparent,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            widget: _buildPureCont(widget.data),
+            widget: _buildPureCont(widget.data, false),
             radius: 0,
           )
         : myInkWell(
             longPress: () => _longPress(),
             tap: () => _tap(),
             color: Colors.transparent,
-            widget: _buildPureCont(widget.data),
+            widget: _buildPureCont(widget.data, false),
             radius: 0,
           );
   }
