@@ -28,6 +28,7 @@ import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/mid_request.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
+import 'package:html/dom.dart' as dom;
 
 Color boy_color = os_deep_blue;
 Color girl_color = Color(0xFFFF6B3D);
@@ -83,6 +84,24 @@ class _PersonCenterState extends State<PersonCenter> {
     if (data != null && data["body"] != null) {
       setState(() {
         userInfo = data;
+      });
+    }
+
+    String url =
+        base_url + "home.php?mod=space&uid=${widget.param!["uid"]}&do=profile";
+    String html = (await XHttp().pureHttpWithCookie(
+      url: url,
+    ))
+        .data
+        .toString();
+    dom.Document document = dom.Document.html(html);
+    List<String> medalImages = document
+        .querySelectorAll("p.md_ctrl a img")
+        .map((element) => base_url + (element.attributes['src'] ?? ""))
+        .toList();
+    if (medalImages.length > 0) {
+      setState(() {
+        userInfo!["medalImages"] = medalImages;
       });
     }
   }
@@ -795,6 +814,25 @@ class _PersonCardState extends State<PersonCard> {
                         ),
                       ],
                     ),
+                    widget.data!["medalImages"] != null &&
+                            widget.data!["medalImages"].isNotEmpty
+                        ? Wrap(
+                            spacing: 0.0, // Horizontal spacing between images
+                            runSpacing: 0.0, // Vertical spacing between lines
+                            children:
+                                (widget.data!["medalImages"] as List<String>)
+                                    .map((imageUrl) {
+                              return Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Image.network(
+                                  imageUrl,
+                                  width: 18,
+                                  height: 40,
+                                ),
+                              );
+                            }).toList(),
+                          )
+                        : Container(),
                     widget.isMe!
                         ? Sign(
                             data: widget.data,
