@@ -404,7 +404,7 @@ class _MeBtnHeroState extends State<MeBtnHero> {
               ),
               Container(height: 3),
               Hero(
-                tag: widget.txt!,
+                tag: widget.txt!+"1", //避免两个Hero tag为回复使得冲突
                 child: Material(
                   color: Colors.transparent,
                   child: Text(

@@ -492,9 +492,7 @@ class _TopicDetailState extends State<TopicDetail> {
 
   @override
   void dispose() {
-    setState(() {
-      isDispose = true;
-    });
+    isDispose = true; //在 dispose 方法中调用 setState 会导致错误，因为在 dispose 方法中，State 对象已经被标记为不可用，不能再调用 setState。
     super.dispose();
   }
 

@@ -233,9 +233,17 @@ class _BagWidgetState extends State<BagWidget> {
           },
         );
         String ret = tmp.data.toString();
-        int receive_water_num =
-            int.parse(ret.split("恭喜您获得 水滴 ")[1].split(" 滴")[0]);
-        showWaterNum(receive_water_num);
+        //<?xml version="1.0" encoding="utf-8"?>
+        // <root><![CDATA[<script type="text/javascript" reload="1">if(typeof errorhandle_magics=='function') {errorhandle_magics('恭喜您获得 水滴 10 滴', {'credit':'水滴 10 滴'});}hideWindow('magics');showDialog('恭喜您获得 水滴 10 滴', 'right', null, null, 0, null, null, null, null, null, null);</script>]]></root>
+
+        RegExp regExp = RegExp(r"恭喜您获得 水滴 (\d+) 滴");
+        Match? match = regExp.firstMatch(ret);
+        if (match != null) {
+          int receive_water_num = int.parse(match.group(1)!);
+          showWaterNum(receive_water_num);
+        }else{
+          showToast(context: context, type: XSToast.none, txt: "领取失败");
+        }
         widget.refresh!();
       },
     );
