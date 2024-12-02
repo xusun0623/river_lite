@@ -217,6 +217,8 @@ class _AboutCardState extends State<AboutCard> {
         }
         if (widget.title == "开发&设计者") {
           toUserSpace(context, 221788);
+        } else if (widget.title == "鸣谢") {
+          Navigator.pushNamed(context, "/webview", arguments: "https://bbs.uestc.edu.cn/merge_qshp/");
         }
       },
       duration: Duration(milliseconds: 100),
@@ -235,7 +237,7 @@ class _AboutCardState extends State<AboutCard> {
               Positioned(
                   right: 0,
                   top: 0,
-                  child: (widget.withUrl ?? false) || widget.title == "开发&设计者"
+                  child: (widget.withUrl ?? false) || widget.title == "开发&设计者"  || widget.title == "鸣谢"
                       ? Container(
                           // padding: EdgeInsets.only(top: 5),
                           child: Transform.rotate(
