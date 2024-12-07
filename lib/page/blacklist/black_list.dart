@@ -221,6 +221,7 @@ class _BlackListState extends State<BlackList> {
 
   _update() async {
     await setStorage(key: "black", value: jsonEncode(data));
+    data = data!.where((element) => element != null && element != "").toList();
     Provider.of<BlackProvider>(context, listen: false).black = data;
   }
 

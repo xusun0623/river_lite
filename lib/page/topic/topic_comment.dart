@@ -438,6 +438,7 @@ class _CommentState extends State<Comment> {
         "复制文本内容",
         "举报反馈",
         _getBlack() ? "取消屏蔽此帖子" : "屏蔽此贴的ID",
+        "屏蔽此人",
         ...(is_my_comment ? ["追加内容"] : []),
         ...(is_me ? [widget.data["poststick"] == 1 ? "取消置顶评论" : "置顶评论"] : []),
         ...(is_my_comment ? ["删除评论"] : []),
@@ -446,6 +447,7 @@ class _CommentState extends State<Comment> {
         Icons.copy,
         Icons.feedback_outlined,
         _getBlack() ? Icons.remove_circle_outline_rounded : Icons.block,
+        Icons.person_off_outlined,
         ...(is_my_comment ? [Icons.edit] : []),
         ...(is_me
             ? [
@@ -469,6 +471,12 @@ class _CommentState extends State<Comment> {
         }
         if (res == "取消屏蔽此帖子" || res == "屏蔽此贴的ID") {
           _blackID();
+        }
+        if (res == "屏蔽此人") {
+          // print("屏蔽此人");
+          // print(widget.data["reply_name"]);
+          await setBlackWord(widget.data["reply_name"].toString(), context);
+          setState(() {});
         }
         if (res == "追加内容") {
           _append_cont();

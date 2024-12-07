@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 getStorage({required String key, String initData = ""}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  // await prefs.clear(); // 本地数据出错时取消注释以便清除
   String? s = await prefs.getString(key);
   if (s == null) {
     await prefs.setString(key, initData);

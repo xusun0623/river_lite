@@ -3,6 +3,7 @@ import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:offer_show/asset/bigScreen.dart';
+import 'package:offer_show/asset/black.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/home_desktop_mode.dart';
 import 'package:offer_show/asset/modal.dart';
@@ -228,9 +229,9 @@ class _PersonCenterState extends State<PersonCenter> {
   _tapMore() {
     showAction(
       context: context,
-      options: ["复制空间链接", "展示二维码"],
-      icons: [Icons.copy, Icons.qr_code],
-      tap: (res) {
+      options: ["复制空间链接", "展示二维码", "屏蔽此人"],
+      icons: [Icons.copy, Icons.qr_code, Icons.person_off_outlined],
+      tap: (res) async {
         if (res == "复制空间链接") {
           Navigator.pop(context);
           Clipboard.setData(
@@ -253,6 +254,13 @@ class _PersonCenterState extends State<PersonCenter> {
                   "https://bbs.uestc.edu.cn/home.php?mod=space&uid=${widget.param!["uid"]}",
             )
           ]);
+        }
+        if (res == "屏蔽此人") {
+          // print(res);
+          await setBlackWord(userInfo!["name"], context);
+          Navigator.pop(context);
+          showToast(context: context, type: XSToast.success, txt: "屏蔽成功");
+
         }
       },
     );
