@@ -63,6 +63,7 @@ class _CommentState extends State<Comment> {
   bool is_me = false;
   bool is_my_comment = false;
   String? blackKeyWord;
+  bool is_tid_block = false;
 
   _getLikedStatus() async {
     String tmp = await getStorage(
@@ -415,13 +416,16 @@ class _CommentState extends State<Comment> {
     ]);
   }
 
-  _blackID() async {
-    if (_getBlack()) {
+  _blackTid() async {
+    if (_getBlack() && is_tid_block) {
       await removeBlackWord(widget.data["reply_id"].toString(), context);
-    } else {
+      is_tid_block = false;
+    } else if (!is_tid_block) {
       await setBlackWord(widget.data["reply_id"].toString(), context);
+      is_tid_block = true;
     }
     setState(() {});
+    widget.fresh!();
   }
 
   _showMore() async {
@@ -437,7 +441,7 @@ class _CommentState extends State<Comment> {
       options: [
         "复制文本内容",
         "举报反馈",
-        _getBlack() ? "取消屏蔽此帖子" : "屏蔽此贴的ID",
+        is_tid_block ? "取消屏蔽此帖子" : "屏蔽此贴的ID",
         "屏蔽此人",
         ...(is_my_comment ? ["追加内容"] : []),
         ...(is_me ? [widget.data["poststick"] == 1 ? "取消置顶评论" : "置顶评论"] : []),
@@ -446,7 +450,7 @@ class _CommentState extends State<Comment> {
       icons: [
         Icons.copy,
         Icons.feedback_outlined,
-        _getBlack() ? Icons.remove_circle_outline_rounded : Icons.block,
+        is_tid_block ? Icons.remove_circle_outline_rounded : Icons.block,
         Icons.person_off_outlined,
         ...(is_my_comment ? [Icons.edit] : []),
         ...(is_me
@@ -470,13 +474,14 @@ class _CommentState extends State<Comment> {
           _feedback();
         }
         if (res == "取消屏蔽此帖子" || res == "屏蔽此贴的ID") {
-          _blackID();
+          _blackTid();
         }
         if (res == "屏蔽此人") {
           // print("屏蔽此人");
           // print(widget.data["reply_name"]);
           await setBlackWord(widget.data["reply_name"].toString(), context);
           setState(() {});
+          widget.fresh!();
         }
         if (res == "追加内容") {
           _append_cont();
@@ -653,11 +658,15 @@ class _CommentState extends State<Comment> {
     Provider.of<BlackProvider>(context, listen: false)
         .black!
         .forEach((element) {
-      if (widget.data["reply_id"].toString().contains(element)) {
-        flag = true;
-        blackKeyWord = element;
-      }
-    });
+          if (widget.data["reply_id"].toString().contains(element) ||
+              widget.data["reply_name"].toString().contains(element)) {
+            flag = true;
+            blackKeyWord = element;
+          }
+          if (widget.data["reply_id"].toString().contains(element)) {
+            is_tid_block = true;
+          }
+        });
     return flag;
   }
 
