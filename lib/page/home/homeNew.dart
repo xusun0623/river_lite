@@ -340,12 +340,12 @@ class _HomeNewState extends State<HomeNew> with AutomaticKeepAliveClientMixin {
           Provider.of<BlackProvider>(context, listen: false)
               .black!
               .forEach((element) {
-            if (i["title"].toString().contains(element) ||
-                i["subject"].toString().contains(element) ||
-                i["user_nick_name"].toString().contains(element)) {
-              flag = true;
-            }
-          });
+                if (i["title"].toString().contains(element) ||
+                    i["subject"].toString().contains(element) ||
+                    i["user_nick_name"].toString().contains(element)) {
+                  flag = true;
+                }
+              });
           return flag;
         }
 
