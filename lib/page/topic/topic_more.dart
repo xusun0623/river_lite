@@ -245,6 +245,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         "复制帖子链接",
         "举报反馈",
         "屏蔽此贴",
+        "屏蔽楼主",
         ...(widget.data!["topic"]["user_id"] == await getUid() ? ["编辑帖子"] : []),
         ...(widget.data!["topic"]["user_id"] == await getUid() ? ["补充内容"] : []),
         ...(widget.data!["topic"]["user_id"] == await getUid() ? ["删除帖子"] : []),
@@ -255,6 +256,7 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         Icons.content_copy_rounded,
         Icons.feedback_outlined,
         Icons.block,
+        Icons.person_off_outlined,
         ...(widget.data!["topic"]["user_id"] == await getUid()
             ? [Icons.edit]
             : []),
@@ -295,6 +297,12 @@ class _TopicDetailMoreState extends State<TopicDetailMore> {
         }
         if (res == "屏蔽此贴") {
           setBlackWord(widget.data!["topic"]["title"], context);
+          widget.block!();
+        }
+        if (res == "屏蔽楼主") {
+          // print("屏蔽楼主");
+          // print(widget.data!["topic"]["user_nick_name"]);
+          setBlackWord(widget.data!["topic"]["user_nick_name"], context);
           widget.block!();
         }
         if (res == "编辑帖子") {

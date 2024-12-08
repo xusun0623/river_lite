@@ -246,8 +246,8 @@ class _TopicState extends State<Topic> {
   _moreAction() async {
     showAction(
       context: context,
-      options: ["复制帖子链接", "举报反馈"],
-      icons: [Icons.copy, Icons.feedback_outlined],
+      options: ["复制帖子链接", "举报反馈", "屏蔽此人"],
+      icons: [Icons.copy, Icons.feedback_outlined, Icons.person_off_outlined],
       tap: (res) async {
         if (res == "屏蔽此贴") {
           await setBlackWord(widget.data!["title"], context);
