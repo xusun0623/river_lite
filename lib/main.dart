@@ -16,6 +16,7 @@ import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +35,19 @@ void main() async {
       await windowManager.focus();
     });
   }
+
+  // 请求 Android 通知权限
+  if (Platform.isAndroid) {
+    await requestNotificationPermission();
+  }
+
   runApp(MyApp());
+}
+
+Future<void> requestNotificationPermission() async {
+  if (await Permission.notification.isDenied) {
+    await Permission.notification.request();
+  }
 }
 
 class MyApp extends StatelessWidget {
