@@ -40,6 +40,7 @@ import 'package:offer_show/page/waterTask/task_list.dart';
 import 'package:offer_show/page/waterTask/water_inout_detail.dart';
 import 'package:offer_show/page/waterTask/water_task.dart';
 import 'package:offer_show/page/water_total/water_total.dart';
+import 'package:offer_show/page/webview/webview.dart';
 
 final routers = {
   "/": () => Start(),
@@ -83,6 +84,7 @@ final routers = {
   "/msg_three": (data) => MsgThree(type: data),
   "/msg_detail": (data) => MsgDetail(usrInfo: data),
   "/user_list": (data) => UserList(data: data),
+  "/webview": (data) => OSWebViewPage(url: data),
   "/photo_view": ({required data}) => PhotoPreview(
         galleryItems: data.galleryItems,
         defaultImage: data.defaultImage,
