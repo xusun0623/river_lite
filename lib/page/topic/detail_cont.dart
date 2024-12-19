@@ -564,13 +564,11 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
 
   // 预处理文本
   String markdownText = widget.data["infor"].replaceAll("&nbsp;", " ");
-  if (markdownText.indexOf("本帖最后由") > -1) {
-    int editIndex = markdownText.indexOf("编辑") + 7;
-    if (editIndex >= markdownText.length) {
-      editIndex = markdownText.length - 1;
-    }
-    markdownText = markdownText.substring(editIndex);
-  }
+
+  markdownText = markdownText.replaceAllMapped(
+    RegExp(r'本帖最后由(.*?)于(.*)编辑'),
+        (match) => '>*本帖最后由${match.group(1)}于${match.group(2)}编辑*\n',
+  );
 
   // 获取 isDark 值
   final bool isDark = Provider.of<ColorProvider>(context, listen: false).isDark;
