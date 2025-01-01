@@ -832,10 +832,16 @@ class _PersonCardState extends State<PersonCard> {
                                     .map((imageUrl) {
                               return Padding(
                                 padding: const EdgeInsets.all(4.0),
-                                child: Image.network(
-                                  imageUrl,
+                                child:  CachedNetworkImage(
+                                  imageUrl: imageUrl,
                                   width: 18,
                                   height: 40,
+                                  placeholder: (context, url) => Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                                      color: os_grey,
+                                    ),
+                                  ),
                                 ),
                               );
                             }).toList(),
