@@ -658,15 +658,15 @@ class _CommentState extends State<Comment> {
     Provider.of<BlackProvider>(context, listen: false)
         .black!
         .forEach((element) {
-          if (widget.data["reply_id"].toString().contains(element) ||
-              widget.data["reply_name"].toString().contains(element)) {
-            flag = true;
-            blackKeyWord = element;
-          }
-          if (widget.data["reply_id"].toString().contains(element)) {
-            is_tid_block = true;
-          }
-        });
+      if (widget.data["reply_id"].toString().contains(element) ||
+          widget.data["reply_name"].toString().contains(element)) {
+        flag = true;
+        blackKeyWord = element;
+      }
+      if (widget.data["reply_id"].toString().contains(element)) {
+        is_tid_block = true;
+      }
+    });
     return flag;
   }
 
@@ -921,16 +921,22 @@ class _CommentState extends State<Comment> {
                                     List<Widget> listwidgt = [];
                                     var inside_quote_content_all =
                                         reply_data["quote_content_all"];
-                                    Padding quote_padding = _buildPureCont(
-                                        inside_quote_content_all, true);
+                                    Widget quote_padding = _buildPureCont(
+                                      inside_quote_content_all,
+                                      true,
+                                    );
                                     listwidgt.add(quote_padding);
 
                                     //高度是bbb Padding的高度
                                     showPopWithHeight2(
-                                        context,
-                                        listwidgt,
-                                        MediaQuery.of(context).size.height *
-                                            0.5);
+                                      context,
+                                      [
+                                        Container(height: 15),
+                                        ...listwidgt,
+                                        Container(height: 15),
+                                      ],
+                                      MediaQuery.of(context).size.height * 0.5,
+                                    );
                                   },
                                   radius: 0,
                                   widget: Container(

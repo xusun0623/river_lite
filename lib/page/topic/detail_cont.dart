@@ -595,7 +595,8 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
   // 创建自定义的扩展集
   final md.ExtensionSet customExtensionSet = md.ExtensionSet(
     [
-      ...md.ExtensionSet.gitHubFlavored.blockSyntaxes, // 移除 4空格的代码块解析  RegExp(r'^(?:    | {0,3}\t)(.*)$');
+      ...md.ExtensionSet.gitHubFlavored
+          .blockSyntaxes, // 移除 4空格的代码块解析  RegExp(r'^(?:    | {0,3}\t)(.*)$');
       LatexBlockSyntax(),
     ],
     [
@@ -620,7 +621,7 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
           textStyle: TextStyle(
             color: isDark ? os_dark_white : os_black,
           ),
-         textScaleFactor: 1.2,
+          textScaleFactor: 1.2,
         ),
       },
       styleSheet: MarkdownStyleSheet(
@@ -638,7 +639,7 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
         h6: commonHeadingStyle,
         listBullet: commonHeadingStyle, // 设置无序列表编号的Text样式
         blockquote: TextStyle(
-          color: Colors.green, // 设置引用文本的颜色
+          color: os_deep_grey, // 设置引用文本的颜色
           fontStyle: FontStyle.italic,
         ),
         blockquoteDecoration: BoxDecoration(
@@ -646,7 +647,7 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
           borderRadius: BorderRadius.circular(4),
           border: Border(
             left: BorderSide(
-              color: Colors.green, // 设置引用块左侧边框的颜色
+              color: Colors.transparent, // 设置引用块左侧边框的颜色
               width: 4,
             ),
           ),
@@ -658,7 +659,6 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
         codeblockDecoration: BoxDecoration(
           color: isDark ? os_light_light_dark_card : os_back,
           borderRadius: BorderRadius.circular(4),
-
         ),
       ),
     ),

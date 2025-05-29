@@ -2,7 +2,7 @@ name: offer_show
 description: Project for hepan_lite
 
 publish_to: "none"
-version: 1.0.12+2
+version: 1.0.13+2
 
 environment:
   sdk: '>=3.0.0 <=3.22.0'
@@ -95,6 +95,7 @@ flutter:
     - lib/emoji/2/
     - lib/emoji/3/
     - lib/emoji/4/
+    - lib/emoji/5/
     - lib/img/
     - lib/img/water_total/
     - lib/img/banner/

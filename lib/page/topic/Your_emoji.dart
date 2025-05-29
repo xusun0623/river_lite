@@ -143,6 +143,34 @@ class _YourEmojiState extends State<YourEmoji> {
     return tmp;
   }
 
+  List<Widget> _buildRiver5() {
+    List<Widget> tmp = [];
+    emoji5.forEach((element) {
+      tmp.add(myInkWell(
+        radius: 5,
+        color: Colors.transparent,
+        tap: () {
+          widget.tap("[s:${element}]");
+        },
+        widget: Padding(
+          padding: EdgeInsets.all(5),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(12.5)),
+            child: Container(
+              color: os_white,
+              width: widget.size ?? 37,
+              height: widget.size ?? 37,
+              child: Image.asset(
+                "lib/emoji/5/s_${element}.gif",
+              ),
+            ),
+          ),
+        ),
+      ));
+    });
+    return tmp;
+  }
+
   List<Widget> _buildEmoji(int index) {
     List<Widget> tmp = [];
     for (var i = 0; i < emoji[index].characters.length; i++) {
@@ -268,6 +296,26 @@ class _YourEmojiState extends State<YourEmoji> {
             padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
             child: Wrap(
               children: _buildRiver4(),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+            child: Text(
+              "洋葱头",
+              style: XSTextStyle(
+                context: context,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Provider.of<ColorProvider>(context).isDark
+                    ? os_dark_white
+                    : os_black,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+            child: Wrap(
+              children: _buildRiver5(),
             ),
           ),
           Container(

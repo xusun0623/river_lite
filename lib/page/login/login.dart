@@ -55,7 +55,9 @@ class _LoginState extends State<Login> {
       }
       if (data["rs"] == 1) {
         await getWebCookie(username: username, password: password);
-        setStorage(key: "myinfo", value: jsonEncode(data));
+        await setStorage(key: "myinfo", value: jsonEncode(data));
+        var _p = Provider.of<LoginedProvider>(context, listen: false);
+        _p.getLoginStatus();
         UserInfoProvider provider =
             Provider.of<UserInfoProvider>(context, listen: false);
         provider.data = data;

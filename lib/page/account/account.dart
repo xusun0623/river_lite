@@ -12,6 +12,7 @@ import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Account extends StatefulWidget {
   Account({Key? key}) : super(key: key);
@@ -138,18 +139,26 @@ class _AccountState extends State<Account> {
                 context: context,
                 title: "请确认",
                 cont: "即将退出登录，并删除你在本地的所有个人信息和收藏，请确认",
-                confirm: () {
+                confirm: () async {
                   UserInfoProvider provider =
                       Provider.of<UserInfoProvider>(context, listen: false);
-                  Provider.of<MsgProvider>(context, listen: false).clearMsg();
+                  await Provider.of<MsgProvider>(context, listen: false)
+                      .clearMsg();
                   provider.data = null;
                   provider.refresh();
-                  setStorage(key: "myinfo", value: "");
-                  setStorage(key: "topic_like", value: "");
-                  setStorage(key: "history", value: "[]");
-                  setStorage(key: "draft", value: "[]");
-                  setStorage(key: "search-history", value: "[]");
+                  await setStorage(key: "myinfo", value: "");
+                  await setStorage(key: "topic_like", value: "");
+                  await setStorage(key: "history", value: "[]");
+                  await setStorage(key: "draft", value: "[]");
+                  await setStorage(key: "search-history", value: "[]");
+
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.clear();
                   setState(() {});
+
+                  Provider.of<LoginedProvider>(context, listen: false)
+                      .getLoginStatus();
                   Navigator.pop(context);
                 });
           },

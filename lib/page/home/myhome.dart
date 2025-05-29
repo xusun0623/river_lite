@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/asset/color.dart';
 import 'package:offer_show/asset/svg.dart';
 import 'package:offer_show/asset/xs_textstyle.dart';
+import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/page/collection_tab/collection_tab.dart';
 import 'package:offer_show/page/column_waterfall/column_waterfall.dart';
 import 'package:offer_show/page/essence/essence.dart';
@@ -253,6 +255,56 @@ class _MyHomeState extends State<MyHome> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    var _p = Provider.of<LoginedProvider>(context);
+    if (!_p.isLogined) {
+      return Scaffold(
+        backgroundColor:
+            Provider.of<ColorProvider>(context).isDark ? os_dark_back : os_back,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Lottie.asset(
+                "lib/lottie/no_login.json",
+                width: 300,
+              ),
+            ),
+            Container(height: 75),
+            myInkWell(
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_light_dark_card,
+              tap: () {
+                Navigator.of(context).pushNamed(
+                  "/login",
+                  arguments: 0,
+                );
+              },
+              widget: Container(
+                width: 200,
+                height: 55,
+                decoration: BoxDecoration(),
+                child: Center(
+                  child: Text(
+                    "登录后畅游河畔",
+                    style: XSTextStyle(
+                      context: context,
+                      color: Provider.of<ColorProvider>(context).isDark
+                          ? os_dark_back
+                          : os_white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              radius: 100,
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: _getAppBar(),
       backgroundColor:

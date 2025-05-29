@@ -32,7 +32,7 @@ class _TabStyle extends AnimatedWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
-    final TabBarTheme tabBarTheme = TabBarTheme.of(context);
+    final TabBarThemeData tabBarTheme = TabBarTheme.of(context);
     final Animation<double> animation = listenable as Animation<double>;
 
     // To enable TextStyle.lerp(style1, style2, value), both styles must have
@@ -743,7 +743,7 @@ class _ScaleTabBarState extends State<ScaleTabBar> {
 
   Decoration get _indicator {
     if (widget.indicator != null) return widget.indicator!;
-    final TabBarTheme tabBarTheme = TabBarTheme.of(context);
+    final TabBarThemeData tabBarTheme = TabBarTheme.of(context);
     if (tabBarTheme.indicator != null) return tabBarTheme.indicator!;
 
     Color color = widget.indicatorColor ?? Theme.of(context).indicatorColor;
@@ -993,7 +993,7 @@ class _ScaleTabBarState extends State<ScaleTabBar> {
       );
     }
 
-    final TabBarTheme tabBarTheme = TabBarTheme.of(context);
+    final TabBarThemeData tabBarTheme = TabBarTheme.of(context);
 
     final List<Widget> wrappedTabs =
         List<Widget>.generate(widget.tabs.length, (int index) {
