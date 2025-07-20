@@ -74,7 +74,10 @@ dependencies:
   dismissible_page: ^1.0.2
   in_app_review: ^2.0.9
   # flutter_markdown: ^0.7.4+1 # 已引入源码
-  flutter_math_fork: ^0.7.2
+  flutter_math_fork:
+    git:
+      url: git@github.com:dakshatsuraasa/flutter_math
+      ref: bd30a5faca93fe1279f1d39d347f9dbe8472877b
   # flutter_markdown_latex : ^0.3.4 # 已引入源码
   # flutter_local_notifications: ^19.2.1
 
