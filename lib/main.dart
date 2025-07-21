@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:offer_show/asset/color.dart';
+import 'package:offer_show/global_key/app.dart';
 import 'package:offer_show/router/router.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:provider/provider.dart';
@@ -78,6 +79,8 @@ class MyApp extends StatelessWidget {
             systemNavigationBarIconBrightness: Brightness.dark,
           ),
           child: MaterialApp(
+            navigatorKey: appNavigator,
+            navigatorObservers: [],
             debugShowCheckedModeBanner: false,
             initialRoute: "/",
             theme: ThemeData(
