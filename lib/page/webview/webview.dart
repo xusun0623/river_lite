@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:offer_show/global_key/app.dart';
+import 'package:offer_show/util/mid_request.dart';
+import 'package:offer_show/util/storage.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:offer_show/asset/color.dart';
@@ -39,10 +45,35 @@ class _OSWebViewPageState extends State<OSWebViewPage> {
               _isLoading = false;
               _pageTitle = title ?? '加载中...'; // 如果无法获取标题则显示“加载中...”
             });
+            if (url.startsWith(vpn_login_prefix) && (await getStorage(key: 'uestc_webvpn')) == "1") {
+              String vpnUser = await getStorage(key: 'uestc_webvpn_user');
+              String vpnPass = await getStorage(key: 'uestc_webvpn_pass');
+              if (vpnUser.isNotEmpty || vpnPass.isNotEmpty) {
+                _controller.runJavaScript('''\$(function() {
+                  document.querySelector('#pwdFromId input[name=username]').value=${json.encode(vpnUser)};
+                  document.querySelector('#pwdFromId input[name=passwordText], #pwdFromId input[name=userPassword]').value=${json.encode(vpnPass)};
+                  document.querySelector('#pwdFromId #login_submit').click();
+                })''');
+              }
+            } else if (url.startsWith(vpn_root)) {
+              final cookies = await WebviewCookieManager().getCookies(vpn_root);
+              for (final cookie in cookies) {
+                if (cookie.name == vpn_cookie_name && cookie.value.isNotEmpty) {
+                  await setStorage(key: 'uestc_webvpn_ticket', value: cookie.value);
+                  vpnCookie = cookie.value;
+                  break;
+                }
+              }
+            }
           },
         ),
       )
       ..loadRequest(Uri.parse(widget.url));
+  }
+  @override
+  void dispose() {
+    inWebView = 0;
+    super.dispose();
   }
 
   @override
