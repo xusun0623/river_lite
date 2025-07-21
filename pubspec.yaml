@@ -80,6 +80,7 @@ dependencies:
       ref: bd30a5faca93fe1279f1d39d347f9dbe8472877b
   # flutter_markdown_latex : ^0.3.4 # 已引入源码
   # flutter_local_notifications: ^19.2.1
+  webview_cookie_manager: ^2.0.6
 
 dev_dependencies:
   flutter_test:
