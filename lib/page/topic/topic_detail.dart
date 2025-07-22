@@ -245,9 +245,10 @@ class _TopicDetailState extends State<TopicDetail> {
                   .contains("https://bbs.uestc.edu.cn//goto/") &&
               c["reply_content"][2]["type"] == 0) {
             c["reply_content"].removeRange(0, 2);
-            if (c["reply_content"][0]["infor"].indexOf("\r\n\r\n") != -1) {
-              c["reply_content"][0]["infor"] =
-                  c["reply_content"][0]["infor"].split("\r\n\r\n")[1];
+            if (c["reply_content"][0]["infor"].contains("\r\n\r\n")) {
+              c["reply_content"][0]["infor"] = c["reply_content"][0]["infor"]
+                  .substring(
+                      c["reply_content"][0]["infor"].indexOf("\r\n\r\n") + 4);
             } else if (c["reply_content"][0]["infor"].startsWith(">") &&
                 c["reply_content"][0]["infor"].contains("\n") == false) {
               c["reply_content"].removeAt(0);

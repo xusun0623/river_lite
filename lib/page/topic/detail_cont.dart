@@ -21,6 +21,7 @@ import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/to_user.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/asset/xs_textstyle.dart';
+import 'package:offer_show/asset/processUrl.dart';
 import 'package:offer_show/components/bilibili_player.dart';
 import 'package:offer_show/components/niw.dart';
 import 'package:offer_show/components/video_player.dart';
@@ -109,74 +110,8 @@ class _DetailContState extends State<DetailCont> {
         print(widget.data);
         // return;
         try {
-          if (widget.data['url']
-                  .toString()
-                  .indexOf(base_url + "forum.php?mod=viewthread&tid=") >
-              -1) {
-            String tmp_suffix = widget.data["url"].toString().split("tid=")[1];
-            Navigator.pushNamed(
-              context,
-              "/topic_detail",
-              arguments: int.parse(
-                tmp_suffix.contains("&")
-                    ? tmp_suffix.split("&")[0]
-                    : tmp_suffix,
-              ),
-            );
-          } else if (widget.data['url']
-                  .toString()
-                  .indexOf(base_url + "user/") !=
-              -1) {
-            //适配https://bbs.uestc.edu.cn/user/123456
-            //目前测试似乎没遇到问题
-            String tmp_suffix = widget.data["url"].toString().split("user/")[1];
-            toUserSpace(
-              context,
-              int.parse(
-                tmp_suffix.contains("/")
-                    ? tmp_suffix.split("/")[0]
-                    : tmp_suffix,
-              ),
-            );
-          } else if (widget.data['url']
-                  .toString()
-                  .indexOf(base_url + "home.php?mod=space&uid=") >
-              -1) {
-            String tmp_suffix = widget.data["url"].toString().split("uid=")[1];
-            toUserSpace(
-              context,
-              int.parse(
-                tmp_suffix.contains("&")
-                    ? tmp_suffix.split("&")[1]
-                    : tmp_suffix,
-              ),
-            );
-          } else if (widget.data['url'].toString().indexOf(base_url + "at:") >
-              -1) {
-            String tmp_suffix = widget.data["url"].toString().split("at:")[1];
-            toUserSpace(
-              context,
-              int.parse(
-                tmp_suffix.contains("/")
-                    ? tmp_suffix.split("/")[1]
-                    : tmp_suffix,
-              ),
-            );
-          } else if (widget.data['url']
-                  .toString()
-                  .indexOf(base_url + "thread/") >
-              -1) {
-            String tmp_suffix =
-                widget.data["url"].toString().split("thread/")[1];
-            Navigator.pushNamed(
-              context,
-              "/topic_detail",
-              arguments: int.parse(
-                tmp_suffix.contains("/")
-                    ? tmp_suffix.split("/")[0]
-                    : tmp_suffix,
-              ),
-            );
+          if (specialUrl(widget.data['url'].toString())){
+            processUrl(widget.data['url'].toString(), context);
           } else
             showModal(
               context: context,
@@ -348,18 +283,23 @@ class _DetailContState extends State<DetailCont> {
         width: MediaQuery.of(context).size.width - 30,
         padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "附件" + widget.data["desc"],
-              style: XSTextStyle(context: context, color: os_deep_grey),
+            Expanded(
+              child: Text(
+                "附件 \n" + widget.data["infor"],
+                style: XSTextStyle(context: context, color: os_deep_grey),
+              ),
             ),
-            Text(
-              "点击下载",
-              style: XSTextStyle(
-                context: context,
-                fontWeight: FontWeight.bold,
-                color: os_color,
+            Container(
+              alignment: Alignment.center,
+              child: Text(
+                "点击下载",
+                style: XSTextStyle(
+                  context: context,
+                  fontWeight: FontWeight.bold,
+                  color: os_color,
+                ),
               ),
             ),
           ],
@@ -564,13 +504,11 @@ Widget WidgetTxt(BuildContext context, DetailCont widget) {
 
   // 预处理文本
   String markdownText = widget.data["infor"].replaceAll("&nbsp;", " ");
-  if (markdownText.indexOf("本帖最后由") > -1) {
-    int editIndex = markdownText.indexOf("编辑") + 7;
-    if (editIndex >= markdownText.length) {
-      editIndex = markdownText.length - 1;
-    }
-    markdownText = markdownText.substring(editIndex);
-  }
+
+  markdownText = markdownText.replaceAllMapped(
+    RegExp(r'本帖最后由(.*?)于(.*)编辑'),
+        (match) => '>*本帖最后由${match.group(1)}于${match.group(2)}编辑*\n',
+  );
 
   // 获取 isDark 值
   final bool isDark = Provider.of<ColorProvider>(context, listen: false).isDark;

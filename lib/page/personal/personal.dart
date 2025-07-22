@@ -821,25 +821,31 @@ class _PersonCardState extends State<PersonCard> {
                         ),
                       ],
                     ),
-                    // widget.data!["medalImages"] != null &&
-                    //         widget.data!["medalImages"].isNotEmpty
-                    //     ? Wrap(
-                    //         spacing: 0.0, // Horizontal spacing between images
-                    //         runSpacing: 0.0, // Vertical spacing between lines
-                    //         children:
-                    //             (widget.data!["medalImages"] as List<String>)
-                    //                 .map((imageUrl) {
-                    //           return Padding(
-                    //             padding: const EdgeInsets.all(4.0),
-                    //             child: Image.network(
-                    //               imageUrl,
-                    //               width: 18,
-                    //               height: 40,
-                    //             ),
-                    //           );
-                    //         }).toList(),
-                    //       )
-                    //     : Container(),
+                    widget.data!["medalImages"] != null &&
+                            widget.data!["medalImages"].isNotEmpty
+                        ? Wrap(
+                            spacing: 0.0, // Horizontal spacing between images
+                            runSpacing: 0.0, // Vertical spacing between lines
+                            children:
+                                (widget.data!["medalImages"] as List<String>)
+                                    .map((imageUrl) {
+                              return Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child:  CachedNetworkImage(
+                                  imageUrl: imageUrl,
+                                  width: 18,
+                                  height: 40,
+                                  placeholder: (context, url) => Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                                      color: os_grey,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          )
+                        : Container(),
                     widget.isMe!
                         ? Sign(
                             data: widget.data,
