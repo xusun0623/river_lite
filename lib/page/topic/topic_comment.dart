@@ -111,7 +111,7 @@ class _CommentState extends State<Comment> {
     setStorage(key: "comment_like", value: tmp);
   }
 
-  _buildContBody(data) {
+  _buildContBody(data, String? format) {
     List<Widget> tmp = [];
     var imgLists = [];
     data.forEach((e) {
@@ -157,6 +157,7 @@ class _CommentState extends State<Comment> {
         tmp.add(Container(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
           child: DetailCont(
+            format: format,
             data: e,
             removeSelectable: true,
             imgLists: imgLists,
@@ -1008,7 +1009,7 @@ class _CommentState extends State<Comment> {
                       _getBlack()
                           ? _buildContBody([
                               {"infor": "此回复已被你屏蔽", "type": 0}
-                            ])
+                            ], null)
                           : Container(
                               width: MediaQuery.of(context).size.width -
                                   (MediaQuery.of(context).size.width >
@@ -1018,7 +1019,7 @@ class _CommentState extends State<Comment> {
                                       : 0) -
                                   75,
                               child:
-                                  _buildContBody(reply_data["reply_content"])),
+                                  _buildContBody(reply_data["reply_content"], reply_data["format"])),
                       widget.is_last
                           ? Container(
                               margin: EdgeInsets.only(top: 20),
