@@ -37,6 +37,7 @@ import '../../util/interface.dart';
 class DetailCont extends StatefulWidget {
   var data;
   var imgLists;
+  String? format; // 帖子格式
   String? desc; //在图片上的描述
   String? title; //在图片上的描述标题
   bool? isComment;
@@ -44,6 +45,7 @@ class DetailCont extends StatefulWidget {
   bool? fade;
   DetailCont({
     Key? key,
+    this.format,
     this.data,
     this.imgLists,
     this.isComment,
@@ -67,7 +69,7 @@ class _DetailContState extends State<DetailCont> {
   Widget build(BuildContext context) {
     switch (widget.data["type"]) {
       case 0: //纯文字
-        return WidgetTxt(context, widget);
+        return widget.format == "2" ? WidgetTxtMarkdown(context, widget) : WidgetTxt(context, widget);
       case 1: //图片
         return WidgetImage(context, widget);
       case 2: //未知
@@ -452,6 +454,126 @@ Widget WidgetImage(BuildContext context, DetailCont widget) {
   );
 }
 
+Widget WidgetTxt(BuildContext context, DetailCont widget) {
+  return widget.data["infor"].toString().trim() == ""
+      ? Container()
+      : (widget.data["infor"].toString().characters.length == 1 &&
+              emoji
+                  .toString()
+                  .characters
+                  .contains(widget.data["infor"].toString().trim())
+          ? Container(
+              width: MediaQuery.of(context).size.width - 30,
+              child: widget.removeSelectable ?? false
+                  ? Text.rich(
+                      TextSpan(
+                        style: XSTextStyle(
+                          context: context,
+                          fontSize: 60,
+                          height: 1.6,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
+                        ),
+                        text: widget.data["infor"].toString().trim(),
+                      ),
+                    )
+                  : SelectableText.rich(
+                      TextSpan(
+                        style: XSTextStyle(
+                          context: context,
+                          fontSize: 60,
+                          height: 1.6,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
+                        ),
+                        text: widget.data["infor"].toString().trim(),
+                      ),
+                    ),
+            )
+          : Container(
+              width: MediaQuery.of(context).size.width - 30,
+              child: widget.removeSelectable ?? false
+                  ? Text.rich(
+                      TextSpan(
+                        style: XSTextStyle(
+                          context: context,
+                          fontSize: 15.5,
+                          height: 1.6,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
+                        ),
+                        children: _getRichText(
+                          context,
+                          widget.data["infor"].indexOf("本帖最后由") > -1
+                              ? widget.data["infor"].substring(
+                                  (widget.data["infor"].indexOf("编辑") + 7) >=
+                                          widget.data["infor"].length
+                                      ? widget.data["infor"].length - 1
+                                      : widget.data["infor"].indexOf("编辑") + 7)
+                              : widget.data["infor"],
+                        ),
+                      ),
+                    )
+                  : SelectableText.rich(
+                      TextSpan(
+                        style: XSTextStyle(
+                          context: context,
+                          fontSize: 16,
+                          height: 1.6,
+                          color: Provider.of<ColorProvider>(context).isDark
+                              ? os_dark_white
+                              : os_black,
+                        ),
+                        children: _getRichText(
+                          context,
+                          widget.data["infor"].indexOf("本帖最后由") > -1
+                              ? widget.data["infor"].substring(
+                                  (widget.data["infor"].indexOf("编辑") + 7) >=
+                                          widget.data["infor"].length
+                                      ? widget.data["infor"].length - 1
+                                      : widget.data["infor"].indexOf("编辑") + 7)
+                              : widget.data["infor"],
+                        ),
+                      ),
+                    ),
+            ));
+}
+
+List<InlineSpan> _getRichText(BuildContext context, String t) {
+  List<InlineSpan> ret = [];
+  t = t.replaceAll("&nbsp;", " ");
+  List<String> tmp = t.split("[mobcent_phiz=");
+  ret.add(TextSpan(text: tmp[0]));
+  for (var i = 1; i < tmp.length; i++) {
+    var first_idx = tmp[i].indexOf(']');
+    if (first_idx != -1) {
+      ret.add(WidgetSpan(
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: Opacity(
+            opacity: Provider.of<ColorProvider>(context).isDark ? 0.8 : 1,
+            child: CachedNetworkImage(
+              placeholder: (context, url) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: os_grey,
+                ),
+              ),
+              imageUrl: tmp[i].substring(0, first_idx),
+            ),
+          ),
+        ),
+      ));
+      ret.add(TextSpan(text: tmp[i].substring(first_idx + 1)));
+    }
+  }
+  return ret;
+}
+
 // 自定义的 MobcentPhizSyntax
 class MobcentPhizSyntax extends md.InlineSyntax {
   MobcentPhizSyntax() : super(r'\[mobcent_phiz=(.*?)\]');
@@ -496,8 +618,8 @@ class MobcentPhizBuilder extends MarkdownElementBuilder {
   }
 }
 
-// 更新的 WidgetTxt 方法
-Widget WidgetTxt(BuildContext context, DetailCont widget) {
+// 用于 Markdown 渲染的 WidgetTxt 方法
+Widget WidgetTxtMarkdown(BuildContext context, DetailCont widget) {
   if (widget.data["infor"].toString().trim() == "") {
     return Container();
   }

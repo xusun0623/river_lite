@@ -708,6 +708,7 @@ class _TopicDetailState extends State<TopicDetail> {
             child: Container(
               padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
               child: DetailCont(
+                format: data["topic"]["format"],
                 data: e,
                 removeSelectable: true,
                 imgLists: imgLists,
