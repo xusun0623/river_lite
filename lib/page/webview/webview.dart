@@ -64,6 +64,15 @@ class _OSWebViewPageState extends State<OSWebViewPage> {
                   break;
                 }
               }
+              await XHttp().restoreAuthCookieToVpn();
+              showDialog(context: context, builder: (context) => AlertDialog(
+                title: Text('VPN 登录成功'),
+                content: Text('返回后请刷新页面。'),
+                actions: [TextButton(onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                }, child: Text("确定"))],
+              ));
             }
           },
         ),
