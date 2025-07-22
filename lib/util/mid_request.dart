@@ -12,12 +12,14 @@ import 'package:offer_show/asset/cookie.dart';
 import 'package:offer_show/global_key/app.dart';
 import 'package:offer_show/util/storage.dart';
 
-const base_url = "https://bbs.uestc.edu.cn/";
+const bbs_host = 'bbs.uestc.edu.cn';
+const base_url = "https://$bbs_host/";
 const vpn_host = 'webvpn.uestc.edu.cn';
 const vpn_root = 'https://${vpn_host}/';
 const vpn_login_prefix = 'https://webvpn.uestc.edu.cn/https/77726476706e69737468656265737421f9f3408f69256d436a0bc7a99c406d3652/authserver/login';
 const vpn_base_url = 'https://${vpn_host}/https/77726476706e69737468656265737421f2f552d232357b447d468ca88d1b203b/';
 const vpn_cookie_name = 'wengine_vpn_ticketwebvpn_uestc_edu_cn';
+const vpn_cookie_api = '${vpn_root}wengine-vpn/cookie';
 
 class ServerConfig {
   String url = base_url + "mobcent/app/web/index.php";
@@ -77,7 +79,7 @@ class XHttp {
     if (await isVPNEnabled()) {
       final vpnCookie = await getVPNCookie();
       if (vpnCookie.isNotEmpty) {
-        cookie = cookie.isEmpty ? vpnCookie : '${cookie}; ${vpnCookie}';
+        cookie = vpnCookie;
       }
     }
     dio.options.contentType = Headers.formUrlEncodedContentType;
@@ -228,5 +230,35 @@ class XHttp {
       header: header,
       param: param,
     );
+  }
+
+  saveAuthCookieFromVpn() async {
+    final cookies = await pureHttp(url: Uri.parse(vpn_cookie_api).replace(queryParameters: {
+      'method': ['get'],
+      'host': [bbs_host],
+      'scheme': ['https'],
+      'path': ['/'],
+      'vpn_timestamp': [DateTime.timestamp().millisecondsSinceEpoch.toString()],
+    }).toString(), method: 'GET');
+    if (cookies?.data is String) {
+      final authCookies = cookies.data.split(RegExp(r';\s*')).where((cookie) => cookie.startsWith('v3hW_2132_auth=') || cookie.startsWith('v3hW_2132_saltkey='));
+      if (authCookies.isNotEmpty) {
+        await setStorage(key: 'cookies_vpn', value: authCookies.join(';'));
+      }
+    }
+  }
+  restoreAuthCookieToVpn() async {
+    final value = await getStorage(key: 'cookies_vpn');
+    if (value is String && value.isNotEmpty) {
+      value.split(RegExp(r';\s*')).forEach((cookie) => 
+        pureHttp(url: Uri.parse(vpn_cookie_api).replace(queryParameters: {
+          'method': ['set'],
+          'host': [bbs_host],
+          'scheme': ['https'],
+          'path': ['/'],
+          'ck_data': [cookie],
+        }).toString(), method: 'POST')
+      );
+    }
   }
 }
