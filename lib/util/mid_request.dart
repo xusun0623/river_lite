@@ -9,6 +9,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:offer_show/asset/cookie.dart';
+import 'package:offer_show/asset/modal.dart';
 import 'package:offer_show/global_key/app.dart';
 import 'package:offer_show/util/storage.dart';
 
@@ -183,6 +184,7 @@ class XHttp {
           if (inWebView == 0) {
             print("open webview");
             ++inWebView;
+            hideToast();
             Navigator.pushNamed(appNavigator.currentContext!, "/webview", arguments: vpn_root);
           } else {
             print("webview already open");
