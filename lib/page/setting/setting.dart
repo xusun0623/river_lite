@@ -294,7 +294,7 @@ class _SettingState extends State<Setting> {
   bool useVpn = false;
   String vpnUsername = "";
   String vpnPassword = "";
-  bool vpnPasswordObscured = false;
+  bool vpnPasswordObscured = true;
 
   getAnsStatus() async {
     String txt = await getStorage(key: "auto");
