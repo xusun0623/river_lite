@@ -17,8 +17,8 @@ const base_url = "https://$bbs_host/";
 const vpn_host = 'webvpn.uestc.edu.cn';
 const vpn_root = 'https://${vpn_host}/';
 const vpn_login_url = '${vpn_root}login';
-const vpn_login_prefix = 'https://webvpn.uestc.edu.cn/https/77726476706e69737468656265737421f9f3408f69256d436a0bc7a99c406d3652/authserver/login';
-const vpn_base_url = 'https://${vpn_host}/https/77726476706e69737468656265737421f2f552d232357b447d468ca88d1b203b/';
+const vpn_login_prefix = '${vpn_root}https/77726476706e69737468656265737421f9f3408f69256d436a0bc7a99c406d3652/authserver/login';
+const vpn_base_url = '${vpn_root}https/77726476706e69737468656265737421f2f552d232357b447d468ca88d1b203b/';
 const vpn_cookie_name = 'wengine_vpn_ticketwebvpn_uestc_edu_cn';
 const vpn_cookie_api = '${vpn_root}wengine-vpn/cookie';
 
