@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:offer_show/components/cached_network_image.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -285,7 +285,7 @@ class _MeFuncHeadState extends State<MeFuncHead> {
           ),
           Container(width: 10),
           Hero(
-            tag: ["", "收藏", "发表", "回复", "足迹", "草稿"][widget.type],
+            tag: ["", "收藏", "发表", "回复", "足迹", "草稿"][widget.type] + "111",
             child: Material(
               color: Colors.transparent,
               child: Container(
@@ -413,7 +413,6 @@ class HistoryCard extends StatefulWidget {
 }
 
 class _HistoryCardState extends State<HistoryCard> {
-
   @override
   Widget build(BuildContext context) {
     return Container(

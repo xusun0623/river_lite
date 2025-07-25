@@ -68,6 +68,11 @@ class _StartState extends State<Start> {
     }
   }
 
+  _isLogin() async {
+    var _p = Provider.of<LoginedProvider>(context, listen: false);
+    _p.getLoginStatus();
+  }
+
   @override
   void initState() {
     _navi();
@@ -75,6 +80,7 @@ class _StartState extends State<Start> {
     _pic();
     fetchAll();
     _autoQuestion();
+    _isLogin();
     super.initState();
   }
 

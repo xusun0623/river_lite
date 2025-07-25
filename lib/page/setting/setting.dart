@@ -10,6 +10,7 @@ import 'package:offer_show/asset/toWebUrl.dart';
 import 'package:offer_show/asset/vibrate.dart';
 import 'package:offer_show/asset/xs_textstyle.dart';
 import 'package:offer_show/components/newNaviBar.dart';
+import 'package:offer_show/global_key/app.dart';
 import 'package:offer_show/util/cache_manager.dart';
 import 'package:offer_show/util/provider.dart';
 import 'package:offer_show/util/storage.dart';
@@ -28,6 +29,54 @@ class _SettingState extends State<Setting> {
     int divisions = ((1.2 - 0.8) / 0.05).round(); // 计算刻度数量
     List<Widget> tmp = [];
     tmp.addAll([
+      ResponsiveWidget(
+        child: SwitchListTile(
+          inactiveTrackColor: Provider.of<ColorProvider>(context).isDark
+              ? Color(0x33FFFFFF)
+              : os_middle_grey,
+          title: Text(
+            "使用校园 VPN 访问",
+            style: XSTextStyle(
+              context: context,
+              fontSize: 15,
+              color: Provider.of<ColorProvider>(context).isDark
+                  ? os_dark_white
+                  : os_black,
+            ),
+          ),
+          value: useVpn,
+          onChanged: (bool value) {
+            setStorage(key: "uestc_webvpn", value: value ? "1" : "");
+            setState(() {
+              useVpn = value;
+              vpnEnabled = value;
+            });
+          },
+        ),
+      ),
+      ...(useVpn ? [
+        Padding(padding: EdgeInsets.symmetric(horizontal: 15), child: Column(children: [
+          TextFormField(decoration: InputDecoration(labelText: 'VPN 登录学号'), initialValue: vpnUsername, onChanged: (String? value){
+            setStorage(key: 'uestc_webvpn_user', value: value ?? "");
+            setState(() {
+              vpnUsername = value ?? "";
+            });
+          }),
+          TextFormField(decoration: InputDecoration(labelText: 'VPN 登录密码', suffixIcon: IconButton(onPressed: () {
+            setState(() {
+              vpnPasswordObscured = !vpnPasswordObscured;
+            });
+          }, icon: Icon(vpnPasswordObscured ? Icons.visibility : Icons.visibility_off))),
+          initialValue: vpnPassword,
+          onChanged: (String? value){
+            setStorage(key: 'uestc_webvpn_pass', value: value ?? "");
+            setState(() {
+              vpnPassword = value ?? "";
+            });
+          },
+          obscureText: vpnPasswordObscured),
+        ]))
+      ] : []),
       ResponsiveWidget(
         child: ListTile(
           title: Text(
@@ -242,6 +291,10 @@ class _SettingState extends State<Setting> {
   }
 
   bool autoAnswer = true;
+  bool useVpn = false;
+  String vpnUsername = "";
+  String vpnPassword = "";
+  bool vpnPasswordObscured = true;
 
   getAnsStatus() async {
     String txt = await getStorage(key: "auto");
@@ -253,6 +306,16 @@ class _SettingState extends State<Setting> {
   @override
   void initState() {
     getAnsStatus();
+    (() async {
+      String vpn = await getStorage(key: 'uestc_webvpn');
+      String vpnUser = await getStorage(key: 'uestc_webvpn_user');
+      String vpnPass = await getStorage(key: 'uestc_webvpn_pass');
+      setState(() {
+        useVpn = vpn == "1";
+        vpnUsername = vpnUser;
+        vpnPassword = vpnPass;
+      });
+    })();
     super.initState();
   }
 

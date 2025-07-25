@@ -540,7 +540,7 @@ class Api {
 
   // 热门
   portal_newslist() async {
-    return await XHttp().post(
+    return await XHttp().postWithGlobalToken(
       url: "",
       param: {
         "r": "portal/newslist",

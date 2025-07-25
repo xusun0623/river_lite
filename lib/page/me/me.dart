@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:offer_show/components/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:offer_show/asset/bigScreen.dart';
@@ -404,7 +404,7 @@ class _MeBtnHeroState extends State<MeBtnHero> {
               ),
               Container(height: 3),
               Hero(
-                tag: widget.txt!+"1", //避免两个Hero tag为回复使得冲突
+                tag: widget.txt! + "111", //避免两个Hero tag为回复使得冲突
                 child: Material(
                   color: Colors.transparent,
                   child: Text(

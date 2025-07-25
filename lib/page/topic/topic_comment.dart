@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:offer_show/components/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -111,7 +111,7 @@ class _CommentState extends State<Comment> {
     setStorage(key: "comment_like", value: tmp);
   }
 
-  _buildContBody(data) {
+  _buildContBody(data, String? format) {
     List<Widget> tmp = [];
     var imgLists = [];
     data.forEach((e) {
@@ -157,6 +157,7 @@ class _CommentState extends State<Comment> {
         tmp.add(Container(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
           child: DetailCont(
+            format: format,
             data: e,
             removeSelectable: true,
             imgLists: imgLists,
@@ -658,15 +659,15 @@ class _CommentState extends State<Comment> {
     Provider.of<BlackProvider>(context, listen: false)
         .black!
         .forEach((element) {
-          if (widget.data["reply_id"].toString().contains(element) ||
-              widget.data["reply_name"].toString().contains(element)) {
-            flag = true;
-            blackKeyWord = element;
-          }
-          if (widget.data["reply_id"].toString().contains(element)) {
-            is_tid_block = true;
-          }
-        });
+      if (widget.data["reply_id"].toString().contains(element) ||
+          widget.data["reply_name"].toString().contains(element)) {
+        flag = true;
+        blackKeyWord = element;
+      }
+      if (widget.data["reply_id"].toString().contains(element)) {
+        is_tid_block = true;
+      }
+    });
     return flag;
   }
 
@@ -921,16 +922,22 @@ class _CommentState extends State<Comment> {
                                     List<Widget> listwidgt = [];
                                     var inside_quote_content_all =
                                         reply_data["quote_content_all"];
-                                    Padding quote_padding = _buildPureCont(
-                                        inside_quote_content_all, true);
+                                    Widget quote_padding = _buildPureCont(
+                                      inside_quote_content_all,
+                                      true,
+                                    );
                                     listwidgt.add(quote_padding);
 
                                     //高度是bbb Padding的高度
                                     showPopWithHeight2(
-                                        context,
-                                        listwidgt,
-                                        MediaQuery.of(context).size.height *
-                                            0.5);
+                                      context,
+                                      [
+                                        Container(height: 15),
+                                        ...listwidgt,
+                                        Container(height: 15),
+                                      ],
+                                      MediaQuery.of(context).size.height * 0.5,
+                                    );
                                   },
                                   radius: 0,
                                   widget: Container(
@@ -1002,7 +1009,7 @@ class _CommentState extends State<Comment> {
                       _getBlack()
                           ? _buildContBody([
                               {"infor": "此回复已被你屏蔽", "type": 0}
-                            ])
+                            ], null)
                           : Container(
                               width: MediaQuery.of(context).size.width -
                                   (MediaQuery.of(context).size.width >
@@ -1012,7 +1019,7 @@ class _CommentState extends State<Comment> {
                                       : 0) -
                                   75,
                               child:
-                                  _buildContBody(reply_data["reply_content"])),
+                                  _buildContBody(reply_data["reply_content"], reply_data["format"])),
                       widget.is_last
                           ? Container(
                               margin: EdgeInsets.only(top: 20),

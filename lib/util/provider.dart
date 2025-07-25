@@ -11,9 +11,26 @@ import 'package:flutter/material.dart';
 import 'package:offer_show/asset/bigScreen.dart';
 import 'package:offer_show/util/interface.dart';
 import 'package:offer_show/util/storage.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:async';
 
+class LoginedProvider extends ChangeNotifier {
+  bool isLogined = false;
+
+  getLoginStatus() async {
+    String myinfo = await getStorage(key: "myinfo", initData: "");
+    if (myinfo == "") {
+      isLogined = false;
+    } else {
+      isLogined = true;
+    }
+    refresh();
+  }
+
+  refresh() {
+    notifyListeners();
+  }
+}
 
 class FontSizeProvider extends ChangeNotifier {
   double fraction = 1;
@@ -110,20 +127,21 @@ class MsgProvider extends ChangeNotifier {
   ScrollController scrollController = new ScrollController();
   bool? load_done = false;
   bool loading = false;
-  Timer? _pollingTimer;  // 定时器变量，用于轮询
+  Timer? _pollingTimer; // 定时器变量，用于轮询
 
   // 初始化通知插件
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  //     FlutterLocalNotificationsPlugin();
 
   MsgProvider() {
     // 初始化通知配置
     if (Platform.isAndroid) {
-      AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher'); // 确保图标资源存在
-      var initializationSettings = InitializationSettings(
-          android: initializationSettingsAndroid);
-      flutterLocalNotificationsPlugin.initialize(initializationSettings);
-      startPolling(); // 启动轮询
+      // AndroidInitializationSettings initializationSettingsAndroid =
+      //     AndroidInitializationSettings('@mipmap/ic_launcher'); // 确保图标资源存在
+      // var initializationSettings =
+      //     InitializationSettings(android: initializationSettingsAndroid);
+      // flutterLocalNotificationsPlugin.initialize(initializationSettings);
+      // startPolling(); // 启动轮询
       print("启动轮询");
     }
   }
@@ -171,36 +189,35 @@ class MsgProvider extends ChangeNotifier {
   }
 
   // 展示系统通知
-  Future<void> _showNotification(msg) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-      'riverlite', // 通道 ID
-      'riverlite', // 通道名称
-      channelDescription: '河畔Lite通知', // 通道描述
-      importance: Importance.max,
-      priority: Priority.high,
-      showWhen: false,
-    );
-    print("展示通知");
-    String notificationMsg = "";
-    if(msg!["atMeInfoCount"] > 0) {
-      notificationMsg += "有" + msg!["atMeInfoCount"].toString() + "条@我的消息\n";
-    }else if(msg!["replyInfoCount"] > 0) {
-      notificationMsg +=
-          "有" + msg!["replyInfoCount"].toString() + "条回复我的消息\n";
-    }else if(msg!["systemInfoCount"] > 0) {
-      notificationMsg +=
-          "有" + msg!["systemInfoCount"].toString() + "条系统消息\n";
-    }
-    const NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      '新消息',
-      notificationMsg,
-      platformChannelSpecifics,
-    );
-  }
+  // Future<void> _showNotification(msg) async {
+  //   const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  //       AndroidNotificationDetails(
+  //     'riverlite', // 通道 ID
+  //     'riverlite', // 通道名称
+  //     channelDescription: '河畔Lite通知', // 通道描述
+  //     importance: Importance.max,
+  //     priority: Priority.high,
+  //     showWhen: false,
+  //   );
+  //   print("展示通知");
+  //   String notificationMsg = "";
+  //   if (msg!["atMeInfoCount"] > 0) {
+  //     notificationMsg += "有" + msg!["atMeInfoCount"].toString() + "条@我的消息\n";
+  //   } else if (msg!["replyInfoCount"] > 0) {
+  //     notificationMsg += "有" + msg!["replyInfoCount"].toString() + "条回复我的消息\n";
+  //   } else if (msg!["systemInfoCount"] > 0) {
+  //     notificationMsg += "有" + msg!["systemInfoCount"].toString() + "条系统消息\n";
+  //   }
+  //   const NotificationDetails platformChannelSpecifics =
+  //       NotificationDetails(android: androidPlatformChannelSpecifics);
+  //   await flutterLocalNotificationsPlugin.show(
+  //     0,
+  //     '新消息',
+  //     notificationMsg,
+  //     platformChannelSpecifics,
+  //   );
+  // }
+
   getMore() async {
     if (load_done! || loading) return;
     loading = true;
@@ -232,23 +249,26 @@ class MsgProvider extends ChangeNotifier {
     _pollingTimer = Timer.periodic(Duration(seconds: 30), (timer) async {
       await getMsg();
       print("轮询");
-      print("msg"+msg.toString());
+      print("msg" + msg.toString());
       print(_lastMsg);
-      if ((msg!["atMeInfoCount"] > 0||msg!["replyInfoCount"] > 0||msg!["systemInfoCount"] > 0)
-          && !mapEquals(msg, _lastMsg)) {
-        _showNotification(msg); // 只有首次或者有更新才进行通知
-        _lastMsg = Map.from(msg!); ; // 更新上一次的消息状态
+      if ((msg!["atMeInfoCount"] > 0 ||
+              msg!["replyInfoCount"] > 0 ||
+              msg!["systemInfoCount"] > 0) &&
+          !mapEquals(msg, _lastMsg)) {
+        // _showNotification(msg); // 只有首次或者有更新才进行通知
+        _lastMsg = Map.from(msg!);
+        ; // 更新上一次的消息状态
 
-        print("_lastMsg"+_lastMsg.toString());
+        print("_lastMsg" + _lastMsg.toString());
       }
     });
   }
+
   // 停止轮询
   stopPolling() {
     _pollingTimer?.cancel();
   }
 }
-
 
 class TabShowProvider extends ChangeNotifier {
   int index = 0;

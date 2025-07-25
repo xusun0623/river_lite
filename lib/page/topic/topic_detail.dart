@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:offer_show/components/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
@@ -708,6 +708,7 @@ class _TopicDetailState extends State<TopicDetail> {
             child: Container(
               padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
               child: DetailCont(
+                format: data["topic"]["format"],
                 data: e,
                 removeSelectable: true,
                 imgLists: imgLists,

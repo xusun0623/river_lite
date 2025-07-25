@@ -2,7 +2,7 @@ name: offer_show
 description: Project for hepan_lite
 
 publish_to: "none"
-version: 1.0.12+2
+version: 1.0.13+2
 
 environment:
   sdk: '>=3.0.0 <=3.22.0'
@@ -20,10 +20,8 @@ dependencies:
   # flutter_qr_reader: ^1.0.5
   bitsdojo_window: ^0.1.5
   window_manager: ^0.3.9
-  images_picker: ^1.2.11
   # flick_video_player: ^0.7.0
-  video_player: ^2.4.6
-  qr_code_scanner: ^1.0.0
+  video_player: ^2.10.0
   qr_flutter: ^4.1.0
   device_info_plus: ^10.1.2
   sizer: ^2.0.15
@@ -39,13 +37,13 @@ dependencies:
   photo_view: ^0.15.0
   provider:
   shared_preferences: ^2.0.5
-  fluttertoast: ^8.0.6
+  fluttertoast: ^8.2.12
   flutter_svg: ^2.0.10+1
   dio: ^5.5.0+1
   url_launcher: ^6.0.20
   # heic_to_jpg: ^0.2.0
   # image_gallery_saver: ^2.0.3
-  image_gallery_saver_plus: ^3.0.5
+  image_gallery_saver_plus: ^4.0.1
   cached_network_image: ^3.3.1
   octo_image: ^2.0.0
   flutter_cache_manager: ^3.3.0
@@ -74,9 +72,19 @@ dependencies:
   dismissible_page: ^1.0.2
   in_app_review: ^2.0.9
   # flutter_markdown: ^0.7.4+1 # 已引入源码
-  flutter_math_fork: ^0.7.2
+  flutter_math_fork:
+    git:
+      url: git@github.com:dakshatsuraasa/flutter_math
+      ref: bd30a5faca93fe1279f1d39d347f9dbe8472877b
   # flutter_markdown_latex : ^0.3.4 # 已引入源码
-  flutter_local_notifications: ^12.0.0
+  # flutter_local_notifications: ^19.2.1
+  webview_cookie_manager:
+    git:
+      url: git@github.com:fryette/webview_cookie_manager.git
+      ref: 23d7475d9b9ac29f3cc92e91ac8a78ecb733a54d
+  mobile_scanner: ^7.0.1
+dependency_overrides:
+  photo_manager: ^3.7.1
 
 dev_dependencies:
   flutter_test:
@@ -95,6 +103,7 @@ flutter:
     - lib/emoji/2/
     - lib/emoji/3/
     - lib/emoji/4/
+    - lib/emoji/5/
     - lib/img/
     - lib/img/water_total/
     - lib/img/banner/

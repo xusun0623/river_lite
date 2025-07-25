@@ -22,6 +22,9 @@ getWebCookie({
       value: "${response.headers["set-cookie"]!.join(";")};",
     );
     // print("重新请求Token，用户名为${name}，密码是${pwd}");
+    if (await isVPNEnabled()) {
+      await XHttp().saveAuthCookieFromVpn();
+    }
   }
   return "${response.headers["set-cookie"]!.join(";")};";
 }
